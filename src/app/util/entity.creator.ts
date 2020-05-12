@@ -1,24 +1,23 @@
-import { Tag } from '../model/tag.model';
-import { Sdk } from '../model/sdk.model';
-import { Qpu } from '../model/qpu.model';
-import { Provider } from '../model/provider.model';
-import { Implementation } from '../model/implementation.model';
-import { Content } from '../model/content.model';
-import { Algorithm } from '../model/algorithm.model';
-import { Parameter } from '../model/parameter.model';
+import { Tag } from "../model/tag.model";
+import { Sdk } from "../model/sdk.model";
+import { Qpu } from "../model/qpu.model";
+import { Provider } from "../model/provider.model";
+import { Implementation } from "../model/implementation.model";
+import { Content } from "../model/content.model";
+import { Algorithm } from "../model/algorithm.model";
+import { Parameter } from "../model/parameter.model";
 
 export class EntityCreator {
-
   public static createTagFromDialogResult(dialogResult: any): Tag {
     return {
       key: dialogResult.key,
-      value: dialogResult.value
+      value: dialogResult.value,
     };
   }
 
   public static createSdkFromDialogResult(dialogResult: any): Sdk {
     return {
-      name: dialogResult.name
+      name: dialogResult.name,
     };
   }
 
@@ -42,13 +41,13 @@ export class EntityCreator {
     return {
       name: dialogResult.name,
       accessKey: dialogResult.accessKey,
-      secretKey: dialogResult.secretKey
+      secretKey: dialogResult.secretKey,
     };
   }
 
   public static createContentFromDialogResult(dialogResult: any): Content {
     return {
-      description: dialogResult.description
+      description: dialogResult.description,
     };
   }
 
@@ -57,21 +56,27 @@ export class EntityCreator {
       name: dialogResult.name,
       description: dialogResult.description,
       type: dialogResult.type,
-      restriction: dialogResult.restriction
+      restriction: dialogResult.restriction,
     };
   }
 
-  public static createAlgorithmFromDialogResult(dialogResult: any, resultContent: Content): Algorithm {
+  public static createAlgorithmFromDialogResult(
+    dialogResult: any,
+    resultContent: Content
+  ): Algorithm {
     return {
       name: dialogResult.name,
       inputParameters: dialogResult.inputParameters,
       content: resultContent,
       outputParameters: dialogResult.outputParameters,
-      tags: [dialogResult.tag]
+      tags: [dialogResult.tag],
     };
   }
 
-  public static createImplementationFromDialogResult(dialogResult: any, resultContent: Content): Implementation {
+  public static createImplementationFromDialogResult(
+    dialogResult: any,
+    resultContent: Content
+  ): Implementation {
     return {
       name: dialogResult.name,
       sdk: dialogResult.sdk.name,
@@ -81,7 +86,7 @@ export class EntityCreator {
       selectionRule: dialogResult.selectionRule,
       inputParameters: dialogResult.inputParameters,
       outputParameters: dialogResult.outputParameters,
-      tags: [dialogResult.tag]
+      tags: [dialogResult.tag],
     };
   }
 }

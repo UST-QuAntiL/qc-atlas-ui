@@ -1,7 +1,7 @@
-import { Tag } from './tag.model';
-import { Parameters } from './parameters.model';
-import { Content } from './content.model';
-import { Link } from './link.model';
+import { Tag } from "./tag.model";
+import { Parameters } from "./parameters.model";
+import { Content } from "./content.model";
+import { Link } from "./link.model";
 
 export class Implementation {
   id?: number;

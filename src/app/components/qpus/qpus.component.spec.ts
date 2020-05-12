@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { QpusComponent } from './qpus.component';
+import { QpusComponent } from "./qpus.component";
 
-describe('QpusComponent', () => {
+describe("QpusComponent", () => {
   let component: QpusComponent;
   let fixture: ComponentFixture<QpusComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QpusComponent ]
-    })
-    .compileComponents();
+      declarations: [QpusComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('QpusComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
