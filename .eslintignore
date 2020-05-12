@@ -1,5 +1,0 @@
-{
-    "ignorePatterns": ["e2e/*"],
-    "rules": {
-    }
-}
