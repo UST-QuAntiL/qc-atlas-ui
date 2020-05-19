@@ -22,12 +22,6 @@
     <mat-label>Description</mat-label>
     <input matInput [(ngModel)]="data.description">
   </mat-form-field>
-  <mat-form-field appearance="fill" class="input-field">
-    <mat-label>SDK</mat-label>
-    <mat-select [(ngModel)]="data.sdk">
-      <mat-option *ngFor="let sdk of data.sdks" [value]="sdk">{{sdk.name}}</mat-option>
-    </mat-select>
-  </mat-form-field>
   <h5 mat-dialog-title>Input Parameters
     <button (click)="addParameter('input')" mat-button>
       <mat-icon>add</mat-icon>

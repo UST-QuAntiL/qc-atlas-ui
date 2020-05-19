@@ -1,5 +1,4 @@
 import { Tag } from '../model/tag.model';
-import { Sdk } from '../model/sdk.model';
 import { Qpu } from '../model/qpu.model';
 import { Provider } from '../model/provider.model';
 import { Implementation } from '../model/implementation.model';
@@ -15,12 +14,6 @@ export class EntityCreator {
     };
   }
 
-  public static createSdkFromDialogResult(dialogResult: any): Sdk {
-    return {
-      name: dialogResult.name,
-    };
-  }
-
   public static createQpuFromDialogResult(dialogResult: any): Qpu {
     return {
       maxGateTime: dialogResult.maxGateTime,
@@ -29,12 +22,6 @@ export class EntityCreator {
       t1: dialogResult.t1,
       supportedSdkIds: dialogResult.supportedSdkIds,
     };
-  }
-
-  public static createSupportedSdkIdsIfNotExist(qpu: Qpu): void {
-    if (!qpu.supportedSdkIds) {
-      qpu.supportedSdkIds = [];
-    }
   }
 
   public static createProviderFromDialogResult(dialogResult: any): Provider {

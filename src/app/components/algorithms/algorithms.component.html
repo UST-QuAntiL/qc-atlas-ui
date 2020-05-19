@@ -76,10 +76,6 @@
                   <button mat-button (click)="openImplementation(element)">{{element.name}}</button>
                 </td>
               </ng-container>
-              <ng-container matColumnDef="sdk">
-                <th mat-header-cell *matHeaderCellDef>SDK</th>
-                <td mat-cell *matCellDef="let element">{{element.sdk}}</td>
-              </ng-container>
               <tr mat-header-row *matHeaderRowDef="displayedImplementationColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedImplementationColumns;"></tr>
             </table>

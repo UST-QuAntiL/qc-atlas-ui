@@ -10,7 +10,6 @@ import { Implementation } from '../../model/implementation.model';
 import { ImplementationService } from '../../services/implementation.service';
 import { TagService } from '../../services/tag.service';
 import { Tag } from '../../model/tag.model';
-import { Sdk } from '../../model/sdk.model';
 import { Algorithm } from '../../model/algorithm.model';
 
 @Component({
@@ -32,7 +31,6 @@ export class ImplementationsComponent implements OnInit, OnChanges {
   displayedTagsColumns: string[] = ['key', 'value'];
 
   tags: Tag[] = [];
-  sdks: Sdk[] = [];
 
   constructor(
     private implementationService: ImplementationService,

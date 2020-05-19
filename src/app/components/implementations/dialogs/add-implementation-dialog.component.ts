@@ -10,7 +10,6 @@ import { Tag } from '../../../model/tag.model';
 import { Parameters } from '../../../model/parameters.model';
 import { AddParameterDialogComponent } from '../../parameters/dialogs/add-parameter-dialog.component';
 import { Parameter } from '../../../model/parameter.model';
-import { Sdk } from '../../../model/sdk.model';
 import { EntityCreator } from '../../../util/entity.creator';
 import { UtilService } from '../../../util/util.service';
 
@@ -161,8 +160,6 @@ export interface DialogData {
   inputParameters: Parameters;
   outputParameters: Parameters;
   programmingLanguage: string;
-  sdk: string;
-  sdks: Sdk[];
   selectionRule: string;
   tag: Tag;
   tags: Tag[];

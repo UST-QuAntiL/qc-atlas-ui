@@ -9,8 +9,6 @@ import { TagService } from '../../services/tag.service';
 import { Tag } from '../../model/tag.model';
 import { Content } from '../../model/content.model';
 import { AddImplementationDialogComponent } from '../implementations/dialogs/add-implementation-dialog.component';
-import { Sdk } from '../../model/sdk.model';
-import { SdkService } from '../../services/sdk.service';
 import { JsonImportDialogComponent } from '../dialogs/json-import-dialog.component';
 import { EntityCreator } from '../../util/entity.creator';
 import { UtilService } from '../../util/util.service';
@@ -24,7 +22,6 @@ import { AddAlgorithmDialogComponent } from './dialogs/add-algorithm-dialog.comp
 export class AlgorithmsComponent implements OnInit {
   algorithms: Algorithm[] = [];
   tags: Tag[] = [];
-  sdks: Sdk[] = [];
   implementations: Implementation[] = [];
   implementationOpened = false;
 
@@ -32,7 +29,7 @@ export class AlgorithmsComponent implements OnInit {
   selectedImplementation: Implementation;
 
   displayedTagsColumns: string[] = ['key', 'value'];
-  displayedImplementationColumns: string[] = ['name', 'sdk'];
+  displayedImplementationColumns: string[] = ['name'];
   currentEntity = 'Algorithm';
   implEntity = 'Implementation';
   tagEntity = 'Tags';
@@ -43,20 +40,12 @@ export class AlgorithmsComponent implements OnInit {
     private utilService: UtilService,
     private implementationService: ImplementationService,
     public dialog: MatDialog,
-    private tagService: TagService,
-    private sdkService: SdkService
+    private tagService: TagService
   ) {}
 
   ngOnInit(): void {
     this.getAllAlgorithms();
     this.getTags();
-    this.getSdks();
-  }
-
-  getSdks(): void {
-    this.sdkService.getAllSdks().subscribe((data) => {
-      this.sdks = data.sdkDtos;
-    });
   }
 
   getAllAlgorithms(): void {
@@ -105,7 +94,6 @@ export class AlgorithmsComponent implements OnInit {
     const dialogRef = this.utilService.createDialog(
       AddImplementationDialogComponent,
       this.implEntity,
-      this.sdks,
       this.tags
     );
 
@@ -176,7 +164,6 @@ export class AlgorithmsComponent implements OnInit {
     const dialogRef = this.utilService.createDialog(
       AddAlgorithmDialogComponent,
       this.currentEntity,
-      null,
       this.tags
     );
 

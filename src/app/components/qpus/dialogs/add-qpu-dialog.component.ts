@@ -1,7 +1,6 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Sdk } from '../../../model/sdk.model';
 
 @Component({
   selector: 'app-add-qpu-dialog-component',
@@ -36,7 +35,6 @@ export class AddQpuDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.data.supportedSdkIds = [];
     this.qpuForm = new FormGroup({
       name: new FormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -76,27 +74,8 @@ export class AddQpuDialogComponent implements OnInit {
       this.maxGateTime.errors?.required ||
       this.numberOfQubits.errors?.pattern ||
       this.maxGateTime.errors?.pattern ||
-      this.t1.errors?.pattern ||
-      this.data.supportedSdkIds.length === 0
+      this.t1.errors?.pattern
     );
-  }
-
-  onSdkCheckboxChange(sdk: Sdk, event: any): void {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    event.checked
-      ? this.addToSupportedSdkIds(sdk.id)
-      : this.removeFromSupportedSdkIds(sdk.id);
-  }
-
-  private addToSupportedSdkIds(sdkId: number): void {
-    this.data.supportedSdkIds.push(sdkId);
-  }
-
-  private removeFromSupportedSdkIds(sdkId: number): void {
-    const indexToRemove = this.data.supportedSdkIds.findIndex(
-      (entry) => entry === sdkId
-    );
-    this.data.supportedSdkIds.splice(indexToRemove, 1);
   }
 }
 
@@ -106,6 +85,4 @@ export interface DialogData {
   maxGateTime: number;
   numberOfQubits: number;
   t1: number;
-  supportedSdkIds: number[];
-  sdks: Sdk[];
 }
