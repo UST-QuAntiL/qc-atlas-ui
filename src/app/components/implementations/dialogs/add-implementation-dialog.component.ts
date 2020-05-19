@@ -6,11 +6,7 @@ import {
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Tag } from '../../../model/tag.model';
-import { Parameters } from '../../../model/parameters.model';
-import { AddParameterDialogComponent } from '../../parameters/dialogs/add-parameter-dialog.component';
-import { Parameter } from '../../../model/parameter.model';
-import { EntityCreator } from '../../../util/entity.creator';
+import { TagDto } from 'api/models';
 import { UtilService } from '../../../util/util.service';
 
 @Component({
@@ -22,9 +18,6 @@ export class AddImplementationDialogComponent implements OnInit {
   @ViewChild('outputTable') tableOut: MatTable<any>;
 
   implementationForm: FormGroup;
-
-  inputParameters: Parameters = new Parameters();
-  outputParameters: Parameters = new Parameters();
 
   displayedParametersColumns: string[] = [
     'name',
@@ -38,10 +31,7 @@ export class AddImplementationDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
     private utilService: UtilService
-  ) {
-    this.inputParameters.parameters = [];
-    this.outputParameters.parameters = [];
-  }
+  ) {}
 
   get name() {
     return this.implementationForm.get('name');
@@ -115,41 +105,6 @@ export class AddImplementationDialogComponent implements OnInit {
       ).value;
     });
   }
-
-  addParameter(parameterType: string) {
-    const dialogRef = this.utilService.createDialog(
-      AddParameterDialogComponent,
-      parameterType + 'parameter'
-    );
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        const parameter: Parameter = EntityCreator.createParameterFromDialogResult(
-          dialogResult
-        );
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        parameterType === 'input'
-          ? this.addToInputParams(parameter)
-          : this.addToOutputParams(parameter);
-        if (this.tableIn) {
-          this.tableIn.renderRows();
-        }
-        if (this.tableOut) {
-          this.tableOut.renderRows();
-        }
-      }
-    });
-  }
-
-  addToInputParams(parameter: Parameter) {
-    this.inputParameters.parameters.push(parameter);
-    this.data.inputParameters = this.inputParameters;
-  }
-
-  addToOutputParams(parameter: Parameter) {
-    this.outputParameters.parameters.push(parameter);
-    this.data.outputParameters = this.outputParameters;
-  }
 }
 
 export interface DialogData {
@@ -157,10 +112,8 @@ export interface DialogData {
   name: string;
   description: string;
   fileLocation: string;
-  inputParameters: Parameters;
-  outputParameters: Parameters;
   programmingLanguage: string;
   selectionRule: string;
-  tag: Tag;
-  tags: Tag[];
+  tag: TagDto;
+  tags: TagDto[];
 }

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { TagService } from '../../services/tag.service';
-import { Tag } from '../../model/tag.model';
+import { TagDto } from 'api/models';
+import { TagService } from 'api/services/tag.service';
 import { JsonImportDialogComponent } from '../dialogs/json-import-dialog.component';
-import { EntityCreator } from '../../util/entity.creator';
 import { UtilService } from '../../util/util.service';
 import { AddTagDialogComponent } from './dialogs/add-tag-dialog.component';
 
@@ -14,7 +13,7 @@ import { AddTagDialogComponent } from './dialogs/add-tag-dialog.component';
   styleUrls: ['./tags.component.scss'],
 })
 export class TagsComponent implements OnInit {
-  tags: Tag[] = [];
+  tags: TagDto[] = [];
 
   displayedTagsColumns: string[] = ['key', 'value'];
 
@@ -30,7 +29,7 @@ export class TagsComponent implements OnInit {
   }
 
   getAllTags(): void {
-    this.tagService.getAllTags().subscribe((tags) => {
+    this.tagService.getTags2().subscribe((tags) => {
       this.tags = tags.tagsDtos;
     });
   }
@@ -43,9 +42,11 @@ export class TagsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        this.tagService.createTagWithJson(dialogResult).subscribe(() => {
-          this.handleTagCreationResult();
-        });
+        this.tagService
+          .createTag({ body: JSON.parse(dialogResult) })
+          .subscribe(() => {
+            this.handleTagCreationResult();
+          });
       }
     });
   }
@@ -58,8 +59,11 @@ export class TagsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const tag: Tag = EntityCreator.createTagFromDialogResult(dialogResult);
-        this.tagService.createTag(tag).subscribe(() => {
+        const tag: TagDto = {
+          key: dialogResult.key,
+          value: dialogResult.value,
+        };
+        this.tagService.createTag({ body: tag }).subscribe(() => {
           this.handleTagCreationResult();
         });
       }

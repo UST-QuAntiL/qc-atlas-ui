@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { ImplementationService } from '../../services/implementation.service';
-import { Implementation } from '../../model/implementation.model';
-import { Algorithm } from '../../model/algorithm.model';
-import { AlgorithmService } from '../../services/algorithm.service';
-import { TagService } from '../../services/tag.service';
-import { Tag } from '../../model/tag.model';
-import { Content } from '../../model/content.model';
+import { AlgorithmDto, ImplementationDto, TagDto } from 'api/models';
+import { AlgorithmService } from 'api/services/algorithm.service';
+import { ImplementationService } from 'api/services/implementation.service';
+import { TagService } from 'api/services/tag.service';
 import { AddImplementationDialogComponent } from '../implementations/dialogs/add-implementation-dialog.component';
 import { JsonImportDialogComponent } from '../dialogs/json-import-dialog.component';
-import { EntityCreator } from '../../util/entity.creator';
 import { UtilService } from '../../util/util.service';
 import { AddAlgorithmDialogComponent } from './dialogs/add-algorithm-dialog.component';
 
@@ -20,13 +16,13 @@ import { AddAlgorithmDialogComponent } from './dialogs/add-algorithm-dialog.comp
   styleUrls: ['./algorithms.component.scss'],
 })
 export class AlgorithmsComponent implements OnInit {
-  algorithms: Algorithm[] = [];
-  tags: Tag[] = [];
-  implementations: Implementation[] = [];
+  algorithms: AlgorithmDto[] = [];
+  tags: TagDto[] = [];
+  implementations: ImplementationDto[] = [];
   implementationOpened = false;
 
-  selectedAlgorithm: Algorithm;
-  selectedImplementation: Implementation;
+  selectedAlgorithm: AlgorithmDto;
+  selectedImplementation: ImplementationDto;
 
   displayedTagsColumns: string[] = ['key', 'value'];
   displayedImplementationColumns: string[] = ['name'];
@@ -49,7 +45,7 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   getAllAlgorithms(): void {
-    this.algorithmService.getAllAlgorithms().subscribe((data) => {
+    this.algorithmService.getAlgorithms().subscribe((data) => {
       this.algorithms = data.algorithmDtos;
       // set initial selected algorithm
       if (this.algorithms.length > 0) {
@@ -58,7 +54,7 @@ export class AlgorithmsComponent implements OnInit {
     });
   }
 
-  onAlgorithmSelected(algorithm: Algorithm): void {
+  onAlgorithmSelected(algorithm: AlgorithmDto): void {
     this.implementationOpened = false;
     this.selectedAlgorithm = algorithm;
     this.getImplementations();
@@ -67,7 +63,7 @@ export class AlgorithmsComponent implements OnInit {
 
   getImplementations(): void {
     this.implementationService
-      .getImplementationsForAlgorithm(this.selectedAlgorithm.id)
+      .getImplementations({ algoId: this.selectedAlgorithm.id })
       .subscribe((implementations) => {
         this.implementations = implementations.implementationDtos;
       });
@@ -82,7 +78,10 @@ export class AlgorithmsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.implementationService
-          .createImplementationWithJson(this.selectedAlgorithm.id, result)
+          .createImplementation({
+            algoId: this.selectedAlgorithm.id,
+            body: JSON.parse(result),
+          })
           .subscribe((implementationResult) => {
             this.processImplementationResult(implementationResult);
           });
@@ -100,15 +99,15 @@ export class AlgorithmsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
         this.selectedImplementation = null;
-        const resultContent: Content = EntityCreator.createContentFromDialogResult(
-          dialogResult
-        );
-        const implementation: Implementation = EntityCreator.createImplementationFromDialogResult(
-          dialogResult,
-          resultContent
-        );
+        const implementation: ImplementationDto = {
+          name: dialogResult.name,
+          fileLocation: dialogResult.fileLocation,
+        };
         this.implementationService
-          .createImplementation(this.selectedAlgorithm.id, implementation)
+          .createImplementation({
+            algoId: this.selectedAlgorithm.id,
+            body: implementation,
+          })
           .subscribe((implementationResult) => {
             this.processImplementationResult(implementationResult);
           });
@@ -116,19 +115,19 @@ export class AlgorithmsComponent implements OnInit {
     });
   }
 
-  openImplementation(implementation: Implementation): void {
+  openImplementation(implementation: ImplementationDto): void {
     this.implementationOpened = true;
     this.selectedImplementation = implementation;
   }
 
-  getColorOfSelectedAlgorithm(id: number): string {
+  getColorOfSelectedAlgorithm(id: string): string {
     return this.utilService.getColorOfSelectedButton(
       this.selectedAlgorithm,
       id
     );
   }
 
-  getColorOfSelectedImplementation(id: number): string {
+  getColorOfSelectedImplementation(id: string): string {
     return this.utilService.getColorOfSelectedButton(
       this.selectedImplementation,
       id
@@ -145,7 +144,7 @@ export class AlgorithmsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.algorithmService
-          .createAlgorithmWithJson(result)
+          .createAlgorithm(JSON.parse(result))
           .subscribe((algorithmResult) => {
             this.processAlgorithmResult(algorithmResult);
           });
@@ -154,7 +153,7 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   getTags(): void {
-    this.tagService.getAllTags().subscribe((data) => {
+    this.tagService.getTags2().subscribe((data) => {
       this.tags = data.tagsDtos;
     });
   }
@@ -171,15 +170,12 @@ export class AlgorithmsComponent implements OnInit {
       if (dialogResult) {
         this.selectedAlgorithm = null;
         this.implementations = null;
-        const resultContent: Content = EntityCreator.createContentFromDialogResult(
-          dialogResult
-        );
-        const algorithm: Algorithm = EntityCreator.createAlgorithmFromDialogResult(
-          dialogResult,
-          resultContent
-        );
+        const algorithm: AlgorithmDto = {
+          name: dialogResult.name,
+          tags: [dialogResult.tag],
+        };
         this.algorithmService
-          .createAlgorithm(algorithm)
+          .createAlgorithm({ body: algorithm })
           .subscribe((algorithmResult) => {
             this.processAlgorithmResult(algorithmResult);
           });
@@ -198,7 +194,7 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   private processImplementationResult(
-    implementationResult: Implementation
+    implementationResult: ImplementationDto
   ): void {
     this.implementations.push(implementationResult);
     this.selectedImplementation = implementationResult;
@@ -207,14 +203,14 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   private getTagsForAlgorithm(): void {
-    this.tagService
-      .getTagsForAlgorithm(this.selectedAlgorithm.id)
+    this.algorithmService
+      .getTags({ id: this.selectedAlgorithm.id })
       .subscribe((tagData) => {
         this.tags = tagData.tagsDtos;
       });
   }
 
-  private processAlgorithmResult(algorithmResult: Algorithm): void {
+  private processAlgorithmResult(algorithmResult: AlgorithmDto): void {
     this.algorithms.push(algorithmResult);
     this.onAlgorithmSelected(algorithmResult);
     this.utilService.callSnackBar(this.currentEntity);

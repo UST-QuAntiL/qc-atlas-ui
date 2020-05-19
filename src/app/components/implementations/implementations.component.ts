@@ -6,11 +6,9 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Implementation } from '../../model/implementation.model';
-import { ImplementationService } from '../../services/implementation.service';
-import { TagService } from '../../services/tag.service';
-import { Tag } from '../../model/tag.model';
-import { Algorithm } from '../../model/algorithm.model';
+import { AlgorithmDto, ImplementationDto, TagDto } from 'api/models';
+import { ImplementationService } from 'api/services/implementation.service';
+import { TagService } from 'api/services/tag.service';
 
 @Component({
   selector: 'app-implementations',
@@ -18,9 +16,9 @@ import { Algorithm } from '../../model/algorithm.model';
   styleUrls: ['./implementations.component.scss'],
 })
 export class ImplementationsComponent implements OnInit, OnChanges {
-  @Input() selectedImplementation: Implementation;
-  @Input() selectedAlgorithm: Algorithm;
-  @Input() implementations: Implementation[];
+  @Input() selectedImplementation: ImplementationDto;
+  @Input() selectedAlgorithm: AlgorithmDto;
+  @Input() implementations: ImplementationDto[];
 
   displayedParametersColumns: string[] = [
     'name',
@@ -30,7 +28,7 @@ export class ImplementationsComponent implements OnInit, OnChanges {
   ];
   displayedTagsColumns: string[] = ['key', 'value'];
 
-  tags: Tag[] = [];
+  tags: TagDto[] = [];
 
   constructor(
     private implementationService: ImplementationService,
@@ -56,13 +54,13 @@ export class ImplementationsComponent implements OnInit, OnChanges {
     );
   }
 
-  getImplementationById(algoId: number, implId: number): void {
+  getImplementationById(algoId: string, implId: string): void {
     this.implementationService
-      .getImplementationById(algoId, implId)
+      .getImplementation({ algoId, implId })
       .subscribe((implData) => {
         this.selectedImplementation = implData;
-        this.tagService
-          .getTagsForImplementation(algoId, implId)
+        this.implementationService
+          .getTags1({ algoId, implId })
           .subscribe((tagData) => {
             this.tags = tagData.tagsDtos;
           });

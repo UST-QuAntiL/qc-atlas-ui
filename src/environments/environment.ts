@@ -4,17 +4,7 @@
 
 export const environment = {
   production: false,
-
-  // Backend related stuff
   API_URL: 'http://localhost:8080/atlas',
-  ALGORITHM_ENDPOINT: '/algorithms/',
-  IMPLEMENTATION_ENDPOINT: '/implementations/',
-  PROVIDER_ENDPOINT: '/providers/',
-  QPU_ENDPOINT: '/qpus/',
-  SDK_ENDPOINT: '/sdks/',
-  TAG_ENDPOINT: '/tags/',
-  INPUT_PARAMETERS: '/inputParameters',
-  OUTPUT_PARAMETERS: '/outputParameters',
 };
 
 /*

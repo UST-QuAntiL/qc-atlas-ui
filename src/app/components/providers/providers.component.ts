@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { Provider } from '../../model/provider.model';
-import { ProviderService } from '../../services/provider.service';
+import { ProviderDto } from 'api/models';
+import { ProviderService } from 'api/services/provider.service';
 import { JsonImportDialogComponent } from '../dialogs/json-import-dialog.component';
-import { EntityCreator } from '../../util/entity.creator';
 import { UtilService } from '../../util/util.service';
 import { AddProviderDialogComponent } from './dialogs/add-provider-dialog.component';
 
@@ -14,8 +13,8 @@ import { AddProviderDialogComponent } from './dialogs/add-provider-dialog.compon
   styleUrls: ['./providers.component.scss'],
 })
 export class ProvidersComponent implements OnInit {
-  providers: Provider[] = [];
-  selectedProvider: Provider;
+  providers: ProviderDto[] = [];
+  selectedProvider: ProviderDto;
   currentEntity = 'Provider';
 
   constructor(
@@ -29,11 +28,11 @@ export class ProvidersComponent implements OnInit {
     this.getAllProviders();
   }
 
-  getSelectedProviderColor(id: number): string {
+  getSelectedProviderColor(id: string): string {
     return this.utilService.getColorOfSelectedButton(this.selectedProvider, id);
   }
 
-  makeSelectedProvider(provider: Provider): void {
+  makeSelectedProvider(provider: ProviderDto): void {
     this.selectedProvider = provider;
   }
 
@@ -46,7 +45,7 @@ export class ProvidersComponent implements OnInit {
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
         this.providerService
-          .createProviderWithJson(dialogResult)
+          .createProvider({ body: JSON.parse(dialogResult) })
           .subscribe((providerResult) => {
             this.processProviderResult(providerResult);
           });
@@ -62,11 +61,13 @@ export class ProvidersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const provider: Provider = EntityCreator.createProviderFromDialogResult(
-          dialogResult
-        );
+        const provider: ProviderDto = {
+          name: dialogResult.name,
+          accessKey: dialogResult.accessKey,
+          secretKey: dialogResult.secretKey,
+        };
         this.providerService
-          .createProvider(provider)
+          .createProvider({ body: provider })
           .subscribe((providerResult) => {
             this.processProviderResult(providerResult);
           });
@@ -75,7 +76,7 @@ export class ProvidersComponent implements OnInit {
   }
 
   private getAllProviders(): void {
-    this.providerService.getAllProviders().subscribe((providers) => {
+    this.providerService.getProviders().subscribe((providers) => {
       this.providers = providers.providerDtoList;
       this.selectInitialProvider();
     });
@@ -87,7 +88,7 @@ export class ProvidersComponent implements OnInit {
     }
   }
 
-  private processProviderResult(providerResult: Provider): void {
+  private processProviderResult(providerResult: ProviderDto): void {
     this.providers.push(providerResult);
     this.selectedProvider = providerResult;
     this.utilService.callSnackBar(this.currentEntity);

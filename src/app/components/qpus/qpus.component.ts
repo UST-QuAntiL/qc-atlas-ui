@@ -6,11 +6,9 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Qpu } from '../../model/qpu.model';
+import { ProviderDto, QpuDto } from 'api/models';
+import { QpuService } from 'api/services/qpu.service';
 import { JsonImportDialogComponent } from '../dialogs/json-import-dialog.component';
-import { QpuService } from '../../services/qpu.service';
-import { Provider } from '../../model/provider.model';
-import { EntityCreator } from '../../util/entity.creator';
 import { UtilService } from '../../util/util.service';
 import { AddQpuDialogComponent } from './dialogs/add-qpu-dialog.component';
 
@@ -20,9 +18,9 @@ import { AddQpuDialogComponent } from './dialogs/add-qpu-dialog.component';
   styleUrls: ['./qpus.component.scss'],
 })
 export class QpusComponent implements OnInit, OnChanges {
-  @Input() selectedProvider: Provider;
+  @Input() selectedProvider: ProviderDto;
 
-  qpus: Qpu[] = [];
+  qpus: QpuDto[] = [];
   currentEntity = 'QPU';
   sdkEntity = 'SDKs';
 
@@ -45,8 +43,8 @@ export class QpusComponent implements OnInit, OnChanges {
     this.getQpuForProvider(this.selectedProvider.id);
   }
 
-  getQpuForProvider(providerId: number): void {
-    this.qpuService.getQpusForProvider(providerId).subscribe((data) => {
+  getQpuForProvider(providerId: string): void {
+    this.qpuService.getQpus({ providerId }).subscribe((data) => {
       this.qpus = data.qpuDtoList;
     });
   }
@@ -67,7 +65,10 @@ export class QpusComponent implements OnInit, OnChanges {
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
         this.qpuService
-          .createQpuWithJson(this.selectedProvider.id, dialogResult)
+          .createQpu({
+            providerId: this.selectedProvider.id,
+            body: JSON.parse(dialogResult),
+          })
           .subscribe(() => {
             this.handleQpuCreationResult();
           });
@@ -83,9 +84,14 @@ export class QpusComponent implements OnInit, OnChanges {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const qpu: Qpu = EntityCreator.createQpuFromDialogResult(dialogResult);
+        const qpu: QpuDto = {
+          maxGateTime: dialogResult.maxGateTime,
+          name: dialogResult.name,
+          numberOfQubits: dialogResult.numberOfQubits,
+          t1: dialogResult.t1,
+        };
         this.qpuService
-          .createQpu(this.selectedProvider.id, qpu)
+          .createQpu({ providerId: this.selectedProvider.id, body: qpu })
           .subscribe(() => {
             this.handleQpuCreationResult();
           });

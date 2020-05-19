@@ -4,10 +4,6 @@
     <mat-card-subtitle>Implementation: {{selectedImplementation.name}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div class="entity-content">
-      <h3>Programming language</h3>
-      {{selectedImplementation.programmingLanguage}}
-    </div>
     <mat-divider></mat-divider>
     <div class="entity-content">
       <h3>File location</h3>
@@ -15,16 +11,9 @@
     </div>
     <mat-divider></mat-divider>
     <div class="entity-content">
-      <h3>Selection rule</h3>
-      {{selectedImplementation.selectionRule}}
+      <h3>Description</h3>
+      {{selectedImplementation.description}}
     </div>
-    <mat-divider></mat-divider>
-    <div class="entity-content">
-      <h3>Content</h3>
-      {{selectedImplementation.content.description}}
-    </div>
-    <!-- TODO: move to parameters component -->
-   <app-parameters [selectedImplementation]="selectedImplementation"></app-parameters>
     <div class="entity-content">
       <h3>Tags</h3>
       <table mat-table [dataSource]="this.tags" class="mat-elevation-z0">

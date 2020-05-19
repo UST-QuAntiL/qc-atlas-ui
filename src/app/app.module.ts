@@ -20,6 +20,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ApiModule } from 'api/api.module';
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AlgorithmsComponent } from './components/algorithms/algorithms.component';
@@ -28,7 +30,6 @@ import { TagsComponent } from './components/tags/tags.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AddImplementationDialogComponent } from './components/implementations/dialogs/add-implementation-dialog.component';
 import { AddQpuDialogComponent } from './components/qpus/dialogs/add-qpu-dialog.component';
-import { AddParameterDialogComponent } from './components/parameters/dialogs/add-parameter-dialog.component';
 import { AddTagDialogComponent } from './components/tags/dialogs/add-tag-dialog.component';
 import { AddAlgorithmDialogComponent } from './components/algorithms/dialogs/add-algorithm-dialog.component';
 import { AddProviderDialogComponent } from './components/providers/dialogs/add-provider-dialog.component';
@@ -36,7 +37,6 @@ import { JsonImportDialogComponent } from './components/dialogs/json-import-dial
 import { QpusComponent } from './components/qpus/qpus.component';
 import { MissingEntityDialogComponent } from './components/dialogs/missing-entity-dialog.component';
 import { ImplementationsComponent } from './components/implementations/implementations.component';
-import { ParametersComponent } from './components/parameters/parameters.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +47,6 @@ import { ParametersComponent } from './components/parameters/parameters.componen
     TagsComponent,
     PageNotFoundComponent,
     // dialogs
-    AddParameterDialogComponent,
     AddTagDialogComponent,
     AddAlgorithmDialogComponent,
     AddProviderDialogComponent,
@@ -57,7 +56,6 @@ import { ParametersComponent } from './components/parameters/parameters.componen
     MissingEntityDialogComponent,
     QpusComponent,
     ImplementationsComponent,
-    ParametersComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +63,7 @@ import { ParametersComponent } from './components/parameters/parameters.componen
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    ApiModule.forRoot({ rootUrl: environment.API_URL }),
     AppRoutingModule,
     // material modules
     MatToolbarModule,
@@ -87,7 +86,6 @@ import { ParametersComponent } from './components/parameters/parameters.componen
   ],
   entryComponents: [
     // dialogs need to be provided as entry component
-    AddParameterDialogComponent,
     AddTagDialogComponent,
     AddAlgorithmDialogComponent,
     AddProviderDialogComponent,

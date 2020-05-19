@@ -6,63 +6,6 @@
       <input id="name" formControlName="name" matInput required>
     </mat-form-field>
   </form>
-  <mat-form-field class="input-field">
-    <mat-label>Description</mat-label>
-    <input matInput [(ngModel)]="data.content">
-  </mat-form-field>
-  <!-- TODO: move to parameters component -->
-  <h5 mat-dialog-title>Input Parameters
-    <button (click)="addParameter('input')" mat-button>
-      <mat-icon>add</mat-icon>
-    </button>
-  </h5>
-  <table #inputTable mat-table [dataSource]="inputParameters.parameters" class="mat-elevation-z0"
-         *ngIf="inputParameters.parameters.length > 0">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element">{{element.name}}</td>
-    </ng-container>
-    <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef>Type</th>
-      <td mat-cell *matCellDef="let element">{{element.type}}</td>
-    </ng-container>
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef>Description</th>
-      <td mat-cell *matCellDef="let element">{{element.description}}</td>
-    </ng-container>
-    <ng-container matColumnDef="restriction">
-      <th mat-header-cell *matHeaderCellDef>Restriction</th>
-      <td mat-cell *matCellDef="let element">{{element.restriction}}</td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedParametersColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedParametersColumns;"></tr>
-  </table>
-  <h5 mat-dialog-title>Output Parameters
-    <button (click)="addParameter('output')" mat-button>
-      <mat-icon>add</mat-icon>
-    </button>
-  </h5>
-  <table #outputTable mat-table [dataSource]="outputParameters.parameters" class="mat-elevation-z0"
-         *ngIf="outputParameters.parameters.length > 0">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element">{{element.name}}</td>
-    </ng-container>
-    <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef>Type</th>
-      <td mat-cell *matCellDef="let element">{{element.type}}</td>
-    </ng-container>
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef>Description</th>
-      <td mat-cell *matCellDef="let element">{{element.description}}</td>
-    </ng-container>
-    <ng-container matColumnDef="restriction">
-      <th mat-header-cell *matHeaderCellDef>Restriction</th>
-      <td mat-cell *matCellDef="let element">{{element.restriction}}</td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedParametersColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedParametersColumns;"></tr>
-  </table>
   <h5 mat-dialog-title>Tag</h5>
   <mat-form-field appearance="fill" class="input-field">
     <mat-label>Tag</mat-label>

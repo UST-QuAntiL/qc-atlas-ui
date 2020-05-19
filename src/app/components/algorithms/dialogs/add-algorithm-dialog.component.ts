@@ -6,11 +6,7 @@ import {
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Tag } from '../../../model/tag.model';
-import { Parameters } from '../../../model/parameters.model';
-import { Content } from '../../../model/content.model';
-import { AddParameterDialogComponent } from '../../parameters/dialogs/add-parameter-dialog.component';
-import { Parameter } from '../../../model/parameter.model';
+import { TagDto } from 'api/models';
 
 @Component({
   selector: 'app-add-algorithm-dialog-component',
@@ -21,9 +17,6 @@ export class AddAlgorithmDialogComponent implements OnInit {
   @ViewChild('outputTable') tableOut: MatTable<any>;
 
   algorithmForm: FormGroup;
-
-  inputParameters: Parameters = new Parameters();
-  outputParameters: Parameters = new Parameters();
 
   displayedParametersColumns: string[] = [
     'name',
@@ -36,10 +29,7 @@ export class AddAlgorithmDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AddAlgorithmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog
-  ) {
-    this.inputParameters.parameters = [];
-    this.outputParameters.parameters = [];
-  }
+  ) {}
 
   get name() {
     return this.algorithmForm.get('name');
@@ -47,44 +37,6 @@ export class AddAlgorithmDialogComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  addParameter(type: string) {
-    const dialogRef = this.dialog.open(AddParameterDialogComponent, {
-      width: '400px',
-      data: { title: 'Add new ' + type + ' parameter' },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const parameter: Parameter = {
-          name: result.name,
-          description: result.description,
-          type: result.type,
-          restriction: result.restriction,
-        };
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        type === 'input'
-          ? this.addToInputParams(parameter)
-          : this.addToOutputParams(parameter);
-        if (this.tableIn) {
-          this.tableIn.renderRows();
-        }
-        if (this.tableOut) {
-          this.tableOut.renderRows();
-        }
-      }
-    });
-  }
-
-  addToInputParams(parameter: Parameter) {
-    this.inputParameters.parameters.push(parameter);
-    this.data.inputParameters = this.inputParameters;
-  }
-
-  addToOutputParams(parameter: Parameter) {
-    this.outputParameters.parameters.push(parameter);
-    this.data.outputParameters = this.outputParameters;
   }
 
   ngOnInit(): void {
@@ -109,9 +61,6 @@ export class AddAlgorithmDialogComponent implements OnInit {
 export interface DialogData {
   title: string;
   name: string;
-  inputParameters: Parameters;
-  content: Content;
-  outputParameters: Parameters;
-  tag: Tag;
-  tags: Tag[];
+  tag: TagDto;
+  tags: TagDto[];
 }
