@@ -26,9 +26,9 @@ export class AlgorithmsComponent implements OnInit {
 
   displayedTagsColumns: string[] = ['key', 'value'];
   displayedImplementationColumns: string[] = ['name'];
-  currentEntity = 'Algorithm';
-  implEntity = 'Implementation';
-  tagEntity = 'Tags';
+  currentEntity = 'algorithm';
+  implEntity = 'implementation';
+  tagEntity = 'tags';
 
   constructor(
     private router: Router,

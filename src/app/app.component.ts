@@ -23,11 +23,6 @@ export class AppComponent implements OnInit {
         index: 1,
       },
       {
-        label: 'SDKs',
-        link: './sdks',
-        index: 2,
-      },
-      {
         label: 'Tags',
         link: './tags',
         index: 3,

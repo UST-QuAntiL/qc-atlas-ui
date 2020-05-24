@@ -82,7 +82,7 @@ export class ProvidersComponent implements OnInit {
     });
   }
 
-  private selectInitialProvider() {
+  private selectInitialProvider(): void {
     if (!this.selectedProvider && this.providers.length > 0) {
       this.makeSelectedProvider(this.providers[0]);
     }

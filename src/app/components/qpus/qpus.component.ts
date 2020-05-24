@@ -22,7 +22,6 @@ export class QpusComponent implements OnInit, OnChanges {
 
   qpus: QpuDto[] = [];
   currentEntity = 'QPU';
-  sdkEntity = 'SDKs';
 
   displayedQpuColumns: string[] = [
     'name',
@@ -30,7 +29,6 @@ export class QpusComponent implements OnInit, OnChanges {
     'maxGateTime',
     'numberOfQubits',
     't1',
-    'supportedSdkIds',
   ];
 
   constructor(
