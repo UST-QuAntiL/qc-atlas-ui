@@ -49,8 +49,8 @@ export class TagService extends BaseService {
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -98,8 +98,8 @@ export class TagService extends BaseService {
       rb.body(params.body, 'application/json');
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -120,104 +120,6 @@ export class TagService extends BaseService {
 
     return this.createTag$Response(params).pipe(
       map((r: StrictHttpResponse<TagDto>) => r.body as TagDto)
-    );
-  }
-
-  /**
-   * Path part for operation getImplementationsOfTag
-   */
-  static readonly GetImplementationsOfTagPath = '/tags/{tagId}/implementations';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getImplementationsOfTag()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getImplementationsOfTag$Response(params: {
-    tagId: string;
-
-  }): Observable<StrictHttpResponse<ImplementationListDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, TagService.GetImplementationsOfTagPath, 'get');
-    if (params) {
-
-      rb.path('tagId', params.tagId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ImplementationListDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getImplementationsOfTag$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getImplementationsOfTag(params: {
-    tagId: string;
-
-  }): Observable<ImplementationListDto> {
-
-    return this.getImplementationsOfTag$Response(params).pipe(
-      map((r: StrictHttpResponse<ImplementationListDto>) => r.body as ImplementationListDto)
-    );
-  }
-
-  /**
-   * Path part for operation getAlgorithmsOfTag
-   */
-  static readonly GetAlgorithmsOfTagPath = '/tags/{tagId}/algorithms';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAlgorithmsOfTag()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAlgorithmsOfTag$Response(params: {
-    tagId: string;
-
-  }): Observable<StrictHttpResponse<AlgorithmListDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, TagService.GetAlgorithmsOfTagPath, 'get');
-    if (params) {
-
-      rb.path('tagId', params.tagId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<AlgorithmListDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAlgorithmsOfTag$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAlgorithmsOfTag(params: {
-    tagId: string;
-
-  }): Observable<AlgorithmListDto> {
-
-    return this.getAlgorithmsOfTag$Response(params).pipe(
-      map((r: StrictHttpResponse<AlgorithmListDto>) => r.body as AlgorithmListDto)
     );
   }
 
@@ -244,8 +146,8 @@ export class TagService extends BaseService {
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -267,6 +169,104 @@ export class TagService extends BaseService {
 
     return this.getTagById$Response(params).pipe(
       map((r: StrictHttpResponse<TagDto>) => r.body as TagDto)
+    );
+  }
+
+  /**
+   * Path part for operation getAlgorithmsOfTag
+   */
+  static readonly GetAlgorithmsOfTagPath = '/tags/{tagId}/algorithms';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAlgorithmsOfTag()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlgorithmsOfTag$Response(params: {
+    tagId: string;
+
+  }): Observable<StrictHttpResponse<AlgorithmListDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TagService.GetAlgorithmsOfTagPath, 'get');
+    if (params) {
+
+      rb.path('tagId', params.tagId, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<AlgorithmListDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAlgorithmsOfTag$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlgorithmsOfTag(params: {
+    tagId: string;
+
+  }): Observable<AlgorithmListDto> {
+
+    return this.getAlgorithmsOfTag$Response(params).pipe(
+      map((r: StrictHttpResponse<AlgorithmListDto>) => r.body as AlgorithmListDto)
+    );
+  }
+
+  /**
+   * Path part for operation getImplementationsOfTag
+   */
+  static readonly GetImplementationsOfTagPath = '/tags/{tagId}/implementations';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementationsOfTag()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationsOfTag$Response(params: {
+    tagId: string;
+
+  }): Observable<StrictHttpResponse<ImplementationListDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TagService.GetImplementationsOfTagPath, 'get');
+    if (params) {
+
+      rb.path('tagId', params.tagId, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ImplementationListDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementationsOfTag$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationsOfTag(params: {
+    tagId: string;
+
+  }): Observable<ImplementationListDto> {
+
+    return this.getImplementationsOfTag$Response(params).pipe(
+      map((r: StrictHttpResponse<ImplementationListDto>) => r.body as ImplementationListDto)
     );
   }
 

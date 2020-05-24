@@ -24,58 +24,6 @@ export class ImplementationService extends BaseService {
   }
 
   /**
-   * Path part for operation getImplementation
-   */
-  static readonly GetImplementationPath = '/algorithms/{algoId}/implementations/{implId}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getImplementation()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getImplementation$Response(params: {
-    algoId: string;
-    implId: string;
-
-  }): Observable<StrictHttpResponse<ImplementationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ImplementationService.GetImplementationPath, 'get');
-    if (params) {
-
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ImplementationDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getImplementation$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getImplementation(params: {
-    algoId: string;
-    implId: string;
-
-  }): Observable<ImplementationDto> {
-
-    return this.getImplementation$Response(params).pipe(
-      map((r: StrictHttpResponse<ImplementationDto>) => r.body as ImplementationDto)
-    );
-  }
-
-  /**
    * Path part for operation getTags1
    */
   static readonly GetTags1Path = '/algorithms/{algoId}/implementations/{implId}/tags';
@@ -100,8 +48,8 @@ export class ImplementationService extends BaseService {
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -128,6 +76,58 @@ export class ImplementationService extends BaseService {
   }
 
   /**
+   * Path part for operation getImplementation
+   */
+  static readonly GetImplementationPath = '/algorithms/{algoId}/implementations/{implId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementation$Response(params: {
+    algoId: string;
+    implId: string;
+
+  }): Observable<StrictHttpResponse<ImplementationDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ImplementationService.GetImplementationPath, 'get');
+    if (params) {
+
+      rb.path('algoId', params.algoId, {});
+      rb.path('implId', params.implId, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ImplementationDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementation(params: {
+    algoId: string;
+    implId: string;
+
+  }): Observable<ImplementationDto> {
+
+    return this.getImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<ImplementationDto>) => r.body as ImplementationDto)
+    );
+  }
+
+  /**
    * Path part for operation getImplementations
    */
   static readonly GetImplementationsPath = '/algorithms/{algoId}/implementations/';
@@ -150,8 +150,8 @@ export class ImplementationService extends BaseService {
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -200,8 +200,8 @@ export class ImplementationService extends BaseService {
       rb.body(params.body, 'application/json');
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {

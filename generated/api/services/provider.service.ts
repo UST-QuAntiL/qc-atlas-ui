@@ -23,6 +23,55 @@ export class ProviderService extends BaseService {
   }
 
   /**
+   * Path part for operation getProvider
+   */
+  static readonly GetProviderPath = '/providers/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProvider()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProvider$Response(params: {
+    id: string;
+
+  }): Observable<StrictHttpResponse<ProviderDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetProviderPath, 'get');
+    if (params) {
+
+      rb.path('id', params.id, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ProviderDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getProvider$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProvider(params: {
+    id: string;
+
+  }): Observable<ProviderDto> {
+
+    return this.getProvider$Response(params).pipe(
+      map((r: StrictHttpResponse<ProviderDto>) => r.body as ProviderDto)
+    );
+  }
+
+  /**
    * Path part for operation getProviders
    */
   static readonly GetProvidersPath = '/providers/';
@@ -47,8 +96,8 @@ export class ProviderService extends BaseService {
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -96,8 +145,8 @@ export class ProviderService extends BaseService {
       rb.body(params.body, 'application/json');
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -117,55 +166,6 @@ export class ProviderService extends BaseService {
   }): Observable<ProviderDto> {
 
     return this.createProvider$Response(params).pipe(
-      map((r: StrictHttpResponse<ProviderDto>) => r.body as ProviderDto)
-    );
-  }
-
-  /**
-   * Path part for operation getProvider
-   */
-  static readonly GetProviderPath = '/providers/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getProvider()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getProvider$Response(params: {
-    id: string;
-
-  }): Observable<StrictHttpResponse<ProviderDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetProviderPath, 'get');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ProviderDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getProvider$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getProvider(params: {
-    id: string;
-
-  }): Observable<ProviderDto> {
-
-    return this.getProvider$Response(params).pipe(
       map((r: StrictHttpResponse<ProviderDto>) => r.body as ProviderDto)
     );
   }

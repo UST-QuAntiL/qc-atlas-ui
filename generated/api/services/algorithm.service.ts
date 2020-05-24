@@ -48,8 +48,8 @@ export class AlgorithmService extends BaseService {
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -97,8 +97,8 @@ export class AlgorithmService extends BaseService {
       rb.body(params.body, 'application/json');
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -118,55 +118,6 @@ export class AlgorithmService extends BaseService {
   }): Observable<AlgorithmDto> {
 
     return this.createAlgorithm$Response(params).pipe(
-      map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
-    );
-  }
-
-  /**
-   * Path part for operation getAlgorithm
-   */
-  static readonly GetAlgorithmPath = '/algorithms/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAlgorithm()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAlgorithm$Response(params: {
-    id: string;
-
-  }): Observable<StrictHttpResponse<AlgorithmDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmPath, 'get');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<AlgorithmDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAlgorithm$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAlgorithm(params: {
-    id: string;
-
-  }): Observable<AlgorithmDto> {
-
-    return this.getAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
     );
   }
@@ -194,8 +145,8 @@ export class AlgorithmService extends BaseService {
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -217,6 +168,55 @@ export class AlgorithmService extends BaseService {
 
     return this.getTags$Response(params).pipe(
       map((r: StrictHttpResponse<TagListDto>) => r.body as TagListDto)
+    );
+  }
+
+  /**
+   * Path part for operation getAlgorithm
+   */
+  static readonly GetAlgorithmPath = '/algorithms/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlgorithm$Response(params: {
+    id: string;
+
+  }): Observable<StrictHttpResponse<AlgorithmDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmPath, 'get');
+    if (params) {
+
+      rb.path('id', params.id, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<AlgorithmDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlgorithm(params: {
+    id: string;
+
+  }): Observable<AlgorithmDto> {
+
+    return this.getAlgorithm$Response(params).pipe(
+      map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
     );
   }
 
