@@ -24,9 +24,58 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Path part for operation getAlgorithm
+   */
+  static readonly GetAlgorithmPath = '/algorithms/v1/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlgorithm$Response(params: {
+    id: string;
+
+  }): Observable<StrictHttpResponse<AlgorithmDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmPath, 'get');
+    if (params) {
+
+      rb.path('id', params.id, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<AlgorithmDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlgorithm(params: {
+    id: string;
+
+  }): Observable<AlgorithmDto> {
+
+    return this.getAlgorithm$Response(params).pipe(
+      map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
+    );
+  }
+
+  /**
    * Path part for operation getAlgorithms
    */
-  static readonly GetAlgorithmsPath = '/algorithms/';
+  static readonly GetAlgorithmsPath = '/algorithms/v1/';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -78,7 +127,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation createAlgorithm
    */
-  static readonly CreateAlgorithmPath = '/algorithms/';
+  static readonly CreateAlgorithmPath = '/algorithms/v1/';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -125,7 +174,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getTags
    */
-  static readonly GetTagsPath = '/algorithms/{id}/tags';
+  static readonly GetTagsPath = '/algorithms/v1/{id}/tags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -168,55 +217,6 @@ export class AlgorithmService extends BaseService {
 
     return this.getTags$Response(params).pipe(
       map((r: StrictHttpResponse<TagListDto>) => r.body as TagListDto)
-    );
-  }
-
-  /**
-   * Path part for operation getAlgorithm
-   */
-  static readonly GetAlgorithmPath = '/algorithms/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAlgorithm()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAlgorithm$Response(params: {
-    id: string;
-
-  }): Observable<StrictHttpResponse<AlgorithmDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmPath, 'get');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<AlgorithmDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAlgorithm$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAlgorithm(params: {
-    id: string;
-
-  }): Observable<AlgorithmDto> {
-
-    return this.getAlgorithm$Response(params).pipe(
-      map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
     );
   }
 

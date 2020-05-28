@@ -27,7 +27,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation getTags2
    */
-  static readonly GetTags2Path = '/tags/';
+  static readonly GetTags2Path = '/tags/v1/';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -79,7 +79,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation createTag
    */
-  static readonly CreateTagPath = '/tags/';
+  static readonly CreateTagPath = '/tags/v1/';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -126,7 +126,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation getTagById
    */
-  static readonly GetTagByIdPath = '/tags/{tagId}';
+  static readonly GetTagByIdPath = '/tags/v1/{tagId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -175,7 +175,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation getAlgorithmsOfTag
    */
-  static readonly GetAlgorithmsOfTagPath = '/tags/{tagId}/algorithms';
+  static readonly GetAlgorithmsOfTagPath = '/tags/v1/{tagId}/algorithms';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -224,7 +224,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation getImplementationsOfTag
    */
-  static readonly GetImplementationsOfTagPath = '/tags/{tagId}/implementations';
+  static readonly GetImplementationsOfTagPath = '/tags/v1/{tagId}/implementations';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

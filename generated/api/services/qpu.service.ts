@@ -25,7 +25,7 @@ export class QpuService extends BaseService {
   /**
    * Path part for operation getQpus
    */
-  static readonly GetQpusPath = '/providers/{providerId}/qpus/';
+  static readonly GetQpusPath = '/qpus/v1/';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -43,7 +43,7 @@ export class QpuService extends BaseService {
     const rb = new RequestBuilder(this.rootUrl, QpuService.GetQpusPath, 'get');
     if (params) {
 
-      rb.path('providerId', params.providerId, {});
+      rb.query('providerId', params.providerId, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
 
@@ -80,7 +80,7 @@ export class QpuService extends BaseService {
   /**
    * Path part for operation createQpu
    */
-  static readonly CreateQpuPath = '/providers/{providerId}/qpus/';
+  static readonly CreateQpuPath = '/qpus/v1/';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -96,7 +96,7 @@ export class QpuService extends BaseService {
     const rb = new RequestBuilder(this.rootUrl, QpuService.CreateQpuPath, 'post');
     if (params) {
 
-      rb.path('providerId', params.providerId, {});
+      rb.query('providerId', params.providerId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -130,7 +130,7 @@ export class QpuService extends BaseService {
   /**
    * Path part for operation getQpu
    */
-  static readonly GetQpuPath = '/providers/{providerId}/qpus/{qpuId}';
+  static readonly GetQpuPath = '/qpus/v1/{qpuId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -139,7 +139,6 @@ export class QpuService extends BaseService {
    * This method doesn't expect any request body.
    */
   getQpu$Response(params: {
-    providerId: string;
     qpuId: string;
 
   }): Observable<StrictHttpResponse<QpuDto>> {
@@ -147,7 +146,6 @@ export class QpuService extends BaseService {
     const rb = new RequestBuilder(this.rootUrl, QpuService.GetQpuPath, 'get');
     if (params) {
 
-      rb.path('providerId', params.providerId, {});
       rb.path('qpuId', params.qpuId, {});
 
     }
@@ -169,7 +167,6 @@ export class QpuService extends BaseService {
    * This method doesn't expect any request body.
    */
   getQpu(params: {
-    providerId: string;
     qpuId: string;
 
   }): Observable<QpuDto> {

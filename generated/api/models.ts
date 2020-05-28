@@ -1,7 +1,7 @@
 export { AlgorithmDto } from './models/algorithm-dto';
-export { AlgorithmListDto } from './models/algorithm-list-dto';
 export { Links } from './models/links';
 export { TagDto } from './models/tag-dto';
+export { AlgorithmListDto } from './models/algorithm-list-dto';
 export { TagListDto } from './models/tag-list-dto';
 export { ImplementationDto } from './models/implementation-dto';
 export { ImplementationListDto } from './models/implementation-list-dto';
