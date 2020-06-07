@@ -23,7 +23,7 @@
                     [color]="getColorOfSelectedImplementation(implementation.id)">
               {{implementation.name}}
             </button>
-            <button mat-button class="container-right" (click)="updateImplementation(this.selectedImplementation)">
+            <button mat-button class="container-right" (click)="updateImplementation(implementation)">
               <mat-icon mat-list-icon>edit</mat-icon>
             </button>
           </div>

@@ -88,7 +88,7 @@ export class ProblemTypeControllerService extends BaseService {
    */
   createProblemType$Response(params: {
       body: ProblemTypeDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProblemTypeControllerService.CreateProblemTypePath, 'post');
     if (params) {
@@ -102,7 +102,7 @@ export class ProblemTypeControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -115,10 +115,10 @@ export class ProblemTypeControllerService extends BaseService {
    */
   createProblemType(params: {
       body: ProblemTypeDto
-  }): Observable<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }> {
 
     return this.createProblemType$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> })
     );
   }
 
@@ -136,7 +136,7 @@ export class ProblemTypeControllerService extends BaseService {
   getProblemTypeById$Response(params: {
     id: string;
 
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProblemTypeControllerService.GetProblemTypeByIdPath, 'get');
     if (params) {
@@ -150,7 +150,7 @@ export class ProblemTypeControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -164,10 +164,10 @@ export class ProblemTypeControllerService extends BaseService {
   getProblemTypeById(params: {
     id: string;
 
-  }): Observable<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }> {
 
     return this.getProblemTypeById$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> })
     );
   }
 
@@ -185,7 +185,7 @@ export class ProblemTypeControllerService extends BaseService {
   updateProblemType$Response(params: {
     id: string;
       body: ProblemTypeDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProblemTypeControllerService.UpdateProblemTypePath, 'put');
     if (params) {
@@ -200,7 +200,7 @@ export class ProblemTypeControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -214,10 +214,10 @@ export class ProblemTypeControllerService extends BaseService {
   updateProblemType(params: {
     id: string;
       body: ProblemTypeDto
-  }): Observable<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }> {
 
     return this.updateProblemType$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'parentProblemType'?: string, 'links'?: Array<Link> })
     );
   }
 

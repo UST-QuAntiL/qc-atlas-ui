@@ -92,7 +92,7 @@ export class QpuService extends BaseService {
   createQpu$Response(params: {
     providerId: string;
       body: QpuDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, QpuService.CreateQpuPath, 'post');
     if (params) {
@@ -107,7 +107,7 @@ export class QpuService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -121,10 +121,10 @@ export class QpuService extends BaseService {
   createQpu(params: {
     providerId: string;
       body: QpuDto
-  }): Observable<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, 'links'?: Array<Link> }> {
 
     return this.createQpu$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, 'links'?: Array<Link> })
     );
   }
 
@@ -143,7 +143,7 @@ export class QpuService extends BaseService {
     qpuId: string;
     providerId: string;
 
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, QpuService.GetQpuPath, 'get');
     if (params) {
@@ -158,7 +158,7 @@ export class QpuService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -173,10 +173,10 @@ export class QpuService extends BaseService {
     qpuId: string;
     providerId: string;
 
-  }): Observable<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, 'links'?: Array<Link> }> {
 
     return this.getQpu$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, 'links'?: Array<Link> })
     );
   }
 

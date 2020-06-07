@@ -25,6 +25,55 @@ export class ImplementationService extends BaseService {
   }
 
   /**
+   * Path part for operation getImplementation
+   */
+  static readonly GetImplementationPath = '/implementations/v1/{implId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementation$Response(params: {
+    implId: string;
+
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ImplementationService.GetImplementationPath, 'get');
+    if (params) {
+
+      rb.path('implId', params.implId, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementation(params: {
+    implId: string;
+
+  }): Observable<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }> {
+
+    return this.getImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> })
+    );
+  }
+
+  /**
    * Path part for operation getTags1
    */
   static readonly GetTags1Path = '/implementations/v1/{implId}/tags';
@@ -36,7 +85,6 @@ export class ImplementationService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTags1$Response(params: {
-    algoId: string;
     implId: string;
 
   }): Observable<StrictHttpResponse<CollectionModelEntityModelTagDto>> {
@@ -44,7 +92,6 @@ export class ImplementationService extends BaseService {
     const rb = new RequestBuilder(this.rootUrl, ImplementationService.GetTags1Path, 'get');
     if (params) {
 
-      rb.query('algoId', params.algoId, {});
       rb.path('implId', params.implId, {});
 
     }
@@ -66,7 +113,6 @@ export class ImplementationService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTags1(params: {
-    algoId: string;
     implId: string;
 
   }): Observable<CollectionModelEntityModelTagDto> {
@@ -126,6 +172,53 @@ export class ImplementationService extends BaseService {
   }
 
   /**
+   * Path part for operation updateImplementation
+   */
+  static readonly UpdateImplementationPath = '/implementations/v1/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateImplementation$Response(params: {
+      body: ImplementationDto
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ImplementationService.UpdateImplementationPath, 'put');
+    if (params) {
+
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateImplementation(params: {
+      body: ImplementationDto
+  }): Observable<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }> {
+
+    return this.updateImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> })
+    );
+  }
+
+  /**
    * Path part for operation createImplementation
    */
   static readonly CreateImplementationPath = '/implementations/v1/';
@@ -139,7 +232,7 @@ export class ImplementationService extends BaseService {
   createImplementation$Response(params: {
     algoId: string;
       body: ImplementationDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, ImplementationService.CreateImplementationPath, 'post');
     if (params) {
@@ -154,7 +247,7 @@ export class ImplementationService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -168,62 +261,10 @@ export class ImplementationService extends BaseService {
   createImplementation(params: {
     algoId: string;
       body: ImplementationDto
-  }): Observable<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }> {
 
     return this.createImplementation$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> })
-    );
-  }
-
-  /**
-   * Path part for operation getImplementation
-   */
-  static readonly GetImplementationPath = '/implementations/v1/{implId}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getImplementation()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getImplementation$Response(params: {
-    algoId: string;
-    implId: string;
-
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ImplementationService.GetImplementationPath, 'get');
-    if (params) {
-
-      rb.query('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getImplementation$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getImplementation(params: {
-    algoId: string;
-    implId: string;
-
-  }): Observable<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }> {
-
-    return this.getImplementation$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'link': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, 'links'?: Array<Link> })
     );
   }
 

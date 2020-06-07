@@ -1,9 +1,9 @@
 /* tslint:disable */
 import { Link } from './link';
 export interface EntityModelProviderDto {
-  '_links'?: Array<Link>;
   accessKey: string;
   id?: string;
+  links?: Array<Link>;
   name: string;
   secretKey: string;
 }

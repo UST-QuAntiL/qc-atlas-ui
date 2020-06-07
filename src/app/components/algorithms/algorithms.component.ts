@@ -90,19 +90,15 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   createImplementation(): void {
-    const dialogRef = this.utilService.createDialog(
+    const dialogRef = this.utilService.createDialog<ImplementationDto>(
       AddImplementationDialogComponent,
       this.implEntity,
       { tags: this.tags }
     );
 
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
+    dialogRef.afterClosed().subscribe((implementation) => {
+      if (implementation) {
         this.selectedImplementation = null;
-        const implementation: ImplementationDto = {
-          name: dialogResult.name,
-          link: dialogResult.link,
-        };
         this.implementationService
           .createImplementation({
             algoId: this.selectedAlgorithm.id,
@@ -152,17 +148,25 @@ export class AlgorithmsComponent implements OnInit {
     });
   }
 
-  updateImplementation(implId: ImplementationDto): void {
+  updateImplementation(implementation: ImplementationDto): void {
     const dialogRef = this.utilService.createDialog(
       AddImplementationDialogComponent,
       this.implEntity,
-      this.tags
+      { ...implementation, tags: this.tags }
     );
-    dialogRef.beforeClosed().subscribe(() => {
-      Object.assign(
-        this.selectedImplementation,
-        dialogRef.componentInstance.implementationForm.value
-      );
+    dialogRef.afterClosed().subscribe((newImplementation) => {
+      this.implementationService
+        .updateImplementation({ body: newImplementation })
+        .subscribe(
+          (result) => {
+            if (result) {
+              Object.assign(implementation, result);
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     });
   }
 

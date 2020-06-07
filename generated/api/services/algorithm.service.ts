@@ -31,22 +31,22 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getTags
+   * Path part for operation getAlgorithm
    */
-  static readonly GetTagsPath = '/algorithms/v1/{id}/tags';
+  static readonly GetAlgorithmPath = '/algorithms/v1/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getTags()` instead.
+   * To access only the response body, use `getAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getTags$Response(params: {
+  getAlgorithm$Response(params: {
     id: string;
 
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelTagDto>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetTagsPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmPath, 'get');
     if (params) {
 
       rb.path('id', params.id, {});
@@ -58,24 +58,123 @@ export class AlgorithmService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelTagDto>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getTags$Response()` instead.
+   * To access the full response (for headers, for example), `getAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getTags(params: {
+  getAlgorithm(params: {
     id: string;
 
-  }): Observable<CollectionModelEntityModelTagDto> {
+  }): Observable<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }> {
 
-    return this.getTags$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelTagDto>) => r.body as CollectionModelEntityModelTagDto)
+    return this.getAlgorithm$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> })
+    );
+  }
+
+  /**
+   * Path part for operation updateAlgorithm
+   */
+  static readonly UpdateAlgorithmPath = '/algorithms/v1/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateAlgorithm$Response(params: {
+    id: string;
+      body: AlgorithmDto
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UpdateAlgorithmPath, 'put');
+    if (params) {
+
+      rb.path('id', params.id, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateAlgorithm(params: {
+    id: string;
+      body: AlgorithmDto
+  }): Observable<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }> {
+
+    return this.updateAlgorithm$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> })
+    );
+  }
+
+  /**
+   * Path part for operation deleteAlgorithm
+   */
+  static readonly DeleteAlgorithmPath = '/algorithms/v1/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteAlgorithm$Response(params: {
+    id: string;
+
+  }): Observable<StrictHttpResponse<{  }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.DeleteAlgorithmPath, 'delete');
+    if (params) {
+
+      rb.path('id', params.id, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{  }>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteAlgorithm(params: {
+    id: string;
+
+  }): Observable<{  }> {
+
+    return this.deleteAlgorithm$Response(params).pipe(
+      map((r: StrictHttpResponse<{  }>) => r.body as {  })
     );
   }
 
@@ -144,7 +243,7 @@ export class AlgorithmService extends BaseService {
    */
   createAlgorithm$Response(params: {
       body: AlgorithmDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, AlgorithmService.CreateAlgorithmPath, 'post');
     if (params) {
@@ -158,7 +257,7 @@ export class AlgorithmService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -171,30 +270,30 @@ export class AlgorithmService extends BaseService {
    */
   createAlgorithm(params: {
       body: AlgorithmDto
-  }): Observable<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }> {
 
     return this.createAlgorithm$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, 'links'?: Array<Link> })
     );
   }
 
   /**
-   * Path part for operation getAlgorithm
+   * Path part for operation getTags
    */
-  static readonly GetAlgorithmPath = '/algorithms/v1/{id}';
+  static readonly GetTagsPath = '/algorithms/v1/{id}/tags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAlgorithm()` instead.
+   * To access only the response body, use `getTags()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAlgorithm$Response(params: {
+  getTags$Response(params: {
     id: string;
 
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<CollectionModelEntityModelTagDto>> {
 
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetTagsPath, 'get');
     if (params) {
 
       rb.path('id', params.id, {});
@@ -206,123 +305,24 @@ export class AlgorithmService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<CollectionModelEntityModelTagDto>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAlgorithm$Response()` instead.
+   * To access the full response (for headers, for example), `getTags$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAlgorithm(params: {
+  getTags(params: {
     id: string;
 
-  }): Observable<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }> {
+  }): Observable<CollectionModelEntityModelTagDto> {
 
-    return this.getAlgorithm$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> })
-    );
-  }
-
-  /**
-   * Path part for operation updateAlgorithm
-   */
-  static readonly UpdateAlgorithmPath = '/algorithms/v1/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateAlgorithm()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateAlgorithm$Response(params: {
-    id: string;
-      body: AlgorithmDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UpdateAlgorithmPath, 'put');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updateAlgorithm$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateAlgorithm(params: {
-    id: string;
-      body: AlgorithmDto
-  }): Observable<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }> {
-
-    return this.updateAlgorithm$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'acronym'?: string, 'intent'?: string, 'problem'?: string, 'inputFormat'?: string, 'algoParameter'?: string, 'outputFormat'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel': 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'problemTypes'?: Array<ProblemTypeDto>, 'applicationAreas'?: Array<string>, 'tags'?: Array<TagDto>, '_links'?: Array<Link> })
-    );
-  }
-
-  /**
-   * Path part for operation deleteAlgorithm
-   */
-  static readonly DeleteAlgorithmPath = '/algorithms/v1/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteAlgorithm()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteAlgorithm$Response(params: {
-    id: string;
-
-  }): Observable<StrictHttpResponse<{  }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.DeleteAlgorithmPath, 'delete');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{  }>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteAlgorithm$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteAlgorithm(params: {
-    id: string;
-
-  }): Observable<{  }> {
-
-    return this.deleteAlgorithm$Response(params).pipe(
-      map((r: StrictHttpResponse<{  }>) => r.body as {  })
+    return this.getTags$Response(params).pipe(
+      map((r: StrictHttpResponse<CollectionModelEntityModelTagDto>) => r.body as CollectionModelEntityModelTagDto)
     );
   }
 
@@ -438,7 +438,7 @@ export class AlgorithmService extends BaseService {
   updateAlgorithmRelation$Response(params: {
     sourceAlgorithmId: string;
       body: AlgorithmRelationDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'sourceAlgorithm': AlgorithmDto, 'targetAlgorithm': AlgorithmDto, 'algoRelationType': AlgoRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'sourceAlgorithm': AlgorithmDto, 'targetAlgorithm': AlgorithmDto, 'algoRelationType': AlgoRelationTypeDto, 'description'?: string, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UpdateAlgorithmRelationPath, 'put');
     if (params) {
@@ -453,7 +453,7 @@ export class AlgorithmService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'sourceAlgorithm': AlgorithmDto, 'targetAlgorithm': AlgorithmDto, 'algoRelationType': AlgoRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'sourceAlgorithm': AlgorithmDto, 'targetAlgorithm': AlgorithmDto, 'algoRelationType': AlgoRelationTypeDto, 'description'?: string, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -467,10 +467,10 @@ export class AlgorithmService extends BaseService {
   updateAlgorithmRelation(params: {
     sourceAlgorithmId: string;
       body: AlgorithmRelationDto
-  }): Observable<{ 'id'?: string, 'sourceAlgorithm': AlgorithmDto, 'targetAlgorithm': AlgorithmDto, 'algoRelationType': AlgoRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'sourceAlgorithm': AlgorithmDto, 'targetAlgorithm': AlgorithmDto, 'algoRelationType': AlgoRelationTypeDto, 'description'?: string, 'links'?: Array<Link> }> {
 
     return this.updateAlgorithmRelation$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'sourceAlgorithm': AlgorithmDto, 'targetAlgorithm': AlgorithmDto, 'algoRelationType': AlgoRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'sourceAlgorithm': AlgorithmDto, 'targetAlgorithm': AlgorithmDto, 'algoRelationType': AlgoRelationTypeDto, 'description'?: string, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'sourceAlgorithm': AlgorithmDto, 'targetAlgorithm': AlgorithmDto, 'algoRelationType': AlgoRelationTypeDto, 'description'?: string, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'sourceAlgorithm': AlgorithmDto, 'targetAlgorithm': AlgorithmDto, 'algoRelationType': AlgoRelationTypeDto, 'description'?: string, 'links'?: Array<Link> })
     );
   }
 

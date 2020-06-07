@@ -88,7 +88,7 @@ export class AlgoRelationTypeControllerService extends BaseService {
    */
   createAlgoRelationType$Response(params: {
       body: AlgoRelationTypeDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, AlgoRelationTypeControllerService.CreateAlgoRelationTypePath, 'post');
     if (params) {
@@ -102,7 +102,7 @@ export class AlgoRelationTypeControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -115,10 +115,10 @@ export class AlgoRelationTypeControllerService extends BaseService {
    */
   createAlgoRelationType(params: {
       body: AlgoRelationTypeDto
-  }): Observable<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }> {
 
     return this.createAlgoRelationType$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'links'?: Array<Link> })
     );
   }
 
@@ -136,7 +136,7 @@ export class AlgoRelationTypeControllerService extends BaseService {
   getAlgoRelationTypeById$Response(params: {
     id: string;
 
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, AlgoRelationTypeControllerService.GetAlgoRelationTypeByIdPath, 'get');
     if (params) {
@@ -150,7 +150,7 @@ export class AlgoRelationTypeControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -164,10 +164,10 @@ export class AlgoRelationTypeControllerService extends BaseService {
   getAlgoRelationTypeById(params: {
     id: string;
 
-  }): Observable<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }> {
 
     return this.getAlgoRelationTypeById$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'links'?: Array<Link> })
     );
   }
 
@@ -185,7 +185,7 @@ export class AlgoRelationTypeControllerService extends BaseService {
   updateAlgoRelationType$Response(params: {
     id: string;
       body: AlgoRelationTypeDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, AlgoRelationTypeControllerService.UpdateAlgoRelationTypePath, 'put');
     if (params) {
@@ -200,7 +200,7 @@ export class AlgoRelationTypeControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -214,10 +214,10 @@ export class AlgoRelationTypeControllerService extends BaseService {
   updateAlgoRelationType(params: {
     id: string;
       body: AlgoRelationTypeDto
-  }): Observable<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }> {
 
     return this.updateAlgoRelationType$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'links'?: Array<Link> })
     );
   }
 

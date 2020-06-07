@@ -11,6 +11,7 @@ import { map, filter } from 'rxjs/operators';
 import { BackendDto } from '../models/backend-dto';
 import { CloudServiceDto } from '../models/cloud-service-dto';
 import { Link } from '../models/link';
+import { Links } from '../models/links';
 import { SoftwarePlatformDto } from '../models/software-platform-dto';
 
 @Injectable({
@@ -89,7 +90,7 @@ export class SoftwarePlatformService extends BaseService {
    */
   addSoftwarePlatform$Response(params: {
       body: SoftwarePlatformDto
-  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Links, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, SoftwarePlatformService.AddSoftwarePlatformPath, 'put');
     if (params) {
@@ -103,7 +104,7 @@ export class SoftwarePlatformService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Links, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -116,10 +117,10 @@ export class SoftwarePlatformService extends BaseService {
    */
   addSoftwarePlatform(params: {
       body: SoftwarePlatformDto
-  }): Observable<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Links, 'links'?: Array<Link> }> {
 
     return this.addSoftwarePlatform$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Links, 'links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Links, 'links'?: Array<Link> })
     );
   }
 
@@ -137,7 +138,7 @@ export class SoftwarePlatformService extends BaseService {
   getSoftwarePlatform$Response(params: {
     id: string;
 
-  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>> {
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Links, 'links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, SoftwarePlatformService.GetSoftwarePlatformPath, 'get');
     if (params) {
@@ -151,7 +152,7 @@ export class SoftwarePlatformService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>;
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Links, 'links'?: Array<Link> }>;
       })
     );
   }
@@ -165,10 +166,10 @@ export class SoftwarePlatformService extends BaseService {
   getSoftwarePlatform(params: {
     id: string;
 
-  }): Observable<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }> {
+  }): Observable<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Links, 'links'?: Array<Link> }> {
 
     return this.getSoftwarePlatform$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Links, 'links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Links, 'links'?: Array<Link> })
     );
   }
 
