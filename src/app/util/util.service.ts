@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { TagDto } from 'api/models';
+import { MatDialogRef } from '@angular/material/dialog/dialog-ref';
+import { ComponentType } from '@angular/cdk/portal';
+
 import { MissingEntityDialogComponent } from '../components/dialogs/missing-entity-dialog.component';
 
 @Injectable({
@@ -18,14 +20,14 @@ export class UtilService {
     });
   }
 
-  public createDialog(
-    dialogComponent: any,
-    entity: string,
-    tags?: TagDto[]
-  ): any {
-    return this.dialog.open(dialogComponent, {
+  public createDialog<R = any, T = any, D = any>(
+    componentOrTemplateRef: ComponentType<T> | TemplateRef<T>,
+    title: string,
+    data?: D
+  ): MatDialogRef<T, R> {
+    return this.dialog.open(componentOrTemplateRef, {
       width: '400px',
-      data: { title: 'Add new ' + entity, tags },
+      data: { title: 'Add new ' + title, ...data },
     });
   }
 
