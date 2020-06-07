@@ -18,13 +18,12 @@
           No implementations yet.
         </div>
         <div *ngFor="let implementation of implementations">
-          <div>
-            <button mat-button (click)="openImplementation(implementation)"
+          <div class="horizontal-container">
+            <button mat-button class="container-left" (click)="openImplementation(implementation)"
                     [color]="getColorOfSelectedImplementation(implementation.id)">
-              <mat-icon>settings_ethernet</mat-icon>
               {{implementation.name}}
             </button>
-            <button mat-button class="edit-image" (click)="updateImplementation(this.selectedImplementation)">
+            <button mat-button class="container-right" (click)="updateImplementation(this.selectedImplementation)">
               <mat-icon mat-list-icon>edit</mat-icon>
             </button>
           </div>
