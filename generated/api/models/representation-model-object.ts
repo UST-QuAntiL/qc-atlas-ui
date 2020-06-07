@@ -1,5 +1,5 @@
 /* tslint:disable */
 import { Links } from './links';
-export interface RepresentationModel {
+export interface RepresentationModelObject {
   '_links'?: Links;
 }

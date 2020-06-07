@@ -1,5 +1,7 @@
 /* tslint:disable */
-export interface ImplementationDto {
+import { Link } from './link';
+export interface EntityModelImplementationDto {
+  '_links'?: Array<Link>;
   assumptions?: string;
   contributors?: string;
   dependencies?: string;

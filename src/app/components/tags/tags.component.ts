@@ -30,7 +30,7 @@ export class TagsComponent implements OnInit {
 
   getAllTags(): void {
     this.tagService.getTags2().subscribe((tags) => {
-      this.tags = tags.tagsDtos;
+      this.tags = tags._embedded.tagDtoes;
     });
   }
 

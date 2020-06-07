@@ -1,7 +1,9 @@
 /* tslint:disable */
+import { Link } from './link';
 import { ProblemTypeDto } from './problem-type-dto';
 import { TagDto } from './tag-dto';
-export interface AlgorithmDto {
+export interface EntityModelAlgorithmDto {
+  '_links'?: Array<Link>;
   acronym?: string;
   algoParameter?: string;
   applicationAreas?: Array<string>;

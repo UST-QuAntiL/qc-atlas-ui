@@ -8,7 +8,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { RepresentationModel } from '../models/representation-model';
+import { RepresentationModelObject } from '../models/representation-model-object';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +34,7 @@ export class RootService extends BaseService {
    */
   root$Response(params?: {
 
-  }): Observable<StrictHttpResponse<RepresentationModel>> {
+  }): Observable<StrictHttpResponse<RepresentationModelObject>> {
 
     const rb = new RequestBuilder(this.rootUrl, RootService.RootPath, 'get');
     if (params) {
@@ -47,7 +47,7 @@ export class RootService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModel>;
+        return r as StrictHttpResponse<RepresentationModelObject>;
       })
     );
   }
@@ -60,10 +60,10 @@ export class RootService extends BaseService {
    */
   root(params?: {
 
-  }): Observable<RepresentationModel> {
+  }): Observable<RepresentationModelObject> {
 
     return this.root$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModel>) => r.body as RepresentationModel)
+      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
     );
   }
 

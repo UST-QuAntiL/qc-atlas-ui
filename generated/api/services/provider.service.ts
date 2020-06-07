@@ -8,8 +8,9 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { Link } from '../models/link';
+import { PagedModelEntityModelProviderDto } from '../models/paged-model-entity-model-provider-dto';
 import { ProviderDto } from '../models/provider-dto';
-import { ProviderListDto } from '../models/provider-list-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -37,7 +38,7 @@ export class ProviderService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<StrictHttpResponse<ProviderListDto>> {
+  }): Observable<StrictHttpResponse<PagedModelEntityModelProviderDto>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProviderService.GetProvidersPath, 'get');
     if (params) {
@@ -52,7 +53,7 @@ export class ProviderService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ProviderListDto>;
+        return r as StrictHttpResponse<PagedModelEntityModelProviderDto>;
       })
     );
   }
@@ -67,10 +68,10 @@ export class ProviderService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<ProviderListDto> {
+  }): Observable<PagedModelEntityModelProviderDto> {
 
     return this.getProviders$Response(params).pipe(
-      map((r: StrictHttpResponse<ProviderListDto>) => r.body as ProviderListDto)
+      map((r: StrictHttpResponse<PagedModelEntityModelProviderDto>) => r.body as PagedModelEntityModelProviderDto)
     );
   }
 
@@ -87,7 +88,7 @@ export class ProviderService extends BaseService {
    */
   createProvider$Response(params: {
       body: ProviderDto
-  }): Observable<StrictHttpResponse<ProviderDto>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'accessKey': string, 'secretKey': string, '_links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProviderService.CreateProviderPath, 'post');
     if (params) {
@@ -101,7 +102,7 @@ export class ProviderService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ProviderDto>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'accessKey': string, 'secretKey': string, '_links'?: Array<Link> }>;
       })
     );
   }
@@ -114,10 +115,10 @@ export class ProviderService extends BaseService {
    */
   createProvider(params: {
       body: ProviderDto
-  }): Observable<ProviderDto> {
+  }): Observable<{ 'id'?: string, 'name': string, 'accessKey': string, 'secretKey': string, '_links'?: Array<Link> }> {
 
     return this.createProvider$Response(params).pipe(
-      map((r: StrictHttpResponse<ProviderDto>) => r.body as ProviderDto)
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'accessKey': string, 'secretKey': string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'accessKey': string, 'secretKey': string, '_links'?: Array<Link> })
     );
   }
 
@@ -135,7 +136,7 @@ export class ProviderService extends BaseService {
   getProvider$Response(params: {
     id: string;
 
-  }): Observable<StrictHttpResponse<ProviderDto>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'accessKey': string, 'secretKey': string, '_links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProviderService.GetProviderPath, 'get');
     if (params) {
@@ -149,7 +150,7 @@ export class ProviderService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ProviderDto>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'accessKey': string, 'secretKey': string, '_links'?: Array<Link> }>;
       })
     );
   }
@@ -163,10 +164,10 @@ export class ProviderService extends BaseService {
   getProvider(params: {
     id: string;
 
-  }): Observable<ProviderDto> {
+  }): Observable<{ 'id'?: string, 'name': string, 'accessKey': string, 'secretKey': string, '_links'?: Array<Link> }> {
 
     return this.getProvider$Response(params).pipe(
-      map((r: StrictHttpResponse<ProviderDto>) => r.body as ProviderDto)
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'accessKey': string, 'secretKey': string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'accessKey': string, 'secretKey': string, '_links'?: Array<Link> })
     );
   }
 

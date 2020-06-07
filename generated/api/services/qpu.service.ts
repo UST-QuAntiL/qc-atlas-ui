@@ -8,8 +8,9 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { Link } from '../models/link';
+import { PagedModelEntityModelQpuDto } from '../models/paged-model-entity-model-qpu-dto';
 import { QpuDto } from '../models/qpu-dto';
-import { QpuListDto } from '../models/qpu-list-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +39,7 @@ export class QpuService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<StrictHttpResponse<QpuListDto>> {
+  }): Observable<StrictHttpResponse<PagedModelEntityModelQpuDto>> {
 
     const rb = new RequestBuilder(this.rootUrl, QpuService.GetQpusPath, 'get');
     if (params) {
@@ -54,7 +55,7 @@ export class QpuService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<QpuListDto>;
+        return r as StrictHttpResponse<PagedModelEntityModelQpuDto>;
       })
     );
   }
@@ -70,10 +71,10 @@ export class QpuService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<QpuListDto> {
+  }): Observable<PagedModelEntityModelQpuDto> {
 
     return this.getQpus$Response(params).pipe(
-      map((r: StrictHttpResponse<QpuListDto>) => r.body as QpuListDto)
+      map((r: StrictHttpResponse<PagedModelEntityModelQpuDto>) => r.body as PagedModelEntityModelQpuDto)
     );
   }
 
@@ -91,7 +92,7 @@ export class QpuService extends BaseService {
   createQpu$Response(params: {
     providerId: string;
       body: QpuDto
-  }): Observable<StrictHttpResponse<QpuDto>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, QpuService.CreateQpuPath, 'post');
     if (params) {
@@ -106,7 +107,7 @@ export class QpuService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<QpuDto>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>;
       })
     );
   }
@@ -120,10 +121,10 @@ export class QpuService extends BaseService {
   createQpu(params: {
     providerId: string;
       body: QpuDto
-  }): Observable<QpuDto> {
+  }): Observable<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }> {
 
     return this.createQpu$Response(params).pipe(
-      map((r: StrictHttpResponse<QpuDto>) => r.body as QpuDto)
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> })
     );
   }
 
@@ -140,13 +141,15 @@ export class QpuService extends BaseService {
    */
   getQpu$Response(params: {
     qpuId: string;
+    providerId: string;
 
-  }): Observable<StrictHttpResponse<QpuDto>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, QpuService.GetQpuPath, 'get');
     if (params) {
 
       rb.path('qpuId', params.qpuId, {});
+      rb.query('providerId', params.providerId, {});
 
     }
     return this.http.request(rb.build({
@@ -155,7 +158,7 @@ export class QpuService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<QpuDto>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>;
       })
     );
   }
@@ -168,11 +171,12 @@ export class QpuService extends BaseService {
    */
   getQpu(params: {
     qpuId: string;
+    providerId: string;
 
-  }): Observable<QpuDto> {
+  }): Observable<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }> {
 
     return this.getQpu$Response(params).pipe(
-      map((r: StrictHttpResponse<QpuDto>) => r.body as QpuDto)
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'numberOfQubits'?: number, 't1'?: number, 'maxGateTime'?: number, '_links'?: Array<Link> })
     );
   }
 

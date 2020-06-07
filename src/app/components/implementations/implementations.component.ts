@@ -56,12 +56,14 @@ export class ImplementationsComponent implements OnInit, OnChanges {
 
   getImplementationById(algoId: string, implId: string): void {
     this.implementationService
-      .getImplementation({ implId })
+      .getImplementation({ algoId, implId })
       .subscribe((implData) => {
         this.selectedImplementation = implData;
-        this.implementationService.getTags1({ implId }).subscribe((tagData) => {
-          this.tags = tagData.tagsDtos;
-        });
+        this.implementationService
+          .getTags1({ algoId, implId })
+          .subscribe((tagData) => {
+            this.tags = tagData._embedded.tagDtoes;
+          });
       });
   }
 

@@ -46,7 +46,7 @@ export class AlgorithmsComponent implements OnInit {
 
   getAllAlgorithms(): void {
     this.algorithmService.getAlgorithms().subscribe((data) => {
-      this.algorithms = data.algorithmDtos;
+      this.algorithms = data._embedded.algorithmDtoes;
       // set initial selected algorithm
       if (this.algorithms.length > 0) {
         this.onAlgorithmSelected(this.algorithms[0]);
@@ -65,7 +65,7 @@ export class AlgorithmsComponent implements OnInit {
     this.implementationService
       .getImplementations({ algoId: this.selectedAlgorithm.id })
       .subscribe((implementations) => {
-        this.implementations = implementations.implementationDtos;
+        this.implementations = implementations._embedded.implementationDtoes;
       });
   }
 
@@ -93,7 +93,7 @@ export class AlgorithmsComponent implements OnInit {
     const dialogRef = this.utilService.createDialog(
       AddImplementationDialogComponent,
       this.implEntity,
-      this.tags
+      { tags: this.tags }
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
@@ -154,7 +154,7 @@ export class AlgorithmsComponent implements OnInit {
 
   getTags(): void {
     this.tagService.getTags2().subscribe((data) => {
-      this.tags = data.tagsDtos;
+      this.tags = data._embedded.tagDtoes;
     });
   }
 
@@ -163,7 +163,7 @@ export class AlgorithmsComponent implements OnInit {
     const dialogRef = this.utilService.createDialog(
       AddAlgorithmDialogComponent,
       this.currentEntity,
-      this.tags
+      { tags: this.tags }
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
@@ -173,6 +173,7 @@ export class AlgorithmsComponent implements OnInit {
         const algorithm: AlgorithmDto = {
           name: dialogResult.name,
           tags: [dialogResult.tag],
+          computationModel: dialogResult.computationModel,
         };
         this.algorithmService
           .createAlgorithm({ body: algorithm })
@@ -206,7 +207,7 @@ export class AlgorithmsComponent implements OnInit {
     this.algorithmService
       .getTags({ id: this.selectedAlgorithm.id })
       .subscribe((tagData) => {
-        this.tags = tagData.tagsDtos;
+        this.tags = tagData._embedded.tagDtoes;
       });
   }
 

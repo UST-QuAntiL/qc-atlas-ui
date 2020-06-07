@@ -43,7 +43,7 @@ export class QpusComponent implements OnInit, OnChanges {
 
   getQpuForProvider(providerId: string): void {
     this.qpuService.getQpus({ providerId }).subscribe((data) => {
-      this.qpus = data.qpuDtoList;
+      this.qpus = data._embedded.qpuDtoes;
     });
   }
 

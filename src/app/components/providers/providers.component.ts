@@ -77,7 +77,7 @@ export class ProvidersComponent implements OnInit {
 
   private getAllProviders(): void {
     this.providerService.getProviders().subscribe((providers) => {
-      this.providers = providers.providerDtoList;
+      this.providers = providers._embedded.providerDtoes;
       this.selectInitialProvider();
     });
   }

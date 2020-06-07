@@ -8,9 +8,10 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { CollectionModelEntityModelImplementationDto } from '../models/collection-model-entity-model-implementation-dto';
+import { CollectionModelEntityModelTagDto } from '../models/collection-model-entity-model-tag-dto';
 import { ImplementationDto } from '../models/implementation-dto';
-import { ImplementationListDto } from '../models/implementation-list-dto';
-import { TagListDto } from '../models/tag-list-dto';
+import { Link } from '../models/link';
 
 @Injectable({
   providedIn: 'root',
@@ -35,13 +36,15 @@ export class ImplementationService extends BaseService {
    * This method doesn't expect any request body.
    */
   getImplementation$Response(params: {
+    algoId: string;
     implId: string;
 
-  }): Observable<StrictHttpResponse<ImplementationDto>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'fileLocation': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, ImplementationService.GetImplementationPath, 'get');
     if (params) {
 
+      rb.query('algoId', params.algoId, {});
       rb.path('implId', params.implId, {});
 
     }
@@ -51,7 +54,7 @@ export class ImplementationService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ImplementationDto>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'fileLocation': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>;
       })
     );
   }
@@ -63,12 +66,13 @@ export class ImplementationService extends BaseService {
    * This method doesn't expect any request body.
    */
   getImplementation(params: {
+    algoId: string;
     implId: string;
 
-  }): Observable<ImplementationDto> {
+  }): Observable<{ 'id'?: string, 'name': string, 'fileLocation': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }> {
 
     return this.getImplementation$Response(params).pipe(
-      map((r: StrictHttpResponse<ImplementationDto>) => r.body as ImplementationDto)
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'fileLocation': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'fileLocation': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> })
     );
   }
 
@@ -84,13 +88,15 @@ export class ImplementationService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTags1$Response(params: {
+    algoId: string;
     implId: string;
 
-  }): Observable<StrictHttpResponse<TagListDto>> {
+  }): Observable<StrictHttpResponse<CollectionModelEntityModelTagDto>> {
 
     const rb = new RequestBuilder(this.rootUrl, ImplementationService.GetTags1Path, 'get');
     if (params) {
 
+      rb.query('algoId', params.algoId, {});
       rb.path('implId', params.implId, {});
 
     }
@@ -100,7 +106,7 @@ export class ImplementationService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<TagListDto>;
+        return r as StrictHttpResponse<CollectionModelEntityModelTagDto>;
       })
     );
   }
@@ -112,12 +118,13 @@ export class ImplementationService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTags1(params: {
+    algoId: string;
     implId: string;
 
-  }): Observable<TagListDto> {
+  }): Observable<CollectionModelEntityModelTagDto> {
 
     return this.getTags1$Response(params).pipe(
-      map((r: StrictHttpResponse<TagListDto>) => r.body as TagListDto)
+      map((r: StrictHttpResponse<CollectionModelEntityModelTagDto>) => r.body as CollectionModelEntityModelTagDto)
     );
   }
 
@@ -135,7 +142,7 @@ export class ImplementationService extends BaseService {
   getImplementations$Response(params: {
     algoId: string;
 
-  }): Observable<StrictHttpResponse<ImplementationListDto>> {
+  }): Observable<StrictHttpResponse<CollectionModelEntityModelImplementationDto>> {
 
     const rb = new RequestBuilder(this.rootUrl, ImplementationService.GetImplementationsPath, 'get');
     if (params) {
@@ -149,7 +156,7 @@ export class ImplementationService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ImplementationListDto>;
+        return r as StrictHttpResponse<CollectionModelEntityModelImplementationDto>;
       })
     );
   }
@@ -163,10 +170,10 @@ export class ImplementationService extends BaseService {
   getImplementations(params: {
     algoId: string;
 
-  }): Observable<ImplementationListDto> {
+  }): Observable<CollectionModelEntityModelImplementationDto> {
 
     return this.getImplementations$Response(params).pipe(
-      map((r: StrictHttpResponse<ImplementationListDto>) => r.body as ImplementationListDto)
+      map((r: StrictHttpResponse<CollectionModelEntityModelImplementationDto>) => r.body as CollectionModelEntityModelImplementationDto)
     );
   }
 
@@ -184,7 +191,7 @@ export class ImplementationService extends BaseService {
   createImplementation$Response(params: {
     algoId: string;
       body: ImplementationDto
-  }): Observable<StrictHttpResponse<ImplementationDto>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'fileLocation': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, ImplementationService.CreateImplementationPath, 'post');
     if (params) {
@@ -199,7 +206,7 @@ export class ImplementationService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ImplementationDto>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'fileLocation': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>;
       })
     );
   }
@@ -213,10 +220,10 @@ export class ImplementationService extends BaseService {
   createImplementation(params: {
     algoId: string;
       body: ImplementationDto
-  }): Observable<ImplementationDto> {
+  }): Observable<{ 'id'?: string, 'name': string, 'fileLocation': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }> {
 
     return this.createImplementation$Response(params).pipe(
-      map((r: StrictHttpResponse<ImplementationDto>) => r.body as ImplementationDto)
+      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'fileLocation': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'fileLocation': string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> })
     );
   }
 
