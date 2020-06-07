@@ -152,6 +152,20 @@ export class AlgorithmsComponent implements OnInit {
     });
   }
 
+  updateImplementation(implId: ImplementationDto): void {
+    const dialogRef = this.utilService.createDialog(
+      AddImplementationDialogComponent,
+      this.implEntity,
+      this.tags
+    );
+    dialogRef.beforeClosed().subscribe(() => {
+      Object.assign(
+        this.selectedImplementation,
+        dialogRef.componentInstance.implementationForm.value
+      );
+    });
+  }
+
   getTags(): void {
     this.tagService.getTags2().subscribe((data) => {
       this.tags = data._embedded.tagDtoes;

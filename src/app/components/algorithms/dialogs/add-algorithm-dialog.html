@@ -13,6 +13,13 @@
       <mat-option *ngFor="let tag of data.tags" [value]="tag">{{tag.key}} {{tag.value}}</mat-option>
     </mat-select>
   </mat-form-field>
+  <h5 mat-dialog-title>Computational Model</h5>
+  <mat-form-field appearance="fill" class="input-field">
+    <mat-label>Computational Model</mat-label>
+    <mat-select [(ngModel)]="data.computationModel">
+      <mat-option *ngFor="let model of this.computationModel" [value]="model">{{model}}</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>

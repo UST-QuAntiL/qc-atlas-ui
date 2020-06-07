@@ -17,6 +17,7 @@ export class AddAlgorithmDialogComponent implements OnInit {
   @ViewChild('outputTable') tableOut: MatTable<any>;
 
   algorithmForm: FormGroup;
+  computationModel = ['CLASSIC', 'QUANTUM', 'HYBRID'];
 
   displayedParametersColumns: string[] = [
     'name',
@@ -33,6 +34,10 @@ export class AddAlgorithmDialogComponent implements OnInit {
 
   get name() {
     return this.algorithmForm.get('name');
+  }
+
+  get computationalModel() {
+    return this.algorithmForm.get('computationalModel');
   }
 
   onNoClick(): void {
@@ -57,10 +62,10 @@ export class AddAlgorithmDialogComponent implements OnInit {
     return this.name.errors?.required || !this.data.tag;
   }
 }
-
 export interface DialogData {
   title: string;
   name: string;
   tag: TagDto;
   tags: TagDto[];
+  computationModel: string;
 }

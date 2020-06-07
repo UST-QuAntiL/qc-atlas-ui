@@ -1,0 +1,10 @@
+.title-container {
+  display:flex;
+  flex-direction:row;
+}
+
+.edit-image {
+  // same fontsize as mat-card-title
+  font-size: 20px;
+  min-width: 0;
+}
