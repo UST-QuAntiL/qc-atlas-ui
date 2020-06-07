@@ -101,7 +101,7 @@ export class AlgorithmsComponent implements OnInit {
         this.selectedImplementation = null;
         const implementation: ImplementationDto = {
           name: dialogResult.name,
-          fileLocation: dialogResult.fileLocation,
+          link: dialogResult.link,
         };
         this.implementationService
           .createImplementation({

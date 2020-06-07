@@ -25,104 +25,6 @@ export class SoftwarePlatformService extends BaseService {
   }
 
   /**
-   * Path part for operation getSoftwarePlatform
-   */
-  static readonly GetSoftwarePlatformPath = '/software-platforms/v1/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getSoftwarePlatform()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getSoftwarePlatform$Response(params: {
-    id: string;
-
-  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SoftwarePlatformService.GetSoftwarePlatformPath, 'get');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getSoftwarePlatform$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getSoftwarePlatform(params: {
-    id: string;
-
-  }): Observable<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }> {
-
-    return this.getSoftwarePlatform$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> })
-    );
-  }
-
-  /**
-   * Path part for operation deleteSoftwarePlatform
-   */
-  static readonly DeleteSoftwarePlatformPath = '/software-platforms/v1/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteSoftwarePlatform()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteSoftwarePlatform$Response(params: {
-    id: string;
-
-  }): Observable<StrictHttpResponse<SoftwarePlatformDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SoftwarePlatformService.DeleteSoftwarePlatformPath, 'delete');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<SoftwarePlatformDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteSoftwarePlatform$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteSoftwarePlatform(params: {
-    id: string;
-
-  }): Observable<SoftwarePlatformDto> {
-
-    return this.deleteSoftwarePlatform$Response(params).pipe(
-      map((r: StrictHttpResponse<SoftwarePlatformDto>) => r.body as SoftwarePlatformDto)
-    );
-  }
-
-  /**
    * Path part for operation getSoftwarePlatforms
    */
   static readonly GetSoftwarePlatformsPath = '/software-platforms/v1/';
@@ -218,6 +120,104 @@ export class SoftwarePlatformService extends BaseService {
 
     return this.addSoftwarePlatform$Response(params).pipe(
       map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> })
+    );
+  }
+
+  /**
+   * Path part for operation getSoftwarePlatform
+   */
+  static readonly GetSoftwarePlatformPath = '/software-platforms/v1/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSoftwarePlatform()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSoftwarePlatform$Response(params: {
+    id: string;
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, SoftwarePlatformService.GetSoftwarePlatformPath, 'get');
+    if (params) {
+
+      rb.path('id', params.id, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getSoftwarePlatform$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSoftwarePlatform(params: {
+    id: string;
+
+  }): Observable<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }> {
+
+    return this.getSoftwarePlatform$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'version'?: string, 'supportedBackends'?: Array<BackendDto>, 'supportedCloudServices'?: Array<CloudServiceDto>, '_links'?: Array<Link> })
+    );
+  }
+
+  /**
+   * Path part for operation deleteSoftwarePlatform
+   */
+  static readonly DeleteSoftwarePlatformPath = '/software-platforms/v1/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteSoftwarePlatform()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteSoftwarePlatform$Response(params: {
+    id: string;
+
+  }): Observable<StrictHttpResponse<SoftwarePlatformDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, SoftwarePlatformService.DeleteSoftwarePlatformPath, 'delete');
+    if (params) {
+
+      rb.path('id', params.id, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<SoftwarePlatformDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteSoftwarePlatform$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteSoftwarePlatform(params: {
+    id: string;
+
+  }): Observable<SoftwarePlatformDto> {
+
+    return this.deleteSoftwarePlatform$Response(params).pipe(
+      map((r: StrictHttpResponse<SoftwarePlatformDto>) => r.body as SoftwarePlatformDto)
     );
   }
 

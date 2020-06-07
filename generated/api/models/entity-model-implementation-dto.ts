@@ -6,9 +6,9 @@ export interface EntityModelImplementationDto {
   contributors?: string;
   dependencies?: string;
   description?: string;
-  fileLocation: string;
   id?: string;
   inputFormat?: string;
+  link: string;
   name: string;
   outputFormat?: string;
   parameter?: string;

@@ -125,55 +125,6 @@ export class TagService extends BaseService {
   }
 
   /**
-   * Path part for operation getImplementationsOfTag
-   */
-  static readonly GetImplementationsOfTagPath = '/tags/v1/{tagId}/implementations';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getImplementationsOfTag()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getImplementationsOfTag$Response(params: {
-    tagId: string;
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelImplementationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, TagService.GetImplementationsOfTagPath, 'get');
-    if (params) {
-
-      rb.path('tagId', params.tagId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelImplementationDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getImplementationsOfTag$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getImplementationsOfTag(params: {
-    tagId: string;
-
-  }): Observable<CollectionModelEntityModelImplementationDto> {
-
-    return this.getImplementationsOfTag$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelImplementationDto>) => r.body as CollectionModelEntityModelImplementationDto)
-    );
-  }
-
-  /**
    * Path part for operation getTagById
    */
   static readonly GetTagByIdPath = '/tags/v1/{tagId}';
@@ -268,6 +219,55 @@ export class TagService extends BaseService {
 
     return this.getAlgorithmsOfTag$Response(params).pipe(
       map((r: StrictHttpResponse<CollectionModelEntityModelAlgorithmDto>) => r.body as CollectionModelEntityModelAlgorithmDto)
+    );
+  }
+
+  /**
+   * Path part for operation getImplementationsOfTag
+   */
+  static readonly GetImplementationsOfTagPath = '/tags/v1/{tagId}/implementations';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementationsOfTag()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationsOfTag$Response(params: {
+    tagId: string;
+
+  }): Observable<StrictHttpResponse<CollectionModelEntityModelImplementationDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TagService.GetImplementationsOfTagPath, 'get');
+    if (params) {
+
+      rb.path('tagId', params.tagId, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<CollectionModelEntityModelImplementationDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementationsOfTag$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationsOfTag(params: {
+    tagId: string;
+
+  }): Observable<CollectionModelEntityModelImplementationDto> {
+
+    return this.getImplementationsOfTag$Response(params).pipe(
+      map((r: StrictHttpResponse<CollectionModelEntityModelImplementationDto>) => r.body as CollectionModelEntityModelImplementationDto)
     );
   }
 

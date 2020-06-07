@@ -37,8 +37,8 @@ export class AddImplementationDialogComponent implements OnInit {
     return this.implementationForm.get('name');
   }
 
-  get fileLocation() {
-    return this.implementationForm.get('fileLocation');
+  get link() {
+    return this.implementationForm.get('link');
   }
 
   get selectionRule() {
@@ -58,8 +58,8 @@ export class AddImplementationDialogComponent implements OnInit {
       this.name.errors?.required ||
       this.programmingLanguage.errors?.required ||
       this.selectionRule.errors?.required ||
-      this.fileLocation.errors?.required ||
-      this.fileLocation.errors?.pattern
+      this.link.errors?.required ||
+      this.link.errors?.pattern
     );
   }
 
@@ -70,7 +70,7 @@ export class AddImplementationDialogComponent implements OnInit {
         Validators.required,
         Validators.maxLength(255),
       ]),
-      fileLocation: new FormControl(this.data.fileLocation, [
+      link: new FormControl(this.data.link, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
@@ -94,9 +94,7 @@ export class AddImplementationDialogComponent implements OnInit {
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.name = this.implementationForm.get('name').value;
-      this.data.fileLocation = this.implementationForm.get(
-        'fileLocation'
-      ).value;
+      this.data.link = this.implementationForm.get('link').value;
       this.data.selectionRule = this.implementationForm.get(
         'selectionRule'
       ).value;
@@ -111,7 +109,7 @@ export interface DialogData {
   title: string;
   name: string;
   description: string;
-  fileLocation: string;
+  link: string;
   programmingLanguage: string;
   selectionRule: string;
   tag: TagDto;

@@ -24,104 +24,6 @@ export class CloudServicesService extends BaseService {
   }
 
   /**
-   * Path part for operation getCloudService
-   */
-  static readonly GetCloudServicePath = '/cloud-services/v1/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getCloudService()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCloudService$Response(params: {
-    id: string;
-
-  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, CloudServicesService.GetCloudServicePath, 'get');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> }>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getCloudService$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCloudService(params: {
-    id: string;
-
-  }): Observable<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> }> {
-
-    return this.getCloudService$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> })
-    );
-  }
-
-  /**
-   * Path part for operation deleteCloudService
-   */
-  static readonly DeleteCloudServicePath = '/cloud-services/v1/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteCloudService()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteCloudService$Response(params: {
-    id: string;
-
-  }): Observable<StrictHttpResponse<CloudServiceDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, CloudServicesService.DeleteCloudServicePath, 'delete');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CloudServiceDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteCloudService$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteCloudService(params: {
-    id: string;
-
-  }): Observable<CloudServiceDto> {
-
-    return this.deleteCloudService$Response(params).pipe(
-      map((r: StrictHttpResponse<CloudServiceDto>) => r.body as CloudServiceDto)
-    );
-  }
-
-  /**
    * Path part for operation getCloudServices
    */
   static readonly GetCloudServicesPath = '/cloud-services/v1/';
@@ -217,6 +119,104 @@ export class CloudServicesService extends BaseService {
 
     return this.addCloudService$Response(params).pipe(
       map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> })
+    );
+  }
+
+  /**
+   * Path part for operation getCloudService
+   */
+  static readonly GetCloudServicePath = '/cloud-services/v1/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCloudService()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCloudService$Response(params: {
+    id: string;
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, CloudServicesService.GetCloudServicePath, 'get');
+    if (params) {
+
+      rb.path('id', params.id, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> }>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getCloudService$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCloudService(params: {
+    id: string;
+
+  }): Observable<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> }> {
+
+    return this.getCloudService$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'costModel'?: string, 'providedBackends'?: Array<BackendDto>, '_links'?: Array<Link> })
+    );
+  }
+
+  /**
+   * Path part for operation deleteCloudService
+   */
+  static readonly DeleteCloudServicePath = '/cloud-services/v1/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteCloudService()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteCloudService$Response(params: {
+    id: string;
+
+  }): Observable<StrictHttpResponse<CloudServiceDto>> {
+
+    const rb = new RequestBuilder(this.rootUrl, CloudServicesService.DeleteCloudServicePath, 'delete');
+    if (params) {
+
+      rb.path('id', params.id, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<CloudServiceDto>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteCloudService$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteCloudService(params: {
+    id: string;
+
+  }): Observable<CloudServiceDto> {
+
+    return this.deleteCloudService$Response(params).pipe(
+      map((r: StrictHttpResponse<CloudServiceDto>) => r.body as CloudServiceDto)
     );
   }
 
