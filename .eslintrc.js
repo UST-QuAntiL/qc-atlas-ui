@@ -222,6 +222,7 @@ module.exports = {
       {
         rulesDirectory: ['codelyzer'],
         rules: {
+          'indent': 'off',
           'import-spacing': true,
           whitespace: [
             true,
