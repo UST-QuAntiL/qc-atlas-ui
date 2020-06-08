@@ -28,14 +28,6 @@ export class AddImplementationDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: ImplementationDto & DialogData
   ) {}
 
-  get name() {
-    return this.form.get('name');
-  }
-
-  get link() {
-    return this.form.get('link');
-  }
-
   onSave() {
     this.dialogRef.close(Object.assign({}, this.data, this.form.value));
   }
@@ -46,9 +38,9 @@ export class AddImplementationDialogComponent implements OnInit {
 
   isRequiredDataMissing(): boolean {
     return (
-      this.name.errors?.required ||
-      this.link.errors?.required ||
-      this.link.errors?.pattern
+      this.form.get('name').errors?.required ||
+      this.form.get('link').errors?.required ||
+      this.form.get('link').errors?.pattern
     );
   }
 
@@ -70,6 +62,8 @@ export class AddImplementationDialogComponent implements OnInit {
         ),
       ]),
       description: new FormControl(this.data.description || ''),
+      contributors: new FormControl(this.data.contributors || ''),
+      assumptions: new FormControl(this.data.assumptions || ''),
       tag: new FormControl(this.data.tag),
     });
   }
