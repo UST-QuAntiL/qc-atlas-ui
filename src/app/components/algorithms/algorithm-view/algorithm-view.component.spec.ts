@@ -8,9 +8,8 @@ describe('AlgorithmViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AlgorithmViewComponent ]
-    })
-    .compileComponents();
+      declarations: [AlgorithmViewComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
