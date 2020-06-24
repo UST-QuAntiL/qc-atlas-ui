@@ -29,6 +29,7 @@ import { AddImplementationDialogComponent } from './components/implementations/d
 import { AddAlgorithmDialogComponent } from './components/algorithms/dialogs/add-algorithm-dialog.component';
 import { JsonImportDialogComponent } from './components/dialogs/json-import-dialog.component';
 import { MissingEntityDialogComponent } from './components/dialogs/missing-entity-dialog.component';
+import { AlgorithmViewComponent } from './components/algorithms/algorithm-view/algorithm-view.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { MissingEntityDialogComponent } from './components/dialogs/missing-entit
     AddImplementationDialogComponent,
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
+    AlgorithmViewComponent,
   ],
   imports: [
     BrowserModule,

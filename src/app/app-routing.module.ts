@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import {AlgorithmViewComponent} from "./components/algorithms/algorithm-view/algorithm-view.component";
 
 const routes: Routes = [
   {
@@ -8,7 +9,7 @@ const routes: Routes = [
     redirectTo: '/algorithms',
     pathMatch: 'full',
   },
-  { path: '**', component: PageNotFoundComponent },
+  { path: '**', component: AlgorithmViewComponent },
 ];
 
 @NgModule({

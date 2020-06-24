@@ -18,13 +18,18 @@ export class AppComponent implements OnInit {
         index: 0,
       },
       {
-        label: 'Providers',
-        link: './providers',
+        label: 'Software platforms',
+        link: './software-platforms',
         index: 1,
       },
       {
-        label: 'Tags',
-        link: './tags',
+        label: 'Cloud services',
+        link: './cloud-services',
+        index: 2,
+      },
+      {
+        label: 'Publications',
+        link: './publications',
         index: 3,
       },
     ];

@@ -1,7 +1,18 @@
 @import '~@angular/material/theming';
 
-body {
+html, body {
   margin: 0;
+  height: 100vh;
+}
+
+.mat-nav-list a.routerLinkActive {
+  background: blue;
+}
+.mat-nav-list:hover a.routerLinkActive {
+  background: blue;
+}
+.mat-nav-list a.routerLinkActive:focus {
+  background: blue;
 }
 
 .action-button-row {
@@ -20,8 +31,8 @@ table {
 
 .entity-container {
   width: 100%;
-  height: 100%;
-  margin: 10px;
+  min-height: 100%;
+  //margin: 10px;
 }
 
 .entity-content {

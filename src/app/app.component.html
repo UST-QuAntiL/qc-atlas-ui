@@ -2,15 +2,30 @@
   <mat-toolbar-row>
     <img (click)="goToHome()" src="../assets/logo.png" class="logo-img">
     <span (click)="goToHome()">QC Atlas</span>
-    <nav mat-tab-nav-bar class="tabs" backgroundColor="primary">
-      <a mat-tab-link
-         *ngFor="let link of navLinks"
-         [routerLink]="link.link"
-         routerLinkActive #rla="routerLinkActive"
-         [active]="rla.isActive">
-        {{link.label}}
-      </a>
-    </nav>
+    <!--    <nav mat-tab-nav-bar class="tabs" backgroundColor="primary">
+          <a mat-tab-link
+             *ngFor="let link of navLinks"
+             [routerLink]="link.link"
+             routerLinkActive #rla="routerLinkActive"
+             [active]="rla.isActive">
+            {{link.label}}
+          </a>
+        </nav>-->
   </mat-toolbar-row>
 </mat-toolbar>
-<router-outlet></router-outlet>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item
+         *ngFor="let link of navLinks"
+         [routerLink]="link.link"
+         routerLinkActive="routerLinkActive">
+        {{link.label}}
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
