@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   activeLinkIndex = -1;
   navLinks: any[] = [];
+  title: String = 'qc-atlas-ui';
 
   constructor(private router: Router) {
     this.navLinks = [
@@ -47,7 +48,5 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  onSettings():void {
-
-  }
+  onSettings():void {}
 }
