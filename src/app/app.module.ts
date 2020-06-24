@@ -24,12 +24,15 @@ import { ApiModule } from 'api/api.module';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { AddImplementationDialogComponent } from './components/implementations/dialogs/add-implementation-dialog.component';
 import { AddAlgorithmDialogComponent } from './components/algorithms/dialogs/add-algorithm-dialog.component';
 import { JsonImportDialogComponent } from './components/dialogs/json-import-dialog.component';
 import { MissingEntityDialogComponent } from './components/dialogs/missing-entity-dialog.component';
 import { AlgorithmViewComponent } from './components/algorithms/algorithm-view/algorithm-view.component';
+import { SoftwarePlatformViewComponent } from './components/software-platforms/software-platform-view/software-platform-view.component';
+import { CloudServiceViewComponent } from './components/cloud-services/cloud-service-view/cloud-service-view.component';
+import { PublicationViewComponent } from './components/publications/publication-view/publication-view.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +45,9 @@ import { AlgorithmViewComponent } from './components/algorithms/algorithm-view/a
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
     AlgorithmViewComponent,
+    SoftwarePlatformViewComponent,
+    CloudServiceViewComponent,
+    PublicationViewComponent,
   ],
   imports: [
     BrowserModule,
