@@ -3,12 +3,17 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { AlgorithmRelationTypeService } from './services/algorithm-relation-type.service';
 import { AlgorithmService } from './services/algorithm.service';
-import { ImplementationService } from './services/implementation.service';
-import { ProviderService } from './services/provider.service';
-import { QpuService } from './services/qpu.service';
+import { ApplicationAreasService } from './services/application-areas.service';
+import { ComputingResourceTypesService } from './services/computing-resource-types.service';
+import { DiscussionTopicService } from './services/discussion-topic.service';
+import { PatternRelationService } from './services/pattern-relation.service';
+import { PatternRelationTypeService } from './services/pattern-relation-type.service';
+import { ProblemTypeService } from './services/problem-type.service';
+import { PublicationService } from './services/publication.service';
 import { RootService } from './services/root.service';
-import { TagService } from './services/tag.service';
+import { SoftwarePlatformService } from './services/software-platform.service';
 
 /**
  * Module that provides all services and configuration.
@@ -18,12 +23,17 @@ import { TagService } from './services/tag.service';
   exports: [],
   declarations: [],
   providers: [
+    AlgorithmRelationTypeService,
     AlgorithmService,
-    ImplementationService,
-    ProviderService,
-    QpuService,
+    ApplicationAreasService,
+    ComputingResourceTypesService,
+    DiscussionTopicService,
+    PatternRelationService,
+    PatternRelationTypeService,
+    ProblemTypeService,
+    PublicationService,
     RootService,
-    TagService,
+    SoftwarePlatformService,
     ApiConfiguration
   ],
 })

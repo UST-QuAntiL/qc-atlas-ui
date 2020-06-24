@@ -1,6 +1,11 @@
+export { AlgorithmRelationTypeService } from './services/algorithm-relation-type.service';
 export { AlgorithmService } from './services/algorithm.service';
-export { ImplementationService } from './services/implementation.service';
-export { ProviderService } from './services/provider.service';
-export { QpuService } from './services/qpu.service';
+export { ApplicationAreasService } from './services/application-areas.service';
+export { ComputingResourceTypesService } from './services/computing-resource-types.service';
+export { DiscussionTopicService } from './services/discussion-topic.service';
+export { PatternRelationService } from './services/pattern-relation.service';
+export { PatternRelationTypeService } from './services/pattern-relation-type.service';
+export { ProblemTypeService } from './services/problem-type.service';
+export { PublicationService } from './services/publication.service';
 export { RootService } from './services/root.service';
-export { TagService } from './services/tag.service';
+export { SoftwarePlatformService } from './services/software-platform.service';

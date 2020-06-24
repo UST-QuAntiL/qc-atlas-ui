@@ -1,6 +1,8 @@
 /* tslint:disable */
+import { Links } from './links';
 import { Publication } from './publication';
-export interface ImplementationDto {
+export interface EntityModelImplementationDto {
+  '_links'?: Links;
   assumptions?: string;
   contributors?: string;
   dependencies?: string;
@@ -12,7 +14,7 @@ export interface ImplementationDto {
    * URL of implementation
    */
   link?: string;
-  name: string;
+  name?: string;
   outputFormat?: string;
   parameter?: string;
   publications?: Array<Publication>;
