@@ -6,7 +6,6 @@ import {
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TagDto } from 'api/models';
 
 @Component({
   selector: 'app-add-algorithm-dialog-component',
@@ -61,6 +60,6 @@ export class AddAlgorithmDialogComponent implements OnInit {
 export interface DialogData {
   title: string;
   name: string;
-  tag: TagDto;
-  tags: TagDto[];
+  tag: any;
+  tags: any[];
 }

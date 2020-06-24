@@ -6,7 +6,6 @@ import {
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TagDto } from 'api/models';
 import { UtilService } from '../../../util/util.service';
 
 @Component({
@@ -114,6 +113,6 @@ export interface DialogData {
   fileLocation: string;
   programmingLanguage: string;
   selectionRule: string;
-  tag: TagDto;
-  tags: TagDto[];
+  tag: any;
+  tags: any[];
 }
