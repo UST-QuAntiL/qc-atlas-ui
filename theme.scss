@@ -5,16 +5,6 @@ html, body {
   height: 100vh;
 }
 
-.mat-nav-list a.routerLinkActive {
-  background: blue;
-}
-.mat-nav-list:hover a.routerLinkActive {
-  background: blue;
-}
-.mat-nav-list a.routerLinkActive:focus {
-  background: blue;
-}
-
 .action-button-row {
   text-align: center;
   margin-top: 20px;

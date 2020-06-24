@@ -46,4 +46,8 @@ export class AppComponent implements OnInit {
   goToHome(): void {
     this.router.navigate(['/']);
   }
+
+  onSettings():void {
+
+  }
 }

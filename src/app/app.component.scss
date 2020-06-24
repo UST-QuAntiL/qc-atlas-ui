@@ -5,21 +5,30 @@
   //z-index: 1000;
 }
 
-.tabs {
-  margin-left: 1em;
-}
-
 .logo-img {
   height: 50px;
   margin: 5px;
 }
 
+.settings-button{
+  margin-left: auto;
+  margin-right: 0;
+}
+
 mat-sidenav{
-  background: #a8a8a8;
-  width: 200px;
-  flex-direction: column;
+  width: 250px;
 }
 
 mat-sidenav-container{
   min-height: calc(100vh - 64px);
+}
+
+.mat-nav-list a.routerLinkActive {
+  background: rgba(0, 0, 0, 0.08);
+}
+.mat-nav-list:hover a.routerLinkActive {
+  background: rgba(0, 0, 0, 0.08);
+}
+.mat-nav-list a.routerLinkActive:focus {
+  background: rgba(0, 0, 0, 0.08);
 }
