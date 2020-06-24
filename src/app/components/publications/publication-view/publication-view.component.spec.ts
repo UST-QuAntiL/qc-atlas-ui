@@ -8,9 +8,8 @@ describe('PublicationViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PublicationViewComponent ]
-    })
-    .compileComponents();
+      declarations: [PublicationViewComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

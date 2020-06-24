@@ -17,11 +17,7 @@ export class UtilService {
     });
   }
 
-  public createDialog(
-    dialogComponent: any,
-    entity: string,
-    tags?: any[]
-  ): any {
+  public createDialog(dialogComponent: any, entity: string, tags?: any[]): any {
     return this.dialog.open(dialogComponent, {
       width: '400px',
       data: { title: 'Add new ' + entity, tags },
