@@ -1,0 +1,15 @@
+<div>
+  <div class="header">
+    <label>{{title}}</label>
+    <mat-form-field>
+      <input [(ngModel)]="inputValue" matInput>
+    </mat-form-field>
+    <button (click)="addElement()" mat-button><mat-icon>add</mat-icon></button>
+  </div>
+  <mat-chip-list>
+    <mat-chip *ngFor="let element of elements" [removable]="true" (removed)="removeElement(element)">
+      {{element}}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+</div>

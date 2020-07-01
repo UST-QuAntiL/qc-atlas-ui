@@ -33,6 +33,8 @@ import { AlgorithmViewComponent } from './components/algorithms/algorithm-view/a
 import { SoftwarePlatformViewComponent } from './components/software-platforms/software-platform-view/software-platform-view.component';
 import { CloudServiceViewComponent } from './components/cloud-services/cloud-service-view/cloud-service-view.component';
 import { PublicationViewComponent } from './components/publications/publication-view/publication-view.component';
+import { ChipCollectionComponent } from './components/generics/chip-collection/chip-collection.component';
+import { PropertyInputComponent } from './components/generics/property-input/property-input.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,8 @@ import { PublicationViewComponent } from './components/publications/publication-
     SoftwarePlatformViewComponent,
     CloudServiceViewComponent,
     PublicationViewComponent,
+    ChipCollectionComponent,
+    PropertyInputComponent,
   ],
   imports: [
     BrowserModule,
