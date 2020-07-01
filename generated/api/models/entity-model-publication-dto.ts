@@ -1,14 +1,3 @@
 /* tslint:disable */
-import { Links } from './links';
-export interface EntityModelPublicationDto {
-  '_links'?: Links;
-  authors?: Array<string>;
-  doi?: string;
-  id?: string;
-  title?: string;
-
-  /**
-   * URL
-   */
-  url?: string;
-}
+import { Link } from './link';
+export type EntityModelPublicationDto = { 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> };

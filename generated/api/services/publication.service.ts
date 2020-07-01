@@ -9,9 +9,9 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { AlgorithmDto } from '../models/algorithm-dto';
-import { CollectionModelEntityModelAlgorithmDto } from '../models/collection-model-entity-model-algorithm-dto';
 import { EntityModelPublicationDto } from '../models/entity-model-publication-dto';
-import { PagedModelEntityModelPublicationDto } from '../models/paged-model-entity-model-publication-dto';
+import { Link } from '../models/link';
+import { PageMetadata } from '../models/page-metadata';
 import { PublicationDto } from '../models/publication-dto';
 
 @Injectable({
@@ -26,208 +26,62 @@ export class PublicationService extends BaseService {
   }
 
   /**
-   * Path part for operation getAlgorithms1
+   * Path part for operation getPublication2
    */
-  static readonly GetAlgorithms1Path = '/publications/{id}/algorithms';
+  static readonly GetPublication2Path = '/v1/publications/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAlgorithms1()` instead.
+   * To access only the response body, use `getPublication2()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAlgorithms1$Response(params: {
+  getPublication2$Response(params: {
     id: string;
 
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelAlgorithmDto>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>> {
 
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetAlgorithms1Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetPublication2Path, 'get');
     if (params) {
 
       rb.path('id', params.id, {});
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelAlgorithmDto>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAlgorithms1$Response()` instead.
+   * To access the full response (for headers, for example), `getPublication2$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAlgorithms1(params: {
+  getPublication2(params: {
     id: string;
 
-  }): Observable<CollectionModelEntityModelAlgorithmDto> {
+  }): Observable<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }> {
 
-    return this.getAlgorithms1$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelAlgorithmDto>) => r.body as CollectionModelEntityModelAlgorithmDto)
-    );
-  }
-
-  /**
-   * Path part for operation getPublications1
-   */
-  static readonly GetPublications1Path = '/publications/';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPublications1()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPublications1$Response(params?: {
-    page?: number;
-    size?: number;
-
-  }): Observable<StrictHttpResponse<PagedModelEntityModelPublicationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetPublications1Path, 'get');
-    if (params) {
-
-      rb.query('page', params.page, {});
-      rb.query('size', params.size, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PagedModelEntityModelPublicationDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPublications1$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPublications1(params?: {
-    page?: number;
-    size?: number;
-
-  }): Observable<PagedModelEntityModelPublicationDto> {
-
-    return this.getPublications1$Response(params).pipe(
-      map((r: StrictHttpResponse<PagedModelEntityModelPublicationDto>) => r.body as PagedModelEntityModelPublicationDto)
-    );
-  }
-
-  /**
-   * Path part for operation createPublication
-   */
-  static readonly CreatePublicationPath = '/publications/';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `createPublication()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  createPublication$Response(params: {
-      body: PublicationDto
-  }): Observable<StrictHttpResponse<EntityModelPublicationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.CreatePublicationPath, 'post');
-    if (params) {
-
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelPublicationDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `createPublication$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  createPublication(params: {
-      body: PublicationDto
-  }): Observable<EntityModelPublicationDto> {
-
-    return this.createPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelPublicationDto>) => r.body as EntityModelPublicationDto)
-    );
-  }
-
-  /**
-   * Path part for operation getPublication
-   */
-  static readonly GetPublicationPath = '/publications/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPublication()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPublication$Response(params: {
-    id: string;
-
-  }): Observable<StrictHttpResponse<EntityModelPublicationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetPublicationPath, 'get');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelPublicationDto>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPublication$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPublication(params: {
-    id: string;
-
-  }): Observable<EntityModelPublicationDto> {
-
-    return this.getPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelPublicationDto>) => r.body as EntityModelPublicationDto)
+    return this.getPublication2$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation updatePublication
    */
-  static readonly UpdatePublicationPath = '/publications/{id}';
+  static readonly UpdatePublicationPath = '/v1/publications/{id}';
 
   /**
+   * Custom ID will be ignored.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updatePublication()` instead.
    *
@@ -236,7 +90,7 @@ export class PublicationService extends BaseService {
   updatePublication$Response(params: {
     id: string;
       body: PublicationDto
-  }): Observable<StrictHttpResponse<EntityModelPublicationDto>> {
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>> {
 
     const rb = new RequestBuilder(this.rootUrl, PublicationService.UpdatePublicationPath, 'put');
     if (params) {
@@ -246,17 +100,19 @@ export class PublicationService extends BaseService {
       rb.body(params.body, 'application/json');
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelPublicationDto>;
+        return r as StrictHttpResponse<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>;
       })
     );
   }
 
   /**
+   * Custom ID will be ignored.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updatePublication$Response()` instead.
    *
@@ -265,17 +121,17 @@ export class PublicationService extends BaseService {
   updatePublication(params: {
     id: string;
       body: PublicationDto
-  }): Observable<EntityModelPublicationDto> {
+  }): Observable<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }> {
 
     return this.updatePublication$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelPublicationDto>) => r.body as EntityModelPublicationDto)
+      map((r: StrictHttpResponse<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation deletePublication
    */
-  static readonly DeletePublicationPath = '/publications/{id}';
+  static readonly DeletePublicationPath = '/v1/publications/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -295,8 +151,8 @@ export class PublicationService extends BaseService {
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -318,6 +174,109 @@ export class PublicationService extends BaseService {
 
     return this.deletePublication$Response(params).pipe(
       map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
+    );
+  }
+
+  /**
+   * Path part for operation getPublications2
+   */
+  static readonly GetPublications2Path = '/v1/publications';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPublications2()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPublications2$Response(params?: {
+    page?: number;
+    size?: number;
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'publicationDtoes'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetPublications2Path, 'get');
+    if (params) {
+
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'publicationDtoes'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getPublications2$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPublications2(params?: {
+    page?: number;
+    size?: number;
+
+  }): Observable<{ '_embedded'?: { 'publicationDtoes'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }> {
+
+    return this.getPublications2$Response(params).pipe(
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'publicationDtoes'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'publicationDtoes'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata })
+    );
+  }
+
+  /**
+   * Path part for operation createPublication
+   */
+  static readonly CreatePublicationPath = '/v1/publications';
+
+  /**
+   * Custom ID will be ignored.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createPublication()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createPublication$Response(params: {
+      body: PublicationDto
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, PublicationService.CreatePublicationPath, 'post');
+    if (params) {
+
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>;
+      })
+    );
+  }
+
+  /**
+   * Custom ID will be ignored.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createPublication$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createPublication(params: {
+      body: PublicationDto
+  }): Observable<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }> {
+
+    return this.createPublication$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> })
     );
   }
 

@@ -1,13 +1,5 @@
 /* tslint:disable */
 import { AlgorithmDto } from './algorithm-dto';
-import { Links } from './links';
+import { Link } from './link';
 import { PatternRelationTypeDto } from './pattern-relation-type-dto';
-export interface EntityModelPatternRelationDto {
-  '_links'?: Links;
-  algorithm?: AlgorithmDto;
-  algorithmId?: string;
-  description?: string;
-  id?: string;
-  pattern?: string;
-  patternRelationType?: PatternRelationTypeDto;
-}
+export type EntityModelPatternRelationDto = { 'id'?: string, 'algorithm': AlgorithmDto, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> };

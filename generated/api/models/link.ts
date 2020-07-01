@@ -1,11 +1,2 @@
 /* tslint:disable */
-export interface Link {
-  deprecation?: string;
-  href?: string;
-  hreflang?: string;
-  name?: string;
-  profile?: string;
-  templated?: boolean;
-  title?: string;
-  type?: string;
-}
+export type Link = { 'href'?: string, 'hreflang'?: string, 'title'?: string, 'type'?: string, 'deprecation'?: string, 'profile'?: string, 'name'?: string, 'templated'?: boolean };

@@ -1,23 +1,7 @@
 /* tslint:disable */
 import { Algorithm } from './algorithm';
-import { ComputingResource } from './computing-resource';
+import { ComputingResourceProperty } from './computing-resource-property';
 import { Publication } from './publication';
 import { QuantumAlgorithm } from './quantum-algorithm';
 import { SoftwarePlatform } from './software-platform';
-export interface QuantumImplementation {
-  algorithm?: QuantumAlgorithm;
-  assumptions?: string;
-  contributors?: string;
-  dependencies?: string;
-  description?: string;
-  id?: string;
-  implementedAlgorithm?: Algorithm;
-  inputFormat?: string;
-  link?: string;
-  name?: string;
-  outputFormat?: string;
-  parameter?: string;
-  publications?: Array<Publication>;
-  requiredComputingResources?: Array<ComputingResource>;
-  usedSoftwarePlatform?: SoftwarePlatform;
-}
+export type QuantumImplementation = { 'id'?: string, 'name'?: string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'link'?: string, 'dependencies'?: string, 'publications'?: Array<Publication>, 'implementedAlgorithm'?: Algorithm, 'requiredComputingResourceProperties'?: Array<ComputingResourceProperty>, 'softwarePlatforms'?: Array<SoftwarePlatform>, 'algorithm'?: QuantumAlgorithm };

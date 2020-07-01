@@ -1,34 +1,10 @@
 /* tslint:disable */
 import { AlgorithmRelation } from './algorithm-relation';
 import { ApplicationArea } from './application-area';
-import { ComputingResource } from './computing-resource';
+import { ComputingResourceProperty } from './computing-resource-property';
 import { PatternRelation } from './pattern-relation';
 import { ProblemType } from './problem-type';
 import { Publication } from './publication';
 import { QuantumImplementation } from './quantum-implementation';
 import { Tag } from './tag';
-export interface QuantumAlgorithm {
-  acronym?: string;
-  algoParameter?: string;
-  algorithmRelations?: Array<AlgorithmRelation>;
-  applicationAreas?: Array<ApplicationArea>;
-  assumptions?: string;
-  computationModel?: 'CLASSIC' | 'QUANTUM' | 'HYBRID';
-  id?: string;
-  implementations?: Array<QuantumImplementation>;
-  inputFormat?: string;
-  intent?: string;
-  name?: string;
-  nisqReady?: boolean;
-  outputFormat?: string;
-  problem?: string;
-  problemTypes?: Array<ProblemType>;
-  publications?: Array<Publication>;
-  quantumComputationModel?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING';
-  relatedPatterns?: Array<PatternRelation>;
-  requiredComputingResources?: Array<ComputingResource>;
-  sketch?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL';
-  solution?: string;
-  speedUp?: string;
-  tags?: Array<Tag>;
-}
+export type QuantumAlgorithm = { 'id'?: string, 'name'?: string, 'inputFormat'?: string, 'outputFormat'?: string, 'acronym'?: string, 'publications'?: Array<Publication>, 'intent'?: string, 'problem'?: string, 'algorithmRelations'?: Array<AlgorithmRelation>, 'requiredComputingResourceProperties'?: Array<ComputingResourceProperty>, 'algoParameter'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel'?: 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'relatedPatterns'?: Array<PatternRelation>, 'problemTypes'?: Array<ProblemType>, 'applicationAreas'?: Array<ApplicationArea>, 'tags'?: Array<Tag>, 'nisqReady'?: boolean, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', 'speedUp'?: string, 'implementations'?: Array<QuantumImplementation> };

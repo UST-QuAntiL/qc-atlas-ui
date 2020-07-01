@@ -1,8 +1,3 @@
 /* tslint:disable */
 import { Algorithm } from './algorithm';
-export interface ProblemType {
-  algorithms?: Array<Algorithm>;
-  id?: string;
-  name?: string;
-  parentProblemType?: string;
-}
+export type ProblemType = { 'id'?: string, 'name'?: string, 'parentProblemType'?: string, 'algorithms'?: Array<Algorithm> };

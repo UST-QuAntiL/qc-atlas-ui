@@ -1,12 +1,2 @@
 /* tslint:disable */
-export interface SoftwarePlatformDto {
-  id?: string;
-  licence?: string;
-
-  /**
-   * URL
-   */
-  link?: string;
-  name: string;
-  version?: string;
-}
+export type SoftwarePlatformDto = { 'id'?: string, 'name': string, 'link'?: string, 'version'?: string, 'licence'?: string };

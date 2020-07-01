@@ -1,21 +1,3 @@
 /* tslint:disable */
-import { Links } from './links';
-import { Publication } from './publication';
-export interface EntityModelImplementationDto {
-  '_links'?: Links;
-  assumptions?: string;
-  contributors?: string;
-  dependencies?: string;
-  description?: string;
-  id?: string;
-  inputFormat?: string;
-
-  /**
-   * URL of implementation
-   */
-  link?: string;
-  name?: string;
-  outputFormat?: string;
-  parameter?: string;
-  publications?: Array<Publication>;
-}
+import { Link } from './link';
+export type EntityModelImplementationDto = { 'id'?: string, 'name': string, 'link'?: string, 'inputFormat'?: string, 'outputFormat'?: string, 'description'?: string, 'contributors'?: string, 'assumptions'?: string, 'parameter'?: string, 'dependencies'?: string, '_links'?: Array<Link> };
