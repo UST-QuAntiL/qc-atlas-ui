@@ -18,7 +18,9 @@ export class ChipCollectionComponent implements OnInit {
   ngOnInit(): void {}
 
   addElement(): void {
-    this.onAddElement.emit(this.inputValue);
+    if (this.inputValue.trim() !== '') {
+      this.onAddElement.emit(this.inputValue);
+    }
     this.inputValue = '';
   }
 
