@@ -76,6 +76,7 @@ export class DataListComponent implements OnInit {
 
   onDelete() {
     this.deleteElements.emit();
+    this.selection.clear()
   }
 
   onAdd() {

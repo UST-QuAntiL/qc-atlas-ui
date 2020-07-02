@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api/services/algorithm.service';
+import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-list',
@@ -47,7 +48,7 @@ export class AlgorithmListComponent implements OnInit {
     selectedAmount: 1,
   };
 
-  constructor(private algorithmService: AlgorithmService) {
+  constructor(private algorithmService: AlgorithmService, private genericDataService: GenericDataService) {
   }
 
   ngOnInit(): void {
@@ -55,34 +56,49 @@ export class AlgorithmListComponent implements OnInit {
   }
 
   getAlgorithms(): void {
-    // TODO: Fix generated services
+    // Clear query params
+    this.queryParams = {};
     this.queryParams.page = this.pagingInfo.page.number;
     this.queryParams.size = this.paginatorConfig.selectedAmount;
 
     this.algorithmService.getAlgorithms(this.queryParams).subscribe((data) => {
-      const jsonData = JSON.parse(JSON.stringify(data));
-      this.pagingInfo.page = jsonData.page;
-      this.pagingInfo._links = jsonData._links;
-      const classicAlgs = jsonData._embedded.classicAlgorithmDtoes;
-      const quantumAlgs = jsonData._embedded.quantumAlgorithmDtoes;
-      if (classicAlgs) {
-        this.algorithms = this.algorithms.concat(classicAlgs);
-      }
-      if (quantumAlgs) {
-        this.algorithms = this.algorithms.concat(quantumAlgs);
-      }
-      console.log(this.algorithms);
+      this.prepareAlgorithmdata(JSON.parse(JSON.stringify(data)));
     });
+  }
+
+  getAlgorithmsHateoas(url: string): void {
+    this.genericDataService.getData(url).subscribe((data) => {
+      this.prepareAlgorithmdata(data);
+    });
+  }
+
+  prepareAlgorithmdata(data): void {
+    // Clear current algorithms
+    this.algorithms = [];
+
+    // Read all incoming algorithms
+    const classicAlgs = data._embedded.classicAlgorithmDtoes;
+    const quantumAlgs = data._embedded.quantumAlgorithmDtoes;
+
+    // Adjust Paging and Hateoas data
+    this.pagingInfo.page = data.page;
+    this.pagingInfo._links = data._links;
+
+    // Adjust Algorithm data
+    if (classicAlgs) {
+      this.algorithms = this.algorithms.concat(classicAlgs);
+    }
+    if (quantumAlgs) {
+      this.algorithms = this.algorithms.concat(quantumAlgs);
+    }
   }
 
   selectionChanged(event) {
     this.selectedAlgorithms = event;
-    console.log(this.selectedAlgorithms);
   }
 
   pageChanged(event) {
-    const newPageUrl = event;
-    console.log(newPageUrl);
+    this.getAlgorithmsHateoas(event);
   }
 
   dataSorted(event) {
@@ -92,12 +108,24 @@ export class AlgorithmListComponent implements OnInit {
 
   paginatorConfigChanged(event) {
     this.paginatorConfig = event;
-    console.log(this.paginatorConfig);
+    this.getAlgorithms();
   }
 
   deleteElements() {
-    console.log('Delete Elements: ');
-    console.log(this.selectedAlgorithms);
+    // Clear query params
+    this.queryParams = {};
+
+    // Iterate all selected algorithms and delete them
+    for (const algorithm of this.selectedAlgorithms) {
+      this.queryParams.algoId = algorithm.id;
+      this.algorithmService.deleteAlgorithm(this.queryParams).subscribe(() => {
+        // Refresh Algorithms after delete
+        this.getAlgorithms();
+      });
+    }
+
+    // Clear selected algorithms
+    this.selectedAlgorithms = [];
   }
 
   addElement() {
@@ -105,7 +133,6 @@ export class AlgorithmListComponent implements OnInit {
   }
 
   searchElement(event) {
-    const searchText = event;
-    console.log(searchText);
+    console.log(event);
   }
 }

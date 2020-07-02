@@ -43,6 +43,7 @@ import { PublicationListComponent } from './components/publications/publication-
 import { AlgorithmListComponent } from './components/algorithms/algorithm-list/algorithm-list.component';
 import { ChipCollectionComponent } from './components/generics/chip-collection/chip-collection.component';
 import { PropertyInputComponent } from './components/generics/property-input/property-input.component';
+import { GenericDataService } from './util/generic-data.service';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,7 @@ import { PropertyInputComponent } from './components/generics/property-input/pro
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
   ],
-  providers: [],
+  providers: [GenericDataService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
