@@ -48,8 +48,10 @@ export class AlgorithmListComponent implements OnInit {
     selectedAmount: 1,
   };
 
-  constructor(private algorithmService: AlgorithmService, private genericDataService: GenericDataService) {
-  }
+  constructor(
+    private algorithmService: AlgorithmService,
+    private genericDataService: GenericDataService
+  ) {}
 
   ngOnInit(): void {
     this.getAlgorithms();

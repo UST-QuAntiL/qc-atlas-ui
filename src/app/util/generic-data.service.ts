@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BaseService } from 'api/base-service';
 import { ApiConfiguration } from 'api/api-configuration';
 
@@ -8,16 +7,11 @@ import { ApiConfiguration } from 'api/api-configuration';
   providedIn: 'root',
 })
 export class GenericDataService extends BaseService {
-
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
   getData(url: string) {
     return this.http.get(url);
   }
-
 }
