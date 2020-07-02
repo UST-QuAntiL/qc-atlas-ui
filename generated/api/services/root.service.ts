@@ -8,7 +8,6 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { RepresentationModelObject } from '../models/representation-model-object';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +23,7 @@ export class RootService extends BaseService {
   /**
    * Path part for operation root
    */
-  static readonly RootPath = '/';
+  static readonly RootPath = '/v1/';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -34,7 +33,7 @@ export class RootService extends BaseService {
    */
   root$Response(params?: {
 
-  }): Observable<StrictHttpResponse<RepresentationModelObject>> {
+  }): Observable<StrictHttpResponse<{  }>> {
 
     const rb = new RequestBuilder(this.rootUrl, RootService.RootPath, 'get');
     if (params) {
@@ -42,12 +41,12 @@ export class RootService extends BaseService {
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModelObject>;
+        return r as StrictHttpResponse<{  }>;
       })
     );
   }
@@ -60,10 +59,10 @@ export class RootService extends BaseService {
    */
   root(params?: {
 
-  }): Observable<RepresentationModelObject> {
+  }): Observable<{  }> {
 
     return this.root$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
+      map((r: StrictHttpResponse<{  }>) => r.body as {  })
     );
   }
 

@@ -1,8 +1,7 @@
 export { AlgorithmRelationTypeService } from './services/algorithm-relation-type.service';
 export { AlgorithmService } from './services/algorithm.service';
 export { ApplicationAreasService } from './services/application-areas.service';
-export { ComputingResourceTypesService } from './services/computing-resource-types.service';
-export { DiscussionTopicService } from './services/discussion-topic.service';
+export { ComputingResourcePropertiesTypesService } from './services/computing-resource-properties-types.service';
 export { PatternRelationService } from './services/pattern-relation.service';
 export { PatternRelationTypeService } from './services/pattern-relation-type.service';
 export { ProblemTypeService } from './services/problem-type.service';

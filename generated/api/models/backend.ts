@@ -1,12 +1,4 @@
 /* tslint:disable */
 import { BackendProperty } from './backend-property';
-import { ComputingResource } from './computing-resource';
-export interface Backend {
-  backendProperties?: Array<BackendProperty>;
-  id?: string;
-  name?: string;
-  providedQuantumResources?: Array<ComputingResource>;
-  quantumComputationModel?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING';
-  technology?: string;
-  vendor?: string;
-}
+import { ComputingResourceProperty } from './computing-resource-property';
+export type Backend = { 'id'?: string, 'name'?: string, 'vendor'?: string, 'technology'?: string, 'providedQuantumResources'?: Array<ComputingResourceProperty>, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', 'backendProperties'?: Array<BackendProperty> };

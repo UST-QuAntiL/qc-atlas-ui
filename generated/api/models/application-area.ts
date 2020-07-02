@@ -1,7 +1,3 @@
 /* tslint:disable */
 import { Algorithm } from './algorithm';
-export interface ApplicationArea {
-  algorithms?: Array<Algorithm>;
-  id?: string;
-  name?: string;
-}
+export type ApplicationArea = { 'id'?: string, 'name'?: string, 'algorithms'?: Array<Algorithm> };

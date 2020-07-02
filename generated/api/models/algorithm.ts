@@ -1,29 +1,9 @@
 /* tslint:disable */
 import { AlgorithmRelation } from './algorithm-relation';
 import { ApplicationArea } from './application-area';
-import { ComputingResource } from './computing-resource';
+import { ComputingResourceProperty } from './computing-resource-property';
 import { PatternRelation } from './pattern-relation';
 import { ProblemType } from './problem-type';
 import { Publication } from './publication';
 import { Tag } from './tag';
-export interface Algorithm {
-  acronym?: string;
-  algoParameter?: string;
-  algorithmRelations?: Array<AlgorithmRelation>;
-  applicationAreas?: Array<ApplicationArea>;
-  assumptions?: string;
-  computationModel?: 'CLASSIC' | 'QUANTUM' | 'HYBRID';
-  id?: string;
-  inputFormat?: string;
-  intent?: string;
-  name?: string;
-  outputFormat?: string;
-  problem?: string;
-  problemTypes?: Array<ProblemType>;
-  publications?: Array<Publication>;
-  relatedPatterns?: Array<PatternRelation>;
-  requiredComputingResources?: Array<ComputingResource>;
-  sketch?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL';
-  solution?: string;
-  tags?: Array<Tag>;
-}
+export type Algorithm = { 'id'?: string, 'name'?: string, 'inputFormat'?: string, 'outputFormat'?: string, 'acronym'?: string, 'publications'?: Array<Publication>, 'intent'?: string, 'problem'?: string, 'algorithmRelations'?: Array<AlgorithmRelation>, 'requiredComputingResourceProperties'?: Array<ComputingResourceProperty>, 'algoParameter'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel'?: 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'relatedPatterns'?: Array<PatternRelation>, 'problemTypes'?: Array<ProblemType>, 'applicationAreas'?: Array<ApplicationArea>, 'tags'?: Array<Tag> };

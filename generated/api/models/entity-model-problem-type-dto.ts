@@ -1,8 +1,3 @@
 /* tslint:disable */
-import { Links } from './links';
-export interface EntityModelProblemTypeDto {
-  '_links'?: Links;
-  id?: string;
-  name?: string;
-  parentProblemType?: string;
-}
+import { Link } from './link';
+export type EntityModelProblemTypeDto = { 'id'?: string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> };

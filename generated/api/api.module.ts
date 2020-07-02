@@ -6,8 +6,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 import { AlgorithmRelationTypeService } from './services/algorithm-relation-type.service';
 import { AlgorithmService } from './services/algorithm.service';
 import { ApplicationAreasService } from './services/application-areas.service';
-import { ComputingResourceTypesService } from './services/computing-resource-types.service';
-import { DiscussionTopicService } from './services/discussion-topic.service';
+import { ComputingResourcePropertiesTypesService } from './services/computing-resource-properties-types.service';
 import { PatternRelationService } from './services/pattern-relation.service';
 import { PatternRelationTypeService } from './services/pattern-relation-type.service';
 import { ProblemTypeService } from './services/problem-type.service';
@@ -26,8 +25,7 @@ import { SoftwarePlatformService } from './services/software-platform.service';
     AlgorithmRelationTypeService,
     AlgorithmService,
     ApplicationAreasService,
-    ComputingResourceTypesService,
-    DiscussionTopicService,
+    ComputingResourcePropertiesTypesService,
     PatternRelationService,
     PatternRelationTypeService,
     ProblemTypeService,

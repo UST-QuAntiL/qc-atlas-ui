@@ -1,14 +1,3 @@
 /* tslint:disable */
-import { Links } from './links';
-export interface EntityModelSoftwarePlatformDto {
-  '_links'?: Links;
-  id?: string;
-  licence?: string;
-
-  /**
-   * URL
-   */
-  link?: string;
-  name?: string;
-  version?: string;
-}
+import { Link } from './link';
+export type EntityModelSoftwarePlatformDto = { 'id'?: string, 'name': string, 'link'?: string, 'version'?: string, 'licence'?: string, '_links'?: Array<Link> };

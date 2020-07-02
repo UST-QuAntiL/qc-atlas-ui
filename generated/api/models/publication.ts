@@ -1,10 +1,4 @@
 /* tslint:disable */
 import { Algorithm } from './algorithm';
-export interface Publication {
-  algorithms?: Array<Algorithm>;
-  authors?: Array<string>;
-  doi?: string;
-  id?: string;
-  title?: string;
-  url?: string;
-}
+import { Implementation } from './implementation';
+export type Publication = { 'id'?: string, 'doi'?: string, 'url'?: string, 'title'?: string, 'authors'?: Array<string>, 'algorithms'?: Array<Algorithm>, 'implementations'?: Array<Implementation> };

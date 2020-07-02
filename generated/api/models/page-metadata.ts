@@ -1,7 +1,2 @@
 /* tslint:disable */
-export interface PageMetadata {
-  number?: number;
-  size?: number;
-  totalElements?: number;
-  totalPages?: number;
-}
+export type PageMetadata = { 'size'?: number, 'totalElements'?: number, 'totalPages'?: number, 'number'?: number };
