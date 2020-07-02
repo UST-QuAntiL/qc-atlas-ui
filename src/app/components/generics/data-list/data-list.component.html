@@ -1,8 +1,12 @@
+<!-- Parent-Container -->
 <div class="atlas-text container-fluid p-3 mt-3">
+  <!-- Mat-Card for Style -->
   <mdb-card cascade="true" narrower="true">
+    <!-- Container that adds padding between Mat-Card and content -->
     <div class="px-5">
+      <!-- Main Control-Panel (Search-Bar + Buttons) -->
       <div class="row">
-        <div *ngIf="allowSearch" class="col-md-9">
+        <div *ngIf="allowSearch" class="col-xl-10 col-lg-8 col-md-6 col-sm-3 col-1">
           <div class="md-form">
             <input
               type="text"
@@ -14,29 +18,31 @@
             <label for="search">Search</label>
           </div>
         </div>
-        <div class="row p-4">
-          <div class="col-xs-1">
-            <button mdbBtn class="control-button add-button" type="button" color="green" outline="true"
-                    (click)="onAdd()" mdbWavesEffect>
-              <mdb-icon fas icon="plus"></mdb-icon>
-            </button>
-          </div>
-          <div class="col-xs-1">
-            <button mdbBtn class="control-button delete-button" type="button" color="red" outline="true"
-                    (click)="onDelete()" mdbWavesEffect>
-              <mdb-icon fas icon="minus"></mdb-icon>
-            </button>
-          </div>
+        <div class="col col-xl-1 pt-4">
+          <button mdbBtn class="control-button add-button btn-block" type="button" color="green" outline="true"
+                  (click)="onAdd()" mdbWavesEffect>
+            <mdb-icon fas icon="plus"></mdb-icon>
+          </button>
+        </div>
+        <div class="col col-xl-1 pt-4">
+          <button mdbBtn class="control-button delete-button btn-block" type="button" color="red" outline="true"
+                  (click)="onDelete()" mdbWavesEffect>
+            <mdb-icon fas icon="minus"></mdb-icon>
+          </button>
         </div>
       </div>
+      <!-- Data-Table -->
       <table id="tableSortExample" class="mb-3" mdbTable matSort (matSortChange)="sortData($event)">
+        <!-- Table-Header with the Header-Data -->
         <thead class="data-header">
         <tr>
+          <!-- Optional Select-All Checkbox Element in first Header-Column -->
           <th class="center-checkbox" scope="row" *ngIf="allowSelection">
             <mdb-checkbox (change)="$event ? masterToggle() : null"
                           [checked]="selection.hasValue() && isAllSelected()"
                           [indeterminate]="selection.hasValue() && !isAllSelected()"></mdb-checkbox>
           </th>
+          <!-- One column for each needed data variable -->
           <ng-container *ngFor="let column of dataColumns; let i = index">
             <th class="th-lg hide-arrow" mat-sort-header="{{ variableNames[i] }}" aria-controls="tableSortExample" scope="col">
               <a>{{ column }}</a>
@@ -44,25 +50,32 @@
           </ng-container>
         </tr>
         </thead>
+        <!-- Table-Body with the Data-Elements -->
         <tbody>
         <tr class="data-element" *ngFor="let dataEntry of data">
+          <!-- Optional Select-Checkbox Element in first Body-Column -->
           <th class="center-checkbox" scope="row" *ngIf="allowSelection">
             <mdb-checkbox [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
                           (change)="$event ? rowToggle(dataEntry, !selection.isSelected(dataEntry)) : null"></mdb-checkbox>
           </th>
+          <!-- One column for each needed data variable value -->
           <td class="crop" *ngFor="let variableName of variableNames" [routerLink]="dataEntry[routingVariable]">{{ dataEntry[variableName] }}</td>
         </tr>
         </tbody>
+        <!-- Optional Table-Footer for pagination -->
         <tfoot *ngIf="pagination">
         <tr>
+          <!-- Completely fill footer column -->
           <td colspan="1000">
             <nav aria-label="Page navigation example">
+              <!-- Optional Table-Size selection of left side of footer -->
               <mat-form-field class="float-left">
                 <mat-label>Items per page:</mat-label>
                 <mat-select [(ngModel)]="paginatorConfig.selectedAmount" (selectionChange)="onChangePagingatorConfig()">
                   <mat-option *ngFor="let choice of paginatorConfig.amountChoices" [value]="choice">{{ choice }}</mat-option>
                 </mat-select>
               </mat-form-field>
+              <!-- Optional Paginator on the right side of the footer -->
               <ul class="pagination pg-blue float-right">
                 <div class="page-control" color="green" outline="true">
                   <li class="page-item"><a class="page-link no-events"><mat-icon class="page-button no-select" [ngClass]="[pagination._links.first ? 'enabled' : 'disabled']" (click)="changePage(pagination._links.first.href)">first_page</mat-icon></a></li>
