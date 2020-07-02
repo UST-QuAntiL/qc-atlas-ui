@@ -80,7 +80,7 @@
                 <div class="page-control" color="green" outline="true">
                   <li class="page-item"><a class="page-link no-events"><mat-icon class="page-button no-select" [ngClass]="[pagination._links.first ? 'enabled' : 'disabled']" (click)="changePage(pagination._links.first.href)">first_page</mat-icon></a></li>
                   <li class="page-item"><a class="page-link no-events"><mat-icon class="page-button no-select" [ngClass]="[pagination._links.prev ? 'enabled' : 'disabled']" (click)="changePage(pagination._links.prev.href)">chevron_left</mat-icon></a></li>
-                  <li class="page-item"><a class="page-link current-page no-select"> {{ pagination.page.number }} </a></li>
+                  <li class="page-item"><a class="page-link current-page no-select"> {{ pagination.page.number + 1 }} </a></li>
                   <li class="page-item"><a class="page-link no-events"><mat-icon class="page-button no-select" [ngClass]="[pagination._links.next ? 'enabled' : 'disabled']" (click)="changePage(pagination._links.next.href)">chevron_right</mat-icon></a></li>
                   <li class="page-item"><a class="page-link no-events"><mat-icon class="page-button no-select" [ngClass]="[pagination._links.last ? 'enabled' : 'disabled']" (click)="changePage(pagination._links.last.href)">last_page</mat-icon></a></li>
                 </div>

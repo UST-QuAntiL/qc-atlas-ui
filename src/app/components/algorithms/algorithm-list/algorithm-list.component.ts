@@ -9,9 +9,10 @@ import { AlgorithmService } from 'api/services/algorithm.service';
 export class AlgorithmListComponent implements OnInit {
   algorithms: any[] = [];
   selectedAlgorithms: any[] = [];
-  tableColumns = ['Name', 'Description', 'Authors', 'Format'];
-  variableNames = ['name', 'description', 'authors', 'format'];
+  tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
+  variableNames = ['name', 'acronym', 'computationModel', 'problem'];
   routingVariable = 'id';
+  queryParams: any = {};
   sortData: any = {
     active: '',
     direction: '',
@@ -38,52 +39,41 @@ export class AlgorithmListComponent implements OnInit {
       size: 10,
       totalElements: 2,
       totalPages: 5,
-      number: 1,
+      number: 0,
     },
   };
   paginatorConfig = {
-    amountChoices: [10, 20, 30],
-    selectedAmount: 10,
+    amountChoices: [1, 2, 3],
+    selectedAmount: 1,
   };
-  constructor(private algorithmService: AlgorithmService) {}
+
+  constructor(private algorithmService: AlgorithmService) {
+  }
 
   ngOnInit(): void {
-    this.algorithms = [
-      {
-        id: '261642e3-da41-4c91-b1d9-b9ce40b698a9',
-        name: 'Alg1',
-        description: 'Alg 1 description',
-        authors: [
-          'Author Ab',
-          'Author Bc',
-          'Author De',
-          'Author Ef',
-          'Author Fg',
-        ],
-        format: 'String',
-      },
-      {
-        id: '261642e3-da41-4c91-b1d9-b9ce40b698a7',
-        name: 'Alg2',
-        description: 'Alg 2 description',
-        authors: ['Author Ab', 'Author Bc'],
-        format: 'Integer',
-      },
-    ];
     this.getAlgorithms();
   }
 
   getAlgorithms(): void {
     // TODO: Fix generated services
-    /* this.algorithmService.getAlgorithms().subscribe((data) => {
-      const algorithms = data._embedded.algorithmDtoes;
-      const page = data.page;
-      console.log(algorithms);
-      console.log(page);
-    }); */
-  }
+    this.queryParams.page = this.pagingInfo.page.number;
+    this.queryParams.size = this.paginatorConfig.selectedAmount;
 
-  adjustInput(): void {}
+    this.algorithmService.getAlgorithms(this.queryParams).subscribe((data) => {
+      const jsonData = JSON.parse(JSON.stringify(data));
+      this.pagingInfo.page = jsonData.page;
+      this.pagingInfo._links = jsonData._links;
+      const classicAlgs = jsonData._embedded.classicAlgorithmDtoes;
+      const quantumAlgs = jsonData._embedded.quantumAlgorithmDtoes;
+      if (classicAlgs) {
+        this.algorithms = this.algorithms.concat(classicAlgs);
+      }
+      if (quantumAlgs) {
+        this.algorithms = this.algorithms.concat(quantumAlgs);
+      }
+      console.log(this.algorithms);
+    });
+  }
 
   selectionChanged(event) {
     this.selectedAlgorithms = event;
