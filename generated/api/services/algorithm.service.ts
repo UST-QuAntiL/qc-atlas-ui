@@ -61,7 +61,8 @@ export class AlgorithmService extends BaseService {
   getAlgorithms$Response(params?: {
     page?: number;
     size?: number;
-
+    sort?: string;
+    sortBy?: string;
   }): Observable<StrictHttpResponse<{ '_embedded'?: { 'algorithmDtoes'?: Array<EntityModelAlgorithmDto> }, 'page'?: PageMetadata }>> {
 
     const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmsPath, 'get');
@@ -69,6 +70,8 @@ export class AlgorithmService extends BaseService {
 
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+      rb.query('sortBy', params.sortBy, {});
 
     }
     return this.http.request(rb.build({
@@ -93,7 +96,8 @@ export class AlgorithmService extends BaseService {
   getAlgorithms(params?: {
     page?: number;
     size?: number;
-
+    sort?: string;
+    sortBy?: string;
   }): Observable<{ '_embedded'?: { 'algorithmDtoes'?: Array<EntityModelAlgorithmDto> }, 'page'?: PageMetadata }> {
 
     return this.getAlgorithms$Response(params).pipe(

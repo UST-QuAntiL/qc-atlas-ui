@@ -13,7 +13,6 @@ export class AlgorithmListComponent implements OnInit {
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
   routingVariable = 'id';
-  queryParams: any = {};
   sortData: any = {
     active: '',
     direction: '',
@@ -54,16 +53,12 @@ export class AlgorithmListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getAlgorithms();
+    this.getAlgorithms(this.generateGetParams());
   }
 
-  getAlgorithms(): void {
-    // Clear query params
-    this.queryParams = {};
-    this.queryParams.page = this.pagingInfo.page.number;
-    this.queryParams.size = this.paginatorConfig.selectedAmount;
-
-    this.algorithmService.getAlgorithms(this.queryParams).subscribe((data) => {
+  getAlgorithms(params: any): void {
+    console.log(params);
+    this.algorithmService.getAlgorithms(params).subscribe((data) => {
       this.prepareAlgorithmdata(JSON.parse(JSON.stringify(data)));
     });
   }
@@ -105,25 +100,23 @@ export class AlgorithmListComponent implements OnInit {
 
   dataSorted(event): void {
     this.sortData = event;
-    console.log(this.sortData);
+    this.getAlgorithms(this.generateGetParams());
   }
 
   paginatorConfigChanged(event): void {
     this.paginatorConfig = event;
-    this.getAlgorithms();
+    this.getAlgorithms(this.generateGetParams());
   }
 
   deleteElements(): void {
-    // Clear query params
-    this.queryParams = {};
-
     // Iterate all selected algorithms and delete them
     for (const algorithm of this.selectedAlgorithms) {
-      this.queryParams.algoId = algorithm.id;
-      this.algorithmService.deleteAlgorithm(this.queryParams).subscribe(() => {
-        // Refresh Algorithms after delete
-        this.getAlgorithms();
-      });
+      this.algorithmService
+        .deleteAlgorithm(this.generateDeleteParams(algorithm.id))
+        .subscribe(() => {
+          // Refresh Algorithms after delete
+          this.getAlgorithms(this.generateGetParams());
+        });
     }
 
     // Clear selected algorithms
@@ -136,5 +129,24 @@ export class AlgorithmListComponent implements OnInit {
 
   searchElement(event): void {
     console.log(event);
+  }
+
+  generateGetParams(): any {
+    const params: any = {};
+    params.page = this.pagingInfo.page.number;
+    params.size = this.paginatorConfig.selectedAmount;
+
+    if (this.sortData.direction && this.sortData.active) {
+      params.sort = this.sortData.direction;
+      params.sortBy = this.sortData.active;
+    }
+
+    return params;
+  }
+
+  generateDeleteParams(algoId: string): any {
+    const params: any = {};
+    params.algoId = algoId;
+    return params;
   }
 }
