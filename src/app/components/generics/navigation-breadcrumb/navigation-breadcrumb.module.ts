@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { NavigationBreadcrumbComponent } from './navigation-breadcrumb.component';
 import { CommonModule } from '@angular/common';
+import { NavigationBreadcrumbComponent } from './navigation-breadcrumb.component';
 
 @NgModule({
   declarations: [NavigationBreadcrumbComponent],

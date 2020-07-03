@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 export interface BreadcrumbLink {
-  heading: String;
-  subHeading: String;
+  heading: string;
+  subHeading: string;
 }
 
 @Component({
@@ -14,13 +14,13 @@ export class NavigationBreadcrumbComponent implements OnInit {
   @Output() onClickLink: EventEmitter<BreadcrumbLink> = new EventEmitter<
     BreadcrumbLink
   >();
-  @Input() links: Array<BreadcrumbLink> = [];
+  @Input() links: BreadcrumbLink[] = [];
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  clickLink(link: BreadcrumbLink) {
+  clickLink(link: BreadcrumbLink): void {
     this.onClickLink.emit(link);
   }
 }
