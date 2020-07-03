@@ -43,7 +43,6 @@ import { PublicationListComponent } from './components/publications/publication-
 import { AlgorithmListComponent } from './components/algorithms/algorithm-list/algorithm-list.component';
 import { ChipCollectionComponent } from './components/generics/chip-collection/chip-collection.component';
 import { PropertyInputComponent } from './components/generics/property-input/property-input.component';
-import { ImplementationViewModule } from './components/algorithms/implementation-view/implementation-view.module';
 import { NavigationBreadcrumbModule } from './components/generics/navigation-breadcrumb/navigation-breadcrumb.module';
 
 @NgModule({
@@ -98,7 +97,6 @@ import { NavigationBreadcrumbModule } from './components/generics/navigation-bre
     MatCheckboxModule,
     MatButtonModule,
     // app modules
-    ImplementationViewModule,
     NavigationBreadcrumbModule,
   ],
   entryComponents: [
