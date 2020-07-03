@@ -13,6 +13,7 @@ export class AlgorithmListComponent implements OnInit {
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
   routingVariable = 'id';
+  searchParameter = '';
   sortData: any = {
     active: '',
     direction: '',
@@ -127,7 +128,8 @@ export class AlgorithmListComponent implements OnInit {
   }
 
   searchElement(event): void {
-    console.log(event);
+    this.searchParameter = event;
+    this.getAlgorithms(this.generateGetParams());
   }
 
   generateGetParams(): any {
@@ -138,6 +140,10 @@ export class AlgorithmListComponent implements OnInit {
     if (this.sortData.direction && this.sortData.active) {
       params.sort = this.sortData.direction;
       params.sortBy = this.sortData.active;
+    }
+
+    if (this.searchParameter) {
+      params.search = this.searchParameter;
     }
 
     return params;
