@@ -57,7 +57,6 @@ export class AlgorithmListComponent implements OnInit {
   }
 
   getAlgorithms(params: any): void {
-    console.log(params);
     this.algorithmService.getAlgorithms(params).subscribe((data) => {
       this.prepareAlgorithmdata(JSON.parse(JSON.stringify(data)));
     });
