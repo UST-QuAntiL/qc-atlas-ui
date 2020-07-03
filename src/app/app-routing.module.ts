@@ -8,8 +8,11 @@ import { PublicationListComponent } from './components/publications/publication-
 import { ImplementationViewComponent } from './components/algorithms/implementation-view/implementation-view.component';
 
 const routes: Routes = [
-    { path: 'algorithms', component: AlgorithmListComponent },
-  { path: 'algorithms/:algo_id/implementations/:impl_id', component: ImplementationViewComponent},
+  { path: 'algorithms', component: AlgorithmListComponent },
+  {
+    path: 'algorithms/:algoId/implementations/:implId',
+    component: ImplementationViewComponent,
+  },
   { path: 'software-platforms', component: SoftwarePlatformViewComponent },
   { path: 'cloud-services', component: CloudServiceViewComponent },
   { path: 'publications', component: PublicationListComponent },
@@ -25,5 +28,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}
