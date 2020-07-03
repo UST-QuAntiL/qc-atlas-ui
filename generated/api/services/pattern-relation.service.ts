@@ -41,7 +41,7 @@ export class PatternRelationService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'patternRelationDtoes'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }>> {
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'patternRelations'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }>> {
 
     const rb = new RequestBuilder(this.rootUrl, PatternRelationService.GetPatternRelationTypesPath, 'get');
     if (params) {
@@ -56,7 +56,7 @@ export class PatternRelationService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_embedded'?: { 'patternRelationDtoes'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }>;
+        return r as StrictHttpResponse<{ '_embedded'?: { 'patternRelations'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }>;
       })
     );
   }
@@ -71,10 +71,10 @@ export class PatternRelationService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<{ '_embedded'?: { 'patternRelationDtoes'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }> {
+  }): Observable<{ '_embedded'?: { 'patternRelations'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }> {
 
     return this.getPatternRelationTypes$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_embedded'?: { 'patternRelationDtoes'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'patternRelationDtoes'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata })
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'patternRelations'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'patternRelations'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata })
     );
   }
 

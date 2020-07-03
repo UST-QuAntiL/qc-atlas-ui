@@ -191,7 +191,7 @@ export class AlgorithmRelationTypeService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'algoRelationTypeDtoes'?: Array<EntityModelAlgoRelationTypeDto> }, 'page'?: PageMetadata }>> {
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'algoRelationTypes'?: Array<EntityModelAlgoRelationTypeDto> }, 'page'?: PageMetadata }>> {
 
     const rb = new RequestBuilder(this.rootUrl, AlgorithmRelationTypeService.GetAlgoRelationTypesPath, 'get');
     if (params) {
@@ -206,7 +206,7 @@ export class AlgorithmRelationTypeService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_embedded'?: { 'algoRelationTypeDtoes'?: Array<EntityModelAlgoRelationTypeDto> }, 'page'?: PageMetadata }>;
+        return r as StrictHttpResponse<{ '_embedded'?: { 'algoRelationTypes'?: Array<EntityModelAlgoRelationTypeDto> }, 'page'?: PageMetadata }>;
       })
     );
   }
@@ -221,10 +221,10 @@ export class AlgorithmRelationTypeService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<{ '_embedded'?: { 'algoRelationTypeDtoes'?: Array<EntityModelAlgoRelationTypeDto> }, 'page'?: PageMetadata }> {
+  }): Observable<{ '_embedded'?: { 'algoRelationTypes'?: Array<EntityModelAlgoRelationTypeDto> }, 'page'?: PageMetadata }> {
 
     return this.getAlgoRelationTypes$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_embedded'?: { 'algoRelationTypeDtoes'?: Array<EntityModelAlgoRelationTypeDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'algoRelationTypeDtoes'?: Array<EntityModelAlgoRelationTypeDto> }, 'page'?: PageMetadata })
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'algoRelationTypes'?: Array<EntityModelAlgoRelationTypeDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'algoRelationTypes'?: Array<EntityModelAlgoRelationTypeDto> }, 'page'?: PageMetadata })
     );
   }
 

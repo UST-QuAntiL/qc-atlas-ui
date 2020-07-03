@@ -191,7 +191,7 @@ export class PatternRelationTypeService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'patternRelationTypeDtoes'?: Array<EntityModelPatternRelationTypeDto> }, 'page'?: PageMetadata }>> {
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'patternRelationTypes'?: Array<EntityModelPatternRelationTypeDto> }, 'page'?: PageMetadata }>> {
 
     const rb = new RequestBuilder(this.rootUrl, PatternRelationTypeService.GetPatternRelationTypes1Path, 'get');
     if (params) {
@@ -206,7 +206,7 @@ export class PatternRelationTypeService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_embedded'?: { 'patternRelationTypeDtoes'?: Array<EntityModelPatternRelationTypeDto> }, 'page'?: PageMetadata }>;
+        return r as StrictHttpResponse<{ '_embedded'?: { 'patternRelationTypes'?: Array<EntityModelPatternRelationTypeDto> }, 'page'?: PageMetadata }>;
       })
     );
   }
@@ -221,10 +221,10 @@ export class PatternRelationTypeService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<{ '_embedded'?: { 'patternRelationTypeDtoes'?: Array<EntityModelPatternRelationTypeDto> }, 'page'?: PageMetadata }> {
+  }): Observable<{ '_embedded'?: { 'patternRelationTypes'?: Array<EntityModelPatternRelationTypeDto> }, 'page'?: PageMetadata }> {
 
     return this.getPatternRelationTypes1$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_embedded'?: { 'patternRelationTypeDtoes'?: Array<EntityModelPatternRelationTypeDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'patternRelationTypeDtoes'?: Array<EntityModelPatternRelationTypeDto> }, 'page'?: PageMetadata })
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'patternRelationTypes'?: Array<EntityModelPatternRelationTypeDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'patternRelationTypes'?: Array<EntityModelPatternRelationTypeDto> }, 'page'?: PageMetadata })
     );
   }
 
