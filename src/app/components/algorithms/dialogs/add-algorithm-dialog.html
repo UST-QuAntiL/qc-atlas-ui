@@ -6,11 +6,11 @@
       <input id="name" formControlName="name" matInput required>
     </mat-form-field>
   </form>
-  <h5 mat-dialog-title>Tag</h5>
-  <mat-form-field appearance="fill" class="input-field">
-    <mat-label>Tag</mat-label>
-    <mat-select [(ngModel)]="data.tag">
-      <mat-option *ngFor="let tag of data.tags" [value]="tag">{{tag.key}} {{tag.value}}</mat-option>
+
+  <mat-form-field class="input-field">
+    <mat-label>Computation model</mat-label>
+    <mat-select [(ngModel)]="data.computationModel" required>
+      <mat-option *ngFor="let option of computationModelOption" [value]="option">{{option}}</mat-option>
     </mat-select>
   </mat-form-field>
 </div>

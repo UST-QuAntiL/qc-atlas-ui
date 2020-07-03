@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api/services/algorithm.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AlgorithmDto } from 'api/models';
+import { Router } from '@angular/router';
 import { GenericDataService } from '../../../util/generic-data.service';
+import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
 
 @Component({
   selector: 'app-algorithm-list',
@@ -50,7 +54,9 @@ export class AlgorithmListComponent implements OnInit {
 
   constructor(
     private algorithmService: AlgorithmService,
-    private genericDataService: GenericDataService
+    private genericDataService: GenericDataService,
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -124,7 +130,7 @@ export class AlgorithmListComponent implements OnInit {
   }
 
   addElement(): void {
-    console.log('Add Element');
+    this.openAddAlgorithmDialog();
   }
 
   searchElement(event): void {
@@ -153,5 +159,25 @@ export class AlgorithmListComponent implements OnInit {
     const params: any = {};
     params.algoId = algoId;
     return params;
+  }
+
+  openAddAlgorithmDialog(): void {
+    const params: any = {};
+    const dialogRef = this.dialog.open(AddAlgorithmDialogComponent, {
+      width: '400px',
+      data: { title: 'Add new algorithm' },
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      const algorithmDto: AlgorithmDto = {
+        name: dialogResult.name,
+        computationModel: dialogResult.computationModel.toUpperCase(),
+      };
+      params.body = algorithmDto;
+
+      this.algorithmService.createAlgorithm(params).subscribe((data) => {
+        this.router.navigate([data.id]);
+      });
+    });
   }
 }
