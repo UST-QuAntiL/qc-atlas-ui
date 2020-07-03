@@ -11,6 +11,7 @@
             <input
               type="text"
               [(ngModel)]="searchText"
+              (input)="onSearchChange()"
               class="form-control"
               id="search"
               mdbInput

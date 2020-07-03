@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  HostListener,
-} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
@@ -34,27 +27,22 @@ export class DataListComponent implements OnInit {
 
   constructor() {}
 
-  @HostListener('input')
-  oninput() {
-    this.searchElement.emit(this.searchText);
-  }
-
   ngOnInit(): void {}
 
-  isAllSelected() {
+  isAllSelected(): boolean {
     return this.data.length === this.selection.selected.length;
   }
 
   // Toggle all check boxes
-  masterToggle() {
+  masterToggle(): void {
     const isAllSelected = this.isAllSelected();
     this.data.forEach((element) => {
-      this.changeSelection(element, isAllSelected ? false : true);
+      this.changeSelection(element, !isAllSelected);
     });
     this.selectionChange.emit(this.selection.selected);
   }
 
-  rowToggle(row: any, select: boolean) {
+  rowToggle(row: any, select: boolean): void {
     this.changeSelection(row, !this.selection.isSelected(row));
     this.selectionChange.emit(this.selection.selected);
   }
@@ -63,35 +51,39 @@ export class DataListComponent implements OnInit {
     return Array.isArray(data);
   }
 
-  printArray(dataArray: any) {
+  printArray(dataArray: any): void {
     let result = '';
     for (const data of dataArray) {
       result = result.concat(data) + ',';
     }
   }
 
-  changePage(link: string) {
+  changePage(link: string): void {
     this.pageChange.emit(link);
   }
 
-  onDelete() {
+  onDelete(): void {
     this.deleteElements.emit();
     this.selection.clear();
   }
 
-  onAdd() {
+  onAdd(): void {
     this.addElement.emit();
   }
 
-  sortData(event: any) {
+  sortData(event: any): void {
     this.dataSorted.emit(event);
   }
 
-  onChangePagingatorConfig() {
+  onChangePagingatorConfig(): void {
     this.paginationConfigChange.emit(this.paginatorConfig);
   }
 
-  private changeSelection(row: any, select: boolean) {
+  onSearchChange(): void {
+    this.searchElement.emit(this.searchText);
+  }
+
+  private changeSelection(row: any, select: boolean): void {
     if (select !== this.selection.isSelected(row)) {
       this.selection.toggle(row);
     }

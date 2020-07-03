@@ -95,25 +95,25 @@ export class AlgorithmListComponent implements OnInit {
     }
   }
 
-  selectionChanged(event) {
+  selectionChanged(event): void {
     this.selectedAlgorithms = event;
   }
 
-  pageChanged(event) {
+  pageChanged(event): void {
     this.getAlgorithmsHateoas(event);
   }
 
-  dataSorted(event) {
+  dataSorted(event): void {
     this.sortData = event;
     console.log(this.sortData);
   }
 
-  paginatorConfigChanged(event) {
+  paginatorConfigChanged(event): void {
     this.paginatorConfig = event;
     this.getAlgorithms();
   }
 
-  deleteElements() {
+  deleteElements(): void {
     // Clear query params
     this.queryParams = {};
 
@@ -130,11 +130,11 @@ export class AlgorithmListComponent implements OnInit {
     this.selectedAlgorithms = [];
   }
 
-  addElement() {
+  addElement(): void {
     console.log('Add Element');
   }
 
-  searchElement(event) {
+  searchElement(event): void {
     console.log(event);
   }
 }
