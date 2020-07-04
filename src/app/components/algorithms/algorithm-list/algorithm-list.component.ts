@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api/services/algorithm.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AlgorithmDto, QuantumAlgorithm } from 'api/models';
+import { AlgorithmDto } from 'api/models';
 import { Router } from '@angular/router';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
@@ -169,21 +169,16 @@ export class AlgorithmListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult.computationModel === 'Classic') {
-        const classicAlgorithmDto: AlgorithmDto = {
-          name: dialogResult.name,
-          computationModel: dialogResult.computationModel.toUpperCase(),
-        };
-        params.body = classicAlgorithmDto;
+      const algorithmDto: any = {
+        name: dialogResult.name,
+        computationModel: dialogResult.computationModel.toUpperCase(),
+      };
+
+      if (algorithmDto.computationModel === 'QUANTUM') {
+        algorithmDto.quantumComputationModel = dialogResult.quantumComputationModel.toUpperCase();
       }
-      if (dialogResult.computationModel === 'Quantum') {
-        const quantumAlgorithmDto: AlgorithmDto = {
-          name: dialogResult.name,
-          computationModel: dialogResult.computationModel.toUpperCase(),
-          quantumComputationModel: dialogResult.quantumComputationModel.toUpperCase(),
-        };
-        params.body = quantumAlgorithmDto;
-      }
+
+      params.body = algorithmDto as AlgorithmDto;
 
       this.algorithmService.createAlgorithm(params).subscribe((data) => {
         this.router.navigate([data.id]);
