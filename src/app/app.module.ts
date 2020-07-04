@@ -29,7 +29,6 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { AddImplementationDialogComponent } from './components/implementations/dialogs/add-implementation-dialog.component';
 import { AddAlgorithmDialogComponent } from './components/algorithms/dialogs/add-algorithm-dialog.component';
 import { JsonImportDialogComponent } from './components/dialogs/json-import-dialog.component';
 import { MissingEntityDialogComponent } from './components/dialogs/missing-entity-dialog.component';
@@ -51,7 +50,6 @@ import { NavigationBreadcrumbModule } from './components/generics/navigation-bre
     PageNotFoundComponent,
     // dialogs
     AddAlgorithmDialogComponent,
-    AddImplementationDialogComponent,
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
     AlgorithmViewComponent,
@@ -100,7 +98,6 @@ import { NavigationBreadcrumbModule } from './components/generics/navigation-bre
   entryComponents: [
     // dialogs need to be provided as entry component
     AddAlgorithmDialogComponent,
-    AddImplementationDialogComponent,
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
   ],
