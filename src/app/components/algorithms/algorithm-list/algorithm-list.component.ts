@@ -63,11 +63,12 @@ export class AlgorithmListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((dialogResult) => {
       const algorithmDto: any = {
         name: dialogResult.name,
-        computationModel: dialogResult.computationModel.toUpperCase(),
+        computationModel: dialogResult.computationModel,
       };
 
       if (algorithmDto.computationModel === 'QUANTUM') {
-        algorithmDto.quantumComputationModel = dialogResult.quantumComputationModel.toUpperCase();
+        algorithmDto.quantumComputationModel =
+          dialogResult.quantumComputationModel;
       }
 
       params.body = algorithmDto as AlgorithmDto;

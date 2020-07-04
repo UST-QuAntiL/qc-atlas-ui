@@ -12,13 +12,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class AddAlgorithmDialogComponent implements OnInit {
   algorithmForm: FormGroup;
-  selectedCtrlName: any;
-  computationModelOption: string[] = ['Quantum', 'Classic', 'Hybrid'];
-  quantumComputationModelOption: string[] = [
-    'Gate_Based',
-    'Measurement_Based',
-    'Quantum_Annealing',
-  ];
 
   constructor(
     public dialogRef: MatDialogRef<AddAlgorithmDialogComponent>,

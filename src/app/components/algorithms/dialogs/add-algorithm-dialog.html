@@ -9,15 +9,18 @@
   <mat-form-field class="input-field">
     <mat-label>Computation model</mat-label>
     <mat-select [(ngModel)]="data.computationModel" required>
-      <mat-option *ngFor="let option of computationModelOption" [value]="option">{{option}}</mat-option>
+      <mat-option [value]="'CLASSIC'">Classic</mat-option>
+      <mat-option [value]="'QUANTUM'">Quantum</mat-option>
+      <mat-option [value]="'HYBRID'">Hybrid</mat-option>
     </mat-select>
   </mat-form-field>
-  <ng-container *ngIf="data.computationModel === 'Quantum'">
+  <ng-container *ngIf="data.computationModel === 'QUANTUM'">
     <mat-form-field class="input-field">
       <mat-label>Quantum Computation model</mat-label>
       <mat-select [(ngModel)]="data.quantumComputationModel" required>
-        <mat-option *ngFor="let quantumOption of quantumComputationModelOption"
-                    [value]="quantumOption">{{quantumOption}}</mat-option>
+        <mat-option [value]="'GATE_BASED'">Gate Based</mat-option>
+        <mat-option [value]="'MEASUREMENT_BASED'">Measurement Based</mat-option>
+        <mat-option [value]="'QUANTUM_ANNEALING'">Quantum Annealing</mat-option>
       </mat-select>
     </mat-form-field>
   </ng-container>
