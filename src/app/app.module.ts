@@ -42,8 +42,8 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { PublicationListComponent } from './components/publications/publication-list/publication-list.component';
 import { AlgorithmListComponent } from './components/algorithms/algorithm-list/algorithm-list.component';
 import { ChipCollectionComponent } from './components/generics/chip-collection/chip-collection.component';
-import { PropertyInputComponent } from './components/generics/property-input/property-input.component';
 import { GenericDataService } from './util/generic-data.service';
+import { NavigationBreadcrumbModule } from './components/generics/navigation-breadcrumb/navigation-breadcrumb.module';
 
 @NgModule({
   declarations: [
@@ -64,7 +64,6 @@ import { GenericDataService } from './util/generic-data.service';
     PublicationListComponent,
     AlgorithmListComponent,
     ChipCollectionComponent,
-    PropertyInputComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -96,6 +95,8 @@ import { GenericDataService } from './util/generic-data.service';
     MatSelectModule,
     MatCheckboxModule,
     MatButtonModule,
+    // app modules
+    NavigationBreadcrumbModule,
   ],
   entryComponents: [
     // dialogs need to be provided as entry component

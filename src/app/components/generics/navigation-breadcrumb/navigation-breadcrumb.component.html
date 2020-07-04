@@ -1,0 +1,33 @@
+<nav aria-label="breadcrumb" class="h2">
+  <ol class="breadcrumb bg-transparent">
+    <li
+      *ngFor="let link of links.slice(0, links.length - 1)"
+      class="breadcrumb-item"
+      style="display: flex;"
+      (click)="clickLink(link)"
+    >
+      <div class="breadcrumb-item-container">
+        <div class="heading blue-text">
+          {{ link.heading }}
+        </div>
+        <h6 style="color: gray;">
+          {{ link.subHeading }}
+        </h6>
+      </div>
+    </li>
+    <li
+      class="breadcrumb-item"
+      style="display: flex;"
+      (click)="clickLink(links[links.length - 1])"
+    >
+      <div class="breadcrumb-item-container">
+        <div class="heading">
+          {{ links[links.length - 1].heading }}
+        </div>
+        <h6 style="color: gray;">
+          {{ links[links.length - 1].subHeading }}
+        </h6>
+      </div>
+    </li>
+  </ol>
+</nav>

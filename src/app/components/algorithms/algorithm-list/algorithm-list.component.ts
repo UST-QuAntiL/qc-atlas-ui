@@ -65,6 +65,7 @@ export class AlgorithmListComponent implements OnInit {
 
   getAlgorithms(params: any): void {
     this.algorithmService.getAlgorithms(params).subscribe((data) => {
+      // Adjust Paging and Hateoas data
       this.prepareAlgorithmdata(JSON.parse(JSON.stringify(data)));
     });
   }
@@ -76,24 +77,10 @@ export class AlgorithmListComponent implements OnInit {
   }
 
   prepareAlgorithmdata(data): void {
-    // Clear current algorithms
-    this.algorithms = [];
-
-    // Read all incoming algorithms
-    const classicAlgs = data._embedded.classicAlgorithmDtoes;
-    const quantumAlgs = data._embedded.quantumAlgorithmDtoes;
-
-    // Adjust Paging and Hateoas data
+    // Read all incoming data
+    this.algorithms = data._embedded.algorithms;
     this.pagingInfo.page = data.page;
     this.pagingInfo._links = data._links;
-
-    // Adjust Algorithm data
-    if (classicAlgs) {
-      this.algorithms = this.algorithms.concat(classicAlgs);
-    }
-    if (quantumAlgs) {
-      this.algorithms = this.algorithms.concat(quantumAlgs);
-    }
   }
 
   selectionChanged(event): void {

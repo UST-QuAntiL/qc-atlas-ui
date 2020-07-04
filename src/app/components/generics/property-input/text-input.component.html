@@ -1,0 +1,25 @@
+<mat-form-field>
+  <mat-label class="input-label">{{ name }}</mat-label>
+  <input
+    *ngIf="!multiline"
+    type="text"
+    [disabled]="!isBeingEdited"
+    [(ngModel)]="value"
+    matInput
+  />
+  <textarea
+    *ngIf="multiline"
+    [disabled]="!isBeingEdited"
+    [(ngModel)]="value"
+    matInput
+  ></textarea>
+  <button
+    mat-button
+    matSuffix
+    mat-icon-button
+    aria-label="Clear"
+    (click)="toggleEdit()"
+  >
+    <mat-icon>{{ isBeingEdited ? 'save' : 'edit' }}</mat-icon>
+  </button>
+</mat-form-field>

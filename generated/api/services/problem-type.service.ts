@@ -39,7 +39,7 @@ export class ProblemTypeService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'problemTypeDtoes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }>> {
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'problemTypes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }>> {
 
     const rb = new RequestBuilder(this.rootUrl, ProblemTypeService.GetProblemTypes1Path, 'get');
     if (params) {
@@ -54,7 +54,7 @@ export class ProblemTypeService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_embedded'?: { 'problemTypeDtoes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }>;
+        return r as StrictHttpResponse<{ '_embedded'?: { 'problemTypes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }>;
       })
     );
   }
@@ -69,10 +69,10 @@ export class ProblemTypeService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<{ '_embedded'?: { 'problemTypeDtoes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }> {
+  }): Observable<{ '_embedded'?: { 'problemTypes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }> {
 
     return this.getProblemTypes1$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_embedded'?: { 'problemTypeDtoes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'problemTypeDtoes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata })
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'problemTypes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'problemTypes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata })
     );
   }
 

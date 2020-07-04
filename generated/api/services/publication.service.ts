@@ -192,7 +192,7 @@ export class PublicationService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'publicationDtoes'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>> {
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>> {
 
     const rb = new RequestBuilder(this.rootUrl, PublicationService.GetPublications2Path, 'get');
     if (params) {
@@ -207,7 +207,7 @@ export class PublicationService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_embedded'?: { 'publicationDtoes'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>;
+        return r as StrictHttpResponse<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>;
       })
     );
   }
@@ -222,10 +222,10 @@ export class PublicationService extends BaseService {
     page?: number;
     size?: number;
 
-  }): Observable<{ '_embedded'?: { 'publicationDtoes'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }> {
+  }): Observable<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }> {
 
     return this.getPublications2$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_embedded'?: { 'publicationDtoes'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'publicationDtoes'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata })
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata })
     );
   }
 
