@@ -1,16 +1,14 @@
-<app-table [data]="algorithms"
-           [dataColumns]="tableColumns"
-           [variableNames]="variableNames"
-           [pagination]=pagingInfo
-           [paginatorConfig]=paginatorConfig
-           [routingVariable]="routingVariable"
+<app-table [data]=algorithms
+           [variableNames]=variableNames
+           [dataColumns]=tableColumns
            [allowSelection]=true
            [allowSearch]=true
-           (deleteElements)="deleteElements()"
-           (addElement)="addElement()"
-           (selectionChange)="selectionChanged($event)"
-           (searchElement)="searchElement($event)"
-           (pageChange)="pageChanged($event)"
-           (paginationConfigChange)="paginatorConfigChanged($event)"
-           (dataSorted)="dataSorted($event)">
+           [allowPagination]=true
+           [pagination]=pagingInfo
+           [paginatorConfig]=paginatorConfig
+           [routingVariable]="'id'"
+           (addElement)="onAddElement()"
+           (deleteElements)="onDeleteElements($event)"
+           (datalistConfigChanged)="onDatalistConfigChanged($event)"
+           (pageChange)="onPageChanged($event)">
 </app-table>

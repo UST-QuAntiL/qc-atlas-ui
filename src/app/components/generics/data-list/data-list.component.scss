@@ -45,6 +45,11 @@ mat-grid-list {
   transition: all .2s ease-in-out;
 }
 
+.data-element:hover {
+  background-color: mat-color($qc-atlas-ui-accent);
+  cursor: pointer;
+}
+
 .page-control {
   display: flex;
 }
@@ -84,12 +89,6 @@ mat-grid-list {
 
 .page-button:hover {
   background-color: mat-color($qc-atlas-ui-primary) !important;
-}
-
-.data-element:hover {
-  background-color: mat-color($qc-atlas-ui-accent);
-  transform: scale(1.05, 1.05);
-  cursor: pointer;
 }
 
 .no-events {

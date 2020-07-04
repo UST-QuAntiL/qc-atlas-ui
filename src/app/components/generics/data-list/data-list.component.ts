@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
@@ -8,26 +8,32 @@ import { SelectionModel } from '@angular/cdk/collections';
 })
 export class DataListComponent implements OnInit {
   @Input() data: any[];
+  @Input() variableNames: string[];
   @Input() dataColumns: string[];
   @Input() allowSelection: boolean;
   @Input() allowSearch: boolean;
-  @Input() variableNames: string[];
+  @Input() allowPagination: boolean;
   @Input() pagination: any;
   @Input() paginatorConfig: any;
   @Input() routingVariable: string;
-  @Output() selectionChange = new EventEmitter<any[]>();
-  @Output() pageChange = new EventEmitter<string>();
-  @Output() deleteElements = new EventEmitter<void>();
   @Output() addElement = new EventEmitter<void>();
-  @Output() paginationConfigChange = new EventEmitter<any>();
-  @Output() searchElement = new EventEmitter<string>();
-  @Output() dataSorted = new EventEmitter<any>();
+  @Output() deleteElements = new EventEmitter<DeleteParams>();
+  @Output() pageChange = new EventEmitter<string>();
+  @Output() datalistConfigChanged = new EventEmitter<any>();
   selection = new SelectionModel<any>(true, []);
   searchText = '';
+  sortDirection = '';
+  sortActiveElement = '';
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.allowPagination) {
+      this.generateInitialPaginator();
+    }
+
+    this.datalistConfigChanged.emit(this.generateGetParameter());
+  }
 
   isAllSelected(): boolean {
     return this.data.length === this.selection.selected.length;
@@ -39,23 +45,10 @@ export class DataListComponent implements OnInit {
     this.data.forEach((element) => {
       this.changeSelection(element, !isAllSelected);
     });
-    this.selectionChange.emit(this.selection.selected);
   }
 
-  rowToggle(row: any, select: boolean): void {
+  rowToggle(row: any): void {
     this.changeSelection(row, !this.selection.isSelected(row));
-    this.selectionChange.emit(this.selection.selected);
-  }
-
-  isArray(data): boolean {
-    return Array.isArray(data);
-  }
-
-  printArray(dataArray: any): void {
-    let result = '';
-    for (const data of dataArray) {
-      result = result.concat(data) + ',';
-    }
   }
 
   changePage(link: string): void {
@@ -63,7 +56,7 @@ export class DataListComponent implements OnInit {
   }
 
   onDelete(): void {
-    this.deleteElements.emit();
+    this.deleteElements.emit(this.generateDeleteParameter());
     this.selection.clear();
   }
 
@@ -72,15 +65,17 @@ export class DataListComponent implements OnInit {
   }
 
   sortData(event: any): void {
-    this.dataSorted.emit(event);
+    this.sortDirection = event.direction;
+    this.sortActiveElement = event.active;
+    this.datalistConfigChanged.emit(this.generateGetParameter());
   }
 
   onChangePagingatorConfig(): void {
-    this.paginationConfigChange.emit(this.paginatorConfig);
+    this.datalistConfigChanged.emit(this.generateGetParameter());
   }
 
   onSearchChange(): void {
-    this.searchElement.emit(this.searchText);
+    this.datalistConfigChanged.emit(this.generateGetParameter());
   }
 
   private changeSelection(row: any, select: boolean): void {
@@ -88,4 +83,58 @@ export class DataListComponent implements OnInit {
       this.selection.toggle(row);
     }
   }
+
+  private generateDeleteParameter(): DeleteParams {
+    return {
+      elements: this.selection.selected,
+      queryParams: this.generateGetParameter(),
+    };
+  }
+
+  private generateGetParameter(): QueryParams {
+    const params: QueryParams = {};
+    if (this.allowPagination) {
+      params.page = this.pagination.page.number;
+      params.size = this.paginatorConfig.selectedAmount;
+    }
+
+    if (this.sortDirection && this.sortActiveElement) {
+      params.sort = this.sortDirection;
+      params.sortBy = this.sortActiveElement;
+    }
+
+    if (this.allowSearch && this.searchText) {
+      params.search = this.searchText;
+    }
+
+    return params;
+  }
+
+  private generateInitialPaginator(): void {
+    if (!this.pagination) {
+      this.pagination = {};
+    }
+    if (!this.pagination._links) {
+      this.pagination._links = {};
+    }
+    if (!this.pagination.page) {
+      this.pagination.page = {};
+    }
+    if (!this.pagination.page.number) {
+      this.pagination.page.number = 0;
+    }
+  }
+}
+
+export interface QueryParams {
+  page?: number;
+  size?: number;
+  sort?: string;
+  sortBy?: string;
+  search?: string;
+}
+
+export interface DeleteParams {
+  elements: any;
+  queryParams: QueryParams;
 }

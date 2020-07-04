@@ -13,41 +13,10 @@ import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.com
 })
 export class AlgorithmListComponent implements OnInit {
   algorithms: any[] = [];
-  selectedAlgorithms: any[] = [];
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
-  routingVariable = 'id';
-  searchParameter = '';
-  sortData: any = {
-    active: '',
-    direction: '',
-  };
-  pagingInfo = {
-    _links: {
-      prev: {
-        href: 'http://previousPage',
-      },
-      next: {
-        href: 'http://nextPage',
-      },
-      first: {
-        href: 'http://firstPage',
-      },
-      last: {
-        href: 'http://lastPage',
-      },
-      self: {
-        href: 'http://currentPage',
-      },
-    },
-    page: {
-      size: 10,
-      totalElements: 2,
-      totalPages: 5,
-      number: 0,
-    },
-  };
-  paginatorConfig = {
+  pagingInfo: any = {};
+  paginatorConfig: any = {
     amountChoices: [1, 2, 3],
     selectedAmount: 1,
   };
@@ -59,95 +28,32 @@ export class AlgorithmListComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.getAlgorithms(this.generateGetParams());
-  }
+  ngOnInit(): void {}
 
   getAlgorithms(params: any): void {
     this.algorithmService.getAlgorithms(params).subscribe((data) => {
-      this.prepareAlgorithmdata(JSON.parse(JSON.stringify(data)));
+      this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
     });
   }
 
   getAlgorithmsHateoas(url: string): void {
     this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareAlgorithmdata(data);
+      this.prepareAlgorithmData(data);
     });
   }
 
-  prepareAlgorithmdata(data): void {
+  prepareAlgorithmData(data): void {
     // Read all incoming data
-    this.algorithms = data._embedded.algorithms;
+    if (data._embedded) {
+      this.algorithms = data._embedded.algorithms;
+    } else {
+      this.algorithms = [];
+    }
     this.pagingInfo.page = data.page;
     this.pagingInfo._links = data._links;
   }
 
-  selectionChanged(event): void {
-    this.selectedAlgorithms = event;
-  }
-
-  pageChanged(event): void {
-    this.getAlgorithmsHateoas(event);
-  }
-
-  dataSorted(event): void {
-    this.sortData = event;
-    this.getAlgorithms(this.generateGetParams());
-  }
-
-  paginatorConfigChanged(event): void {
-    this.paginatorConfig = event;
-    this.getAlgorithms(this.generateGetParams());
-  }
-
-  deleteElements(): void {
-    // Iterate all selected algorithms and delete them
-    for (const algorithm of this.selectedAlgorithms) {
-      this.algorithmService
-        .deleteAlgorithm(this.generateDeleteParams(algorithm.id))
-        .subscribe(() => {
-          // Refresh Algorithms after delete
-          this.getAlgorithms(this.generateGetParams());
-        });
-    }
-
-    // Clear selected algorithms
-    this.selectedAlgorithms = [];
-  }
-
-  addElement(): void {
-    this.openAddAlgorithmDialog();
-  }
-
-  searchElement(event): void {
-    this.searchParameter = event;
-    this.getAlgorithms(this.generateGetParams());
-  }
-
-  generateGetParams(): any {
-    const params: any = {};
-    params.page = this.pagingInfo.page.number;
-    params.size = this.paginatorConfig.selectedAmount;
-
-    if (this.sortData.direction && this.sortData.active) {
-      params.sort = this.sortData.direction;
-      params.sortBy = this.sortData.active;
-    }
-
-    if (this.searchParameter) {
-      params.search = this.searchParameter;
-    }
-
-    return params;
-  }
-
-  generateDeleteParams(algoId: string): any {
-    const params: any = {};
-    params.algoId = algoId;
-    return params;
-  }
-
-  openAddAlgorithmDialog(): void {
+  onAddElement(): void {
     const params: any = {};
     const dialogRef = this.dialog.open(AddAlgorithmDialogComponent, {
       width: '400px',
@@ -170,5 +76,31 @@ export class AlgorithmListComponent implements OnInit {
         this.router.navigate([data.id]);
       });
     });
+  }
+
+  onDeleteElements(event): void {
+    // Iterate all selected algorithms and delete them
+    for (const algorithm of event.elements) {
+      this.algorithmService
+        .deleteAlgorithm(this.generateDeleteParams(algorithm.id))
+        .subscribe(() => {
+          // Refresh Algorithms after delete
+          this.getAlgorithms(event.queryParams);
+        });
+    }
+  }
+
+  onPageChanged(event): void {
+    this.getAlgorithmsHateoas(event);
+  }
+
+  onDatalistConfigChanged(event): void {
+    this.getAlgorithms(event);
+  }
+
+  generateDeleteParams(algoId: string): any {
+    const params: any = {};
+    params.algoId = algoId;
+    return params;
   }
 }

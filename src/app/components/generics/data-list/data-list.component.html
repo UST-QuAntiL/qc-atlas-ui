@@ -58,7 +58,7 @@
           <!-- Optional Select-Checkbox Element in first Body-Column -->
           <th class="center-checkbox" scope="row" *ngIf="allowSelection">
             <mdb-checkbox [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
-                          (change)="$event ? rowToggle(dataEntry, !selection.isSelected(dataEntry)) : null"></mdb-checkbox>
+                          (change)="$event ? rowToggle(dataEntry) : null"></mdb-checkbox>
           </th>
           <!-- One column for each needed data variable value -->
           <td class="crop" *ngFor="let variableName of variableNames"
