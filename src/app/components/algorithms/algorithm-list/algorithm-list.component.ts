@@ -65,7 +65,6 @@ export class AlgorithmListComponent implements OnInit {
 
   getAlgorithms(params: any): void {
     this.algorithmService.getAlgorithms(params).subscribe((data) => {
-      // Adjust Paging and Hateoas data
       this.prepareAlgorithmdata(JSON.parse(JSON.stringify(data)));
     });
   }
