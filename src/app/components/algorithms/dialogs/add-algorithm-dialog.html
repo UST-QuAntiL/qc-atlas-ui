@@ -6,13 +6,21 @@
       <input id="name" formControlName="name" matInput required>
     </mat-form-field>
   </form>
-
   <mat-form-field class="input-field">
     <mat-label>Computation model</mat-label>
     <mat-select [(ngModel)]="data.computationModel" required>
       <mat-option *ngFor="let option of computationModelOption" [value]="option">{{option}}</mat-option>
     </mat-select>
   </mat-form-field>
+  <ng-container *ngIf="data.computationModel === 'Quantum'">
+    <mat-form-field class="input-field">
+      <mat-label>Quantum Computation model</mat-label>
+      <mat-select [(ngModel)]="data.quantumComputationModel" required>
+        <mat-option *ngFor="let quantumOption of quantumComputationModelOption"
+                    [value]="quantumOption">{{quantumOption}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </ng-container>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>
