@@ -42,7 +42,6 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { PublicationListComponent } from './components/publications/publication-list/publication-list.component';
 import { AlgorithmListComponent } from './components/algorithms/algorithm-list/algorithm-list.component';
 import { ChipCollectionComponent } from './components/generics/chip-collection/chip-collection.component';
-import { PropertyInputComponent } from './components/generics/property-input/property-input.component';
 import { NavigationBreadcrumbModule } from './components/generics/navigation-breadcrumb/navigation-breadcrumb.module';
 
 @NgModule({
@@ -64,7 +63,6 @@ import { NavigationBreadcrumbModule } from './components/generics/navigation-bre
     PublicationListComponent,
     AlgorithmListComponent,
     ChipCollectionComponent,
-    PropertyInputComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
