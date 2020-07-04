@@ -15,11 +15,31 @@
   </div>
 
   <mat-tab-group>
-    <mat-tab label="{{ tabOptions[0] }}"> </mat-tab>
-    <mat-tab label="{{ tabOptions[1] }}"> </mat-tab>
-    <mat-tab label="{{ tabOptions[2] }}"> </mat-tab>
-    <mat-tab label="{{ tabOptions[3] }}"> </mat-tab>
-    <mat-tab label="{{ tabOptions[4] }}">
+    <mat-tab label="General">
+      <div class="tab-body p-2">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <app-text-input name="Name" [value]="impl.name"></app-text-input>
+          </div>
+          <div class="d-flex">
+            <app-select-input
+              name="Software Platform"
+              [choices]="softwarePlatformOptions"
+              [includeEmpty]="true"
+            ></app-select-input>
+          </div>
+        </div>
+        <div class="d-flex">
+          <app-text-input
+            name="Description"
+            [value]="impl.description"
+            [multiline]="true"
+          ></app-text-input>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Publications"> </mat-tab>
+    <mat-tab label="Discussion">
       <h1>Discussion WIP</h1>
     </mat-tab>
   </mat-tab-group>
