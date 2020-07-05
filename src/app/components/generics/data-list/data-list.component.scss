@@ -58,6 +58,18 @@ mat-grid-list {
   color: white;
 }
 
+// overwrite the checkbox background
+::ng-deep .mat-checkbox-checked .mat-checkbox-background, .mat-checkbox-indeterminate .mat-checkbox-background {
+  background-color: #b71c1c!important;
+  text-align: center !important;
+}
+
+// overwrite the ripple overlay on hover and click
+::ng-deep .mat-checkbox:not(.mat-checkbox-disabled) .mat-checkbox-ripple .mat-pseudo-checkbox-checked .mat-ripple-element {
+  background-color: #b71c1c !important;
+  text-align: center !important;
+}
+
 .control-disabled {
   background-color: grey !important;
   cursor: default;
