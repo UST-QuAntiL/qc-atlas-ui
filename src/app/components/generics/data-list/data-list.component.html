@@ -25,7 +25,7 @@
             <mdb-icon fas icon="plus"></mdb-icon>
           </button>
         </div>
-        <div class="col col-xl-1 pt-4">
+        <div *ngIf="allowDelete" class="col col-xl-1 pt-4">
           <button mdbBtn class="control-button delete-button btn-block" type="button" color="red" outline="true"
                   (click)="onDelete()" mdbWavesEffect>
             <mdb-icon fas icon="minus"></mdb-icon>
@@ -38,7 +38,7 @@
         <thead class="data-header">
         <tr>
           <!-- Optional Select-All Checkbox Element in first Header-Column -->
-          <th class="center-checkbox" scope="row" *ngIf="allowSelection">
+          <th class="center-checkbox" scope="row" *ngIf="allowDelete">
             <mdb-checkbox (change)="$event ? masterToggle() : null"
                           [checked]="selection.hasValue() && isAllSelected()"
                           [indeterminate]="selection.hasValue() && !isAllSelected()"></mdb-checkbox>
@@ -56,7 +56,7 @@
         <tbody>
         <tr class="data-element" *ngFor="let dataEntry of data">
           <!-- Optional Select-Checkbox Element in first Body-Column -->
-          <th class="center-checkbox" scope="row" *ngIf="allowSelection">
+          <th class="center-checkbox" scope="row" *ngIf="allowDelete">
             <mdb-checkbox [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
                           (change)="$event ? rowToggle(dataEntry) : null"></mdb-checkbox>
           </th>
