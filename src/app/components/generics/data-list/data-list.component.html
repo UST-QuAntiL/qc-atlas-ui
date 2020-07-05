@@ -19,7 +19,7 @@
             <label for="search">Search</label>
           </div>
         </div>
-        <div class="col col-xl-1 pt-4">
+        <div *ngIf="allowCreate" class="col col-xl-1 pt-4">
           <button mdbBtn class="control-button add-button btn-block" type="button" color="green" outline="true"
                   (click)="onAdd()" mdbWavesEffect>
             <mdb-icon fas icon="plus"></mdb-icon>
