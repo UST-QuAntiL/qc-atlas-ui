@@ -60,7 +60,7 @@
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
-    "ng-openapi-gen": "git+https://github.com/timniederhausen/ng-openapi-gen#b25932c5e273f1779135bef6547605e634dd4a47",
+    "ng-openapi-gen": "git+https://github.com/timniederhausen/ng-openapi-gen#af5c4278587c47999f3c9b48da158398736a7fed",
     "prettier": "^2.0.5",
     "protractor": "^7.0.0",
     "ts-node": "~8.3.0",
