@@ -72,7 +72,7 @@
           <td colspan="1000">
             <nav aria-label="Page navigation example">
               <!-- Optional Table-Size selection of left side of footer -->
-              <mat-form-field class="float-left">
+              <mat-form-field *ngIf="paginatorConfig" class="float-left">
                 <mat-label>Items per page:</mat-label>
                 <mat-select [(ngModel)]="paginatorConfig.selectedAmount" (selectionChange)="onChangePagingatorConfig()">
                   <mat-option *ngFor="let choice of paginatorConfig.amountChoices"

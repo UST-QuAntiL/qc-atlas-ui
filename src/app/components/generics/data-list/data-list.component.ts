@@ -12,7 +12,6 @@ export class DataListComponent implements OnInit {
   @Input() dataColumns: string[];
   @Input() allowSelection: boolean;
   @Input() allowSearch: boolean;
-  @Input() allowPagination: boolean;
   @Input() pagination: any;
   @Input() paginatorConfig: any;
   @Input() routingVariable: string;
@@ -28,7 +27,7 @@ export class DataListComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    if (this.allowPagination) {
+    if (this.pagination) {
       this.generateInitialPaginator();
     }
 
@@ -93,9 +92,12 @@ export class DataListComponent implements OnInit {
 
   private generateGetParameter(): QueryParams {
     const params: QueryParams = {};
-    if (this.allowPagination) {
+    if (this.pagination) {
       params.page = this.pagination.page.number;
-      params.size = this.paginatorConfig.selectedAmount;
+
+      if (this.paginatorConfig) {
+        params.size = this.paginatorConfig.selectedAmount;
+      }
     }
 
     if (this.sortDirection && this.sortActiveElement) {
@@ -111,9 +113,6 @@ export class DataListComponent implements OnInit {
   }
 
   private generateInitialPaginator(): void {
-    if (!this.pagination) {
-      this.pagination = {};
-    }
     if (!this.pagination._links) {
       this.pagination._links = {};
     }
