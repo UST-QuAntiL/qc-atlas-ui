@@ -13,6 +13,7 @@ export class DataListComponent implements OnInit {
   @Input() allowCreate: boolean;
   @Input() allowDelete: boolean;
   @Input() allowSearch: boolean;
+  @Input() allowSort: boolean;
   @Input() pagination: any;
   @Input() paginatorConfig: any;
   @Input() routingVariable: string;
