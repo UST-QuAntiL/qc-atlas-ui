@@ -33,93 +33,97 @@
         </div>
       </div>
       <!-- Data-Table -->
-      <table id="tableSortExample" class="mb-3" mdbTable matSort (matSortChange)="sortData($event)">
-        <!-- Table-Header with the Header-Data -->
-        <thead class="data-header">
-        <tr>
-          <!-- Optional Select-All Checkbox Element in first Header-Column -->
-          <th class="center-checkbox" scope="row" *ngIf="allowDelete">
-            <mdb-checkbox (change)="$event ? masterToggle() : null"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"></mdb-checkbox>
-          </th>
-          <!-- One column for each needed data variable -->
-          <ng-container *ngFor="let column of dataColumns; let i = index">
-            <th class="th-lg hide-arrow" mat-sort-header="{{ variableNames[i] }}" [disabled]="allowSort ? false : true " aria-controls="tableSortExample"
-                scope="col">
-              <a>{{ column }}</a>
+      <div class="table-responsive">
+        <table id="tableSortExample" class="mb-3" mdbTable matSort (matSortChange)="sortData($event)">
+          <!-- Table-Header with the Header-Data -->
+          <thead class="data-header">
+          <tr>
+            <!-- Optional Select-All Checkbox Element in first Header-Column -->
+            <th class="center-checkbox" scope="row" *ngIf="allowDelete">
+              <mdb-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()"></mdb-checkbox>
             </th>
-          </ng-container>
-        </tr>
-        </thead>
-        <!-- Table-Body with the Data-Elements -->
-        <tbody>
-        <tr class="data-element" *ngFor="let dataEntry of data">
-          <!-- Optional Select-Checkbox Element in first Body-Column -->
-          <th class="center-checkbox" scope="row" *ngIf="allowDelete">
-            <mdb-checkbox [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
-                          (change)="$event ? rowToggle(dataEntry) : null"></mdb-checkbox>
-          </th>
-          <!-- One column for each needed data variable value -->
-          <td class="crop" *ngFor="let variableName of variableNames"
-              [routerLink]="dataEntry[routingVariable]">{{ dataEntry[variableName] }}</td>
-        </tr>
-        </tbody>
-        <!-- Optional Table-Footer for pagination -->
-        <tfoot *ngIf="pagination">
-        <tr>
-          <!-- Completely fill footer column -->
-          <td colspan="1000">
-            <nav aria-label="Page navigation example">
-              <!-- Optional Table-Size selection of left side of footer -->
-              <mat-form-field *ngIf="paginatorConfig" class="float-left">
-                <mat-label>Items per page:</mat-label>
-                <mat-select [(ngModel)]="paginatorConfig.selectedAmount" (selectionChange)="onChangePagingatorConfig()">
-                  <mat-option *ngFor="let choice of paginatorConfig.amountChoices"
-                              [value]="choice">{{ choice }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <!-- Optional Paginator on the right side of the footer -->
-              <ul class="pagination pg-blue float-right">
-                <div class="page-control" color="green" outline="true">
-                  <!-- First Page button -->
-                  <li class="page-item"><a class="page-link no-events">
-                    <mat-icon class="page-button no-select"
-                              [ngClass]="[pagination._links.first && pagination._links.first.href != pagination._links.self.href ? 'enabled' : 'disabled']"
-                              (click)="changePage(pagination._links.first.href)">first_page
-                    </mat-icon>
-                  </a></li>
-                  <!-- Previous Page button -->
-                  <li class="page-item"><a class="page-link no-events">
-                    <mat-icon class="page-button no-select"
-                              [ngClass]="[pagination._links.prev ? 'enabled' : 'disabled']"
-                              (click)="changePage(pagination._links.prev.href)">chevron_left
-                    </mat-icon>
-                  </a></li>
-                  <!-- Current Page field -->
-                  <li class="page-item"><a
-                    class="page-link current-page no-select"> {{ pagination.page.number + 1 }} </a></li>
-                  <!-- Next Page button -->
-                  <li class="page-item"><a class="page-link no-events">
-                    <mat-icon class="page-button no-select"
-                              [ngClass]="[pagination._links.next ? 'enabled' : 'disabled']"
-                              (click)="changePage(pagination._links.next.href)">chevron_right
-                    </mat-icon>
-                  </a></li>
-                  <!-- Last Page button -->
-                  <li class="page-item"><a class="page-link no-events">
-                    <mat-icon class="page-button no-select"
-                              [ngClass]="[(pagination._links.last && pagination._links.last.href != pagination._links.self.href) ? 'enabled' : 'disabled']"
-                              (click)="changePage(pagination._links.last.href)">last_page
-                    </mat-icon>
-                  </a></li>
-                </div>
-              </ul>
-            </nav>
-          </td>
-        </tr>
-        </tfoot>
-      </table>
+            <!-- One column for each needed data variable -->
+            <ng-container *ngFor="let column of dataColumns; let i = index">
+              <th class="th-lg hide-arrow" mat-sort-header="{{ variableNames[i] }}"
+                  [disabled]="allowSort ? false : true " aria-controls="tableSortExample"
+                  scope="col">
+                <a>{{ column }}</a>
+              </th>
+            </ng-container>
+          </tr>
+          </thead>
+          <!-- Table-Body with the Data-Elements -->
+          <tbody>
+          <tr class="data-element" *ngFor="let dataEntry of data">
+            <!-- Optional Select-Checkbox Element in first Body-Column -->
+            <th class="center-checkbox" scope="row" *ngIf="allowDelete">
+              <mdb-checkbox [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
+                            (change)="$event ? rowToggle(dataEntry) : null"></mdb-checkbox>
+            </th>
+            <!-- One column for each needed data variable value -->
+            <td class="crop" *ngFor="let variableName of variableNames"
+                [routerLink]="dataEntry[routingVariable]">{{ dataEntry[variableName] }}</td>
+          </tr>
+          </tbody>
+          <!-- Optional Table-Footer for pagination -->
+          <tfoot *ngIf="pagination">
+          <tr>
+            <!-- Completely fill footer column -->
+            <td colspan="1000">
+              <nav aria-label="Page navigation example">
+                <!-- Optional Table-Size selection of left side of footer -->
+                <mat-form-field *ngIf="paginatorConfig" class="float-left">
+                  <mat-label>Items per page:</mat-label>
+                  <mat-select [(ngModel)]="paginatorConfig.selectedAmount"
+                              (selectionChange)="onChangePagingatorConfig()">
+                    <mat-option *ngFor="let choice of paginatorConfig.amountChoices"
+                                [value]="choice">{{ choice }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- Optional Paginator on the right side of the footer -->
+                <ul class="pagination pg-blue float-right">
+                  <div class="page-control" color="green" outline="true">
+                    <!-- First Page button -->
+                    <li class="page-item"><a class="page-link no-events">
+                      <mat-icon class="page-button no-select"
+                                [ngClass]="[pagination._links.first && pagination._links.first.href != pagination._links.self.href ? 'enabled' : 'disabled']"
+                                (click)="changePage(pagination._links.first.href)">first_page
+                      </mat-icon>
+                    </a></li>
+                    <!-- Previous Page button -->
+                    <li class="page-item"><a class="page-link no-events">
+                      <mat-icon class="page-button no-select"
+                                [ngClass]="[pagination._links.prev ? 'enabled' : 'disabled']"
+                                (click)="changePage(pagination._links.prev.href)">chevron_left
+                      </mat-icon>
+                    </a></li>
+                    <!-- Current Page field -->
+                    <li class="page-item"><a
+                      class="page-link current-page no-select"> {{ pagination.page.number + 1 }} </a></li>
+                    <!-- Next Page button -->
+                    <li class="page-item"><a class="page-link no-events">
+                      <mat-icon class="page-button no-select"
+                                [ngClass]="[pagination._links.next ? 'enabled' : 'disabled']"
+                                (click)="changePage(pagination._links.next.href)">chevron_right
+                      </mat-icon>
+                    </a></li>
+                    <!-- Last Page button -->
+                    <li class="page-item"><a class="page-link no-events">
+                      <mat-icon class="page-button no-select"
+                                [ngClass]="[(pagination._links.last && pagination._links.last.href != pagination._links.self.href) ? 'enabled' : 'disabled']"
+                                (click)="changePage(pagination._links.last.href)">last_page
+                      </mat-icon>
+                    </a></li>
+                  </div>
+                </ul>
+              </nav>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   </mdb-card>
 </div>
