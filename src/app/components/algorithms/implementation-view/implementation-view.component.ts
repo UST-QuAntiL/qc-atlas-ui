@@ -41,7 +41,7 @@ export class ImplementationViewComponent implements OnInit {
         this.algo = algo;
         this.links[0] = {
           heading: this.algo.name,
-          subHeading: this.algo.computationModel,
+          subHeading: this.algo.computationModel + ' Algorithm',
         };
       });
 
@@ -55,5 +55,15 @@ export class ImplementationViewComponent implements OnInit {
           };
         });
     });
+  }
+
+  onChange(): void {
+    this.algorithmService
+      .updateImplementation({
+        algoId: this.algo.id,
+        implId: this.impl.id,
+        body: this.impl,
+      })
+      .subscribe();
   }
 }

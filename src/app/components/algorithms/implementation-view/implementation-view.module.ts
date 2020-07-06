@@ -11,6 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ImplementationViewComponent } from './implementation-view.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ImplementationViewComponent],
@@ -24,6 +25,7 @@ import { ImplementationViewComponent } from './implementation-view.component';
     CommonModule,
     NavigationBreadcrumbModule,
     GenericsModule,
+    FormsModule,
   ],
 })
 export class ImplementationViewModule {}

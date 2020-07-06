@@ -1,5 +1,5 @@
-<div>
-  <div class="header-container p-2">
+<div *ngIf="impl">
+  <div class="header-container p-2" *ngIf="algo">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
     <div class="badge-list">
       <mat-chip-list>
@@ -16,23 +16,51 @@
 
   <mat-tab-group>
     <mat-tab label="General">
-      <div class="tab-body p-2">
+      <div class="tab-body p-4">
         <div class="d-flex justify-content-between">
-          <div class="d-flex">
-            <app-text-input name="Name" [value]="impl.name"></app-text-input>
-          </div>
-          <div class="d-flex">
-            <app-select-input
-              name="Software Platform"
-              [choices]="softwarePlatformOptions"
-              [includeEmpty]="true"
-            ></app-select-input>
-          </div>
+          <app-text-input
+            (onSaveChanges)="onChange()"
+            name="Name"
+            class="w-100 p-2"
+            [(ngModel)]="impl.name"
+          ></app-text-input>
+          <app-select-input
+            class="w-100 p-2"
+            name="Software Platform"
+            (onSaveChanges)="onChange()"
+            [choices]="softwarePlatformOptions"
+            [includeEmpty]="true"
+          ></app-select-input>
         </div>
         <div class="d-flex">
           <app-text-input
             name="Description"
-            [value]="impl.description"
+            class="w-100 p-2"
+            (onSaveChanges)="onChange()"
+            [(ngModel)]="impl.description"
+            [multiline]="true"
+          ></app-text-input>
+        </div>
+        <div class="d-flex justify-content-between">
+          <app-text-input
+            class="w-100 p-2"
+            name="Input Format"
+            (onSaveChanges)="onChange()"
+            [(ngModel)]="impl.inputFormat"
+          ></app-text-input>
+          <app-text-input
+            class="w-100 p-2"
+            name="Output Format"
+            (onSaveChanges)="onChange()"
+            [(ngModel)]="impl.outputFormat"
+          ></app-text-input>
+        </div>
+        <div class="d-flex justify-content-between">
+          <app-text-input
+            class="w-100 p-2"
+            name="Contributors"
+            (onSaveChanges)="onChange()"
+            [(ngModel)]="impl.contributors"
             [multiline]="true"
           ></app-text-input>
         </div>
@@ -43,4 +71,7 @@
       <h1>Discussion WIP</h1>
     </mat-tab>
   </mat-tab-group>
+</div>
+<div *ngIf="impl === undefined">
+  Loading..
 </div>
