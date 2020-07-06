@@ -1,2 +1,2 @@
 /* tslint:disable */
-export type PatternRelationType = { 'id'?: string, 'name'?: string };
+export type PatternRelationType = { id?: string; name?: string };
