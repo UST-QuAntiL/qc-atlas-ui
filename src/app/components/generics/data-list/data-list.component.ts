@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  HostListener,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
@@ -15,84 +8,134 @@ import { SelectionModel } from '@angular/cdk/collections';
 })
 export class DataListComponent implements OnInit {
   @Input() data: any[];
-  @Input() dataColumns: string[];
-  @Input() allowSelection: boolean;
-  @Input() allowSearch: boolean;
   @Input() variableNames: string[];
+  @Input() dataColumns: string[];
+  @Input() allowAdd: boolean;
+  @Input() allowDelete: boolean;
+  @Input() allowSearch: boolean;
+  @Input() allowSort: boolean;
   @Input() pagination: any;
   @Input() paginatorConfig: any;
   @Input() routingVariable: string;
-  @Output() selectionChange = new EventEmitter<any[]>();
-  @Output() pageChange = new EventEmitter<string>();
-  @Output() deleteElements = new EventEmitter<void>();
   @Output() addElement = new EventEmitter<void>();
-  @Output() paginationConfigChange = new EventEmitter<any>();
-  @Output() searchElement = new EventEmitter<string>();
-  @Output() dataSorted = new EventEmitter<any>();
+  @Output() deleteElements = new EventEmitter<DeleteParams>();
+  @Output() pageChange = new EventEmitter<string>();
+  @Output() datalistConfigChanged = new EventEmitter<any>();
   selection = new SelectionModel<any>(true, []);
   searchText = '';
+  sortDirection = '';
+  sortActiveElement = '';
 
   constructor() {}
 
-  @HostListener('input')
-  oninput() {
-    this.searchElement.emit(this.searchText);
+  ngOnInit(): void {
+    if (this.pagination) {
+      this.generateInitialPaginator();
+    }
+
+    this.datalistConfigChanged.emit(this.generateGetParameter());
   }
 
-  ngOnInit(): void {}
-
-  isAllSelected() {
+  isAllSelected(): boolean {
     return this.data.length === this.selection.selected.length;
   }
 
   // Toggle all check boxes
-  masterToggle() {
+  masterToggle(): void {
     const isAllSelected = this.isAllSelected();
     this.data.forEach((element) => {
-      this.changeSelection(element, isAllSelected ? false : true);
+      this.changeSelection(element, !isAllSelected);
     });
-    this.selectionChange.emit(this.selection.selected);
   }
 
-  rowToggle(row: any, select: boolean) {
+  rowToggle(row: any): void {
     this.changeSelection(row, !this.selection.isSelected(row));
-    this.selectionChange.emit(this.selection.selected);
   }
 
-  isArray(data): boolean {
-    return Array.isArray(data);
-  }
-
-  printArray(dataArray: any) {
-    let result = '';
-    for (const data of dataArray) {
-      result = result.concat(data) + ',';
-    }
-  }
-
-  changePage(link: string) {
+  changePage(link: string): void {
     this.pageChange.emit(link);
   }
 
-  onDelete() {
-    this.deleteElements.emit();
+  onDelete(): void {
+    this.deleteElements.emit(this.generateDeleteParameter());
+    this.selection.clear();
   }
 
-  onAdd() {
+  onAdd(): void {
     this.addElement.emit();
   }
 
-  sortData(event: any) {
-    this.dataSorted.emit(event);
+  sortData(event: any): void {
+    this.sortDirection = event.direction;
+    this.sortActiveElement = event.active;
+    this.datalistConfigChanged.emit(this.generateGetParameter());
   }
 
-  onChangePagingatorConfig() {
-    this.paginationConfigChange.emit(this.paginatorConfig);
+  onChangePagingatorConfig(): void {
+    this.datalistConfigChanged.emit(this.generateGetParameter());
   }
 
-  private changeSelection(row: any, select: boolean) {
+  onSearchChange(): void {
+    this.datalistConfigChanged.emit(this.generateGetParameter());
+  }
+
+  private changeSelection(row: any, select: boolean): void {
     if (select !== this.selection.isSelected(row)) {
       this.selection.toggle(row);
     }
   }
+
+  private generateDeleteParameter(): DeleteParams {
+    return {
+      elements: this.selection.selected,
+      queryParams: this.generateGetParameter(),
+    };
+  }
+
+  private generateGetParameter(): QueryParams {
+    const params: QueryParams = {};
+    if (this.pagination) {
+      params.page = this.pagination.page.number;
+
+      if (this.paginatorConfig) {
+        params.size = this.paginatorConfig.selectedAmount;
+      }
+    }
+
+    if (this.sortDirection && this.sortActiveElement) {
+      params.sort = this.sortDirection;
+      params.sortBy = this.sortActiveElement;
+    }
+
+    if (this.allowSearch && this.searchText) {
+      params.search = this.searchText;
+    }
+
+    return params;
+  }
+
+  private generateInitialPaginator(): void {
+    if (!this.pagination._links) {
+      this.pagination._links = {};
+    }
+    if (!this.pagination.page) {
+      this.pagination.page = {};
+    }
+    if (!this.pagination.page.number) {
+      this.pagination.page.number = 0;
+    }
+  }
+}
+
+export interface QueryParams {
+  page?: number;
+  size?: number;
+  sort?: string;
+  sortBy?: string;
+  search?: string;
+}
+
+export interface DeleteParams {
+  elements: any;
+  queryParams: QueryParams;
 }

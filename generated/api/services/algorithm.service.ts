@@ -221,6 +221,9 @@ export class AlgorithmService extends BaseService {
   getAlgorithms$Response(params?: {
     page?: number;
     size?: number;
+    sort?: string;
+    sortBy?: string;
+    search?: string;
 
   }): Observable<StrictHttpResponse<{ '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> }, 'page'?: PageMetadata }>> {
 
@@ -229,6 +232,9 @@ export class AlgorithmService extends BaseService {
 
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+      rb.query('sortBy', params.sortBy, {});
+      rb.query('search', params.search, {});
 
     }
     return this.http.request(rb.build({
@@ -253,6 +259,9 @@ export class AlgorithmService extends BaseService {
   getAlgorithms(params?: {
     page?: number;
     size?: number;
+    sort?: string;
+    sortBy?: string;
+    search?: string;
 
   }): Observable<{ '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> }, 'page'?: PageMetadata }> {
 

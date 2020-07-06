@@ -45,12 +45,29 @@ mat-grid-list {
   transition: all .2s ease-in-out;
 }
 
+.data-element:hover {
+  background-color: mat-color($qc-atlas-ui-accent);
+  cursor: pointer;
+}
+
 .page-control {
   display: flex;
 }
 
 ::ng-deep .hide-arrow .mat-sort-header-arrow {
   color: white;
+}
+
+// overwrite the checkbox background
+::ng-deep .mat-checkbox-checked .mat-checkbox-background, .mat-checkbox-indeterminate .mat-checkbox-background {
+  background-color: #b71c1c!important;
+  text-align: center !important;
+}
+
+// overwrite the ripple overlay on hover and click
+::ng-deep .mat-checkbox:not(.mat-checkbox-disabled) .mat-checkbox-ripple .mat-pseudo-checkbox-checked .mat-ripple-element {
+  background-color: #b71c1c !important;
+  text-align: center !important;
 }
 
 .control-disabled {
@@ -84,12 +101,6 @@ mat-grid-list {
 
 .page-button:hover {
   background-color: mat-color($qc-atlas-ui-primary) !important;
-}
-
-.data-element:hover {
-  background-color: mat-color($qc-atlas-ui-accent);
-  transform: scale(1.05, 1.05);
-  cursor: pointer;
 }
 
 .no-events {

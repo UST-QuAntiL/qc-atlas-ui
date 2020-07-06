@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api/services/algorithm.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AlgorithmDto } from 'api/models';
+import { Router } from '@angular/router';
+import { GenericDataService } from '../../../util/generic-data.service';
+import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
 
 @Component({
   selector: 'app-algorithm-list',
@@ -8,114 +13,95 @@ import { AlgorithmService } from 'api/services/algorithm.service';
 })
 export class AlgorithmListComponent implements OnInit {
   algorithms: any[] = [];
-  selectedAlgorithms: any[] = [];
-  tableColumns = ['Name', 'Description', 'Authors', 'Format'];
-  variableNames = ['name', 'description', 'authors', 'format'];
-  routingVariable = 'id';
-  sortData: any = {
-    active: '',
-    direction: '',
+  tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
+  variableNames = ['name', 'acronym', 'computationModel', 'problem'];
+  pagingInfo: any = {};
+  paginatorConfig: any = {
+    amountChoices: [1, 2, 3],
+    selectedAmount: 1,
   };
-  pagingInfo = {
-    _links: {
-      prev: {
-        href: 'http://previousPage',
-      },
-      next: {
-        href: 'http://nextPage',
-      },
-      first: {
-        href: 'http://firstPage',
-      },
-      last: {
-        href: 'http://lastPage',
-      },
-      self: {
-        href: 'http://currentPage',
-      },
-    },
-    page: {
-      size: 10,
-      totalElements: 2,
-      totalPages: 5,
-      number: 1,
-    },
-  };
-  paginatorConfig = {
-    amountChoices: [10, 20, 30],
-    selectedAmount: 10,
-  };
-  constructor(private algorithmService: AlgorithmService) {}
 
-  ngOnInit(): void {
-    this.algorithms = [
-      {
-        id: '261642e3-da41-4c91-b1d9-b9ce40b698a9',
-        name: 'Alg1',
-        description: 'Alg 1 description',
-        authors: [
-          'Author Ab',
-          'Author Bc',
-          'Author De',
-          'Author Ef',
-          'Author Fg',
-        ],
-        format: 'String',
-      },
-      {
-        id: '261642e3-da41-4c91-b1d9-b9ce40b698a7',
-        name: 'Alg2',
-        description: 'Alg 2 description',
-        authors: ['Author Ab', 'Author Bc'],
-        format: 'Integer',
-      },
-    ];
-    this.getAlgorithms();
+  constructor(
+    private algorithmService: AlgorithmService,
+    private genericDataService: GenericDataService,
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {}
+
+  getAlgorithms(params: any): void {
+    this.algorithmService.getAlgorithms(params).subscribe((data) => {
+      this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
+    });
   }
 
-  getAlgorithms(): void {
-    // TODO: Fix generated services
-    /* this.algorithmService.getAlgorithms().subscribe((data) => {
-      const algorithms = data._embedded.algorithmDtoes;
-      const page = data.page;
-      console.log(algorithms);
-      console.log(page);
-    }); */
+  getAlgorithmsHateoas(url: string): void {
+    this.genericDataService.getData(url).subscribe((data) => {
+      this.prepareAlgorithmData(data);
+    });
   }
 
-  adjustInput(): void {}
-
-  selectionChanged(event) {
-    this.selectedAlgorithms = event;
-    console.log(this.selectedAlgorithms);
+  prepareAlgorithmData(data): void {
+    // Read all incoming data
+    if (data._embedded) {
+      this.algorithms = data._embedded.algorithms;
+    } else {
+      this.algorithms = [];
+    }
+    this.pagingInfo.page = data.page;
+    this.pagingInfo._links = data._links;
   }
 
-  pageChanged(event) {
-    const newPageUrl = event;
-    console.log(newPageUrl);
+  onAddElement(): void {
+    const params: any = {};
+    const dialogRef = this.dialog.open(AddAlgorithmDialogComponent, {
+      width: '400px',
+      data: { title: 'Add new algorithm' },
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      const algorithmDto: any = {
+        name: dialogResult.name,
+        computationModel: dialogResult.computationModel,
+      };
+
+      if (algorithmDto.computationModel === 'QUANTUM') {
+        algorithmDto.quantumComputationModel =
+          dialogResult.quantumComputationModel;
+      }
+
+      params.body = algorithmDto as AlgorithmDto;
+
+      this.algorithmService.createAlgorithm(params).subscribe((data) => {
+        this.router.navigate([data.id]);
+      });
+    });
   }
 
-  dataSorted(event) {
-    this.sortData = event;
-    console.log(this.sortData);
+  onDeleteElements(event): void {
+    // Iterate all selected algorithms and delete them
+    for (const algorithm of event.elements) {
+      this.algorithmService
+        .deleteAlgorithm(this.generateDeleteParams(algorithm.id))
+        .subscribe(() => {
+          // Refresh Algorithms after delete
+          this.getAlgorithms(event.queryParams);
+        });
+    }
   }
 
-  paginatorConfigChanged(event) {
-    this.paginatorConfig = event;
-    console.log(this.paginatorConfig);
+  onPageChanged(event): void {
+    this.getAlgorithmsHateoas(event);
   }
 
-  deleteElements() {
-    console.log('Delete Elements: ');
-    console.log(this.selectedAlgorithms);
+  onDatalistConfigChanged(event): void {
+    this.getAlgorithms(event);
   }
 
-  addElement() {
-    console.log('Add Element');
-  }
-
-  searchElement(event) {
-    const searchText = event;
-    console.log(searchText);
+  generateDeleteParams(algoId: string): any {
+    const params: any = {};
+    params.algoId = algoId;
+    return params;
   }
 }

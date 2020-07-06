@@ -3,8 +3,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -12,17 +11,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   templateUrl: 'add-algorithm-dialog.html',
 })
 export class AddAlgorithmDialogComponent implements OnInit {
-  @ViewChild('inputTable') tableIn: MatTable<any>;
-  @ViewChild('outputTable') tableOut: MatTable<any>;
-
   algorithmForm: FormGroup;
-
-  displayedParametersColumns: string[] = [
-    'name',
-    'type',
-    'description',
-    'restriction',
-  ];
 
   constructor(
     public dialogRef: MatDialogRef<AddAlgorithmDialogComponent>,
@@ -32,6 +21,9 @@ export class AddAlgorithmDialogComponent implements OnInit {
 
   get name() {
     return this.algorithmForm.get('name');
+  }
+  get computationModel() {
+    return this.algorithmForm.get('computationModel');
   }
 
   onNoClick(): void {
@@ -45,21 +37,33 @@ export class AddAlgorithmDialogComponent implements OnInit {
         Validators.required,
         Validators.maxLength(255),
       ]),
+      computationModel: new FormControl(this.data.computationModel, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+
+      quantumComputationModel: new FormControl(
+        this.data.quantumComputationModel,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]
+      ),
     });
 
     this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.name = this.algorithmForm.get('name').value;
+      this.data.name = this.name.value;
     });
   }
 
   isRequiredDataMissing(): boolean {
-    return this.name.errors?.required || !this.data.tag;
+    return this.name.errors?.required && this.computationModel.errors?.required;
   }
 }
 
 export interface DialogData {
   title: string;
   name: string;
-  tag: any;
-  tags: any[];
+  computationModel: string;
+  quantumComputationModel: string;
 }
