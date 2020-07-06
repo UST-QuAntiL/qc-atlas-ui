@@ -74,7 +74,7 @@ export class AlgorithmListComponent implements OnInit {
       params.body = algorithmDto as AlgorithmDto;
 
       this.algorithmService.createAlgorithm(params).subscribe((data) => {
-        this.router.navigate([data.id]);
+        this.router.navigate(['algorithms', data.id]);
       });
     });
   }

@@ -32,8 +32,15 @@ export class PublicationListComponent implements OnInit {
   ngOnInit(): void {}
 
   getPublications(params: any): void {
-    this.publicationService.getPublication2(params).subscribe((data) => {
+    this.publicationService.getPublications2(params).subscribe((data) => {
+      console.log(data);
       this.preparePublicationData(JSON.parse(JSON.stringify(data)));
+    });
+  }
+
+  getPublicationsHateoas(url: string): void {
+    this.genericDataService.getData(url).subscribe((data) => {
+      this.preparePublicationData(data);
     });
   }
 
@@ -56,5 +63,31 @@ export class PublicationListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((dialogResult) => {});
+  }
+
+  onDeleteElements(event): void {
+    // Iterate all selected algorithms and delete them
+    for (const publication of event.elements) {
+      this.publicationService
+        .deletePublication(this.generateDeleteParams(publication.id))
+        .subscribe(() => {
+          // Refresh Algorithms after delete
+          this.getPublications(event.queryParams);
+        });
+    }
+  }
+
+  onPageChanged(event): void {
+    this.getPublicationsHateoas(event);
+  }
+
+  onDatalistConfigChanged(event): void {
+    this.getPublications(event);
+  }
+
+  generateDeleteParams(publicationId: string): any {
+    const params: any = {};
+    params.id = publicationId;
+    return params;
   }
 }

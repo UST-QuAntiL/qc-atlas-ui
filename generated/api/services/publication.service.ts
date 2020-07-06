@@ -191,6 +191,9 @@ export class PublicationService extends BaseService {
   getPublications2$Response(params?: {
     page?: number;
     size?: number;
+    sort?: string;
+    sortBy?: string;
+    search?: string;
 
   }): Observable<StrictHttpResponse<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>> {
 
@@ -199,6 +202,9 @@ export class PublicationService extends BaseService {
 
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+      rb.query('sortBy', params.sortBy, {});
+      rb.query('search', params.search, {});
 
     }
     return this.http.request(rb.build({
@@ -221,6 +227,9 @@ export class PublicationService extends BaseService {
   getPublications2(params?: {
     page?: number;
     size?: number;
+    sort?: string;
+    sortBy?: string;
+    search?: string;
 
   }): Observable<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }> {
 
