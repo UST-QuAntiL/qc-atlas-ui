@@ -4,17 +4,12 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-publication-dialog-component',
   templateUrl: 'add-publication-dialog.html',
+  styleUrls: ['add-publication-dialog.scss'],
 })
 export class AddPublicationDialogComponent implements OnInit {
   publicationForm: FormGroup;
@@ -25,8 +20,13 @@ export class AddPublicationDialogComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
-  removeItem() {
-    this.data.authors.pop();
+  removeItem(index) {
+    console.log(this.data.authors);
+    console.log(index);
+    if (index > -1) {
+      this.data.authors.splice(index, 1);
+    }
+    console.log(this.data.authors);
   }
 
   addItem() {
@@ -42,7 +42,7 @@ export class AddPublicationDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.data.authors = [];
+    this.data.authors = [''];
     this.publicationForm = new FormGroup({
       publicationTitle: new FormControl(this.data.publicationTitle, [
         // eslint-disable-next-line @typescript-eslint/unbound-method

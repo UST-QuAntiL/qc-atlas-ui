@@ -6,14 +6,29 @@
       <input id="publicationTitle" formControlName="publicationTitle" matInput required>
     </mat-form-field>
     <mat-label> Authors</mat-label>
-    <div *ngFor="let author of data.authors">
-      <mat-form-field class="input-field">
-        <input [(ngModel)]="author"  matInput required>
-      </mat-form-field>
-      <button type="button" mdbBtn color="primary"> Delete</button>
+    <div *ngFor="let author of data.authors; let i = index">
+      <div class="row">
+        <div class="col-10">
+          <mat-form-field class="input-field">
+            <input [(ngModel)]="data.authors[i]" [ngModelOptions]="{standalone: true}" matInput required>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <button id="deleteButton" mat-mini-fab (click)="removeItem(i)">
+            <mdb-icon fas icon="minus"></mdb-icon>
+          </button>
+        </div>
+      </div>
     </div>
-
-    <button type="button" mdbBtn color="primary" (click)="addItem()"> Add</button>
+    <div class="row">
+      <div class="col-10">
+      </div>
+      <div class="col-2">
+        <button id="addButton" mat-mini-fab (click)="addItem()">
+          <mdb-icon fas icon="plus"></mdb-icon>
+        </button>
+      </div>
+    </div>
   </form>
 </div>
 <div mat-dialog-actions>
