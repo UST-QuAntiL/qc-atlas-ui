@@ -7,11 +7,11 @@ import {
   BreadcrumbModule,
   IconsModule,
 } from 'angular-bootstrap-md';
+import { FormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ImplementationViewComponent } from './implementation-view.component';
-import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ImplementationViewComponent],

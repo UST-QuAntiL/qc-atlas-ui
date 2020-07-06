@@ -1,8 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {
-  AbstractValueAccessor,
-  DoProvider,
-} from './abstract-value-accessor';
+import { AbstractValueAccessor, DoProvider } from './abstract-value-accessor';
 
 @Component({
   selector: 'app-text-input',
@@ -21,7 +18,6 @@ export class TextInputComponent extends AbstractValueAccessor {
   toggleEdit(): void {
     if (this.isBeingEdited) {
       this.onSaveChanges.emit(this._value);
-      console.log(this._value);
     }
     this.isBeingEdited = !this.isBeingEdited;
   }

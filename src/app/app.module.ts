@@ -44,6 +44,7 @@ import { ChipCollectionComponent } from './components/generics/chip-collection/c
 import { GenericDataService } from './util/generic-data.service';
 import { NavigationBreadcrumbModule } from './components/generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ImplementationViewModule } from './components/algorithms/implementation-view/implementation-view.module';
+import { GenericsModule } from './components/generics/generics.module';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,6 @@ import { ImplementationViewModule } from './components/algorithms/implementation
     SoftwarePlatformViewComponent,
     CloudServiceViewComponent,
     PublicationViewComponent,
-    DataListComponent,
     NavigationComponent,
     PublicationListComponent,
     AlgorithmListComponent,
@@ -97,6 +97,7 @@ import { ImplementationViewModule } from './components/algorithms/implementation
     // app modules
     NavigationBreadcrumbModule,
     ImplementationViewModule,
+    GenericsModule,
   ],
   entryComponents: [
     // dialogs need to be provided as entry component
@@ -104,7 +105,6 @@ import { ImplementationViewModule } from './components/algorithms/implementation
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
   ],
-  providers: [GenericDataService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
