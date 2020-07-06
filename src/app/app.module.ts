@@ -31,6 +31,7 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { AddImplementationDialogComponent } from './components/implementations/dialogs/add-implementation-dialog.component';
 import { AddAlgorithmDialogComponent } from './components/algorithms/dialogs/add-algorithm-dialog.component';
+import { AddPublicationDialogComponent } from './components/publications/dialogs/add-publication-dialog.component';
 import { JsonImportDialogComponent } from './components/dialogs/json-import-dialog.component';
 import { MissingEntityDialogComponent } from './components/dialogs/missing-entity-dialog.component';
 import { AlgorithmViewComponent } from './components/algorithms/algorithm-view/algorithm-view.component';
@@ -52,6 +53,7 @@ import { NavigationBreadcrumbModule } from './components/generics/navigation-bre
     PageNotFoundComponent,
     // dialogs
     AddAlgorithmDialogComponent,
+    AddPublicationDialogComponent,
     AddImplementationDialogComponent,
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
@@ -101,6 +103,7 @@ import { NavigationBreadcrumbModule } from './components/generics/navigation-bre
   entryComponents: [
     // dialogs need to be provided as entry component
     AddAlgorithmDialogComponent,
+    AddPublicationDialogComponent,
     AddImplementationDialogComponent,
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
