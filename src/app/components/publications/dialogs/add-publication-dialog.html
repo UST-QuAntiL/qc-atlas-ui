@@ -5,21 +5,15 @@
       <mat-label>Title</mat-label>
       <input id="publicationTitle" formControlName="publicationTitle" matInput required>
     </mat-form-field>
-    <mat-form-field class="input-field">
-      <mat-label>Url</mat-label>
-      <input id="url" formControlName="url" matInput required>
-    </mat-form-field>
-    <mat-form-field class="input-field">
-      <mat-label>Doi</mat-label>
-      <input id="doi" formControlName="doi" matInput required>
-    </mat-form-field>
-    <div formArrayName="authors">
-      <div *ngFor="let author of publicationForm.controls.author; let i=index">
-        <div>
-          <span> Author {{i + 1}}</span>
-        </div>
-      </div>
+    <mat-label> Authors</mat-label>
+    <div *ngFor="let author of data.authors">
+      <mat-form-field class="input-field">
+        <input [(ngModel)]="author"  matInput required>
+      </mat-form-field>
+      <button type="button" mdbBtn color="primary"> Delete</button>
     </div>
+
+    <button type="button" mdbBtn color="primary" (click)="addItem()"> Add</button>
   </form>
 </div>
 <div mat-dialog-actions>
