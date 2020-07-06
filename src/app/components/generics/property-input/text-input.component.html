@@ -4,13 +4,13 @@
     *ngIf="!multiline"
     type="text"
     [disabled]="!isBeingEdited"
-    [(ngModel)]="model"
+    [(ngModel)]="value"
     matInput
   />
   <textarea
     *ngIf="multiline"
     [disabled]="!isBeingEdited"
-    [(ngModel)]="model"
+    [(ngModel)]="value"
     matInput
   ></textarea>
   <button

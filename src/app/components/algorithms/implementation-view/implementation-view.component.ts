@@ -65,5 +65,10 @@ export class ImplementationViewComponent implements OnInit {
         body: this.impl,
       })
       .subscribe();
+    // live refresh name
+    this.links[1] = {
+      heading: this.impl.name,
+      subHeading: '',
+    };
   }
 }
