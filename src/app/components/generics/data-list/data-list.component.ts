@@ -54,10 +54,12 @@ export class DataListComponent implements OnInit {
 
   changePage(link: string): void {
     this.pageChange.emit(link);
+    this.selection.clear();
   }
 
   onElementClicked(element): void {
     this.elementClicked.emit(element);
+    this.selection.clear();
   }
 
   onDelete(): void {
@@ -75,20 +77,24 @@ export class DataListComponent implements OnInit {
 
   onAdd(): void {
     this.addElement.emit();
+    this.selection.clear();
   }
 
   sortData(event: any): void {
     this.sortDirection = event.direction;
     this.sortActiveElement = event.active;
     this.datalistConfigChanged.emit(this.generateGetParameter());
+    this.selection.clear();
   }
 
   onChangePagingatorConfig(): void {
     this.datalistConfigChanged.emit(this.generateGetParameter());
+    this.selection.clear();
   }
 
   onSearchChange(): void {
     this.datalistConfigChanged.emit(this.generateGetParameter());
+    this.selection.clear();
   }
 
   private changeSelection(row: any, select: boolean): void {
