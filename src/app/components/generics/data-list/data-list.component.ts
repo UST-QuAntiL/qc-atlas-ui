@@ -61,6 +61,14 @@ export class DataListComponent implements OnInit {
     this.selection.clear();
   }
 
+  onSingleDelete(element): void {
+    const deleteElement: any[] = [element];
+    const deleteParams = this.generateDeleteParameter();
+    deleteParams.elements = deleteElement;
+    this.deleteElements.emit(deleteParams);
+    this.selection.clear();
+  }
+
   onAdd(): void {
     this.addElement.emit();
   }

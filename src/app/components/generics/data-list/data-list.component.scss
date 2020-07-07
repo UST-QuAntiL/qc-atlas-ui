@@ -116,3 +116,18 @@ mat-grid-list {
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
+
+.center-text {
+  text-align: center;
+}
+
+.delete-small {
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  outline: none !important;
+}
+
+.delete-small:hover {
+  color: red;
+}
