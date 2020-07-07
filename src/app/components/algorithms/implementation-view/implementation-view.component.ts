@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api/services/algorithm.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlgorithmDto } from 'api/models/algorithm-dto';
 import { ImplementationDto } from 'api/models/implementation-dto';
 import { SoftwarePlatformService } from 'api/services/software-platform.service';
@@ -39,7 +39,8 @@ export class ImplementationViewComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private softwarePlatformService: SoftwarePlatformService,
     private publicationService: PublicationService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +76,15 @@ export class ImplementationViewComponent implements OnInit {
     this.publicationService.getPublications2(params).subscribe((data) => {
       console.log(data._embedded?.publications);
     });
+  }
+
+  onElementClicked(implementation: any): void {
+    this.router.navigate([
+      'algorithms',
+      this.algo.id,
+      'implementations',
+      implementation.id,
+    ]);
   }
 
   onPageChanged($event: string): void {}

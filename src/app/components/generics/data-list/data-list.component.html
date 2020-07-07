@@ -41,7 +41,7 @@
             <!-- Optional Select-All Checkbox Element in first Header-Column -->
             <th class="align-middle center-text" *ngIf="allowDelete">
               <div class="d-flex align-baseline justify-content-center">
-                <mat-checkbox (change)="$event ? masterToggle() : null"
+                <mat-checkbox color="warn" (change)="$event ? masterToggle() : null"
                               [checked]="selection.hasValue() && isAllSelected()"
                               [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
               </div>
@@ -64,12 +64,11 @@
           <tr class="data-element" *ngFor="let dataEntry of data">
             <!-- Optional Select-Checkbox Element in first Body-Column -->
             <th class="align-middle center-text" *ngIf="allowDelete">
-                <mat-checkbox [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
+                <mat-checkbox color="warn" [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
                               (change)="$event ? rowToggle(dataEntry) : null"></mat-checkbox>
             </th>
             <!-- One column for each needed data variable value -->
-            <td class="crop align-middle" *ngFor="let variableName of variableNames"
-                [routerLink]="dataEntry[routingVariable]">{{ dataEntry[variableName] }}</td>
+            <td class="crop align-middle" *ngFor="let variableName of variableNames" (click)="onElementClicked(dataEntry)">{{ dataEntry[variableName] }}</td>
             <td *ngIf="allowDelete">
               <button mat-icon-button class="delete-small" (click)="onSingleDelete(dataEntry); $event.stopPropagation()">
                 <mat-icon>delete</mat-icon>

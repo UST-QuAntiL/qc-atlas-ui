@@ -79,7 +79,7 @@
           [allowSort]="true"
           [pagination]="pagingInfo"
           [paginatorConfig]="paginatorConfig"
-          [routingVariable]="'id'"
+          (elementClicked)="onElementClicked($event)"
           (addElement)="onAddQuantumResource()"
           (deleteElements)="onDeleteQuantumResource($event)"
           (datalistConfigChanged)="onDatalistConfigChanged($event)"
