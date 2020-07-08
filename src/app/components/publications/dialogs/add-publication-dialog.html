@@ -6,11 +6,11 @@
       <input id="publicationTitle" formControlName="publicationTitle" matInput required>
     </mat-form-field>
     <mat-label> Authors</mat-label>
-    <div *ngFor="let author of data.authors; let i = index">
+    <div *ngFor="let author of authorsForm.controls; let i = index">
       <div class="row">
         <div class="col-10">
           <mat-form-field class="input-field">
-            <input [(ngModel)]="data.authors[i]" [ngModelOptions]="{standalone: true}" matInput required>
+            <input [formControl]="authorsForm.controls[i]" matInput required>
           </mat-form-field>
         </div>
         <div class="col-2">

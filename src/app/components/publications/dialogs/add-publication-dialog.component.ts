@@ -4,7 +4,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-publication-dialog-component',
@@ -13,6 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class AddPublicationDialogComponent implements OnInit {
   publicationForm: FormGroup;
+  authorsForm = new FormArray([]);
 
   constructor(
     public dialogRef: MatDialogRef<AddPublicationDialogComponent>,
@@ -21,16 +22,11 @@ export class AddPublicationDialogComponent implements OnInit {
   ) {}
 
   removeItem(index) {
-    console.log(this.data.authors);
-    console.log(index);
-    if (index > -1) {
-      this.data.authors.splice(index, 1);
-    }
-    console.log(this.data.authors);
+    this.authorsForm.removeAt(index);
   }
 
   addItem() {
-    this.data.authors.push('');
+    this.authorsForm.push(new FormControl());
   }
 
   get publicationTitle() {
@@ -42,22 +38,29 @@ export class AddPublicationDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.data.authors = [''];
+    this.addItem();
     this.publicationForm = new FormGroup({
       publicationTitle: new FormControl(this.data.publicationTitle, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
       ]),
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      authorsForm: new FormArray([], [Validators.required]),
     });
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.publicationTitle = this.publicationTitle.value;
+      this.data.authors = this.authorsForm.getRawValue();
+      console.log(this.data.authors);
     });
   }
 
   isRequiredDataMissing(): boolean {
-    return this.publicationTitle.errors?.required;
+    return (
+      this.publicationTitle.errors?.required ||
+      this.authorsForm.errors?.required
+    );
   }
 }
 

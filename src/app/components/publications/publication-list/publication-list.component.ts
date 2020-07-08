@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api/services/publication.service';
 import { AlgorithmDto } from 'api/models/algorithm-dto';
+import { PublicationDto } from 'api/models/publication-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddAlgorithmDialogComponent } from '../../algorithms/dialogs/add-algorithm-dialog.component';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
@@ -66,7 +67,19 @@ export class PublicationListComponent implements OnInit {
       data: { title: 'Add new publication' },
     });
 
-    dialogRef.afterClosed().subscribe((dialogResult) => {});
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      const publicationDto: PublicationDto = {
+        title: dialogResult.publicationTitle,
+        authors: dialogResult.authors,
+      };
+      const param = {
+        body: publicationDto,
+      };
+
+      this.publicationService.createPublication(param).subscribe((data) => {
+        this.router.navigate(['publications', data.id]);
+      });
+    });
   }
 
   onDeleteElements(event): void {
