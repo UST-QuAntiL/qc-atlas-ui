@@ -14,18 +14,18 @@
           </mat-form-field>
         </div>
         <div class="col-2">
-          <button id="deleteButton" mat-mini-fab (click)="removeItem(i)">
-            <mdb-icon fas icon="minus"></mdb-icon>
+          <button mat-icon-button id="deleteButton" (click)="removeItem(i)">
+            <mdb-icon fas icon="user-slash"></mdb-icon>
           </button>
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row mb-3">
       <div class="col-10">
       </div>
       <div class="col-2">
-        <button id="addButton" mat-mini-fab (click)="addItem()">
-          <mdb-icon fas icon="plus"></mdb-icon>
+        <button mat-icon-button id="addButton" (click)="addItem()">
+          <mdb-icon fas icon="user-plus"></mdb-icon>
         </button>
       </div>
     </div>

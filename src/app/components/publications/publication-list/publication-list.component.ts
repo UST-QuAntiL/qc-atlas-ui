@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api/services/publication.service';
-import { AlgorithmDto } from 'api/models/algorithm-dto';
 import { PublicationDto } from 'api/models/publication-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
-import { AddAlgorithmDialogComponent } from '../../algorithms/dialogs/add-algorithm-dialog.component';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
 
 @Component({
@@ -72,11 +70,8 @@ export class PublicationListComponent implements OnInit {
         title: dialogResult.publicationTitle,
         authors: dialogResult.authors,
       };
-      const param = {
-        body: publicationDto,
-      };
-
-      this.publicationService.createPublication(param).subscribe((data) => {
+      params.body = publicationDto;
+      this.publicationService.createPublication(params).subscribe((data) => {
         this.router.navigate(['publications', data.id]);
       });
     });

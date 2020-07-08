@@ -2,12 +2,19 @@ button:focus {
   outline: none;
 }
 
-#deleteButton {
-  background-color: #b71c1c;
-  color: white;
+#addButton {
+  color: green;
 }
 
-#addButton {
-  background-color: green;
-  color: white;
+#deleteButton {
+  color: darkred;
 }
+
+#deleteButton:hover {
+  transform: scale(1.5);
+}
+
+#addButton:hover {
+  transform: scale(1.5);
+}
+

@@ -26,7 +26,8 @@ export class AddPublicationDialogComponent implements OnInit {
   }
 
   addItem() {
-    this.authorsForm.push(new FormControl());
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    this.authorsForm.push(new FormControl('', Validators.required));
   }
 
   get publicationTitle() {
@@ -46,21 +47,29 @@ export class AddPublicationDialogComponent implements OnInit {
         Validators.maxLength(255),
       ]),
       // eslint-disable-next-line @typescript-eslint/unbound-method
-      authorsForm: new FormArray([], [Validators.required]),
+      // authorsForm: new FormArray([], [Validators.required]),
     });
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.publicationTitle = this.publicationTitle.value;
       this.data.authors = this.authorsForm.getRawValue();
-      console.log(this.data.authors);
     });
   }
 
   isRequiredDataMissing(): boolean {
-    return (
-      this.publicationTitle.errors?.required ||
-      this.authorsForm.errors?.required
-    );
+    return this.publicationTitle.errors?.required || this.checkAuthors();
+  }
+
+  checkAuthors(): boolean {
+    if (this.authorsForm.length < 1) {
+      return true;
+    }
+    for (let i = 0; i < this.authorsForm.length; i++) {
+      if (this.authorsForm.get([i]).errors?.required) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
