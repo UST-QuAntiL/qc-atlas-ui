@@ -14,6 +14,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 export class AddPublicationDialogComponent implements OnInit {
   publicationForm: FormGroup;
   authorsForm = new FormArray([]);
+  isCanceld = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddPublicationDialogComponent>,
@@ -35,6 +36,7 @@ export class AddPublicationDialogComponent implements OnInit {
   }
 
   onNoClick(): void {
+    this.isCanceld = true;
     this.dialogRef.close();
   }
 

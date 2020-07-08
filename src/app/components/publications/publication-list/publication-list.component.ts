@@ -66,14 +66,16 @@ export class PublicationListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
-      const publicationDto: PublicationDto = {
-        title: dialogResult.publicationTitle,
-        authors: dialogResult.authors,
-      };
-      params.body = publicationDto;
-      this.publicationService.createPublication(params).subscribe((data) => {
-        this.router.navigate(['publications', data.id]);
-      });
+      if (!dialogRef.componentInstance.isCanceld) {
+        const publicationDto: PublicationDto = {
+          title: dialogResult.publicationTitle,
+          authors: dialogResult.authors,
+        };
+        params.body = publicationDto;
+        this.publicationService.createPublication(params).subscribe((data) => {
+          this.router.navigate(['publications', data.id]);
+        });
+      }
     });
   }
 
