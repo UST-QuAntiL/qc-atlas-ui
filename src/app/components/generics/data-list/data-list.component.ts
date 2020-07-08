@@ -16,7 +16,7 @@ export class DataListComponent implements OnInit {
   @Input() allowSort: boolean;
   @Input() pagination: any;
   @Input() paginatorConfig: any;
-  @Input() routingVariable: string;
+  @Output() elementClicked = new EventEmitter<any>();
   @Output() addElement = new EventEmitter<void>();
   @Output() deleteElements = new EventEmitter<DeleteParams>();
   @Output() pageChange = new EventEmitter<string>();
@@ -54,6 +54,12 @@ export class DataListComponent implements OnInit {
 
   changePage(link: string): void {
     this.pageChange.emit(link);
+    this.selection.clear();
+  }
+
+  onElementClicked(element): void {
+    this.elementClicked.emit(element);
+    this.selection.clear();
   }
 
   onDelete(): void {
@@ -61,22 +67,34 @@ export class DataListComponent implements OnInit {
     this.selection.clear();
   }
 
+  onSingleDelete(element): void {
+    const deleteElement: any[] = [element];
+    const deleteParams = this.generateDeleteParameter();
+    deleteParams.elements = deleteElement;
+    this.deleteElements.emit(deleteParams);
+    this.selection.clear();
+  }
+
   onAdd(): void {
     this.addElement.emit();
+    this.selection.clear();
   }
 
   sortData(event: any): void {
     this.sortDirection = event.direction;
     this.sortActiveElement = event.active;
     this.datalistConfigChanged.emit(this.generateGetParameter());
+    this.selection.clear();
   }
 
   onChangePagingatorConfig(): void {
     this.datalistConfigChanged.emit(this.generateGetParameter());
+    this.selection.clear();
   }
 
   onSearchChange(): void {
     this.datalistConfigChanged.emit(this.generateGetParameter());
+    this.selection.clear();
   }
 
   private changeSelection(row: any, select: boolean): void {

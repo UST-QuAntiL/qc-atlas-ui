@@ -1,0 +1,100 @@
+<div *ngIf="impl">
+  <div class="header-container p-2" *ngIf="algo">
+    <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+    <div class="badge-list">
+      <mat-chip-list>
+        <mat-chip
+          *ngFor="let element of [1, 2, 2, 3, 53, 3]"
+          [removable]="true"
+        >
+          {{ element }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+
+  <mat-tab-group (selectedIndexChange)="changeTab($event)">
+    <mat-tab label="General">
+      <div class="tab-body p-4">
+        <div class="d-flex justify-content-between">
+          <app-text-input
+            (onSaveChanges)="onChangeImpl()"
+            name="Name"
+            class="w-100 p-2"
+            [(ngModel)]="impl.name"
+          ></app-text-input>
+          <app-select-input
+            class="w-100 p-2"
+            name="Software Platform"
+            (onSaveChanges)="onChangeImpl()"
+            [choices]="softwarePlatformOptions"
+            [includeEmpty]="true"
+          ></app-select-input>
+        </div>
+        <div class="d-flex">
+          <app-text-input
+            name="Description"
+            class="w-100 p-2"
+            (onSaveChanges)="onChangeImpl()"
+            [(ngModel)]="impl.description"
+            [multiline]="true"
+          ></app-text-input>
+        </div>
+        <div class="d-flex justify-content-between">
+          <app-text-input
+            class="w-100 p-2"
+            name="Input Format"
+            (onSaveChanges)="onChangeImpl()"
+            [(ngModel)]="impl.inputFormat"
+          ></app-text-input>
+          <app-text-input
+            class="w-100 p-2"
+            name="Output Format"
+            (onSaveChanges)="onChangeImpl()"
+            [(ngModel)]="impl.outputFormat"
+          ></app-text-input>
+        </div>
+        <div class="d-flex justify-content-between">
+          <app-text-input
+            class="w-100 p-2"
+            name="Contributors"
+            (onSaveChanges)="onChangeImpl()"
+            [(ngModel)]="impl.contributors"
+            [multiline]="true"
+          ></app-text-input>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Publications">
+      <div class="p-4">
+        <app-table
+          class="w-100 p-2"
+          [data]="quantumResources"
+          [variableNames]="variableNames"
+          [dataColumns]="tableColumns"
+          [allowAdd]="true"
+          [allowDelete]="true"
+          [allowSearch]="true"
+          [allowSort]="true"
+          [pagination]="pagingInfo"
+          [paginatorConfig]="paginatorConfig"
+          (elementClicked)="onElementClicked($event)"
+          (addElement)="onAddQuantumResource()"
+          (deleteElements)="onDeleteQuantumResource($event)"
+          (datalistConfigChanged)="onDatalistConfigChanged($event)"
+          (pageChange)="onPageChanged($event)"
+        >
+        </app-table>
+      </div>
+    </mat-tab>
+    <mat-tab label="Discussion">
+      <div class="tab-body p-4">
+        <h1>Discussion WIP</h1>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<div *ngIf="impl === undefined">
+  Loading..
+</div>

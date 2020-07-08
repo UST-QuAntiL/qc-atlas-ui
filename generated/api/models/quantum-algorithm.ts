@@ -7,4 +7,31 @@ import { ProblemType } from './problem-type';
 import { Publication } from './publication';
 import { QuantumImplementation } from './quantum-implementation';
 import { Tag } from './tag';
-export type QuantumAlgorithm = { 'id'?: string, 'name'?: string, 'inputFormat'?: string, 'outputFormat'?: string, 'acronym'?: string, 'publications'?: Array<Publication>, 'intent'?: string, 'problem'?: string, 'algorithmRelations'?: Array<AlgorithmRelation>, 'requiredComputingResourceProperties'?: Array<ComputingResourceProperty>, 'algoParameter'?: string, 'sketch'?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL', 'solution'?: string, 'assumptions'?: string, 'computationModel'?: 'CLASSIC' | 'QUANTUM' | 'HYBRID', 'relatedPatterns'?: Array<PatternRelation>, 'problemTypes'?: Array<ProblemType>, 'applicationAreas'?: Array<ApplicationArea>, 'tags'?: Array<Tag>, 'nisqReady'?: boolean, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', 'speedUp'?: string, 'implementations'?: Array<QuantumImplementation> };
+export type QuantumAlgorithm = {
+  id?: string;
+  name?: string;
+  inputFormat?: string;
+  outputFormat?: string;
+  acronym?: string;
+  publications?: Array<Publication>;
+  intent?: string;
+  problem?: string;
+  algorithmRelations?: Array<AlgorithmRelation>;
+  requiredComputingResourceProperties?: Array<ComputingResourceProperty>;
+  algoParameter?: string;
+  sketch?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL';
+  solution?: string;
+  assumptions?: string;
+  computationModel?: 'CLASSIC' | 'QUANTUM' | 'HYBRID';
+  relatedPatterns?: Array<PatternRelation>;
+  problemTypes?: Array<ProblemType>;
+  applicationAreas?: Array<ApplicationArea>;
+  tags?: Array<Tag>;
+  nisqReady?: boolean;
+  quantumComputationModel?:
+    | 'GATE_BASED'
+    | 'MEASUREMENT_BASED'
+    | 'QUANTUM_ANNEALING';
+  speedUp?: string;
+  implementations?: Array<QuantumImplementation>;
+};

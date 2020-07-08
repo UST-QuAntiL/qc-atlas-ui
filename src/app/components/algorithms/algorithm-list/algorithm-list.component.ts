@@ -53,6 +53,10 @@ export class AlgorithmListComponent implements OnInit {
     this.pagingInfo._links = data._links;
   }
 
+  onElementClicked(algorithm: any): void {
+    this.router.navigate(['algorithms', algorithm.id]);
+  }
+
   onAddElement(): void {
     const params: any = {};
     const dialogRef = this.dialog.open(AddAlgorithmDialogComponent, {

@@ -17,17 +17,15 @@ import { PageMetadata } from '../models/page-metadata';
   providedIn: 'root',
 })
 export class ComputingResourcePropertiesTypesService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
   /**
    * Path part for operation getResourcePropertyTypes
    */
-  static readonly GetResourcePropertyTypesPath = '/v1/computing-resource-properties-types';
+  static readonly GetResourcePropertyTypesPath =
+    '/v1/computing-resource-properties-types';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -38,25 +36,45 @@ export class ComputingResourcePropertiesTypesService extends BaseService {
   getResourcePropertyTypes$Response(params?: {
     page?: number;
     size?: number;
-
-  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'computingResourcePropertyTypes'?: Array<EntityModelComputingResourcePropertyTypeDto> }, 'page'?: PageMetadata }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ComputingResourcePropertiesTypesService.GetResourcePropertyTypesPath, 'get');
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: {
+        computingResourcePropertyTypes?: Array<
+          EntityModelComputingResourcePropertyTypeDto
+        >;
+      };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ComputingResourcePropertiesTypesService.GetResourcePropertyTypesPath,
+      'get'
+    );
     if (params) {
-
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_embedded'?: { 'computingResourcePropertyTypes'?: Array<EntityModelComputingResourcePropertyTypeDto> }, 'page'?: PageMetadata }>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              computingResourcePropertyTypes?: Array<
+                EntityModelComputingResourcePropertyTypeDto
+              >;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
   }
 
   /**
@@ -68,18 +86,43 @@ export class ComputingResourcePropertiesTypesService extends BaseService {
   getResourcePropertyTypes(params?: {
     page?: number;
     size?: number;
-
-  }): Observable<{ '_embedded'?: { 'computingResourcePropertyTypes'?: Array<EntityModelComputingResourcePropertyTypeDto> }, 'page'?: PageMetadata }> {
-
+  }): Observable<{
+    _embedded?: {
+      computingResourcePropertyTypes?: Array<
+        EntityModelComputingResourcePropertyTypeDto
+      >;
+    };
+    page?: PageMetadata;
+  }> {
     return this.getResourcePropertyTypes$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_embedded'?: { 'computingResourcePropertyTypes'?: Array<EntityModelComputingResourcePropertyTypeDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'computingResourcePropertyTypes'?: Array<EntityModelComputingResourcePropertyTypeDto> }, 'page'?: PageMetadata })
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              computingResourcePropertyTypes?: Array<
+                EntityModelComputingResourcePropertyTypeDto
+              >;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              computingResourcePropertyTypes?: Array<
+                EntityModelComputingResourcePropertyTypeDto
+              >;
+            };
+            page?: PageMetadata;
+          }
+      )
     );
   }
 
   /**
    * Path part for operation createComputingResourcePropertyType
    */
-  static readonly CreateComputingResourcePropertyTypePath = '/v1/computing-resource-properties-types';
+  static readonly CreateComputingResourcePropertyTypePath =
+    '/v1/computing-resource-properties-types';
 
   /**
    * Custom ID will be ignored.
@@ -90,24 +133,43 @@ export class ComputingResourcePropertiesTypesService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createComputingResourcePropertyType$Response(params: {
-      body: ComputingResourcePropertyTypeDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ComputingResourcePropertiesTypesService.CreateComputingResourcePropertyTypePath, 'post');
+    body: ComputingResourcePropertyTypeDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+      description?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ComputingResourcePropertiesTypesService.CreateComputingResourcePropertyTypePath,
+      'post'
+    );
     if (params) {
-
-
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
   }
 
   /**
@@ -119,18 +181,41 @@ export class ComputingResourcePropertiesTypesService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createComputingResourcePropertyType(params: {
-      body: ComputingResourcePropertyTypeDto
-  }): Observable<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }> {
-
+    body: ComputingResourcePropertyTypeDto;
+  }): Observable<{
+    id?: string;
+    name: string;
+    datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+    description?: string;
+    _links?: Array<Link>;
+  }> {
     return this.createComputingResourcePropertyType$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> })
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id?: string;
+            name: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
+            _links?: Array<Link>;
+          }
+      )
     );
   }
 
   /**
    * Path part for operation getComputingResourcePropertyType
    */
-  static readonly GetComputingResourcePropertyTypePath = '/v1/computing-resource-properties-types/{id}';
+  static readonly GetComputingResourcePropertyTypePath =
+    '/v1/computing-resource-properties-types/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -140,24 +225,42 @@ export class ComputingResourcePropertiesTypesService extends BaseService {
    */
   getComputingResourcePropertyType$Response(params: {
     id: string;
-
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ComputingResourcePropertiesTypesService.GetComputingResourcePropertyTypePath, 'get');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>;
-      })
+  }): Observable<
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+      description?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ComputingResourcePropertiesTypesService.GetComputingResourcePropertyTypePath,
+      'get'
     );
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
   }
 
   /**
@@ -168,18 +271,40 @@ export class ComputingResourcePropertiesTypesService extends BaseService {
    */
   getComputingResourcePropertyType(params: {
     id: string;
-
-  }): Observable<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }> {
-
+  }): Observable<{
+    id?: string;
+    name: string;
+    datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+    description?: string;
+    _links?: Array<Link>;
+  }> {
     return this.getComputingResourcePropertyType$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> })
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id?: string;
+            name: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
+            _links?: Array<Link>;
+          }
+      )
     );
   }
 
   /**
    * Path part for operation updateComputingResourcePropertyType
    */
-  static readonly UpdateComputingResourcePropertyTypePath = '/v1/computing-resource-properties-types/{id}';
+  static readonly UpdateComputingResourcePropertyTypePath =
+    '/v1/computing-resource-properties-types/{id}';
 
   /**
    * Custom ID will be ignored.
@@ -191,25 +316,45 @@ export class ComputingResourcePropertiesTypesService extends BaseService {
    */
   updateComputingResourcePropertyType$Response(params: {
     id: string;
-      body: ComputingResourcePropertyTypeDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ComputingResourcePropertiesTypesService.UpdateComputingResourcePropertyTypePath, 'put');
+    body: ComputingResourcePropertyTypeDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+      description?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ComputingResourcePropertiesTypesService.UpdateComputingResourcePropertyTypePath,
+      'put'
+    );
     if (params) {
-
       rb.path('id', params.id, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
   }
 
   /**
@@ -222,18 +367,41 @@ export class ComputingResourcePropertiesTypesService extends BaseService {
    */
   updateComputingResourcePropertyType(params: {
     id: string;
-      body: ComputingResourcePropertyTypeDto
-  }): Observable<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }> {
-
+    body: ComputingResourcePropertyTypeDto;
+  }): Observable<{
+    id?: string;
+    name: string;
+    datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+    description?: string;
+    _links?: Array<Link>;
+  }> {
     return this.updateComputingResourcePropertyType$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> })
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id?: string;
+            name: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
+            _links?: Array<Link>;
+          }
+      )
     );
   }
 
   /**
    * Path part for operation deleteComputingResourcePropertyType
    */
-  static readonly DeleteComputingResourcePropertyTypePath = '/v1/computing-resource-properties-types/{id}';
+  static readonly DeleteComputingResourcePropertyTypePath =
+    '/v1/computing-resource-properties-types/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -243,24 +411,30 @@ export class ComputingResourcePropertiesTypesService extends BaseService {
    */
   deleteComputingResourcePropertyType$Response(params: {
     id: string;
-
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ComputingResourcePropertiesTypesService.DeleteComputingResourcePropertyTypePath, 'delete');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>;
-      })
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ComputingResourcePropertiesTypesService.DeleteComputingResourcePropertyTypePath,
+      'delete'
     );
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -271,12 +445,9 @@ export class ComputingResourcePropertiesTypesService extends BaseService {
    */
   deleteComputingResourcePropertyType(params: {
     id: string;
-
-  }): Observable<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }> {
-
+  }): Observable<void> {
     return this.deleteComputingResourcePropertyType$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, 'datatype': 'INTEGER' | 'STRING' | 'FLOAT', 'description'?: string, '_links'?: Array<Link> })
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
-
 }

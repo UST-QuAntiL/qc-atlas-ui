@@ -6,8 +6,8 @@
     <div class="px-5">
       <!-- Main Control-Panel (Search-Bar + Buttons) -->
       <div class="row">
-        <div *ngIf="allowSearch" class="col-xl-10 col-lg-8 col-md-6 col-sm-3 col-1">
-          <div class="md-form">
+        <div *ngIf="allowSearch" class="col-12">
+          <div class="md-form m-2">
             <input
               type="text"
               [(ngModel)]="searchText"
@@ -19,18 +19,18 @@
             <label for="search">Search</label>
           </div>
         </div>
-        <div *ngIf="allowAdd" class="col col-xl-1 pt-4">
-          <button mdbBtn class="control-button add-button btn-block" type="button" color="green" outline="true"
-                  (click)="onAdd()" mdbWavesEffect>
-            <mdb-icon fas icon="plus"></mdb-icon>
-          </button>
-        </div>
-        <div *ngIf="allowDelete" class="col col-xl-1 pt-4">
-          <button mdbBtn class="control-button delete-button btn-block" type="button" color="red" outline="true"
-                  (click)="onDelete()" mdbWavesEffect>
-            <mdb-icon fas icon="minus"></mdb-icon>
-          </button>
-        </div>
+      </div>
+      <div class="row m-1">
+        <button mdbBtn *ngIf="allowAdd" class="control-button add-button btn-sm" type="button" color="green"
+                outline="true"
+                (click)="onAdd()" mdbWavesEffect>
+          <mat-icon>note_add</mat-icon>
+        </button>
+        <button mdbBtn *ngIf="allowDelete && selection.hasValue()" class="control-button delete-button btn-sm"
+                type="button" color="red" outline="true"
+                (click)="onDelete()" mdbWavesEffect>
+          <mat-icon>delete</mat-icon>
+        </button>
       </div>
       <!-- Data-Table -->
       <div class="table-responsive">
@@ -39,36 +39,41 @@
           <thead class="data-header">
           <tr>
             <!-- Optional Select-All Checkbox Element in first Header-Column -->
-            <th scope="row" *ngIf="allowDelete">
-              <div class="d-flex align-items-center justify-content-center">
-                <mat-checkbox (change)="$event ? masterToggle() : null"
+            <th class="align-middle center-text" *ngIf="allowDelete">
+              <div class="d-flex align-baseline justify-content-center">
+                <mat-checkbox color="warn" (change)="$event ? masterToggle() : null"
                               [checked]="selection.hasValue() && isAllSelected()"
                               [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
               </div>
             </th>
             <!-- One column for each needed data variable -->
             <ng-container *ngFor="let column of dataColumns; let i = index">
-              <th class="th-lg hide-arrow" mat-sort-header="{{ variableNames[i] }}"
+              <th class="th-lg hide-arrow align-middle" mat-sort-header="{{ variableNames[i] }}"
                   [disabled]="allowSort ? false : true " aria-controls="tableSortExample"
                   scope="col">
                 <a>{{ column }}</a>
               </th>
             </ng-container>
+            <th *ngIf="allowDelete">
+              <a> Actions </a>
+            </th>
           </tr>
           </thead>
           <!-- Table-Body with the Data-Elements -->
-          <tbody>
+          <tbody align-middle justify-content-center>
           <tr class="data-element" *ngFor="let dataEntry of data">
             <!-- Optional Select-Checkbox Element in first Body-Column -->
-            <th scope="row" *ngIf="allowDelete">
-              <div class="d-flex align-items-center justify-content-center">
-                <mat-checkbox [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
+            <th class="align-middle center-text" *ngIf="allowDelete">
+                <mat-checkbox color="warn" [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
                               (change)="$event ? rowToggle(dataEntry) : null"></mat-checkbox>
-              </div>
             </th>
             <!-- One column for each needed data variable value -->
-            <td class="crop" *ngFor="let variableName of variableNames"
-                [routerLink]="dataEntry[routingVariable]">{{ dataEntry[variableName] }}</td>
+            <td class="crop align-middle" *ngFor="let variableName of variableNames" (click)="onElementClicked(dataEntry)">{{ dataEntry[variableName] }}</td>
+            <td *ngIf="allowDelete">
+              <button mat-icon-button class="delete-small" (click)="onSingleDelete(dataEntry); $event.stopPropagation()">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
           </tr>
           </tbody>
           <!-- Optional Table-Footer for pagination -->

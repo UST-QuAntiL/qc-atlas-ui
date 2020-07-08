@@ -17,10 +17,7 @@ import { PageMetadata } from '../models/page-metadata';
   providedIn: 'root',
 })
 export class ApplicationAreasService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -38,25 +35,39 @@ export class ApplicationAreasService extends BaseService {
   getApplicationAreas1$Response(params?: {
     page?: number;
     size?: number;
-
-  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'applicationAreas'?: Array<EntityModelApplicationAreaDto> }, 'page'?: PageMetadata }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ApplicationAreasService.GetApplicationAreas1Path, 'get');
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ApplicationAreasService.GetApplicationAreas1Path,
+      'get'
+    );
     if (params) {
-
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_embedded'?: { 'applicationAreas'?: Array<EntityModelApplicationAreaDto> }, 'page'?: PageMetadata }>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              applicationAreas?: Array<EntityModelApplicationAreaDto>;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
   }
 
   /**
@@ -68,11 +79,27 @@ export class ApplicationAreasService extends BaseService {
   getApplicationAreas1(params?: {
     page?: number;
     size?: number;
-
-  }): Observable<{ '_embedded'?: { 'applicationAreas'?: Array<EntityModelApplicationAreaDto> }, 'page'?: PageMetadata }> {
-
+  }): Observable<{
+    _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
+    page?: PageMetadata;
+  }> {
     return this.getApplicationAreas1$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_embedded'?: { 'applicationAreas'?: Array<EntityModelApplicationAreaDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'applicationAreas'?: Array<EntityModelApplicationAreaDto> }, 'page'?: PageMetadata })
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              applicationAreas?: Array<EntityModelApplicationAreaDto>;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              applicationAreas?: Array<EntityModelApplicationAreaDto>;
+            };
+            page?: PageMetadata;
+          }
+      )
     );
   }
 
@@ -90,24 +117,35 @@ export class ApplicationAreasService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createApplicationArea$Response(params: {
-      body: ApplicationAreaDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ApplicationAreasService.CreateApplicationAreaPath, 'post');
+    body: ApplicationAreaDto;
+  }): Observable<
+    StrictHttpResponse<{ id?: string; name: string; _links?: Array<Link> }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ApplicationAreasService.CreateApplicationAreaPath,
+      'post'
+    );
     if (params) {
-
-
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
   }
 
   /**
@@ -119,11 +157,18 @@ export class ApplicationAreasService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createApplicationArea(params: {
-      body: ApplicationAreaDto
-  }): Observable<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }> {
-
+    body: ApplicationAreaDto;
+  }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
     return this.createApplicationArea$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, '_links'?: Array<Link> })
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            _links?: Array<Link>;
+          }>
+        ) => r.body as { id?: string; name: string; _links?: Array<Link> }
+      )
     );
   }
 
@@ -140,24 +185,34 @@ export class ApplicationAreasService extends BaseService {
    */
   getApplicationAreaById$Response(params: {
     id: string;
-
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ApplicationAreasService.GetApplicationAreaByIdPath, 'get');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>;
-      })
+  }): Observable<
+    StrictHttpResponse<{ id?: string; name: string; _links?: Array<Link> }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ApplicationAreasService.GetApplicationAreaByIdPath,
+      'get'
     );
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
   }
 
   /**
@@ -168,11 +223,17 @@ export class ApplicationAreasService extends BaseService {
    */
   getApplicationAreaById(params: {
     id: string;
-
-  }): Observable<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }> {
-
+  }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
     return this.getApplicationAreaById$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, '_links'?: Array<Link> })
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            _links?: Array<Link>;
+          }>
+        ) => r.body as { id?: string; name: string; _links?: Array<Link> }
+      )
     );
   }
 
@@ -191,25 +252,37 @@ export class ApplicationAreasService extends BaseService {
    */
   updateApplicationArea$Response(params: {
     id: string;
-      body: ApplicationAreaDto
-  }): Observable<StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ApplicationAreasService.UpdateApplicationAreaPath, 'put');
+    body: ApplicationAreaDto;
+  }): Observable<
+    StrictHttpResponse<{ id?: string; name: string; _links?: Array<Link> }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ApplicationAreasService.UpdateApplicationAreaPath,
+      'put'
+    );
     if (params) {
-
       rb.path('id', params.id, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
   }
 
   /**
@@ -222,11 +295,18 @@ export class ApplicationAreasService extends BaseService {
    */
   updateApplicationArea(params: {
     id: string;
-      body: ApplicationAreaDto
-  }): Observable<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }> {
-
+    body: ApplicationAreaDto;
+  }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
     return this.updateApplicationArea$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id'?: string, 'name': string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'name': string, '_links'?: Array<Link> })
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            _links?: Array<Link>;
+          }>
+        ) => r.body as { id?: string; name: string; _links?: Array<Link> }
+      )
     );
   }
 
@@ -243,24 +323,30 @@ export class ApplicationAreasService extends BaseService {
    */
   deleteApplicationArea$Response(params: {
     id: string;
-
-  }): Observable<StrictHttpResponse<ApplicationAreaDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ApplicationAreasService.DeleteApplicationAreaPath, 'delete');
-    if (params) {
-
-      rb.path('id', params.id, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ApplicationAreaDto>;
-      })
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ApplicationAreasService.DeleteApplicationAreaPath,
+      'delete'
     );
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -269,14 +355,9 @@ export class ApplicationAreasService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteApplicationArea(params: {
-    id: string;
-
-  }): Observable<ApplicationAreaDto> {
-
+  deleteApplicationArea(params: { id: string }): Observable<void> {
     return this.deleteApplicationArea$Response(params).pipe(
-      map((r: StrictHttpResponse<ApplicationAreaDto>) => r.body as ApplicationAreaDto)
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
-
 }

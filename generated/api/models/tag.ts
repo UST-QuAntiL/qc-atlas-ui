@@ -1,2 +1,2 @@
 /* tslint:disable */
-export type Tag = { 'id'?: string };
+export type Tag = { id?: string };

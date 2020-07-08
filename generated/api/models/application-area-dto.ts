@@ -1,2 +1,2 @@
 /* tslint:disable */
-export type ApplicationAreaDto = { 'id'?: string, 'name': string };
+export type ApplicationAreaDto = { id?: string; name: string };

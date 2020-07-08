@@ -55,6 +55,10 @@ export class PublicationListComponent implements OnInit {
     this.pagingInfo._links = data._links;
   }
 
+  onElementClicked(publication: any): void {
+    this.router.navigate(['publications', publication.id]);
+  }
+
   onAddElement(): void {
     const params: any = {};
     const dialogRef = this.dialog.open(AddPublicationDialogComponent, {

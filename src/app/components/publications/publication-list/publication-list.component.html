@@ -7,7 +7,7 @@
            [allowSort]=true
            [pagination]=pagingInfo
            [paginatorConfig]=paginatorConfig
-           [routingVariable]="'id'"
+           (elementClicked)="onElementClicked($event)"
            (addElement)="onAddElement()"
            (deleteElements)="onDeleteElements($event)"
            (datalistConfigChanged)="onDatalistConfigChanged($event)"
