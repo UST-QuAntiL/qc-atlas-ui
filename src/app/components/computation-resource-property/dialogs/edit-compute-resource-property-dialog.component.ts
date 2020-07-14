@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, SimpleChanges } from '@angular/core';
 import { EntityModelComputingResourcePropertyDto } from 'api/models/entity-model-computing-resource-property-dto';
 import {
   MAT_DIALOG_DATA,
@@ -7,7 +7,7 @@ import {
 } from '@angular/material/dialog';
 import { ComputingResourcePropertiesTypesService } from 'api/services/computing-resource-properties-types.service';
 import { EntityModelComputingResourcePropertyTypeDto } from 'api/models/entity-model-computing-resource-property-type-dto';
-import { FormControl } from '@angular/forms';
+import { Form, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Option } from '../../generics/property-input/select-input.component';
@@ -24,6 +24,12 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   valueValidationControl = new FormControl();
   matcher = new ShowOnDirtyErrorStateMatcher();
   filteredTypes: Observable<EntityModelComputingResourcePropertyTypeDto[]>;
+  formGroup: FormGroup = new FormGroup({
+    typeName: new FormControl('', Validators.minLength(1)),
+    typeDesc: new FormControl(),
+    typeDatatype: new FormControl('FLOAT'),
+    value: new FormControl('', Validators.minLength(1)),
+  });
 
   baseElement: EntityModelComputingResourcePropertyDto = {
     value: '',
@@ -37,11 +43,34 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
 
   selectedType: EntityModelComputingResourcePropertyTypeDto = null;
 
-  typeName = '';
-  typeDescription = '';
-  typeDatatype: 'INTEGER' | 'STRING' | 'FLOAT' = 'FLOAT';
+  get typeName(): string {
+    return (this.formGroup.controls.typeName as FormControl).value.toString();
+  }
+  set typeName(name: string) {
+    (this.formGroup.controls.typeName as FormControl).setValue(name);
+  }
 
-  propertyValue = '';
+  get typeDescription(): string {
+    return (this.formGroup.controls.typeDesc as FormControl).value.toString();
+  }
+  set typeDescription(desc: string) {
+    (this.formGroup.controls.typeDesc as FormControl).setValue(desc);
+  }
+
+  get typeDatatype(): 'INTEGER' | 'STRING' | 'FLOAT' {
+    return (this.formGroup.controls
+      .typeDatatype as FormControl).value.toString();
+  }
+  set typeDatatype(type: 'INTEGER' | 'STRING' | 'FLOAT') {
+    (this.formGroup.controls.typeDatatype as FormControl).setValue(type);
+  }
+
+  get propertyValue(): string {
+    return (this.formGroup.controls.value as FormControl).value.toString();
+  }
+  set propertyValue(value: string) {
+    (this.formGroup.controls.value as FormControl).setValue(value);
+  }
   valueInputInvalid = true;
 
   availableTypes: ValidatingOption[] = [
@@ -99,6 +128,8 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     this.selectedType = type;
     this.typeDatatype = type.datatype;
     this.typeDescription = type.description;
+    this.formGroup.controls.typeDesc.disable();
+    this.formGroup.controls.typeDatatype.disable();
     this.validateValueInput();
   }
 
@@ -107,11 +138,14 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
       this.selectedType = null;
       this.typeDescription = '';
       this.typeDatatype = 'FLOAT';
+      this.formGroup.controls.typeDesc.enable();
+      this.formGroup.controls.typeDatatype.enable();
       this.valueInputInvalid = true;
     }
   }
 
   validateValueInput(): void {
+    console.log((this.formGroup.controls.value as FormControl).value);
     const validator = this.availableTypes.find(
       (e) => e.value === this.typeDatatype
     ).validationFunc;

@@ -1,13 +1,12 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
-  <form class="full-width">
+  <form class="full-width" [formGroup]="formGroup">
     <mat-form-field appearance="fill" class="full-width">
       <mat-label class="input-label">Type name</mat-label>
       <input
         type="text"
-        [(ngModel)]="typeName"
         placeholder="Type name"
-        [formControl]="typeNameControl"
+        formControlName="typeName"
         [matAutocomplete]="auto"
         (input)="resetSelectedType()"
         class="full-width"
@@ -21,7 +20,10 @@
           [value]="type.name"
           (click)="onTypeSelect(type)"
         >
-          {{ type.name }} ({{ type.datatype }})
+          <span>{{ type.name }} ({{ type.datatype }})</span>
+          <small *ngIf="type.description.length > 0">
+            {{ type.description }}
+          </small>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -29,9 +31,8 @@
     <mat-form-field class="full-width">
       <mat-label class="input-label">Type description</mat-label>
       <input
-        [(ngModel)]="typeDescription"
+        formControlName="typeDesc"
         name="type-description"
-        [disabled]="selectedType != null"
         matInput
         type="text"
         placeholder="Type description"
@@ -42,8 +43,7 @@
     <mat-form-field class="full-width">
       <mat-label class="input-label">Data Type</mat-label>
       <mat-select
-        [disabled]="selectedType != null"
-        [(ngModel)]="typeDatatype"
+        formControlName="typeDatatype"
         name="type-datatype"
         class="full-width"
         (ngModelChange)="validateValueInput()"
@@ -58,9 +58,8 @@
     <mat-form-field class="full-width">
       <mat-label class="input-label">Property value</mat-label>
       <input
-        [(ngModel)]="propertyValue"
+        formControlName="value"
         (input)="validateValueInput()"
-        [formControl]="valueValidationControl"
         [errorStateMatcher]="matcher"
         name="property-value"
         matInput
@@ -79,7 +78,11 @@
   <button mat-button [mat-dialog-close]="null">
     Cancel
   </button>
-  <button mat-button (click)="onSubmit()" [disabled]="valueInputInvalid || typeName.length == 0">
+  <button
+    mat-button
+    (click)="onSubmit()"
+    [disabled]="valueInputInvalid || typeName.length == 0"
+  >
     Ok
   </button>
 </div>
