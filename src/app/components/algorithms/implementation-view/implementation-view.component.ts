@@ -11,6 +11,7 @@ import {
   DeleteParams,
   QueryParams,
 } from '../../generics/data-list/data-list.component';
+import { EntityModelComputingResourcePropertyDto } from 'api/models/entity-model-computing-resource-property-dto';
 
 @Component({
   templateUrl: './implementation-view.component.html',
@@ -34,6 +35,7 @@ export class ImplementationViewComponent implements OnInit {
     { heading: '', subHeading: '' },
     { heading: '', subHeading: '' },
   ];
+  computeResourceProperties: EntityModelComputingResourcePropertyDto[] = [];
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -89,6 +91,68 @@ export class ImplementationViewComponent implements OnInit {
 
   onPageChanged($event: string): void {}
 
+  addComputeResourceProperty(
+    property: EntityModelComputingResourcePropertyDto
+  ): void {
+    console.log('add compute resource property');
+    console.log(property);
+    this.algorithmService
+      .addComputingResource1({
+        algoId: this.algo.id,
+        implId: this.impl.id,
+        body: property,
+      })
+      .subscribe((e) => {
+        this.fetchComputeResourceProperties();
+      });
+  }
+
+  updateComputeResourceProperty(
+    property: EntityModelComputingResourcePropertyDto
+  ): void {
+    this.algorithmService
+      .updateComputingResource1({
+        algoId: this.algo.id,
+        implId: this.impl.id,
+        resourceId: property.id,
+        body: property,
+      })
+      .subscribe((e) => {
+        this.fetchComputeResourceProperties();
+      });
+  }
+
+  deleteComputeResourceProperty(
+    property: EntityModelComputingResourcePropertyDto
+  ): void {
+    this.algorithmService
+      .deleteComputingResource1({
+        algoId: this.algo.id,
+        implId: this.impl.id,
+        resourceId: property.id,
+      })
+      .subscribe((e) => {
+        this.fetchComputeResourceProperties();
+      });
+  }
+
+  fetchComputeResourceProperties(): void {
+    this.algorithmService
+      .getComputingResources1({
+        algoId: this.algo.id,
+        implId: this.impl.id,
+        page: 0,
+        // TODO find better option, e.g. use a pagination for the list
+        size: 1000,
+      })
+      .subscribe((e) => {
+        if (e._embedded != null) {
+          this.computeResourceProperties =
+            e._embedded.computingResourceProperties;
+        }
+      });
+  }
+
   private loadGeneral(): void {
     this.softwarePlatformService.getSoftwarePlatforms1().subscribe((list) => {
       const softwarePlatforms = list._embedded?.softwarePlatforms || [];
@@ -114,6 +178,7 @@ export class ImplementationViewComponent implements OnInit {
             heading: this.impl.name,
             subHeading: '',
           };
+          this.fetchComputeResourceProperties();
         });
     });
   }

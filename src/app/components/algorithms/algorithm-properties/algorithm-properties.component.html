@@ -68,22 +68,11 @@
   </mat-card>
 
   <mat-card class="m-4">
-    <div class="m-4">
-      <mat-label class="property-label">Required compute resource properties</mat-label>
-      <button
-        mat-button
-        matSuffix
-        mat-icon-button
-        aria-label="Clear"
-        (click)="addComputeResourceProperty()">
-        <mat-icon>add</mat-icon>
-      </button>
-      <mat-list>
-        <mat-list-item *ngFor="let property of computeResourceProperties">
-          {{property.type.name}}: {{property.type.datatype.toLowerCase()}} = {{property.value}}
-        </mat-list-item>
-      </mat-list>
-    </div>
+    <app-computation-resource-property-list (addProperty)="addComputeResourceProperty($event)"
+                                            (updateProperty)="updateComputeResourceProperty($event)"
+                                            (deleteProperty)="deleteComputeResourceProperty($event)"
+                                            [resourceProperties]="computeResourceProperties">
+    </app-computation-resource-property-list>
   </mat-card>
 
   <mat-card class="m-4">

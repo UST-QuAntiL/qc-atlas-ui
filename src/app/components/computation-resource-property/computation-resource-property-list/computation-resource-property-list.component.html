@@ -1,0 +1,54 @@
+<mat-label class="property-label">
+  Required compute resource properties
+</mat-label>
+<button
+  mat-button
+  matSuffix
+  mat-icon-button
+  aria-label="Add a property"
+  (click)="onAdd()"
+>
+  <mat-icon>add</mat-icon>
+</button>
+<mat-list *ngIf="resourceProperties.length > 0">
+  <mat-list-item
+    *ngFor="let property of resourceProperties"
+    (mouseleave)="clearHover()"
+    (mouseover)="onHover(property.id)"
+  >
+    <span
+      [matTooltip]="property.type.description"
+      matTooltipPosition="above"
+      [matTooltipDisabled]="
+        property.type.description == null ||
+        property.type.description.length === 0
+      "
+    >
+      {{ property.type.name }}: {{ property.type.datatype.toLowerCase() }} =
+      {{ property.value }}
+    </span>
+    <button
+      mat-button
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      *ngIf="isHovered(property.id)"
+      (click)="onEdit(property)"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button
+      mat-button
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      *ngIf="isHovered(property.id)"
+      (click)="onDelete(property)"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-list-item>
+</mat-list>
+<h6 *ngIf="resourceProperties.length == 0" class="centered-text">
+  No compute resource properties found.
+</h6>
