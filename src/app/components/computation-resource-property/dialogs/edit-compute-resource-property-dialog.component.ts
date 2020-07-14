@@ -10,8 +10,8 @@ import { EntityModelComputingResourcePropertyTypeDto } from 'api/models/entity-m
 import { Form, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Option } from '../../generics/property-input/select-input.component';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { Option } from '../../generics/property-input/select-input.component';
 
 @Component({
   selector: 'app-edit-compute-resource-property-dialog',

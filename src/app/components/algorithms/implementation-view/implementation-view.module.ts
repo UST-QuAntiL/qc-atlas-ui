@@ -9,27 +9,27 @@ import {
 } from 'angular-bootstrap-md';
 import { FormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatCardModule } from '@angular/material/card';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
+import { ComputingResourcePropertyModule } from '../../computation-resource-property/computing-resource-property.module';
 import { ImplementationViewComponent } from './implementation-view.component';
-import {ComputingResourcePropertyModule} from "../../computation-resource-property/computing-resource-property.module";
-import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [ImplementationViewComponent],
-    imports: [
-        BreadcrumbModule,
-        BadgeModule,
-        IconsModule,
-        MatChipsModule,
-        MatTabsModule,
-        MatIconModule,
-        CommonModule,
-        NavigationBreadcrumbModule,
-        GenericsModule,
-        FormsModule,
-        ComputingResourcePropertyModule,
-        MatCardModule,
-    ],
+  imports: [
+    BreadcrumbModule,
+    BadgeModule,
+    IconsModule,
+    MatChipsModule,
+    MatTabsModule,
+    MatIconModule,
+    CommonModule,
+    NavigationBreadcrumbModule,
+    GenericsModule,
+    FormsModule,
+    ComputingResourcePropertyModule,
+    MatCardModule,
+  ],
 })
 export class ImplementationViewModule {}

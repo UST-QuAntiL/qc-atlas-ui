@@ -5,13 +5,13 @@ import { AlgorithmDto } from 'api/models/algorithm-dto';
 import { ImplementationDto } from 'api/models/implementation-dto';
 import { SoftwarePlatformService } from 'api/services/software-platform.service';
 import { PublicationService } from 'api/services/publication.service';
+import { EntityModelComputingResourcePropertyDto } from 'api/models/entity-model-computing-resource-property-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import {
   DeleteParams,
   QueryParams,
 } from '../../generics/data-list/data-list.component';
-import { EntityModelComputingResourcePropertyDto } from 'api/models/entity-model-computing-resource-property-dto';
 
 @Component({
   templateUrl: './implementation-view.component.html',
