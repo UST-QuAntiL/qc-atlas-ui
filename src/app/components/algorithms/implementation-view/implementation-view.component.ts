@@ -132,6 +132,10 @@ export class ImplementationViewComponent implements OnInit {
         resourceId: property.id,
       })
       .subscribe((e) => {
+        this.computeResourceProperties = this.computeResourceProperties.filter(
+          (elem: EntityModelComputingResourcePropertyDto) =>
+            elem.id !== property.id
+        );
         this.fetchComputeResourceProperties();
       });
   }

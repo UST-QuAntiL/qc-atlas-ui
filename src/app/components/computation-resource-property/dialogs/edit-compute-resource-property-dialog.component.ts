@@ -7,7 +7,14 @@ import {
 } from '@angular/material/dialog';
 import { ComputingResourcePropertiesTypesService } from 'api/services/computing-resource-properties-types.service';
 import { EntityModelComputingResourcePropertyTypeDto } from 'api/models/entity-model-computing-resource-property-type-dto';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
@@ -28,7 +35,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     typeName: new FormControl('', Validators.minLength(1)),
     typeDesc: new FormControl(),
     typeDatatype: new FormControl('FLOAT'),
-    value: new FormControl('', Validators.minLength(1)),
+    value: new FormControl(''),
   });
 
   baseElement: EntityModelComputingResourcePropertyDto = {
@@ -62,7 +69,9 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
       .typeDatatype as FormControl).value.toString();
   }
   set typeDatatype(type: 'INTEGER' | 'STRING' | 'FLOAT') {
-    (this.formGroup.controls.typeDatatype as FormControl).setValue(type);
+    const datatypeControl = this.formGroup.controls.typeDatatype as FormControl;
+    datatypeControl.setValue(type);
+    datatypeControl.setValidators(null);
   }
 
   get propertyValue(): string {
@@ -103,12 +112,20 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.formGroup.controls.value.setValidators([
+      Validators.minLength(1),
+      this.typeValidator(),
+    ]);
     if (this.data.entity != null) {
       this.baseElement = this.data.entity;
 
       this.propertyValue = this.data.entity.value;
       this.typeName = this.data.entity.type.name;
       this.onTypeSelect(this.data.entity.type);
+    } else {
+      this.propertyValue = '';
+      this.typeDescription = '';
+      this.typeName = '';
     }
     this.propertyTypeService
       // TODO find better solution to fetch all types available
@@ -145,16 +162,8 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   }
 
   validateValueInput(): void {
-    console.log((this.formGroup.controls.value as FormControl).value);
-    const validator = this.availableTypes.find(
-      (e) => e.value === this.typeDatatype
-    ).validationFunc;
-    this.valueInputInvalid = !validator(this.propertyValue);
-    if (this.valueInputInvalid) {
-      this.valueValidationControl.markAsDirty();
-    } else {
-      this.valueValidationControl.markAsPristine();
-    }
+    this.valueInputInvalid = (this.formGroup.controls
+      .value as FormControl).invalid;
   }
 
   onSubmit(): void {
@@ -177,6 +186,21 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
           this.dialogRef.close(this.baseElement);
         });
     }
+  }
+
+  private typeValidator(): ValidatorFn {
+    return (control) => {
+      const currType = this.typeDatatype;
+      const validationFunc = this.availableTypes.find(
+        (e) => e.value === currType
+      ).validationFunc;
+      if (!validationFunc(control.value)) {
+        return {
+          invalidInput: true,
+        };
+      }
+      return null;
+    };
   }
 
   private _filter(

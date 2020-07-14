@@ -281,6 +281,10 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         resourceId: property.id,
       })
       .subscribe((e) => {
+        this.computeResourceProperties = this.computeResourceProperties.filter(
+          (elem: EntityModelComputingResourcePropertyDto) =>
+            elem.id !== property.id
+        );
         this.fetchComputeResourceProperties();
       });
   }
