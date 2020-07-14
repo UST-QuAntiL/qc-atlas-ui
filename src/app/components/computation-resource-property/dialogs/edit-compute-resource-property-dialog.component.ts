@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { EntityModelComputingResourcePropertyDto } from 'api/models/entity-model-computing-resource-property-dto';
 import {
   MAT_DIALOG_DATA,
@@ -7,7 +7,7 @@ import {
 } from '@angular/material/dialog';
 import { ComputingResourcePropertiesTypesService } from 'api/services/computing-resource-properties-types.service';
 import { EntityModelComputingResourcePropertyTypeDto } from 'api/models/entity-model-computing-resource-property-type-dto';
-import { Form, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
