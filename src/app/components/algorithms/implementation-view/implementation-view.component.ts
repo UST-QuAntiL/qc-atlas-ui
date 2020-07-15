@@ -103,6 +103,7 @@ export class ImplementationViewComponent implements OnInit {
         this.links[0] = {
           heading: this.algo.name,
           subHeading: this.algo.computationModel + ' Algorithm',
+          link: '/algorithms/' + algoId,
         };
       });
 
