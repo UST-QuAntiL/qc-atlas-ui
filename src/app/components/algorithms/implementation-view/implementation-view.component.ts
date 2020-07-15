@@ -12,6 +12,7 @@ import {
   DeleteParams,
   QueryParams,
 } from '../../generics/data-list/data-list.component';
+import { InputParameter } from '../impl-selection-criteria/impl-selection-criteria.component';
 
 @Component({
   templateUrl: './implementation-view.component.html',
@@ -36,6 +37,17 @@ export class ImplementationViewComponent implements OnInit {
     { heading: '', subHeading: '' },
   ];
   computeResourceProperties: EntityModelComputingResourcePropertyDto[] = [];
+
+  placeholderInputParams: InputParameter[] = [
+    {
+      name: 'N',
+      datatype: 'Integer',
+    },
+    {
+      name: 'M',
+      datatype: 'String',
+    },
+  ];
 
   constructor(
     private algorithmService: AlgorithmService,

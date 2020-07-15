@@ -6,14 +6,14 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./impl-selection-criteria.component.scss'],
 })
 export class ImplSelectionCriteriaComponent {
-  @Input() params: InputParameters[];
+  @Input() params: InputParameter[];
 }
 
 /**
  * this should be generated from the NISQ Analyzer backend
  * TODO
  */
-interface InputParameters {
+export interface InputParameter {
   name: string;
   datatype: 'Integer' | 'Float' | 'String';
   description?: string;
