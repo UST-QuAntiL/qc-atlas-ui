@@ -189,10 +189,10 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   }
 
   private typeValidator(): ValidatorFn {
-    return (control) => {
+    return (control: AbstractControl): ValidationErrors | null => {
       const currType = this.typeDatatype;
       const validationFunc = this.availableTypes.find(
-        (e) => e.value === currType
+        (e: ValidatingOption) => e.value === currType
       ).validationFunc;
       if (!validationFunc(control.value)) {
         return {

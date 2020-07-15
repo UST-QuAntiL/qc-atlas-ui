@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EntityModelComputingResourcePropertyDto } from 'api/models/entity-model-computing-resource-property-dto';
-import { MatDialog } from '@angular/material/dialog';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
@@ -9,6 +8,7 @@ import {
   EditComputeResourcePropertyDialogComponent,
   EditComputeResourcePropertyDialogData,
 } from '../dialogs/edit-compute-resource-property-dialog.component';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-computation-resource-property-list',
@@ -34,7 +34,7 @@ export class ComputationResourcePropertyListComponent implements OnInit {
 
   hoveredEntry = '';
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private utilService: UtilService) {}
 
   ngOnInit(): void {}
 
@@ -53,10 +53,10 @@ export class ComputationResourcePropertyListComponent implements OnInit {
       yesButtonText: 'Yes',
       noButtonText: 'No',
     };
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
-      data: dialogData,
-    });
+    const dialogRef = this.utilService.createDialog(
+      ConfirmDialogComponent,
+      dialogData
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult != null) {
@@ -82,12 +82,9 @@ export class ComputationResourcePropertyListComponent implements OnInit {
       title: dialogTitle,
       entity: element,
     };
-    const dialogRef = this.dialog.open(
+    const dialogRef = this.utilService.createDialog(
       EditComputeResourcePropertyDialogComponent,
-      {
-        width: '400px',
-        data: dialogData,
-      }
+      dialogData
     );
 
     dialogRef

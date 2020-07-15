@@ -22,7 +22,6 @@ import { SelectInputComponent } from './property-input/select-input.component';
 import { CheckboxInputComponent } from './property-input/checkbox-input.component';
 import { DataListComponent } from './data-list/data-list.component';
 import { ChipCollectionComponent } from './chip-collection/chip-collection.component';
-import { TreeOutputComponent } from './tree-output/tree-output.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
 
 @NgModule({
@@ -32,7 +31,6 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
     CheckboxInputComponent,
     DataListComponent,
     ChipCollectionComponent,
-    TreeOutputComponent,
     ConfirmDialogComponent,
   ],
   imports: [
@@ -60,7 +58,6 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
     CheckboxInputComponent,
     DataListComponent,
     ChipCollectionComponent,
-    TreeOutputComponent,
     RouterModule,
     MatSortModule,
     ConfirmDialogComponent,
