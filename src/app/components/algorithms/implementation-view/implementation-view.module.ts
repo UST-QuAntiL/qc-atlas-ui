@@ -9,14 +9,14 @@ import {
 } from 'angular-bootstrap-md';
 import { FormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
-import { GenericsModule } from '../../generics/generics.module';
-import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
-import { ImplementationViewComponent } from './implementation-view.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { GenericsModule } from '../../generics/generics.module';
+import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
+import { ComputingResourcePropertyModule } from '../../computation-resource-property/computing-resource-property.module';
 import { ImplSelectionCriteriaComponent } from '../impl-selection-criteria/impl-selection-criteria.component';
+import { ImplementationViewComponent } from './implementation-view.component';
 
 @NgModule({
   declarations: [ImplementationViewComponent, ImplSelectionCriteriaComponent],
@@ -34,6 +34,8 @@ import { ImplSelectionCriteriaComponent } from '../impl-selection-criteria/impl-
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
+    ComputingResourcePropertyModule,
+    MatCardModule,
   ],
 })
 export class ImplementationViewModule {}

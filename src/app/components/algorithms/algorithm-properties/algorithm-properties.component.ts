@@ -15,6 +15,7 @@ import {
   EntityModelProblemTypeDto,
 } from 'api/models';
 import { ProblemTypeService } from 'api/services/problem-type.service';
+import { AlgorithmService } from 'api/services/algorithm.service';
 import {
   FileNode,
   ProblemTypeTreeComponent,
@@ -69,12 +70,13 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   problemTypeTreeData: FileNode[] = [];
 
   constructor(
+    private algorithmService: AlgorithmService,
     private problemTypeService: ProblemTypeService,
     private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
-    this.createDummyCompureResourceProperties();
+    this.fetchComputeResourceProperties();
 
     // const problem1: EntityModelProblemTypeDto = {
     //   name: 'ProblemTestType1',
@@ -197,10 +199,6 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     this.removeApplicationArea.emit(applicationArea);
   }
 
-  addComputeResourceProperty(): void {
-    console.log('add compute resource property');
-  }
-
   getParentsForNode(problemType: EntityModelProblemTypeDto): void {
     this.addParentTreeToProblemType(problemType);
   }
@@ -245,18 +243,65 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       });
   }
 
-  createDummyCompureResourceProperties(): void {
-    for (let i = 0; i < 5; i++) {
-      const element: EntityModelComputingResourcePropertyDto = {
-        id: i.toString(),
-        type: {
-          name: 'variable' + i,
-          datatype: 'INTEGER',
-          description: 'this is a test description',
-        },
-        value: 'value',
-      };
-      this.computeResourceProperties.push(JSON.parse(JSON.stringify(element)));
-    }
+  addComputeResourceProperty(
+    property: EntityModelComputingResourcePropertyDto
+  ): void {
+    console.log('add compute resource property');
+    console.log(property);
+    this.algorithmService
+      .addComputingResource({
+        algoId: this.algorithm.id,
+        body: property,
+      })
+      .subscribe((e) => {
+        this.fetchComputeResourceProperties();
+      });
+  }
+
+  updateComputeResourceProperty(
+    property: EntityModelComputingResourcePropertyDto
+  ): void {
+    this.algorithmService
+      .updateComputingResource({
+        algoId: this.algorithm.id,
+        resourceId: property.id,
+        body: property,
+      })
+      .subscribe((e) => {
+        this.fetchComputeResourceProperties();
+      });
+  }
+
+  deleteComputeResourceProperty(
+    property: EntityModelComputingResourcePropertyDto
+  ): void {
+    this.algorithmService
+      .deleteComputingResource({
+        algoId: this.algorithm.id,
+        resourceId: property.id,
+      })
+      .subscribe((e) => {
+        this.computeResourceProperties = this.computeResourceProperties.filter(
+          (elem: EntityModelComputingResourcePropertyDto) =>
+            elem.id !== property.id
+        );
+        this.fetchComputeResourceProperties();
+      });
+  }
+
+  fetchComputeResourceProperties(): void {
+    this.algorithmService
+      .getComputingResources({
+        algoId: this.algorithm.id,
+        page: 0,
+        // TODO find better option, e.g. use a pagination for the list
+        size: 1000,
+      })
+      .subscribe((e) => {
+        if (e._embedded != null) {
+          this.computeResourceProperties =
+            e._embedded.computingResourceProperties;
+        }
+      });
   }
 }

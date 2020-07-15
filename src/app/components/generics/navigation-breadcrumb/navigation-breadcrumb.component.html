@@ -8,7 +8,7 @@
     >
       <div class="breadcrumb-item-container">
         <div class="heading blue-text">
-          {{ link.heading }}
+          <a [routerLink]="link.link"> {{ link.heading }} </a>
         </div>
         <h6 style="color: gray;">
           {{ link.subHeading }}

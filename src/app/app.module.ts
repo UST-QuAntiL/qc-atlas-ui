@@ -42,6 +42,7 @@ import { AlgorithmModule } from './components/algorithms/algorithm.module';
 import { ImplementationViewModule } from './components/algorithms/implementation-view/implementation-view.module';
 import { GenericsModule } from './components/generics/generics.module';
 import { UtilService } from './util/util.service';
+import { ComputingResourcePropertyModule } from './components/computation-resource-property/computing-resource-property.module';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { UtilService } from './util/util.service';
     AlgorithmModule,
     ImplementationViewModule,
     GenericsModule,
+    ComputingResourcePropertyModule,
   ],
   bootstrap: [AppComponent],
   exports: [],
