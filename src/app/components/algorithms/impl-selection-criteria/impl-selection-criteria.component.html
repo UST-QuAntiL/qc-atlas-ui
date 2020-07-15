@@ -1,0 +1,18 @@
+<h2>Required information for the NISQ Analyzer</h2>
+<div class="header-container">
+  <h4>Input Parameters</h4>
+  <button
+    mat-button
+    matSuffix
+    mat-icon-button
+    aria-label="Add Input Parameter"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+<div *ngFor="let param in params">
+<mat-card class="m-4">
+  <h5>{{param.name}}</h5>
+  <h5>Prolog Rules</h5>
+</mat-card>
+</div>

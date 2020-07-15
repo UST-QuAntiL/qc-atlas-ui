@@ -12,9 +12,14 @@ import { MatChipsModule } from '@angular/material/chips';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ImplementationViewComponent } from './implementation-view.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ImplSelectionCriteriaComponent } from '../impl-selection-criteria/impl-selection-criteria.component';
 
 @NgModule({
-  declarations: [ImplementationViewComponent],
+  declarations: [ImplementationViewComponent, ImplSelectionCriteriaComponent],
   imports: [
     BreadcrumbModule,
     BadgeModule,
@@ -26,6 +31,9 @@ import { ImplementationViewComponent } from './implementation-view.component';
     NavigationBreadcrumbModule,
     GenericsModule,
     FormsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
   ],
 })
 export class ImplementationViewModule {}

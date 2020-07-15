@@ -93,6 +93,12 @@
         <h1>Discussion WIP</h1>
       </div>
     </mat-tab>
+    <mat-tab label="Selection Criteria">
+      <div class="tab-body p-4">
+        <app-impl-selection-criteria [params]="[]">
+        </app-impl-selection-criteria>
+      </div>
+    </mat-tab>
   </mat-tab-group>
 </div>
 <div *ngIf="impl === undefined">
