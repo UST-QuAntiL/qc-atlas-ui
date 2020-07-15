@@ -1,5 +1,5 @@
-export { AlgorithmRelationTypeService } from './services/algorithm-relation-type.service';
 export { AlgorithmService } from './services/algorithm.service';
+export { AlgorithmRelationTypeService } from './services/algorithm-relation-type.service';
 export { ApplicationAreasService } from './services/application-areas.service';
 export { ComputingResourcePropertiesTypesService } from './services/computing-resource-properties-types.service';
 export { PatternRelationService } from './services/pattern-relation.service';

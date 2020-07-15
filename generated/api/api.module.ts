@@ -8,8 +8,8 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
-import { AlgorithmRelationTypeService } from './services/algorithm-relation-type.service';
 import { AlgorithmService } from './services/algorithm.service';
+import { AlgorithmRelationTypeService } from './services/algorithm-relation-type.service';
 import { ApplicationAreasService } from './services/application-areas.service';
 import { ComputingResourcePropertiesTypesService } from './services/computing-resource-properties-types.service';
 import { PatternRelationService } from './services/pattern-relation.service';
@@ -27,8 +27,8 @@ import { SoftwarePlatformService } from './services/software-platform.service';
   exports: [],
   declarations: [],
   providers: [
-    AlgorithmRelationTypeService,
     AlgorithmService,
+    AlgorithmRelationTypeService,
     ApplicationAreasService,
     ComputingResourcePropertiesTypesService,
     PatternRelationService,
