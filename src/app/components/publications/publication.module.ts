@@ -11,7 +11,9 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { CommonModule } from '@angular/common';
+import { MatChipsModule } from '@angular/material/chips';
 import { GenericsModule } from '../generics/generics.module';
+import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { AddPublicationDialogComponent } from './dialogs/add-publication-dialog.component';
 import { PublicationListComponent } from './publication-list/publication-list.component';
 import { PublicationViewComponent } from './publication-view/publication-view.component';
@@ -28,6 +30,7 @@ import { PublicationViewComponent } from './publication-view/publication-view.co
     MatDialogModule,
     GenericsModule,
     MatIconModule,
+    MatChipsModule,
     MatCardModule,
     MatFormFieldModule,
     MatButtonModule,
@@ -40,6 +43,7 @@ import { PublicationViewComponent } from './publication-view/publication-view.co
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
+    NavigationBreadcrumbModule,
   ],
   exports: [
     AddPublicationDialogComponent,

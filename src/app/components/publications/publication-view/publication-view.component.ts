@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { PublicationService } from 'api/services/publication.service';
+import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
+import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 
 @Component({
   selector: 'app-publication-view',
@@ -6,7 +12,43 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./publication-view.component.scss'],
 })
 export class PublicationViewComponent implements OnInit {
-  constructor() {}
+  testTags: string[] = ['test tag', 'quantum', 'publication'];
+  publication: EntityModelPublicationDto;
+  links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
+  private routeSub: Subscription;
 
-  ngOnInit(): void {}
+  constructor(
+    private publicationService: PublicationService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.routeSub = this.route.params.subscribe(({ publicationId }) => {
+      this.publicationService.getPublication2({ id: publicationId }).subscribe(
+        (publication: EntityModelPublicationDto) => {
+          this.publication = publication;
+          console.log(this.publication);
+          this.links[0] = {
+            heading: this.publication.title,
+            subHeading: '',
+          };
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    });
+  }
+
+  addTag(): void {
+    console.log('add tag');
+    // TODO: create tag dialog
+  }
+
+  removeTag(tag: string): void {
+    const index = this.testTags.indexOf(tag);
+    if (index !== -1) {
+      this.testTags.splice(index, 1);
+    }
+  }
 }
