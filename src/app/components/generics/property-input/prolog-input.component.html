@@ -5,6 +5,7 @@
     type="text"
     [disabled]="!isBeingEdited"
     [(ngModel)]="value"
+    [errorStateMatcher]="matcher"
     matInput
     prolog
   />
@@ -17,5 +18,5 @@
   >
     <mat-icon>{{ isBeingEdited ? 'save' : 'edit' }}</mat-icon>
   </button>
-  <mat-error *ngIf="model.errors">{{ model.errors.toString() }}</mat-error>
+  <mat-error *ngIf="model.errors">{{ model.errors.message || 'syntax error' }}</mat-error>
 </mat-form-field>

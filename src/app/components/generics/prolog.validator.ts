@@ -5,7 +5,7 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
-import { parseRule } from '../../util/MinimalPrologParser';
+import { parsePrologRule } from '../../util/MinimalPrologParser';
 
 @Directive({
   selector: '[prolog][ngModel]',
@@ -20,7 +20,7 @@ export class PrologValidator implements Validator {
     }
     try {
       // Ignore the result, we just want to know if it's valid.
-      parseRule(control.value);
+      parsePrologRule(control.value);
       return null;
     } catch (e) {
       return { message: e.message };

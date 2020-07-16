@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractValueAccessor, DoProvider } from './abstract-value-accessor';
+import { CustomErrorStateMatcher } from './default.error-matcher';
 
 @Component({
   selector: 'app-prolog-input',
@@ -15,6 +16,8 @@ export class PrologInputComponent extends AbstractValueAccessor {
   @Input() maxLines = 1;
 
   isBeingEdited = false;
+
+  matcher = new CustomErrorStateMatcher();
 
   toggleEdit(): void {
     if (this.isBeingEdited) {

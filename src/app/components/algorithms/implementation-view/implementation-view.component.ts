@@ -49,6 +49,8 @@ export class ImplementationViewComponent implements OnInit {
     },
   ];
 
+  placeholderPrologRule = 'executable(N, shor-general-qiskit) :- N > 2.';
+
   constructor(
     private algorithmService: AlgorithmService,
     private softwarePlatformService: SoftwarePlatformService,
