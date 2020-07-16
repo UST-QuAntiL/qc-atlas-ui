@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-impl-selection-criteria',
@@ -7,6 +8,22 @@ import { Component, Input } from '@angular/core';
 })
 export class ImplSelectionCriteriaComponent {
   @Input() params: InputParameter[];
+
+  selection = new SelectionModel<number>(true);
+
+  addOne(): void {
+    this.params.push({
+      name: '',
+      datatype: 'Integer',
+    });
+  }
+
+  deleteMany(): void {
+    this.params = this.params.filter(
+      (_, index) => !this.selection.isSelected(index)
+    );
+    this.selection.clear();
+  }
 }
 
 /**

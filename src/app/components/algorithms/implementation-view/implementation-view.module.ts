@@ -17,6 +17,7 @@ import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb
 import { GenericsModule } from '../../generics/generics.module';
 import { ImplSelectionCriteriaComponent } from '../impl-selection-criteria/impl-selection-criteria.component';
 import { ImplementationViewComponent } from './implementation-view.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [ImplementationViewComponent, ImplSelectionCriteriaComponent],
@@ -37,6 +38,7 @@ import { ImplementationViewComponent } from './implementation-view.component';
     MatFormFieldModule,
     ComputingResourcePropertyModule,
     MatCardModule,
+    MatCheckboxModule,
   ],
 })
 export class ImplementationViewModule {}
