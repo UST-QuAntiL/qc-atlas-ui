@@ -19,6 +19,7 @@
       <app-chip-collection class="w-100"
                            [title]="'Authors'"
                            [elements]="publication.authors"
+                           [allowEmpty]=false
                            (onAddElement)="addAuthorEvent($event)"
                            (onRemoveElement)="removeAuthorEvent($event)">
       </app-chip-collection>
