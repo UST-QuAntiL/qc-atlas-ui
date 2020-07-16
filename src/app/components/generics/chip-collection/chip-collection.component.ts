@@ -6,10 +6,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./chip-collection.component.scss'],
 })
 export class ChipCollectionComponent implements OnInit {
-  @Output() onRemoveElement: EventEmitter<string> = new EventEmitter<string>();
+  @Output() onRemoveElement: EventEmitter<any> = new EventEmitter<any>();
   @Output() onAddElement: EventEmitter<string> = new EventEmitter<string>();
   @Input() title = '';
-  @Input() elements: string[] = [];
+  @Input() elements: any[] = [];
+  @Input() displayVariable = '';
 
   inputValue = '';
 
@@ -24,7 +25,7 @@ export class ChipCollectionComponent implements OnInit {
     this.inputValue = '';
   }
 
-  removeElement(element: string): void {
+  removeElement(element: any): void {
     this.onRemoveElement.emit(element);
   }
 }

@@ -408,4 +408,73 @@ export class ProblemTypeService extends BaseService {
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
+
+  /**
+   * Path part for operation getProblemTypeParentList
+   */
+  static readonly GetProblemTypeParentListPath =
+    '/v1/problem-types/{id}/problem-type-parent-tree';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProblemTypeParentList()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProblemTypeParentList$Response(params: {
+    id: string;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProblemTypeService.GetProblemTypeParentListPath,
+      'get'
+    );
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getProblemTypeParentList$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProblemTypeParentList(params: {
+    id: string;
+  }): Observable<{
+    _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
+  }> {
+    return this.getProblemTypeParentList$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
+          }>
+        ) =>
+          r.body as {
+            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
+          }
+      )
+    );
+  }
 }

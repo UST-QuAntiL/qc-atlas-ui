@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MissingEntityDialogComponent } from '../components/dialogs/missing-entity-dialog.component';
 
 @Injectable({
@@ -11,16 +11,16 @@ export class UtilService {
 
   constructor(private snackBar: MatSnackBar, public dialog: MatDialog) {}
 
-  public callSnackBar(addedEntity: string): void {
-    this.snackBar.open('Successfully added new ' + addedEntity, 'Ok', {
+  public callSnackBar(text: string): void {
+    this.snackBar.open(text, 'Ok', {
       duration: 2000,
     });
   }
 
-  public createDialog(dialogComponent: any, entity: string, tags?: any[]): any {
+  public createDialog(dialogComponent: any, data: any): MatDialogRef<any> {
     return this.dialog.open(dialogComponent, {
       width: '400px',
-      data: { title: 'Add new ' + entity, tags },
+      data,
     });
   }
 

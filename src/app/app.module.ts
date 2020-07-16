@@ -25,27 +25,23 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ApiModule } from 'api/api.module';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MatTreeModule } from '@angular/material/tree';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { AddAlgorithmDialogComponent } from './components/algorithms/dialogs/add-algorithm-dialog.component';
-import { AddPublicationDialogComponent } from './components/publications/dialogs/add-publication-dialog.component';
 import { JsonImportDialogComponent } from './components/dialogs/json-import-dialog.component';
 import { MissingEntityDialogComponent } from './components/dialogs/missing-entity-dialog.component';
-import { AlgorithmViewComponent } from './components/algorithms/algorithm-view/algorithm-view.component';
 import { SoftwarePlatformViewComponent } from './components/software-platforms/software-platform-view/software-platform-view.component';
 import { CloudServiceViewComponent } from './components/cloud-services/cloud-service-view/cloud-service-view.component';
-import { PublicationViewComponent } from './components/publications/publication-view/publication-view.component';
-import { DataListComponent } from './components/generics/data-list/data-list.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
-import { PublicationListComponent } from './components/publications/publication-list/publication-list.component';
-import { AlgorithmListComponent } from './components/algorithms/algorithm-list/algorithm-list.component';
-import { ChipCollectionComponent } from './components/generics/chip-collection/chip-collection.component';
-import { GenericDataService } from './util/generic-data.service';
 import { NavigationBreadcrumbModule } from './components/generics/navigation-breadcrumb/navigation-breadcrumb.module';
+import { AlgorithmModule } from './components/algorithms/algorithm.module';
 import { ImplementationViewModule } from './components/algorithms/implementation-view/implementation-view.module';
 import { GenericsModule } from './components/generics/generics.module';
+import { UtilService } from './util/util.service';
+import { ComputingResourcePropertyModule } from './components/computation-resource-property/computing-resource-property.module';
+import { PublicationModule } from './components/publications/publication.module';
 
 @NgModule({
   declarations: [
@@ -53,18 +49,11 @@ import { GenericsModule } from './components/generics/generics.module';
     AppComponent,
     PageNotFoundComponent,
     // dialogs
-    AddAlgorithmDialogComponent,
-    AddPublicationDialogComponent,
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
-    AlgorithmViewComponent,
     SoftwarePlatformViewComponent,
     CloudServiceViewComponent,
-    PublicationViewComponent,
     NavigationComponent,
-    PublicationListComponent,
-    AlgorithmListComponent,
-    ChipCollectionComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -96,18 +85,18 @@ import { GenericsModule } from './components/generics/generics.module';
     MatSelectModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatChipsModule,
+    MatTreeModule,
     // app modules
     NavigationBreadcrumbModule,
+    AlgorithmModule,
+    PublicationModule,
     ImplementationViewModule,
     GenericsModule,
-  ],
-  entryComponents: [
-    // dialogs need to be provided as entry component
-    AddAlgorithmDialogComponent,
-    AddPublicationDialogComponent,
-    JsonImportDialogComponent,
-    MissingEntityDialogComponent,
+    ComputingResourcePropertyModule,
   ],
   bootstrap: [AppComponent],
+  exports: [],
+  providers: [UtilService],
 })
 export class AppModule {}

@@ -12,6 +12,7 @@ export class TextInputComponent extends AbstractValueAccessor {
 
   @Input() name = '';
   @Input() multiline = false;
+  @Input() maxLines = 1;
 
   isBeingEdited = false;
 

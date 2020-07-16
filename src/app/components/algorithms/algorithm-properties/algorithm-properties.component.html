@@ -1,0 +1,125 @@
+<div class="p-4">
+  <mat-card class="m-4">
+    <div class="d-flex">
+      <app-text-input class="w-100 p-2"
+                      name="Acronym"
+                      [(ngModel)]="algorithm.acronym"
+                      (onSaveChanges)="onChangesSaved($event, 'acronym')"></app-text-input>
+      <app-text-input class="w-100 p-2"
+                      name="Intent"
+                      [(ngModel)]="algorithm.intent"
+                      [multiline]="true"
+                      [maxLines]="5"
+                      (onSaveChanges)="onChangesSaved($event, 'intent')"></app-text-input>
+
+      <app-text-input class="w-100 p-2"
+                      name="Problem"
+                      [(ngModel)]="algorithm.problem"
+                      [multiline]="true"
+                      [maxLines]="5"
+                      (onSaveChanges)="onChangesSaved($event, 'problem')"></app-text-input>
+    </div>
+  </mat-card>
+
+  <div class="d-flex">
+    <mat-card class="w-100 m-4">
+      <app-problem-type-tree #problemTypeTree
+                             class="w-100"
+                             name="Problem-Types"
+                             [treeData]="problemTypeTreeData"
+                             (onAddElement)="addProblemTypeEvent()"
+                             (onRemoveElement)="removeProblemTypeEvent()" (onExpandParents)="getParentsForNode($event)"></app-problem-type-tree>
+    </mat-card>
+    <mat-card class="w-100 m-4">
+      <app-chip-collection class="w-100"
+                           [title]="'Application areas'"
+                           [elements]="applicationAreas"
+                           [displayVariable]="'name'"
+                           (onAddElement)="addApplicationAreaEvent($event)"
+                           (onRemoveElement)="removeApplicationAreaEvent($event)"></app-chip-collection>
+    </mat-card>
+  </div>
+
+  <!-- TODO: Add related patterns -->
+
+  <mat-card class="m-4">
+    <div class="d-flex">
+      <app-text-input class="w-100 p-2"
+                      name="Input format"
+                      [(ngModel)]="algorithm.inputFormat"
+                      [multiline]="true"
+                      [maxLines]="5"
+                      (onSaveChanges)="onChangesSaved($event, 'inputFormat')"></app-text-input>
+
+      <app-text-input class="w-100 p-2"
+                      name="Parameters"
+                      [(ngModel)]="algorithm.algoParameter"
+                      [multiline]="true"
+                      [maxLines]="5"
+                      (onSaveChanges)="onChangesSaved($event, 'algoParameter')"></app-text-input>
+
+      <app-text-input class="w-100 p-2"
+                      name="Output format"
+                      [(ngModel)]="algorithm.outputFormat"
+                      [multiline]="true"
+                      [maxLines]="5"
+                      (onSaveChanges)="onChangesSaved($event, 'outputFormat')"></app-text-input>
+    </div>
+  </mat-card>
+
+  <mat-card class="m-4">
+    <app-computation-resource-property-list (addProperty)="addComputeResourceProperty($event)"
+                                            (updateProperty)="updateComputeResourceProperty($event)"
+                                            (deleteProperty)="deleteComputeResourceProperty($event)"
+                                            [resourceProperties]="computeResourceProperties">
+    </app-computation-resource-property-list>
+  </mat-card>
+
+  <mat-card class="m-4">
+    <div class="d-flex">
+      <app-text-input class="w-100 p-2"
+                      name="Solution"
+                      [(ngModel)]="algorithm.solution"
+                      [multiline]="true"
+                      [maxLines]="5"
+                      (onSaveChanges)="onChangesSaved($event, 'solution')"></app-text-input>
+
+      <app-text-input class="w-100 p-2"
+                      name="Assumptions"
+                      [(ngModel)]="algorithm.assumptions"
+                      [multiline]="true"
+                      [maxLines]="5"
+                      (onSaveChanges)="onChangesSaved($event, 'assumptions')"></app-text-input>
+    </div>
+  </mat-card>
+
+  <mat-card class="m-4" *ngIf="algorithm.computationModel === 'QUANTUM'">
+    <div class="d-flex">
+      <app-select-input class="p-2"
+                        name="Quantum computation model"
+                        [(ngModel)]="algorithm.quantumComputationModel"
+                        [choices]="quantumComputationModelOptions"></app-select-input>
+
+      <app-text-input class="w-100 p-2"
+                      name="Speedup"
+                      [(ngModel)]="algorithm.speedUp"
+                      (onSaveChanges)="onChangesSaved($event, 'speedUp')"></app-text-input>
+    </div>
+    <app-checkbox-input class="p-2"
+                        name="NISQ ready"
+                        [(ngModel)]="algorithm.nisqReady"
+                        (onSaveChanges)="onChangesSaved($event, 'nisqReady')">
+    </app-checkbox-input>
+  </mat-card>
+
+  <!-- TODO: finish Sketch -->
+  <mat-card class="m-4">
+    <app-select-input class="p-2"
+                      name="Sketch type"
+                      [(ngModel)]="algorithm.sketch"
+                      [includeEmpty]="true"
+                      [choices]="sketchOptions"
+                      (onSaveChanges)="onChangesSaved($event, 'sketch')"></app-select-input>
+  </mat-card>
+
+</div>

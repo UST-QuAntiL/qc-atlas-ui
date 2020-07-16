@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractValueAccessor } from './abstract-value-accessor';
+import { AbstractValueAccessor, DoProvider } from './abstract-value-accessor';
 
 export interface Option {
   value: string;
@@ -10,6 +10,7 @@ export interface Option {
   selector: 'app-select-input',
   templateUrl: './select-input.component.html',
   styleUrls: ['./select-input.component.scss'],
+  providers: [DoProvider(SelectInputComponent)],
 })
 export class SelectInputComponent extends AbstractValueAccessor {
   @Output() onSaveChanges: EventEmitter<string> = new EventEmitter<string>();

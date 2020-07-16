@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export interface BreadcrumbLink {
   heading: string;
   subHeading: string;
+  link?: string;
 }
 
 @Component({

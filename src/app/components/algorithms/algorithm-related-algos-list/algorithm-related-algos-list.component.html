@@ -1,0 +1,15 @@
+<app-table [data]=algorithmRelations
+           [variableNames]=variableNames
+           [dataColumns]=tableColumns
+           [allowAdd]=true
+           [allowDelete]=true
+           [allowSearch]=true
+           [allowSort]=true
+           [pagination]=pagingInfo
+           [paginatorConfig]=paginatorConfig
+           (addElement)="onAddElement()"
+           (deleteElements)="onDeleteElements($event)"
+           (datalistConfigChanged)="onDatalistConfigChanged($event)"
+           (pageChange)="onPageChanged($event)"
+           (elementClicked)="onElementClicked($event)">
+</app-table>

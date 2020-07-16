@@ -1,0 +1,13 @@
+<div class="p-2">
+  <mat-checkbox [(ngModel)]="value" [disabled]="!isBeingEdited" color="primary">
+    {{ name }}
+  </mat-checkbox>
+  <button
+    mat-button
+    matSuffix
+    mat-icon-button
+    aria-label="Clear"
+    (click)="toggleEdit()">
+    <mat-icon>{{ isBeingEdited ? 'save' : 'edit' }}</mat-icon>
+  </button>
+</div>

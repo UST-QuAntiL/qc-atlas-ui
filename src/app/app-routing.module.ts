@@ -6,9 +6,11 @@ import { CloudServiceViewComponent } from './components/cloud-services/cloud-ser
 import { AlgorithmListComponent } from './components/algorithms/algorithm-list/algorithm-list.component';
 import { PublicationListComponent } from './components/publications/publication-list/publication-list.component';
 import { ImplementationViewComponent } from './components/algorithms/implementation-view/implementation-view.component';
+import { AlgorithmViewComponent } from './components/algorithms/algorithm-view/algorithm-view.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
+  { path: 'algorithms/:algoId', component: AlgorithmViewComponent },
   {
     path: 'algorithms/:algoId/implementations/:implId',
     component: ImplementationViewComponent,

@@ -1,0 +1,87 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content>
+  <form class="full-width" [formGroup]="formGroup">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label class="input-label">Type name</mat-label>
+      <input
+        type="text"
+        placeholder="Type name"
+        formControlName="typeName"
+        [matAutocomplete]="typeAutocomplete"
+        (input)="resetSelectedType()"
+        class="full-width"
+        name="type-name"
+        matInput
+        required
+      />
+      <mat-autocomplete #typeAutocomplete="matAutocomplete">
+        <mat-option
+          *ngFor="let type of filteredTypes | async"
+          [value]="type.name"
+          (click)="onTypeSelect(type)"
+        >
+          <span>{{ type.name }} ({{ type.datatype }})</span>
+          <small *ngIf="type.description.length > 0">
+            {{ type.description }}
+          </small>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label class="input-label">Type description</mat-label>
+      <input
+        formControlName="typeDesc"
+        name="type-description"
+        matInput
+        type="text"
+        placeholder="Type description"
+        class="full-width"
+      />
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label class="input-label">Data Type</mat-label>
+      <mat-select
+        formControlName="typeDatatype"
+        class="full-width"
+        (ngModelChange)="validateValueInput()"
+        required
+      >
+        <mat-option *ngFor="let opt of availableTypes" [value]="opt.value">{{
+          opt.label
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label class="input-label">Property value</mat-label>
+      <input
+        formControlName="value"
+        (input)="validateValueInput()"
+        [errorStateMatcher]="matcher"
+        name="property-value"
+        matInput
+        type="text"
+        placeholder="Property value"
+        class="full-width"
+        required
+      />
+      <mat-error>
+        The input is invalid for the data type
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="null">
+    Cancel
+  </button>
+  <button
+    mat-button
+    (click)="onSubmit()"
+    [disabled]="valueInputInvalid || typeName.length == 0"
+  >
+    Ok
+  </button>
+</div>

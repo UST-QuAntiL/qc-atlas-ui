@@ -17,8 +17,8 @@ export class PublicationListComponent implements OnInit {
   variableNames = ['title', 'url', 'doi', 'authors'];
   pagingInfo: any = {};
   paginatorConfig: any = {
-    amountChoices: [1, 2, 3],
-    selectedAmount: 1,
+    amountChoices: [10, 25, 50],
+    selectedAmount: 10,
   };
 
   constructor(
@@ -66,7 +66,7 @@ export class PublicationListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (!dialogRef.componentInstance.isCanceld) {
+      if (dialogResult) {
         const publicationDto: PublicationDto = {
           title: dialogResult.publicationTitle,
           authors: dialogResult.authors,

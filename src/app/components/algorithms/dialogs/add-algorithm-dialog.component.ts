@@ -4,7 +4,12 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-add-algorithm-dialog-component',
@@ -19,10 +24,10 @@ export class AddAlgorithmDialogComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
-  get name() {
+  get name(): AbstractControl | null {
     return this.algorithmForm.get('name');
   }
-  get computationModel() {
+  get computationModel(): AbstractControl | null {
     return this.algorithmForm.get('computationModel');
   }
 
@@ -41,7 +46,6 @@ export class AddAlgorithmDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-
       quantumComputationModel: new FormControl(
         this.data.quantumComputationModel,
         [
