@@ -106,8 +106,6 @@ export class ImplementationViewComponent implements OnInit {
   addComputeResourceProperty(
     property: EntityModelComputingResourcePropertyDto
   ): void {
-    console.log('add compute resource property');
-    console.log(property);
     this.algorithmService
       .addComputingResource1({
         algoId: this.algo.id,

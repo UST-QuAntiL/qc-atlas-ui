@@ -14,7 +14,7 @@
   <mat-card class="m-4">
     <div class="d-flex justify-content-between">
       <app-text-input
-        class="w-50 p-2"
+        class="p-2"
         name="Name of the Parameter"
         [(ngModel)]="param.name"
       ></app-text-input>
@@ -23,16 +23,14 @@
         name="Description"
         [(ngModel)]="param.description"
       ></app-text-input>
-    </div>
-    <div class="d-flex justify-content-between">
       <app-select-input
-        class="w-50 p-2"
+        class="w-25 p-2"
         name="Datatype"
         [(ngModel)]="param.datatype"
         [choices]="[{value:'Integer', label:'Integer'},{value:'Float', label:'Float'},{value:'String', label:'String'}]"
       ></app-select-input>
       <app-text-input
-        class="w-50 p-2"
+        class="w-25 p-2"
         name="Restriction"
         [(ngModel)]="param.restriction"
       ></app-text-input>
