@@ -13,4 +13,16 @@
       </mat-chip-list>
     </div>
   </div>
+
+  <mat-tab-group>
+    <mat-tab label="General">
+      <app-publication-properties [publication]="publication" (updatePublicationField)="updatePublicationField($event)"></app-publication-properties>
+    </mat-tab>
+    <mat-tab label="Algorithms">
+      <app-publication-algorithms-list [publication]="publication"></app-publication-algorithms-list>
+    </mat-tab>
+    <mat-tab label="Implementations">
+      <app-publication-implementations-list [publication]="publication"></app-publication-implementations-list>
+    </mat-tab>
+  </mat-tab-group>
 </div>

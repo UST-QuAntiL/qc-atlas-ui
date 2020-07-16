@@ -12,9 +12,15 @@
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <mat-chip-list>
+  <mat-chip-list *ngIf="displayVariable">
     <mat-chip *ngFor="let element of elements" [removable]="true" (removed)="removeElement(element)">
       {{element[displayVariable]}}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+  <mat-chip-list *ngIf="!displayVariable">
+    <mat-chip *ngFor="let element of elements" [removable]="true" (removed)="removeElement(element)">
+      {{element}}
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
   </mat-chip-list>

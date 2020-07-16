@@ -12,17 +12,24 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTabsModule } from '@angular/material/tabs';
 import { GenericsModule } from '../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { AddPublicationDialogComponent } from './dialogs/add-publication-dialog.component';
 import { PublicationListComponent } from './publication-list/publication-list.component';
 import { PublicationViewComponent } from './publication-view/publication-view.component';
+import { PublicationPropertiesComponent } from './publication-properties/publication-properties.component';
+import { PublicationAlgorithmsListComponent } from './publication-algorithms-list/publication-algorithms-list.component';
+import { PublicationImplementationsListComponent } from './publication-implementations-list/publication-implementations-list.component';
 
 @NgModule({
   declarations: [
     AddPublicationDialogComponent,
     PublicationListComponent,
     PublicationViewComponent,
+    PublicationPropertiesComponent,
+    PublicationAlgorithmsListComponent,
+    PublicationImplementationsListComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -44,6 +51,7 @@ import { PublicationViewComponent } from './publication-view/publication-view.co
     FormsModule,
     ReactiveFormsModule,
     NavigationBreadcrumbModule,
+    MatTabsModule,
   ],
   exports: [
     AddPublicationDialogComponent,

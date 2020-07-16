@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { PublicationService } from 'api/services/publication.service';
-import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
 import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -50,5 +49,19 @@ export class PublicationViewComponent implements OnInit {
     if (index !== -1) {
       this.testTags.splice(index, 1);
     }
+  }
+
+  updatePublicationField(event: { field; value }): void {
+    this.publication[event.field] = event.value;
+    this.publicationService
+      .updatePublication({ id: this.publication.id, body: this.publication })
+      .subscribe(
+        (publication) => {
+          this.publication = publication;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 }
