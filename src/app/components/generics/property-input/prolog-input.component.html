@@ -1,0 +1,21 @@
+<mat-form-field>
+  <mat-label class="input-label">{{ name }}</mat-label>
+  <input
+    #model="ngModel"
+    type="text"
+    [disabled]="!isBeingEdited"
+    [(ngModel)]="value"
+    matInput
+    prolog
+  />
+  <button
+    mat-button
+    matSuffix
+    mat-icon-button
+    aria-label="Clear"
+    (click)="toggleEdit()"
+  >
+    <mat-icon>{{ isBeingEdited ? 'save' : 'edit' }}</mat-icon>
+  </button>
+  <mat-error *ngIf="model.errors">{{ model.errors.toString() }}</mat-error>
+</mat-form-field>

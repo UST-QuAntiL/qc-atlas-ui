@@ -34,14 +34,15 @@
           (change)="$event ? selection.toggle(i) : null"
         ></mat-checkbox>
       </div>
-      <app-text-input
+      <app-prolog-input
         class="p-2"
         name="Name of the Parameter"
         [(ngModel)]="param.name"
-      ></app-text-input>
+      ></app-prolog-input>
       <app-text-input
         class="w-50 p-2"
         name="Description"
+        prolog
         [(ngModel)]="param.description"
       ></app-text-input>
       <app-select-input

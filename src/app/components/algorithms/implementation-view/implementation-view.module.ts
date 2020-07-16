@@ -12,12 +12,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ComputingResourcePropertyModule } from '../../computation-resource-property/computing-resource-property.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../../generics/generics.module';
 import { ImplSelectionCriteriaComponent } from '../impl-selection-criteria/impl-selection-criteria.component';
 import { ImplementationViewComponent } from './implementation-view.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [ImplementationViewComponent, ImplSelectionCriteriaComponent],

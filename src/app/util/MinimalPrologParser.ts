@@ -1,12 +1,23 @@
-export class MinimalPrologParser {
-  public parseRule(rule: string): PrologRule {
-    return undefined;
+export const parseRule = (rule: string): PrologRule => {
+  rule = rule.replace(/\s+/, '');
+  const delimIndex = rule.indexOf(':-');
+  if (delimIndex === -1) {
+    throw new Error('not a rule');
   }
-}
+  const head = rule.substring(0, delimIndex);
+  const body = rule.substring(delimIndex + 2);
+  const [functionName, params] = /(.*?)\((.*?)\)/.exec(head).splice(1);
+  if (!functionName) {
+    throw new Error('no function name');
+  }
+
+  const args = params.split(',');
+  return { head: { functionName, arguments: args }, body };
+};
 
 interface Token {
   id: string;
-  matches: string;
+  matches?: string;
   content?: string;
 }
 
@@ -28,33 +39,3 @@ export interface PrologHead {
   functionName: string;
   arguments: string[];
 }
-
-const prologTokens: { [key: string]: Token } = {
-  ':-': { id: 'op:rule', matches: ':-' },
-  '?-': { id: 'op:query', matches: '?-' },
-  '=\\=': { id: 'op:equalnot', matches: '=\\=' },
-  '=:=': { id: 'op:equal', matches: '=:=' },
-  ',': { id: 'op:conj', matches: ',' },
-  ';': { id: 'op:disj', matches: ';' },
-  '=': { id: 'op:unif', matches: '=' },
-  '\\=': { id: 'op:notunif', matches: '\\=' },
-  '<': { id: 'op:lt', matches: '<' },
-  '>': { id: 'op:gt', matches: '>' },
-  '=<': { id: 'op:em', matches: '=<' },
-  '>=': { id: 'op:ge', matches: '>=' },
-  '-': { id: 'op:minus', matches: '-' },
-  '+': { id: 'op:plus', matches: '+' },
-  '*': { id: 'op:mult', matches: '*' },
-  '/': { id: 'op:div', matches: '/' },
-  // prettier-ignore
-  'not': { id: 'op:not', matches: 'not' },
-  // prettier-ignore
-  'is': { id: 'op:is', matches: 'is' },
-  '|': { id: 'list:tail', matches: '|' },
-  '\n': { id: 'newline', matches: '\n' },
-  '.': { id: 'period', matches: '.' },
-  '(': { id: 'parens_open', matches: '(' },
-  ')': { id: 'parens_close', matches: ')' },
-  '[': { id: 'list:open', matches: '[' },
-  ']': { id: 'list:close', matches: ']' },
-};
