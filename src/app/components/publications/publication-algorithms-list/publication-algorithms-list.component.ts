@@ -8,8 +8,38 @@ import { EntityModelPublicationDto } from 'api/models/entity-model-publication-d
 })
 export class PublicationAlgorithmsListComponent implements OnInit {
   @Input() publication: EntityModelPublicationDto;
+  algorithms: any[] = [];
+  tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
+  variableNames = ['name', 'acronym', 'computationModel', 'problem'];
+  pagingInfo: any = {};
+  paginatorConfig: any = {
+    amountChoices: [10, 25, 50],
+    selectedAmount: 10,
+  };
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.publication);
+  }
+
+  onElementClicked(algorithm: any): void {
+    console.log('Algorithm clicked');
+  }
+
+  onAddElement(): void {
+    console.log('Add clicked!');
+  }
+
+  onDeleteElements(event): void {
+    console.log('Delete clicked!');
+  }
+
+  onPageChanged(event): void {
+    console.log('Page change clicked!');
+  }
+
+  onDatalistConfigChanged(event): void {
+    console.log('Config change clicked!');
+  }
 }
