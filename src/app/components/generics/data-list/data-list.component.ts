@@ -10,6 +10,7 @@ export class DataListComponent implements OnInit {
   @Input() data: any[];
   @Input() variableNames: string[];
   @Input() dataColumns: string[];
+  @Input() externalLinkVariables: string[];
   @Input() allowAdd: boolean;
   @Input() allowDelete: boolean;
   @Input() allowSearch: boolean;

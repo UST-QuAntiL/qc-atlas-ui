@@ -68,7 +68,18 @@
                               (change)="$event ? rowToggle(dataEntry) : null"></mat-checkbox>
             </th>
             <!-- One column for each needed data variable value -->
-            <td class="crop align-middle" *ngFor="let variableName of variableNames" (click)="onElementClicked(dataEntry)">{{ dataEntry[variableName] }}</td>
+            <td class="crop align-middle" *ngFor="let variableName of variableNames" (click)="onElementClicked(dataEntry)">
+              <!-- Check if element is a URL -->
+              <div *ngIf="externalLinkVariables && externalLinkVariables.includes(variableName); then isExternalLink else isBasicDataEntry"></div>
+              <!-- If element is external link, then click should open link in a new tab -->
+              <ng-template #isExternalLink>
+                <a class="table-url" [href]="dataEntry[variableName]" target="_blank" (click)="$event.stopPropagation()">{{ dataEntry[variableName] }}</a>
+              </ng-template>
+              <!-- If element is basic -->
+              <ng-template #isBasicDataEntry>
+                <a>{{ dataEntry[variableName] }}</a>
+              </ng-template>
+            </td>
             <td *ngIf="allowDelete">
               <button mat-icon-button class="delete-small" (click)="onSingleDelete(dataEntry); $event.stopPropagation()">
                 <mat-icon>delete</mat-icon>
