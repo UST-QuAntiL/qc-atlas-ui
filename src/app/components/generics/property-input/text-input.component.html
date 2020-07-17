@@ -1,15 +1,17 @@
+<div [ngClass]="{'url-input': isLink}">
 <mat-form-field>
   <mat-label class="input-label">{{ name }}</mat-label>
   <input
     *ngIf="!multiline"
     type="text"
-    [disabled]="!isBeingEdited"
+    [readonly]="!isBeingEdited"
     [(ngModel)]="value"
     matInput
+    (click)="(!isBeingEdited && isLink) ? openLink() : false"
   />
   <textarea
     *ngIf="multiline"
-    [disabled]="!isBeingEdited"
+    [readonly]="!isBeingEdited"
     [(ngModel)]="value"
     [matAutosizeMaxRows]="maxLines"
     [matAutosizeMinRows]="2"
@@ -26,3 +28,4 @@
     <mat-icon>{{ isBeingEdited ? 'save' : 'edit' }}</mat-icon>
   </button>
 </mat-form-field>
+</div>

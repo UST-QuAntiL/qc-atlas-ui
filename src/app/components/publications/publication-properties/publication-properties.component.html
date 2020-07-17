@@ -10,6 +10,7 @@
       <app-text-input class="p-2"
                       name="URL"
                       [(ngModel)]="publication.url"
+                      [isLink]=true
                       (onSaveChanges)="onChangesSaved($event, 'url')"></app-text-input>
     </mat-card>
   </div>

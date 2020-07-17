@@ -7,6 +7,31 @@
   color: rgba(0, 0, 0, 0.54);
 }
 
+
+::ng-deep .url-input {
+
+  .mat-form-field:hover{
+
+    cursor: pointer;
+    .mat-form-field-underline {
+      background-color: blue;
+    }
+    .mat-form-field-label {
+      color: blue;
+    }
+    .mat-form-field-ripple {
+      background-color: blue;
+    }
+    .mat-form-field-required-marker {
+      color: blue;
+    }
+    .mat-input-element {
+      color: blue;
+    }
+  }
+}
+
+
 mat-form-field {
   min-width: 100%;
 }
