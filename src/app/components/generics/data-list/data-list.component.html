@@ -24,7 +24,7 @@
         <button mdbBtn *ngIf="allowAdd" class="control-button add-button btn-sm" type="button" color="green"
                 outline="true"
                 (click)="onAdd()" mdbWavesEffect>
-          <mat-icon>note_add</mat-icon>
+          <span class="material-icons">playlist_add</span>
         </button>
         <button mdbBtn *ngIf="allowDelete && selection.hasValue()" class="control-button delete-button btn-sm"
                 type="button" color="red" outline="true"
@@ -64,16 +64,19 @@
           <tr class="data-element" *ngFor="let dataEntry of data">
             <!-- Optional Select-Checkbox Element in first Body-Column -->
             <th class="align-middle center-text" *ngIf="allowDelete">
-                <mat-checkbox color="warn" [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
-                              (change)="$event ? rowToggle(dataEntry) : null"></mat-checkbox>
+              <mat-checkbox color="warn" [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
+                            (change)="$event ? rowToggle(dataEntry) : null"></mat-checkbox>
             </th>
             <!-- One column for each needed data variable value -->
-            <td class="crop align-middle" *ngFor="let variableName of variableNames" (click)="onElementClicked(dataEntry)">
+            <td class="crop align-middle" *ngFor="let variableName of variableNames"
+                (click)="onElementClicked(dataEntry)">
               <!-- Check if element is a URL -->
-              <div *ngIf="externalLinkVariables && externalLinkVariables.includes(variableName); then isExternalLink else isBasicDataEntry"></div>
+              <div
+                *ngIf="externalLinkVariables && externalLinkVariables.includes(variableName); then isExternalLink else isBasicDataEntry"></div>
               <!-- If element is external link, then click should open link in a new tab -->
               <ng-template #isExternalLink>
-                <a class="table-url" [href]="dataEntry[variableName]" target="_blank" (click)="$event.stopPropagation()">{{ dataEntry[variableName] }}</a>
+                <a class="table-url" [href]="dataEntry[variableName]" target="_blank"
+                   (click)="$event.stopPropagation()">{{ dataEntry[variableName] }}</a>
               </ng-template>
               <!-- If element is basic -->
               <ng-template #isBasicDataEntry>
@@ -81,7 +84,8 @@
               </ng-template>
             </td>
             <td *ngIf="allowDelete">
-              <button mat-icon-button class="delete-small" (click)="onSingleDelete(dataEntry); $event.stopPropagation()">
+              <button mat-icon-button class="delete-small"
+                      (click)="onSingleDelete(dataEntry); $event.stopPropagation()">
                 <mat-icon>delete</mat-icon>
               </button>
             </td>
