@@ -121,8 +121,8 @@ export class DataListComponent implements OnInit {
     }
 
     if (this.sortDirection && this.sortActiveElement) {
-      params.sort = this.sortDirection;
-      params.sortBy = this.sortActiveElement;
+      // comma-delimited list of properties, last element is the direction!
+      params.sort = `${this.sortActiveElement},${this.sortDirection}`;
     }
 
     if (this.allowSearch && this.searchText) {
@@ -149,7 +149,6 @@ export interface QueryParams {
   page?: number;
   size?: number;
   sort?: string;
-  sortBy?: string;
   search?: string;
 }
 
