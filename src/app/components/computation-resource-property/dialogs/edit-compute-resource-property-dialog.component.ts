@@ -127,17 +127,15 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
       this.typeDescription = '';
       this.typeName = '';
     }
-    this.propertyTypeService
-      .getResourcePropertyTypes()
-      .subscribe((e) => {
-        if (e._embedded != null) {
-          this.types = e._embedded.computingResourcePropertyTypes;
-        }
-        this.filteredTypes = this.typeNameControl.valueChanges.pipe(
-          startWith(''),
-          map((value) => this._filter(value.toString().toLowerCase()))
-        );
-      });
+    this.propertyTypeService.getResourcePropertyTypes().subscribe((e) => {
+      if (e._embedded != null) {
+        this.types = e._embedded.computingResourcePropertyTypes;
+      }
+      this.filteredTypes = this.typeNameControl.valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filter(value.toString().toLowerCase()))
+      );
+    });
   }
 
   onTypeSelect(type: EntityModelComputingResourcePropertyTypeDto): void {
