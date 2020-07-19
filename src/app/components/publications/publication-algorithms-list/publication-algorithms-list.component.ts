@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
+import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-publication-algorithms-list',
@@ -20,10 +21,26 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     selectedAmount: 10,
   };
 
-  constructor() {}
+  constructor(private genericDataService: GenericDataService) {}
 
   ngOnInit(): void {
-    console.log(this.publication);
+    const links = JSON.parse(JSON.stringify(this.publication._links));
+    this.getPublicationAlgorithms(links.algorithms.href);
+  }
+
+  getPublicationAlgorithms(url: string): void {
+    this.genericDataService.getData(url).subscribe((data) => {
+      this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
+    });
+  }
+
+  prepareAlgorithmData(data): void {
+    // Read all incoming data
+    if (data._embedded) {
+      this.algorithms = data._embedded.algorithms;
+    } else {
+      this.algorithms = [];
+    }
   }
 
   onElementClicked(algorithm: any): void {
@@ -35,8 +52,6 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   }
 
   onAddSelectedAlgorithms(event): void {
-
-
     this.showRelatedAlgoTable = true;
   }
 

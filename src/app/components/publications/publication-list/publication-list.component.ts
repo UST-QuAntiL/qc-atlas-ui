@@ -33,7 +33,6 @@ export class PublicationListComponent implements OnInit {
 
   getPublications(params: any): void {
     this.publicationService.getPublications2(params).subscribe((data) => {
-      console.log(data);
       this.preparePublicationData(JSON.parse(JSON.stringify(data)));
     });
   }

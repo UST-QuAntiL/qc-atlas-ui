@@ -26,7 +26,6 @@ export class PublicationViewComponent implements OnInit {
       this.publicationService.getPublication2({ id: publicationId }).subscribe(
         (publication: EntityModelPublicationDto) => {
           this.publication = publication;
-          console.log(this.publication);
           this.links[0] = {
             heading: this.publication.title,
             subHeading: '',
