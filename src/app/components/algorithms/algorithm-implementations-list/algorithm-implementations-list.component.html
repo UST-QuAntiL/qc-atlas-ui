@@ -2,13 +2,13 @@
            [variableNames]=variableNames
            [dataColumns]=tableColumns
            [allowAdd]=true
-           [allowDelete]=true
+           [allowSelection]=true
            [allowSearch]=true
            [allowSort]=true
            [pagination]=pagingInfo
            [paginatorConfig]=paginatorConfig
            (addElement)="onAddImplementation()"
-           (deleteElements)="onDeleteImplementation($event)"
+           (submitSelectedElements)="onDeleteImplementation($event)"
            (datalistConfigChanged)="onDatalistConfigChanged($event)"
            (pageChange)="onPageChanged($event)"
            (elementClicked)="onImplementationClicked($event)">
