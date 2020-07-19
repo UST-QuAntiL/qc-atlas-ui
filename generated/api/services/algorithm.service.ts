@@ -56,11 +56,25 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAlgorithms$Response(params?: {
-    page?: number;
-    size?: number;
-    sort?: string;
-    sortBy?: string;
+    /**
+     * Filter criteria for this query
+     */
     search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
@@ -73,11 +87,10 @@ export class AlgorithmService extends BaseService {
       'get'
     );
     if (params) {
+      rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-      rb.query('sortBy', params.sortBy, {});
-      rb.query('search', params.search, {});
     }
     return this.http
       .request(
@@ -106,11 +119,25 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAlgorithms(params?: {
-    page?: number;
-    size?: number;
-    sort?: string;
-    sortBy?: string;
+    /**
+     * Filter criteria for this query
+     */
     search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
     page?: PageMetadata;
