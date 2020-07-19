@@ -145,9 +145,6 @@ export class ImplementationViewComponent implements OnInit {
       .getComputingResources1({
         algoId: this.algo.id,
         implId: this.impl.id,
-        page: 0,
-        // TODO find better option, e.g. use a pagination for the list
-        size: 1000,
       })
       .subscribe((e) => {
         if (e._embedded != null) {

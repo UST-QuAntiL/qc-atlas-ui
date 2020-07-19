@@ -128,8 +128,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
       this.typeName = '';
     }
     this.propertyTypeService
-      // TODO find better solution to fetch all types available
-      .getResourcePropertyTypes({ page: 0, size: 1000 })
+      .getResourcePropertyTypes()
       .subscribe((e) => {
         if (e._embedded != null) {
           this.types = e._embedded.computingResourcePropertyTypes;

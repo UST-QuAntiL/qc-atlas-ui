@@ -293,9 +293,6 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     this.algorithmService
       .getComputingResources({
         algoId: this.algorithm.id,
-        page: 0,
-        // TODO find better option, e.g. use a pagination for the list
-        size: 1000,
       })
       .subscribe((e) => {
         if (e._embedded != null) {
