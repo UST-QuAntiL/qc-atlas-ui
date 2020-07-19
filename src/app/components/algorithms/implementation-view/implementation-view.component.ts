@@ -74,7 +74,7 @@ export class ImplementationViewComponent implements OnInit {
 
   onDeleteQuantumResource($event: DeleteParams): void {}
 
-  onDatalistConfigChanged(params: QueryParams): void {
+  onDatalistConfigChanged(params: any): void {
     this.publicationService.getPublications2(params).subscribe((data) => {
       console.log(data._embedded?.publications);
     });
