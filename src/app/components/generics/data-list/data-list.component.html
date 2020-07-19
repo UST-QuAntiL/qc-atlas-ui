@@ -24,12 +24,12 @@
         <button mdbBtn *ngIf="allowAdd" class="control-button add-button btn-sm" type="button" color="green"
                 outline="true"
                 (click)="onAdd()" mdbWavesEffect>
-          <span class="material-icons">playlist_add</span>
+          <span class="material-icons">{{addIcon}}</span>
         </button>
-        <button mdbBtn *ngIf="allowDelete && selection.hasValue()" class="control-button delete-button btn-sm"
+        <button mdbBtn *ngIf="allowSelection && selection.hasValue()" class="control-button delete-button btn-sm"
                 type="button" color="red" outline="true"
-                (click)="onDelete()" mdbWavesEffect>
-          <mat-icon>delete</mat-icon>
+                (click)="onSelectionSubmitted()" mdbWavesEffect>
+          <mat-icon>{{submitSelectionIcon}}</mat-icon>
         </button>
       </div>
       <!-- Data-Table -->
@@ -39,7 +39,7 @@
           <thead class="data-header">
           <tr>
             <!-- Optional Select-All Checkbox Element in first Header-Column -->
-            <th class="align-middle center-text" *ngIf="allowDelete">
+            <th class="align-middle center-text" *ngIf="allowSelection">
               <div class="d-flex align-baseline justify-content-center">
                 <mat-checkbox color="warn" (change)="$event ? masterToggle() : null"
                               [checked]="selection.hasValue() && isAllSelected()"
@@ -54,7 +54,7 @@
                 <a>{{ column }}</a>
               </th>
             </ng-container>
-            <th *ngIf="allowDelete">
+            <th *ngIf="allowSelection">
               <a> Actions </a>
             </th>
           </tr>
@@ -63,7 +63,7 @@
           <tbody align-middle justify-content-center>
           <tr class="data-element" *ngFor="let dataEntry of data">
             <!-- Optional Select-Checkbox Element in first Body-Column -->
-            <th class="align-middle center-text" *ngIf="allowDelete">
+            <th class="align-middle center-text" *ngIf="allowSelection">
               <mat-checkbox color="warn" [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
                             (change)="$event ? rowToggle(dataEntry) : null"></mat-checkbox>
             </th>
@@ -83,10 +83,10 @@
                 <a>{{ dataEntry[variableName] }}</a>
               </ng-template>
             </td>
-            <td *ngIf="allowDelete">
+            <td *ngIf="allowSelection">
               <button mat-icon-button class="delete-small"
                       (click)="onSingleDelete(dataEntry); $event.stopPropagation()">
-                <mat-icon>delete</mat-icon>
+                <mat-icon>{{submitSelectionIcon}}</mat-icon>
               </button>
             </td>
           </tr>

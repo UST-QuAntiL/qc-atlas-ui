@@ -3,14 +3,14 @@
            [dataColumns]=tableColumns
            [externalLinkVariables]=externalLinkVariables
            [allowAdd]=true
-           [allowDelete]=true
+           [allowSelection]=true
            [allowSearch]=true
            [allowSort]=true
            [pagination]=pagingInfo
            [paginatorConfig]=paginatorConfig
            (elementClicked)="onElementClicked($event)"
            (addElement)="onAddElement()"
-           (deleteElements)="onDeleteElements($event)"
+           (submitSelectedElements)="onDeleteElements($event)"
            (datalistConfigChanged)="onDatalistConfigChanged($event)"
            (pageChange)="onPageChanged($event)">
 </app-table>

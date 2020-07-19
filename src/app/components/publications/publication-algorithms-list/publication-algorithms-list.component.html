@@ -1,15 +1,34 @@
-<app-table [data]=algorithms
+<app-table class="related-algorithms-table"
+           *ngIf=showRelatedAlgoTable
+           [data]=algorithms
            [variableNames]=variableNames
            [dataColumns]=tableColumns
+           [addIcon]=addIcon
            [allowAdd]=true
-           [allowDelete]=true
+           [allowSelection]=false
            [allowSearch]=true
            [allowSort]=true
            [pagination]=pagingInfo
            [paginatorConfig]=paginatorConfig
            (elementClicked)="onElementClicked($event)"
-           (addElement)="onAddElement()"
-           (deleteElements)="onDeleteElements($event)"
+           (addElement)="onAddNewAlgorithms()"
+           (datalistConfigChanged)="onDatalistConfigChanged($event)"
+           (pageChange)="onPageChanged($event)">
+</app-table>
+
+<app-table class="overall-algorithms-table"
+           *ngIf=!showRelatedAlgoTable
+           [data]=algorithms
+           [variableNames]=variableNames
+           [dataColumns]=tableColumns
+           [allowAdd]=false
+           [allowSelection]=true
+           [allowSearch]=true
+           [allowSort]=true
+           [pagination]=pagingInfo
+           [paginatorConfig]=paginatorConfig
+           (elementClicked)="onElementClicked($event)"
+           (submitSelectedElements)="onAddSelectedAlgorithms($event)"
            (datalistConfigChanged)="onDatalistConfigChanged($event)"
            (pageChange)="onPageChanged($event)">
 </app-table>

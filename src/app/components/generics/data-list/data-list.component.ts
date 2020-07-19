@@ -12,14 +12,16 @@ export class DataListComponent implements OnInit {
   @Input() dataColumns: string[];
   @Input() externalLinkVariables: string[];
   @Input() allowAdd: boolean;
-  @Input() allowDelete: boolean;
+  @Input() addIcon = 'playlist_add';
+  @Input() allowSelection: boolean;
+  @Input() submitSelectionIcon = 'delete';
   @Input() allowSearch: boolean;
   @Input() allowSort: boolean;
   @Input() pagination: any;
   @Input() paginatorConfig: any;
   @Output() elementClicked = new EventEmitter<any>();
   @Output() addElement = new EventEmitter<void>();
-  @Output() deleteElements = new EventEmitter<DeleteParams>();
+  @Output() submitSelectedElements = new EventEmitter<DeleteParams>(); // changed
   @Output() pageChange = new EventEmitter<string>();
   @Output() datalistConfigChanged = new EventEmitter<any>();
   selection = new SelectionModel<any>(true, []);
@@ -63,8 +65,9 @@ export class DataListComponent implements OnInit {
     this.selection.clear();
   }
 
-  onDelete(): void {
-    this.deleteElements.emit(this.generateDeleteParameter());
+  // changed
+  onSelectionSubmitted(): void {
+    this.submitSelectedElements.emit(this.generateDeleteParameter());
     this.selection.clear();
   }
 
@@ -72,7 +75,7 @@ export class DataListComponent implements OnInit {
     const deleteElement: any[] = [element];
     const deleteParams = this.generateDeleteParameter();
     deleteParams.elements = deleteElement;
-    this.deleteElements.emit(deleteParams);
+    this.submitSelectedElements.emit(deleteParams);
     this.selection.clear();
   }
 

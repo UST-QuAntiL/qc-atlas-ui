@@ -8,6 +8,9 @@ import { EntityModelPublicationDto } from 'api/models/entity-model-publication-d
 })
 export class PublicationAlgorithmsListComponent implements OnInit {
   @Input() publication: EntityModelPublicationDto;
+  showRelatedAlgoTable = true;
+  addIcon = 'playlist_add';
+  addSubmitSelectionIcon = '';
   algorithms: any[] = [];
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
@@ -27,12 +30,14 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     console.log('Algorithm clicked');
   }
 
-  onAddElement(): void {
-    console.log('Add clicked!');
+  onAddNewAlgorithms(): void {
+    this.showRelatedAlgoTable = false;
   }
 
-  onDeleteElements(event): void {
-    console.log('Delete clicked!');
+  onAddSelectedAlgorithms(event): void {
+
+
+    this.showRelatedAlgoTable = true;
   }
 
   onPageChanged(event): void {
