@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
 import { AlgorithmService } from 'api/services/algorithm.service';
+import { PublicationService } from 'api/services/publication.service';
 import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
@@ -10,21 +11,17 @@ import { GenericDataService } from '../../../util/generic-data.service';
 })
 export class PublicationAlgorithmsListComponent implements OnInit {
   @Input() publication: EntityModelPublicationDto;
-  showRelatedAlgoTable = true;
   algorithms: any[] = [];
   linkedAlgorithms: any[] = [];
   publicationLinks: any;
+  searchText: any;
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
-    amountChoices: [10, 25, 50],
-    selectedAmount: 10,
-  };
 
   constructor(
     private genericDataService: GenericDataService,
-    private algorithmService: AlgorithmService
+    private algorithmService: AlgorithmService,
+    private publicationService: PublicationService
   ) {}
 
   ngOnInit(): void {
@@ -34,25 +31,47 @@ export class PublicationAlgorithmsListComponent implements OnInit {
 
   getPublicationAlgorithms(url: string): void {
     this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
+      this.prepareRelatedAlgorithmData(JSON.parse(JSON.stringify(data)));
     });
   }
 
-  getAlgorithms(params) {
+  getAlgorithms(params): void {
     this.algorithmService.getAlgorithms(params).subscribe((data) => {
       this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
     });
   }
 
-  prepareAlgorithmData(data): void {
+  linkAlgorithm(params: any): void {
+    this.publicationService.addAlgorithm(params).subscribe((data) => {
+      this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
+    });
+  }
+
+  unlinkAlgorithms(event): void {
+    // Iterate all selected algorithms
+    for (const element of event.elements) {
+      // Build params using path ids and perform delete request
+      this.publicationService
+        .deleteReferenceToAlgorithm(this.generateLinkParams(element.id))
+        .subscribe((data) => {
+          // Update table after deletion
+          this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
+        });
+    }
+  }
+
+  prepareRelatedAlgorithmData(data): void {
     // Read all incoming data
-    if (data._embedded && this.showRelatedAlgoTable) {
+    if (data._embedded) {
       this.linkedAlgorithms = data._embedded.algorithms;
     } else {
       this.linkedAlgorithms = [];
     }
+  }
 
-    if (data._embedded && !this.showRelatedAlgoTable) {
+  prepareAlgorithmData(data): void {
+    // Read all incoming data
+    if (data._embedded) {
       this.algorithms = data._embedded.algorithms;
     } else {
       this.algorithms = [];
@@ -63,24 +82,29 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     console.log('Algorithm clicked');
   }
 
-  onAddNewAlgorithms(): void {
-    this.showRelatedAlgoTable = false;
-  }
-
-  onAddSelectedAlgorithms(event): void {
-    this.showRelatedAlgoTable = true;
-  }
-
-  onPageChanged(event): void {
-    console.log('Page change clicked!');
-  }
-
   onDatalistConfigChanged(event): void {
     console.log('Config change clicked!');
-    if (this.showRelatedAlgoTable) {
-      this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
-    } else {
-      this.getAlgorithms(event);
+    this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
+  }
+
+  onSearchChange(): void {
+    console.log(this.searchText);
+    if (this.searchText.length > 0) {
+      const params = {
+        search: this.searchText,
+      };
+      this.getAlgorithms(params);
     }
+  }
+
+  onSelectToLink(algorithm: any): void {
+    this.linkAlgorithm(this.generateLinkParams(algorithm.id));
+  }
+
+  generateLinkParams(algorithmId: string): any {
+    return {
+      id: this.publication.id,
+      algoId: algorithmId,
+    };
   }
 }

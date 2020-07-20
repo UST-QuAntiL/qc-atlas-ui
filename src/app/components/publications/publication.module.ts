@@ -13,6 +13,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { GenericsModule } from '../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { AddPublicationDialogComponent } from './dialogs/add-publication-dialog.component';
@@ -52,6 +53,7 @@ import { PublicationImplementationsListComponent } from './publication-implement
     ReactiveFormsModule,
     NavigationBreadcrumbModule,
     MatTabsModule,
+    MatAutocompleteModule,
   ],
   exports: [
     AddPublicationDialogComponent,

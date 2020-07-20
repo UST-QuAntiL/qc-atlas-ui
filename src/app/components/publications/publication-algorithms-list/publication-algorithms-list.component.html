@@ -1,29 +1,27 @@
+<div class="row" matAutocompleteOrigin #origin="matAutocompleteOrigin">
+  <mat-form-field appearance="outline" floatLabel="always" class="col-xl-6">
+    <mat-label>Link algorithms</mat-label>
+    <input matInput [matAutocomplete]="auto" placeholder="Search algorithms" [(ngModel)]="searchText"
+           [matAutocompleteConnectedTo]="origin"
+           (input)="onSearchChange()">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let algorithm of algorithms">
+        <div style="display:flex;flex-wrap: nowrap;align-items:center;justify-content:center;margin: auto;">
+          <span
+            style="flex-grow: 1;flex: 1 1 33%;"
+            (click)="onSelectToLink(algorithm)">{{algorithm.name | titlecase}} {{algorithm.problem | titlecase}}</span>
+        </div>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
+
 <app-table class="related-algorithms-table"
-           *ngIf=showRelatedAlgoTable
            [data]=linkedAlgorithms
            [variableNames]=variableNames
            [dataColumns]=tableColumns
-           [allowAdd]=true
-           [allowSelection]=false
-           (elementClicked)="onElementClicked($event)"
-           (addElement)="onAddNewAlgorithms()"
-           (datalistConfigChanged)="onDatalistConfigChanged($event)"
-           (pageChange)="onPageChanged($event)">
-</app-table>
-
-<app-table class="overall-algorithms-table"
-           *ngIf=!showRelatedAlgoTable
-           [data]=algorithms
-           [variableNames]=variableNames
-           [dataColumns]=tableColumns
-           [allowAdd]=false
            [allowSelection]=true
-           [allowSearch]=true
-           [allowSort]=true
-           [pagination]=pagingInfo
-           [paginatorConfig]=paginatorConfig
            (elementClicked)="onElementClicked($event)"
-           (submitSelectedElements)="onAddSelectedAlgorithms($event)"
            (datalistConfigChanged)="onDatalistConfigChanged($event)"
-           (pageChange)="onPageChanged($event)">
+           (submitSelectedElements)="unlinkAlgorithms($event)">
 </app-table>
