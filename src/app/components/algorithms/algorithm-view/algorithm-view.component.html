@@ -3,8 +3,12 @@
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
     <div>
       <mat-chip-list>
-        <mat-chip *ngFor="let tag of testTags" [removable]="true" (removed)="removeTag(tag)">
-          {{tag}}
+        <mat-chip
+          *ngFor="let tag of testTags"
+          [removable]="true"
+          (removed)="removeTag(tag)"
+        >
+          {{ tag }}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
         <mat-chip class="clickable-chip" (click)="addTag()">
@@ -16,32 +20,37 @@
 
   <mat-tab-group>
     <mat-tab label="General">
-      <app-algorithm-properties [algorithm]="algorithm"
-                                [applicationAreas]="applicationAreas"
-                                [problemTypes]="problemTypes"
-                                (updateAlgorithmField)="updateAlgorithmField($event)"
-                                (addApplicationArea)="addApplicationArea($event)"
-                                (removeApplicationArea)="removeApplicationArea($event)"
-                                (addProblemType)="addProblemType($event)"
-                                (removeProblemType)="removeProblemType($event)"></app-algorithm-properties>
+      <app-algorithm-properties
+        [algorithm]="algorithm"
+        [applicationAreas]="applicationAreas"
+        [problemTypes]="problemTypes"
+        (updateAlgorithmField)="updateAlgorithmField($event)"
+        (addApplicationArea)="addApplicationArea($event)"
+        (removeApplicationArea)="removeApplicationArea($event)"
+        (addProblemType)="addProblemType($event)"
+        (removeProblemType)="removeProblemType($event)"
+      ></app-algorithm-properties>
     </mat-tab>
     <mat-tab label="Implementations">
-      <app-algorithm-implementations-list [algorithm]="algorithm"></app-algorithm-implementations-list>
+      <app-algorithm-implementations-list
+        [algorithm]="algorithm"
+      ></app-algorithm-implementations-list>
     </mat-tab>
     <mat-tab label="Related algorithms">
-      <app-algorithm-related-algos-list [algorithm]="algorithm"></app-algorithm-related-algos-list>
+      <app-algorithm-related-algos-list
+        [algorithm]="algorithm"
+      ></app-algorithm-related-algos-list>
     </mat-tab>
     <mat-tab label="Publications">
-      <app-algorithm-publications-list [algorithm]="algorithm"></app-algorithm-publications-list>
+      <app-algorithm-publications-list
+        [algorithm]="algorithm"
+      ></app-algorithm-publications-list>
     </mat-tab>
     <mat-tab label="NISQ Analyser">
-      <h1>NISQ Analyser WIP</h1>
+      <app-algorithm-nisq-analyzer></app-algorithm-nisq-analyzer>
     </mat-tab>
     <mat-tab label="Discussion">
       <h1>Discussion WIP</h1>
     </mat-tab>
   </mat-tab-group>
 </div>
-
-
-

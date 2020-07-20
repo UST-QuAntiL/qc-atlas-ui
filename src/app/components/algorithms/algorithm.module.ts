@@ -16,6 +16,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputingResourcePropertyModule } from '../computation-resource-property/computing-resource-property.module';
+import { NisqAnalyzerModule } from './nisq-analyzer/nisq-analyzer.module';
 import { AlgorithmListComponent } from './algorithm-list/algorithm-list.component';
 import { AlgorithmViewComponent } from './algorithm-view/algorithm-view.component';
 import { AlgorithmImplementationsListComponent } from './algorithm-implementations-list/algorithm-implementations-list.component';
@@ -61,6 +62,7 @@ import { ProblemTypeTreeComponent } from './problem-type-tree/problem-type-tree.
     MatAutocompleteModule,
     MatTreeModule,
     ComputingResourcePropertyModule,
+    NisqAnalyzerModule,
   ],
   exports: [
     AlgorithmListComponent,

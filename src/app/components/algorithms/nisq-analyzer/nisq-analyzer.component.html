@@ -1,0 +1,50 @@
+<mat-horizontal-stepper [linear]="true" #stepper="matHorizontalStepper">
+  <mat-step [editable]="false" [stepControl]="inputFormGroup" label="Input">
+    <form [formGroup]="inputFormGroup">
+      <div formArrayName="params">
+        <div *ngFor="let param of params; let i = index" [formGroupName]="i">
+          <mat-form-field>
+            <mat-label>{{ param.label }}</mat-label>
+            <input
+              matInput
+              [placeholder]="param.placeholder"
+              [formControlName]="param.name"
+              [required]="!!param.required"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-select formControlName="cloudService">
+            <mat-option *ngFor="let cs of cloudServices" [value]="cs.name">{{
+              cs.label
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Number of shots (for later execution)</mat-label>
+          <input matInput required formControlName="shotCount" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Your Qiskit token</mat-label>
+          <input matInput required formControlName="qiskitToken" />
+        </mat-form-field>
+      </div>
+      <div>
+        <button
+          mat-button
+          type="submit"
+          [disabled]="inputFormGroup.invalid"
+          (click)="submit() && stepper.next()"
+        >
+          Analyze!
+        </button>
+      </div>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>
