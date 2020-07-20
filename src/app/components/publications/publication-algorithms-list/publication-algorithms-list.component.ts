@@ -14,9 +14,14 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   algorithms: any[] = [];
   linkedAlgorithms: any[] = [];
   publicationLinks: any;
-  searchText: any;
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
+  linkObject: any = {
+    title: 'Link publication with algorithms',
+    subtitle: 'Search algorithms',
+    displayVariable: 'name',
+    data: [],
+  };
 
   constructor(
     private genericDataService: GenericDataService,
@@ -72,9 +77,9 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   prepareAlgorithmData(data): void {
     // Read all incoming data
     if (data._embedded) {
-      this.algorithms = data._embedded.algorithms;
+      this.linkObject.data = data._embedded.algorithms;
     } else {
-      this.algorithms = [];
+      this.linkObject.data = [];
     }
   }
 
@@ -87,18 +92,17 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
   }
 
-  onSearchChange(): void {
-    console.log(this.searchText);
-    if (this.searchText.length > 0) {
-      const params = {
-        search: this.searchText,
-      };
-      this.getAlgorithms(params);
+  searchAlgorithms(search: string): void {
+    if (search) {
+      this.getAlgorithms({ search });
+    } else {
+      this.linkObject.data = [];
     }
   }
 
   onSelectToLink(algorithm: any): void {
     this.linkAlgorithm(this.generateLinkParams(algorithm.id));
+    this.linkObject.data = [];
   }
 
   generateLinkParams(algorithmId: string): any {

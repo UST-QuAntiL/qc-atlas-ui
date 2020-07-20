@@ -15,6 +15,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { AppRoutingModule } from '../../app-routing.module';
 import { GenericDataService } from '../../util/generic-data.service';
 import { TextInputComponent } from './property-input/text-input.component';
@@ -51,6 +52,7 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
     BrowserModule,
     BrowserAnimationsModule,
     MatDialogModule,
+    MatAutocompleteModule,
   ],
   exports: [
     TextInputComponent,
