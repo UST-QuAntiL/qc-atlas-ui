@@ -157,8 +157,10 @@ export class NisqAnalyzerComponent implements OnInit {
 
   analyzerResults: NISQResult[] = DUMMY_ANALYZE_RESULTS;
 
-  resultBackendColumns = ['backendName', 'width', 'depth', 'execution'];
+  resultBackendColumns = ['backendName', 'width', 'depth'];
   results?: NisqAnalyzeResults = undefined;
+
+  selectedExecutionParams: BackendExecutionParams;
 
   constructor(private formBuilder: FormBuilder) {}
 
@@ -195,11 +197,12 @@ export class NisqAnalyzerComponent implements OnInit {
     return true;
   }
 
-  execute(): void {
+  execute(selectedExecutionParams: BackendExecutionParams): void {
     this.results = undefined;
     setTimeout(() => {
       this.results = DUMMY_RESULTS;
     }, 3000);
+    this.selectedExecutionParams = selectedExecutionParams;
   }
 
   getInputParameter(name: string): ImplementationParameter {
