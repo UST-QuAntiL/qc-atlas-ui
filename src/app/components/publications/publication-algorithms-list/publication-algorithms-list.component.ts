@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
+import { AlgorithmService } from 'api/services/algorithm.service';
 import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
@@ -10,9 +11,9 @@ import { GenericDataService } from '../../../util/generic-data.service';
 export class PublicationAlgorithmsListComponent implements OnInit {
   @Input() publication: EntityModelPublicationDto;
   showRelatedAlgoTable = true;
-  addIcon = 'playlist_add';
-  addSubmitSelectionIcon = '';
   algorithms: any[] = [];
+  linkedAlgorithms: any[] = [];
+  publicationLinks: any;
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
   pagingInfo: any = {};
@@ -21,11 +22,14 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     selectedAmount: 10,
   };
 
-  constructor(private genericDataService: GenericDataService) {}
+  constructor(
+    private genericDataService: GenericDataService,
+    private algorithmService: AlgorithmService
+  ) {}
 
   ngOnInit(): void {
-    const links = JSON.parse(JSON.stringify(this.publication._links));
-    this.getPublicationAlgorithms(links.algorithms.href);
+    this.publicationLinks = JSON.parse(JSON.stringify(this.publication._links));
+    this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
   }
 
   getPublicationAlgorithms(url: string): void {
@@ -34,9 +38,21 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     });
   }
 
+  getAlgorithms(params) {
+    this.algorithmService.getAlgorithms(params).subscribe((data) => {
+      this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
+    });
+  }
+
   prepareAlgorithmData(data): void {
     // Read all incoming data
-    if (data._embedded) {
+    if (data._embedded && this.showRelatedAlgoTable) {
+      this.linkedAlgorithms = data._embedded.algorithms;
+    } else {
+      this.linkedAlgorithms = [];
+    }
+
+    if (data._embedded && !this.showRelatedAlgoTable) {
       this.algorithms = data._embedded.algorithms;
     } else {
       this.algorithms = [];
@@ -61,5 +77,10 @@ export class PublicationAlgorithmsListComponent implements OnInit {
 
   onDatalistConfigChanged(event): void {
     console.log('Config change clicked!');
+    if (this.showRelatedAlgoTable) {
+      this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
+    } else {
+      this.getAlgorithms(event);
+    }
   }
 }

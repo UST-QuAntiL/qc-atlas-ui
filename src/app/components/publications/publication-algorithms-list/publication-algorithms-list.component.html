@@ -1,13 +1,10 @@
 <app-table class="related-algorithms-table"
            *ngIf=showRelatedAlgoTable
-           [data]=algorithms
+           [data]=linkedAlgorithms
            [variableNames]=variableNames
            [dataColumns]=tableColumns
-           [addIcon]=addIcon
            [allowAdd]=true
            [allowSelection]=false
-           [allowSearch]=true
-           [allowSort]=true
            (elementClicked)="onElementClicked($event)"
            (addElement)="onAddNewAlgorithms()"
            (datalistConfigChanged)="onDatalistConfigChanged($event)"
