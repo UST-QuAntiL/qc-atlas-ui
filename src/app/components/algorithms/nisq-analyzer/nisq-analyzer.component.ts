@@ -1,5 +1,27 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+
+interface BackendExecutionParams {
+  backendName: string;
+  backendProviderName: string;
+  maxDepth: number;
+  depth: number;
+  qbits: number;
+  width: number;
+  maxWidth: number;
+}
+
+interface NISQResult {
+  implementationName: string;
+  backendExecutionParams: BackendExecutionParams[];
+}
 
 export interface ImplementationParameter {
   name: string;
@@ -39,6 +61,16 @@ const DUMMY_CLOUD_SERVICES = [
   selector: 'app-algorithm-nisq-analyzer',
   templateUrl: './nisq-analyzer.component.html',
   styleUrls: ['./nisq-analyzer.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
+    ]),
+  ],
 })
 export class NisqAnalyzerComponent implements OnInit {
   @Input() params = DUMMY_PARAMS;
@@ -46,6 +78,49 @@ export class NisqAnalyzerComponent implements OnInit {
 
   inputFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+
+  columnsToDisplay = ['backendName', 'width', 'depth', 'execution'];
+  expandedElement: BackendExecutionParams | null;
+
+  analyzerResults: NISQResult[] = [
+    {
+      implementationName: 'shor-general-qiskit',
+      backendExecutionParams: [
+        {
+          backendName: 'ibmq_16_melbourne',
+          backendProviderName: 'IBMQ',
+          maxDepth: 232,
+          depth: 123,
+          qbits: 15,
+          width: 11,
+          maxWidth: 200,
+        },
+      ],
+    },
+    {
+      implementationName: 'shor-15-qiskit',
+      backendExecutionParams: [
+        {
+          backendName: 'ibmq_16_melbourne',
+          backendProviderName: 'IBMQ',
+          maxDepth: 232,
+          depth: 5,
+          qbits: 15,
+          width: 5,
+          maxWidth: 200,
+        },
+        {
+          backendName: 'ibmq_ourense',
+          backendProviderName: 'IBMQ',
+          maxDepth: 232,
+          depth: 11,
+          qbits: 15,
+          width: 19,
+          maxWidth: 200,
+        },
+      ],
+    },
+  ];
 
   constructor(private formBuilder: FormBuilder) {}
 
