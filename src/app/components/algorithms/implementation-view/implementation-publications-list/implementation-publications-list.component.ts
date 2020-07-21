@@ -103,7 +103,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
   }
 
   onElementClicked(publication: any): void {
-    this.router.navigate(['publication', publication.id]);
+    this.router.navigate(['publications', publication.id]);
   }
 
   onDatalistConfigChanged(event): void {
