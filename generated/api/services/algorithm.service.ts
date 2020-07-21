@@ -2685,90 +2685,10 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation addPublication1
-   */
-  static readonly AddPublication1Path =
-    '/v1/algorithms/{algoId}/implementations/{implId}/publications';
-
-  /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addPublication1()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  addPublication1$Response(params: {
-    algoId: string;
-    implId: string;
-    body: PublicationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { publications?: Array<EntityModelPublicationDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.AddPublication1Path,
-      'post'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addPublication1$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  addPublication1(params: {
-    algoId: string;
-    implId: string;
-    body: PublicationDto;
-  }): Observable<{
-    _embedded?: { publications?: Array<EntityModelPublicationDto> };
-  }> {
-    return this.addPublication1$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }
-      )
-    );
-  }
-
-  /**
    * Path part for operation getPublication1
    */
   static readonly GetPublication1Path =
-    '/v1/algorithms/{algoId}/implementations/{implId}/publications/{publicationId}';
+    '/v1/algorithms/{algoId}/implementations/{implId}/publications/{publId}';
 
   /**
    * Get a specific referenced publication of an implementation.
@@ -2781,7 +2701,7 @@ export class AlgorithmService extends BaseService {
   getPublication1$Response(params: {
     algoId: string;
     implId: string;
-    publicationId: string;
+    publId: string;
   }): Observable<
     StrictHttpResponse<{
       id?: string;
@@ -2800,7 +2720,7 @@ export class AlgorithmService extends BaseService {
     if (params) {
       rb.path('algoId', params.algoId, {});
       rb.path('implId', params.implId, {});
-      rb.path('publicationId', params.publicationId, {});
+      rb.path('publId', params.publId, {});
     }
     return this.http
       .request(
@@ -2835,7 +2755,7 @@ export class AlgorithmService extends BaseService {
   getPublication1(params: {
     algoId: string;
     implId: string;
-    publicationId: string;
+    publId: string;
   }): Observable<{
     id?: string;
     title: string;
@@ -2863,6 +2783,85 @@ export class AlgorithmService extends BaseService {
             url?: string;
             authors: Array<string>;
             _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation addPublication1
+   */
+  static readonly AddPublication1Path =
+    '/v1/algorithms/{algoId}/implementations/{implId}/publications/{publId}';
+
+  /**
+   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addPublication1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  addPublication1$Response(params: {
+    algoId: string;
+    implId: string;
+    publId: string;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { publications?: Array<EntityModelPublicationDto> };
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.AddPublication1Path,
+      'post'
+    );
+    if (params) {
+      rb.path('algoId', params.algoId, {});
+      rb.path('implId', params.implId, {});
+      rb.path('publId', params.publId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { publications?: Array<EntityModelPublicationDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `addPublication1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  addPublication1(params: {
+    algoId: string;
+    implId: string;
+    publId: string;
+  }): Observable<{
+    _embedded?: { publications?: Array<EntityModelPublicationDto> };
+  }> {
+    return this.addPublication1$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { publications?: Array<EntityModelPublicationDto> };
+          }>
+        ) =>
+          r.body as {
+            _embedded?: { publications?: Array<EntityModelPublicationDto> };
           }
       )
     );
