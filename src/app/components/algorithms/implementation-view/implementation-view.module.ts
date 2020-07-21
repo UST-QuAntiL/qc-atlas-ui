@@ -14,9 +14,13 @@ import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ComputingResourcePropertyModule } from '../../computation-resource-property/computing-resource-property.module';
 import { ImplementationViewComponent } from './implementation-view.component';
+import { ImplementationPublicationsListComponent } from './implementation-publications-list/implementation-publications-list.component';
 
 @NgModule({
-  declarations: [ImplementationViewComponent],
+  declarations: [
+    ImplementationViewComponent,
+    ImplementationPublicationsListComponent,
+  ],
   imports: [
     BreadcrumbModule,
     BadgeModule,

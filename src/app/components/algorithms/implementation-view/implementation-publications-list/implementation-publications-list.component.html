@@ -1,0 +1,12 @@
+<app-table [data]=linkedPublications
+           [variableNames]=variableNames
+           [dataColumns]=tableColumns
+           [allowAdd]=true
+           [allowSelection]=true
+           [linkObject]=linkObject
+           (elementClicked)="onElementClicked($event)"
+           (datalistConfigChanged)="onDatalistConfigChanged($event)"
+           (submitSelectedElements)="unlinkPublications($event)"
+           (linkConfigChange)="searchPublications($event)"
+           (linkElement)="onSelectToLink($event)">
+</app-table>
