@@ -10,6 +10,7 @@ import { map, filter } from 'rxjs/operators';
 
 import { ClassicAlgorithmDto } from '../models/classic-algorithm-dto';
 import { EntityModelAlgorithmDto } from '../models/entity-model-algorithm-dto';
+import { EntityModelImplementationDto } from '../models/entity-model-implementation-dto';
 import { EntityModelPublicationDto } from '../models/entity-model-publication-dto';
 import { Link } from '../models/link';
 import { PageMetadata } from '../models/page-metadata';
@@ -763,6 +764,207 @@ export class PublicationService extends BaseService {
   }): Observable<void> {
     return this.deleteReferenceToAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getImplementations1
+   */
+  static readonly GetImplementations1Path =
+    '/v1/publications/{id}/implementations';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementations1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementations1$Response(params: {
+    id: string;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetImplementations1Path,
+      'get'
+    );
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementations1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementations1(params: {
+    id: string;
+  }): Observable<{
+    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+  }> {
+    return this.getImplementations1$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getImplementation1
+   */
+  static readonly GetImplementation1Path =
+    '/v1/publications/{id}/implementations/{implId}';
+
+  /**
+   * Get a specific referenced implementation of a publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementation1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementation1$Response(params: {
+    id: string;
+    implId: string;
+  }): Observable<
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      link?: string;
+      inputFormat?: string;
+      outputFormat?: string;
+      description?: string;
+      contributors?: string;
+      assumptions?: string;
+      parameter?: string;
+      dependencies?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetImplementation1Path,
+      'get'
+    );
+    if (params) {
+      rb.path('id', params.id, {});
+      rb.path('implId', params.implId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Get a specific referenced implementation of a publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementation1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementation1(params: {
+    id: string;
+    implId: string;
+  }): Observable<{
+    id?: string;
+    name: string;
+    link?: string;
+    inputFormat?: string;
+    outputFormat?: string;
+    description?: string;
+    contributors?: string;
+    assumptions?: string;
+    parameter?: string;
+    dependencies?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.getImplementation1$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }
+      )
     );
   }
 }

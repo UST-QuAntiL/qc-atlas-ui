@@ -2884,7 +2884,7 @@ export class AlgorithmService extends BaseService {
   deleteReferenceToPublication1$Response(params: {
     algoId: string;
     implId: string;
-    publicationId: string;
+    publId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -2894,7 +2894,7 @@ export class AlgorithmService extends BaseService {
     if (params) {
       rb.path('algoId', params.algoId, {});
       rb.path('implId', params.implId, {});
-      rb.path('publicationId', params.publicationId, {});
+      rb.path('publId', params.publId, {});
     }
     return this.http
       .request(
@@ -2924,7 +2924,7 @@ export class AlgorithmService extends BaseService {
   deleteReferenceToPublication1(params: {
     algoId: string;
     implId: string;
-    publicationId: string;
+    publId: string;
   }): Observable<void> {
     return this.deleteReferenceToPublication1$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)

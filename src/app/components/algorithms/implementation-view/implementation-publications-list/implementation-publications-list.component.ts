@@ -71,7 +71,6 @@ export class ImplementationPublicationsListComponent implements OnInit {
   unlinkPublications(event): void {
     // Iterate all selected algorithms
     for (const element of event.elements) {
-
       console.log(element);
       // Build params using path ids and perform delete request
       this.algorithmService
@@ -128,14 +127,6 @@ export class ImplementationPublicationsListComponent implements OnInit {
   }
 
   generateLinkParams(publicationId: string): any {
-
-    const obj = {
-      publId: publicationId,
-      algoId: this.algoId,
-      implId: this.implementation.id,
-    };
-
-    console.log(obj);
     return {
       publId: publicationId,
       algoId: this.algoId,
