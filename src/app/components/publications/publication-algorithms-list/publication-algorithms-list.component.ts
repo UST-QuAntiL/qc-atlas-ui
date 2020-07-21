@@ -3,6 +3,7 @@ import { EntityModelPublicationDto } from 'api/models/entity-model-publication-d
 import { AlgorithmService } from 'api/services/algorithm.service';
 import { PublicationService } from 'api/services/publication.service';
 import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
+import { Router } from '@angular/router';
 import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
@@ -27,7 +28,8 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   constructor(
     private genericDataService: GenericDataService,
     private algorithmService: AlgorithmService,
-    private publicationService: PublicationService
+    private publicationService: PublicationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +87,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   }
 
   onElementClicked(algorithm: any): void {
-    console.log('Algorithm clicked');
+    this.router.navigate(['algorithms', algorithm.id]);
   }
 
   onDatalistConfigChanged(event): void {

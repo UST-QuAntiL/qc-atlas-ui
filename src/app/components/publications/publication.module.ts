@@ -21,7 +21,6 @@ import { PublicationListComponent } from './publication-list/publication-list.co
 import { PublicationViewComponent } from './publication-view/publication-view.component';
 import { PublicationPropertiesComponent } from './publication-properties/publication-properties.component';
 import { PublicationAlgorithmsListComponent } from './publication-algorithms-list/publication-algorithms-list.component';
-import { PublicationImplementationsListComponent } from './publication-implementations-list/publication-implementations-list.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +29,6 @@ import { PublicationImplementationsListComponent } from './publication-implement
     PublicationViewComponent,
     PublicationPropertiesComponent,
     PublicationAlgorithmsListComponent,
-    PublicationImplementationsListComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
