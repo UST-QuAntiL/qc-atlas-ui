@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api/services/publication.service';
 import { PublicationDto } from 'api/models/publication-dto';
+import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
 
@@ -12,7 +13,7 @@ import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog
   styleUrls: ['./publication-list.component.scss'],
 })
 export class PublicationListComponent implements OnInit {
-  publications: any[] = [];
+  publications: EntityModelPublicationDto[] = [];
   tableColumns = ['Title', 'URL', 'DOI', 'Authors'];
   variableNames = ['title', 'url', 'doi', 'authors'];
   externalLinkVariables = ['url'];
@@ -33,7 +34,7 @@ export class PublicationListComponent implements OnInit {
 
   getPublications(params: any): void {
     this.publicationService.getPublications2(params).subscribe((data) => {
-      this.preparePublicationData(JSON.parse(JSON.stringify(data)));
+      this.preparePublicationData(data);
     });
   }
 

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
 import { AlgorithmService } from 'api/services/algorithm.service';
 import { PublicationService } from 'api/services/publication.service';
+import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { GenericDataService } from '../../../util/generic-data.service';
 })
 export class PublicationAlgorithmsListComponent implements OnInit {
   @Input() publication: EntityModelPublicationDto;
-  algorithms: any[] = [];
+  algorithms: EntityModelAlgorithmDto[] = [];
   linkedAlgorithms: any[] = [];
   publicationLinks: any;
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
@@ -36,13 +37,13 @@ export class PublicationAlgorithmsListComponent implements OnInit {
 
   getPublicationAlgorithms(url: string): void {
     this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareRelatedAlgorithmData(JSON.parse(JSON.stringify(data)));
+      this.prepareRelatedAlgorithmData(data);
     });
   }
 
   getAlgorithms(params): void {
     this.algorithmService.getAlgorithms(params).subscribe((data) => {
-      this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
+      this.prepareAlgorithmData(data);
     });
   }
 
