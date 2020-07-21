@@ -23,7 +23,7 @@ export class PublicationImplementationsListComponent implements OnInit {
     'link',
   ];
   linkObject: any = {
-    title: 'Link implementation with algorithms',
+    title: 'Link publication with implementations',
     subtitle: 'Search implementations',
     displayVariable: 'name',
     data: [],
@@ -35,7 +35,12 @@ export class PublicationImplementationsListComponent implements OnInit {
     private publicationService: PublicationService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.publicationLinks = JSON.parse(JSON.stringify(this.publication._links));
+    this.getPublicationImplementations(
+      this.publicationLinks.implementations.href
+    );
+  }
 
   onDatalistConfigChanged(event): void {
     console.log('Config change clicked!');
