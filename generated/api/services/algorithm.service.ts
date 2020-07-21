@@ -2871,7 +2871,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deleteReferenceToPublication1
    */
   static readonly DeleteReferenceToPublication1Path =
-    '/v1/algorithms/{algoId}/implementations/{implId}/publications/{publicationId}';
+    '/v1/algorithms/{algoId}/implementations/{implId}/publications/{publId}';
 
   /**
    * Delete a reference to a publication of the implementation.
