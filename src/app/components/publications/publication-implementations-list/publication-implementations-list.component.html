@@ -1,0 +1,7 @@
+<app-table class="related-implementation-table"
+           [data]=linkedImplementations
+           [variableNames]=variableNames
+           [dataColumns]=tableColumns
+           (elementClicked)="onElementClicked($event)"
+           (datalistConfigChanged)="onDatalistConfigChanged($event)">
+</app-table>
