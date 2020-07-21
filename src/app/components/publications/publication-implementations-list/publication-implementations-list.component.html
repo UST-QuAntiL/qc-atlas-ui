@@ -1,1 +1,14 @@
-<p>publication-implementations-list works!</p>
+<app-table class="related-implementation-table"
+           [data]=linkedImplementations
+           [variableNames]=variableNames
+           [dataColumns]=tableColumns
+           [allowAdd]=true
+           [allowSelection]=true
+           [linkObject]=linkObject
+           (elementClicked)="onElementClicked($event)"
+           (datalistConfigChanged)="onDatalistConfigChanged($event)"
+           (submitSelectedElements)="unlinkImplementations($event)"
+           (linkConfigChange)="searchImplementations($event)"
+           (linkElement)="onSelectToLink($event)">
+</app-table>
+

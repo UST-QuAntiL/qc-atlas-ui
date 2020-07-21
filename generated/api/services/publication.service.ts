@@ -841,4 +841,273 @@ export class PublicationService extends BaseService {
       )
     );
   }
+
+  /**
+   * Path part for operation getImplementation1
+   */
+  static readonly GetImplementation1Path =
+    '/v1/publications/{id}/implementations/{implId}';
+
+  /**
+   * Get a specific referenced implementation of a publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementation1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementation1$Response(params: {
+    id: string;
+    implId: string;
+  }): Observable<
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      link?: string;
+      inputFormat?: string;
+      outputFormat?: string;
+      description?: string;
+      contributors?: string;
+      assumptions?: string;
+      parameter?: string;
+      dependencies?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetImplementation1Path,
+      'get'
+    );
+    if (params) {
+      rb.path('id', params.id, {});
+      rb.path('implId', params.implId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Get a specific referenced implementation of a publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementation1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementation1(params: {
+    id: string;
+    implId: string;
+  }): Observable<{
+    id?: string;
+    name: string;
+    link?: string;
+    inputFormat?: string;
+    outputFormat?: string;
+    description?: string;
+    contributors?: string;
+    assumptions?: string;
+    parameter?: string;
+    dependencies?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.getImplementation1$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation addImplementation
+   */
+  static readonly AddImplementationPath =
+    '/v1/publications/{id}/implementations/{implId}';
+
+  /**
+   * Add a reference to an existing implementation (that was previously created via a POST on /implementations/). Custom ID will be ignored. For implementation only ID is required, other implementation attributes will not change. If the implementation doesn't exist yet, a 404 error is thrown.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  addImplementation$Response(params: {
+    id: string;
+    implId: string;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.AddImplementationPath,
+      'post'
+    );
+    if (params) {
+      rb.path('id', params.id, {});
+      rb.path('implId', params.implId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Add a reference to an existing implementation (that was previously created via a POST on /implementations/). Custom ID will be ignored. For implementation only ID is required, other implementation attributes will not change. If the implementation doesn't exist yet, a 404 error is thrown.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `addImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  addImplementation(params: {
+    id: string;
+    implId: string;
+  }): Observable<{
+    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+  }> {
+    return this.addImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deleteReferenceToImplementation
+   */
+  static readonly DeleteReferenceToImplementationPath =
+    '/v1/publications/{id}/implementations/{implId}';
+
+  /**
+   * Delete a reference to a implementation of the publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteReferenceToImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteReferenceToImplementation$Response(params: {
+    id: string;
+    implId: string;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.DeleteReferenceToImplementationPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('id', params.id, {});
+      rb.path('implId', params.implId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete a reference to a implementation of the publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteReferenceToImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteReferenceToImplementation(params: {
+    id: string;
+    implId: string;
+  }): Observable<void> {
+    return this.deleteReferenceToImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
 }
