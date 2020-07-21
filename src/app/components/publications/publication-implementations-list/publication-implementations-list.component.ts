@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
+import { Router } from '@angular/router';
 import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
@@ -20,7 +21,10 @@ export class PublicationImplementationsListComponent implements OnInit {
     'link',
   ];
 
-  constructor(private genericDataService: GenericDataService) {}
+  constructor(
+    private genericDataService: GenericDataService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.publicationLinks = JSON.parse(JSON.stringify(this.publication._links));
@@ -50,6 +54,16 @@ export class PublicationImplementationsListComponent implements OnInit {
   }
 
   onElementClicked(implementation: any): void {
-    console.log('Implementation clicked');
+    this.genericDataService
+      .getData(implementation._links.implementedAlgorithm.href)
+      .subscribe((data) => {
+        const algo = JSON.parse(JSON.stringify(data));
+        this.router.navigate([
+          'algorithms',
+          algo.id,
+          'implementations',
+          implementation.id,
+        ]);
+      });
   }
 }
