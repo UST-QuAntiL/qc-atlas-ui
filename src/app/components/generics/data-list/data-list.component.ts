@@ -24,7 +24,7 @@ export class DataListComponent implements OnInit {
   @Output() addElement = new EventEmitter<void>();
   @Output() submitSelectedElements = new EventEmitter<DeleteParams>(); // changed
   @Output() pageChange = new EventEmitter<string>();
-  @Output() datalistConfigChanged = new EventEmitter<any>();
+  @Output() datalistConfigChanged = new EventEmitter<QueryParams>();
   selection = new SelectionModel<any>(true, []);
   searchText = '';
   sortDirection = '';
@@ -92,7 +92,7 @@ export class DataListComponent implements OnInit {
     this.selection.clear();
   }
 
-  onChangePagingatorConfig(): void {
+  onChangePaginatorConfig(): void {
     this.datalistConfigChanged.emit(this.generateGetParameter());
     this.selection.clear();
   }

@@ -98,7 +98,7 @@
           <mat-form-field *ngIf="paginatorConfig" class="float-left">
             <mat-label>Items per page:</mat-label>
             <mat-select [(ngModel)]="paginatorConfig.selectedAmount"
-                        (selectionChange)="onChangePagingatorConfig()">
+                        (selectionChange)="onChangePaginatorConfig()">
               <mat-option *ngFor="let choice of paginatorConfig.amountChoices"
                           [value]="choice">{{ choice }}</mat-option>
             </mat-select>

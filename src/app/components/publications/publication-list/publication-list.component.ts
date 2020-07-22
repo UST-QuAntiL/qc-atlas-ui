@@ -6,6 +6,10 @@ import { PublicationDto } from 'api/models/publication-dto';
 import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
+import {
+  DeleteParams,
+  QueryParams,
+} from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-publication-list',
@@ -32,7 +36,7 @@ export class PublicationListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getPublications(params: any): void {
+  getPublications(params: QueryParams): void {
     this.publicationService.getPublications2(params).subscribe((data) => {
       this.preparePublicationData(data);
     });
@@ -80,29 +84,15 @@ export class PublicationListComponent implements OnInit {
     });
   }
 
-  onDeleteElements(event): void {
+  onDeleteElements(event: DeleteParams): void {
     // Iterate all selected algorithms and delete them
     for (const publication of event.elements) {
       this.publicationService
-        .deletePublication(this.generateDeleteParams(publication.id))
+        .deletePublication({ id: publication.id })
         .subscribe(() => {
           // Refresh Algorithms after delete
           this.getPublications(event.queryParams);
         });
     }
-  }
-
-  onPageChanged(event): void {
-    this.getPublicationsHateoas(event);
-  }
-
-  onDatalistConfigChanged(event): void {
-    this.getPublications(event);
-  }
-
-  generateDeleteParams(publicationId: string): any {
-    const params: any = {};
-    params.id = publicationId;
-    return params;
   }
 }

@@ -1,16 +1,21 @@
-<app-table [data]=publications
-           [variableNames]=variableNames
-           [dataColumns]=tableColumns
-           [externalLinkVariables]=externalLinkVariables
-           [allowAdd]=true
-           [allowSelection]=true
-           [allowSearch]=true
-           [allowSort]=true
-           [pagination]=pagingInfo
-           [paginatorConfig]=paginatorConfig
-           (elementClicked)="onElementClicked($event)"
-           (addElement)="onAddElement()"
-           (submitSelectedElements)="onDeleteElements($event)"
-           (datalistConfigChanged)="onDatalistConfigChanged($event)"
-           (pageChange)="onPageChanged($event)">
-</app-table>
+<mdb-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table [data]=publications
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [externalLinkVariables]=externalLinkVariables
+               [allowAdd]=true
+               [allowSelection]=true
+               [allowSearch]=true
+               [allowSort]=true
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
+               [emptyTableMessage]="'No publications found'"
+               (elementClicked)="onElementClicked($event)"
+               (addElement)="onAddElement()"
+               (submitSelectedElements)="onDeleteElements($event)"
+               (datalistConfigChanged)="getPublications($event)"
+               (pageChange)="getPublicationsHateoas($event)">
+    </app-table>
+  </div>
+</mdb-card>
