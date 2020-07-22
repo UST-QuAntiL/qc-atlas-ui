@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
 import { Router } from '@angular/router';
+import { PublicationService } from 'api/services/publication.service';
+import { AlgorithmService } from 'api/services/algorithm.service';
+import { EntityModelImplementationDto } from 'api/models/entity-model-implementation-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
@@ -10,8 +13,7 @@ import { GenericDataService } from '../../../util/generic-data.service';
 })
 export class PublicationImplementationsListComponent implements OnInit {
   @Input() publication: EntityModelPublicationDto;
-  publicationLinks: any;
-  linkedImplementations: any[] = [];
+  linkedImplementations: EntityModelImplementationDto[] = [];
   tableColumns = ['Name', 'Description', 'Contributors', 'Assumptions', 'Link'];
   variableNames = [
     'name',
@@ -23,34 +25,28 @@ export class PublicationImplementationsListComponent implements OnInit {
 
   constructor(
     private genericDataService: GenericDataService,
+    private publicationService: PublicationService,
+    private algorithmService: AlgorithmService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.publicationLinks = JSON.parse(JSON.stringify(this.publication._links));
-    this.getPublicationImplementations(
-      this.publicationLinks.implementations.href
-    );
+    this.getLinkedImplementations({ id: this.publication.id });
   }
 
   onDatalistConfigChanged(event): void {
-    this.getPublicationImplementations(
-      this.publicationLinks.implementations.href
-    );
+    this.getLinkedImplementations({ id: this.publication.id });
   }
 
-  getPublicationImplementations(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareRelatedImplementationData(data);
+  getLinkedImplementations(params): void {
+    this.publicationService.getImplementations1(params).subscribe((data) => {
+      // Read all incoming data
+      if (data._embedded) {
+        this.linkedImplementations = data._embedded.implementations;
+      } else {
+        this.linkedImplementations = [];
+      }
     });
-  }
-  prepareRelatedImplementationData(data): void {
-    // Read all incoming data
-    if (data._embedded) {
-      this.linkedImplementations = data._embedded.implementations;
-    } else {
-      this.linkedImplementations = [];
-    }
   }
 
   onElementClicked(implementation: any): void {
