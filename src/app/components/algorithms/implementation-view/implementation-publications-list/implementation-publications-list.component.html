@@ -3,10 +3,7 @@
            [dataColumns]=tableColumns
            [allowAdd]=true
            [allowSelection]=true
-           [linkObject]=linkObject
            (elementClicked)="onElementClicked($event)"
            (datalistConfigChanged)="onDatalistConfigChanged($event)"
-           (submitSelectedElements)="unlinkPublications($event)"
-           (linkConfigChange)="searchPublications($event)"
-           (linkElement)="onSelectToLink($event)">
+           (submitSelectedElements)="unlinkPublications($event)">
 </app-table>

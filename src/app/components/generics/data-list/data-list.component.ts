@@ -21,7 +21,6 @@ export class DataListComponent implements OnInit {
   @Input() paginatorConfig: any;
   @Output() elementClicked = new EventEmitter<any>();
   @Output() addElement = new EventEmitter<void>();
-  @Output() linkConfigChange = new EventEmitter<string>();
   @Output() submitSelectedElements = new EventEmitter<DeleteParams>(); // changed
   @Output() pageChange = new EventEmitter<string>();
   @Output() datalistConfigChanged = new EventEmitter<any>();
