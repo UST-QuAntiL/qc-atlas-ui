@@ -19,6 +19,7 @@
       <div>
         <mat-form-field class="w-25">
           <mat-select formControlName="cloudService">
+            <mat-label>Cloud Services</mat-label>
             <mat-option *ngFor="let cs of cloudServices" [value]="cs.name">{{
               cs.label
             }}</mat-option>
@@ -134,9 +135,9 @@
       <h3>Execution results</h3>
       <div class="p-2">
         <h6>Input</h6>
-        <div *ngFor="let resParam of resultParams">
-          <span>{{ getInputParameter(resParam).label }}:</span>
-          <span>{{ results.params[resParam] }}</span>
+        <div *ngFor="let resParam of nisqExecutionParams.params | keyvalue">
+          <span>{{ resParam.key }}:</span>
+          <span>{{ resParam.value }}</span>
         </div>
       </div>
       <div class="p-2">

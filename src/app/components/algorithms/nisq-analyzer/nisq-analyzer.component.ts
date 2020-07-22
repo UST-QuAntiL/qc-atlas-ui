@@ -28,6 +28,8 @@ export interface ImplementationParameter {
   label: string;
   placeholder?: string;
   required?: boolean;
+  // TODO change value type
+  value: number;
 }
 
 export interface CloudServiceOption {
@@ -55,11 +57,13 @@ const DUMMY_PARAMS: ImplementationParameter[] = [
     name: 'N',
     label: 'N - Integer, N > 0, Number to be factored',
     placeholder: 'e.g. 15',
+    value: 15,
   },
   {
     name: 'L',
     label: 'L - Length of binary L',
     placeholder: 'e.g. 4',
+    value: 4,
   },
 ];
 
@@ -161,12 +165,9 @@ export class NisqAnalyzerComponent implements OnInit {
   results?: NisqAnalyzeResults = undefined;
 
   selectedExecutionParams: BackendExecutionParams;
+  nisqExecutionParams: NisqExecutionParameters;
 
   constructor(private formBuilder: FormBuilder) {}
-
-  get resultParams(): string[] {
-    return Object.keys(this.results.params);
-  }
 
   ngOnInit(): void {
     this.inputFormGroup = this.formBuilder.group({
@@ -188,12 +189,11 @@ export class NisqAnalyzerComponent implements OnInit {
 
   submit(): boolean {
     const value = this.inputFormGroup.value;
-    const result = {
+    this.nisqExecutionParams = {
       ...value,
       // array of objects to one object
       params: Object.assign.apply(undefined, [{}, ...value.params]),
     } as NisqExecutionParameters;
-    console.log(result);
     return true;
   }
 
