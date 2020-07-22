@@ -4,7 +4,7 @@ import { AlgorithmService } from 'api/services/algorithm.service';
 import { PublicationService } from 'api/services/publication.service';
 import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
 import { Router } from '@angular/router';
-import { GenericDataService } from '../../../util/generic-data.service';
+import { AlgorithmDto } from 'api/models/algorithm-dto';
 
 @Component({
   selector: 'app-publication-algorithms-list',
@@ -13,46 +13,75 @@ import { GenericDataService } from '../../../util/generic-data.service';
 })
 export class PublicationAlgorithmsListComponent implements OnInit {
   @Input() publication: EntityModelPublicationDto;
-  algorithms: EntityModelAlgorithmDto[] = [];
-  linkedAlgorithms: any[] = [];
-  publicationLinks: any;
+  linkedAlgorithms: EntityModelAlgorithmDto[] = [];
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
   linkObject: any = {
-    title: 'Link publication with algorithms',
-    subtitle: 'Search algorithms',
+    title: 'Link algorithm with ',
+    subtitle: 'Search algorithm by name',
     displayVariable: 'name',
     data: [],
   };
+  tableAddAllowed = true;
+  isLinkingEnabled = false;
 
   constructor(
-    private genericDataService: GenericDataService,
     private algorithmService: AlgorithmService,
     private publicationService: PublicationService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.publicationLinks = JSON.parse(JSON.stringify(this.publication._links));
-    this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
+    this.linkObject.title += this.publication.title;
+    this.getLinkedAlgorithms({ id: this.publication.id });
   }
 
-  getPublicationAlgorithms(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareRelatedAlgorithmData(data);
+  getLinkedAlgorithms(params): void {
+    this.publicationService.getAlgorithms1(params).subscribe((algorithms) => {
+      if (algorithms._embedded) {
+        this.linkedAlgorithms = algorithms._embedded.algorithms;
+      } else {
+        this.linkedAlgorithms = [];
+      }
     });
   }
 
-  getAlgorithms(params): void {
-    this.algorithmService.getAlgorithms(params).subscribe((data) => {
-      this.prepareAlgorithmData(data);
-    });
+  searchUnlinkedAlgorithms(search: string): void {
+    // Search for unlinked algorithms if search-text is not empty
+    if (search) {
+      this.algorithmService.getAlgorithms({ search }).subscribe((data) => {
+        this.updateLinkableAlgorithms(data._embedded);
+      });
+    } else {
+      this.linkObject.data = [];
+    }
   }
 
-  linkAlgorithm(params: any): void {
-    this.publicationService.addAlgorithm(params).subscribe((data) => {
-      this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
-    });
+  updateLinkableAlgorithms(algorithmData): void {
+    // Clear list of linkable algorithms
+    this.linkObject.data = [];
+    // If linkable algorithms found
+    if (algorithmData) {
+      // Search algorithms and filter only those that are not already linked
+      for (const algorithm of algorithmData.algorithms) {
+        if (!this.linkedAlgorithms.some((alg) => alg.id === algorithm.id)) {
+          this.linkObject.data.push(algorithm);
+        }
+      }
+    }
+  }
+
+  linkAlgorithm(algorithm: AlgorithmDto): void {
+    // Generate parameters
+    const params = this.generateLinkParams(algorithm.id);
+    // Empty unlinked algorithms
+    this.linkObject.data = [];
+    // Link algorithm
+    this.publicationService
+      .addAlgorithm(params)
+      .subscribe((linkedAlgorithm) => {
+        this.getLinkedAlgorithms({ id: this.publication.id });
+      });
   }
 
   unlinkAlgorithms(event): void {
@@ -63,26 +92,8 @@ export class PublicationAlgorithmsListComponent implements OnInit {
         .deleteReferenceToAlgorithm(this.generateLinkParams(element.id))
         .subscribe((data) => {
           // Update table after deletion
-          this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
+          this.getLinkedAlgorithms({ id: this.publication.id });
         });
-    }
-  }
-
-  prepareRelatedAlgorithmData(data): void {
-    // Read all incoming data
-    if (data._embedded) {
-      this.linkedAlgorithms = data._embedded.algorithms;
-    } else {
-      this.linkedAlgorithms = [];
-    }
-  }
-
-  prepareAlgorithmData(data): void {
-    // Read all incoming data
-    if (data._embedded) {
-      this.linkObject.data = data._embedded.algorithms;
-    } else {
-      this.linkObject.data = [];
     }
   }
 
@@ -91,21 +102,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   }
 
   onDatalistConfigChanged(event): void {
-    console.log('Config change clicked!');
-    this.getPublicationAlgorithms(this.publicationLinks.algorithms.href);
-  }
-
-  searchAlgorithms(search: string): void {
-    if (search) {
-      this.getAlgorithms({ search });
-    } else {
-      this.linkObject.data = [];
-    }
-  }
-
-  onSelectToLink(algorithm: any): void {
-    this.linkAlgorithm(this.generateLinkParams(algorithm.id));
-    this.linkObject.data = [];
+    this.getLinkedAlgorithms({ id: this.publication.id });
   }
 
   generateLinkParams(algorithmId: string): any {
@@ -113,5 +110,10 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       id: this.publication.id,
       algoId: algorithmId,
     };
+  }
+
+  onToggleLink(): void {
+    this.isLinkingEnabled = !this.isLinkingEnabled;
+    this.tableAddAllowed = !this.tableAddAllowed;
   }
 }

@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatBadgeModule } from '@angular/material/badge';
 import { AppRoutingModule } from '../../app-routing.module';
 import { GenericDataService } from '../../util/generic-data.service';
 import { TextInputComponent } from './property-input/text-input.component';
@@ -55,6 +56,7 @@ import { LinkInputComponent } from './link-input/link-input.component';
     BrowserAnimationsModule,
     MatDialogModule,
     MatAutocompleteModule,
+    MatBadgeModule,
   ],
   exports: [
     TextInputComponent,
@@ -65,6 +67,7 @@ import { LinkInputComponent } from './link-input/link-input.component';
     RouterModule,
     MatSortModule,
     ConfirmDialogComponent,
+    LinkInputComponent,
   ],
   providers: [GenericDataService],
 })

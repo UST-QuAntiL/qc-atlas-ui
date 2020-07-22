@@ -19,6 +19,7 @@ export class DataListComponent implements OnInit {
   @Input() allowSort: boolean;
   @Input() pagination: any;
   @Input() paginatorConfig: any;
+  @Input() emptyTableMessage = 'No elements found';
   @Output() elementClicked = new EventEmitter<any>();
   @Output() addElement = new EventEmitter<void>();
   @Output() submitSelectedElements = new EventEmitter<DeleteParams>(); // changed

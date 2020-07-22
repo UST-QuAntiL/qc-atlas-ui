@@ -1,10 +1,28 @@
-<app-table class="related-algorithms-table"
-           [data]=linkedAlgorithms
-           [variableNames]=variableNames
-           [dataColumns]=tableColumns
-           [allowAdd]=true
-           [allowSelection]=true
-           (elementClicked)="onElementClicked($event)"
-           (datalistConfigChanged)="onDatalistConfigChanged($event)"
-           (submitSelectedElements)="unlinkAlgorithms($event)">
-</app-table>
+<mdb-card *ngIf="isLinkingEnabled" class="m-2">
+  <div class="mx-3 my-2">
+    <app-link-input
+      [linkObject]="linkObject"
+      [isDisableable]=true
+      (searchTextChanged)="searchUnlinkedAlgorithms($event)"
+      (linkElement)="linkAlgorithm($event)"
+      (disable)="onToggleLink()">
+    </app-link-input>
+  </div>
+</mdb-card>
+
+<mdb-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table
+      [data]=linkedAlgorithms
+      [variableNames]=variableNames
+      [dataColumns]=tableColumns
+      [allowAdd]=tableAddAllowed
+      [allowSelection]=true
+      [emptyTableMessage]="'No linked algorithms found'"
+      (elementClicked)="onElementClicked($event)"
+      (datalistConfigChanged)="onDatalistConfigChanged($event)"
+      (submitSelectedElements)="unlinkAlgorithms($event)"
+      (addElement)="onToggleLink()">
+    </app-table>
+  </div>
+</mdb-card>

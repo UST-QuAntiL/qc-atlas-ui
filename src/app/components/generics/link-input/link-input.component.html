@@ -1,21 +1,18 @@
-<!-- Parent-Container -->
-<div class="atlas-text container-fluid p-3 mt-3">
-  <!-- Mat-Card for Style -->
-  <mdb-card cascade="true" narrower="true">
-    <!-- Link-Dropdown -->
-    <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>Link publication with algorithms</mat-label>
-      <input matInput [matAutocomplete]="auto" placeholder="Search algorithms" [(ngModel)]="linkSearchText"
-             (input)="onLinkConfigChange()">
-      <mat-autocomplete panelWidth="15%" #auto="matAutocomplete">
-        <mat-option *ngFor="let linkData of linkObject.data">
-          <div class="d-flex flex-column" (click)="onLinkElement(linkData)">
-            <div class="p-2">
-              <span>{{ linkData[linkObject.displayVariable] }}</span>
-            </div>
-          </div>
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-  </mdb-card>
-</div>
+<!-- Link-Dropdown -->
+<button *ngIf="isDisableable" class="float-right" mat-icon-button color="warn" id="cancel-button" (click)="onDisable()">
+  <mdb-icon fas icon="times-circle"></mdb-icon>
+</button>
+<mat-form-field appearance="outline" floatLabel="always">
+  <mat-label>{{ linkObject.title }}</mat-label>
+  <input matInput [matAutocomplete]="auto" [placeholder]="linkObject.subtitle"
+         (input)="onLinkSearchChange()" [(ngModel)]="linkSearchText">
+  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onLinkElement($event.option.value)">
+    <mat-option *ngFor="let linkData of linkObject.data" [value]="linkData">
+      <div class="d-flex flex-column" (click)="onLinkElement(linkData)">
+        <div class="p-2">
+          <span>{{ linkData[linkObject.displayVariable] }}</span>
+        </div>
+      </div>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

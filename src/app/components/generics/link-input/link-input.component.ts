@@ -7,9 +7,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class LinkInputComponent implements OnInit {
   @Input() linkObject: any;
+  @Input() isDisableable: boolean;
   @Output() linkElement = new EventEmitter<any>();
-  @Output() linkConfigChange = new EventEmitter<string>();
+  @Output() searchTextChanged = new EventEmitter<string>();
+  @Output() disable = new EventEmitter<void>();
   linkSearchText = '';
+
   constructor() {}
 
   ngOnInit(): void {}
@@ -19,7 +22,11 @@ export class LinkInputComponent implements OnInit {
     this.linkSearchText = '';
   }
 
-  onLinkConfigChange(): void {
-    this.linkConfigChange.emit(this.linkSearchText);
+  onLinkSearchChange(): void {
+    this.searchTextChanged.emit(this.linkSearchText);
+  }
+
+  onDisable(): void {
+    this.disable.emit();
   }
 }
