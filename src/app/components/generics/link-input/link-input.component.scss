@@ -2,6 +2,10 @@ mat-form-field {
   width: 100%;
 }
 
+#cancel-button {
+  outline: none;
+}
+
 #cancel-button:hover {
   transform: scale(1.5);
 }
