@@ -24,6 +24,7 @@ import { CheckboxInputComponent } from './property-input/checkbox-input.componen
 import { DataListComponent } from './data-list/data-list.component';
 import { ChipCollectionComponent } from './chip-collection/chip-collection.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
+import { LinkInputComponent } from './link-input/link-input.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
     DataListComponent,
     ChipCollectionComponent,
     ConfirmDialogComponent,
+    LinkInputComponent,
   ],
   imports: [
     ReactiveFormsModule,

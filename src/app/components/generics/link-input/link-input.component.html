@@ -1,0 +1,21 @@
+<!-- Parent-Container -->
+<div class="atlas-text container-fluid p-3 mt-3">
+  <!-- Mat-Card for Style -->
+  <mdb-card cascade="true" narrower="true">
+    <!-- Link-Dropdown -->
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Link publication with algorithms</mat-label>
+      <input matInput [matAutocomplete]="auto" placeholder="Search algorithms" [(ngModel)]="linkSearchText"
+             (input)="onLinkConfigChange()">
+      <mat-autocomplete panelWidth="15%" #auto="matAutocomplete">
+        <mat-option *ngFor="let linkData of linkObject.data">
+          <div class="d-flex flex-column" (click)="onLinkElement(linkData)">
+            <div class="p-2">
+              <span>{{ linkData[linkObject.displayVariable] }}</span>
+            </div>
+          </div>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </mdb-card>
+</div>

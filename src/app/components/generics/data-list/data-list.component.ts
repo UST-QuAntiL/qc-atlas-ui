@@ -10,7 +10,6 @@ export class DataListComponent implements OnInit {
   @Input() data: any[];
   @Input() variableNames: string[];
   @Input() dataColumns: string[];
-  @Input() linkObject: any;
   @Input() externalLinkVariables: string[];
   @Input() allowAdd: boolean;
   @Input() addIcon = 'playlist_add';
@@ -22,14 +21,12 @@ export class DataListComponent implements OnInit {
   @Input() paginatorConfig: any;
   @Output() elementClicked = new EventEmitter<any>();
   @Output() addElement = new EventEmitter<void>();
-  @Output() linkElement = new EventEmitter<any>();
   @Output() linkConfigChange = new EventEmitter<string>();
   @Output() submitSelectedElements = new EventEmitter<DeleteParams>(); // changed
   @Output() pageChange = new EventEmitter<string>();
   @Output() datalistConfigChanged = new EventEmitter<any>();
   selection = new SelectionModel<any>(true, []);
   searchText = '';
-  linkSearchText = '';
   sortDirection = '';
   sortActiveElement = '';
 
@@ -86,15 +83,6 @@ export class DataListComponent implements OnInit {
   onAdd(): void {
     this.addElement.emit();
     this.selection.clear();
-  }
-
-  onLinkElement(element: any): void {
-    this.linkElement.emit(element);
-    this.linkSearchText = '';
-  }
-
-  onLinkConfigChange(): void {
-    this.linkConfigChange.emit(this.linkSearchText);
   }
 
   sortData(event: any): void {

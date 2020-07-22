@@ -22,27 +22,12 @@
       </div>
       <!-- Add-Button -->
       <div class="row m-1">
-        <button mdbBtn *ngIf="allowAdd && !linkObject" class="control-button add-button btn-sm" type="button"
+        <button mdbBtn *ngIf="allowAdd" class="control-button add-button btn-sm" type="button"
                 color="green"
                 outline="true"
                 (click)="onAdd()" mdbWavesEffect>
           <span class="material-icons">{{addIcon}}</span>
         </button>
-        <!-- Link-Dropdown -->
-        <mat-form-field *ngIf="allowAdd && linkObject" appearance="outline" floatLabel="always">
-          <mat-label>Link publication with algorithms</mat-label>
-          <input matInput [matAutocomplete]="auto" placeholder="Search algorithms" [(ngModel)]="linkSearchText"
-                 (input)="onLinkConfigChange()">
-          <mat-autocomplete panelWidth="15%" #auto="matAutocomplete">
-            <mat-option *ngFor="let linkData of linkObject.data">
-              <div class="d-flex flex-column" (click)="onLinkElement(linkData)">
-                <div class="p-2">
-                  <span>{{ linkData[linkObject.displayVariable] }}</span>
-                </div>
-              </div>
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
         <!-- Delete-Selected-Button -->
         <button mdbBtn *ngIf="allowSelection && selection.hasValue()" class="control-button delete-button btn-sm"
                 type="button" color="red" outline="true"
