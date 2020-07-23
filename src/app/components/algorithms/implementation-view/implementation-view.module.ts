@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import {
   BadgeModule,
   BreadcrumbModule,
+  CardsModule,
   IconsModule,
 } from 'angular-bootstrap-md';
 import { FormsModule } from '@angular/forms';
@@ -34,6 +35,7 @@ import { ImplementationPublicationsListComponent } from './implementation-public
     FormsModule,
     ComputingResourcePropertyModule,
     MatCardModule,
+    CardsModule,
   ],
 })
 export class ImplementationViewModule {}

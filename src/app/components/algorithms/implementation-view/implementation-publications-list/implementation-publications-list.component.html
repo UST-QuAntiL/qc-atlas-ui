@@ -1,9 +1,26 @@
-<app-table [data]=linkedPublications
-           [variableNames]=variableNames
-           [dataColumns]=tableColumns
-           [allowAdd]=true
-           [allowSelection]=true
-           (elementClicked)="onElementClicked($event)"
-           (datalistConfigChanged)="onDatalistConfigChanged($event)"
-           (submitSelectedElements)="unlinkPublications($event)">
-</app-table>
+<mdb-card *ngIf="isLinkingEnabled" class="m-2">
+  <div class="mx-3 my-2">
+    <app-link-input
+      [linkObject]="linkObject"
+      [isDisableable]=true
+      (searchTextChanged)="searchUnlinkedPublications($event)"
+      (linkElement)="linkPublication($event)"
+      (disable)="onToggleLink()">
+    </app-link-input>
+  </div>
+</mdb-card>
+
+<mdb-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table [data]=linkedPublications
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [allowAdd]=tableAddAllowed
+               [allowSelection]=true
+               (elementClicked)="onElementClicked($event)"
+               (datalistConfigChanged)="onDatalistConfigChanged($event)"
+               (submitSelectedElements)="unlinkPublications($event)"
+               (addElement)="onToggleLink()">
+    </app-table>
+  </div>
+</mdb-card>
