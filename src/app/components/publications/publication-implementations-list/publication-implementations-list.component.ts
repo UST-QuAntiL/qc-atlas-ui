@@ -39,14 +39,16 @@ export class PublicationImplementationsListComponent implements OnInit {
   }
 
   getLinkedImplementations(params): void {
-    this.publicationService.getImplementations1(params).subscribe((data) => {
-      // Read all incoming data
-      if (data._embedded) {
-        this.linkedImplementations = data._embedded.implementations;
-      } else {
-        this.linkedImplementations = [];
-      }
-    });
+    this.publicationService
+      .getPublicationImplementations(params)
+      .subscribe((data) => {
+        // Read all incoming data
+        if (data._embedded) {
+          this.linkedImplementations = data._embedded.implementations;
+        } else {
+          this.linkedImplementations = [];
+        }
+      });
   }
 
   onElementClicked(implementation: any): void {

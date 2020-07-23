@@ -37,13 +37,15 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   }
 
   getLinkedAlgorithms(params): void {
-    this.publicationService.getAlgorithms1(params).subscribe((algorithms) => {
-      if (algorithms._embedded) {
-        this.linkedAlgorithms = algorithms._embedded.algorithms;
-      } else {
-        this.linkedAlgorithms = [];
-      }
-    });
+    this.publicationService
+      .getPublicationAlgorithms(params)
+      .subscribe((algorithms) => {
+        if (algorithms._embedded) {
+          this.linkedAlgorithms = algorithms._embedded.algorithms;
+        } else {
+          this.linkedAlgorithms = [];
+        }
+      });
   }
 
   searchUnlinkedAlgorithms(search: string): void {
@@ -78,7 +80,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     this.linkObject.data = [];
     // Link algorithm
     this.publicationService
-      .addAlgorithm(params)
+      .linkAlgorithmWithPublication(params)
       .subscribe((linkedAlgorithm) => {
         this.getLinkedAlgorithms({ id: this.publication.id });
       });
@@ -89,7 +91,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     for (const element of event.elements) {
       // Build params using path ids and perform delete request
       this.publicationService
-        .deleteReferenceToAlgorithm(this.generateLinkParams(element.id))
+        .unlinkAlgorithmFromPublication(this.generateLinkParams(element.id))
         .subscribe((data) => {
           // Update table after deletion
           this.getLinkedAlgorithms({ id: this.publication.id });
