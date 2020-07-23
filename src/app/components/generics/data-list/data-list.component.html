@@ -88,6 +88,12 @@
       </td>
     </tr>
     </tbody>
+    <!-- Empty Table-Body if no elements found -->
+    <tbody *ngIf="!data || data.length <= 0" align-middle justify-content-center>
+    <tr>
+      <td class="text-center" colspan="1000"><a>{{ emptyTableMessage }}</a></td>
+    </tr>
+    </tbody>
     <!-- Optional Table-Footer for pagination -->
     <tfoot *ngIf="pagination">
     <tr>
@@ -144,7 +150,5 @@
     </tr>
     </tfoot>
   </table>
-  <!-- If no elements in table -->
-  <div class="m-3 d-flex justify-content-center" *ngIf="!data || data.length <= 0">{{ emptyTableMessage }}</div>
 </div>
 
