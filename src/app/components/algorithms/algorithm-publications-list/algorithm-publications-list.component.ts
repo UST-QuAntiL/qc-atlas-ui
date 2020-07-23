@@ -71,19 +71,37 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       });
   }
 
-  unlinkPublications(event): void {
+  async unlinkPublications(event): Promise<void> {
     // Iterate all selected algorithms
     for (const publication of event.elements) {
+      await this.unlinkPublication(publication.id);
+    }
+  }
+
+  unlinkPublication(publicationId) {
+    const promise = new Promise((resolve, reject) => {
       // Build params using path ids and perform delete request
       this.algorithmService
         .deleteReferenceToPublication({
           algoId: this.algorithm.id,
-          publicationId: publication.id,
+          publicationId,
         })
-        .subscribe((data) => {
-          this.getLinkedPublications({ algoId: this.algorithm.id });
-        });
-    }
+        .toPromise()
+        .then(
+          (data) => {
+            // Update table after deletion
+            this.getLinkedPublications({
+              algoId: this.algorithm.id,
+              publicationId,
+            });
+            resolve();
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+    return promise;
   }
 
   onAddElement(): void {}

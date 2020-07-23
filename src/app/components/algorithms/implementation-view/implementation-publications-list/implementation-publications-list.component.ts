@@ -79,18 +79,31 @@ export class ImplementationPublicationsListComponent implements OnInit {
       });
   }
 
-  unlinkPublications(event): void {
+  async unlinkPublications(event): Promise<void> {
     // Iterate all selected algorithms
-    for (const element of event.elements) {
-      console.log(element);
+    for (const publication of event.elements) {
+      await this.unlinkPublication(publication.id);
+    }
+  }
+
+  unlinkPublication(elementId) {
+    const promise = new Promise((resolve, reject) => {
       // Build params using path ids and perform delete request
       this.algorithmService
-        .deleteReferenceToPublication1(this.generateLinkParams(element.id))
-        .subscribe((data) => {
-          // Update table after deletion
-          this.getLinkedPublications();
-        });
-    }
+        .deleteReferenceToPublication1(this.generateLinkParams(elementId))
+        .toPromise()
+        .then(
+          (data) => {
+            // Update table after deletion
+            this.getLinkedPublications();
+            resolve();
+          },
+          (err) => {
+            reject(err);
+          }
+        );
+    });
+    return promise;
   }
 
   onElementClicked(publication: any): void {
