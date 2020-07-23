@@ -7,16 +7,16 @@
         type="text"
         placeholder="Type name"
         formControlName="typeName"
-        [matAutocomplete]="typeAutocomplete"
+        [matAutocomplete]="auto"
         (input)="resetSelectedType()"
         class="full-width"
         name="type-name"
         matInput
         required
       />
-      <mat-autocomplete #typeAutocomplete="matAutocomplete">
+      <mat-autocomplete #auto="matAutocomplete">
         <mat-option
-          *ngFor="let type of filteredTypes | async"
+          *ngFor="let type of filteredTypes"
           [value]="type.name"
           (click)="onTypeSelect(type)"
         >

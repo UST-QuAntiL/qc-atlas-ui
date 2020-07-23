@@ -15,10 +15,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { Option } from '../../generics/property-input/select-input.component';
+import { CustomErrorStateMatcher } from '../../generics/property-input/default.error-matcher';
 
 @Component({
   selector: 'app-edit-compute-resource-property-dialog',
@@ -27,10 +25,8 @@ import { Option } from '../../generics/property-input/select-input.component';
 })
 export class EditComputeResourcePropertyDialogComponent implements OnInit {
   types: EntityModelComputingResourcePropertyTypeDto[] = [];
-  typeNameControl = new FormControl();
-  valueValidationControl = new FormControl();
-  matcher = new ShowOnDirtyErrorStateMatcher();
-  filteredTypes: Observable<EntityModelComputingResourcePropertyTypeDto[]>;
+  matcher = new CustomErrorStateMatcher();
+  filteredTypes: EntityModelComputingResourcePropertyTypeDto[];
   formGroup: FormGroup = new FormGroup({
     typeName: new FormControl('', Validators.minLength(1)),
     typeDesc: new FormControl(),
@@ -88,14 +84,14 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
       value: 'FLOAT',
       validationFunc: (e): boolean =>
         // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
-        e.length > 0 && e.match(/-?\d+\.\d+/) && !isNaN(parseFloat(e)),
+        e.length > 0 && e.match(/^[+-]?\d+(\.\d+)?$/) && !isNaN(parseFloat(e)),
     },
     {
       label: 'Integer',
       value: 'INTEGER',
       validationFunc: (e): boolean =>
         // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
-        e.length > 0 && e.match(/^\d+$/) && !isNaN(parseInt(e, 10)),
+        e.length > 0 && e.match(/^(-)?\d+$/) && !isNaN(parseInt(e, 10)),
     },
     {
       label: 'String',
@@ -127,18 +123,13 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
       this.typeDescription = '';
       this.typeName = '';
     }
-    this.propertyTypeService
-      // TODO find better solution to fetch all types available
-      .getResourcePropertyTypes({ page: 0, size: 1000 })
-      .subscribe((e) => {
-        if (e._embedded != null) {
-          this.types = e._embedded.computingResourcePropertyTypes;
-        }
-        this.filteredTypes = this.typeNameControl.valueChanges.pipe(
-          startWith(''),
-          map((value) => this._filter(value.toString().toLowerCase()))
-        );
-      });
+    this.propertyTypeService.getResourcePropertyTypes().subscribe((e) => {
+      if (e._embedded != null) {
+        this.types = e._embedded.computingResourcePropertyTypes;
+      }
+    });
+    this.formGroup.controls.value.setValue('');
+    this.validateValueInput();
   }
 
   onTypeSelect(type: EntityModelComputingResourcePropertyTypeDto): void {
@@ -151,6 +142,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   }
 
   resetSelectedType(): void {
+    this.filteredTypes = this._filter(this.typeName);
     if (this.selectedType != null) {
       this.selectedType = null;
       this.typeDescription = '';
@@ -195,6 +187,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
         (e: ValidatingOption) => e.value === currType
       ).validationFunc;
       if (!validationFunc(control.value)) {
+        console.log(control.value + ' is invalid');
         return {
           invalidInput: true,
         };
@@ -206,10 +199,10 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   private _filter(
     value: string
   ): EntityModelComputingResourcePropertyTypeDto[] {
+    const val = value.toLowerCase();
     return this.types.filter(
       (type) =>
-        type.name.includes(value) ||
-        type.description.toLowerCase().includes(value)
+        type.name.includes(val) || type.description.toLowerCase().includes(val)
     );
   }
 }

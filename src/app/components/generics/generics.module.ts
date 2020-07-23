@@ -26,16 +26,20 @@ import { DataListComponent } from './data-list/data-list.component';
 import { ChipCollectionComponent } from './chip-collection/chip-collection.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
 import { LinkInputComponent } from './link-input/link-input.component';
+import { PrologInputComponent } from './property-input/prolog-input.component';
+import { PrologValidator } from './prolog.validator';
 
 @NgModule({
   declarations: [
     TextInputComponent,
+    PrologInputComponent,
     SelectInputComponent,
     CheckboxInputComponent,
     DataListComponent,
     ChipCollectionComponent,
     ConfirmDialogComponent,
     LinkInputComponent,
+    PrologValidator,
   ],
   imports: [
     ReactiveFormsModule,
@@ -60,6 +64,7 @@ import { LinkInputComponent } from './link-input/link-input.component';
   ],
   exports: [
     TextInputComponent,
+    PrologInputComponent,
     SelectInputComponent,
     CheckboxInputComponent,
     DataListComponent,
@@ -68,6 +73,7 @@ import { LinkInputComponent } from './link-input/link-input.component';
     MatSortModule,
     ConfirmDialogComponent,
     LinkInputComponent,
+    PrologValidator,
   ],
   providers: [GenericDataService],
 })

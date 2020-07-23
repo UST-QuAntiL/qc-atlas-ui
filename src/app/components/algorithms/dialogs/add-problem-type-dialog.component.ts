@@ -50,15 +50,13 @@ export class AddProblemTypeDialogComponent implements OnInit {
     ]);
     this.parentProblemTypeControl = new FormControl(this.parentName);
     this.problemTypeForm = new FormGroup({ name: this.problemTypeControl });
-    this.problemTypeService
-      .getProblemTypes1({ page: 0, size: 1000 })
-      .subscribe((types) => {
-        if (types._embedded) {
-          this.existingProblemTypes = types._embedded.problemTypes;
-        } else {
-          this.existingProblemTypes = [];
-        }
-      });
+    this.problemTypeService.getProblemTypes1().subscribe((types) => {
+      if (types._embedded) {
+        this.existingProblemTypes = types._embedded.problemTypes;
+      } else {
+        this.existingProblemTypes = [];
+      }
+    });
 
     this.problemTypeControl.valueChanges.subscribe((value) => {
       this.filteredProblemTyped = this.filterProblemTypes(value);
