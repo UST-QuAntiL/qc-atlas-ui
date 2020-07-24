@@ -82,28 +82,12 @@ export class ImplementationPublicationsListComponent implements OnInit {
   async unlinkPublications(event): Promise<void> {
     // Iterate all selected algorithms
     for (const publication of event.elements) {
-      await this.unlinkPublication(publication.id);
-    }
-  }
-
-  unlinkPublication(elementId) {
-    const promise = new Promise((resolve, reject) => {
-      // Build params using path ids and perform delete request
+      await // Build params using path ids and perform delete request
       this.algorithmService
-        .deleteReferenceToPublication1(this.generateLinkParams(elementId))
-        .toPromise()
-        .then(
-          (data) => {
-            // Update table after deletion
-            this.getLinkedPublications();
-            resolve();
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-    });
-    return promise;
+        .deleteReferenceToPublication1(this.generateLinkParams(publication.id))
+        .toPromise();
+      this.getLinkedPublications();
+    }
   }
 
   onElementClicked(publication: any): void {
