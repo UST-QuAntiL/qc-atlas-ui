@@ -4,7 +4,6 @@ import { AlgorithmService } from 'api/services/algorithm.service';
 import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
 import { PublicationService } from 'api/services/publication.service';
 import { Router } from '@angular/router';
-import { AlgorithmDto } from 'api/models/algorithm-dto';
 import { PublicationDto } from 'api/models/publication-dto';
 
 @Component({
@@ -19,7 +18,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   publications: EntityModelPublicationDto[];
   variableNames: string[] = ['title', 'authors', 'doi'];
   tableColumns: string[] = ['Title', 'Authors', 'DOI'];
-  linkObject: any = {
+  linkObject: LinkObject = {
     title: 'Link publication with ',
     subtitle: 'Search publications by title',
     displayVariable: 'title',
@@ -114,4 +113,11 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.isLinkingEnabled = !this.isLinkingEnabled;
     this.tableAddAllowed = !this.tableAddAllowed;
   }
+}
+
+interface LinkObject {
+  title: string;
+  subtitle: string;
+  displayVariable: string;
+  data: [];
 }
