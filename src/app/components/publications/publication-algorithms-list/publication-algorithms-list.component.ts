@@ -5,6 +5,7 @@ import { PublicationService } from 'api/services/publication.service';
 import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
 import { Router } from '@angular/router';
 import { AlgorithmDto } from 'api/models/algorithm-dto';
+import { LinkObject } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-publication-algorithms-list',
@@ -16,7 +17,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   linkedAlgorithms: EntityModelAlgorithmDto[] = [];
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
-  linkObject: any = {
+  linkObject: LinkObject = {
     title: 'Link algorithm with ',
     subtitle: 'Search algorithm by name',
     displayVariable: 'name',

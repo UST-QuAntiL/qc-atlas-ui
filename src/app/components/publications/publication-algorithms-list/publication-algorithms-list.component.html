@@ -1,4 +1,4 @@
-<mdb-card *ngIf="isLinkingEnabled" class="m-2">
+<mat-card *ngIf="isLinkingEnabled" class="m-2">
   <div class="mx-3 my-2">
     <app-link-input
       [linkObject]="linkObject"
@@ -8,9 +8,9 @@
       (disable)="onToggleLink()">
     </app-link-input>
   </div>
-</mdb-card>
+</mat-card>
 
-<mdb-card class="m-2">
+<mat-card class="m-2">
   <div class="mx-3 mb-2">
     <app-table
       [data]=linkedAlgorithms
@@ -25,4 +25,4 @@
       (addElement)="onToggleLink()">
     </app-table>
   </div>
-</mdb-card>
+</mat-card>

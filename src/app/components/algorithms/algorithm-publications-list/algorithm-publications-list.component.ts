@@ -5,6 +5,7 @@ import { EntityModelPublicationDto } from 'api/models/entity-model-publication-d
 import { PublicationService } from 'api/services/publication.service';
 import { Router } from '@angular/router';
 import { PublicationDto } from 'api/models/publication-dto';
+import { LinkObject } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-algorithm-publications-list',
@@ -113,11 +114,4 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.isLinkingEnabled = !this.isLinkingEnabled;
     this.tableAddAllowed = !this.tableAddAllowed;
   }
-}
-
-interface LinkObject {
-  title: string;
-  subtitle: string;
-  displayVariable: string;
-  data: [];
 }

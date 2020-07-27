@@ -160,3 +160,10 @@ export interface DeleteParams {
   elements: any;
   queryParams: QueryParams;
 }
+
+export interface LinkObject {
+  title: string;
+  subtitle: string;
+  displayVariable: string;
+  data: [];
+}
