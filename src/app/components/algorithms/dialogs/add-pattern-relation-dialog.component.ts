@@ -43,8 +43,13 @@ export class AddPatternRelationDialogComponent implements OnInit {
         Validators.required,
       ]),
     });
-    this.setPatternRelationType(this.data.patternRelationType.name);
-    this.selectedRelationType = this.data.patternRelationType;
+
+    // Fill PatternRelationType if dialog is used for editing
+    if (this.data.patternRelationType) {
+      this.setPatternRelationType(this.data.patternRelationType.name);
+      this.selectedRelationType = this.data.patternRelationType;
+    }
+
     this.patternRelationTypeService
       .getPatternRelationTypes1({})
       .subscribe((relationTypes) => {
