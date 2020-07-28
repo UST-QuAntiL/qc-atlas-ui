@@ -1,15 +1,19 @@
-<app-table [data]=algorithmRelations
-           [variableNames]=variableNames
-           [dataColumns]=tableColumns
-           [allowAdd]=true
-           [allowDelete]=true
-           [allowSearch]=true
-           [allowSort]=true
-           [pagination]=pagingInfo
-           [paginatorConfig]=paginatorConfig
-           (addElement)="onAddElement()"
-           (deleteElements)="onDeleteElements($event)"
-           (datalistConfigChanged)="onDatalistConfigChanged($event)"
-           (pageChange)="onPageChanged($event)"
-           (elementClicked)="onElementClicked($event)">
-</app-table>
+<mdb-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table [data]=algorithmRelations
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [allowAdd]=true
+               [allowSelection]=true
+               [allowSearch]=true
+               [allowSort]=true
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
+               (addElement)="onAddElement()"
+               (submitSelectedElements)="onDeleteElements($event)"
+               (datalistConfigChanged)="onDatalistConfigChanged($event)"
+               (pageChange)="onPageChanged($event)"
+               (elementClicked)="onElementClicked($event)">
+    </app-table>
+  </div>
+</mdb-card>

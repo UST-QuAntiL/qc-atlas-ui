@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import {
   BadgeModule,
   BreadcrumbModule,
+  CardsModule,
   IconsModule,
 } from 'angular-bootstrap-md';
 import { FormsModule } from '@angular/forms';
@@ -18,9 +19,14 @@ import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb
 import { GenericsModule } from '../../generics/generics.module';
 import { ImplSelectionCriteriaComponent } from '../impl-selection-criteria/impl-selection-criteria.component';
 import { ImplementationViewComponent } from './implementation-view.component';
+import { ImplementationPublicationsListComponent } from './implementation-publications-list/implementation-publications-list.component';
 
 @NgModule({
-  declarations: [ImplementationViewComponent, ImplSelectionCriteriaComponent],
+  declarations: [
+    ImplementationViewComponent,
+    ImplementationPublicationsListComponent,
+    ImplSelectionCriteriaComponent,
+  ],
   imports: [
     CommonModule,
     BreadcrumbModule,
@@ -38,6 +44,7 @@ import { ImplementationViewComponent } from './implementation-view.component';
     MatFormFieldModule,
     ComputingResourcePropertyModule,
     MatCardModule,
+    CardsModule,
     MatCheckboxModule,
   ],
 })

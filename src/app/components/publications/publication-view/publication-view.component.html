@@ -1,1 +1,28 @@
-<p>publication-view works!</p>
+<div *ngIf="publication" class="m-2">
+  <div class="header-container p-2">
+    <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+    <div>
+      <mat-chip-list>
+        <mat-chip *ngFor="let tag of testTags" [removable]="true" (removed)="removeTag(tag)">
+          {{tag}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <mat-chip class="clickable-chip" (click)="addTag()">
+          <mat-icon>add</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="General">
+      <app-publication-properties [publication]="publication" (updatePublicationField)="updatePublicationField($event)"></app-publication-properties>
+    </mat-tab>
+    <mat-tab label="Algorithms">
+      <app-publication-algorithms-list [publication]="publication"></app-publication-algorithms-list>
+    </mat-tab>
+    <mat-tab label="Implementations">
+      <app-publication-implementations-list [publication]="publication"></app-publication-implementations-list>
+    </mat-tab>
+  </mat-tab-group>
+</div>

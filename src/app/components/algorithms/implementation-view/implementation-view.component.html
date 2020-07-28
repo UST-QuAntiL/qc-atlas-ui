@@ -75,25 +75,9 @@
       </div>
     </mat-tab>
     <mat-tab label="Publications">
-      <div class="p-4">
-        <app-table
-          class="w-100 p-2"
-          [data]="quantumResources"
-          [variableNames]="variableNames"
-          [dataColumns]="tableColumns"
-          [allowAdd]="true"
-          [allowDelete]="true"
-          [allowSearch]="true"
-          [allowSort]="true"
-          [pagination]="pagingInfo"
-          [paginatorConfig]="paginatorConfig"
-          (elementClicked)="onElementClicked($event)"
-          (addElement)="onAddQuantumResource()"
-          (deleteElements)="onDeleteQuantumResource($event)"
-          (datalistConfigChanged)="onDatalistConfigChanged($event)"
-          (pageChange)="onPageChanged($event)"
-        >
-        </app-table>
+      <div>
+        <app-implementation-publications-list [implementation]=impl>
+        </app-implementation-publications-list>
       </div>
     </mat-tab>
     <mat-tab label="Discussion">

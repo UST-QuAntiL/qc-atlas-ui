@@ -11,6 +11,7 @@ export class ChipCollectionComponent implements OnInit {
   @Input() title = '';
   @Input() elements: any[] = [];
   @Input() displayVariable = '';
+  @Input() allowEmpty = true;
 
   inputValue = '';
 

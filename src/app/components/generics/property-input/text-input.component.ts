@@ -13,6 +13,7 @@ export class TextInputComponent extends AbstractValueAccessor {
   @Input() name = '';
   @Input() multiline = false;
   @Input() maxLines = 1;
+  @Input() isLink: boolean;
 
   isBeingEdited = false;
 
@@ -21,5 +22,9 @@ export class TextInputComponent extends AbstractValueAccessor {
       this.onSaveChanges.emit(this._value);
     }
     this.isBeingEdited = !this.isBeingEdited;
+  }
+
+  openLink(): void {
+    window.open(this.value, '_blank');
   }
 }

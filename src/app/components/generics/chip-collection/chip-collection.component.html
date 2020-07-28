@@ -13,9 +13,9 @@
     </button>
   </div>
   <mat-chip-list>
-    <mat-chip *ngFor="let element of elements" [removable]="true" (removed)="removeElement(element)">
-      {{element[displayVariable]}}
-      <mat-icon matChipRemove>cancel</mat-icon>
+    <mat-chip *ngFor="let element of elements" [removable]="allowEmpty || (!allowEmpty && elements.length > 1)" (removed)="removeElement(element)">
+      {{ displayVariable ? element[displayVariable] : element }}
+      <mat-icon *ngIf="allowEmpty || (!allowEmpty && elements.length > 1)" matChipRemove>cancel</mat-icon>
     </mat-chip>
   </mat-chip-list>
 </div>

@@ -1,0 +1,12 @@
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table class="related-implementation-table"
+               [data]=linkedImplementations
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [emptyTableMessage]="'No linked implementations found'"
+               (elementClicked)="onElementClicked($event)"
+               (datalistConfigChanged)="onDatalistConfigChanged($event)">
+    </app-table>
+  </div>
+</mat-card>

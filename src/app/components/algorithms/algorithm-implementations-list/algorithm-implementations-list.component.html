@@ -1,15 +1,19 @@
-<app-table [data]=implementations
-           [variableNames]=variableNames
-           [dataColumns]=tableColumns
-           [allowAdd]=true
-           [allowDelete]=true
-           [allowSearch]=true
-           [allowSort]=true
-           [pagination]=pagingInfo
-           [paginatorConfig]=paginatorConfig
-           (addElement)="onAddImplementation()"
-           (deleteElements)="onDeleteImplementation($event)"
-           (datalistConfigChanged)="onDatalistConfigChanged($event)"
-           (pageChange)="onPageChanged($event)"
-           (elementClicked)="onImplementationClicked($event)">
-</app-table>
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table [data]=implementations
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [allowAdd]=true
+               [allowSelection]=true
+               [allowSearch]=true
+               [allowSort]=true
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
+               (addElement)="onAddImplementation()"
+               (submitSelectedElements)="onDeleteImplementation($event)"
+               (datalistConfigChanged)="onDatalistConfigChanged($event)"
+               (pageChange)="onPageChanged($event)"
+               (elementClicked)="onImplementationClicked($event)">
+    </app-table>
+  </div>
+</mat-card>

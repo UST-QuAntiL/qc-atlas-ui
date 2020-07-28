@@ -10,17 +10,21 @@ export class DataListComponent implements OnInit {
   @Input() data: any[];
   @Input() variableNames: string[];
   @Input() dataColumns: string[];
+  @Input() externalLinkVariables: string[];
   @Input() allowAdd: boolean;
-  @Input() allowDelete: boolean;
+  @Input() addIcon = 'playlist_add';
+  @Input() allowSelection: boolean;
+  @Input() submitSelectionIcon = 'delete';
   @Input() allowSearch: boolean;
   @Input() allowSort: boolean;
   @Input() pagination: any;
   @Input() paginatorConfig: any;
+  @Input() emptyTableMessage = 'No elements found';
   @Output() elementClicked = new EventEmitter<any>();
   @Output() addElement = new EventEmitter<void>();
-  @Output() deleteElements = new EventEmitter<DeleteParams>();
+  @Output() submitSelectedElements = new EventEmitter<DeleteParams>(); // changed
   @Output() pageChange = new EventEmitter<string>();
-  @Output() datalistConfigChanged = new EventEmitter<any>();
+  @Output() datalistConfigChanged = new EventEmitter<QueryParams>();
   selection = new SelectionModel<any>(true, []);
   searchText = '';
   sortDirection = '';
@@ -62,8 +66,9 @@ export class DataListComponent implements OnInit {
     this.selection.clear();
   }
 
-  onDelete(): void {
-    this.deleteElements.emit(this.generateDeleteParameter());
+  // changed
+  onSelectionSubmitted(): void {
+    this.submitSelectedElements.emit(this.generateDeleteParameter());
     this.selection.clear();
   }
 
@@ -71,7 +76,7 @@ export class DataListComponent implements OnInit {
     const deleteElement: any[] = [element];
     const deleteParams = this.generateDeleteParameter();
     deleteParams.elements = deleteElement;
-    this.deleteElements.emit(deleteParams);
+    this.submitSelectedElements.emit(deleteParams);
     this.selection.clear();
   }
 
@@ -87,7 +92,7 @@ export class DataListComponent implements OnInit {
     this.selection.clear();
   }
 
-  onChangePagingatorConfig(): void {
+  onChangePaginatorConfig(): void {
     this.datalistConfigChanged.emit(this.generateGetParameter());
     this.selection.clear();
   }
@@ -121,8 +126,7 @@ export class DataListComponent implements OnInit {
     }
 
     if (this.sortDirection && this.sortActiveElement) {
-      // comma-delimited list of properties, last element is the direction!
-      params.sort = `${this.sortActiveElement},${this.sortDirection}`;
+      params.sort = [this.sortActiveElement, this.sortDirection];
     }
 
     if (this.allowSearch && this.searchText) {
@@ -148,11 +152,18 @@ export class DataListComponent implements OnInit {
 export interface QueryParams {
   page?: number;
   size?: number;
-  sort?: string;
+  sort?: string[];
   search?: string;
 }
 
 export interface DeleteParams {
   elements: any;
   queryParams: QueryParams;
+}
+
+export interface LinkObject {
+  title: string;
+  subtitle: string;
+  displayVariable: string;
+  data: any[];
 }

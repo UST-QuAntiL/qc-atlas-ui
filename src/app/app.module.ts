@@ -34,15 +34,14 @@ import { JsonImportDialogComponent } from './components/dialogs/json-import-dial
 import { MissingEntityDialogComponent } from './components/dialogs/missing-entity-dialog.component';
 import { SoftwarePlatformViewComponent } from './components/software-platforms/software-platform-view/software-platform-view.component';
 import { CloudServiceViewComponent } from './components/cloud-services/cloud-service-view/cloud-service-view.component';
-import { PublicationViewComponent } from './components/publications/publication-view/publication-view.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
-import { PublicationListComponent } from './components/publications/publication-list/publication-list.component';
 import { NavigationBreadcrumbModule } from './components/generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { AlgorithmModule } from './components/algorithms/algorithm.module';
 import { ImplementationViewModule } from './components/algorithms/implementation-view/implementation-view.module';
 import { GenericsModule } from './components/generics/generics.module';
 import { UtilService } from './util/util.service';
 import { ComputingResourcePropertyModule } from './components/computation-resource-property/computing-resource-property.module';
+import { PublicationModule } from './components/publications/publication.module';
 
 @NgModule({
   declarations: [
@@ -54,9 +53,7 @@ import { ComputingResourcePropertyModule } from './components/computation-resour
     MissingEntityDialogComponent,
     SoftwarePlatformViewComponent,
     CloudServiceViewComponent,
-    PublicationViewComponent,
     NavigationComponent,
-    PublicationListComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -93,6 +90,7 @@ import { ComputingResourcePropertyModule } from './components/computation-resour
     // app modules
     NavigationBreadcrumbModule,
     AlgorithmModule,
+    PublicationModule,
     ImplementationViewModule,
     GenericsModule,
     ComputingResourcePropertyModule,

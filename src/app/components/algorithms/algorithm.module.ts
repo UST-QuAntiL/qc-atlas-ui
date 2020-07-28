@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTreeModule } from '@angular/material/tree';
+import { CardsModule } from 'angular-bootstrap-md';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputingResourcePropertyModule } from '../computation-resource-property/computing-resource-property.module';
@@ -64,6 +65,7 @@ import { AlgorithmRelatedPatternsComponent } from './algorithm-related-patterns/
     MatAutocompleteModule,
     MatTreeModule,
     ComputingResourcePropertyModule,
+    CardsModule,
     NisqAnalyzerModule,
   ],
   exports: [

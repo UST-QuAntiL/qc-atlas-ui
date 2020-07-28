@@ -3,8 +3,8 @@
     <app-link-input
       [linkObject]="linkObject"
       [isDisableable]=true
-      (searchTextChanged)="searchUnlinkedPublications($event)"
-      (linkElement)="linkPublication($event)"
+      (searchTextChanged)="searchUnlinkedAlgorithms($event)"
+      (linkElement)="linkAlgorithm($event)"
       (disable)="onToggleLink()">
     </app-link-input>
   </div>
@@ -13,7 +13,7 @@
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
     <app-table
-      [data]=linkedPublications
+      [data]=linkedAlgorithms
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
@@ -21,7 +21,7 @@
       [emptyTableMessage]="'No linked algorithms found'"
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged($event)"
-      (submitSelectedElements)="unlinkPublications($event)"
+      (submitSelectedElements)="unlinkAlgorithms($event)"
       (addElement)="onToggleLink()">
     </app-table>
   </div>

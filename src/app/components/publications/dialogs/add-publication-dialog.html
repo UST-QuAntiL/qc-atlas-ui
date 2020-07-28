@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="publicationForm">
+    <mat-form-field class="input-field">
+      <mat-label>Title</mat-label>
+      <input id="publicationTitle" formControlName="publicationTitle" matInput required>
+    </mat-form-field>
+    <mat-label> Authors</mat-label>
+    <div *ngFor="let author of authorsForm.controls; let i = index">
+      <div class="row">
+        <div class="col-10">
+          <mat-form-field class="input-field">
+            <input [formControl]="authorsForm.controls[i]" matInput required>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <button mat-icon-button color="warn" id="deleteButton" (click)="removeItem(i)">
+            <mdb-icon fas icon="user-slash"></mdb-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-10">
+      </div>
+      <div class="col-2">
+        <button mat-icon-button color="success" id="addButton" (click)="addItem()">
+          <mdb-icon fas icon="user-plus"></mdb-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok
+  </button>
+</div>
