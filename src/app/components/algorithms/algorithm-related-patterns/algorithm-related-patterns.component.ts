@@ -50,6 +50,18 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
       });
   }
 
+  updatePatternRelation(relationId: string, body: PatternRelationDto): void {
+    this.algorithmService
+      .updatePatternRelations({
+        algoId: this.algorithm.id,
+        relationId,
+        body,
+      })
+      .subscribe((data) => {
+        this.getPatternRelations({ algoId: this.algorithm.id });
+      });
+  }
+
   onAddElement(): void {
     const dialogRef = this.dialog.open(AddPatternRelationDialogComponent, {
       width: '400px',
@@ -102,7 +114,48 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     this.getPatternRelations({ algoId: this.algorithm.id });
   }
 
-  onElementClicked(event): void {}
+  onElementClicked(event): void {
+    const dialogRef = this.dialog.open(AddPatternRelationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Edit pattern relation',
+        algoId: this.algorithm.id,
+        pattern: event.pattern,
+        description: event.description,
+        patternRelationType: event.patternTypeObject,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        if (!dialogResult.patternRelationType.id) {
+          this.patternRelationTypeService
+            .createPatternRelationType({
+              body: dialogResult.patternRelationType,
+            })
+            .subscribe((createdType) => {
+              this.updatePatternRelation(
+                event.id,
+                this.generatePatternRelationDto(
+                  createdType,
+                  dialogResult.description,
+                  dialogResult.pattern
+                )
+              );
+            });
+        } else {
+          this.updatePatternRelation(
+            event.id,
+            this.generatePatternRelationDto(
+              dialogResult.patternRelationType,
+              dialogResult.description,
+              dialogResult.pattern
+            )
+          );
+        }
+      }
+    });
+  }
 
   generateTableObjects(): void {
     this.tableObjects = [];
@@ -112,6 +165,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
         description: relation.description,
         patternType: relation.patternRelationType.name,
         pattern: relation.pattern,
+        patternTypeObject: relation.patternRelationType,
       });
     }
   }
@@ -135,4 +189,5 @@ export interface PatternRelationTableObject {
   patternType: string;
   description: string;
   pattern: string;
+  patternTypeObject: PatternRelationTypeDto;
 }

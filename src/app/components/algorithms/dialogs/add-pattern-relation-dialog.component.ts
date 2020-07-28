@@ -43,6 +43,8 @@ export class AddPatternRelationDialogComponent implements OnInit {
         Validators.required,
       ]),
     });
+    this.setPatternRelationType(this.data.patternRelationType.name);
+    this.selectedRelationType = this.data.patternRelationType;
     this.patternRelationTypeService
       .getPatternRelationTypes1({})
       .subscribe((relationTypes) => {
@@ -61,6 +63,10 @@ export class AddPatternRelationDialogComponent implements OnInit {
 
   get pattern(): AbstractControl | null {
     return this.patternRelationForm.get('pattern');
+  }
+
+  setPatternRelationType(value) {
+    this.patternRelationForm.get('patternRelationType').setValue(value);
   }
 
   get patternRelationType(): AbstractControl | null {
