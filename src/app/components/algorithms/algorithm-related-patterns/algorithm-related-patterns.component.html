@@ -1,1 +1,16 @@
-<p>algorithm-related-patterns works!</p>
+<mdb-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table [data]=patternRelations
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [externalLinkVariables]=externalLinkVariables
+               [allowAdd]=true
+               [allowSelection]=true
+               [emptyTableMessage]="'No related patterns found'"
+               (addElement)="onAddElement()"
+               (submitSelectedElements)="onDeleteElements($event)"
+               (datalistConfigChanged)="onDatalistConfigChanged($event)"
+               (elementClicked)="onElementClicked($event)">
+    </app-table>
+  </div>
+</mdb-card>
