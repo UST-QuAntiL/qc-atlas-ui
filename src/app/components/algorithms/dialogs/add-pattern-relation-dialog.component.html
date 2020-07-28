@@ -10,11 +10,12 @@
       <textarea formControlName="description" matInput required></textarea>
     </mat-form-field>
     <mat-form-field class="input-field">
-      <mat-label>Relation Type</mat-label>
+      <mat-label>Pattern</mat-label>
       <input
         formControlName="patternRelationType"
         [matAutocomplete]="autoProblemType"
         placeholder="Competing Consumer"
+        (change)="onPatternRelationInputChanged()"
         matInput
         required>
       <mat-autocomplete #autoProblemType="matAutocomplete" >
@@ -30,5 +31,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="data">Ok</button>
+  <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok</button>
 </div>

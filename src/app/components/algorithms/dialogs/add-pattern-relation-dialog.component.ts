@@ -79,6 +79,25 @@ export class AddPatternRelationDialogComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  onPatternRelationInputChanged(): void {
+    const existingRelationType = this.patternRelationTypes.find(
+      (x) => x.name === this.patternRelationType.value
+    );
+    if (existingRelationType) {
+      this.selectedRelationType = existingRelationType;
+    } else {
+      this.selectedRelationType = { name: this.patternRelationType.value };
+    }
+  }
+
+  isRequiredDataMissing(): boolean {
+    return (
+      this.pattern.errors?.required ||
+      this.patternRelationType.errors?.required ||
+      this.description.errors?.required
+    );
+  }
 }
 
 export interface DialogData {
