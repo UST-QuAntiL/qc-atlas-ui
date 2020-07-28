@@ -80,7 +80,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
                 this.generatePatternRelationDto(
                   createdType,
                   dialogResult.description,
-                  dialogResult.pattern
+                  dialogResult.pattern,
+                  undefined
                 )
               );
             });
@@ -89,7 +90,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
             this.generatePatternRelationDto(
               dialogResult.patternRelationType,
               dialogResult.description,
-              dialogResult.pattern
+              dialogResult.pattern,
+              undefined
             )
           );
         }
@@ -139,7 +141,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
                 this.generatePatternRelationDto(
                   createdType,
                   dialogResult.description,
-                  dialogResult.pattern
+                  dialogResult.pattern,
+                  event.id
                 )
               );
             });
@@ -149,7 +152,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
             this.generatePatternRelationDto(
               dialogResult.patternRelationType,
               dialogResult.description,
-              dialogResult.pattern
+              dialogResult.pattern,
+              event.id
             )
           );
         }
@@ -173,9 +177,11 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   generatePatternRelationDto(
     patternRelationType: PatternRelationTypeDto,
     description: string,
-    pattern: string
+    pattern: string,
+    id: string
   ): PatternRelationDto {
     return {
+      id,
       algorithm: this.algorithm,
       pattern,
       patternRelationType,
