@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="patternRelationForm">
+    <mat-form-field class="input-field">
+      <mat-label>URI</mat-label>
+      <input formControlName="pattern" placeholder="blog.cdemi.io/design-patterns-competing-consumer-pattern" matInput required>
+    </mat-form-field>
+    <mat-form-field class="input-field">
+      <mat-label>Description</mat-label>
+      <textarea formControlName="description" matInput required></textarea>
+    </mat-form-field>
+    <mat-form-field class="input-field">
+      <mat-label>Relation Type</mat-label>
+      <input
+        formControlName="patternRelationType"
+        [matAutocomplete]="autoProblemType"
+        placeholder="Competing Consumer"
+        matInput
+        required>
+      <mat-autocomplete #autoProblemType="matAutocomplete" >
+        <mat-option
+          *ngFor="let type of patternRelationTypes"
+          [value]="type.name"
+          (click)="onPatternRelationTypeSelect(type)">
+          {{ type.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data">Ok</button>
+</div>

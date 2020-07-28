@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmDto } from 'api/models/algorithm-dto';
-import { EntityModelAlgorithmRelationDto } from 'api/models/entity-model-algorithm-relation-dto';
 import { EntityModelPatternRelationDto } from 'api/models/entity-model-pattern-relation-dto';
+import { MatDialog } from '@angular/material/dialog';
+import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 
 @Component({
   selector: 'app-algorithm-related-patterns',
@@ -20,13 +21,24 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   tableColumns: string[] = ['Description', 'Link', 'Relation Type']; // 'Name', 'Type', 'Relation'
   externalLinkVariables: string[] = ['pattern'];
 
-  constructor() {}
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {
     console.log(this.algorithm);
   }
 
-  onAddElement(): void {}
+  onAddElement(): void {
+    const dialogRef = this.dialog.open(AddPatternRelationDialogComponent, {
+      width: '400px',
+      data: { title: 'Add new pattern relation', algoId: this.algorithm.id },
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        console.log(dialogResult);
+      }
+    });
+  }
 
   onDeleteElements(event): void {}
 
