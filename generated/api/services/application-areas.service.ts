@@ -22,19 +22,36 @@ export class ApplicationAreasService extends BaseService {
   }
 
   /**
-   * Path part for operation getApplicationAreas1
+   * Path part for operation getApplicationAreas
    */
-  static readonly GetApplicationAreas1Path = '/v1/application-areas';
+  static readonly GetApplicationAreasPath = '/v1/application-areas';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getApplicationAreas1()` instead.
+   * To access only the response body, use `getApplicationAreas()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getApplicationAreas1$Response(params?: {
+  getApplicationAreas$Response(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
@@ -43,12 +60,14 @@ export class ApplicationAreasService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      ApplicationAreasService.GetApplicationAreas1Path,
+      ApplicationAreasService.GetApplicationAreasPath,
       'get'
     );
     if (params) {
+      rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -72,18 +91,35 @@ export class ApplicationAreasService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getApplicationAreas1$Response()` instead.
+   * To access the full response (for headers, for example), `getApplicationAreas$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getApplicationAreas1(params?: {
+  getApplicationAreas(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
     page?: PageMetadata;
   }> {
-    return this.getApplicationAreas1$Response(params).pipe(
+    return this.getApplicationAreas$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{

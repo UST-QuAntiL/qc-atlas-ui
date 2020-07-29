@@ -22,17 +22,17 @@ export class ProblemTypeService extends BaseService {
   }
 
   /**
-   * Path part for operation getProblemTypes1
+   * Path part for operation getProblemTypes
    */
-  static readonly GetProblemTypes1Path = '/v1/problem-types';
+  static readonly GetProblemTypesPath = '/v1/problem-types';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getProblemTypes1()` instead.
+   * To access only the response body, use `getProblemTypes()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getProblemTypes1$Response(params?: {
+  getProblemTypes$Response(params?: {
     page?: number;
     size?: number;
   }): Observable<
@@ -43,7 +43,7 @@ export class ProblemTypeService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      ProblemTypeService.GetProblemTypes1Path,
+      ProblemTypeService.GetProblemTypesPath,
       'get'
     );
     if (params) {
@@ -70,18 +70,18 @@ export class ProblemTypeService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getProblemTypes1$Response()` instead.
+   * To access the full response (for headers, for example), `getProblemTypes$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getProblemTypes1(params?: {
+  getProblemTypes(params?: {
     page?: number;
     size?: number;
   }): Observable<{
     _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
     page?: PageMetadata;
   }> {
-    return this.getProblemTypes1$Response(params).pipe(
+    return this.getProblemTypes$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{

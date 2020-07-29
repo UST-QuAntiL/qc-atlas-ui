@@ -22,8 +22,8 @@
     <mat-tab label="General">
       <app-algorithm-properties
         [algorithm]="algorithm"
-        [applicationAreas]="applicationAreas"
         [linkedProblemTypes]="problemTypes"
+        [linkedApplicationAreas]="applicationAreas"
         (updateAlgorithmField)="updateAlgorithmField($event)"
         (addApplicationArea)="addApplicationArea($event)"
         (removeApplicationArea)="removeApplicationArea($event)"

@@ -24,17 +24,17 @@ export class PatternRelationService extends BaseService {
   }
 
   /**
-   * Path part for operation getPatternRelationTypes
+   * Path part for operation getAllPatternRelationTypes
    */
-  static readonly GetPatternRelationTypesPath = '/v1/pattern-relations';
+  static readonly GetAllPatternRelationTypesPath = '/v1/pattern-relations';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPatternRelationTypes()` instead.
+   * To access only the response body, use `getAllPatternRelationTypes()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternRelationTypes$Response(params?: {
+  getAllPatternRelationTypes$Response(params?: {
     page?: number;
     size?: number;
   }): Observable<
@@ -45,7 +45,7 @@ export class PatternRelationService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternRelationService.GetPatternRelationTypesPath,
+      PatternRelationService.GetAllPatternRelationTypesPath,
       'get'
     );
     if (params) {
@@ -74,18 +74,18 @@ export class PatternRelationService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPatternRelationTypes$Response()` instead.
+   * To access the full response (for headers, for example), `getAllPatternRelationTypes$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternRelationTypes(params?: {
+  getAllPatternRelationTypes(params?: {
     page?: number;
     size?: number;
   }): Observable<{
     _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
     page?: PageMetadata;
   }> {
-    return this.getPatternRelationTypes$Response(params).pipe(
+    return this.getAllPatternRelationTypes$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -106,19 +106,19 @@ export class PatternRelationService extends BaseService {
   }
 
   /**
-   * Path part for operation createPatternRelation1
+   * Path part for operation createPatternRelation
    */
-  static readonly CreatePatternRelation1Path = '/v1/pattern-relations';
+  static readonly CreatePatternRelationPath = '/v1/pattern-relations';
 
   /**
    * Add a pattern relation from an algorithm to a given pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `createPatternRelation1()` instead.
+   * To access only the response body, use `createPatternRelation()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createPatternRelation1$Response(params: {
+  createPatternRelation$Response(params: {
     body: PatternRelationDto;
   }): Observable<
     StrictHttpResponse<{
@@ -132,7 +132,7 @@ export class PatternRelationService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternRelationService.CreatePatternRelation1Path,
+      PatternRelationService.CreatePatternRelationPath,
       'post'
     );
     if (params) {
@@ -164,11 +164,11 @@ export class PatternRelationService extends BaseService {
    * Add a pattern relation from an algorithm to a given pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `createPatternRelation1$Response()` instead.
+   * To access the full response (for headers, for example), `createPatternRelation$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createPatternRelation1(params: {
+  createPatternRelation(params: {
     body: PatternRelationDto;
   }): Observable<{
     id?: string;
@@ -178,7 +178,7 @@ export class PatternRelationService extends BaseService {
     description?: string;
     _links?: Array<Link>;
   }> {
-    return this.createPatternRelation1$Response(params).pipe(
+    return this.createPatternRelation$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -203,17 +203,17 @@ export class PatternRelationService extends BaseService {
   }
 
   /**
-   * Path part for operation getPatternRelation1
+   * Path part for operation getPatternRelation
    */
-  static readonly GetPatternRelation1Path = '/v1/pattern-relations/{id}';
+  static readonly GetPatternRelationPath = '/v1/pattern-relations/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPatternRelation1()` instead.
+   * To access only the response body, use `getPatternRelation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternRelation1$Response(params: {
+  getPatternRelation$Response(params: {
     id: string;
   }): Observable<
     StrictHttpResponse<{
@@ -227,7 +227,7 @@ export class PatternRelationService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternRelationService.GetPatternRelation1Path,
+      PatternRelationService.GetPatternRelationPath,
       'get'
     );
     if (params) {
@@ -257,11 +257,11 @@ export class PatternRelationService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPatternRelation1$Response()` instead.
+   * To access the full response (for headers, for example), `getPatternRelation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternRelation1(params: {
+  getPatternRelation(params: {
     id: string;
   }): Observable<{
     id?: string;
@@ -271,7 +271,7 @@ export class PatternRelationService extends BaseService {
     description?: string;
     _links?: Array<Link>;
   }> {
-    return this.getPatternRelation1$Response(params).pipe(
+    return this.getPatternRelation$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -296,19 +296,20 @@ export class PatternRelationService extends BaseService {
   }
 
   /**
-   * Path part for operation updatePatternRelationType
+   * Path part for operation updatePatternRelationTypeByPattern
    */
-  static readonly UpdatePatternRelationTypePath = '/v1/pattern-relations/{id}';
+  static readonly UpdatePatternRelationTypeByPatternPath =
+    '/v1/pattern-relations/{id}';
 
   /**
    * Update a reference to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updatePatternRelationType()` instead.
+   * To access only the response body, use `updatePatternRelationTypeByPattern()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updatePatternRelationType$Response(params: {
+  updatePatternRelationTypeByPattern$Response(params: {
     id: string;
     body: PatternRelationDto;
   }): Observable<
@@ -323,7 +324,7 @@ export class PatternRelationService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternRelationService.UpdatePatternRelationTypePath,
+      PatternRelationService.UpdatePatternRelationTypeByPatternPath,
       'put'
     );
     if (params) {
@@ -357,11 +358,11 @@ export class PatternRelationService extends BaseService {
    * Update a reference to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updatePatternRelationType$Response()` instead.
+   * To access the full response (for headers, for example), `updatePatternRelationTypeByPattern$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updatePatternRelationType(params: {
+  updatePatternRelationTypeByPattern(params: {
     id: string;
     body: PatternRelationDto;
   }): Observable<{
@@ -372,7 +373,7 @@ export class PatternRelationService extends BaseService {
     description?: string;
     _links?: Array<Link>;
   }> {
-    return this.updatePatternRelationType$Response(params).pipe(
+    return this.updatePatternRelationTypeByPattern$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -397,22 +398,22 @@ export class PatternRelationService extends BaseService {
   }
 
   /**
-   * Path part for operation deletePatternRelation1
+   * Path part for operation deletePatternRelation
    */
-  static readonly DeletePatternRelation1Path = '/v1/pattern-relations/{id}';
+  static readonly DeletePatternRelationPath = '/v1/pattern-relations/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deletePatternRelation1()` instead.
+   * To access only the response body, use `deletePatternRelation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deletePatternRelation1$Response(params: {
+  deletePatternRelation$Response(params: {
     id: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternRelationService.DeletePatternRelation1Path,
+      PatternRelationService.DeletePatternRelationPath,
       'delete'
     );
     if (params) {
@@ -437,12 +438,12 @@ export class PatternRelationService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deletePatternRelation1$Response()` instead.
+   * To access the full response (for headers, for example), `deletePatternRelation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deletePatternRelation1(params: { id: string }): Observable<void> {
-    return this.deletePatternRelation1$Response(params).pipe(
+  deletePatternRelation(params: { id: string }): Observable<void> {
+    return this.deletePatternRelation$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }

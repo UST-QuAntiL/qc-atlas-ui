@@ -37,7 +37,7 @@ export class PublicationListComponent implements OnInit {
   ngOnInit(): void {}
 
   getPublications(params: QueryParams): void {
-    this.publicationService.getPublications2(params).subscribe((data) => {
+    this.publicationService.getPublications(params).subscribe((data) => {
       this.preparePublicationData(data);
     });
   }

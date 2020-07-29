@@ -23,7 +23,7 @@ export class PublicationViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ publicationId }) => {
-      this.publicationService.getPublication2({ id: publicationId }).subscribe(
+      this.publicationService.getPublication({ id: publicationId }).subscribe(
         (publication: EntityModelPublicationDto) => {
           this.publication = publication;
           this.links[0] = {

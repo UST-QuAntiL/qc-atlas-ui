@@ -22,17 +22,17 @@ export class SoftwarePlatformService extends BaseService {
   }
 
   /**
-   * Path part for operation getSoftwarePlatforms1
+   * Path part for operation getSoftwarePlatforms
    */
-  static readonly GetSoftwarePlatforms1Path = '/v1/software-platforms';
+  static readonly GetSoftwarePlatformsPath = '/v1/software-platforms';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getSoftwarePlatforms1()` instead.
+   * To access only the response body, use `getSoftwarePlatforms()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatforms1$Response(params?: {
+  getSoftwarePlatforms$Response(params?: {
     page?: number;
     size?: number;
   }): Observable<
@@ -43,7 +43,7 @@ export class SoftwarePlatformService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      SoftwarePlatformService.GetSoftwarePlatforms1Path,
+      SoftwarePlatformService.GetSoftwarePlatformsPath,
       'get'
     );
     if (params) {
@@ -72,18 +72,18 @@ export class SoftwarePlatformService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getSoftwarePlatforms1$Response()` instead.
+   * To access the full response (for headers, for example), `getSoftwarePlatforms$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatforms1(params?: {
+  getSoftwarePlatforms(params?: {
     page?: number;
     size?: number;
   }): Observable<{
     _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
     page?: PageMetadata;
   }> {
-    return this.getSoftwarePlatforms1$Response(params).pipe(
+    return this.getSoftwarePlatforms$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -104,19 +104,19 @@ export class SoftwarePlatformService extends BaseService {
   }
 
   /**
-   * Path part for operation addSoftwarePlatform1
+   * Path part for operation addSoftwarePlatform
    */
-  static readonly AddSoftwarePlatform1Path = '/v1/software-platforms';
+  static readonly AddSoftwarePlatformPath = '/v1/software-platforms';
 
   /**
    * Custom ID will be ignored.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addSoftwarePlatform1()` instead.
+   * To access only the response body, use `addSoftwarePlatform()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addSoftwarePlatform1$Response(params: {
+  addSoftwarePlatform$Response(params: {
     body: SoftwarePlatformDto;
   }): Observable<
     StrictHttpResponse<{
@@ -130,7 +130,7 @@ export class SoftwarePlatformService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      SoftwarePlatformService.AddSoftwarePlatform1Path,
+      SoftwarePlatformService.AddSoftwarePlatformPath,
       'post'
     );
     if (params) {
@@ -162,11 +162,11 @@ export class SoftwarePlatformService extends BaseService {
    * Custom ID will be ignored.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addSoftwarePlatform1$Response()` instead.
+   * To access the full response (for headers, for example), `addSoftwarePlatform$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addSoftwarePlatform1(params: {
+  addSoftwarePlatform(params: {
     body: SoftwarePlatformDto;
   }): Observable<{
     id?: string;
@@ -176,7 +176,7 @@ export class SoftwarePlatformService extends BaseService {
     licence?: string;
     _links?: Array<Link>;
   }> {
-    return this.addSoftwarePlatform1$Response(params).pipe(
+    return this.addSoftwarePlatform$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -201,17 +201,17 @@ export class SoftwarePlatformService extends BaseService {
   }
 
   /**
-   * Path part for operation getSoftwarePlatform1
+   * Path part for operation getSoftwarePlatform
    */
-  static readonly GetSoftwarePlatform1Path = '/v1/software-platforms/{id}';
+  static readonly GetSoftwarePlatformPath = '/v1/software-platforms/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getSoftwarePlatform1()` instead.
+   * To access only the response body, use `getSoftwarePlatform()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatform1$Response(params: {
+  getSoftwarePlatform$Response(params: {
     id: string;
   }): Observable<
     StrictHttpResponse<{
@@ -225,7 +225,7 @@ export class SoftwarePlatformService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      SoftwarePlatformService.GetSoftwarePlatform1Path,
+      SoftwarePlatformService.GetSoftwarePlatformPath,
       'get'
     );
     if (params) {
@@ -255,11 +255,11 @@ export class SoftwarePlatformService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getSoftwarePlatform1$Response()` instead.
+   * To access the full response (for headers, for example), `getSoftwarePlatform$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatform1(params: {
+  getSoftwarePlatform(params: {
     id: string;
   }): Observable<{
     id?: string;
@@ -269,7 +269,7 @@ export class SoftwarePlatformService extends BaseService {
     licence?: string;
     _links?: Array<Link>;
   }> {
-    return this.getSoftwarePlatform1$Response(params).pipe(
+    return this.getSoftwarePlatform$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{

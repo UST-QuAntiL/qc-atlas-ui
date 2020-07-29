@@ -40,19 +40,21 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   }
 
   getLinkedPublications(params): void {
-    this.algorithmService.getPublications(params).subscribe((publications) => {
-      if (publications._embedded) {
-        this.linkedPublications = publications._embedded.publications;
-      } else {
-        this.linkedPublications = [];
-      }
-    });
+    this.algorithmService
+      .getPublicationsByAlgorithm(params)
+      .subscribe((publications) => {
+        if (publications._embedded) {
+          this.linkedPublications = publications._embedded.publications;
+        } else {
+          this.linkedPublications = [];
+        }
+      });
   }
 
   searchUnlinkedPublications(search: string): void {
     // Search for unlinked algorithms if search-text is not empty
     if (search) {
-      this.publicationService.getPublications2({ search }).subscribe((data) => {
+      this.publicationService.getPublications({ search }).subscribe((data) => {
         this.updateLinkablePublications(data._embedded);
       });
     } else {
@@ -94,7 +96,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.router.navigate(['publications', publication.id]);
   }
 
-  updateLinkablePublications(publicationData) {
+  updateLinkablePublications(publicationData): void {
     // Clear list of linkable algorithms
     this.linkObject.data = [];
     // If linkable algorithms found

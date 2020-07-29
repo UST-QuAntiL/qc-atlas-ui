@@ -26,17 +26,17 @@ export class PublicationService extends BaseService {
   }
 
   /**
-   * Path part for operation getPublications2
+   * Path part for operation getPublications
    */
-  static readonly GetPublications2Path = '/v1/publications';
+  static readonly GetPublicationsPath = '/v1/publications';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPublications2()` instead.
+   * To access only the response body, use `getPublications()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPublications2$Response(params?: {
+  getPublications$Response(params?: {
     /**
      * Filter criteria for this query
      */
@@ -64,7 +64,7 @@ export class PublicationService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PublicationService.GetPublications2Path,
+      PublicationService.GetPublicationsPath,
       'get'
     );
     if (params) {
@@ -93,11 +93,11 @@ export class PublicationService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPublications2$Response()` instead.
+   * To access the full response (for headers, for example), `getPublications$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPublications2(params?: {
+  getPublications(params?: {
     /**
      * Filter criteria for this query
      */
@@ -121,7 +121,7 @@ export class PublicationService extends BaseService {
     _embedded?: { publications?: Array<EntityModelPublicationDto> };
     page?: PageMetadata;
   }> {
-    return this.getPublications2$Response(params).pipe(
+    return this.getPublications$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -235,17 +235,17 @@ export class PublicationService extends BaseService {
   }
 
   /**
-   * Path part for operation getPublication2
+   * Path part for operation getPublication
    */
-  static readonly GetPublication2Path = '/v1/publications/{id}';
+  static readonly GetPublicationPath = '/v1/publications/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPublication2()` instead.
+   * To access only the response body, use `getPublication()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPublication2$Response(params: {
+  getPublication$Response(params: {
     id: string;
   }): Observable<
     StrictHttpResponse<{
@@ -259,7 +259,7 @@ export class PublicationService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PublicationService.GetPublication2Path,
+      PublicationService.GetPublicationPath,
       'get'
     );
     if (params) {
@@ -289,11 +289,11 @@ export class PublicationService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPublication2$Response()` instead.
+   * To access the full response (for headers, for example), `getPublication$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPublication2(params: {
+  getPublication(params: {
     id: string;
   }): Observable<{
     id?: string;
@@ -303,7 +303,7 @@ export class PublicationService extends BaseService {
     authors: Array<string>;
     _links?: Array<Link>;
   }> {
-    return this.getPublication2$Response(params).pipe(
+    return this.getPublication$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{

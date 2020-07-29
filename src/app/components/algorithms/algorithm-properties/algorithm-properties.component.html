@@ -32,13 +32,19 @@
                              (onExpandParents)="getParentsForNode($event)"
                              (onSearchTextChanged)="searchUnlinkedProblemTypes($event)"></app-problem-type-tree>
     </mat-card>
+
     <mat-card class="w-100 m-4">
-      <app-chip-collection class="w-100"
-                           [title]="'Application areas'"
-                           [elements]="applicationAreas"
-                           [displayVariable]="'name'"
-                           (onAddElement)="addApplicationAreaEvent($event)"
-                           (onRemoveElement)="removeApplicationAreaEvent($event)"></app-chip-collection>
+      <div class="mx-3 my-2">
+        <app-chip-collection class="w-100"
+                             [title]="'Application areas'"
+                             [elements]="linkedApplicationAreas"
+                             [displayVariable]="'name'"
+                             [useToAddLinks]="true"
+                             [linkObject]=applicationAreaLinkObject
+                             (onAddElement)="addApplicationAreaEvent($event)"
+                             (onRemoveElement)="removeApplicationAreaEvent($event)"
+                             (onSearchTextChanged)="searchUnlinkedApplicationAreas($event)"></app-chip-collection>
+      </div>
     </mat-card>
   </div>
 

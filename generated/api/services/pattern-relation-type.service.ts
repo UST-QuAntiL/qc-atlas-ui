@@ -22,17 +22,17 @@ export class PatternRelationTypeService extends BaseService {
   }
 
   /**
-   * Path part for operation getPatternRelationTypes1
+   * Path part for operation getPatternRelationTypes
    */
-  static readonly GetPatternRelationTypes1Path = '/v1/pattern-relation-types';
+  static readonly GetPatternRelationTypesPath = '/v1/pattern-relation-types';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPatternRelationTypes1()` instead.
+   * To access only the response body, use `getPatternRelationTypes()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternRelationTypes1$Response(params?: {
+  getPatternRelationTypes$Response(params?: {
     page?: number;
     size?: number;
   }): Observable<
@@ -45,7 +45,7 @@ export class PatternRelationTypeService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternRelationTypeService.GetPatternRelationTypes1Path,
+      PatternRelationTypeService.GetPatternRelationTypesPath,
       'get'
     );
     if (params) {
@@ -74,11 +74,11 @@ export class PatternRelationTypeService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPatternRelationTypes1$Response()` instead.
+   * To access the full response (for headers, for example), `getPatternRelationTypes$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternRelationTypes1(params?: {
+  getPatternRelationTypes(params?: {
     page?: number;
     size?: number;
   }): Observable<{
@@ -87,7 +87,7 @@ export class PatternRelationTypeService extends BaseService {
     };
     page?: PageMetadata;
   }> {
-    return this.getPatternRelationTypes1$Response(params).pipe(
+    return this.getPatternRelationTypes$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -243,20 +243,20 @@ export class PatternRelationTypeService extends BaseService {
   }
 
   /**
-   * Path part for operation updatePatternRelationType1
+   * Path part for operation updatePatternRelationType
    */
-  static readonly UpdatePatternRelationType1Path =
+  static readonly UpdatePatternRelationTypePath =
     '/v1/pattern-relation-types/{id}';
 
   /**
    * Custom ID will be ignored.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updatePatternRelationType1()` instead.
+   * To access only the response body, use `updatePatternRelationType()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updatePatternRelationType1$Response(params: {
+  updatePatternRelationType$Response(params: {
     id: string;
     body: PatternRelationTypeDto;
   }): Observable<
@@ -264,7 +264,7 @@ export class PatternRelationTypeService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternRelationTypeService.UpdatePatternRelationType1Path,
+      PatternRelationTypeService.UpdatePatternRelationTypePath,
       'put'
     );
     if (params) {
@@ -295,15 +295,15 @@ export class PatternRelationTypeService extends BaseService {
    * Custom ID will be ignored.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updatePatternRelationType1$Response()` instead.
+   * To access the full response (for headers, for example), `updatePatternRelationType$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updatePatternRelationType1(params: {
+  updatePatternRelationType(params: {
     id: string;
     body: PatternRelationTypeDto;
   }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
-    return this.updatePatternRelationType1$Response(params).pipe(
+    return this.updatePatternRelationType$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{

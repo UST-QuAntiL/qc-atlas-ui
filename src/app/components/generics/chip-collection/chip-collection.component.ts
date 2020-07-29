@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { LinkObject } from '../data-list/data-list.component';
 
 @Component({
   selector: 'app-chip-collection',
@@ -7,11 +8,18 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class ChipCollectionComponent implements OnInit {
   @Output() onRemoveElement: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onAddElement: EventEmitter<string> = new EventEmitter<string>();
+  @Output() onAddElement: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onSearchTextChanged: EventEmitter<string> = new EventEmitter<
+    string
+  >();
   @Input() title = '';
   @Input() elements: any[] = [];
   @Input() displayVariable = '';
   @Input() allowEmpty = true;
+  @Input() useToAddLinks = false;
+  @Input() linkTitle = '';
+  @Input() linkSubtitle = '';
+  @Input() linkObject: LinkObject;
 
   inputValue = '';
 

@@ -8,7 +8,7 @@
          (input)="onLinkSearchChange()" [(ngModel)]="linkSearchText">
   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onLinkElement($event.option.value)">
     <mat-option *ngFor="let linkData of linkObject.data" [value]="linkData">
-      <div class="d-flex flex-column" (click)="onLinkElement(linkData)">
+      <div class="d-flex flex-column">
         <div class="p-2">
           <span>{{ linkData[linkObject.displayVariable] }}</span>
         </div>
