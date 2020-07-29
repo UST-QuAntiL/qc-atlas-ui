@@ -23,14 +23,17 @@
 
   <div class="d-flex">
     <mat-card class="w-100 m-4">
-      <app-problem-type-tree #problemTypeTree
-                             class="w-100"
-                             [title]='"Problem types"'
-                             [treeData]="problemTypeTreeData"
-                             (onAddElement)="onAddProblemType.emit($event)"
-                             (onRemoveElement)="onRemoveProblemType.emit($event)"
-                             (onExpandParents)="getParentsForNode($event)"
-                             (onSearchTextChanged)="searchUnlinkedProblemTypes($event)"></app-problem-type-tree>
+      <div class="mx-3 my-2">
+        <app-problem-type-tree #problemTypeTree
+                               class="w-100"
+                               [title]='"Problem types"'
+                               [treeData]="problemTypeTreeData"
+                               [linkObject]="problemTypeLinkObject"
+                               (onAddElement)="onAddProblemType.emit($event)"
+                               (onRemoveElement)="onRemoveProblemType.emit($event)"
+                               (onExpandParents)="getParentsForNode($event)"
+                               (onSearchTextChanged)="searchUnlinkedProblemTypes($event)"></app-problem-type-tree>
+      </div>
     </mat-card>
 
     <mat-card class="w-100 m-4">
@@ -124,7 +127,7 @@
   <mat-card class="m-4">
     <app-select-input class="p-2"
                       name="Sketch type"
-                      [(ngModel)]="algorithm.sketch"
+                      [(ngModel)]="algorithm.sketches"
                       [includeEmpty]="true"
                       [choices]="sketchOptions"
                       (onSaveChanges)="onChangesSaved($event, 'sketch')"></app-select-input>

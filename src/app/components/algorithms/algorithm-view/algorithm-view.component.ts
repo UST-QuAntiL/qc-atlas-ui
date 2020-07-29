@@ -189,7 +189,6 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
           if (types._embedded) {
             this.problemTypes = types._embedded.problemTypes;
           }
-          console.log(types);
         },
         (error) => {
           console.log(error);
