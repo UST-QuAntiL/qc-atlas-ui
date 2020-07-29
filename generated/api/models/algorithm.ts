@@ -5,6 +5,7 @@ import { ComputingResourceProperty } from './computing-resource-property';
 import { PatternRelation } from './pattern-relation';
 import { ProblemType } from './problem-type';
 import { Publication } from './publication';
+import { Sketch } from './sketch';
 import { Tag } from './tag';
 export type Algorithm = {
   id?: string;
@@ -18,7 +19,7 @@ export type Algorithm = {
   algorithmRelations?: Array<AlgorithmRelation>;
   requiredComputingResourceProperties?: Array<ComputingResourceProperty>;
   algoParameter?: string;
-  sketch?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL';
+  sketches?: Array<Sketch>;
   solution?: string;
   assumptions?: string;
   computationModel?: 'CLASSIC' | 'QUANTUM' | 'HYBRID';

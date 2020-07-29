@@ -33,8 +33,25 @@ export class ProblemTypeService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProblemTypes$Response(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
@@ -47,8 +64,10 @@ export class ProblemTypeService extends BaseService {
       'get'
     );
     if (params) {
+      rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -75,8 +94,25 @@ export class ProblemTypeService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProblemTypes(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
     page?: PageMetadata;

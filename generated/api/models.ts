@@ -42,6 +42,7 @@ export { PublicationDto } from './models/publication-dto';
 export { QuantumAlgorithm } from './models/quantum-algorithm';
 export { QuantumAlgorithmDto } from './models/quantum-algorithm-dto';
 export { QuantumImplementation } from './models/quantum-implementation';
+export { Sketch } from './models/sketch';
 export { SoftwarePlatform } from './models/software-platform';
 export { SoftwarePlatformDto } from './models/software-platform-dto';
 export { Tag } from './models/tag';

@@ -17,8 +17,6 @@ export class ChipCollectionComponent implements OnInit {
   @Input() displayVariable = '';
   @Input() allowEmpty = true;
   @Input() useToAddLinks = false;
-  @Input() linkTitle = '';
-  @Input() linkSubtitle = '';
   @Input() linkObject: LinkObject;
 
   inputValue = '';

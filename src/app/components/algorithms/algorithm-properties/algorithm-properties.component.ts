@@ -180,18 +180,18 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   }
 
   searchUnlinkedProblemTypes(search: string): void {
-    // Search for unlinked algorithms if search-text is not empty
+    // Search for unlinked problem types if search-text is not empty
     if (search) {
       this.problemTypeService.getProblemTypes({ search }).subscribe((data) => {
-        this.updateLinkableApplicationAreas(data._embedded);
+        this.updateLinkableProblemTypes(data._embedded);
       });
     } else {
       this.problemTypeLinkObject.data = [];
     }
   }
 
-  updateLinkableApplicationAreas(problemTypesData): void {
-    // Clear list of linkable algorithms
+  updateLinkableProblemTypes(problemTypesData): void {
+    // Clear list of linkable problem types
     this.problemTypeLinkObject.data = [];
     // If linkable algorithms found
     if (problemTypesData) {

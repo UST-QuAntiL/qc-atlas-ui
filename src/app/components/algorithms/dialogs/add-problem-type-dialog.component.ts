@@ -57,7 +57,7 @@ export class AddProblemTypeDialogComponent implements OnInit {
     this.parentProblemTypeForm = new FormGroup({
       parentProblemType: this.parentProblemTypeControl,
     });
-    this.problemTypeService.getProblemTypes1().subscribe((types) => {
+    this.problemTypeService.getProblemTypes().subscribe((types) => {
       if (types._embedded) {
         this.existingProblemTypes = types._embedded.problemTypes;
       } else {

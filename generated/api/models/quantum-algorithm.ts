@@ -6,6 +6,7 @@ import { PatternRelation } from './pattern-relation';
 import { ProblemType } from './problem-type';
 import { Publication } from './publication';
 import { QuantumImplementation } from './quantum-implementation';
+import { Sketch } from './sketch';
 import { Tag } from './tag';
 export type QuantumAlgorithm = {
   id?: string;
@@ -19,7 +20,7 @@ export type QuantumAlgorithm = {
   algorithmRelations?: Array<AlgorithmRelation>;
   requiredComputingResourceProperties?: Array<ComputingResourceProperty>;
   algoParameter?: string;
-  sketch?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL';
+  sketches?: Array<Sketch>;
   solution?: string;
   assumptions?: string;
   computationModel?: 'CLASSIC' | 'QUANTUM' | 'HYBRID';

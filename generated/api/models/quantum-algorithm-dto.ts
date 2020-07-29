@@ -1,5 +1,6 @@
 /* tslint:disable */
 import { QuantumImplementation } from './quantum-implementation';
+import { Sketch } from './sketch';
 export type QuantumAlgorithmDto = {
   id?: string;
   name: string;
@@ -9,7 +10,7 @@ export type QuantumAlgorithmDto = {
   inputFormat?: string;
   algoParameter?: string;
   outputFormat?: string;
-  sketch?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL';
+  sketches?: Array<Sketch>;
   solution?: string;
   assumptions?: string;
   computationModel: 'QUANTUM';

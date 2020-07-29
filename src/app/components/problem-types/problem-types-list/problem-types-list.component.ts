@@ -31,7 +31,7 @@ export class ProblemTypesListComponent implements OnInit {
   ngOnInit(): void {}
 
   getProblemTypes(params: any): void {
-    this.problemTypeService.getProblemTypes1(params).subscribe((data) => {
+    this.problemTypeService.getProblemTypes(params).subscribe((data) => {
       this.prepareProblemTypeData(JSON.parse(JSON.stringify(data)));
     });
   }
