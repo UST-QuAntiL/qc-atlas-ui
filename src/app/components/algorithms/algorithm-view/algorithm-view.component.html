@@ -23,12 +23,12 @@
       <app-algorithm-properties
         [algorithm]="algorithm"
         [applicationAreas]="applicationAreas"
-        [problemTypes]="problemTypes"
+        [linkedProblemTypes]="problemTypes"
         (updateAlgorithmField)="updateAlgorithmField($event)"
         (addApplicationArea)="addApplicationArea($event)"
         (removeApplicationArea)="removeApplicationArea($event)"
-        (addProblemType)="addProblemType($event)"
-        (removeProblemType)="removeProblemType($event)"
+        (onAddProblemType)="addProblemTypeToAlgorithm($event)"
+        (onRemoveProblemType)="removeProblemTypeFromAlgorithm($event)"
       ></app-algorithm-properties>
     </mat-tab>
     <mat-tab label="Implementations">

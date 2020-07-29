@@ -12,6 +12,7 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
 import { EntityModelProblemTypeDto } from 'generated/api/models/entity-model-problem-type-dto';
+import { LinkObject } from '../../generics/data-list/data-list.component';
 
 export class FileNode {
   problemType: EntityModelProblemTypeDto;
@@ -26,14 +27,24 @@ export class FileNode {
   styleUrls: ['./problem-type-tree.component.scss'],
 })
 export class ProblemTypeTreeComponent implements OnInit, OnChanges {
-  @Output() onAddElement: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onRemoveElement: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onAddElement: EventEmitter<
+    EntityModelProblemTypeDto
+  > = new EventEmitter<EntityModelProblemTypeDto>();
+  @Output() onRemoveElement: EventEmitter<
+    EntityModelProblemTypeDto
+  > = new EventEmitter<EntityModelProblemTypeDto>();
   @Output() onExpandParents: EventEmitter<
     EntityModelProblemTypeDto
   > = new EventEmitter<EntityModelProblemTypeDto>();
+  @Output() onSearchTextChanged: EventEmitter<string> = new EventEmitter<
+    string
+  >();
 
-  @Input() name = '';
+  @Input() title = '';
   @Input() treeData: FileNode[];
+  @Input() linkObject: LinkObject;
+
+  inputValue = '';
 
   nestedTreeControl: NestedTreeControl<FileNode> = new NestedTreeControl<
     FileNode
@@ -57,14 +68,6 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
 
   isTreeDataInvalid(): boolean {
     return this.treeData == null || this.treeData.length < 1;
-  }
-
-  addElement(): void {
-    this.onAddElement.emit();
-  }
-
-  removeElement(): void {
-    this.onRemoveElement.emit();
   }
 
   expandNode(node: FileNode): void {

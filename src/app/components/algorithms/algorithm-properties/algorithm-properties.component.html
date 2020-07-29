@@ -25,10 +25,12 @@
     <mat-card class="w-100 m-4">
       <app-problem-type-tree #problemTypeTree
                              class="w-100"
-                             name="Problem-Types"
+                             [title]='"Problem types"'
                              [treeData]="problemTypeTreeData"
-                             (onAddElement)="addProblemTypeEvent()"
-                             (onRemoveElement)="removeProblemTypeEvent()" (onExpandParents)="getParentsForNode($event)"></app-problem-type-tree>
+                             (onAddElement)="onAddProblemType.emit($event)"
+                             (onRemoveElement)="onRemoveProblemType.emit($event)"
+                             (onExpandParents)="getParentsForNode($event)"
+                             (onSearchTextChanged)="searchUnlinkedProblemTypes($event)"></app-problem-type-tree>
     </mat-card>
     <mat-card class="w-100 m-4">
       <app-chip-collection class="w-100"
