@@ -8,6 +8,7 @@ import { PatternRelationTypeDto } from 'api/models/pattern-relation-type-dto';
 import { PatternRelationDto } from 'api/models';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
+import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'app-algorithm-related-patterns',
@@ -104,19 +105,35 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   }
 
   onDeleteElements(event): void {
-    for (const relation of event.elements) {
-      this.algorithmService
-        .deletePatternRelation({
-          algoId: this.algorithm.id,
-          relationId: relation.id,
-        })
-        .subscribe((data) => {
-          this.getPatternRelations({ algoId: this.algorithm.id });
-          this.utilService.callSnackBar(
-            'Successfully removed pattern relation'
-          );
-        });
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirm Deletion',
+        message:
+          'Are you sure you want to delete ' +
+          event.elements.length +
+          ' pattern relations',
+        yesButtonText: 'yes',
+        noButtonText: 'no',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        for (const relation of event.elements) {
+          this.algorithmService
+            .deletePatternRelation({
+              algoId: this.algorithm.id,
+              relationId: relation.id,
+            })
+            .subscribe((data) => {
+              this.getPatternRelations({ algoId: this.algorithm.id });
+              this.utilService.callSnackBar(
+                'Successfully removed pattern relation'
+              );
+            });
+        }
+      }
+    });
   }
 
   onDatalistConfigChanged(event): void {
