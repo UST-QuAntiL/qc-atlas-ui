@@ -7,6 +7,7 @@ import { AlgorithmService } from 'api/services/algorithm.service';
 import { PatternRelationTypeDto } from 'api/models/pattern-relation-type-dto';
 import { PatternRelationDto } from 'api/models';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-algorithm-related-patterns',
@@ -25,7 +26,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private patternRelationTypeService: PatternRelationTypeService,
-    private algorithmService: AlgorithmService
+    private algorithmService: AlgorithmService,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {}
@@ -47,6 +49,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
       .createPatternRelation({ algoId: this.algorithm.id, body })
       .subscribe((data) => {
         this.getPatternRelations({ algoId: this.algorithm.id });
+        this.utilService.callSnackBar('Successfully created pattern relation');
       });
   }
 
@@ -108,6 +111,9 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
         })
         .subscribe((data) => {
           this.getPatternRelations({ algoId: this.algorithm.id });
+          this.utilService.callSnackBar(
+            'Successfully removed pattern relation'
+          );
         });
     }
   }
