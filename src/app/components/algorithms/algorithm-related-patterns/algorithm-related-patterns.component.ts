@@ -62,6 +62,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
       })
       .subscribe((data) => {
         this.getPatternRelations({ algoId: this.algorithm.id });
+        this.utilService.callSnackBar('Successfully updated pattern relation');
       });
   }
 
