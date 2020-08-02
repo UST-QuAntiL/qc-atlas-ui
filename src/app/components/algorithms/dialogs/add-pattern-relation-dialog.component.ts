@@ -92,13 +92,38 @@ export class AddPatternRelationDialogComponent implements OnInit {
   }
 
   onPatternRelationInputChanged(): void {
+    // Return Type from Input if it exists
     const existingRelationType = this.patternRelationTypes.find(
       (x) => x.name === this.patternRelationType.value
     );
-    if (existingRelationType) {
-      this.selectedRelationType = existingRelationType;
-    } else {
-      this.selectedRelationType = { name: this.patternRelationType.value };
+    // If Input-Field not empty and input type does not exist
+    if (!existingRelationType && this.patternRelationType.value) {
+      // If pattern type does not exist and first element is existing type
+      if (this.patternRelationTypes.length < 1 || (this.patternRelationTypes[0] && this.patternRelationTypes[0].id)) {
+        // Push new type to array that needs to be created on the fly
+        this.patternRelationTypes.unshift({ name: this.patternRelationType.value });
+        this.onPatternRelationTypeSelect(this.patternRelationTypes[0]);
+      }
+
+      else if (!this.patternRelationTypes[0].id) {
+        this.patternRelationTypes[0] = { name: this.patternRelationType.value };
+        this.onPatternRelationTypeSelect(this.patternRelationTypes[0]);
+      }
+    }
+    // If Input-Field not empty and pattern exists
+     else if (existingRelationType && this.patternRelationType.value) {
+      if (!this.patternRelationTypes[0].id) {
+        this.patternRelationTypes.shift();
+        this.onPatternRelationTypeSelect(existingRelationType);
+      }
+    }
+
+    // If Input-Field is empty
+    else if (!this.patternRelationType.value) {
+      if (this.patternRelationTypes.length > 0 && !this.patternRelationTypes[0].id) {
+        this.patternRelationTypes.shift();
+        this.onPatternRelationTypeSelect(undefined);
+      }
     }
   }
 
