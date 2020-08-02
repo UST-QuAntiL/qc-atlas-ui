@@ -1,12 +1,7 @@
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  Form,
   FormControl,
   FormGroup,
   Validators,
@@ -70,7 +65,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
     return this.patternRelationForm.get('pattern');
   }
 
-  setPatternRelationType(value) {
+  setPatternRelationType(value): void {
     this.patternRelationForm.get('patternRelationType').setValue(value);
   }
 
