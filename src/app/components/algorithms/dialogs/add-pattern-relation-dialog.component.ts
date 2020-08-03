@@ -113,9 +113,16 @@ export class AddPatternRelationDialogComponent implements OnInit {
         );
       } else if (this.stateGroups[0].optionName === 'New Pattern-Relation') {
         this.stateGroups[0].patternRelationTypes[0].name = this.patternRelationType.value;
-      } else {}
+        this.onPatternRelationTypeSelect(
+          this.stateGroups[0].patternRelationTypes[0]
+        );
+      } else {
+      }
     } else {
-      this.stateGroups.shift();
+      if (this.stateGroups[0].optionName === 'New Pattern-Relation') {
+        this.stateGroups.shift();
+        this.onPatternRelationTypeSelect(existingRelationType);
+      }
     }
   }
 
