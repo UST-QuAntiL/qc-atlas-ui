@@ -19,6 +19,7 @@ import { PatternRelationTypeService } from 'api/services/pattern-relation-type.s
 export class AddPatternRelationDialogComponent implements OnInit {
   patternRelationForm: FormGroup;
   patternRelationTypes: EntityModelPatternRelationTypeDto[] = [];
+  stateGroups: StateGroup[] = [];
   selectedRelationType: PatternRelationTypeDto;
 
   constructor(
@@ -51,6 +52,10 @@ export class AddPatternRelationDialogComponent implements OnInit {
         if (relationTypes._embedded) {
           this.patternRelationTypes =
             relationTypes._embedded.patternRelationTypes;
+          this.stateGroups.push({
+            optionName: 'Existing Pattern-Relations',
+            patternRelationTypes: this.patternRelationTypes,
+          });
         }
       });
 
@@ -94,32 +99,23 @@ export class AddPatternRelationDialogComponent implements OnInit {
     // If Input-Field not empty and input type does not exist
     if (!existingRelationType && this.patternRelationType.value) {
       // If pattern type does not exist and first element is existing type
-      if (
-        this.patternRelationTypes.length < 1 ||
-        (this.patternRelationTypes[0] && this.patternRelationTypes[0].id)
-      ) {
-        // Push new type to array that needs to be created on the fly
-        this.patternRelationTypes.unshift({
-          name: this.patternRelationType.value,
+      if (!(this.stateGroups[0].optionName === 'New Pattern-Relation')) {
+        this.stateGroups.unshift({
+          optionName: 'New Pattern-Relation',
+          patternRelationTypes: [
+            {
+              name: this.patternRelationType.value,
+            },
+          ],
         });
-        this.onPatternRelationTypeSelect(this.patternRelationTypes[0]);
-      } else if (!this.patternRelationTypes[0].id) {
-        this.patternRelationTypes[0] = { name: this.patternRelationType.value };
-        this.onPatternRelationTypeSelect(this.patternRelationTypes[0]);
-      }
-    } else if (existingRelationType && this.patternRelationType.value) {
-      if (!this.patternRelationTypes[0].id) {
-        this.patternRelationTypes.shift();
-        this.onPatternRelationTypeSelect(existingRelationType);
-      }
-    } else if (!this.patternRelationType.value) {
-      if (
-        this.patternRelationTypes.length > 0 &&
-        !this.patternRelationTypes[0].id
-      ) {
-        this.patternRelationTypes.shift();
-        this.onPatternRelationTypeSelect(undefined);
-      }
+        this.onPatternRelationTypeSelect(
+          this.stateGroups[0].patternRelationTypes[0]
+        );
+      } else if (this.stateGroups[0].optionName === 'New Pattern-Relation') {
+        this.stateGroups[0].patternRelationTypes[0].name = this.patternRelationType.value;
+      } else {}
+    } else {
+      this.stateGroups.shift();
     }
   }
 
@@ -138,4 +134,9 @@ export interface DialogData {
   pattern: string;
   patternRelationType: EntityModelPatternRelationTypeDto;
   description: string;
+}
+
+export interface StateGroup {
+  optionName: string;
+  patternRelationTypes: EntityModelPatternRelationTypeDto[];
 }
