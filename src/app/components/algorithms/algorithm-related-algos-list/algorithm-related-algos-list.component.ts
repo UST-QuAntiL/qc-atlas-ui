@@ -27,7 +27,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     'relationTypeName',
     'description',
   ];
-  tableColumns: string[] = ['Algorithm', 'Relation', 'Description'];
+  tableColumns: string[] = ['Related Algorithm', 'Relation', 'Description'];
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
@@ -170,17 +170,30 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onElementClicked(event): void {
-    this.router.navigate(['algorithms/', event.targetAlgObject.id]);
+    // this.router.navigate(['algorithms', event.targetAlgObject.id]);
+    this.router
+      .navigateByUrl('/' + event.targetAlgObject.id, {
+        skipLocationChange: true,
+      })
+      .then(() =>
+        this.router.navigate(['algorithms/' + event.targetAlgObject.id])
+      );
   }
 
   generateTableObjects(): void {
     this.tableObjects = [];
     for (const relation of this.algorithmRelations) {
+      let targetAlg: AlgorithmDto;
+      if (this.algorithm.id !== relation.targetAlgorithm.id) {
+        targetAlg = relation.targetAlgorithm;
+      } else {
+        targetAlg = relation.sourceAlgorithm;
+      }
       this.tableObjects.push({
         id: relation.id,
         description: relation.description,
-        targetAlgName: relation.targetAlgorithm.name,
-        targetAlgObject: relation.targetAlgorithm,
+        targetAlgName: targetAlg.name,
+        targetAlgObject: targetAlg,
         relationTypeName: relation.algoRelationType.name,
         relationTypeObject: relation.algoRelationType,
       });
