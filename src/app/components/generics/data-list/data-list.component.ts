@@ -21,6 +21,7 @@ export class DataListComponent implements OnInit {
   @Input() paginatorConfig: any;
   @Input() emptyTableMessage = 'No elements found';
   @Output() elementClicked = new EventEmitter<any>();
+  @Output() urlClicked = new EventEmitter<UrlData>();
   @Output() addElement = new EventEmitter<void>();
   @Output() submitSelectedElements = new EventEmitter<DeleteParams>(); // changed
   @Output() pageChange = new EventEmitter<string>();
@@ -44,6 +45,13 @@ export class DataListComponent implements OnInit {
     return this.data.length === this.selection.selected.length;
   }
 
+  isLink(variableName): boolean {
+    return (
+      this.externalLinkVariables &&
+      this.externalLinkVariables.includes(variableName)
+    );
+  }
+
   // Toggle all check boxes
   masterToggle(): void {
     const isAllSelected = this.isAllSelected();
@@ -64,6 +72,15 @@ export class DataListComponent implements OnInit {
   onElementClicked(element): void {
     this.elementClicked.emit(element);
     this.selection.clear();
+  }
+
+  onUrlClicked(event, element, variableName): void {
+    event.stopPropagation();
+    const urlData: UrlData = {
+      element,
+      variableName,
+    };
+    this.urlClicked.emit(urlData);
   }
 
   // changed
@@ -166,4 +183,9 @@ export interface LinkObject {
   subtitle: string;
   displayVariable: string;
   data: any[];
+}
+
+export interface UrlData {
+  element: any;
+  variableName: string;
 }
