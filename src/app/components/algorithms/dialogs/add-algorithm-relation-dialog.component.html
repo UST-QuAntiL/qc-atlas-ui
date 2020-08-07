@@ -10,11 +10,11 @@
         (ngModelChange)="refreshAlgorithms()"
         matInput
         required>
-      <mat-autocomplete #targetAlg="matAutocomplete">
+      <mat-autocomplete #targetAlg="matAutocomplete" (optionSelected)="setTargetAlg($event.option.value)" [displayWith]="displayAlgorithm">
           <mat-option
             *ngFor="let alg of linkableAlgorithms"
-            [value]="alg.name"
-            (click)="onTargetAlgorithmSelect(alg)">
+            [value]="alg"
+            (click)="setTargetAlg(alg)">
             {{alg.name}}
           </mat-option>
       </mat-autocomplete>
@@ -28,12 +28,12 @@
         (ngModelChange)="onRelationInputChanged()"
         matInput
         required>
-      <mat-autocomplete #relationType="matAutocomplete">
+      <mat-autocomplete #relationType="matAutocomplete" (optionSelected)="setRelationType($event.option.value)" [displayWith]="displayRelation">
         <mat-optgroup *ngFor="let stateGroup of stateGroups" [label]="stateGroup.optionName">
           <mat-option
             *ngFor="let type of stateGroup.algoRelationTypes"
-            [value]="type.name"
-            (click)="onRelationTypeSelect(type)">
+            [value]="type"
+            (click)="setRelationType(type)">
             {{type.name}}
           </mat-option>
         </mat-optgroup>

@@ -101,13 +101,11 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
-      console.log(dialogResult);
       if (dialogResult) {
         if (!dialogResult.relationType.id) {
           this.algorithmRelationTypeService
             .createAlgoRelationType({ body: dialogResult.relationType })
             .subscribe((createdType) => {
-              console.log(createdType);
               this.createAlgorithmRelation(
                 this.generateRelationDto(
                   null,

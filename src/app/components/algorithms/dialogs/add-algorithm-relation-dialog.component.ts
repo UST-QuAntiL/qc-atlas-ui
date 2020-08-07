@@ -23,8 +23,6 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   stateGroups: StateGroup[] = [];
   algoRelationTypes: EntityModelAlgoRelationTypeDto[] = [];
   linkableAlgorithms: AlgorithmDto[] = [];
-  selectedRelationType: AlgoRelationTypeDto;
-  selectedTargetAlg: AlgorithmDto;
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -58,11 +56,9 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     // Fill PatternRelationType if dialog is used for editing
     if (this.data.relationType) {
       this.setRelationType(this.data.relationType.name);
-      this.selectedRelationType = this.data.relationType;
     }
     if (this.data.targetAlg) {
       this.setTargetAlg(this.data.targetAlg.name);
-      this.selectedTargetAlg = this.data.targetAlg;
     }
 
     // Init list of available relation types
@@ -80,10 +76,10 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
 
     // On close
     this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.relationType = this.selectedRelationType;
+      this.data.relationType = this.relationType.value;
       this.data.relationTypeName = this.relationTypeName.value;
       this.data.description = this.description.value;
-      this.data.targetAlg = this.selectedTargetAlg;
+      this.data.targetAlg = this.targetAlg.value;
       this.data.targetAlgName = this.targetAlgName.value;
     });
   }
@@ -116,20 +112,49 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     return this.algorithmRelationForm.get('relationTypeName');
   }
 
+  displayRelation(type: AlgoRelationTypeDto): string {
+    return type && type.name ? type.name : '';
+  }
+
+  displayAlgorithm(algo: AlgorithmDto): string {
+    return algo && algo.name ? algo.name : '';
+  }
+
   refreshAlgorithms(): void {
+    this.setTargetAlg(undefined);
+    this.linkableAlgorithms = [];
     if (this.targetAlgName.value) {
       this.algorithmService
         .getAlgorithms({ page: 0, size: 25, search: this.targetAlgName.value })
         .subscribe((algorithms) => {
           if (algorithms._embedded) {
-            this.linkableAlgorithms = algorithms._embedded.algorithms;
-          } else {
-            this.linkableAlgorithms = [];
+            this.filterLinkableAlgorithms(algorithms._embedded.algorithms);
           }
         });
-    } else {
-      this.linkableAlgorithms = [];
     }
+  }
+
+  filterLinkableAlgorithms(algorithms: AlgorithmDto[]): void {
+    for (const algorithm of algorithms) {
+      if (
+        algorithm.id !== this.data.algoId &&
+        !this.isAlreadyLinked(algorithm)
+      ) {
+        this.linkableAlgorithms.push(algorithm);
+      }
+    }
+  }
+
+  isAlreadyLinked(algorithm: AlgorithmDto): boolean {
+    for (const relation of this.data.existingRelations) {
+      if (
+        relation.sourceAlgorithm.id === algorithm.id ||
+        relation.targetAlgorithm.id === algorithm.id
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onNoClick(): void {
@@ -137,22 +162,18 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   }
 
   isRequiredDataMissing(): boolean {
-    // TODO: Fix this part
-    return this.description.errors?.required;
-  }
-
-  onRelationTypeSelect(type: AlgoRelationTypeDto): void {
-    this.selectedRelationType = type;
-    this.data.relationType = type;
-  }
-
-  onTargetAlgorithmSelect(algorithm: AlgorithmDto): void {
-    this.selectedTargetAlg = algorithm;
-    this.data.targetAlg = algorithm;
-    this.setTargetAlg(algorithm);
+    return (
+      this.description.errors?.required ||
+      this.targetAlg.errors?.required ||
+      this.relationType.errors?.required
+    );
   }
 
   onRelationInputChanged(): void {
+    // Don't do anything if option selected
+    if (typeof this.relationTypeName.value !== 'string') {
+      return;
+    }
     // Return Type from Input if it exists
     const existingRelationType = this.algoRelationTypes.find(
       (x) => x.name === this.relationTypeName.value
@@ -173,16 +194,16 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
             },
           ],
         });
-        this.onRelationTypeSelect(this.stateGroups[0].algoRelationTypes[0]);
+        this.setRelationType(this.stateGroups[0].algoRelationTypes[0]);
       } else if (this.stateGroups[0].optionName === 'New Algorithm-Relation') {
         this.stateGroups[0].algoRelationTypes[0].name = this.relationTypeName.value;
-        this.onRelationTypeSelect(this.stateGroups[0].algoRelationTypes[0]);
+        this.setRelationType(this.stateGroups[0].algoRelationTypes[0]);
       } else {
       }
     } else {
       if (this.stateGroups[0].optionName === 'New Algorithm-Relation') {
         this.stateGroups.shift();
-        this.onRelationTypeSelect(existingRelationType);
+        this.setRelationType(existingRelationType);
       }
     }
   }
