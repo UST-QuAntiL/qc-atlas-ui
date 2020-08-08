@@ -9,6 +9,7 @@ import {
 import { AlgorithmService } from 'api/services/algorithm.service';
 import { EntityModelPatternRelationTypeDto } from 'api/models/entity-model-pattern-relation-type-dto';
 import { PatternRelationTypeService } from 'api/services/pattern-relation-type.service';
+import { PatternRelationTypeDto } from 'api/models/pattern-relation-type-dto';
 
 @Component({
   selector: 'app-add-pattern-relation-dialog',
@@ -19,7 +20,6 @@ export class AddPatternRelationDialogComponent implements OnInit {
   patternRelationForm: FormGroup;
   patternRelationTypes: EntityModelPatternRelationTypeDto[] = [];
   stateGroups: StateGroup[] = [];
-  typeInput = '';
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -37,12 +37,10 @@ export class AddPatternRelationDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      patternRelationInput: new FormControl(this.typeInput),
     });
 
     // Fill PatternRelationType if dialog is used for editing
     if (this.data.patternRelationType) {
-      this.setPatternRelationInput(this.data.patternRelationType.name);
       this.setPatternRelationType(this.data.patternRelationType);
     }
 
@@ -62,8 +60,25 @@ export class AddPatternRelationDialogComponent implements OnInit {
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.pattern = this.pattern.value;
       this.data.description = this.description.value;
-      this.data.patternRelationType = this.patternRelationType.value;
+      this.data.patternRelationType = this.generateRelationType(
+        this.patternRelationType.value
+      );
     });
+  }
+
+  generateRelationType(type): PatternRelationTypeDto {
+    if (type && type.id) {
+      return type;
+    } else {
+      return type && type.name
+        ? this.findRelationTypeByName(type.name)
+        : this.findRelationTypeByName(type);
+    }
+  }
+
+  findRelationTypeByName(name): PatternRelationTypeDto {
+    const foundType = this.patternRelationTypes.find((x) => x.name === name);
+    return foundType ? foundType : { name };
   }
 
   get pattern(): AbstractControl | null {
@@ -82,22 +97,8 @@ export class AddPatternRelationDialogComponent implements OnInit {
     return this.patternRelationForm.get('description');
   }
 
-  get patternRelationInput(): AbstractControl | null {
-    return this.patternRelationForm.get('patternRelationInput');
-  }
-
-  setPatternRelationInput(value: string): void {
-    this.patternRelationForm.get('patternRelationInput').setValue(value);
-  }
-
-  displayRelation(type): string {
-    if (type && !type.name) {
-      return type;
-    } else if (type && type.name) {
-      return type.name;
-    } else {
-      return '';
-    }
+  displayRelation(type: PatternRelationTypeDto): string {
+    return type && type.name ? type.name : '';
   }
 
   onNoClick(): void {
@@ -106,44 +107,41 @@ export class AddPatternRelationDialogComponent implements OnInit {
 
   onPatternRelationInputChanged(): void {
     // Don't do anything if option selected
-    if (typeof this.patternRelationInput.value !== 'string') {
-      return;
-    }
+    const searchType = this.patternRelationType.value.name
+      ? this.patternRelationType.value
+      : { name: this.patternRelationType.value };
     // Return Type from Input if it exists
     const existingRelationType = this.patternRelationTypes.find(
-      (x) => x.name === this.patternRelationInput.value
+      (x) => x.name === searchType.name
     );
-    // If Input-Field not empty and input type does not exist
-    if (!existingRelationType && this.patternRelationInput.value) {
+    // If searched type does not exist
+    if (!existingRelationType) {
       // If pattern type does not exist and first element is existing type
-      if (
-        !this.stateGroups[0] ||
-        this.stateGroups[0].optionName !== 'New Pattern-Relation'
-      ) {
-        this.stateGroups.unshift({
-          optionName: 'New Pattern-Relation',
-          patternRelationTypes: [
-            {
-              name: this.patternRelationInput.value,
-            },
-          ],
-        });
-        this.setPatternRelationType(
-          this.stateGroups[0].patternRelationTypes[0]
-        );
-      } else if (this.stateGroups[0].optionName === 'New Pattern-Relation') {
-        this.stateGroups[0].patternRelationTypes[0].name = this.patternRelationInput.value;
-        this.setPatternRelationType(
-          this.stateGroups[0].patternRelationTypes[0]
-        );
-      } else {
+      if (this.typesNotEmpty() || this.isFirstElementNew()) {
+        this.pushNewRelationType(searchType);
+      } else if (!this.isFirstElementNew()) {
+        this.stateGroups[0].patternRelationTypes[0] = searchType;
       }
     } else {
-      if (this.stateGroups[0].optionName === 'New Pattern-Relation') {
+      if (!this.isFirstElementNew()) {
         this.stateGroups.shift();
-        this.setPatternRelationType(existingRelationType);
       }
     }
+  }
+
+  typesNotEmpty(): boolean {
+    return !this.stateGroups[0];
+  }
+
+  isFirstElementNew(): boolean {
+    return this.stateGroups[0].optionName !== 'New Pattern-Relation';
+  }
+
+  pushNewRelationType(type): void {
+    this.stateGroups.unshift({
+      optionName: 'New Pattern-Relation',
+      patternRelationTypes: [type],
+    });
   }
 
   isRequiredDataMissing(): boolean {
