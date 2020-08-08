@@ -20,7 +20,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
   patternRelationForm: FormGroup;
   patternRelationTypes: EntityModelPatternRelationTypeDto[] = [];
   stateGroups: StateGroup[] = [];
-  selectedRelationType: PatternRelationTypeDto;
+  typeInput = '';
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -38,12 +38,12 @@ export class AddPatternRelationDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
+      patternRelationInput: new FormControl(this.typeInput),
     });
 
     // Fill PatternRelationType if dialog is used for editing
     if (this.data.patternRelationType) {
-      this.setPatternRelationType(this.data.patternRelationType.name);
-      this.selectedRelationType = this.data.patternRelationType;
+      this.setPatternRelationType(this.data.patternRelationType);
     }
 
     this.patternRelationTypeService
@@ -62,7 +62,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.pattern = this.pattern.value;
       this.data.description = this.description.value;
-      this.data.patternRelationType = this.selectedRelationType;
+      this.data.patternRelationType = this.patternRelationType.value;
     });
   }
 
@@ -82,9 +82,13 @@ export class AddPatternRelationDialogComponent implements OnInit {
     return this.patternRelationForm.get('description');
   }
 
-  onPatternRelationTypeSelect(type: EntityModelPatternRelationTypeDto): void {
-    this.selectedRelationType = type;
-    this.data.patternRelationType = type;
+  get patternRelationInput(): AbstractControl | null {
+    return this.patternRelationForm.get('patternRelationInput');
+  }
+
+  displayRelation(type: PatternRelationTypeDto): string {
+    console.log(type);
+    return type && type.name ? type.name : '';
   }
 
   onNoClick(): void {
@@ -92,28 +96,35 @@ export class AddPatternRelationDialogComponent implements OnInit {
   }
 
   onPatternRelationInputChanged(): void {
+    // Don't do anything if option selected
+    if (typeof this.patternRelationInput.value !== 'string') {
+      return;
+    }
     // Return Type from Input if it exists
     const existingRelationType = this.patternRelationTypes.find(
-      (x) => x.name === this.patternRelationType.value
+      (x) => x.name === this.patternRelationInput.value
     );
     // If Input-Field not empty and input type does not exist
-    if (!existingRelationType && this.patternRelationType.value) {
+    if (!existingRelationType && this.patternRelationInput.value) {
       // If pattern type does not exist and first element is existing type
-      if (!(this.stateGroups[0].optionName === 'New Pattern-Relation')) {
+      if (
+        !this.stateGroups[0] ||
+        this.stateGroups[0].optionName !== 'New Pattern-Relation'
+      ) {
         this.stateGroups.unshift({
           optionName: 'New Pattern-Relation',
           patternRelationTypes: [
             {
-              name: this.patternRelationType.value,
+              name: this.patternRelationInput.value,
             },
           ],
         });
-        this.onPatternRelationTypeSelect(
+        this.setPatternRelationType(
           this.stateGroups[0].patternRelationTypes[0]
         );
       } else if (this.stateGroups[0].optionName === 'New Pattern-Relation') {
-        this.stateGroups[0].patternRelationTypes[0].name = this.patternRelationType.value;
-        this.onPatternRelationTypeSelect(
+        this.stateGroups[0].patternRelationTypes[0].name = this.patternRelationInput.value;
+        this.setPatternRelationType(
           this.stateGroups[0].patternRelationTypes[0]
         );
       } else {
@@ -121,7 +132,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
     } else {
       if (this.stateGroups[0].optionName === 'New Pattern-Relation') {
         this.stateGroups.shift();
-        this.onPatternRelationTypeSelect(existingRelationType);
+        this.setPatternRelationType(existingRelationType);
       }
     }
   }
