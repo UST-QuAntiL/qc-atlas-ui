@@ -115,7 +115,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
       (x) => x.name === searchType.name
     );
     // If searched type does not exist
-    if (!existingRelationType) {
+    if (!existingRelationType && searchType.name) {
       // If pattern type does not exist and first element is existing type
       if (this.typesNotEmpty() || this.isFirstElementNew()) {
         this.pushNewRelationType(searchType);
