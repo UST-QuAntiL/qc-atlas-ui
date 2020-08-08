@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import { AlgorithmService } from 'api/services/algorithm.service';
 import { EntityModelPatternRelationTypeDto } from 'api/models/entity-model-pattern-relation-type-dto';
-import { PatternRelationTypeDto } from 'api/models/pattern-relation-type-dto';
 import { PatternRelationTypeService } from 'api/services/pattern-relation-type.service';
 
 @Component({
@@ -43,6 +42,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
 
     // Fill PatternRelationType if dialog is used for editing
     if (this.data.patternRelationType) {
+      this.setPatternRelationInput(this.data.patternRelationType.name);
       this.setPatternRelationType(this.data.patternRelationType);
     }
 
@@ -86,9 +86,18 @@ export class AddPatternRelationDialogComponent implements OnInit {
     return this.patternRelationForm.get('patternRelationInput');
   }
 
-  displayRelation(type: PatternRelationTypeDto): string {
-    console.log(type);
-    return type && type.name ? type.name : '';
+  setPatternRelationInput(value: string): void {
+    this.patternRelationForm.get('patternRelationInput').setValue(value);
+  }
+
+  displayRelation(type): string {
+    if (type && !type.name) {
+      return type;
+    } else if (type && type.name) {
+      return type.name;
+    } else {
+      return '';
+    }
   }
 
   onNoClick(): void {
