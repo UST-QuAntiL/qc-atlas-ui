@@ -97,6 +97,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         title: 'Add new algorithm relation',
         algoId: this.algorithm.id,
         existingRelations: this.algorithmRelations,
+        disableAlg: false,
       },
     });
 
@@ -168,6 +169,28 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onElementClicked(event): void {
+    const dialogRef = this.dialog.open(AddAlgorithmRelationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Update algorithm relation',
+        algoId: this.algorithm.id,
+        existingRelations: this.algorithmRelations,
+        relationType: event.relationTypeObject,
+        targetAlg: event.targetAlgObject,
+        description: event.description,
+        disableAlg: true,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        console.log(dialogResult);
+      }
+    });
+  }
+
+  //  TODO: Make onUrlClicked using other branch
+  /* onElementClicked(event): void {
     // this.router.navigate(['algorithms', event.targetAlgObject.id]);
     this.router
       .navigateByUrl('/' + event.targetAlgObject.id, {
@@ -176,7 +199,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
       .then(() =>
         this.router.navigate(['algorithms/' + event.targetAlgObject.id])
       );
-  }
+  } */
 
   generateTableObjects(): void {
     this.tableObjects = [];

@@ -23,6 +23,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   stateGroups: StateGroup[] = [];
   algoRelationTypes: EntityModelAlgoRelationTypeDto[] = [];
   linkableAlgorithms: AlgorithmDto[] = [];
+  isUpdateDialog = false;
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -41,20 +42,26 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      targetAlgName: new FormControl(this.data.targetAlgName, [
+      targetAlgName: new FormControl(
+        { value: this.data.targetAlgName, disabled: this.data.disableAlg },
         // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      targetAlg: new FormControl(this.data.targetAlg, [Validators.required]),
+        [Validators.required]
+      ),
+      targetAlg: new FormControl(
+        { value: this.data.targetAlg, disabled: this.data.disableAlg },
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        [Validators.required]
+      ),
     });
 
     // Fill PatternRelationType if dialog is used for editing
     if (this.data.relationType) {
-      this.setRelationType(this.data.relationType.name);
+      this.setRelationType(this.data.relationType);
+      this.isUpdateDialog = true;
     }
     if (this.data.targetAlg) {
-      this.setTargetAlg(this.data.targetAlg.name);
+      this.setTargetAlg(this.data.targetAlg);
+      this.setTargetAlgName(this.data.targetAlg.name);
     }
 
     // Init list of available relation types
@@ -73,7 +80,8 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     // On close
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.relationType = this.generateRelationType(
-        this.relationType.value
+        this.relationType.value,
+        'relationType'
       );
       this.data.description = this.description.value;
       this.data.targetAlg = this.targetAlg.value;
@@ -81,18 +89,23 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     });
   }
 
-  generateRelationType(type): AlgoRelationTypeDto {
+  generateRelationType(type, objectType: string): AlgoRelationTypeDto {
     if (type && type.id) {
       return type;
     } else {
       return type && type.name
-        ? this.findRelationTypeByName(type.name)
-        : this.findRelationTypeByName(type);
+        ? this.findObjectByName(type.name, objectType)
+        : this.findObjectByName(type, objectType);
     }
   }
 
-  findRelationTypeByName(name): AlgoRelationTypeDto {
-    const foundType = this.algoRelationTypes.find((x) => x.name === name);
+  findObjectByName(name, objectType: string): AlgoRelationTypeDto {
+    let foundType: AlgorithmDto | AlgoRelationTypeDto;
+    if (objectType === 'relationType') {
+      foundType = this.algoRelationTypes.find((x) => x.name === name);
+    } else {
+      foundType = this.linkableAlgorithms.find((x) => x.name === name);
+    }
     return foundType ? foundType : { name };
   }
 
@@ -102,6 +115,10 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
 
   get targetAlgName(): AbstractControl | null {
     return this.algorithmRelationForm.get('targetAlgName');
+  }
+
+  setTargetAlgName(value): void {
+    this.algorithmRelationForm.get('targetAlgName').setValue(value);
   }
 
   get targetAlg(): AbstractControl | null {
@@ -226,6 +243,7 @@ export interface DialogData {
   description: string;
   existingRelations: AlgorithmRelationDto[];
   relationId: string;
+  disableAlg: boolean;
 }
 
 export interface StateGroup {
