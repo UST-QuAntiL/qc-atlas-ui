@@ -174,6 +174,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
       data: {
         title: 'Update algorithm relation',
         algoId: this.algorithm.id,
+        algoRelationId: event.id,
         existingRelations: this.algorithmRelations,
         relationType: event.relationTypeObject,
         targetAlg: event.targetAlgObject,
@@ -184,7 +185,33 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        console.log(dialogResult);
+        if (!dialogResult.relationType.id) {
+          this.algorithmRelationTypeService
+            .createAlgoRelationType({ body: dialogResult.relationType })
+            .subscribe((createdType) => {
+              this.updateAlgorithmRelation(
+                dialogResult.algoRelationId,
+                this.generateRelationDto(
+                  dialogResult.algoRelationId,
+                  this.algorithm,
+                  dialogResult.targetAlg,
+                  createdType,
+                  dialogResult.description
+                )
+              );
+            });
+        } else {
+          this.updateAlgorithmRelation(
+            dialogResult.algoRelationId,
+            this.generateRelationDto(
+              dialogResult.algoRelationId,
+              this.algorithm,
+              dialogResult.targetAlg,
+              dialogResult.relationType,
+              dialogResult.description
+            )
+          );
+        }
       }
     });
   }

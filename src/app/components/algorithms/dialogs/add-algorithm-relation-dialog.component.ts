@@ -23,6 +23,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   stateGroups: StateGroup[] = [];
   algoRelationTypes: EntityModelAlgoRelationTypeDto[] = [];
   linkableAlgorithms: AlgorithmDto[] = [];
+  selectedAlgorithm: AlgorithmDto;
   isUpdateDialog = false;
 
   constructor(
@@ -42,11 +43,6 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      targetAlgName: new FormControl(
-        { value: this.data.targetAlgName, disabled: this.data.disableAlg },
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        [Validators.required]
-      ),
       targetAlg: new FormControl(
         { value: this.data.targetAlg, disabled: this.data.disableAlg },
         // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -60,8 +56,8 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
       this.isUpdateDialog = true;
     }
     if (this.data.targetAlg) {
+      this.selectedAlgorithm = this.data.targetAlg;
       this.setTargetAlg(this.data.targetAlg);
-      this.setTargetAlgName(this.data.targetAlg.name);
     }
 
     // Init list of available relation types
@@ -80,45 +76,30 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     // On close
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.relationType = this.generateRelationType(
-        this.relationType.value,
-        'relationType'
+        this.relationType.value
       );
       this.data.description = this.description.value;
-      this.data.targetAlg = this.targetAlg.value;
-      this.data.targetAlgName = this.targetAlgName.value;
+      this.data.targetAlg = this.selectedAlgorithm;
     });
   }
 
-  generateRelationType(type, objectType: string): AlgoRelationTypeDto {
+  generateRelationType(type): AlgoRelationTypeDto {
     if (type && type.id) {
       return type;
     } else {
       return type && type.name
-        ? this.findObjectByName(type.name, objectType)
-        : this.findObjectByName(type, objectType);
+        ? this.findObjectByName(type.name)
+        : this.findObjectByName(type);
     }
   }
 
-  findObjectByName(name, objectType: string): AlgoRelationTypeDto {
-    let foundType: AlgorithmDto | AlgoRelationTypeDto;
-    if (objectType === 'relationType') {
-      foundType = this.algoRelationTypes.find((x) => x.name === name);
-    } else {
-      foundType = this.linkableAlgorithms.find((x) => x.name === name);
-    }
+  findObjectByName(name): AlgoRelationTypeDto {
+    const foundType = this.algoRelationTypes.find((x) => x.name === name);
     return foundType ? foundType : { name };
   }
 
   get description(): AbstractControl | null {
     return this.algorithmRelationForm.get('description');
-  }
-
-  get targetAlgName(): AbstractControl | null {
-    return this.algorithmRelationForm.get('targetAlgName');
-  }
-
-  setTargetAlgName(value): void {
-    this.algorithmRelationForm.get('targetAlgName').setValue(value);
   }
 
   get targetAlg(): AbstractControl | null {
@@ -146,14 +127,16 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   }
 
   refreshAlgorithms(): void {
-    this.setTargetAlg(undefined);
     this.linkableAlgorithms = [];
-    if (this.targetAlgName.value) {
+    if (this.targetAlg.value && typeof this.targetAlg.value === 'string') {
       this.algorithmService
-        .getAlgorithms({ page: 0, size: 25, search: this.targetAlgName.value })
+        .getAlgorithms({ page: 0, size: 25, search: this.targetAlg.value })
         .subscribe((algorithms) => {
           if (algorithms._embedded) {
             this.filterLinkableAlgorithms(algorithms._embedded.algorithms);
+            this.selectedAlgorithm = this.linkableAlgorithms.find(
+              (x) => x.name === this.targetAlg.value
+            );
           }
         });
     }
@@ -189,8 +172,8 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   isRequiredDataMissing(): boolean {
     return (
       this.description.errors?.required ||
-      this.targetAlg.errors?.required ||
-      this.relationType.errors?.required
+      this.relationType.errors?.required ||
+      !this.selectedAlgorithm
     );
   }
 
@@ -237,8 +220,8 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
 export interface DialogData {
   title: string;
   algoId: string;
+  algoRelationId: string;
   relationType: AlgoRelationTypeDto;
-  targetAlgName: string;
   targetAlg: AlgorithmDto;
   description: string;
   existingRelations: AlgorithmRelationDto[];
