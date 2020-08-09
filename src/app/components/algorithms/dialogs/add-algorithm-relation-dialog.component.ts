@@ -37,10 +37,6 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      relationTypeName: new FormControl(this.data.relationTypeName, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
       relationType: new FormControl(this.data.relationType, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
@@ -76,12 +72,28 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
 
     // On close
     this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.relationType = this.relationType.value;
-      this.data.relationTypeName = this.relationTypeName.value;
+      this.data.relationType = this.generateRelationType(
+        this.relationType.value
+      );
       this.data.description = this.description.value;
       this.data.targetAlg = this.targetAlg.value;
       this.data.targetAlgName = this.targetAlgName.value;
     });
+  }
+
+  generateRelationType(type): AlgoRelationTypeDto {
+    if (type && type.id) {
+      return type;
+    } else {
+      return type && type.name
+        ? this.findRelationTypeByName(type.name)
+        : this.findRelationTypeByName(type);
+    }
+  }
+
+  findRelationTypeByName(name): AlgoRelationTypeDto {
+    const foundType = this.algoRelationTypes.find((x) => x.name === name);
+    return foundType ? foundType : { name };
   }
 
   get description(): AbstractControl | null {
@@ -106,10 +118,6 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
 
   get relationType(): AbstractControl | null {
     return this.algorithmRelationForm.get('relationType');
-  }
-
-  get relationTypeName(): AbstractControl | null {
-    return this.algorithmRelationForm.get('relationTypeName');
   }
 
   displayRelation(type: AlgoRelationTypeDto): string {
@@ -170,49 +178,48 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   }
 
   onRelationInputChanged(): void {
-    // Don't do anything if option selected
-    if (typeof this.relationTypeName.value !== 'string') {
-      return;
-    }
+    const searchType = this.relationType.value.name
+      ? this.relationType.value
+      : { name: this.relationType.value };
     // Return Type from Input if it exists
     const existingRelationType = this.algoRelationTypes.find(
-      (x) => x.name === this.relationTypeName.value
+      (x) => x.name === searchType.name
     );
 
     // If Input-Field not empty and input type does not exist
-    if (!existingRelationType && this.relationTypeName.value) {
+    if (!existingRelationType && searchType.name) {
       // If pattern type does not exist and first element is existing type
-      if (
-        !this.stateGroups[0] ||
-        this.stateGroups[0].optionName !== 'New Algorithm-Relation'
-      ) {
-        this.stateGroups.unshift({
-          optionName: 'New Algorithm-Relation',
-          algoRelationTypes: [
-            {
-              name: this.relationTypeName.value,
-            },
-          ],
-        });
-        this.setRelationType(this.stateGroups[0].algoRelationTypes[0]);
-      } else if (this.stateGroups[0].optionName === 'New Algorithm-Relation') {
-        this.stateGroups[0].algoRelationTypes[0].name = this.relationTypeName.value;
-        this.setRelationType(this.stateGroups[0].algoRelationTypes[0]);
-      } else {
+      if (this.algoTypesNotEmpty() || this.isFirstTypeNew()) {
+        this.pushNewRelationType(searchType);
+      } else if (!this.isFirstTypeNew()) {
+        this.stateGroups[0].algoRelationTypes[0] = searchType;
       }
     } else {
-      if (this.stateGroups[0].optionName === 'New Algorithm-Relation') {
+      if (!this.isFirstTypeNew()) {
         this.stateGroups.shift();
-        this.setRelationType(existingRelationType);
       }
     }
+  }
+
+  pushNewRelationType(type): void {
+    this.stateGroups.unshift({
+      optionName: 'New Algorithm-Relation',
+      algoRelationTypes: [type],
+    });
+  }
+
+  algoTypesNotEmpty(): boolean {
+    return !this.stateGroups[0];
+  }
+
+  isFirstTypeNew(): boolean {
+    return this.stateGroups[0].optionName !== 'New Algorithm-Relation';
   }
 }
 
 export interface DialogData {
   title: string;
   algoId: string;
-  relationTypeName: string;
   relationType: AlgoRelationTypeDto;
   targetAlgName: string;
   targetAlg: AlgorithmDto;
