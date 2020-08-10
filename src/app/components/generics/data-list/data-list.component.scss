@@ -120,6 +120,13 @@ mat-grid-list {
   color: red;
 }
 
+a.table-url {
+  color: dodgerblue;
+}
+
 a.table-url:hover {
+  text-decoration: underline;
+  color: mat-color($qc-atlas-ui-primary);
+  cursor: pointer;
   text-decoration: underline;
 }

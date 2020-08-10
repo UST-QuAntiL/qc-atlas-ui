@@ -9,6 +9,7 @@ import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog
 import {
   DeleteParams,
   QueryParams,
+  UrlData,
 } from '../../generics/data-list/data-list.component';
 
 @Component({
@@ -61,6 +62,11 @@ export class PublicationListComponent implements OnInit {
 
   onElementClicked(publication: any): void {
     this.router.navigate(['publications', publication.id]);
+  }
+
+  onUrlClicked(urlData: UrlData): void {
+    // No check needed since publications have only one url-field called 'url'
+    window.open(urlData.element['url'], '_blank');
   }
 
   onAddElement(): void {
