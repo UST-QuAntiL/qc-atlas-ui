@@ -42,7 +42,7 @@
         [algorithm]="algorithm"
       ></app-algorithm-publications-list>
     </mat-tab>
-    <mat-tab label="NISQ Analyzer">
+    <mat-tab [hidden]="isNisqUsed" label="NISQ Analyzer">
       <app-algorithm-nisq-analyzer
       [algorithmId]="this.algorithm.id"></app-algorithm-nisq-analyzer>
     </mat-tab>

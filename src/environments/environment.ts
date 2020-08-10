@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
+  nisqAnalyzer: true,
   API_URL: 'http://localhost:8080/atlas',
+  NISQ_API_URL: 'http://localhost:8081/nisq-analyzer',
   PATTERN_ATLAS_API_URL: 'http://localhost:8082/patternpedia',
 };
 
