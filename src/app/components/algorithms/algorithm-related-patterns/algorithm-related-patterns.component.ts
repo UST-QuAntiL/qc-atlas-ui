@@ -187,7 +187,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   }
 
   onUrlClicked(urlData: UrlData): void {
-    // No check needed since publications have only one url-field called 'pattern'
+    // No check needed since pattern-relations have only one url-field called 'pattern'
     window.open(urlData.element['pattern'], '_blank');
   }
 
