@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { UtilService } from '../../../util/util.service';
 import { AddAlgorithmRelationDialogComponent } from '../dialogs/add-algorithm-relation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
+import { UrlData } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-algorithm-related-algos-list',
@@ -28,6 +29,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     'description',
   ];
   tableColumns: string[] = ['Related Algorithm', 'Relation', 'Description'];
+  externalLinkVariables = ['targetAlgName'];
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
@@ -216,17 +218,19 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     });
   }
 
-  //  TODO: Make onUrlClicked using other branch
-  /* onElementClicked(event): void {
-    // this.router.navigate(['algorithms', event.targetAlgObject.id]);
+  onUrlClicked(urlData: UrlData): void {
+    // Open view related algorithm (only url-field)
     this.router
-      .navigateByUrl('/' + event.targetAlgObject.id, {
+      .navigateByUrl('/', {
         skipLocationChange: true,
       })
       .then(() =>
-        this.router.navigate(['algorithms/' + event.targetAlgObject.id])
+        this.router.navigate([
+          'algorithms',
+          urlData.element['targetAlgObject'].id,
+        ])
       );
-  } */
+  }
 
   generateTableObjects(): void {
     this.tableObjects = [];
