@@ -9,6 +9,7 @@ import { PatternRelationDto } from 'api/models';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
+import { UrlData } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-algorithm-related-patterns',
@@ -183,6 +184,11 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
         }
       }
     });
+  }
+
+  onUrlClicked(urlData: UrlData): void {
+    // No check needed since publications have only one url-field called 'pattern'
+    window.open(urlData.element['pattern'], '_blank');
   }
 
   generateTableObjects(): void {
