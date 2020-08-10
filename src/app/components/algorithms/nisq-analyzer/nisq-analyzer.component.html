@@ -50,17 +50,17 @@
     </form>
   </mat-step>
   <mat-step [editable]="false" label="Analyzer Results">
-    <div class="p-2" *ngFor="let result of analyzerResults">
+    <div class="p-2" *ngFor="let result of groupResultsByImplementation(analyzerResults)">
       <h4>{{ result.implementation.name }}</h4>
       <table
         mat-table
-        [dataSource]="result"
+        [dataSource]="result.results"
         multiTemplateDataRows
         class="w-100"
       >
         <ng-container matColumnDef="backendName">
           <th mat-header-cell *matHeaderCellDef>Backend Name</th>
-          <td mat-cell *matCellDef="let element">{{ element.qpuId }}</td>
+          <td mat-cell *matCellDef="let element">PLACEHOLDER</td>
         </ng-container>
 
         <ng-container matColumnDef="width">
@@ -99,10 +99,9 @@
                 element == expandedElement ? 'expanded' : 'collapsed'
               "
             >
-              {{element.qpuId}}
-              <!---
-              Max depth: {{ element.maxDepth }} Qbits:
-              {{ element.qbits }} Provider: {{ element.backendProviderName }} -->
+              <!--
+              Max gate time: {{ element.qpu.maxGateTime }} Qbits:
+              {{ element.qpu.numberOfQubits }} T1: {{ element.qpu.t1 }} -->
             </div>
           </td>
         </ng-container>

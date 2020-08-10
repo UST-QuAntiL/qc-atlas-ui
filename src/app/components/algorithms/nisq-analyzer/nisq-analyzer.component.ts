@@ -12,6 +12,8 @@ import { SdkDto } from 'api-nisq/models/sdk-dto';
 import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
 import { ExecutionRequest } from 'api-nisq/models/execution-request';
 import { AnalysisResultDto } from 'api-nisq/models/analysis-result-dto';
+import { ImplementationDto as NISQImplementationDto } from 'api-nisq/models';
+import { NisqAnalyzerService } from './nisq-analyzer.service';
 
 export interface ImplementationParameter extends ParameterDto {
   // TODO change value type
@@ -110,6 +112,7 @@ const DUMMY_RESULTS: ExecutionResultDto = {
   ],
 })
 export class NisqAnalyzerComponent implements OnInit {
+  @Input() algorithmId: string;
   @Input() params = DUMMY_PARAMS;
   @Input() cloudServices = DUMMY_CLOUD_SERVICES;
 
@@ -126,9 +129,13 @@ export class NisqAnalyzerComponent implements OnInit {
   selectedExecutionParams: ExecutionRequest;
   nisqExecutionParams: NisqExecutionParameters;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private nisqAnalyzerService: NisqAnalyzerService,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
+    this.nisqAnalyzerService.init(this.algorithmId);
     this.inputFormGroup = this.formBuilder.group({
       params: this.formBuilder.array(
         this.params.map((param) =>
@@ -157,6 +164,9 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   execute(selectedExecutionParams: ExecutionRequest): void {
+    this.nisqAnalyzerService.getImplementations().subscribe((result) => {
+      console.log(result);
+    });
     this.results = undefined;
     setTimeout(() => {
       this.results = DUMMY_RESULTS;
@@ -164,7 +174,29 @@ export class NisqAnalyzerComponent implements OnInit {
     this.selectedExecutionParams = selectedExecutionParams;
   }
 
-  getInputParameter(name: string): ImplementationParameter {
-    return this.params.find((p) => p.name === name);
+  groupResultsByImplementation(
+    analysisResults: AnalysisResultDto[]
+  ): GroupedResults[] {
+    const results: GroupedResults[] = [];
+
+    for (const analysisResult of analysisResults) {
+      const tmp = results.find(
+        (res) => res.implementation.id === analysisResult.implementation.id
+      );
+      if (tmp) {
+        tmp.results.push(tmp);
+      } else {
+        results.push({
+          implementation: analysisResult.implementation,
+          results: [analysisResult],
+        });
+      }
+    }
+    return results;
   }
+}
+
+export interface GroupedResults {
+  implementation: NISQImplementationDto;
+  results: AnalysisResultDto[];
 }
