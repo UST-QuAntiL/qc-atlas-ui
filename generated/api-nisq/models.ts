@@ -1,3 +1,5 @@
+export { AnalysisResultDto } from './models/analysis-result-dto';
+export { AnalysisResultListDto } from './models/analysis-result-list-dto';
 export { CreateQpuRequest } from './models/create-qpu-request';
 export { ExecutionRequest } from './models/execution-request';
 export { ExecutionResultDto } from './models/execution-result-dto';

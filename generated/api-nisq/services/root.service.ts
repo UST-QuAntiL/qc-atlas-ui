@@ -8,6 +8,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { AnalysisResultListDto } from '../models/analysis-result-list-dto';
+import { ParameterListDto } from '../models/parameter-list-dto';
 import { RepresentationModel } from '../models/representation-model';
 import { SelectionRequest } from '../models/selection-request';
 
@@ -85,7 +87,7 @@ export class RootService extends BaseService {
    */
   selectImplementations$Response(params: {
     body: SelectionRequest;
-  }): Observable<StrictHttpResponse<string>> {
+  }): Observable<StrictHttpResponse<AnalysisResultListDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       RootService.SelectImplementationsPath,
@@ -104,7 +106,7 @@ export class RootService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<string>;
+          return r as StrictHttpResponse<AnalysisResultListDto>;
         })
       );
   }
@@ -119,9 +121,12 @@ export class RootService extends BaseService {
    */
   selectImplementations(params: {
     body: SelectionRequest;
-  }): Observable<string> {
+  }): Observable<AnalysisResultListDto> {
     return this.selectImplementations$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
+      map(
+        (r: StrictHttpResponse<AnalysisResultListDto>) =>
+          r.body as AnalysisResultListDto
+      )
     );
   }
 
@@ -140,7 +145,7 @@ export class RootService extends BaseService {
    */
   getSelectionParams$Response(params: {
     algoId: string;
-  }): Observable<StrictHttpResponse<string>> {
+  }): Observable<StrictHttpResponse<ParameterListDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       RootService.GetSelectionParamsPath,
@@ -159,7 +164,7 @@ export class RootService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<string>;
+          return r as StrictHttpResponse<ParameterListDto>;
         })
       );
   }
@@ -172,9 +177,11 @@ export class RootService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getSelectionParams(params: { algoId: string }): Observable<string> {
+  getSelectionParams(params: { algoId: string }): Observable<ParameterListDto> {
     return this.getSelectionParams$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
+      map(
+        (r: StrictHttpResponse<ParameterListDto>) => r.body as ParameterListDto
+      )
     );
   }
 }

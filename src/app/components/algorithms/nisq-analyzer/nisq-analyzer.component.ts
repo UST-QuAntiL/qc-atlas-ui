@@ -7,132 +7,91 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { ParameterDto } from 'api-nisq/models/parameter-dto';
+import { SdkDto } from 'api-nisq/models/sdk-dto';
+import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
+import { ExecutionRequest } from 'api-nisq/models/execution-request';
+import { AnalysisResultDto } from 'api-nisq/models/analysis-result-dto';
 
-interface BackendExecutionParams {
-  backendName: string;
-  backendProviderName: string;
-  maxDepth: number;
-  depth: number;
-  qbits: number;
-  width: number;
-  maxWidth: number;
-}
-
-interface NISQResult {
-  implementationName: string;
-  backendExecutionParams: BackendExecutionParams[];
-}
-
-export interface ImplementationParameter {
-  name: string;
-  label: string;
-  placeholder?: string;
-  required?: boolean;
+export interface ImplementationParameter extends ParameterDto {
   // TODO change value type
-  value: number;
+  value: string;
 }
 
-export interface CloudServiceOption {
-  name: string;
-  label: string;
-}
-
-export interface NisqExecutionParameters {
+export interface NisqExecutionParameters extends ExecutionRequest {
   params: { [key: string]: string };
   cloudService: string;
   shotCount: number;
   qiskitToken: string;
 }
 
-export interface NisqAnalyzeResults {
-  params: { [key: string]: string };
-  chosenImplementation: string;
-  backendExecutionParams: BackendExecutionParams[];
-  outcome: string;
-}
-
 // TODO: ID instead of name?
 const DUMMY_PARAMS: ImplementationParameter[] = [
   {
     name: 'N',
-    label: 'N - Integer, N > 0, Number to be factored',
-    placeholder: 'e.g. 15',
-    value: 15,
+    description: 'N - Integer, N > 0, Number to be factored',
+    value: '15',
   },
   {
     name: 'L',
-    label: 'L - Length of binary L',
-    placeholder: 'e.g. 4',
-    value: 4,
+    description: 'L - Length of binary L',
+    value: '4',
   },
 ];
 
 // TODO: ID instead of name?
-const DUMMY_CLOUD_SERVICES: CloudServiceOption[] = [
+const DUMMY_CLOUD_SERVICES: SdkDto[] = [
   {
     name: 'IBMQ',
-    label: 'IBMQ',
   },
 ];
 
-const DUMMY_ANALYZE_RESULTS: NISQResult[] = [
+const DUMMY_ANALYZE_RESULTS: AnalysisResultDto[] = [
   {
-    implementationName: 'shor-general-qiskit',
-    backendExecutionParams: [
-      {
-        backendName: 'ibmq_16_melbourne',
-        backendProviderName: 'IBMQ',
-        maxDepth: 232,
-        depth: 123,
-        qbits: 15,
-        width: 11,
-        maxWidth: 200,
-      },
-    ],
+    qpu: {
+      id: '0',
+      name: 'some Qpu',
+      numberOfQubits: 5,
+      t1: 0,
+      maxGateTime: 100,
+    },
+    implementation: {
+      id: '0',
+      name: 'some impl',
+      implementedAlgorithm: 'some algo',
+    },
+    estimate: true,
+    analysedDepth: 1,
+    analysedWidth: 1,
   },
   {
-    implementationName: 'shor-15-qiskit',
-    backendExecutionParams: [
-      {
-        backendName: 'ibmq_16_melbourne',
-        backendProviderName: 'IBMQ',
-        maxDepth: 232,
-        depth: 5,
-        qbits: 15,
-        width: 5,
-        maxWidth: 200,
-      },
-      {
-        backendName: 'ibmq_ourense',
-        backendProviderName: 'IBMQ',
-        maxDepth: 232,
-        depth: 11,
-        qbits: 15,
-        width: 19,
-        maxWidth: 200,
-      },
-    ],
+    qpu: {
+      id: '0',
+      name: 'some Qpu',
+      numberOfQubits: 5,
+      t1: 0,
+      maxGateTime: 100,
+    },
+    implementation: {
+      id: '0',
+      name: 'some impl',
+      implementedAlgorithm: 'some algo',
+    },
+    estimate: true,
+    analysedDepth: 1,
+    analysedWidth: 1,
   },
 ];
 
-const DUMMY_RESULTS: NisqAnalyzeResults = {
-  params: {
+const DUMMY_RESULTS: ExecutionResultDto = {
+  inputParameters: {
     N: '15',
     L: '4',
   },
-  chosenImplementation: 'ibmq_16_melbourne',
-  backendExecutionParams: [
-    {
-      backendName: 'ibmq_16_melbourne',
-      backendProviderName: 'IBMQ',
-      maxDepth: 232,
-      depth: 123,
-      qbits: 15,
-      width: 11,
-      maxWidth: 200,
-    },
-  ],
-  outcome: 'success: true\nstatus: SuccessfulCompletion,\ntime_taken: 3ms',
+  statusCode: '1',
+  status: 'FINISHED',
+  id: '0',
+  result: 'success: true\nstatus: SuccessfulCompletion,\ntime_taken: 3ms',
 };
 
 @Component({
@@ -157,14 +116,14 @@ export class NisqAnalyzerComponent implements OnInit {
   inputFormGroup: FormGroup;
 
   columnsToDisplay = ['backendName', 'width', 'depth', 'execution'];
-  expandedElement: BackendExecutionParams | null;
+  expandedElement: ExecutionRequest | null;
 
-  analyzerResults: NISQResult[] = DUMMY_ANALYZE_RESULTS;
+  analyzerResults: AnalysisResultDto[] = DUMMY_ANALYZE_RESULTS;
 
   resultBackendColumns = ['backendName', 'width', 'depth'];
-  results?: NisqAnalyzeResults = undefined;
+  results?: ExecutionResultDto = undefined;
 
-  selectedExecutionParams: BackendExecutionParams;
+  selectedExecutionParams: ExecutionRequest;
   nisqExecutionParams: NisqExecutionParameters;
 
   constructor(private formBuilder: FormBuilder) {}
@@ -197,7 +156,7 @@ export class NisqAnalyzerComponent implements OnInit {
     return true;
   }
 
-  execute(selectedExecutionParams: BackendExecutionParams): void {
+  execute(selectedExecutionParams: ExecutionRequest): void {
     this.results = undefined;
     setTimeout(() => {
       this.results = DUMMY_RESULTS;
