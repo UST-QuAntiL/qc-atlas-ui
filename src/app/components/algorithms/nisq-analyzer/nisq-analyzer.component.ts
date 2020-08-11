@@ -10,18 +10,15 @@ import {
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ParameterDto } from 'api-nisq/models/parameter-dto';
 import { SdkDto } from 'api-nisq/models/sdk-dto';
-import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
-import { ExecutionRequest } from 'api-nisq/models/execution-request';
-import { AnalysisResultDto } from 'api-nisq/models/analysis-result-dto';
-import { ImplementationDto as NISQImplementationDto } from 'api-nisq/models';
+import {
+  AnalysisResultDto,
+  ExecutionRequestDto,
+  ExecutionResultDto,
+  ImplementationDto as NISQImplementationDto,
+} from 'api-nisq/models';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
 
-export interface ImplementationParameter extends ParameterDto {
-  // TODO change value type
-  value: string;
-}
-
-export interface NisqExecutionParameters extends ExecutionRequest {
+export interface NisqExecutionParameters extends ExecutionRequestDto {
   params: { [key: string]: string };
   cloudService: string;
 }
@@ -105,15 +102,14 @@ export class NisqAnalyzerComponent implements OnInit {
   inputFormGroup: FormGroup;
 
   columnsToDisplay = ['backendName', 'width', 'depth', 'execution'];
-  expandedElement: ExecutionRequest | null;
+  expandedElement: ExecutionRequestDto | null;
 
-  analyzerResults: AnalysisResultDto[] = DUMMY_ANALYZE_RESULTS;
+  analyzerResults: AnalysisResultDto[];
 
   resultBackendColumns = ['backendName', 'width', 'depth'];
   results?: ExecutionResultDto = undefined;
 
-  selectedExecutionParams: ExecutionRequest;
-  nisqExecutionParams: NisqExecutionParameters;
+  selectedExecutionParams: ExecutionRequestDto;
 
   constructor(
     private nisqAnalyzerService: NisqAnalyzerService,
@@ -143,20 +139,20 @@ export class NisqAnalyzerComponent implements OnInit {
 
   submit(): boolean {
     const value = this.inputFormGroup.value;
-    this.nisqExecutionParams = {
-      ...value,
-      // array of objects to one object
-      params: Object.assign.apply(undefined, [
-        {
-          token: value.qiskitToken,
-        },
-        ...value.params,
-      ]),
-    } as NisqExecutionParameters;
+    this.nisqAnalyzerService
+      .analyze({
+        algorithmId: this.algo.id,
+        parameters: Object.assign.apply(undefined, [
+          {
+            token: value.qiskitToken,
+          },
+          ...value.params,
+        ]),
+      })
+      .subscribe((results) => (this.analyzerResults = results));
     return true;
   }
 
-  execute(selectedExecutionParams: ExecutionRequest): void {
     this.results = undefined;
     setTimeout(() => {
       this.results = DUMMY_RESULTS;

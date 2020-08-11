@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ImplementationService, RootService } from 'api-nisq/services';
-import { ImplementationListDto, ParameterDto } from 'api-nisq/models';
+import {
+  AnalysisResultDto,
+  ImplementationListDto,
+  ParameterDto,
+  SelectionRequestDto,
+} from 'api-nisq/models';
 import { map } from 'rxjs/operators';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 
@@ -20,12 +25,15 @@ export class NisqAnalyzerService {
   ) {}
 
   getParams(algoId: string): Observable<ParameterDto[]> {
-    return this.rootService.getSelectionParams({ algoId }).pipe(
-      map((list) => {
-        console.log(list);
-        return list.parameters;
-      })
-    );
+    return this.rootService
+      .getSelectionParams({ algoId })
+      .pipe(map((list) => list.parameters));
+  }
+
+  analyze(body: SelectionRequestDto): Observable<AnalysisResultDto[]> {
+    return this.rootService
+      .selectImplementations({ body })
+      .pipe(map((list) => list.analysisResultList));
   }
 
   getImplementations(algoId: string): Observable<ImplementationListDto> {
