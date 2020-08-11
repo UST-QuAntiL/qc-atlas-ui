@@ -29,7 +29,6 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     'description',
   ];
   tableColumns: string[] = ['Related Algorithm', 'Relation', 'Description'];
-  externalLinkVariables = ['targetAlgName'];
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
@@ -170,7 +169,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     this.getAlgorithmRelations({ algoId: this.algorithm.id });
   }
 
-  onElementClicked(event): void {
+  onUpdateClicked(event): void {
     const dialogRef = this.dialog.open(AddAlgorithmRelationDialogComponent, {
       width: '400px',
       data: {
@@ -218,17 +217,14 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     });
   }
 
-  onUrlClicked(urlData: UrlData): void {
+  onElementClicked(event): void {
     // Open view related algorithm (only url-field)
     this.router
       .navigateByUrl('/', {
         skipLocationChange: true,
       })
       .then(() =>
-        this.router.navigate([
-          'algorithms',
-          urlData.element['targetAlgObject'].id,
-        ])
+        this.router.navigate(['algorithms', event.targetAlgObject.id])
       );
   }
 

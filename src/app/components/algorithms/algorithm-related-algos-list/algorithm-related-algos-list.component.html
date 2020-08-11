@@ -3,15 +3,15 @@
     <app-table [data]=tableObjects
                [variableNames]=variableNames
                [dataColumns]=tableColumns
-               [externalLinkVariables]=externalLinkVariables
                [allowAdd]=true
+               [allowEdit]=true
                [allowSelection]=true
                [emptyTableMessage]="'No related algorithms found'"
                (addElement)="onAddElement()"
                (submitSelectedElements)="onDeleteElements($event)"
                (datalistConfigChanged)="onDatalistConfigChanged($event)"
                (elementClicked)="onElementClicked($event)"
-               (urlClicked)="onUrlClicked($event)">
+               (updateClicked)="onUpdateClicked($event)">
     </app-table>
   </div>
 </mdb-card>

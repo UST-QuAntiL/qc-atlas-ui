@@ -12,6 +12,7 @@ export class DataListComponent implements OnInit {
   @Input() dataColumns: string[];
   @Input() externalLinkVariables: string[];
   @Input() allowAdd: boolean;
+  @Input() allowEdit: boolean;
   @Input() addIcon = 'playlist_add';
   @Input() allowSelection: boolean;
   @Input() submitSelectionIcon = 'delete';
@@ -22,6 +23,7 @@ export class DataListComponent implements OnInit {
   @Input() emptyTableMessage = 'No elements found';
   @Output() elementClicked = new EventEmitter<any>();
   @Output() urlClicked = new EventEmitter<UrlData>();
+  @Output() updateClicked = new EventEmitter<any>();
   @Output() addElement = new EventEmitter<void>();
   @Output() submitSelectedElements = new EventEmitter<DeleteParams>(); // changed
   @Output() pageChange = new EventEmitter<string>();
@@ -71,6 +73,11 @@ export class DataListComponent implements OnInit {
 
   onElementClicked(element): void {
     this.elementClicked.emit(element);
+    this.selection.clear();
+  }
+
+  onUpdateClicked(element): void {
+    this.updateClicked.emit(element);
     this.selection.clear();
   }
 
