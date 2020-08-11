@@ -11,7 +11,7 @@ import { map, filter } from 'rxjs/operators';
 import { AnalysisResultListDto } from '../models/analysis-result-list-dto';
 import { ParameterListDto } from '../models/parameter-list-dto';
 import { RepresentationModel } from '../models/representation-model';
-import { SelectionRequest } from '../models/selection-request';
+import { SelectionRequestDto } from '../models/selection-request-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -43,8 +43,8 @@ export class RootService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -86,7 +86,7 @@ export class RootService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   selectImplementations$Response(params: {
-    body: SelectionRequest;
+    body: SelectionRequestDto;
   }): Observable<StrictHttpResponse<AnalysisResultListDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -99,8 +99,8 @@ export class RootService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -120,7 +120,7 @@ export class RootService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   selectImplementations(params: {
-    body: SelectionRequest;
+    body: SelectionRequestDto;
   }): Observable<AnalysisResultListDto> {
     return this.selectImplementations$Response(params).pipe(
       map(
@@ -157,8 +157,8 @@ export class RootService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(

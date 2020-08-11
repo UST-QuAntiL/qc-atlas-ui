@@ -44,8 +44,8 @@
         <app-text-input
           class="p-2"
           name="Name of the Parameter"
-          [(ngModel)]="param.name"
-          (onSaveChanges)="saveParameter(param)"
+          [ngModel]="param.name"
+          (onSaveChanges)="saveParameter(param, $event)"
         ></app-text-input>
         <app-text-input
           class="w-50 p-2"

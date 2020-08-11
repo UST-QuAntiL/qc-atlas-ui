@@ -8,7 +8,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { ExecutionRequest } from '../models/execution-request';
+import { ExecutionRequestDto } from '../models/execution-request-dto';
 import { ExecutionResultDto } from '../models/execution-result-dto';
 import { ImplementationDto } from '../models/implementation-dto';
 import { ImplementationListDto } from '../models/implementation-list-dto';
@@ -50,8 +50,8 @@ export class ImplementationService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -108,8 +108,8 @@ export class ImplementationService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -166,8 +166,8 @@ export class ImplementationService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -196,6 +196,68 @@ export class ImplementationService extends BaseService {
   }
 
   /**
+   * Path part for operation updateImplementation
+   */
+  static readonly UpdateImplementationPath = '/implementations/{implId}';
+
+  /**
+   * Update an implementation
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateImplementation$Response(params: {
+    implId: string;
+    body: ImplementationDto;
+  }): Observable<StrictHttpResponse<ImplementationDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ImplementationService.UpdateImplementationPath,
+      'post'
+    );
+    if (params) {
+      rb.path('implId', params.implId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<ImplementationDto>;
+        })
+      );
+  }
+
+  /**
+   * Update an implementation
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateImplementation(params: {
+    implId: string;
+    body: ImplementationDto;
+  }): Observable<ImplementationDto> {
+    return this.updateImplementation$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<ImplementationDto>) =>
+          r.body as ImplementationDto
+      )
+    );
+  }
+
+  /**
    * Path part for operation executeImplementation
    */
   static readonly ExecuteImplementationPath =
@@ -211,7 +273,7 @@ export class ImplementationService extends BaseService {
    */
   executeImplementation$Response(params: {
     implId: string;
-    body: ExecutionRequest;
+    body: ExecutionRequestDto;
   }): Observable<StrictHttpResponse<ExecutionResultDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -226,8 +288,8 @@ export class ImplementationService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -248,7 +310,7 @@ export class ImplementationService extends BaseService {
    */
   executeImplementation(params: {
     implId: string;
-    body: ExecutionRequest;
+    body: ExecutionRequestDto;
   }): Observable<ExecutionResultDto> {
     return this.executeImplementation$Response(params).pipe(
       map(
@@ -286,8 +348,8 @@ export class ImplementationService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -345,8 +407,8 @@ export class ImplementationService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -371,6 +433,68 @@ export class ImplementationService extends BaseService {
   }): Observable<ParameterDto> {
     return this.addInputParameter$Response(params).pipe(
       map((r: StrictHttpResponse<ParameterDto>) => r.body as ParameterDto)
+    );
+  }
+
+  /**
+   * Path part for operation deleteInputParameters
+   */
+  static readonly DeleteInputParametersPath =
+    '/implementations/{implId}/input-parameters';
+
+  /**
+   * Remove input parameters from an implementation
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteInputParameters()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  deleteInputParameters$Response(params: {
+    implId: string;
+    body: Array<string>;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ImplementationService.DeleteInputParametersPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('implId', params.implId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Remove input parameters from an implementation
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteInputParameters$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  deleteInputParameters(params: {
+    implId: string;
+    body: Array<string>;
+  }): Observable<void> {
+    return this.deleteInputParameters$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
@@ -402,8 +526,8 @@ export class ImplementationService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -463,8 +587,8 @@ export class ImplementationService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(

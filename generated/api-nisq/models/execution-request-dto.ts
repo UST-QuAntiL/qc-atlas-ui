@@ -1,5 +1,5 @@
 /* tslint:disable */
-export type ExecutionRequest = {
+export type ExecutionRequestDto = {
   parameters?: {};
   qpuId?: string;
   analysedDepth?: number;

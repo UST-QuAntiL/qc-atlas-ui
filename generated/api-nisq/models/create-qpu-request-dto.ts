@@ -1,6 +1,6 @@
 /* tslint:disable */
 import { Links } from './links';
-export type CreateQpuRequest = {
+export type CreateQpuRequestDto = {
   id?: string;
   name?: string;
   numberOfQubits?: number;

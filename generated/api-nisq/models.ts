@@ -1,7 +1,7 @@
 export { AnalysisResultDto } from './models/analysis-result-dto';
 export { AnalysisResultListDto } from './models/analysis-result-list-dto';
-export { CreateQpuRequest } from './models/create-qpu-request';
-export { ExecutionRequest } from './models/execution-request';
+export { CreateQpuRequestDto } from './models/create-qpu-request-dto';
+export { ExecutionRequestDto } from './models/execution-request-dto';
 export { ExecutionResultDto } from './models/execution-result-dto';
 export { ExecutionResultListDto } from './models/execution-result-list-dto';
 export { ImplementationDto } from './models/implementation-dto';
@@ -15,4 +15,4 @@ export { QpuListDto } from './models/qpu-list-dto';
 export { RepresentationModel } from './models/representation-model';
 export { SdkDto } from './models/sdk-dto';
 export { SdkListDto } from './models/sdk-list-dto';
-export { SelectionRequest } from './models/selection-request';
+export { SelectionRequestDto } from './models/selection-request-dto';

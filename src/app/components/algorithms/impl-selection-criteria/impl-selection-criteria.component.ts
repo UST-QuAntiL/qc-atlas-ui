@@ -68,17 +68,29 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
   }
 
   deleteMany(): void {
-    // TODO: backend call
+    this.nisqImplementationService.deleteInputParameters({
+      implId: this.impl.id,
+      body: this.selection.selected.map(
+        (index) => this.nisqImpl.inputParameters.parameters[index].name
+      ),
+    });
     this.nisqImpl.inputParameters.parameters = this.nisqImpl.inputParameters.parameters.filter(
       (_, index) => !this.selection.isSelected(index)
     );
     this.selection.clear();
   }
 
-  saveParameter(param: ParameterDto): void {
+  saveParameter(param: ParameterDto, newName?: string): void {
     // Do nothing if there's no name yet
     if (!param.name) {
       return;
+    }
+    this.nisqImplementationService.deleteInputParameters({
+      implId: this.nisqImpl.id,
+      body: [param.name],
+    });
+    if (newName) {
+      param.name = newName;
     }
     this.nisqImplementationService.addInputParameter({
       implId: this.nisqImpl.id,

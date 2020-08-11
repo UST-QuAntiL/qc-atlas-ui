@@ -39,8 +39,8 @@ export class SdksService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -92,8 +92,8 @@ export class SdksService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -141,8 +141,8 @@ export class SdksService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(

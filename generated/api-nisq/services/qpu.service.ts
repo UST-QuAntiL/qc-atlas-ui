@@ -8,7 +8,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { CreateQpuRequest } from '../models/create-qpu-request';
+import { CreateQpuRequestDto } from '../models/create-qpu-request-dto';
 import { QpuDto } from '../models/qpu-dto';
 import { QpuListDto } from '../models/qpu-list-dto';
 
@@ -40,8 +40,8 @@ export class QpuService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -80,7 +80,7 @@ export class QpuService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createQpu$Response(params: {
-    body: CreateQpuRequest;
+    body: CreateQpuRequestDto;
   }): Observable<StrictHttpResponse<QpuDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -93,8 +93,8 @@ export class QpuService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
@@ -113,7 +113,7 @@ export class QpuService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createQpu(params: { body: CreateQpuRequest }): Observable<QpuDto> {
+  createQpu(params: { body: CreateQpuRequestDto }): Observable<QpuDto> {
     return this.createQpu$Response(params).pipe(
       map((r: StrictHttpResponse<QpuDto>) => r.body as QpuDto)
     );
@@ -142,8 +142,8 @@ export class QpuService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'blob',
-          accept: '*/*',
+          responseType: 'json',
+          accept: 'application/hal+json',
         })
       )
       .pipe(
