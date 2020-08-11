@@ -135,7 +135,6 @@ export class NisqAnalyzerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.nisqAnalyzerService.init(this.algorithmId);
     this.inputFormGroup = this.formBuilder.group({
       params: this.formBuilder.array(
         this.params.map((param) =>
