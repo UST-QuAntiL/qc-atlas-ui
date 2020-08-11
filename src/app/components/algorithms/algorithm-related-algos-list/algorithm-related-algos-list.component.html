@@ -1,19 +1,17 @@
 <mdb-card class="m-2">
   <div class="mx-3 mb-2">
-    <app-table [data]=algorithmRelations
+    <app-table [data]=tableObjects
                [variableNames]=variableNames
                [dataColumns]=tableColumns
                [allowAdd]=true
+               [allowEdit]=true
                [allowSelection]=true
-               [allowSearch]=true
-               [allowSort]=true
-               [pagination]=pagingInfo
-               [paginatorConfig]=paginatorConfig
+               [emptyTableMessage]="'No related algorithms found'"
                (addElement)="onAddElement()"
                (submitSelectedElements)="onDeleteElements($event)"
                (datalistConfigChanged)="onDatalistConfigChanged($event)"
-               (pageChange)="onPageChanged($event)"
-               (elementClicked)="onElementClicked($event)">
+               (elementClicked)="onElementClicked($event)"
+               (updateClicked)="onUpdateClicked($event)">
     </app-table>
   </div>
 </mdb-card>

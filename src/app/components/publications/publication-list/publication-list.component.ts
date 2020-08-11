@@ -11,6 +11,8 @@ import {
   QueryParams,
   UrlData,
 } from '../../generics/data-list/data-list.component';
+import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-publication-list',
@@ -32,7 +34,8 @@ export class PublicationListComponent implements OnInit {
     private publicationService: PublicationService,
     private genericDataService: GenericDataService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {}
@@ -85,20 +88,40 @@ export class PublicationListComponent implements OnInit {
         params.body = publicationDto;
         this.publicationService.createPublication(params).subscribe((data) => {
           this.router.navigate(['publications', data.id]);
+          this.utilService.callSnackBar('Successfully created publication');
         });
       }
     });
   }
 
   onDeleteElements(event: DeleteParams): void {
-    // Iterate all selected algorithms and delete them
-    for (const publication of event.elements) {
-      this.publicationService
-        .deletePublication({ id: publication.id })
-        .subscribe(() => {
-          // Refresh Algorithms after delete
-          this.getPublications(event.queryParams);
-        });
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirm Deletion',
+        message:
+          'Are you sure you want to delete the following publication(s): ',
+        data: event.elements,
+        variableName: 'title',
+        yesButtonText: 'yes',
+        noButtonText: 'no',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        // Iterate all selected algorithms and delete them
+        for (const publication of event.elements) {
+          this.publicationService
+            .deletePublication({ id: publication.id })
+            .subscribe(() => {
+              // Refresh Algorithms after delete
+              this.getPublications(event.queryParams);
+              this.utilService.callSnackBar(
+                'Successfully removed publication(s)'
+              );
+            });
+        }
+      }
+    });
   }
 }

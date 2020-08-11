@@ -30,7 +30,6 @@ export class PublicationPropertiesComponent implements OnInit {
   }
 
   removeAuthorEvent(author: string): void {
-    console.log('Delete Author: ' + author);
     const authorIndex = this.publication.authors.indexOf(author);
     this.publication.authors.splice(authorIndex, 1);
     this.updatePublicationField.emit({
