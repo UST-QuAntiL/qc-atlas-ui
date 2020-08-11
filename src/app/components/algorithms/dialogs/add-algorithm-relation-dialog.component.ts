@@ -107,6 +107,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   }
 
   setTargetAlg(value): void {
+    this.selectedAlgorithm = value;
     this.algorithmRelationForm.get('targetAlg').setValue(value);
   }
 
