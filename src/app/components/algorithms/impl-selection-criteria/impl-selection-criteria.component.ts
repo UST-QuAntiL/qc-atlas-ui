@@ -33,20 +33,18 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.nisqImplementationService
-      .getImplementation({ implId: this.impl.id })
-      .subscribe(
-        (nisqImpl) => {
-          this.nisqImpl = nisqImpl;
+      .getImplementations({ algoId: this.algo.id })
+      .subscribe((impls) => {
+        const foundImpl = impls.implementationDtos.find(
+          (i) => i.name === this.impl.name
+        );
+        if (foundImpl) {
+          this.nisqImpl = foundImpl;
           this.selection.clear();
-        },
-        (error) => {
-          if (error.status === 404) {
-            this.createNisqImplementation();
-          } else {
-            console.log(error);
-          }
+        } else {
+          this.createNisqImplementation();
         }
-      );
+      });
   }
 
   ngOnChanges(): void {
@@ -68,39 +66,51 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
   }
 
   deleteMany(): void {
-    this.nisqImplementationService.deleteInputParameters({
-      implId: this.impl.id,
-      body: this.selection.selected.map(
-        (index) => this.nisqImpl.inputParameters.parameters[index].name
-      ),
-    });
+    this.nisqImplementationService
+      .deleteInputParameters({
+        implId: this.nisqImpl.id,
+        body: this.selection.selected.map(
+          (index) => this.nisqImpl.inputParameters.parameters[index].name
+        ),
+      })
+      .subscribe(() => undefined);
     this.nisqImpl.inputParameters.parameters = this.nisqImpl.inputParameters.parameters.filter(
       (_, index) => !this.selection.isSelected(index)
     );
     this.selection.clear();
   }
 
-  saveParameter(param: ParameterDto, newName?: string): void {
+  async saveParameter(param: ParameterDto, newName?: string): Promise<void> {
     // Do nothing if there's no name yet
-    if (!param.name) {
+    if (!param.name && !newName) {
       return;
     }
-    this.nisqImplementationService.deleteInputParameters({
-      implId: this.nisqImpl.id,
-      body: [param.name],
-    });
+    // Very stupid delete & re-create method
+    if (param.name) {
+      try {
+        await this.nisqImplementationService
+          .deleteInputParameters({
+            implId: this.nisqImpl.id,
+            body: [param.name],
+          })
+          .toPromise();
+      } catch (e) {
+        // We don't care
+      }
+    }
     if (newName) {
       param.name = newName;
     }
-    this.nisqImplementationService.addInputParameter({
-      implId: this.nisqImpl.id,
-      body: param,
-    });
+    this.nisqImplementationService
+      .addInputParameter({
+        implId: this.nisqImpl.id,
+        body: param,
+      })
+      .subscribe(() => undefined);
   }
 
   private createNisqImplementation(): void {
     const body: NisqImplementationDto = {
-      id: this.impl.id,
       name: this.impl.name,
       implementedAlgorithm: this.algo.id,
       selectionRule: '',
