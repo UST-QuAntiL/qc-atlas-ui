@@ -18,65 +18,12 @@ import {
 } from 'api-nisq/models';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
 
-export interface NisqExecutionParameters extends ExecutionRequestDto {
-  params: { [key: string]: string };
-  cloudService: string;
-}
-
 // TODO: ID instead of name?
 const DUMMY_CLOUD_SERVICES: SdkDto[] = [
   {
     name: 'IBMQ',
   },
 ];
-
-const DUMMY_ANALYZE_RESULTS: AnalysisResultDto[] = [
-  {
-    qpu: {
-      id: '0',
-      name: 'some Qpu',
-      numberOfQubits: 5,
-      t1: 0,
-      maxGateTime: 100,
-    },
-    implementation: {
-      id: '0',
-      name: 'some impl',
-      implementedAlgorithm: 'some algo',
-    },
-    estimate: true,
-    analysedDepth: 1,
-    analysedWidth: 1,
-  },
-  {
-    qpu: {
-      id: '0',
-      name: 'some Qpu',
-      numberOfQubits: 5,
-      t1: 0,
-      maxGateTime: 100,
-    },
-    implementation: {
-      id: '0',
-      name: 'some impl',
-      implementedAlgorithm: 'some algo',
-    },
-    estimate: true,
-    analysedDepth: 1,
-    analysedWidth: 1,
-  },
-];
-
-const DUMMY_RESULTS: ExecutionResultDto = {
-  inputParameters: {
-    N: '15',
-    L: '4',
-  },
-  statusCode: '1',
-  status: 'FINISHED',
-  id: '0',
-  result: 'success: true\nstatus: SuccessfulCompletion,\ntime_taken: 3ms',
-};
 
 @Component({
   selector: 'app-algorithm-nisq-analyzer',
@@ -96,20 +43,23 @@ const DUMMY_RESULTS: ExecutionResultDto = {
 export class NisqAnalyzerComponent implements OnInit {
   @Input() algo: AlgorithmDto;
 
+  // 1) Selection
   params: ParameterDto[];
   cloudServices = DUMMY_CLOUD_SERVICES;
-
   inputFormGroup: FormGroup;
 
-  columnsToDisplay = ['backendName', 'width', 'depth', 'execution'];
-  expandedElement: ExecutionRequestDto | null;
+  // 2) Analyze phase
+  analyzeParams: {};
+  analyzerResults: AnalysisResultDto[] = [];
 
-  analyzerResults: AnalysisResultDto[];
-
-  resultBackendColumns = ['backendName', 'width', 'depth'];
+  // 3) Execution
+  selectedExecutionParams: ExecutionRequestDto;
   results?: ExecutionResultDto = undefined;
 
-  selectedExecutionParams: ExecutionRequestDto;
+  // Misc UI state
+  analyzeColumns = ['backendName', 'width', 'depth', 'execution'];
+  resultBackendColumns = ['backendName', 'width', 'depth'];
+  expandedElement: ExecutionRequestDto | null;
 
   constructor(
     private nisqAnalyzerService: NisqAnalyzerService,
@@ -139,25 +89,32 @@ export class NisqAnalyzerComponent implements OnInit {
 
   submit(): boolean {
     const value = this.inputFormGroup.value;
+    this.analyzeParams = Object.assign.apply(undefined, [
+      {
+        token: value.qiskitToken,
+      },
+      ...value.params,
+    ]);
     this.nisqAnalyzerService
       .analyze({
         algorithmId: this.algo.id,
-        parameters: Object.assign.apply(undefined, [
-          {
-            token: value.qiskitToken,
-          },
-          ...value.params,
-        ]),
+        parameters: this.analyzeParams,
       })
       .subscribe((results) => (this.analyzerResults = results));
     return true;
   }
 
+  execute(result: AnalysisResultDto): void {
     this.results = undefined;
-    setTimeout(() => {
-      this.results = DUMMY_RESULTS;
-    }, 3000);
-    this.selectedExecutionParams = selectedExecutionParams;
+    this.selectedExecutionParams = {
+      parameters: this.analyzeParams,
+      qpuId: result.qpu.id,
+      analysedDepth: result.analysedDepth,
+      analysedWidth: result.analysedWidth,
+    };
+    this.nisqAnalyzerService
+      .execute(result.implementation.id, this.selectedExecutionParams)
+      .subscribe((results) => (this.results = results));
   }
 
   groupResultsByImplementation(
@@ -170,7 +127,7 @@ export class NisqAnalyzerComponent implements OnInit {
         (res) => res.implementation.id === analysisResult.implementation.id
       );
       if (tmp) {
-        tmp.results.push(tmp);
+        tmp.results.push(analysisResult);
       } else {
         results.push({
           implementation: analysisResult.implementation,

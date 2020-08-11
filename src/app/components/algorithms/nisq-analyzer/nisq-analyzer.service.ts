@@ -4,6 +4,7 @@ import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ImplementationService, RootService } from 'api-nisq/services';
 import {
   AnalysisResultDto,
+  ExecutionRequestDto,
   ImplementationListDto,
   ParameterDto,
   SelectionRequestDto,
@@ -34,6 +35,13 @@ export class NisqAnalyzerService {
     return this.rootService
       .selectImplementations({ body })
       .pipe(map((list) => list.analysisResultList));
+  }
+
+  execute(implId: string, body: ExecutionRequestDto) {
+    return this.nisqImplementationService.executeImplementation({
+      implId,
+      body,
+    });
   }
 
   getImplementations(algoId: string): Observable<ImplementationListDto> {
