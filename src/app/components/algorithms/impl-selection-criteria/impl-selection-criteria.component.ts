@@ -106,7 +106,16 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
         implId: this.nisqImpl.id,
         body: param,
       })
-      .subscribe(() => undefined);
+      .subscribe(() => {});
+  }
+
+  saveImplementation(): void {
+    this.nisqImplementationService
+      .updateImplementation({
+        implId: this.nisqImpl.id,
+        body: this.nisqImpl,
+      })
+      .subscribe(() => {});
   }
 
   private createNisqImplementation(): void {

@@ -6,6 +6,26 @@
   <mat-spinner></mat-spinner>
 </div>
 <div *ngIf="nisqImpl">
+  <div
+    class="d-flex justify-content-between align-self-center header-container"
+  >
+    <app-text-input
+      class="w-25 p-2"
+      name="File Location"
+      [(ngModel)]="nisqImpl.fileLocation"
+      (onSaveChanges)="saveImplementation()"
+    ></app-text-input>
+    <app-select-input
+      class="w-25 p-2"
+      name="SDK"
+      [(ngModel)]="nisqImpl.sdk"
+      [choices]="[
+        { value: 'Qiskit', label: 'Qiskit' },
+        { value: 'Forrest', label: 'Forrest' }
+      ]"
+      (onSaveChanges)="saveImplementation()"
+    ></app-select-input>
+  </div>
   <div class="d-flex justify-content-between header-container">
     <h4>Input Parameters</h4>
     <div class="d-flex">
@@ -82,17 +102,20 @@
       class="p-2"
       name="Selection Rule (in PROLOG)"
       [(ngModel)]="nisqImpl.selectionRule"
+      (onSaveChanges)="saveImplementation()"
     ></app-prolog-input>
     <div class="d-flex justify-content-between">
       <app-prolog-input
         class="w-50 p-2"
         name="Width Rule (in PROLOG)"
         [(ngModel)]="nisqImpl.widthRule"
+        (onSaveChanges)="saveImplementation()"
       ></app-prolog-input>
       <app-prolog-input
         class="w-50 p-2"
         name="Depth Rule (in PROLOG)"
         [(ngModel)]="nisqImpl.depthRule"
+        (onSaveChanges)="saveImplementation()"
       ></app-prolog-input>
     </div>
   </mat-card>
