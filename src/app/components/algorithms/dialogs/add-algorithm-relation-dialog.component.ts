@@ -70,6 +70,10 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
             optionName: 'Existing Algorithm-Relations',
             algoRelationTypes: this.algoRelationTypes,
           });
+          // Set filtered Types if update-dialog
+          if (this.isUpdateDialog) {
+            this.filterTypes(this.relationType.value.name);
+          }
         }
       });
 
@@ -81,6 +85,15 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
       this.data.description = this.description.value;
       this.data.targetAlg = this.selectedAlgorithm;
     });
+  }
+
+  filterTypes(type: string): void {
+    this.stateGroups[
+      this.stateGroups.length - 1
+    ].algoRelationTypes = this.algoRelationTypes.filter(
+      (filterType) =>
+        filterType.name.toLowerCase().indexOf(type.toLowerCase()) === 0
+    );
   }
 
   generateRelationType(type): AlgoRelationTypeDto {
@@ -185,6 +198,8 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     const searchType = this.relationType.value.name
       ? this.relationType.value
       : { name: this.relationType.value };
+    // Filter existing types
+    this.filterTypes(searchType.name);
     // Return Type from Input if it exists
     const existingRelationType = this.algoRelationTypes.find(
       (x) => x.name === searchType.name
