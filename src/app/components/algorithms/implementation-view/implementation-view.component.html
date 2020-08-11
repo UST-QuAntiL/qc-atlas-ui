@@ -20,7 +20,7 @@
     </mat-tab>
     <mat-tab label="Publications">
       <div>
-        <app-implementation-publications-list [implementation]=impl>
+        <app-implementation-publications-list [implementation]="impl">
         </app-implementation-publications-list>
       </div>
     </mat-tab>
@@ -33,11 +33,9 @@
     <mat-tab [hidden]="isNisqUsed" label="Selection Criteria">
       <div class="tab-body p-4">
         <app-impl-selection-criteria
-          [params]="this.placeholderInputParams"
-          [depthRule]="placeholderPrologRule"
-          [widthRule]="placeholderPrologRule"
-          [selectionRule]="placeholderPrologRule">
-        </app-impl-selection-criteria>
+          [algo]="algo"
+          [impl]="impl"
+        ></app-impl-selection-criteria>
       </div>
     </mat-tab>
     <mat-tab label="Discussion">

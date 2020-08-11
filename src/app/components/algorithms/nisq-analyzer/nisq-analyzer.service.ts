@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ImplementationDto as AtlasImplementationDto } from 'api-atlas/models/implementation-dto';
-import { ImplementationService as NISQImplementationService } from '../../../../../generated/api-nisq/services/implementation.service';
+import { ImplementationService as NISQImplementationService } from 'api-nisq/services/implementation.service';
 import { ImplementationDto as NISQImplementationDto } from 'api-nisq/models/implementation-dto';
 import { ImplementationListDto as NISQImplementationListDto } from 'api-nisq/models/implementation-list-dto';
 
@@ -33,22 +33,15 @@ export class NisqAnalyzerService {
     this.algorithmId = algorithmId;
     // Look if implementations with same algo id exist in NISQ analyzer db
     // match implementations with NISQ db and Altas db
-    const observables: Array<Observable<any>> = [];
-    observables.push(
-      this.algorithmService.getImplementations({ algoId: this.algorithmId })
-    );
-    observables.push(
-      this.nisqImplementationService.getImplementations({
-        algoId: this.algorithmId,
-      })
-    );
-
-    let nisqImplementations: NISQImplementationDto[] = [];
-    let altasImplementations: AtlasImplementationDto[] = [];
-
-    forkJoin(observables).subscribe((results) => {
-      nisqImplementations = results[1].implementationDtos || [];
-      altasImplementations = results[0]._embedded.implementations || [];
+    const impls$ = this.algorithmService.getImplementations({
+      algoId: this.algorithmId,
+    });
+    const nisqImpls$ = this.nisqImplementationService.getImplementations({
+      algoId: this.algorithmId,
+    });
+    forkJoin([impls$, nisqImpls$]).subscribe((results) => {
+      const nisqImplementations = results[1].implementationDtos || [];
+      const altasImplementations = results[0]._embedded.implementations || [];
       this.fixNISQIMplementations(altasImplementations, nisqImplementations);
     });
   }

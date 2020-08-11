@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import {
   BadgeModule,
@@ -49,6 +50,7 @@ import { ImplementationSoftwareplatformListComponent } from './implementation-so
     MatCardModule,
     CardsModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule,
     AlgorithmModule,
   ],
 })
