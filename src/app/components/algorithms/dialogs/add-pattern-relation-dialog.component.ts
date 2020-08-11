@@ -54,6 +54,10 @@ export class AddPatternRelationDialogComponent implements OnInit {
             optionName: 'Existing Pattern-Relations',
             patternRelationTypes: this.patternRelationTypes,
           });
+          // Set filtered Types if update-dialog
+          if (this.patternRelationType.value) {
+            this.filterTypes(this.patternRelationType.value.name);
+          }
         }
       });
 
@@ -64,6 +68,15 @@ export class AddPatternRelationDialogComponent implements OnInit {
         this.patternRelationType.value
       );
     });
+  }
+
+  filterTypes(type: string): void {
+    this.stateGroups[
+      this.stateGroups.length - 1
+    ].patternRelationTypes = this.patternRelationTypes.filter(
+      (filterType) =>
+        filterType.name.toLowerCase().indexOf(type.toLowerCase()) === 0
+    );
   }
 
   generateRelationType(type): PatternRelationTypeDto {
@@ -110,6 +123,8 @@ export class AddPatternRelationDialogComponent implements OnInit {
     const searchType = this.patternRelationType.value.name
       ? this.patternRelationType.value
       : { name: this.patternRelationType.value };
+    // Filter existing types
+    this.filterTypes(searchType.name);
     // Return Type from Input if it exists
     const existingRelationType = this.patternRelationTypes.find(
       (x) => x.name === searchType.name
