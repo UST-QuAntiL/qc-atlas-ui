@@ -21,6 +21,7 @@ export class DataListComponent implements OnInit {
   @Input() pagination: any;
   @Input() paginatorConfig: any;
   @Input() emptyTableMessage = 'No elements found';
+  @Input() smallTable = false;
   @Output() elementClicked = new EventEmitter<any>();
   @Output() urlClicked = new EventEmitter<UrlData>();
   @Output() updateClicked = new EventEmitter<any>();

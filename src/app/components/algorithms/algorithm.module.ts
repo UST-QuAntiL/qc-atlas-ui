@@ -16,7 +16,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { CardsModule } from 'angular-bootstrap-md';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
-import { ComputingResourcePropertyModule } from '../computation-resource-property/computing-resource-property.module';
+import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
 import { NisqAnalyzerModule } from './nisq-analyzer/nisq-analyzer.module';
 import { AlgorithmListComponent } from './algorithm-list/algorithm-list.component';
 import { AlgorithmViewComponent } from './algorithm-view/algorithm-view.component';
@@ -68,7 +68,7 @@ import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-rel
     MatDialogModule,
     MatAutocompleteModule,
     MatTreeModule,
-    ComputingResourcePropertyModule,
+    ComputeResourcePropertyModule,
     CardsModule,
     NisqAnalyzerModule,
   ],

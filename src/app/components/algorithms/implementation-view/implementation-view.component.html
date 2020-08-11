@@ -66,11 +66,11 @@
         </div>
 
         <mat-card class="m-4">
-          <app-computation-resource-property-list (addProperty)="addComputeResourceProperty($event)"
-                                                  (updateProperty)="updateComputeResourceProperty($event)"
-                                                  (deleteProperty)="deleteComputeResourceProperty($event)"
-                                                  [resourceProperties]="computeResourceProperties">
-          </app-computation-resource-property-list>
+          <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
+                                              (updateProperty)="updateComputeResourceProperty($event)"
+                                              (deleteProperty)="deleteComputeResourceProperty($event)"
+                                              [resourceProperties]="computeResourceProperties">
+          </app-compute-resource-property-list>
         </mat-card>
       </div>
     </mat-tab>

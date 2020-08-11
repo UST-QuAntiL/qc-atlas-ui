@@ -74,11 +74,11 @@
   </mat-card>
 
   <mat-card class="m-4">
-    <app-computation-resource-property-list (addProperty)="addComputeResourceProperty($event)"
-                                            (updateProperty)="updateComputeResourceProperty($event)"
-                                            (deleteProperty)="deleteComputeResourceProperty($event)"
-                                            [resourceProperties]="computeResourceProperties">
-    </app-computation-resource-property-list>
+    <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
+                                        (updateProperty)="updateComputeResourceProperty($event)"
+                                        (deleteProperty)="deleteComputeResourceProperty($event)"
+                                        [resourceProperties]="computeResourceProperties">
+    </app-compute-resource-property-list>
   </mat-card>
 
   <mat-card class="m-4">
@@ -104,7 +104,7 @@
       <app-select-input class="p-2"
                         name="Quantum computation model"
                         [(ngModel)]="algorithm.quantumComputationModel"
-                        [choices]="quantumComputationModelOptions"></app-select-input>
+                        [choices]="availableQuantumComputationModelOptions"></app-select-input>
 
       <app-text-input class="w-100 p-2"
                       name="Speedup"
@@ -124,7 +124,7 @@
                       name="Sketch type"
                       [(ngModel)]="algorithm.sketches"
                       [includeEmpty]="true"
-                      [choices]="sketchOptions"
+                      [choices]="availableSketchOptions"
                       (onSaveChanges)="onChangesSaved($event, 'sketch')"></app-select-input>
   </mat-card>
 

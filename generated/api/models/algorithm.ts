@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { AlgorithmRelation } from './algorithm-relation';
 import { ApplicationArea } from './application-area';
-import { ComputingResourceProperty } from './computing-resource-property';
+import { ComputeResourceProperty } from './compute-resource-property';
 import { PatternRelation } from './pattern-relation';
 import { ProblemType } from './problem-type';
 import { Publication } from './publication';
@@ -17,7 +17,7 @@ export type Algorithm = {
   intent?: string;
   problem?: string;
   algorithmRelations?: Array<AlgorithmRelation>;
-  requiredComputingResourceProperties?: Array<ComputingResourceProperty>;
+  requiredComputeResourceProperties?: Array<ComputeResourceProperty>;
   algoParameter?: string;
   sketches?: Array<Sketch>;
   solution?: string;

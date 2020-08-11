@@ -1,6 +1,6 @@
 /* tslint:disable */
 import { Algorithm } from './algorithm';
-import { ComputingResourceProperty } from './computing-resource-property';
+import { ComputeResourceProperty } from './compute-resource-property';
 import { SoftwarePlatform } from './software-platform';
 export type Implementation = {
   id?: string;
@@ -14,6 +14,6 @@ export type Implementation = {
   link?: string;
   dependencies?: string;
   implementedAlgorithm?: Algorithm;
-  requiredComputingResourceProperties?: Array<ComputingResourceProperty>;
+  requiredComputeResourceProperties?: Array<ComputeResourceProperty>;
   softwarePlatforms?: Array<SoftwarePlatform>;
 };

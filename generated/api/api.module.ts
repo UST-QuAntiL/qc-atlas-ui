@@ -11,13 +11,13 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 import { AlgorithmService } from './services/algorithm.service';
 import { AlgorithmRelationTypeService } from './services/algorithm-relation-type.service';
 import { ApplicationAreasService } from './services/application-areas.service';
-import { ComputingResourcePropertiesTypesService } from './services/computing-resource-properties-types.service';
+import { ComputeResourcePropertyTypesService } from './services/compute-resource-property-types.service';
+import { ExecutionEnvironmentsService } from './services/execution-environments.service';
 import { PatternRelationService } from './services/pattern-relation.service';
 import { PatternRelationTypeService } from './services/pattern-relation-type.service';
 import { ProblemTypeService } from './services/problem-type.service';
 import { PublicationService } from './services/publication.service';
 import { RootService } from './services/root.service';
-import { SoftwarePlatformService } from './services/software-platform.service';
 
 /**
  * Module that provides all services and configuration.
@@ -30,13 +30,13 @@ import { SoftwarePlatformService } from './services/software-platform.service';
     AlgorithmService,
     AlgorithmRelationTypeService,
     ApplicationAreasService,
-    ComputingResourcePropertiesTypesService,
+    ComputeResourcePropertyTypesService,
+    ExecutionEnvironmentsService,
     PatternRelationService,
     PatternRelationTypeService,
     ProblemTypeService,
     PublicationService,
     RootService,
-    SoftwarePlatformService,
     ApiConfiguration,
   ],
 })

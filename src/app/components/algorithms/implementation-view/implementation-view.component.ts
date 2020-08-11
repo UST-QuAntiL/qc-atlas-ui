@@ -3,10 +3,9 @@ import { AlgorithmService } from 'api/services/algorithm.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlgorithmDto } from 'api/models/algorithm-dto';
 import { ImplementationDto } from 'api/models/implementation-dto';
-import { SoftwarePlatformService } from 'api/services/software-platform.service';
+import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
 import { PublicationService } from 'api/services/publication.service';
-import { EntityModelComputingResourcePropertyDto } from 'api/models/entity-model-computing-resource-property-dto';
-import { MatDialog } from '@angular/material/dialog';
+import { EntityModelComputeResourcePropertyDto } from 'api/models/entity-model-compute-resource-property-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import {
@@ -26,7 +25,6 @@ export class ImplementationViewComponent implements OnInit {
   algo: AlgorithmDto;
   softwarePlatformOptions: Option[];
 
-  quantumResources: any[] = [];
   tableColumns = ['Name', 'Datatype', 'Description', 'Value'];
   variableNames = ['name', 'datatype', 'description', 'value'];
   pagingInfo: any = {};
@@ -39,7 +37,7 @@ export class ImplementationViewComponent implements OnInit {
     { heading: '', subHeading: '' },
     { heading: '', subHeading: '' },
   ];
-  computeResourceProperties: EntityModelComputingResourcePropertyDto[] = [];
+  computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
 
   placeholderInputParams: InputParameter[] = [
     {
@@ -56,12 +54,11 @@ export class ImplementationViewComponent implements OnInit {
 
   constructor(
     private algorithmService: AlgorithmService,
-    private softwarePlatformService: SoftwarePlatformService,
+    private executionEnvironmentsService: ExecutionEnvironmentsService,
     private publicationService: PublicationService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private utilService: UtilService,
-    private dialog: MatDialog
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -113,7 +110,7 @@ export class ImplementationViewComponent implements OnInit {
   onPageChanged($event: string): void {}
 
   addComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
       .addComputingResource({
@@ -127,7 +124,7 @@ export class ImplementationViewComponent implements OnInit {
   }
 
   updateComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
       .updateComputingResource({
@@ -142,36 +139,35 @@ export class ImplementationViewComponent implements OnInit {
   }
 
   deleteComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
+    this.utilService
+      .createDialog(ConfirmDialogComponent, {
         title: 'Confirm Deletion',
         message: 'Are you sure you want to delete the following property: ',
         data: [property.type],
         variableName: 'name',
         yesButtonText: 'yes',
         noButtonText: 'no',
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        this.algorithmService
-          .deleteComputingResource({
-            algoId: this.algo.id,
-            resourceId: property.id,
-          })
-          .subscribe((e) => {
-            this.computeResourceProperties = this.computeResourceProperties.filter(
-              (elem: EntityModelComputingResourcePropertyDto) =>
-                elem.id !== property.id
-            );
-            this.fetchComputeResourceProperties();
-            this.utilService.callSnackBar('Successfully deleted property');
-          });
-      }
-    });
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.algorithmService
+            .deleteComputingResource({
+              algoId: this.algo.id,
+              resourceId: property.id,
+            })
+            .subscribe((e) => {
+              this.computeResourceProperties = this.computeResourceProperties.filter(
+                (elem: EntityModelComputeResourcePropertyDto) =>
+                  elem.id !== property.id
+              );
+              this.fetchComputeResourceProperties();
+              this.utilService.callSnackBar('Successfully deleted property');
+            });
+        }
+      });
   }
 
   fetchComputeResourceProperties(): void {
@@ -179,23 +175,26 @@ export class ImplementationViewComponent implements OnInit {
       .getComputingResources({
         algoId: this.algo.id,
         implId: this.impl.id,
+        page: -1,
       })
       .subscribe((e) => {
         if (e._embedded != null) {
           this.computeResourceProperties =
-            e._embedded.computingResourceProperties;
+            e._embedded.computeResourceProperties;
         }
       });
   }
 
   private loadGeneral(): void {
-    this.softwarePlatformService.getSoftwarePlatforms().subscribe((list) => {
-      const softwarePlatforms = list._embedded?.softwarePlatforms || [];
-      this.softwarePlatformOptions = softwarePlatforms.map((sp) => ({
-        label: sp.name,
-        value: sp.id,
-      }));
-    });
+    this.executionEnvironmentsService
+      .getSoftwarePlatforms()
+      .subscribe((list) => {
+        const softwarePlatforms = list._embedded?.softwarePlatforms || [];
+        this.softwarePlatformOptions = softwarePlatforms.map((sp) => ({
+          label: sp.name,
+          value: sp.id,
+        }));
+      });
     this.activatedRoute.params.subscribe(({ algoId, implId }) => {
       this.algorithmService.getAlgorithm({ algoId }).subscribe((algo) => {
         this.algo = algo;

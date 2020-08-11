@@ -1,0 +1,58 @@
+<mat-card class="m-4">
+  <div class="d-flex mx-3 mb-4">
+    <button mat-icon-button (click)="onSearch()"><mat-icon>search</mat-icon></button>
+    <div class="md-form w-100 my-0">
+      <input
+        type="text"
+        class="form-control"
+        id="search"
+        [(ngModel)]="searchText"
+        (keyup.enter)="onSearch()"
+        mdbInput
+      />
+      <label for="search">Search</label>
+    </div>
+  </div>
+
+  <div class="mx-3">
+    <h6>Software Platforms</h6>
+    <app-table [data]=softwarePlatforms
+               [variableNames]=variableNamesSoftwarePlatform
+               [dataColumns]=tableColumnsSoftwarePlatform
+               [pagination]=pagingInfoSoftwarePlatforms
+               [smallTable]="true"
+               (elementClicked)="onSoftwarePlatformClicked($event)"
+               (datalistConfigChanged)="onDatalistConfigChanged($event)"
+               (pageChange)="getSoftwarePlatformsHateoas($event)">
+    </app-table>
+    <ng-template> #noSoftwarePlatforms</ng-template>
+  </div>
+
+  <div class="mx-3">
+    <h6>Cloud Services</h6>
+    <app-table [data]=cloudServices
+               [variableNames]=variableNamesCloudServices
+               [dataColumns]=tableColumnsCloudServices
+               [pagination]=pagingInfoCloudServices
+               [smallTable]="true"
+               (elementClicked)="onCloudServiceClicked($event)"
+               (datalistConfigChanged)="onDatalistConfigChanged($event)"
+               (pageChange)="getCloudServicesHateoas($event)">
+    </app-table>
+    <ng-template> #noCloudServices</ng-template>
+  </div>
+
+  <div class="mx-3">
+    <h6>Compute Resources</h6>
+    <app-table [data]=computeResources
+               [variableNames]=variableNamesComputeResources
+               [dataColumns]=tableColumnsComputeResources
+               [pagination]=pagingInfoComputeResources
+               [smallTable]="true"
+               (elementClicked)="onComputeResourceClicked($event)"
+               (datalistConfigChanged)="onDatalistConfigChanged($event)"
+               (pageChange)="getComputeResourcesHateoas($event)">
+    </app-table>
+    <ng-template> #noComputeResources</ng-template>
+  </div>
+</mat-card>

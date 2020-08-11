@@ -31,7 +31,7 @@
 </div>
 <!-- Data-Table -->
 <div class="table-responsive">
-  <table id="tableSortExample" class="mb-3" mdbTable matSort (matSortChange)="sortData($event)">
+  <table id="tableSortExample" [class.table-sm]="smallTable" mdbTable matSort (matSortChange)="sortData($event)">
     <!-- Table-Header with the Header-Data -->
     <thead class="data-header">
     <tr>
@@ -104,8 +104,8 @@
             </mat-select>
           </mat-form-field>
           <!-- Optional Paginator on the right side of the footer -->
-          <ul class="pagination pg-blue float-right">
-            <div class="page-control" color="green" outline="true">
+          <ul class="pagination pg-blue float-right m-0">
+            <div class="page-control">
               <!-- First Page button -->
               <li class="page-item"><a class="page-link no-events">
                 <mat-icon class="page-button no-select"

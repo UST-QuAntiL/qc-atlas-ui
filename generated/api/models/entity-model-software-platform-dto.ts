@@ -4,7 +4,7 @@ export type EntityModelSoftwarePlatformDto = {
   id?: string;
   name: string;
   link?: string;
-  version?: string;
   licence?: string;
+  version?: string;
   _links?: Array<Link>;
 };
