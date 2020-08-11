@@ -128,7 +128,6 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   }
 
   refreshAlgorithms(): void {
-    console.log(this.targetAlg.value);
     this.linkableAlgorithms = [];
     if (!this.targetAlg.value) {
       this.selectedAlgorithm = undefined;
