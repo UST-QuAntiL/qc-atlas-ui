@@ -7,6 +7,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ParameterDto } from 'api-nisq/models/parameter-dto';
 import { SdkDto } from 'api-nisq/models/sdk-dto';
 import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
@@ -23,23 +24,7 @@ export interface ImplementationParameter extends ParameterDto {
 export interface NisqExecutionParameters extends ExecutionRequest {
   params: { [key: string]: string };
   cloudService: string;
-  shotCount: number;
-  qiskitToken: string;
 }
-
-// TODO: ID instead of name?
-const DUMMY_PARAMS: ImplementationParameter[] = [
-  {
-    name: 'N',
-    description: 'N - Integer, N > 0, Number to be factored',
-    value: '15',
-  },
-  {
-    name: 'L',
-    description: 'L - Length of binary L',
-    value: '4',
-  },
-];
 
 // TODO: ID instead of name?
 const DUMMY_CLOUD_SERVICES: SdkDto[] = [
@@ -112,9 +97,10 @@ const DUMMY_RESULTS: ExecutionResultDto = {
   ],
 })
 export class NisqAnalyzerComponent implements OnInit {
-  @Input() algorithmId: string;
-  @Input() params = DUMMY_PARAMS;
-  @Input() cloudServices = DUMMY_CLOUD_SERVICES;
+  @Input() algo: AlgorithmDto;
+
+  params: ParameterDto[];
+  cloudServices = DUMMY_CLOUD_SERVICES;
 
   inputFormGroup: FormGroup;
 
@@ -135,20 +121,23 @@ export class NisqAnalyzerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.inputFormGroup = this.formBuilder.group({
-      params: this.formBuilder.array(
-        this.params.map((param) =>
-          this.formBuilder.group({
-            [param.name]: [''],
-          })
-        )
-      ),
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      cloudService: ['', Validators.required],
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      shotCount: ['', Validators.required],
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      qiskitToken: ['', Validators.required],
+    this.nisqAnalyzerService.getParams(this.algo.id).subscribe((params) => {
+      this.params = params.filter((p) => p.name !== 'token');
+      this.inputFormGroup = this.formBuilder.group({
+        params: this.formBuilder.array(
+          this.params.map((param) =>
+            this.formBuilder.group({
+              [param.name]: [''],
+            })
+          )
+        ),
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        cloudService: ['', Validators.required],
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        shotCount: [''],
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        qiskitToken: ['', Validators.required],
+      });
     });
   }
 
@@ -157,15 +146,17 @@ export class NisqAnalyzerComponent implements OnInit {
     this.nisqExecutionParams = {
       ...value,
       // array of objects to one object
-      params: Object.assign.apply(undefined, [{}, ...value.params]),
+      params: Object.assign.apply(undefined, [
+        {
+          token: value.qiskitToken,
+        },
+        ...value.params,
+      ]),
     } as NisqExecutionParameters;
     return true;
   }
 
   execute(selectedExecutionParams: ExecutionRequest): void {
-    this.nisqAnalyzerService.getImplementations().subscribe((result) => {
-      console.log(result);
-    });
     this.results = undefined;
     setTimeout(() => {
       this.results = DUMMY_RESULTS;
