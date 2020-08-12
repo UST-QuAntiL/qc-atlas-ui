@@ -55,6 +55,7 @@ export class NisqAnalyzerComponent implements OnInit {
   // 2) Analyze phase
   analyzeParams: {};
   analyzerResults: AnalysisResultDto[] = [];
+  isCloudServiceClicked = false;
 
   // 3) Execution
   executedAnalyseResult: AnalysisResultDto;
@@ -158,6 +159,16 @@ export class NisqAnalyzerComponent implements OnInit {
       }
     }
     return results;
+  }
+
+  filterInputParams(inputParameters: {}): {} {
+    const result = {};
+    for (const key in inputParameters) {
+      if (key !== 'token') {
+        result[key] = inputParameters[key];
+      }
+    }
+    return result;
   }
 }
 
