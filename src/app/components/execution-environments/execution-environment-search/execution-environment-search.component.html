@@ -13,46 +13,61 @@
       <label for="search">Search</label>
     </div>
   </div>
+  <div *ngIf="hasSearched; else notSearchedYet">
+    <div class="mx-3" >
+      <h6>Software Platforms</h6>
+      <app-table *ngIf="softwarePlatforms.length > 0; else noSoftwarePlatforms"
+                 [data]=softwarePlatforms
+                 [variableNames]=variableNamesSoftwarePlatform
+                 [dataColumns]=tableColumnsSoftwarePlatform
+                 [pagination]=pagingInfoSoftwarePlatforms
+                 [smallTable]="true"
+                 (elementClicked)="onSoftwarePlatformClicked($event)"
+                 (datalistConfigChanged)="onDatalistConfigChanged($event)"
+                 (pageChange)="getSoftwarePlatformsHateoas($event)">
+      </app-table>
+      <ng-template #noSoftwarePlatforms>
+        <h4 class="m-4">No software platforms found that match your search</h4>
+      </ng-template>
+    </div>
 
-  <div class="mx-3">
-    <h6>Software Platforms</h6>
-    <app-table [data]=softwarePlatforms
-               [variableNames]=variableNamesSoftwarePlatform
-               [dataColumns]=tableColumnsSoftwarePlatform
-               [pagination]=pagingInfoSoftwarePlatforms
-               [smallTable]="true"
-               (elementClicked)="onSoftwarePlatformClicked($event)"
-               (datalistConfigChanged)="onDatalistConfigChanged($event)"
-               (pageChange)="getSoftwarePlatformsHateoas($event)">
-    </app-table>
-    <ng-template> #noSoftwarePlatforms</ng-template>
+    <div class="mx-3">
+      <h6>Cloud Services</h6>
+      <app-table *ngIf="cloudServices.length > 0; else noCloudServices"
+                 [data]=cloudServices
+                 [variableNames]=variableNamesCloudServices
+                 [dataColumns]=tableColumnsCloudServices
+                 [pagination]=pagingInfoCloudServices
+                 [smallTable]="true"
+                 (elementClicked)="onCloudServiceClicked($event)"
+                 (datalistConfigChanged)="onDatalistConfigChanged($event)"
+                 (pageChange)="getCloudServicesHateoas($event)">
+      </app-table>
+      <ng-template #noCloudServices class="m-4">
+        <h4 class="m-4">No cloud services found that match your search</h4>
+      </ng-template>
+    </div>
+
+    <div class="mx-3">
+      <h6>Compute Resources</h6>
+      <app-table *ngIf="computeResources.length > 0; else noComputeResources"
+                 [data]=computeResources
+                 [variableNames]=variableNamesComputeResources
+                 [dataColumns]=tableColumnsComputeResources
+                 [pagination]=pagingInfoComputeResources
+                 [smallTable]="true"
+                 (elementClicked)="onComputeResourceClicked($event)"
+                 (datalistConfigChanged)="onDatalistConfigChanged($event)"
+                 (pageChange)="getComputeResourcesHateoas($event)">
+      </app-table>
+      <ng-template #noComputeResources class="m-4">
+        <h4 class="m-4">No compute resources found that match your search</h4>
+      </ng-template>
+    </div>
   </div>
 
-  <div class="mx-3">
-    <h6>Cloud Services</h6>
-    <app-table [data]=cloudServices
-               [variableNames]=variableNamesCloudServices
-               [dataColumns]=tableColumnsCloudServices
-               [pagination]=pagingInfoCloudServices
-               [smallTable]="true"
-               (elementClicked)="onCloudServiceClicked($event)"
-               (datalistConfigChanged)="onDatalistConfigChanged($event)"
-               (pageChange)="getCloudServicesHateoas($event)">
-    </app-table>
-    <ng-template> #noCloudServices</ng-template>
-  </div>
-
-  <div class="mx-3">
-    <h6>Compute Resources</h6>
-    <app-table [data]=computeResources
-               [variableNames]=variableNamesComputeResources
-               [dataColumns]=tableColumnsComputeResources
-               [pagination]=pagingInfoComputeResources
-               [smallTable]="true"
-               (elementClicked)="onComputeResourceClicked($event)"
-               (datalistConfigChanged)="onDatalistConfigChanged($event)"
-               (pageChange)="getComputeResourcesHateoas($event)">
-    </app-table>
-    <ng-template> #noComputeResources</ng-template>
-  </div>
+  <ng-template #notSearchedYet>
+    <h4 class="my-5 introduction-text">Enter a name to search execution environments <br>
+      (Software platforms, Cloud services, Compute resources)</h4>
+  </ng-template>
 </mat-card>
