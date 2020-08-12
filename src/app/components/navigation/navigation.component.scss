@@ -36,11 +36,10 @@
   border: none;
 }
 
-.small-font {
+.sub-tab {
   font-size: 14px;
 }
 
-.collapse-arrow-icon:hover {
+.collapse-arrow-icon {
   color: mat-color($qc-atlas-ui-primary);
-  transform: scale(1.5, 1.5);
 }
