@@ -153,29 +153,23 @@
       <h3>Execution results</h3>
       <div class="p-2">
         <h6>Input</h6>
-        <div
-          *ngFor="let resParam of selectedExecutionParams.parameters | keyvalue"
-        >
+        <div *ngFor="let resParam of results.inputParameters | keyvalue">
           <span>{{ resParam.key }}:</span>
           <span>{{ resParam.value }}</span>
         </div>
       </div>
       <div class="p-2">
-        <h5>
-          Implementation:
-          <!--{{ results.chosenImplementation }} -->
-          TODO
-        </h5>
+        <h5>Implementation: {{ executedAnalyseResult.implementation.name }}</h5>
         <table
           mat-table
-          [dataSource]="[selectedExecutionParams]"
+          [dataSource]="[executedAnalyseResult]"
           multiTemplateDataRows
           class="w-100"
         >
           <ng-container matColumnDef="backendName">
             <th mat-header-cell *matHeaderCellDef>Backend Name</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.qpuId }}
+              {{ element.qpu.name }}
             </td>
           </ng-container>
 
@@ -203,6 +197,7 @@
       </div>
       <div class="p-2">
         <h5>Outcome</h5>
+        <span>{{ results.status }}</span>
         <code>{{ results.result }}</code>
       </div>
     </div>

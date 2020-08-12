@@ -8,6 +8,9 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { interval } from 'rxjs';
+import { exhaustMap, first } from 'rxjs/operators';
+
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ParameterDto } from 'api-nisq/models/parameter-dto';
 import { SdkDto } from 'api-nisq/models/sdk-dto';
@@ -54,7 +57,7 @@ export class NisqAnalyzerComponent implements OnInit {
   analyzerResults: AnalysisResultDto[] = [];
 
   // 3) Execution
-  selectedExecutionParams: ExecutionRequestDto;
+  executedAnalyseResult: AnalysisResultDto;
   results?: ExecutionResultDto = undefined;
 
   // Misc UI state
@@ -106,21 +109,32 @@ export class NisqAnalyzerComponent implements OnInit {
     return true;
   }
 
-  execute(result: AnalysisResultDto): void {
+  execute(analysisResult: AnalysisResultDto): void {
     this.results = undefined;
-    this.selectedExecutionParams = {
+    this.executedAnalyseResult = analysisResult;
+    const request = {
       parameters: this.analyzeParams,
-      qpuId: result.qpu.id,
-      analysedDepth: result.analysedDepth,
-      analysedWidth: result.analysedWidth,
+      qpuId: analysisResult.qpu.id,
+      analysedDepth: analysisResult.analysedDepth,
+      analysedWidth: analysisResult.analysedWidth,
     };
     this.nisqAnalyzerService
-      .execute(result.implementation.id, this.selectedExecutionParams)
+      .execute(analysisResult.implementation.id, request)
       .subscribe((results) => {
         if (results.status === 'FAILED' || results.status === 'FINISHED') {
           this.results = results;
         } else {
-          // TODO: this.http.get(results._links.self)
+          interval(1000)
+            .pipe(
+              exhaustMap(() =>
+                this.http.get<ExecutionResultDto>(results._links['self'].href)
+              ),
+              first(
+                (value) =>
+                  value.status === 'FAILED' || value.status === 'FINISHED'
+              )
+            )
+            .subscribe((finalResult) => (this.results = finalResult));
         }
       });
   }
