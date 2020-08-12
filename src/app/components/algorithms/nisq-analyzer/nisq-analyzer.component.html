@@ -94,8 +94,8 @@
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let element">
             <button
-              mat-raised-button
-              type="submit"
+              class="btn"
+              type="button"
               (click)="execute(element); stepper.next()"
             >
               Execute
@@ -116,6 +116,7 @@
                 element == expandedElement ? 'expanded' : 'collapsed'
               "
             >
+              fd fgdpsgkdfkgofdkogpkafgpdk
               <!--
               Max gate time: {{ element.qpu.maxGateTime }} Qbits:
               {{ element.qpu.numberOfQubits }} T1: {{ element.qpu.t1 }} -->

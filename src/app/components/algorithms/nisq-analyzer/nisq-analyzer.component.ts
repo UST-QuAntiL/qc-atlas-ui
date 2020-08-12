@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   animate,
@@ -63,7 +64,8 @@ export class NisqAnalyzerComponent implements OnInit {
 
   constructor(
     private nisqAnalyzerService: NisqAnalyzerService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -114,7 +116,13 @@ export class NisqAnalyzerComponent implements OnInit {
     };
     this.nisqAnalyzerService
       .execute(result.implementation.id, this.selectedExecutionParams)
-      .subscribe((results) => (this.results = results));
+      .subscribe((results) => {
+        if (results.status === 'FAILED' || results.status === 'FINISHED') {
+          this.results = results;
+        } else {
+          // TODO: this.http.get(results._links.self)
+        }
+      });
   }
 
   groupResultsByImplementation(
