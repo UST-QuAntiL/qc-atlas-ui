@@ -15,11 +15,12 @@
         Publications
       </a>
       <a
-        mat-list-item (mouseenter)="test.show()" (mouseleave)="test.hide()" [routerLink]="'./execution-environments/search'"
+        mat-list-item [routerLink]="'./execution-environments/search'"
         routerLinkActive="routerLinkActive">
         Execution Environments
+        <mat-icon class="collapse-icon" (click)="test.toggle()">{{ test.isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
       </a>
-      <div mat-list-item (mouseenter)="test.show()" (mouseleave)="test.hide()" mdbCollapse #test="bs-collapse">
+      <div mat-list-item mdbCollapse #test="bs-collapse">
         <a class="small-font" mat-list-item [routerLink]="'./execution-environments/software-platforms'"
            routerLinkActive="routerLinkActive">
           <span class="pl-3">Software Platforms</span>
