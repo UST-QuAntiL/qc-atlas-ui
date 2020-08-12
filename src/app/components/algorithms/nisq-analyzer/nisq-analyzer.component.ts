@@ -74,7 +74,9 @@ export class NisqAnalyzerComponent implements OnInit {
 
   ngOnInit(): void {
     this.nisqAnalyzerService.getParams(this.algo.id).subscribe((params) => {
-      this.params = params.filter((p) => p.name !== 'token');
+      this.params = this.nisqAnalyzerService.collapseParams(
+        params.filter((p) => p.name !== 'token')
+      );
       this.inputFormGroup = this.formBuilder.group({
         params: this.formBuilder.array(
           this.params.map((param) =>
@@ -101,6 +103,7 @@ export class NisqAnalyzerComponent implements OnInit {
       },
       ...value.params,
     ]);
+    this.analyzerResults = undefined;
     this.nisqAnalyzerService
       .analyze({
         algorithmId: this.algo.id,
@@ -168,6 +171,11 @@ export class NisqAnalyzerComponent implements OnInit {
         result[key] = inputParameters[key];
       }
     }
+    return result;
+  }
+
+  beautifyResult(result: string) {
+    // TODO: once we have JSON, prettify
     return result;
   }
 }

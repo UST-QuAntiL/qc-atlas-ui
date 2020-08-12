@@ -44,8 +44,29 @@ export class NisqAnalyzerService {
     });
   }
 
-  getImplementations(algoId: string): Observable<ImplementationListDto> {
-    return this.nisqImplementationService.getImplementations({ algoId });
+  /**
+   * Collapse params with the same name
+   *
+   * NOTE: Doesn't handle restrictions yet and only allows one description!
+   *
+   * @param params
+   */
+  collapseParams(params: ParameterDto[]) {
+    const paramMap: { [key: string]: ParameterDto } = {};
+    for (const param of params) {
+      const finalParam = paramMap[param.name];
+      if (!finalParam) {
+        // Note: Make a copy, so we can modify props!
+        paramMap[param.name] = { ...param };
+        continue;
+      }
+      const replaceDescription =
+        finalParam.description === 'Parameter of rule.' && param.description;
+      if (!finalParam.description || replaceDescription) {
+        finalParam.description = param.description;
+      }
+    }
+    return Object.values(paramMap);
   }
 
   getIBMQBackendState(
