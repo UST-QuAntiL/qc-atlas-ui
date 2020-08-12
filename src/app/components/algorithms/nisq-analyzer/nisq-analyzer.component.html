@@ -18,7 +18,7 @@
             <mat-label>{{ param.name }}</mat-label>
             <input
               matInput
-              pattern="[0-9]+"
+              [pattern]="patternForParam(param)"
               [placeholder]="param.description"
               [formControlName]="param.name"
             />
@@ -30,10 +30,11 @@
           <mat-select formControlName="cloudService">
             <mat-label>Cloud Services</mat-label>
             <mat-option
-              (onSelectionChange)="isCloudServiceClicked = true;"
-              *ngFor="let cs of cloudServices" [value]="cs.name">{{
-              cs.name
-            }}</mat-option>
+              (onSelectionChange)="isCloudServiceClicked = true"
+              *ngFor="let cs of cloudServices"
+              [value]="cs.name"
+              >{{ cs.name }}</mat-option
+            >
           </mat-select>
         </mat-form-field>
       </div>
@@ -162,7 +163,12 @@
       <h3>Execution results</h3>
       <div class="p-2">
         <h6>Input</h6>
-        <div *ngFor="let resParam of filterInputParams(results.inputParameters) | keyvalue">
+        <div
+          *ngFor="
+            let resParam of filterInputParams(results.inputParameters)
+              | keyvalue
+          "
+        >
           <span>{{ resParam.key }}:</span>
           <span>{{ resParam.value }}</span>
         </div>

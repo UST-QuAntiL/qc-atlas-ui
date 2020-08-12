@@ -174,9 +174,21 @@ export class NisqAnalyzerComponent implements OnInit {
     return result;
   }
 
-  beautifyResult(result: string) {
+  beautifyResult(result: string): string {
     // TODO: once we have JSON, prettify
     return result;
+  }
+
+  patternForParam(param: ParameterDto): string {
+    switch (param.type) {
+      case 'Integer':
+        return '[0-9]+';
+      // https://stackoverflow.com/questions/12643009/regular-expression-for-floating-point-numbers
+      case 'Float':
+        return '[+-]?([0-9]*[.])?[0-9]+';
+      default:
+        return undefined;
+    }
   }
 }
 
