@@ -23,13 +23,16 @@
   z-index: 1000;
 }
 .mat-nav-list a.routerLinkActive {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(mat-color($qc-atlas-ui-primary), 0.20);
 }
 .mat-nav-list:hover a.routerLinkActive {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(mat-color($qc-atlas-ui-primary), 0.20);
 }
 .mat-nav-list a.routerLinkActive:focus {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(mat-color($qc-atlas-ui-primary), 0.20);
+}
+.mat-nav-list:hover a:hover {
+  background: rgba(mat-color($qc-atlas-ui-primary), 0.10);
 }
 
 .mat-drawer-side {
