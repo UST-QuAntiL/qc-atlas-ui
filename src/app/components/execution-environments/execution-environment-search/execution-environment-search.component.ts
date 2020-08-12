@@ -51,6 +51,7 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
   pagingInfoComputeResources: any = {};
 
   searchText = '';
+  hasSearched = false;
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
@@ -165,23 +166,25 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
   }
 
   onSearch(): void {
-    if (this.searchText.trim() === '') {
+    this.searchText = this.searchText.trim();
+    if (this.searchText === '') {
       return;
     }
+    this.hasSearched = true;
     this.getSoftwarePlatforms({
       page: 0,
       size: 10,
-      search: this.searchText.trim(),
+      search: this.searchText,
     });
     this.getCloudServices({
       page: 0,
       size: 10,
-      search: this.searchText.trim(),
+      search: this.searchText,
     });
     this.getComputeResources({
       page: 0,
       size: 10,
-      search: this.searchText.trim(),
+      search: this.searchText,
     });
   }
 }
