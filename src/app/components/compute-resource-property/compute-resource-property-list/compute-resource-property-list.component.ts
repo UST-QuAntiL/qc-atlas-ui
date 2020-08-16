@@ -47,22 +47,7 @@ export class ComputeResourcePropertyListComponent implements OnInit {
   }
 
   onDelete(element: EntityModelComputeResourcePropertyDto): void {
-    const dialogData: ConfirmDialogData = {
-      title: 'Confirm Delete',
-      message: 'Do you really want to delete this compute resource property?',
-      yesButtonText: 'Yes',
-      noButtonText: 'No',
-    };
-    const dialogRef = this.utilService.createDialog(
-      ConfirmDialogComponent,
-      dialogData
-    );
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult != null) {
-        this.deleteProperty.emit(element);
-      }
-    });
+    this.deleteProperty.emit(element);
   }
 
   onEdit(element: EntityModelComputeResourcePropertyDto): void {
