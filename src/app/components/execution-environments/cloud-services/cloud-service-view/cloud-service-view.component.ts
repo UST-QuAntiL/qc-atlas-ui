@@ -49,6 +49,10 @@ export class CloudServiceViewComponent implements OnInit {
     );
   }
 
+  ngOnDestroy(): void {
+    this.fieldUpdateSubscription.unsubscribe();
+  }
+
   updateCloudServiceField(fieldUpdate: FieldUpdate): void {
     this.cloudService[fieldUpdate.field] = fieldUpdate.value;
     this.executionEnvironmentsService
