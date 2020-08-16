@@ -5,14 +5,8 @@
                [dataColumns]=tableColumns
                [allowAdd]=true
                [allowSelection]=true
-               [allowSearch]=true
-               [allowSort]=true
-               [pagination]=pagingInfo
-               [paginatorConfig]=paginatorConfig
                (addElement)="onAddImplementation()"
                (submitSelectedElements)="onDeleteImplementation($event)"
-               (datalistConfigChanged)="onDatalistConfigChanged($event)"
-               (pageChange)="onPageChanged($event)"
                (elementClicked)="onImplementationClicked($event)">
     </app-table>
   </div>

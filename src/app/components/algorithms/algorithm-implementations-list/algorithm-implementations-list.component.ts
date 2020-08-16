@@ -20,11 +20,6 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   implementations: EntityModelImplementationDto[];
   variableNames: string[] = ['name', 'description', 'dependencies'];
   tableColumns: string[] = ['Name', 'Description', 'Dependencies'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
-    amountChoices: [10, 25, 50],
-    selectedAmount: 10,
-  };
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -117,10 +112,6 @@ export class AlgorithmImplementationsListComponent implements OnInit {
       }
     });
   }
-
-  onDatalistConfigChanged(event): void {}
-
-  onPageChanged(event): void {}
 
   onImplementationClicked(implementation: EntityModelImplementationDto): void {
     this.router.navigate([
