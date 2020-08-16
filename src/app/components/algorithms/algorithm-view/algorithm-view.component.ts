@@ -115,23 +115,23 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       );
   }
 
-  addApplicationArea(applicationArea: string): void {
-    this.applicationAreasService
-      .createApplicationArea({ body: { name: applicationArea } })
-      .subscribe((area) => {
-        this.algorithmService
-          .addApplicationArea({
-            algoId: this.algorithm.id,
-            body: {
-              id: area.id,
-              name: area.name,
-            },
-          })
-          .subscribe((areas) => {
-            if (areas._embedded) {
-              this.applicationAreas = areas._embedded.applicationAreas;
-            }
-          });
+  addApplicationArea(applicationArea: EntityModelApplicationAreaDto): void {
+    this.algorithmService
+      .addApplicationArea({
+        algoId: this.algorithm.id,
+        body: applicationArea,
+      })
+      .subscribe((areas) => {
+        if (areas._embedded) {
+          this.applicationAreas = areas._embedded.applicationAreas;
+          this.utilService.callSnackBar(
+            'Successfully linked application area "' +
+              applicationArea.name +
+              '" to algorithm "' +
+              this.algorithm.name +
+              '"'
+          );
+        }
       });
   }
 
@@ -143,18 +143,12 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       })
       .subscribe(
         (res) => {
-          this.applicationAreasService
-            .deleteApplicationArea({ id: applicationArea.id })
-            .subscribe(
-              (area) => {},
-              (error) => {
-                console.log(error);
-              }
-            );
           this.getApplicationAreasForAlgorithm(this.algorithm.id);
           this.utilService.callSnackBar(
-            'Successfully removed application area "' +
+            'Successfully removed link to application area "' +
               applicationArea.name +
+              '" from algorithm "' +
+              this.algorithm.name +
               '"'
           );
         },

@@ -109,9 +109,8 @@ export class ImplementationViewComponent implements OnInit {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
-      .addComputingResourceByImplementation({
+      .addComputingResource({
         algoId: this.algo.id,
-        implId: this.impl.id,
         body: property,
       })
       .subscribe((e) => {
@@ -123,9 +122,8 @@ export class ImplementationViewComponent implements OnInit {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
-      .updateComputingResourceByImplementation({
+      .updateComputingResource({
         algoId: this.algo.id,
-        implId: this.impl.id,
         resourceId: property.id,
         body: property,
       })
@@ -138,9 +136,8 @@ export class ImplementationViewComponent implements OnInit {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
-      .deleteComputingResourceByImplementation({
+      .deleteComputingResource({
         algoId: this.algo.id,
-        implId: this.impl.id,
         resourceId: property.id,
       })
       .subscribe((e) => {

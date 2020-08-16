@@ -73,7 +73,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
     // Empty unlinked algorithms
     this.linkObject.data = [];
     this.algorithmService
-      .addPublication(this.generateLinkParams(publication.id))
+      .addPublicationByImplementation(this.generateLinkParams(publication.id))
       .subscribe((data) => {
         this.getLinkedPublications();
       });
@@ -84,7 +84,9 @@ export class ImplementationPublicationsListComponent implements OnInit {
     for (const publication of event.elements) {
       await // Build params using path ids and perform delete request
       this.algorithmService
-        .deleteReferenceToPublication(this.generateLinkParams(publication.id))
+        .deleteReferenceToPublicationByImplementation(
+          this.generateLinkParams(publication.id)
+        )
         .toPromise();
       this.getLinkedPublications();
     }
