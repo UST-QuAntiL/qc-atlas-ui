@@ -107,6 +107,7 @@ export class TagsComponent {
   }
 
   refreshColors(): void {
+    console.log(this.hasStorageAllCategories());
     if (!this.hasStorageAllCategories()) {
       const tmp = this.toColorMap(this.all_tags);
       this.categoryToColor = tmp;
@@ -130,7 +131,7 @@ export class TagsComponent {
     ).sort();
     const localKeys = Object.keys(this.toColorMap(this.all_tags)).sort();
 
-    if (localKeys.length !== localStorageKeys.length) {
+    if (localKeys.length > localStorageKeys.length) {
       return false;
     }
 
@@ -162,6 +163,7 @@ export class TagsComponent {
         return this.generateColor(usedColors);
       }
     }
+    this.colorPalette.push(this.colorPalette[rand]);
     return this.colorPalette[rand];
   }
 

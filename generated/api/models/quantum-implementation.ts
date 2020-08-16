@@ -1,9 +1,10 @@
 /* tslint:disable */
 import { Algorithm } from './algorithm';
-import { ComputingResourceProperty } from './computing-resource-property';
+import { ComputeResourceProperty } from './compute-resource-property';
 import { Publication } from './publication';
 import { QuantumAlgorithm } from './quantum-algorithm';
 import { SoftwarePlatform } from './software-platform';
+import { Tag } from './tag';
 export type QuantumImplementation = {
   id?: string;
   name?: string;
@@ -17,7 +18,8 @@ export type QuantumImplementation = {
   dependencies?: string;
   publications?: Array<Publication>;
   implementedAlgorithm?: Algorithm;
-  requiredComputingResourceProperties?: Array<ComputingResourceProperty>;
+  tags?: Array<Tag>;
+  requiredComputeResourceProperties?: Array<ComputeResourceProperty>;
   softwarePlatforms?: Array<SoftwarePlatform>;
   algorithm?: QuantumAlgorithm;
 };

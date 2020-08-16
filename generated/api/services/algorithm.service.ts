@@ -13,17 +13,18 @@ import { AlgorithmDto } from '../models/algorithm-dto';
 import { AlgorithmRelationDto } from '../models/algorithm-relation-dto';
 import { ApplicationAreaDto } from '../models/application-area-dto';
 import { ClassicAlgorithmDto } from '../models/classic-algorithm-dto';
-import { ComputingResourcePropertyDto } from '../models/computing-resource-property-dto';
-import { ComputingResourcePropertyTypeDto } from '../models/computing-resource-property-type-dto';
+import { ComputeResourcePropertyDto } from '../models/compute-resource-property-dto';
+import { ComputeResourcePropertyTypeDto } from '../models/compute-resource-property-type-dto';
 import { EntityModelAlgorithmDto } from '../models/entity-model-algorithm-dto';
 import { EntityModelAlgorithmRelationDto } from '../models/entity-model-algorithm-relation-dto';
 import { EntityModelApplicationAreaDto } from '../models/entity-model-application-area-dto';
-import { EntityModelComputingResourcePropertyDto } from '../models/entity-model-computing-resource-property-dto';
+import { EntityModelComputeResourcePropertyDto } from '../models/entity-model-compute-resource-property-dto';
 import { EntityModelImplementationDto } from '../models/entity-model-implementation-dto';
 import { EntityModelPatternRelationDto } from '../models/entity-model-pattern-relation-dto';
 import { EntityModelProblemTypeDto } from '../models/entity-model-problem-type-dto';
 import { EntityModelPublicationDto } from '../models/entity-model-publication-dto';
 import { EntityModelSoftwarePlatformDto } from '../models/entity-model-software-platform-dto';
+import { EntityModelTagDto } from '../models/entity-model-tag-dto';
 import { ImplementationDto } from '../models/implementation-dto';
 import { Link } from '../models/link';
 import { PageMetadata } from '../models/page-metadata';
@@ -1200,7 +1201,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getComputingResourcesByAlgorithm
    */
   static readonly GetComputingResourcesByAlgorithmPath =
-    '/v1/algorithms/{algoId}/computing-resource-properties';
+    '/v1/algorithms/{algoId}/compute-resource-properties';
 
   /**
    * Retrieve the required computing resources of an algorithm
@@ -1217,8 +1218,8 @@ export class AlgorithmService extends BaseService {
   }): Observable<
     StrictHttpResponse<{
       _embedded?: {
-        computingResourceProperties?: Array<
-          EntityModelComputingResourcePropertyDto
+        computeResourceProperties?: Array<
+          EntityModelComputeResourcePropertyDto
         >;
       };
       page?: PageMetadata;
@@ -1246,8 +1247,8 @@ export class AlgorithmService extends BaseService {
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
             _embedded?: {
-              computingResourceProperties?: Array<
-                EntityModelComputingResourcePropertyDto
+              computeResourceProperties?: Array<
+                EntityModelComputeResourcePropertyDto
               >;
             };
             page?: PageMetadata;
@@ -1270,9 +1271,7 @@ export class AlgorithmService extends BaseService {
     size?: number;
   }): Observable<{
     _embedded?: {
-      computingResourceProperties?: Array<
-        EntityModelComputingResourcePropertyDto
-      >;
+      computeResourceProperties?: Array<EntityModelComputeResourcePropertyDto>;
     };
     page?: PageMetadata;
   }> {
@@ -1281,8 +1280,8 @@ export class AlgorithmService extends BaseService {
         (
           r: StrictHttpResponse<{
             _embedded?: {
-              computingResourceProperties?: Array<
-                EntityModelComputingResourcePropertyDto
+              computeResourceProperties?: Array<
+                EntityModelComputeResourcePropertyDto
               >;
             };
             page?: PageMetadata;
@@ -1290,8 +1289,8 @@ export class AlgorithmService extends BaseService {
         ) =>
           r.body as {
             _embedded?: {
-              computingResourceProperties?: Array<
-                EntityModelComputingResourcePropertyDto
+              computeResourceProperties?: Array<
+                EntityModelComputeResourcePropertyDto
               >;
             };
             page?: PageMetadata;
@@ -1304,7 +1303,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation addComputingResource
    */
   static readonly AddComputingResourcePath =
-    '/v1/algorithms/{algoId}/computing-resource-properties';
+    '/v1/algorithms/{algoId}/compute-resource-properties';
 
   /**
    * Add a computing resource (e.g. a certain number of qubits) that is required by an algorithm. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change.
@@ -1316,12 +1315,12 @@ export class AlgorithmService extends BaseService {
    */
   addComputingResource$Response(params: {
     algoId: string;
-    body: ComputingResourcePropertyDto;
+    body: ComputeResourcePropertyDto;
   }): Observable<
     StrictHttpResponse<{
       id?: string;
       value?: string;
-      type: ComputingResourcePropertyTypeDto;
+      type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -1348,7 +1347,7 @@ export class AlgorithmService extends BaseService {
           return r as StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -1365,11 +1364,11 @@ export class AlgorithmService extends BaseService {
    */
   addComputingResource(params: {
     algoId: string;
-    body: ComputingResourcePropertyDto;
+    body: ComputeResourcePropertyDto;
   }): Observable<{
     id?: string;
     value?: string;
-    type: ComputingResourcePropertyTypeDto;
+    type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
     return this.addComputingResource$Response(params).pipe(
@@ -1378,14 +1377,14 @@ export class AlgorithmService extends BaseService {
           r: StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -1396,7 +1395,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getComputingResource
    */
   static readonly GetComputingResourcePath =
-    '/v1/algorithms/{algoId}/computing-resource-properties/{resourceId}';
+    '/v1/algorithms/{algoId}/compute-resource-properties/{resourceId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -1411,7 +1410,7 @@ export class AlgorithmService extends BaseService {
     StrictHttpResponse<{
       id?: string;
       value?: string;
-      type: ComputingResourcePropertyTypeDto;
+      type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -1437,7 +1436,7 @@ export class AlgorithmService extends BaseService {
           return r as StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -1456,7 +1455,7 @@ export class AlgorithmService extends BaseService {
   }): Observable<{
     id?: string;
     value?: string;
-    type: ComputingResourcePropertyTypeDto;
+    type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
     return this.getComputingResource$Response(params).pipe(
@@ -1465,14 +1464,14 @@ export class AlgorithmService extends BaseService {
           r: StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -1483,7 +1482,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation updateComputingResource
    */
   static readonly UpdateComputingResourcePath =
-    '/v1/algorithms/{algoId}/computing-resource-properties/{resourceId}';
+    '/v1/algorithms/{algoId}/compute-resource-properties/{resourceId}';
 
   /**
    * Update a computing resource of the algorithm. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change.
@@ -1496,12 +1495,12 @@ export class AlgorithmService extends BaseService {
   updateComputingResource$Response(params: {
     algoId: string;
     resourceId: string;
-    body: ComputingResourcePropertyDto;
+    body: ComputeResourcePropertyDto;
   }): Observable<
     StrictHttpResponse<{
       id?: string;
       value?: string;
-      type: ComputingResourcePropertyTypeDto;
+      type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -1529,7 +1528,7 @@ export class AlgorithmService extends BaseService {
           return r as StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -1547,11 +1546,11 @@ export class AlgorithmService extends BaseService {
   updateComputingResource(params: {
     algoId: string;
     resourceId: string;
-    body: ComputingResourcePropertyDto;
+    body: ComputeResourcePropertyDto;
   }): Observable<{
     id?: string;
     value?: string;
-    type: ComputingResourcePropertyTypeDto;
+    type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
     return this.updateComputingResource$Response(params).pipe(
@@ -1560,14 +1559,14 @@ export class AlgorithmService extends BaseService {
           r: StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -1578,7 +1577,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deleteComputingResource
    */
   static readonly DeleteComputingResourcePath =
-    '/v1/algorithms/{algoId}/computing-resource-properties/{resourceId}';
+    '/v1/algorithms/{algoId}/compute-resource-properties/{resourceId}';
 
   /**
    * Delete a computing resource of the algorithm.
@@ -2158,7 +2157,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getComputingResources
    */
   static readonly GetComputingResourcesPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/computing-resource-properties';
+    '/v1/algorithms/{algoId}/implementations/{implId}/compute-resource-properties';
 
   /**
    * Retrieve the required computing resources of an implementation
@@ -2176,8 +2175,8 @@ export class AlgorithmService extends BaseService {
   }): Observable<
     StrictHttpResponse<{
       _embedded?: {
-        computingResourceProperties?: Array<
-          EntityModelComputingResourcePropertyDto
+        computeResourceProperties?: Array<
+          EntityModelComputeResourcePropertyDto
         >;
       };
       page?: PageMetadata;
@@ -2206,8 +2205,8 @@ export class AlgorithmService extends BaseService {
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
             _embedded?: {
-              computingResourceProperties?: Array<
-                EntityModelComputingResourcePropertyDto
+              computeResourceProperties?: Array<
+                EntityModelComputeResourcePropertyDto
               >;
             };
             page?: PageMetadata;
@@ -2231,9 +2230,7 @@ export class AlgorithmService extends BaseService {
     size?: number;
   }): Observable<{
     _embedded?: {
-      computingResourceProperties?: Array<
-        EntityModelComputingResourcePropertyDto
-      >;
+      computeResourceProperties?: Array<EntityModelComputeResourcePropertyDto>;
     };
     page?: PageMetadata;
   }> {
@@ -2242,8 +2239,8 @@ export class AlgorithmService extends BaseService {
         (
           r: StrictHttpResponse<{
             _embedded?: {
-              computingResourceProperties?: Array<
-                EntityModelComputingResourcePropertyDto
+              computeResourceProperties?: Array<
+                EntityModelComputeResourcePropertyDto
               >;
             };
             page?: PageMetadata;
@@ -2251,8 +2248,8 @@ export class AlgorithmService extends BaseService {
         ) =>
           r.body as {
             _embedded?: {
-              computingResourceProperties?: Array<
-                EntityModelComputingResourcePropertyDto
+              computeResourceProperties?: Array<
+                EntityModelComputeResourcePropertyDto
               >;
             };
             page?: PageMetadata;
@@ -2265,7 +2262,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation addComputingResourceByImplementation
    */
   static readonly AddComputingResourceByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/computing-resource-properties';
+    '/v1/algorithms/{algoId}/implementations/{implId}/compute-resource-properties';
 
   /**
    * Add a computing resource (e.g. a certain number of qubits) that is requiered by an implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
@@ -2278,12 +2275,12 @@ export class AlgorithmService extends BaseService {
   addComputingResourceByImplementation$Response(params: {
     algoId: string;
     implId: string;
-    body: ComputingResourcePropertyDto;
+    body: ComputeResourcePropertyDto;
   }): Observable<
     StrictHttpResponse<{
       id?: string;
       value?: string;
-      type: ComputingResourcePropertyTypeDto;
+      type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -2311,7 +2308,7 @@ export class AlgorithmService extends BaseService {
           return r as StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -2329,11 +2326,11 @@ export class AlgorithmService extends BaseService {
   addComputingResourceByImplementation(params: {
     algoId: string;
     implId: string;
-    body: ComputingResourcePropertyDto;
+    body: ComputeResourcePropertyDto;
   }): Observable<{
     id?: string;
     value?: string;
-    type: ComputingResourcePropertyTypeDto;
+    type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
     return this.addComputingResourceByImplementation$Response(params).pipe(
@@ -2342,14 +2339,14 @@ export class AlgorithmService extends BaseService {
           r: StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -2360,7 +2357,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getComputingResourceByImplementation
    */
   static readonly GetComputingResourceByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/computing-resource-properties/{resourceId}';
+    '/v1/algorithms/{algoId}/implementations/{implId}/compute-resource-properties/{resourceId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -2376,7 +2373,7 @@ export class AlgorithmService extends BaseService {
     StrictHttpResponse<{
       id?: string;
       value?: string;
-      type: ComputingResourcePropertyTypeDto;
+      type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -2403,7 +2400,7 @@ export class AlgorithmService extends BaseService {
           return r as StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -2423,7 +2420,7 @@ export class AlgorithmService extends BaseService {
   }): Observable<{
     id?: string;
     value?: string;
-    type: ComputingResourcePropertyTypeDto;
+    type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
     return this.getComputingResourceByImplementation$Response(params).pipe(
@@ -2432,14 +2429,14 @@ export class AlgorithmService extends BaseService {
           r: StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -2450,7 +2447,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation updateComputingResourceByImplementation
    */
   static readonly UpdateComputingResourceByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/computing-resource-properties/{resourceId}';
+    '/v1/algorithms/{algoId}/implementations/{implId}/compute-resource-properties/{resourceId}';
 
   /**
    * Update a computing resource of the implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
@@ -2464,12 +2461,12 @@ export class AlgorithmService extends BaseService {
     algoId: string;
     implId: string;
     resourceId: string;
-    body: ComputingResourcePropertyDto;
+    body: ComputeResourcePropertyDto;
   }): Observable<
     StrictHttpResponse<{
       id?: string;
       value?: string;
-      type: ComputingResourcePropertyTypeDto;
+      type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -2498,7 +2495,7 @@ export class AlgorithmService extends BaseService {
           return r as StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -2517,11 +2514,11 @@ export class AlgorithmService extends BaseService {
     algoId: string;
     implId: string;
     resourceId: string;
-    body: ComputingResourcePropertyDto;
+    body: ComputeResourcePropertyDto;
   }): Observable<{
     id?: string;
     value?: string;
-    type: ComputingResourcePropertyTypeDto;
+    type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
     return this.updateComputingResourceByImplementation$Response(params).pipe(
@@ -2530,14 +2527,14 @@ export class AlgorithmService extends BaseService {
           r: StrictHttpResponse<{
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
             id?: string;
             value?: string;
-            type: ComputingResourcePropertyTypeDto;
+            type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -2548,7 +2545,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deleteComputingResourceByImplementation
    */
   static readonly DeleteComputingResourceByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/computing-resource-properties/{resourceId}';
+    '/v1/algorithms/{algoId}/implementations/{implId}/compute-resource-properties/{resourceId}';
 
   /**
    * Delete a computing resource of the implementation.
@@ -2948,6 +2945,26 @@ export class AlgorithmService extends BaseService {
   getSoftwarePlatformsByImplementation$Response(params: {
     algoId: string;
     implId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
@@ -2961,6 +2978,10 @@ export class AlgorithmService extends BaseService {
     if (params) {
       rb.path('algoId', params.algoId, {});
       rb.path('implId', params.implId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -2992,6 +3013,26 @@ export class AlgorithmService extends BaseService {
   getSoftwarePlatformsByImplementation(params: {
     algoId: string;
     implId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
   }> {
@@ -3122,8 +3163,8 @@ export class AlgorithmService extends BaseService {
       id?: string;
       name: string;
       link?: string;
-      version?: string;
       licence?: string;
+      version?: string;
       _links?: Array<Link>;
     }>
   > {
@@ -3151,8 +3192,8 @@ export class AlgorithmService extends BaseService {
             id?: string;
             name: string;
             link?: string;
-            version?: string;
             licence?: string;
+            version?: string;
             _links?: Array<Link>;
           }>;
         })
@@ -3175,8 +3216,8 @@ export class AlgorithmService extends BaseService {
     id?: string;
     name: string;
     link?: string;
-    version?: string;
     licence?: string;
+    version?: string;
     _links?: Array<Link>;
   }> {
     return this.getSoftwarePlatformByImplementation$Response(params).pipe(
@@ -3186,8 +3227,8 @@ export class AlgorithmService extends BaseService {
             id?: string;
             name: string;
             link?: string;
-            version?: string;
             licence?: string;
+            version?: string;
             _links?: Array<Link>;
           }>
         ) =>
@@ -3195,8 +3236,8 @@ export class AlgorithmService extends BaseService {
             id?: string;
             name: string;
             link?: string;
-            version?: string;
             licence?: string;
+            version?: string;
             _links?: Array<Link>;
           }
       )
@@ -3264,6 +3305,71 @@ export class AlgorithmService extends BaseService {
   }): Observable<void> {
     return this.deleteReferenceToSoftwarePlatform$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getTags1
+   */
+  static readonly GetTags1Path =
+    '/v1/algorithms/{algoId}/implementations/{implId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTags1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTags1$Response(params: {
+    algoId: string;
+    implId: string;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetTags1Path,
+      'get'
+    );
+    if (params) {
+      rb.path('algoId', params.algoId, {});
+      rb.path('implId', params.implId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getTags1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTags1(params: {
+    algoId: string;
+    implId: string;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.getTags1$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
     );
   }
 
@@ -4320,6 +4426,268 @@ export class AlgorithmService extends BaseService {
   }): Observable<void> {
     return this.deleteReferenceToPublication$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getTags
+   */
+  static readonly GetTagsPath = '/v1/algorithms/{id}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTags()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTags$Response(params: {
+    id: string;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetTagsPath,
+      'get'
+    );
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getTags$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTags(params: {
+    id: string;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.getTags$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getAllImplementations
+   */
+  static readonly GetAllImplementationsPath = '/v1/implementations';
+
+  /**
+   * Retrieve all implementations
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllImplementations()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllImplementations$Response(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetAllImplementationsPath,
+      'get'
+    );
+    if (params) {
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve all implementations
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAllImplementations$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllImplementations(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+    page?: PageMetadata;
+  }> {
+    return this.getAllImplementations$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+            page?: PageMetadata;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getImplementedAlgorithm
+   */
+  static readonly GetImplementedAlgorithmPath = '/v1/implementations/{id}';
+
+  /**
+   * Retrieve a specific algorithm and its basic properties.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementedAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementedAlgorithm$Response(params: {
+    id: string;
+  }): Observable<
+    StrictHttpResponse<
+      { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
+    >
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetImplementedAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('id', params.id, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            { _links?: Array<Link> } & (
+              | ClassicAlgorithmDto
+              | QuantumAlgorithmDto
+            )
+          >;
+        })
+      );
+  }
+
+  /**
+   * Retrieve a specific algorithm and its basic properties.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementedAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementedAlgorithm(params: {
+    id: string;
+  }): Observable<
+    { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
+  > {
+    return this.getImplementedAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<
+            { _links?: Array<Link> } & (
+              | ClassicAlgorithmDto
+              | QuantumAlgorithmDto
+            )
+          >
+        ) =>
+          r.body as { _links?: Array<Link> } & (
+            | ClassicAlgorithmDto
+            | QuantumAlgorithmDto
+          )
+      )
     );
   }
 }

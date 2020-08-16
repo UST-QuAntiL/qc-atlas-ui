@@ -3,9 +3,9 @@ import { AlgorithmService } from 'api/services/algorithm.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlgorithmDto } from 'api/models/algorithm-dto';
 import { ImplementationDto } from 'api/models/implementation-dto';
-import { SoftwarePlatformService } from 'api/services/software-platform.service';
 import { PublicationService } from 'api/services/publication.service';
-import { EntityModelComputingResourcePropertyDto } from 'api/models/entity-model-computing-resource-property-dto';
+import { EntityModelComputeResourcePropertyDto } from 'api/models';
+import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import {
@@ -36,7 +36,7 @@ export class ImplementationViewComponent implements OnInit {
     { heading: '', subHeading: '' },
     { heading: '', subHeading: '' },
   ];
-  computeResourceProperties: EntityModelComputingResourcePropertyDto[] = [];
+  computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
 
   placeholderInputParams: InputParameter[] = [
     {
@@ -53,7 +53,7 @@ export class ImplementationViewComponent implements OnInit {
 
   constructor(
     private algorithmService: AlgorithmService,
-    private softwarePlatformService: SoftwarePlatformService,
+    private softwarePlatformService: ExecutionEnvironmentsService,
     private publicationService: PublicationService,
     private activatedRoute: ActivatedRoute,
     private router: Router
@@ -106,7 +106,7 @@ export class ImplementationViewComponent implements OnInit {
   onPageChanged($event: string): void {}
 
   addComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
       .addComputingResourceByImplementation({
@@ -120,7 +120,7 @@ export class ImplementationViewComponent implements OnInit {
   }
 
   updateComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
       .updateComputingResourceByImplementation({
@@ -135,7 +135,7 @@ export class ImplementationViewComponent implements OnInit {
   }
 
   deleteComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
       .deleteComputingResourceByImplementation({
@@ -145,7 +145,7 @@ export class ImplementationViewComponent implements OnInit {
       })
       .subscribe((e) => {
         this.computeResourceProperties = this.computeResourceProperties.filter(
-          (elem: EntityModelComputingResourcePropertyDto) =>
+          (elem: EntityModelComputeResourcePropertyDto) =>
             elem.id !== property.id
         );
         this.fetchComputeResourceProperties();
@@ -161,7 +161,7 @@ export class ImplementationViewComponent implements OnInit {
       .subscribe((e) => {
         if (e._embedded != null) {
           this.computeResourceProperties =
-            e._embedded.computingResourceProperties;
+            e._embedded.computeResourceProperties;
         }
       });
   }

@@ -1,5 +1,5 @@
 /* tslint:disable */
-export type ComputingResourcePropertyType = {
+export type ComputeResourcePropertyType = {
   id?: string;
   name?: string;
   datatype?: 'INTEGER' | 'STRING' | 'FLOAT';

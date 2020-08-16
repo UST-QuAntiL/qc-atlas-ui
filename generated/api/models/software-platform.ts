@@ -1,14 +1,14 @@
 /* tslint:disable */
-import { Backend } from './backend';
 import { CloudService } from './cloud-service';
+import { ComputeResource } from './compute-resource';
 import { Implementation } from './implementation';
 export type SoftwarePlatform = {
   id?: string;
   name?: string;
   link?: string;
-  version?: string;
   licence?: string;
-  supportedBackends?: Array<Backend>;
+  version?: string;
+  supportedComputeResources?: Array<ComputeResource>;
   supportedCloudServices?: Array<CloudService>;
   implementations?: Array<Implementation>;
 };

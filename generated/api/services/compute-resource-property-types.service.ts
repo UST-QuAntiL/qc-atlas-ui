@@ -8,42 +8,47 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { EntityModelSoftwarePlatformDto } from '../models/entity-model-software-platform-dto';
+import { ComputeResourcePropertyTypeDto } from '../models/compute-resource-property-type-dto';
+import { EntityModelComputeResourcePropertyTypeDto } from '../models/entity-model-compute-resource-property-type-dto';
 import { Link } from '../models/link';
 import { PageMetadata } from '../models/page-metadata';
-import { SoftwarePlatformDto } from '../models/software-platform-dto';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SoftwarePlatformService extends BaseService {
+export class ComputeResourcePropertyTypesService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
   /**
-   * Path part for operation getSoftwarePlatforms
+   * Path part for operation getResourcePropertyTypes
    */
-  static readonly GetSoftwarePlatformsPath = '/v1/software-platforms';
+  static readonly GetResourcePropertyTypesPath =
+    '/v1/compute-resource-property-types';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getSoftwarePlatforms()` instead.
+   * To access only the response body, use `getResourcePropertyTypes()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatforms$Response(params?: {
+  getResourcePropertyTypes$Response(params?: {
     page?: number;
     size?: number;
   }): Observable<
     StrictHttpResponse<{
-      _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
+      _embedded?: {
+        computeResourcePropertyTypes?: Array<
+          EntityModelComputeResourcePropertyTypeDto
+        >;
+      };
       page?: PageMetadata;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      SoftwarePlatformService.GetSoftwarePlatformsPath,
+      ComputeResourcePropertyTypesService.GetResourcePropertyTypesPath,
       'get'
     );
     if (params) {
@@ -62,7 +67,9 @@ export class SoftwarePlatformService extends BaseService {
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
             _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
+              computeResourcePropertyTypes?: Array<
+                EntityModelComputeResourcePropertyTypeDto
+              >;
             };
             page?: PageMetadata;
           }>;
@@ -72,30 +79,38 @@ export class SoftwarePlatformService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getSoftwarePlatforms$Response()` instead.
+   * To access the full response (for headers, for example), `getResourcePropertyTypes$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatforms(params?: {
+  getResourcePropertyTypes(params?: {
     page?: number;
     size?: number;
   }): Observable<{
-    _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
+    _embedded?: {
+      computeResourcePropertyTypes?: Array<
+        EntityModelComputeResourcePropertyTypeDto
+      >;
+    };
     page?: PageMetadata;
   }> {
-    return this.getSoftwarePlatforms$Response(params).pipe(
+    return this.getResourcePropertyTypes$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
             _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
+              computeResourcePropertyTypes?: Array<
+                EntityModelComputeResourcePropertyTypeDto
+              >;
             };
             page?: PageMetadata;
           }>
         ) =>
           r.body as {
             _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
+              computeResourcePropertyTypes?: Array<
+                EntityModelComputeResourcePropertyTypeDto
+              >;
             };
             page?: PageMetadata;
           }
@@ -104,33 +119,33 @@ export class SoftwarePlatformService extends BaseService {
   }
 
   /**
-   * Path part for operation addSoftwarePlatform
+   * Path part for operation createComputingResourcePropertyType
    */
-  static readonly AddSoftwarePlatformPath = '/v1/software-platforms';
+  static readonly CreateComputingResourcePropertyTypePath =
+    '/v1/compute-resource-property-types';
 
   /**
    * Custom ID will be ignored.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addSoftwarePlatform()` instead.
+   * To access only the response body, use `createComputingResourcePropertyType()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addSoftwarePlatform$Response(params: {
-    body: SoftwarePlatformDto;
+  createComputingResourcePropertyType$Response(params: {
+    body: ComputeResourcePropertyTypeDto;
   }): Observable<
     StrictHttpResponse<{
       id?: string;
       name: string;
-      link?: string;
-      version?: string;
-      licence?: string;
+      datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+      description?: string;
       _links?: Array<Link>;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      SoftwarePlatformService.AddSoftwarePlatformPath,
+      ComputeResourcePropertyTypesService.CreateComputingResourcePropertyTypePath,
       'post'
     );
     if (params) {
@@ -149,9 +164,8 @@ export class SoftwarePlatformService extends BaseService {
           return r as StrictHttpResponse<{
             id?: string;
             name: string;
-            link?: string;
-            version?: string;
-            licence?: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
             _links?: Array<Link>;
           }>;
         })
@@ -162,38 +176,35 @@ export class SoftwarePlatformService extends BaseService {
    * Custom ID will be ignored.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addSoftwarePlatform$Response()` instead.
+   * To access the full response (for headers, for example), `createComputingResourcePropertyType$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addSoftwarePlatform(params: {
-    body: SoftwarePlatformDto;
+  createComputingResourcePropertyType(params: {
+    body: ComputeResourcePropertyTypeDto;
   }): Observable<{
     id?: string;
     name: string;
-    link?: string;
-    version?: string;
-    licence?: string;
+    datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+    description?: string;
     _links?: Array<Link>;
   }> {
-    return this.addSoftwarePlatform$Response(params).pipe(
+    return this.createComputingResourcePropertyType$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
             id?: string;
             name: string;
-            link?: string;
-            version?: string;
-            licence?: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
             id?: string;
             name: string;
-            link?: string;
-            version?: string;
-            licence?: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
             _links?: Array<Link>;
           }
       )
@@ -201,31 +212,31 @@ export class SoftwarePlatformService extends BaseService {
   }
 
   /**
-   * Path part for operation getSoftwarePlatform
+   * Path part for operation getComputingResourcePropertyType
    */
-  static readonly GetSoftwarePlatformPath = '/v1/software-platforms/{id}';
+  static readonly GetComputingResourcePropertyTypePath =
+    '/v1/compute-resource-property-types/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getSoftwarePlatform()` instead.
+   * To access only the response body, use `getComputingResourcePropertyType()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatform$Response(params: {
+  getComputingResourcePropertyType$Response(params: {
     id: string;
   }): Observable<
     StrictHttpResponse<{
       id?: string;
       name: string;
-      link?: string;
-      version?: string;
-      licence?: string;
+      datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+      description?: string;
       _links?: Array<Link>;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      SoftwarePlatformService.GetSoftwarePlatformPath,
+      ComputeResourcePropertyTypesService.GetComputingResourcePropertyTypePath,
       'get'
     );
     if (params) {
@@ -244,9 +255,8 @@ export class SoftwarePlatformService extends BaseService {
           return r as StrictHttpResponse<{
             id?: string;
             name: string;
-            link?: string;
-            version?: string;
-            licence?: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
             _links?: Array<Link>;
           }>;
         })
@@ -255,38 +265,35 @@ export class SoftwarePlatformService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getSoftwarePlatform$Response()` instead.
+   * To access the full response (for headers, for example), `getComputingResourcePropertyType$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatform(params: {
+  getComputingResourcePropertyType(params: {
     id: string;
   }): Observable<{
     id?: string;
     name: string;
-    link?: string;
-    version?: string;
-    licence?: string;
+    datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+    description?: string;
     _links?: Array<Link>;
   }> {
-    return this.getSoftwarePlatform$Response(params).pipe(
+    return this.getComputingResourcePropertyType$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
             id?: string;
             name: string;
-            link?: string;
-            version?: string;
-            licence?: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
             id?: string;
             name: string;
-            link?: string;
-            version?: string;
-            licence?: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
             _links?: Array<Link>;
           }
       )
@@ -294,34 +301,34 @@ export class SoftwarePlatformService extends BaseService {
   }
 
   /**
-   * Path part for operation updateSoftwarePlatform
+   * Path part for operation updateComputingResourcePropertyType
    */
-  static readonly UpdateSoftwarePlatformPath = '/v1/software-platforms/{id}';
+  static readonly UpdateComputingResourcePropertyTypePath =
+    '/v1/compute-resource-property-types/{id}';
 
   /**
    * Custom ID will be ignored.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateSoftwarePlatform()` instead.
+   * To access only the response body, use `updateComputingResourcePropertyType()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateSoftwarePlatform$Response(params: {
+  updateComputingResourcePropertyType$Response(params: {
     id: string;
-    body: SoftwarePlatformDto;
+    body: ComputeResourcePropertyTypeDto;
   }): Observable<
     StrictHttpResponse<{
       id?: string;
       name: string;
-      link?: string;
-      version?: string;
-      licence?: string;
+      datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+      description?: string;
       _links?: Array<Link>;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      SoftwarePlatformService.UpdateSoftwarePlatformPath,
+      ComputeResourcePropertyTypesService.UpdateComputingResourcePropertyTypePath,
       'put'
     );
     if (params) {
@@ -342,9 +349,8 @@ export class SoftwarePlatformService extends BaseService {
           return r as StrictHttpResponse<{
             id?: string;
             name: string;
-            link?: string;
-            version?: string;
-            licence?: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
             _links?: Array<Link>;
           }>;
         })
@@ -355,39 +361,36 @@ export class SoftwarePlatformService extends BaseService {
    * Custom ID will be ignored.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updateSoftwarePlatform$Response()` instead.
+   * To access the full response (for headers, for example), `updateComputingResourcePropertyType$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateSoftwarePlatform(params: {
+  updateComputingResourcePropertyType(params: {
     id: string;
-    body: SoftwarePlatformDto;
+    body: ComputeResourcePropertyTypeDto;
   }): Observable<{
     id?: string;
     name: string;
-    link?: string;
-    version?: string;
-    licence?: string;
+    datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+    description?: string;
     _links?: Array<Link>;
   }> {
-    return this.updateSoftwarePlatform$Response(params).pipe(
+    return this.updateComputingResourcePropertyType$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
             id?: string;
             name: string;
-            link?: string;
-            version?: string;
-            licence?: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
             id?: string;
             name: string;
-            link?: string;
-            version?: string;
-            licence?: string;
+            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
+            description?: string;
             _links?: Array<Link>;
           }
       )
@@ -395,22 +398,23 @@ export class SoftwarePlatformService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteSoftwarePlatform
+   * Path part for operation deleteComputingResourcePropertyType
    */
-  static readonly DeleteSoftwarePlatformPath = '/v1/software-platforms/{id}';
+  static readonly DeleteComputingResourcePropertyTypePath =
+    '/v1/compute-resource-property-types/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteSoftwarePlatform()` instead.
+   * To access only the response body, use `deleteComputingResourcePropertyType()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteSoftwarePlatform$Response(params: {
+  deleteComputingResourcePropertyType$Response(params: {
     id: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      SoftwarePlatformService.DeleteSoftwarePlatformPath,
+      ComputeResourcePropertyTypesService.DeleteComputingResourcePropertyTypePath,
       'delete'
     );
     if (params) {
@@ -435,12 +439,14 @@ export class SoftwarePlatformService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteSoftwarePlatform$Response()` instead.
+   * To access the full response (for headers, for example), `deleteComputingResourcePropertyType$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteSoftwarePlatform(params: { id: string }): Observable<void> {
-    return this.deleteSoftwarePlatform$Response(params).pipe(
+  deleteComputingResourcePropertyType(params: {
+    id: string;
+  }): Observable<void> {
+    return this.deleteComputingResourcePropertyType$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }

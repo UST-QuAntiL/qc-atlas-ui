@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { Backend } from './backend';
+import { ComputeResource } from './compute-resource';
 import { SoftwarePlatform } from './software-platform';
 export type CloudService = {
   id?: string;
@@ -8,6 +8,6 @@ export type CloudService = {
   url?: string;
   description?: string;
   costModel?: string;
-  providedBackends?: Array<Backend>;
+  providedComputeResources?: Array<ComputeResource>;
   softwarePlatforms?: Array<SoftwarePlatform>;
 };

@@ -1,10 +1,11 @@
 /* tslint:disable */
 import { AlgorithmRelation } from './algorithm-relation';
 import { ApplicationArea } from './application-area';
-import { ComputingResourceProperty } from './computing-resource-property';
+import { ComputeResourceProperty } from './compute-resource-property';
 import { PatternRelation } from './pattern-relation';
 import { ProblemType } from './problem-type';
 import { Publication } from './publication';
+import { Sketch } from './sketch';
 import { Tag } from './tag';
 export type Algorithm = {
   id?: string;
@@ -16,9 +17,9 @@ export type Algorithm = {
   intent?: string;
   problem?: string;
   algorithmRelations?: Array<AlgorithmRelation>;
-  requiredComputingResourceProperties?: Array<ComputingResourceProperty>;
+  requiredComputeResourceProperties?: Array<ComputeResourceProperty>;
   algoParameter?: string;
-  sketch?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL';
+  sketches?: Array<Sketch>;
   solution?: string;
   assumptions?: string;
   computationModel?: 'CLASSIC' | 'QUANTUM' | 'HYBRID';

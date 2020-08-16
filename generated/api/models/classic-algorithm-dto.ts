@@ -1,4 +1,5 @@
 /* tslint:disable */
+import { Sketch } from './sketch';
 export type ClassicAlgorithmDto = {
   id?: string;
   name: string;
@@ -8,7 +9,7 @@ export type ClassicAlgorithmDto = {
   inputFormat?: string;
   algoParameter?: string;
   outputFormat?: string;
-  sketch?: 'PSEUDOCODE' | 'CIRCUIT' | 'ISING_MODEL';
+  sketches?: Array<Sketch>;
   solution?: string;
   assumptions?: string;
   computationModel: 'CLASSIC';
