@@ -1,0 +1,22 @@
+<mat-card *ngIf="isLinkingEnabled" class="m-2">
+  <div class="mx-3 my-2">
+    <app-link-input
+      [linkObject]="linkObject"
+      [isDisableable]=true
+      (searchTextChanged)="searchUnlinkedSoftwarePlatforms($event)">
+    </app-link-input>
+  </div>
+</mat-card>
+
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table
+      [data]=linkedSoftwarePlatforms
+      [variableNames]=variableNames
+      [dataColumns]=tableColumns
+      [allowAdd]=tableAddAllowed
+      [allowSelection]=true
+      [emptyTableMessage]="'No linked software platforms found'">
+    </app-table>
+  </div>
+</mat-card>
