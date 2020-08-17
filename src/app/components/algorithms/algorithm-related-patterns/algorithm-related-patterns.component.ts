@@ -110,9 +110,9 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
       data: {
         title: 'Confirm Deletion',
         message:
-          'Are you sure you want to delete ' +
-          event.elements.length +
-          ' pattern relations',
+          'Are you sure you want to delete the following pattern relation(s):',
+        data: event.elements,
+        variableName: 'patternType',
         yesButtonText: 'yes',
         noButtonText: 'no',
       },
