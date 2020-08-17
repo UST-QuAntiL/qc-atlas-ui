@@ -8,6 +8,7 @@
       [(ngModel)]="value"
       matInput
       (click)="(isLink && !isBeingEdited && value) ? openLink() : false"
+      (keydown.enter)="toggleEdit()"
     />
     <textarea
       *ngIf="multiline"
@@ -16,6 +17,7 @@
       [matAutosizeMaxRows]="maxLines"
       [matAutosizeMinRows]="2"
       [matTextareaAutosize]="true"
+      (keydown.enter)="toggleEdit()"
       matInput
     ></textarea>
     <button
