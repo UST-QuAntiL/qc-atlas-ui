@@ -51,6 +51,10 @@ export class SoftwarePlatformViewComponent implements OnInit {
     );
   }
 
+  ngOnDestroy(): void {
+    this.fieldUpdateSubscription.unsubscribe();
+  }
+
   updateSoftwarePlatformField(fieldUpdate: FieldUpdate): void {
     this.softwarePlatform[fieldUpdate.field] = fieldUpdate.value;
     this.executionEnvironmentsService
