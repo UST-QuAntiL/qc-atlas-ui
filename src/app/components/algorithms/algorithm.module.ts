@@ -16,7 +16,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { CardsModule } from 'angular-bootstrap-md';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
-import { ComputingResourcePropertyModule } from '../computation-resource-property/computing-resource-property.module';
+import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
 import { NisqAnalyzerModule } from './nisq-analyzer/nisq-analyzer.module';
 import { AlgorithmListComponent } from './algorithm-list/algorithm-list.component';
 import { AlgorithmViewComponent } from './algorithm-view/algorithm-view.component';
@@ -29,6 +29,9 @@ import { AddProblemTypeDialogComponent } from './dialogs/add-problem-type-dialog
 import { RemoveProblemTypeDialogComponent } from './dialogs/remove-problem-type-dialog.component';
 import { CreateImplementationDialogComponent } from './dialogs/create-implementation-dialog.component';
 import { ProblemTypeTreeComponent } from './problem-type-tree/problem-type-tree.component';
+import { AlgorithmRelatedPatternsComponent } from './algorithm-related-patterns/algorithm-related-patterns.component';
+import { AddPatternRelationDialogComponent } from './dialogs/add-pattern-relation-dialog.component';
+import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-relation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +46,9 @@ import { ProblemTypeTreeComponent } from './problem-type-tree/problem-type-tree.
     AddProblemTypeDialogComponent,
     RemoveProblemTypeDialogComponent,
     CreateImplementationDialogComponent,
+    AlgorithmRelatedPatternsComponent,
+    AddPatternRelationDialogComponent,
+    AddAlgorithmRelationDialogComponent,
   ],
   imports: [
     MatTabsModule,
@@ -62,7 +68,7 @@ import { ProblemTypeTreeComponent } from './problem-type-tree/problem-type-tree.
     MatDialogModule,
     MatAutocompleteModule,
     MatTreeModule,
-    ComputingResourcePropertyModule,
+    ComputeResourcePropertyModule,
     CardsModule,
     NisqAnalyzerModule,
   ],
@@ -78,6 +84,8 @@ import { ProblemTypeTreeComponent } from './problem-type-tree/problem-type-tree.
     AddProblemTypeDialogComponent,
     RemoveProblemTypeDialogComponent,
     CreateImplementationDialogComponent,
+    AddPatternRelationDialogComponent,
+    AddAlgorithmRelationDialogComponent,
   ],
 })
 export class AlgorithmModule {}

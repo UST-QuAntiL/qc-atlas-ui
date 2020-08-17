@@ -6,6 +6,7 @@ import { EntityModelPublicationDto } from 'api/models/entity-model-publication-d
 import { EntityModelImplementationDto } from 'api/models/entity-model-implementation-dto';
 import { PublicationDto } from 'api/models/publication-dto';
 import { GenericDataService } from '../../../../util/generic-data.service';
+import { UtilService } from '../../../../util/util.service';
 
 @Component({
   selector: 'app-implementation-publications-list',
@@ -32,7 +33,8 @@ export class ImplementationPublicationsListComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private publicationService: PublicationService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -45,8 +47,9 @@ export class ImplementationPublicationsListComponent implements OnInit {
 
   getLinkedPublications(): void {
     this.algorithmService
-      .getPublicationsByAlgorithm({
+      .getPublicationsByImplementation({
         algoId: this.algoId,
+        implId: this.implementation.id,
       })
       .subscribe((data) => {
         // Read all incoming data
@@ -72,9 +75,10 @@ export class ImplementationPublicationsListComponent implements OnInit {
     // Empty unlinked algorithms
     this.linkObject.data = [];
     this.algorithmService
-      .addPublication(this.generateLinkParams(publication.id))
+      .addPublicationByImplementation(this.generateLinkParams(publication.id))
       .subscribe((data) => {
         this.getLinkedPublications();
+        this.utilService.callSnackBar('Successfully linked publication');
       });
   }
 
@@ -83,9 +87,12 @@ export class ImplementationPublicationsListComponent implements OnInit {
     for (const publication of event.elements) {
       await // Build params using path ids and perform delete request
       this.algorithmService
-        .deleteReferenceToPublication(this.generateLinkParams(publication.id))
+        .deleteReferenceToPublicationByImplementation(
+          this.generateLinkParams(publication.id)
+        )
         .toPromise();
       this.getLinkedPublications();
+      this.utilService.callSnackBar('Successfully unlinked publication(s)');
     }
   }
 

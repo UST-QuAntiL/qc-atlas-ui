@@ -31,7 +31,7 @@
 </div>
 <!-- Data-Table -->
 <div class="table-responsive">
-  <table id="tableSortExample" class="mb-3" mdbTable matSort (matSortChange)="sortData($event)">
+  <table id="tableSortExample" [class.table-sm]="smallTable" mdbTable matSort (matSortChange)="sortData($event)">
     <!-- Table-Header with the Header-Data -->
     <thead class="data-header">
     <tr>
@@ -51,7 +51,7 @@
           <a>{{ column }}</a>
         </th>
       </ng-container>
-      <th *ngIf="allowSelection">
+      <th *ngIf="allowSelection || allowEdit">
         <a> Actions </a>
       </th>
     </tr>
@@ -67,21 +67,15 @@
       <!-- One column for each needed data variable value -->
       <td class="crop align-middle" *ngFor="let variableName of variableNames"
           (click)="onElementClicked(dataEntry)">
-        <!-- Check if element is a URL -->
-        <div
-          *ngIf="externalLinkVariables && externalLinkVariables.includes(variableName); then isExternalLink else isBasicDataEntry"></div>
-        <!-- If element is external link, then click should open link in a new tab -->
-        <ng-template #isExternalLink>
-          <a class="table-url" [href]="dataEntry[variableName]" target="_blank"
-             (click)="$event.stopPropagation()">{{ dataEntry[variableName] }}</a>
-        </ng-template>
-        <!-- If element is basic -->
-        <ng-template #isBasicDataEntry>
-          <a>{{ dataEntry[variableName] }}</a>
-        </ng-template>
+        <!-- Apply URL-Class and Event if variable has a link -->
+        <a [ngClass]="{'table-url': isLink(variableName)}" (click)="isLink(variableName) && onUrlClicked($event, dataEntry, variableName)">{{ dataEntry[variableName] }}</a>
       </td>
-      <td *ngIf="allowSelection">
-        <button mat-icon-button class="delete-small"
+      <td *ngIf="allowSelection || allowEdit">
+        <button *ngIf="allowEdit" mat-icon-button [ngClass]="{'mr-1': allowSelection}" class="update-small"
+                (click)="onUpdateClicked(dataEntry); $event.stopPropagation()">
+          <mat-icon>create</mat-icon>
+        </button>
+        <button *ngIf="allowSelection" mat-icon-button class="delete-small"
                 (click)="onSingleDelete(dataEntry); $event.stopPropagation()">
           <mat-icon>{{submitSelectionIcon}}</mat-icon>
         </button>
@@ -110,8 +104,8 @@
             </mat-select>
           </mat-form-field>
           <!-- Optional Paginator on the right side of the footer -->
-          <ul class="pagination pg-blue float-right">
-            <div class="page-control" color="green" outline="true">
+          <ul class="pagination pg-blue float-right m-0">
+            <div class="page-control">
               <!-- First Page button -->
               <li class="page-item"><a class="page-link no-events">
                 <mat-icon class="page-button no-select"

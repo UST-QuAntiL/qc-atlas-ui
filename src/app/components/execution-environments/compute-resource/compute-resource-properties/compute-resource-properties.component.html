@@ -1,0 +1,48 @@
+<div class="m-4">
+  <!--<mat-card class="px-4 my-4">
+    <app-text-input
+      class="w-100"
+      name="Name"
+      [(ngModel)]="computeResource.name"
+      (onSaveChanges)="onChangesSaved($event, 'name')"
+    ></app-text-input>
+  </mat-card>-->
+
+  <mat-card class="px-4 my-4">
+    <app-text-input
+      class="w-100"
+      name="Vendor"
+      [(ngModel)]="computeResource.vendor"
+      (onSaveChanges)="onChangesSaved($event, 'vendor')"
+    ></app-text-input>
+  </mat-card>
+
+  <mat-card class="px-4 my-4">
+    <app-text-input
+      class="w-100"
+      name="Technology"
+      [(ngModel)]="computeResource.technology"
+      (onSaveChanges)="onChangesSaved($event, 'technology')"
+    ></app-text-input>
+  </mat-card>
+
+  <mat-card class="px-4 my-4">
+    <app-select-input
+      class="w-100"
+      name="Quantum computation model"
+      [(ngModel)]="computeResource.quantumComputationModel"
+      [choices]="availableQuantumComputationModelOptions"
+      (onSaveChanges)="onChangesSaved($event, 'quantumComputationModel')"
+    ></app-select-input>
+  </mat-card>
+
+  <mat-card class="px-4 my-4">
+    <app-compute-resource-property-list
+      (addProperty)="addComputeResourceProperty($event)"
+      (updateProperty)="updateComputeResourceProperty($event)"
+      (deleteProperty)="deleteComputeResourceProperty($event)"
+      [resourceProperties]="computeResourceProperties"
+    >
+    </app-compute-resource-property-list>
+  </mat-card>
+</div>

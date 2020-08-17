@@ -1,0 +1,25 @@
+<div *ngIf="cloudService" class="m-2">
+  <div class="header-container p-2">
+    <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="General">
+      <app-cloud-service-properties
+        [cloudService]="cloudService"
+        (updateCloudServiceField)="updateCloudServiceField($event)"
+      ></app-cloud-service-properties>
+    </mat-tab>
+    <mat-tab label="Software Platforms">
+      <app-cloud-service-software-platform-list
+        [cloudService]="cloudService"
+      ></app-cloud-service-software-platform-list>
+    </mat-tab>
+    <mat-tab label="Compute Resources">
+      <app-cloud-service-compute-resource-list
+        [cloudService]="cloudService"
+      ></app-cloud-service-compute-resource-list>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+

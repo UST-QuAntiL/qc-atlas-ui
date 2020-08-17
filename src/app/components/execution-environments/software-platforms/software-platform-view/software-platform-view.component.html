@@ -1,0 +1,28 @@
+<div *ngIf="softwarePlatform" class="m-2">
+  <div class="header-container p-2">
+    <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="General">
+      <app-software-platform-properties
+        [softwarePlatform]="softwarePlatform"
+      ></app-software-platform-properties>
+    </mat-tab>
+    <mat-tab label="Implementations">
+      <app-software-platform-impl-list
+        [softwarePlatform]="softwarePlatform"
+      ></app-software-platform-impl-list>
+    </mat-tab>
+    <mat-tab label="Cloud Services">
+      <app-software-platform-cloud-service-list
+        [softwarePlatform]="softwarePlatform"
+      ></app-software-platform-cloud-service-list>
+    </mat-tab>
+    <mat-tab label="Compute Resources">
+      <app-software-platform-compute-resource-list
+        [softwarePlatform]="softwarePlatform"
+      ></app-software-platform-compute-resource-list>
+    </mat-tab>
+  </mat-tab-group>
+</div>

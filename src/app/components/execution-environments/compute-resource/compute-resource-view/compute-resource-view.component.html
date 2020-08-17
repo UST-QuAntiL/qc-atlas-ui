@@ -1,0 +1,23 @@
+<div *ngIf="computeResource" class="m-2">
+  <div class="header-container p-2">
+    <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="General">
+      <app-compute-resource-properties
+        [computeResource]="computeResource"
+      ></app-compute-resource-properties>
+    </mat-tab>
+    <mat-tab label="Software Platforms">
+      <app-compute-resource-software-platform-list
+        [computeResource]="computeResource"
+      ></app-compute-resource-software-platform-list>
+    </mat-tab>
+    <mat-tab label="Cloud Services">
+      <app-compute-resource-cloud-service-list
+        [computeResource]="computeResource"
+      ></app-compute-resource-cloud-service-list>
+    </mat-tab>
+  </mat-tab-group>
+</div>

@@ -5,6 +5,8 @@ import { AlgorithmDto } from 'api/models';
 import { Router } from '@angular/router';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
+import { UtilService } from '../../../util/util.service';
+import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'app-algorithm-list',
@@ -25,7 +27,8 @@ export class AlgorithmListComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private genericDataService: GenericDataService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {}
@@ -79,6 +82,7 @@ export class AlgorithmListComponent implements OnInit {
         params.body = algorithmDto as AlgorithmDto;
 
         this.algorithmService.createAlgorithm(params).subscribe((data) => {
+          this.utilService.callSnackBar('Successfully added algorithm');
           this.router.navigate(['algorithms', data.id]);
         });
       }
@@ -86,15 +90,33 @@ export class AlgorithmListComponent implements OnInit {
   }
 
   onDeleteElements(event): void {
-    // Iterate all selected algorithms and delete them
-    for (const algorithm of event.elements) {
-      this.algorithmService
-        .deleteAlgorithm(this.generateDeleteParams(algorithm.id))
-        .subscribe(() => {
-          // Refresh Algorithms after delete
-          this.getAlgorithms(event.queryParams);
-        });
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirm Deletion',
+        message: 'Are you sure you want to delete the following algorithm(s):',
+        data: event.elements,
+        variableName: 'name',
+        yesButtonText: 'yes',
+        noButtonText: 'no',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        // Iterate all selected algorithms and delete them
+        for (const algorithm of event.elements) {
+          this.algorithmService
+            .deleteAlgorithm(this.generateDeleteParams(algorithm.id))
+            .subscribe(() => {
+              // Refresh Algorithms after delete
+              this.getAlgorithms(event.queryParams);
+              this.utilService.callSnackBar(
+                'Successfully deleted algorithm(s)'
+              );
+            });
+        }
+      }
+    });
   }
 
   onPageChanged(event): void {

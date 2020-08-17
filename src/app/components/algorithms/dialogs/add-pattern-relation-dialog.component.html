@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="patternRelationForm">
+    <mat-form-field class="input-field">
+      <mat-label>URI</mat-label>
+      <input formControlName="pattern" placeholder="blog.cdemi.io/design-patterns-competing-consumer-pattern" matInput
+             required>
+    </mat-form-field>
+    <mat-form-field class="input-field">
+      <mat-label>Description</mat-label>
+      <textarea formControlName="description" matInput required></textarea>
+    </mat-form-field>
+    <mat-form-field class="input-field">
+      <mat-label>Pattern</mat-label>
+      <input
+        formControlName="patternRelationType"
+        [matAutocomplete]="relationType"
+        placeholder="Competing Consumer"
+        (ngModelChange)="onPatternRelationInputChanged()"
+        matInput
+        required>
+      <mat-autocomplete #relationType="matAutocomplete" (optionSelected)="setPatternRelationType($event.option.value)" [displayWith]="displayRelation">
+        <mat-optgroup *ngFor="let stateGroup of stateGroups" [label]="stateGroup.optionName">
+          <mat-option
+            *ngFor="let type of stateGroup.patternRelationTypes"
+            [value]="type"
+            (click)="setPatternRelationType(type)">
+            {{type.name}}
+          </mat-option>
+        </mat-optgroup>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok</button>
+</div>

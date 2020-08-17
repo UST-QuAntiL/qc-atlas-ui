@@ -10,10 +10,8 @@ import {
 } from '@angular/core';
 import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
 import {
-  AlgorithmDto,
-  ApplicationAreaDto,
   EntityModelApplicationAreaDto,
-  EntityModelComputingResourcePropertyDto,
+  EntityModelComputeResourcePropertyDto,
   EntityModelProblemTypeDto,
 } from 'api/models';
 import { ProblemTypeService } from 'api/services/problem-type.service';
@@ -27,6 +25,10 @@ import { Option } from '../../generics/property-input/select-input.component';
 import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type-dialog.component';
 import { RemoveProblemTypeDialogComponent } from '../dialogs/remove-problem-type-dialog.component';
 import { UtilService } from '../../../util/util.service';
+import {
+  quantumComputationModelOptions,
+  sketchOptions,
+} from '../../../util/options';
 import { LinkObject } from '../../generics/data-list/data-list.component';
 
 @Component({
@@ -66,6 +68,11 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     displayVariable: 'name',
     data: [],
   };
+
+  availableSketchOptions: Option[] = sketchOptions;
+  availableQuantumComputationModelOptions: Option[] = quantumComputationModelOptions;
+
+  computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
 
   applicationAreaLinkObject: LinkObject = {
     title: 'Link application area with ',
@@ -300,7 +307,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   }
 
   addComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     console.log('add compute resource property');
     console.log(property);
@@ -315,7 +322,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   }
 
   updateComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
       .updateComputingResource({
@@ -329,7 +336,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   }
 
   deleteComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
       .deleteComputingResource({
@@ -338,7 +345,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       })
       .subscribe((e) => {
         this.computeResourceProperties = this.computeResourceProperties.filter(
-          (elem: EntityModelComputingResourcePropertyDto) =>
+          (elem: EntityModelComputeResourcePropertyDto) =>
             elem.id !== property.id
         );
         this.fetchComputeResourceProperties();
@@ -349,11 +356,12 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     this.algorithmService
       .getComputingResourcesByAlgorithm({
         algoId: this.algorithm.id,
+        size: -1,
       })
       .subscribe((e) => {
         if (e._embedded != null) {
           this.computeResourceProperties =
-            e._embedded.computingResourceProperties;
+            e._embedded.computeResourceProperties;
         }
       });
   }

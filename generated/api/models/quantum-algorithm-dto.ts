@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { QuantumImplementation } from './quantum-implementation';
+import { QuantumImplementationDto } from './quantum-implementation-dto';
 import { Sketch } from './sketch';
 export type QuantumAlgorithmDto = {
   id?: string;
@@ -20,5 +20,5 @@ export type QuantumAlgorithmDto = {
     | 'MEASUREMENT_BASED'
     | 'QUANTUM_ANNEALING';
   speedUp?: string;
-  implementations?: Array<QuantumImplementation>;
+  implementations?: Array<QuantumImplementationDto>;
 };

@@ -108,6 +108,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       .subscribe(
         (algo) => {
           this.algorithm = algo;
+          this.utilService.callSnackBar('Successfully updated algorithm');
         },
         (error) => {
           console.log(error);
