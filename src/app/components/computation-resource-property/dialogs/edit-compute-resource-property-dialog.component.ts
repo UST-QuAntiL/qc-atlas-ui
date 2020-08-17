@@ -1,12 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { EntityModelComputingResourcePropertyDto } from 'api/models/entity-model-computing-resource-property-dto';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { ComputingResourcePropertiesTypesService } from 'api/services/computing-resource-properties-types.service';
-import { EntityModelComputingResourcePropertyTypeDto } from 'api/models/entity-model-computing-resource-property-type-dto';
 import {
   AbstractControl,
   FormControl,
@@ -15,6 +12,9 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { EntityModelComputeResourcePropertyTypeDto } from 'api/models/entity-model-compute-resource-property-type-dto';
+import { EntityModelComputeResourcePropertyDto } from 'api/models';
+import { ComputeResourcePropertyTypesService } from 'api/services/compute-resource-property-types.service';
 import { Option } from '../../generics/property-input/select-input.component';
 import { CustomErrorStateMatcher } from '../../generics/property-input/default.error-matcher';
 
@@ -24,9 +24,9 @@ import { CustomErrorStateMatcher } from '../../generics/property-input/default.e
   styleUrls: ['./edit-compute-resource-property-dialog.component.scss'],
 })
 export class EditComputeResourcePropertyDialogComponent implements OnInit {
-  types: EntityModelComputingResourcePropertyTypeDto[] = [];
+  types: EntityModelComputeResourcePropertyTypeDto[] = [];
   matcher = new CustomErrorStateMatcher();
-  filteredTypes: EntityModelComputingResourcePropertyTypeDto[];
+  filteredTypes: EntityModelComputeResourcePropertyTypeDto[];
   formGroup: FormGroup = new FormGroup({
     typeName: new FormControl('', Validators.minLength(1)),
     typeDesc: new FormControl(),
@@ -34,7 +34,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     value: new FormControl(''),
   });
 
-  baseElement: EntityModelComputingResourcePropertyDto = {
+  baseElement: EntityModelComputeResourcePropertyDto = {
     value: '',
     type: {
       datatype: 'STRING',
@@ -44,7 +44,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     },
   };
 
-  selectedType: EntityModelComputingResourcePropertyTypeDto = null;
+  selectedType: EntityModelComputeResourcePropertyTypeDto = null;
 
   get typeName(): string {
     return (this.formGroup.controls.typeName as FormControl).value.toString();
@@ -104,7 +104,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<EditComputeResourcePropertyDialogData>,
     @Inject(MAT_DIALOG_DATA) public data: EditComputeResourcePropertyDialogData,
     public dialog: MatDialog,
-    public propertyTypeService: ComputingResourcePropertiesTypesService
+    public propertyTypeService: ComputeResourcePropertyTypesService
   ) {}
 
   ngOnInit(): void {
@@ -125,14 +125,14 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     }
     this.propertyTypeService.getResourcePropertyTypes().subscribe((e) => {
       if (e._embedded != null) {
-        this.types = e._embedded.computingResourcePropertyTypes;
+        this.types = e._embedded.computeResourcePropertyTypes;
       }
     });
     this.formGroup.controls.value.setValue('');
     this.validateValueInput();
   }
 
-  onTypeSelect(type: EntityModelComputingResourcePropertyTypeDto): void {
+  onTypeSelect(type: EntityModelComputeResourcePropertyTypeDto): void {
     this.selectedType = type;
     this.typeDatatype = type.datatype;
     this.typeDescription = type.description;
@@ -196,9 +196,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     };
   }
 
-  private _filter(
-    value: string
-  ): EntityModelComputingResourcePropertyTypeDto[] {
+  private _filter(value: string): EntityModelComputeResourcePropertyTypeDto[] {
     const val = value.toLowerCase();
     return this.types.filter(
       (type) =>
@@ -212,6 +210,6 @@ export interface ValidatingOption extends Option {
 }
 
 export interface EditComputeResourcePropertyDialogData {
-  entity: EntityModelComputingResourcePropertyDto;
+  entity: EntityModelComputeResourcePropertyDto;
   title: string;
 }

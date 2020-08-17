@@ -10,10 +10,8 @@ import {
 } from '@angular/core';
 import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
 import {
-  AlgorithmDto,
-  ApplicationAreaDto,
   EntityModelApplicationAreaDto,
-  EntityModelComputingResourcePropertyDto,
+  EntityModelComputeResourcePropertyDto,
   EntityModelProblemTypeDto,
 } from 'api/models';
 import { ProblemTypeService } from 'api/services/problem-type.service';
@@ -76,7 +74,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     { value: 'MEASUREMENT_BASED', label: 'Measurement based' },
     { value: 'QUANTUM_ANNEALING', label: 'Quantum Annealing' },
   ];
-  computeResourceProperties: EntityModelComputingResourcePropertyDto[] = [];
+  computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
 
   problemTypeTreeData: FileNode[] = [];
 
@@ -290,7 +288,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   }
 
   addComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     console.log('add compute resource property');
     console.log(property);
@@ -305,7 +303,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   }
 
   updateComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
       .updateComputingResource({
@@ -319,7 +317,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   }
 
   deleteComputeResourceProperty(
-    property: EntityModelComputingResourcePropertyDto
+    property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
       .deleteComputingResource({
@@ -328,7 +326,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       })
       .subscribe((e) => {
         this.computeResourceProperties = this.computeResourceProperties.filter(
-          (elem: EntityModelComputingResourcePropertyDto) =>
+          (elem: EntityModelComputeResourcePropertyDto) =>
             elem.id !== property.id
         );
         this.fetchComputeResourceProperties();
@@ -343,7 +341,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       .subscribe((e) => {
         if (e._embedded != null) {
           this.computeResourceProperties =
-            e._embedded.computingResourceProperties;
+            e._embedded.computeResourceProperties;
         }
       });
   }

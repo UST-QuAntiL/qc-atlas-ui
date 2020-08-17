@@ -1,7 +1,12 @@
 <div *ngIf="algorithm" class="m-2">
   <div class="header-container p-2">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-    <app-tags-component [allowRemoving]="true"></app-tags-component>
+    <app-tags-component
+      [allowRemoving]="true"
+      [tags]="tags"
+      (onRemove)="removeTag($event)"
+      (onAdd)="addTag($event)"
+    ></app-tags-component>
   </div>
 
   <mat-tab-group>

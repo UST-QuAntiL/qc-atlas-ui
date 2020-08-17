@@ -1,56 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TagsDialogComponent } from './dialog/tags-dialog.component';
-
-// placeholder content
-const PLACEHOLDER_ALL_TAGS: Tag[] = [
-  {
-    category: 'Machine Learning',
-    value: 'Naive Bayes',
-  },
-  {
-    category: 'Machine Learning',
-    value: 'Classification',
-  },
-  {
-    category: 'Learning',
-    value: 'Eager Learning',
-  },
-  {
-    category: 'Cryptography',
-    value: 'Factorization',
-  },
-  {
-    category: 'Topic',
-    value: 'Data Science',
-  },
-  {
-    category: 'Topic',
-    value: 'NLP',
-  },
-  {
-    category: 'Topic',
-    value: 'RSA',
-  },
-];
-const PLACEHOLDER_INPUT_TAGS: Tag[] = [
-  {
-    category: 'Machine Learning',
-    value: 'Naive Bayes',
-  },
-  {
-    category: 'Machine Learning',
-    value: 'Classification',
-  },
-  {
-    category: 'Topic',
-    value: 'Data Science',
-  },
-  {
-    category: 'Learning',
-    value: 'Eager Learning',
-  },
-];
+import { TagService } from 'api/services/tag.service';
+import { TagDto } from 'api/models/tag-dto';
 
 @Component({
   selector: 'app-tags-component',
@@ -59,12 +11,12 @@ const PLACEHOLDER_INPUT_TAGS: Tag[] = [
 })
 export class TagsComponent {
   @Input() allowRemoving = true;
-  @Input() tags: Tag[] = PLACEHOLDER_INPUT_TAGS;
+  @Input() tags: TagDto[] = [];
 
-  @Output() onRemove: EventEmitter<Tag> = new EventEmitter<Tag>();
+  @Output() onRemove: EventEmitter<TagDto> = new EventEmitter<TagDto>();
+  @Output() onAdd: EventEmitter<TagDto> = new EventEmitter<TagDto>();
 
-  // TODO fetch this as soon as backend part is finished
-  all_tags: Tag[] = PLACEHOLDER_ALL_TAGS;
+  allTags: TagDto[] = [];
 
   localStorageKey = 'atlas-tag-categories';
   showCategories = false;
@@ -93,23 +45,31 @@ export class TagsComponent {
     '#90a4ae',
   ];
 
-  constructor(public dialog: MatDialog) {
-    // retrieve generated colors from local storage or set them if empty
-    if (localStorage.getItem(this.localStorageKey)) {
-      this.refreshColors();
-    } else if (!this.categoryToColor) {
-      this.categoryToColor = this.toColorMap(this.all_tags);
-      localStorage.setItem(
-        this.localStorageKey,
-        JSON.stringify(this.categoryToColor)
-      );
-    }
+  constructor(private dialog: MatDialog, private tagsService: TagService) {
+    tagsService.getTags({ search: '', page: 0, size: 20 }).subscribe((next) => {
+      if (next._embedded?.tags) {
+        this.allTags = next._embedded.tags.map((entityModelTag) => ({
+          value: entityModelTag.value,
+          category: entityModelTag.category,
+        }));
+      }
+
+      // retrieve generated colors from local storage or set them if empty
+      if (localStorage.getItem(this.localStorageKey)) {
+        this.refreshColors();
+      } else if (!this.categoryToColor) {
+        this.categoryToColor = this.toColorMap(this.allTags);
+        localStorage.setItem(
+          this.localStorageKey,
+          JSON.stringify(this.categoryToColor)
+        );
+      }
+    });
   }
 
   refreshColors(): void {
-    console.log(this.hasStorageAllCategories());
     if (!this.hasStorageAllCategories()) {
-      const tmp = this.toColorMap(this.all_tags);
+      const tmp = this.toColorMap(this.allTags);
       this.categoryToColor = tmp;
       localStorage.removeItem(this.localStorageKey);
       localStorage.setItem(this.localStorageKey, JSON.stringify(tmp));
@@ -129,7 +89,7 @@ export class TagsComponent {
     const localStorageKeys = Object.keys(
       JSON.parse(localStorage.getItem(this.localStorageKey))
     ).sort();
-    const localKeys = Object.keys(this.toColorMap(this.all_tags)).sort();
+    const localKeys = Object.keys(this.toColorMap(this.allTags)).sort();
 
     if (localKeys.length > localStorageKeys.length) {
       return false;
@@ -143,7 +103,7 @@ export class TagsComponent {
     return true;
   }
 
-  toColorMap(tags: Tag[]): Record<string, string> {
+  toColorMap(tags: TagDto[]): Record<string, string> {
     const result: Record<string, string> = this.categoryToColor || {};
     for (const tag of tags) {
       if (!(tag.category in result)) {
@@ -178,26 +138,28 @@ export class TagsComponent {
         width: '400px',
         autoFocus: false,
         data: {
-          allTags: this.all_tags,
+          allTags: this.allTags,
           categoryToColor: this.categoryToColor,
         },
       })
       .afterClosed()
-      .subscribe((addedTag: Tag) => {
+      .subscribe((addedTag: TagDto) => {
         if (addedTag) {
           const tmp = this.tags.find((tag) => tag.value === addedTag.value);
           if (!tmp) {
             this.tags.push(addedTag);
             // TODO this is really bad, will be removed anyway once backend callbacks are built
-            const tmp2 = this.all_tags.find(
+            const tmp2 = this.allTags.find(
               (tag) => tag.value === addedTag.value
             );
             if (!tmp2) {
-              this.all_tags.push(addedTag);
+              this.allTags.push(addedTag);
             }
             this.refreshColors();
           }
         }
+        this.onAdd.emit(addedTag);
+        console.log(addedTag);
       });
   }
 

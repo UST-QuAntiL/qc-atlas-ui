@@ -24,24 +24,48 @@ export class TagService extends BaseService {
   }
 
   /**
-   * Path part for operation getTags2
+   * Path part for operation getTags
    */
-  static readonly GetTags2Path = '/v1/tags/';
+  static readonly GetTagsPath = '/v1/tags/';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getTags2()` instead.
+   * To access only the response body, use `getTags()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getTags2$Response(params?: {}): Observable<
+  getTags$Response(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
     StrictHttpResponse<{
       _embedded?: { tags?: Array<EntityModelTagDto> };
       page?: PageMetadata;
     }>
   > {
-    const rb = new RequestBuilder(this.rootUrl, TagService.GetTags2Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, TagService.GetTagsPath, 'get');
     if (params) {
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -63,15 +87,35 @@ export class TagService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getTags2$Response()` instead.
+   * To access the full response (for headers, for example), `getTags$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getTags2(params?: {}): Observable<{
+  getTags(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
     _embedded?: { tags?: Array<EntityModelTagDto> };
     page?: PageMetadata;
   }> {
-    return this.getTags2$Response(params).pipe(
+    return this.getTags$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{

@@ -34,6 +34,7 @@ import { ProblemTypeDto } from '../models/problem-type-dto';
 import { PublicationDto } from '../models/publication-dto';
 import { QuantumAlgorithmDto } from '../models/quantum-algorithm-dto';
 import { SoftwarePlatformDto } from '../models/software-platform-dto';
+import { TagDto } from '../models/tag-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -3309,18 +3310,18 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getTags1
+   * Path part for operation getTagsOfImplementation
    */
-  static readonly GetTags1Path =
+  static readonly GetTagsOfImplementationPath =
     '/v1/algorithms/{algoId}/implementations/{implId}/tags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getTags1()` instead.
+   * To access only the response body, use `getTagsOfImplementation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getTags1$Response(params: {
+  getTagsOfImplementation$Response(params: {
     algoId: string;
     implId: string;
   }): Observable<
@@ -3328,7 +3329,7 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetTags1Path,
+      AlgorithmService.GetTagsOfImplementationPath,
       'get'
     );
     if (params) {
@@ -3354,15 +3355,147 @@ export class AlgorithmService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getTags1$Response()` instead.
+   * To access the full response (for headers, for example), `getTagsOfImplementation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getTags1(params: {
+  getTagsOfImplementation(params: {
     algoId: string;
     implId: string;
   }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
-    return this.getTags1$Response(params).pipe(
+    return this.getTagsOfImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation addTagToImplementation
+   */
+  static readonly AddTagToImplementationPath =
+    '/v1/algorithms/{algoId}/implementations/{implId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addTagToImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addTagToImplementation$Response(params: {
+    implId: string;
+    body: TagDto;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.AddTagToImplementationPath,
+      'put'
+    );
+    if (params) {
+      rb.path('implId', params.implId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `addTagToImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addTagToImplementation(params: {
+    implId: string;
+    body: TagDto;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.addTagToImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation removeTagFromImplementation
+   */
+  static readonly RemoveTagFromImplementationPath =
+    '/v1/algorithms/{algoId}/implementations/{implId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeTagFromImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  removeTagFromImplementation$Response(params: {
+    implId: string;
+    body: TagDto;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.RemoveTagFromImplementationPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('implId', params.implId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeTagFromImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  removeTagFromImplementation(params: {
+    implId: string;
+    body: TagDto;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.removeTagFromImplementation$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -4430,28 +4563,28 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getTags
+   * Path part for operation getTagsOfAlgorithm
    */
-  static readonly GetTagsPath = '/v1/algorithms/{id}/tags';
+  static readonly GetTagsOfAlgorithmPath = '/v1/algorithms/{algoId}/tags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getTags()` instead.
+   * To access only the response body, use `getTagsOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getTags$Response(params: {
-    id: string;
+  getTagsOfAlgorithm$Response(params: {
+    algoId: string;
   }): Observable<
     StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetTagsPath,
+      AlgorithmService.GetTagsOfAlgorithmPath,
       'get'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path('algoId', params.algoId, {});
     }
     return this.http
       .request(
@@ -4472,14 +4605,144 @@ export class AlgorithmService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getTags$Response()` instead.
+   * To access the full response (for headers, for example), `getTagsOfAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getTags(params: {
-    id: string;
+  getTagsOfAlgorithm(params: {
+    algoId: string;
   }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
-    return this.getTags$Response(params).pipe(
+    return this.getTagsOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation addTagToAlgorithm
+   */
+  static readonly AddTagToAlgorithmPath = '/v1/algorithms/{algoId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addTagToAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addTagToAlgorithm$Response(params: {
+    algoId: string;
+    body: TagDto;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.AddTagToAlgorithmPath,
+      'put'
+    );
+    if (params) {
+      rb.path('algoId', params.algoId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `addTagToAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addTagToAlgorithm(params: {
+    algoId: string;
+    body: TagDto;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.addTagToAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation removeTagFromAlgorithm
+   */
+  static readonly RemoveTagFromAlgorithmPath = '/v1/algorithms/{algoId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeTagFromAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  removeTagFromAlgorithm$Response(params: {
+    algoId: string;
+    body: TagDto;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.RemoveTagFromAlgorithmPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algoId', params.algoId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeTagFromAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  removeTagFromAlgorithm(params: {
+    algoId: string;
+    body: TagDto;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.removeTagFromAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{

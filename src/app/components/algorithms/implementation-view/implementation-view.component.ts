@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlgorithmDto } from 'api/models/algorithm-dto';
 import { ImplementationDto } from 'api/models/implementation-dto';
 import { PublicationService } from 'api/services/publication.service';
-import { EntityModelComputeResourcePropertyDto } from 'api/models';
+import { EntityModelComputeResourcePropertyDto, TagDto } from 'api/models';
 import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
@@ -22,6 +22,7 @@ export class ImplementationViewComponent implements OnInit {
   impl: ImplementationDto;
   algo: AlgorithmDto;
   softwarePlatformOptions: Option[];
+  tags: TagDto[] = [];
 
   quantumResources: any[] = [];
   tableColumns = ['Name', 'Datatype', 'Description', 'Value'];
@@ -163,6 +164,34 @@ export class ImplementationViewComponent implements OnInit {
       });
   }
 
+  addTag(tag: TagDto): void {
+    this.algorithmService
+      .addTagToImplementation({
+        implId: this.impl.id,
+        body: tag,
+      })
+      .subscribe((next) => {
+        this.tags = next._embedded.tags.map((t) => ({
+          value: t.value,
+          category: t.category,
+        }));
+      });
+  }
+
+  removeTag(tag: TagDto): void {
+    this.algorithmService
+      .removeTagFromImplementation({
+        implId: this.impl.id,
+        body: tag,
+      })
+      .subscribe((next) => {
+        this.tags = next._embedded.tags.map((t) => ({
+          value: t.value,
+          category: t.category,
+        }));
+      });
+  }
+
   private loadGeneral(): void {
     this.softwarePlatformService.getSoftwarePlatforms().subscribe((list) => {
       const softwarePlatforms = list._embedded?.softwarePlatforms || [];
@@ -190,7 +219,21 @@ export class ImplementationViewComponent implements OnInit {
             subHeading: '',
           };
           this.fetchComputeResourceProperties();
+          this.getTagsForImplementation(algoId, implId);
         });
     });
+  }
+
+  private getTagsForImplementation(algoId: string, implId: string): void {
+    this.algorithmService
+      .getTagsOfImplementation({ algoId, implId })
+      .subscribe((next) => {
+        if (next._embedded?.tags) {
+          this.tags = next._embedded.tags.map((t) => ({
+            value: t.value,
+            category: t.category,
+          }));
+        }
+      });
   }
 }
