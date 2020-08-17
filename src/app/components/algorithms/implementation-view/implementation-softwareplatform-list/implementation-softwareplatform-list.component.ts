@@ -121,8 +121,10 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
   linkPlatform(platform: SoftwarePlatformDto): void {
     // Empty unlinked algorithms
     this.linkObject.data = [];
-    this.algorithmService
-      .addSoftwarePlatformByImplementation(this.generateLinkParams(platform))
+    this.executionEnvironmentsService
+      .addImplementationReferenceToSoftwarePlatform(
+        this.generateLinkParams(platform.id)
+      )
       .subscribe((data) => {
         this.getLinkedPlatformsHateoas(this.pagingInfo._links.self.href);
         this.getAllLinkedPlatforms();
@@ -130,16 +132,14 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
       });
   }
 
-  async unlinkPublications(event): Promise<void> {
+  async unlinkPlatforms(event): Promise<void> {
     // Iterate all selected algorithms
     for (const platform of event.elements) {
       await // Build params using path ids and perform delete request
-      this.algorithmService
-        .deleteReferenceToSoftwarePlatform({
-          algoId: this.algorithm.id,
-          implId: this.implementation.id,
-          platformId: platform.id,
-        })
+      this.executionEnvironmentsService
+        .deleteImplementationReferenceFromSoftwarePlatform(
+          this.generateLinkParams(platform.id)
+        )
         .toPromise();
       this.utilService.callSnackBar(
         'Successfully unlinked software platform(s)'
@@ -149,10 +149,9 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
     this.getAllLinkedPlatforms();
   }
 
-  generateLinkParams(platform: SoftwarePlatformDto): any {
+  generateLinkParams(id: string): any {
     return {
-      body: platform,
-      algoId: this.algorithm.id,
+      id,
       implId: this.implementation.id,
     };
   }
