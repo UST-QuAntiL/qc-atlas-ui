@@ -91,7 +91,6 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     { value: 'MEASUREMENT_BASED', label: 'Measurement based' },
     { value: 'QUANTUM_ANNEALING', label: 'Quantum Annealing' },
   ];
-  computeResourceProperties: EntityModelComputingResourcePropertyDto[] = [];
 
   constructor(
     private algorithmService: AlgorithmService,
