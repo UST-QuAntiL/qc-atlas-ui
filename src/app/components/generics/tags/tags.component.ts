@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TagsDialogComponent } from './dialog/tags-dialog.component';
 import { TagService } from 'api/services/tag.service';
 import { TagDto } from 'api/models/tag-dto';
+import { TagsDialogComponent } from './dialog/tags-dialog.component';
 
 @Component({
   selector: 'app-tags-component',

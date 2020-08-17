@@ -1,12 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Tag } from 'api/models';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
-  MatDialogConfig,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { Tag } from '../tags.component';
 
 @Component({
   selector: 'app-tags-dialog-component',
