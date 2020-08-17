@@ -204,7 +204,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation getTag
    */
-  static readonly GetTagPath = '/v1/tags/{tagId}';
+  static readonly GetTagPath = '/v1/tags/{value}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -213,7 +213,7 @@ export class TagService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTag$Response(params: {
-    name: string;
+    value: string;
   }): Observable<
     StrictHttpResponse<{
       category?: string;
@@ -223,7 +223,7 @@ export class TagService extends BaseService {
   > {
     const rb = new RequestBuilder(this.rootUrl, TagService.GetTagPath, 'get');
     if (params) {
-      rb.path('name', params.name, {});
+      rb.path('value', params.value, {});
     }
     return this.http
       .request(
@@ -251,7 +251,7 @@ export class TagService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTag(params: {
-    name: string;
+    value: string;
   }): Observable<{ category?: string; value: string; _links?: Array<Link> }> {
     return this.getTag$Response(params).pipe(
       map(
@@ -270,7 +270,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation getAlgorithmsOfTag
    */
-  static readonly GetAlgorithmsOfTagPath = '/v1/tags/{tagId}/algorithms';
+  static readonly GetAlgorithmsOfTagPath = '/v1/tags/{value}/algorithms';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -339,7 +339,7 @@ export class TagService extends BaseService {
    * Path part for operation getImplementationsOfTag
    */
   static readonly GetImplementationsOfTagPath =
-    '/v1/tags/{tagId}/implementations';
+    '/v1/tags/{value}/implementations';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

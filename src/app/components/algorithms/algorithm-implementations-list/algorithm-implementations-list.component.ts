@@ -70,6 +70,9 @@ export class AlgorithmImplementationsListComponent implements OnInit {
                 'implementations',
                 data.id,
               ]);
+              this.utilService.callSnackBar(
+                'Successfully added implementation'
+              );
             });
         }
       });

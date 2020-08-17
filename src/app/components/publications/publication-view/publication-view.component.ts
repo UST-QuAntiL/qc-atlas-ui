@@ -4,6 +4,7 @@ import { EntityModelPublicationDto } from 'api/models/entity-model-publication-d
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-publication-view',
@@ -18,7 +19,8 @@ export class PublicationViewComponent implements OnInit {
 
   constructor(
     private publicationService: PublicationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +59,7 @@ export class PublicationViewComponent implements OnInit {
       .subscribe(
         (publication) => {
           this.publication = publication;
+          this.utilService.callSnackBar('Successfully updated publication');
         },
         (error) => {
           console.log(error);

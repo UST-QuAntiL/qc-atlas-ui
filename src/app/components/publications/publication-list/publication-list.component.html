@@ -12,6 +12,7 @@
                [paginatorConfig]=paginatorConfig
                [emptyTableMessage]="'No publications found'"
                (elementClicked)="onElementClicked($event)"
+               (urlClicked)="onUrlClicked($event)"
                (addElement)="onAddElement()"
                (submitSelectedElements)="onDeleteElements($event)"
                (datalistConfigChanged)="getPublications($event)"

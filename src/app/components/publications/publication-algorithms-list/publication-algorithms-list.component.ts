@@ -6,6 +6,7 @@ import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
 import { Router } from '@angular/router';
 import { AlgorithmDto } from 'api/models/algorithm-dto';
 import { LinkObject } from '../../generics/data-list/data-list.component';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-publication-algorithms-list',
@@ -29,7 +30,8 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   constructor(
     private algorithmService: AlgorithmService,
     private publicationService: PublicationService,
-    private router: Router
+    private router: Router,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +86,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       .linkAlgorithmWithPublication(params)
       .subscribe((linkedAlgorithm) => {
         this.getLinkedAlgorithms({ id: this.publication.id });
+        this.utilService.callSnackBar('Successfully linked Algorithm');
       });
   }
 
@@ -96,6 +99,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
         .subscribe((data) => {
           // Update table after deletion
           this.getLinkedAlgorithms({ id: this.publication.id });
+          this.utilService.callSnackBar('Successfully unlinked Algorithm');
         });
     }
   }

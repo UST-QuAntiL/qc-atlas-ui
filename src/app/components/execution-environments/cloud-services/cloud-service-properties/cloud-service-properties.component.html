@@ -1,0 +1,49 @@
+<div class="m-4">
+  <!--<mat-card class="px-4 my-4">
+    <app-text-input
+      class="w-100"
+      name="Name"
+      [(ngModel)]="cloudService.name"
+      (onSaveChanges)="onChangesSaved($event, 'name')"
+    ></app-text-input>
+  </mat-card>-->
+
+  <mat-card class="px-4 my-4">
+    <app-text-input
+      class="w-100"
+      name="Description"
+      [multiline]="true"
+      [maxLines]="5"
+      [(ngModel)]="cloudService.description"
+      (onSaveChanges)="onChangesSaved($event, 'description')"
+    ></app-text-input>
+  </mat-card>
+
+  <mat-card class="px-4 my-4">
+    <app-text-input
+      class="w-100"
+      name="Provider"
+      [(ngModel)]="cloudService.provider"
+      (onSaveChanges)="onChangesSaved($event, 'provider')"
+    ></app-text-input>
+  </mat-card>
+
+  <mat-card class="px-4 my-4">
+    <app-text-input
+      class="w-100"
+      name="URL"
+      [isLink]="true"
+      [(ngModel)]="cloudService.url"
+      (onSaveChanges)="onChangesSaved($event, 'url')"
+    ></app-text-input>
+  </mat-card>
+
+  <mat-card class="px-4 my-4">
+    <app-text-input
+      class="w-100"
+      name="Cost Model"
+      [(ngModel)]="cloudService.costModel"
+      (onSaveChanges)="onChangesSaved($event, 'costModel')"
+    ></app-text-input>
+  </mat-card>
+</div>

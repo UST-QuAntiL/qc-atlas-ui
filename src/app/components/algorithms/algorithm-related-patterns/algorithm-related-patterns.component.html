@@ -5,12 +5,15 @@
                [dataColumns]=tableColumns
                [externalLinkVariables]=externalLinkVariables
                [allowAdd]=true
+               [allowEdit]=true
                [allowSelection]=true
                [emptyTableMessage]="'No related patterns found'"
                (addElement)="onAddElement()"
                (submitSelectedElements)="onDeleteElements($event)"
                (datalistConfigChanged)="onDatalistConfigChanged($event)"
-               (elementClicked)="onElementClicked($event)">
+               (elementClicked)="onElementClicked($event)"
+               (updateClicked)="onElementClicked($event)"
+               (urlClicked)="onUrlClicked($event)">
     </app-table>
   </div>
 </mdb-card>

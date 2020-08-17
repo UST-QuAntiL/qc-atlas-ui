@@ -17,6 +17,9 @@ import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
 import { AppRoutingModule } from '../../app-routing.module';
 import { GenericDataService } from '../../util/generic-data.service';
 import { TextInputComponent } from './property-input/text-input.component';
@@ -65,6 +68,9 @@ import { TagsDialogComponent } from './tags/dialog/tags-dialog.component';
     MatDialogModule,
     MatAutocompleteModule,
     MatBadgeModule,
+    MatDividerModule,
+    MatListModule,
+    MatCardModule,
   ],
   exports: [
     TextInputComponent,

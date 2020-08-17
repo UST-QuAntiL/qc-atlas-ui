@@ -1,4 +1,4 @@
-<div [ngClass]="{'url-input': (isLink && !isBeingEdited)}">
+<div [ngClass]="{'url-input': (isLink && !isBeingEdited && value)}">
   <mat-form-field>
     <mat-label class="input-label">{{ name }}</mat-label>
     <input
@@ -7,7 +7,7 @@
       [readonly]="!isBeingEdited"
       [(ngModel)]="value"
       matInput
-      (click)="(isLink && !isBeingEdited) ? openLink() : false"
+      (click)="(isLink && !isBeingEdited && value) ? openLink() : false"
     />
     <textarea
       *ngIf="multiline"

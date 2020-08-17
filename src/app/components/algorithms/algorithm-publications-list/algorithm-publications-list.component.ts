@@ -6,6 +6,8 @@ import { PublicationService } from 'api/services/publication.service';
 import { Router } from '@angular/router';
 import { PublicationDto } from 'api/models/publication-dto';
 import { LinkObject } from '../../generics/data-list/data-list.component';
+import { UtilService } from '../../../util/util.service';
+import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'app-algorithm-publications-list',
@@ -31,7 +33,8 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   constructor(
     private algorithmService: AlgorithmService,
     private publicationService: PublicationService,
-    private router: Router
+    private router: Router,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -70,6 +73,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       .addPublication({ algoId: this.algorithm.id, body: publication })
       .subscribe((data) => {
         this.getLinkedPublications({ algoId: this.algorithm.id });
+        this.utilService.callSnackBar('Successfully linked Publication');
       });
   }
 
@@ -83,6 +87,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
         })
         .toPromise();
       this.getLinkedPublications({ algoId: this.algorithm.id });
+      this.utilService.callSnackBar('Successfully unlinked Publication');
     }
   }
 

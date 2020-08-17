@@ -8,6 +8,7 @@ import {
 @Component({
   selector: 'app-delete-algorithm-dialog',
   templateUrl: 'confirm-dialog.component.html',
+  styleUrls: ['confirm-dialog.component.scss'],
 })
 export class ConfirmDialogComponent implements OnInit {
   constructor(
@@ -26,6 +27,8 @@ export class ConfirmDialogComponent implements OnInit {
 export interface ConfirmDialogData {
   title: string;
   message: string;
+  variableName?: string;
+  data?: any[];
   yesButtonText: string;
   noButtonText: string;
 }

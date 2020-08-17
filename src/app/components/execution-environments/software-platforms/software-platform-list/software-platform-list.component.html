@@ -1,0 +1,21 @@
+<mat-card class="m-4">
+  <div class="mx-3 mb-2">
+    <app-table [data]=softwarePlatforms
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [externalLinkVariables]=externalLinkVariables
+               [allowAdd]=true
+               [allowSelection]=true
+               [allowSearch]=true
+               [allowSort]=true
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
+               [emptyTableMessage]="'No software platforms found'"
+               (elementClicked)="onSoftwarePlatformClicked($event)"
+               (addElement)="onCreateSoftwarePlatform()"
+               (submitSelectedElements)="onDeleteSoftwarePlatforms($event)"
+               (datalistConfigChanged)="getSoftwarePlatforms($event)"
+               (pageChange)="getSoftwarePlatformsHateoas($event)">
+    </app-table>
+  </div>
+</mat-card>
