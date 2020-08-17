@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiModule } from 'api/api.module';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MatCardModule } from '@angular/material/card';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -73,6 +74,7 @@ import { ProblemTypesViewComponent } from './components/problem-types/problem-ty
     ComputeResourcePropertyModule,
     ExecutionEnvironmentsModule,
     ServicesModule,
+    MatCardModule,
   ],
   bootstrap: [AppComponent],
   exports: [],
