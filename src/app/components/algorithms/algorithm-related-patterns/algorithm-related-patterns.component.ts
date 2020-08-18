@@ -21,8 +21,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
   patternRelations: EntityModelPatternRelationDto[];
   tableObjects: PatternRelationTableObject[] = [];
-  variableNames: string[] = ['patternType', 'description', 'pattern'];
-  tableColumns: string[] = ['Pattern', 'Description', 'Link'];
+  variableNames: string[] = ['pattern', 'patternType', 'description'];
+  tableColumns: string[] = ['Pattern', 'Relation Type', 'Description'];
   externalLinkVariables: string[] = ['pattern'];
 
   constructor(
