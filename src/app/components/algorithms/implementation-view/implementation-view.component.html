@@ -17,45 +17,53 @@
   <mat-tab-group (selectedIndexChange)="changeTab($event)">
     <mat-tab label="General">
       <div class="tab-body p-4">
-        <div class="d-flex justify-content-between">
-          <app-text-input
-            (onSaveChanges)="onChangeImpl()"
-            name="Name"
-            class="w-100 p-2"
-            [(ngModel)]="impl.name"
-          ></app-text-input>
+        <div class="d-flex">
+          <mat-card class="w-100 m-4">
+            <app-text-input
+              (onSaveChanges)="onChangeImpl()"
+              name="Name"
+              class="p-2"
+              [(ngModel)]="impl.name"
+            ></app-text-input>
+          </mat-card>
+          <mat-card class="w-100 m-4">
+            <app-text-input
+              name="Description"
+              class="p-2"
+              (onSaveChanges)="onChangeImpl()"
+              [(ngModel)]="impl.description"
+              [multiline]="true"
+            ></app-text-input>
+          </mat-card>
         </div>
         <div class="d-flex">
-          <app-text-input
-            name="Description"
-            class="w-100 p-2"
-            (onSaveChanges)="onChangeImpl()"
-            [(ngModel)]="impl.description"
-            [multiline]="true"
-          ></app-text-input>
+          <mat-card class="w-100 m-4">
+            <app-text-input
+              class="p-2"
+              name="Input Format"
+              (onSaveChanges)="onChangeImpl()"
+              [(ngModel)]="impl.inputFormat"
+            ></app-text-input>
+          </mat-card>
+          <mat-card class="w-100 m-4">
+            <app-text-input
+              class="w-100 p-2"
+              name="Output Format"
+              (onSaveChanges)="onChangeImpl()"
+              [(ngModel)]="impl.outputFormat"
+            ></app-text-input>
+          </mat-card>
         </div>
-        <div class="d-flex justify-content-between">
-          <app-text-input
-            class="w-100 p-2"
-            name="Input Format"
-            (onSaveChanges)="onChangeImpl()"
-            [(ngModel)]="impl.inputFormat"
-          ></app-text-input>
-          <app-text-input
-            class="w-100 p-2"
-            name="Output Format"
-            (onSaveChanges)="onChangeImpl()"
-            [(ngModel)]="impl.outputFormat"
-          ></app-text-input>
-        </div>
-        <div class="d-flex justify-content-between">
-          <app-text-input
-            class="w-100 p-2"
-            name="Contributors"
-            (onSaveChanges)="onChangeImpl()"
-            [(ngModel)]="impl.contributors"
-            [multiline]="true"
-          ></app-text-input>
+        <div class="d-flex">
+          <mat-card class="w-100 m-4">
+            <app-text-input
+              class="p-2"
+              name="Contributors"
+              (onSaveChanges)="onChangeImpl()"
+              [(ngModel)]="impl.contributors"
+              [multiline]="true"
+            ></app-text-input>
+          </mat-card>
         </div>
 
         <mat-card class="m-4">
