@@ -3,8 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ProblemTypeService } from 'api/services/problem-type.service';
 import { ProblemTypeDto } from 'api/models/problem-type-dto';
+import { EntityModelProblemTypeDto } from 'api/models/entity-model-problem-type-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
-import { AddProblemTypeDialogComponent } from '../../algorithms/dialogs/add-problem-type-dialog.component';
+import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type-dialog.component';
 
 @Component({
   selector: 'app-problem-types-list',
@@ -67,7 +68,7 @@ export class ProblemTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const problemTypeDto: any = {
+        const problemTypeDto: EntityModelProblemTypeDto = {
           name: dialogResult.name,
         };
         if (
@@ -77,8 +78,7 @@ export class ProblemTypesListComponent implements OnInit {
           problemTypeDto.parentProblemType = dialogResult.parentProblemType.id;
         }
 
-        params.body = problemTypeDto as ProblemTypeDto;
-
+        params.body = problemTypeDto;
         this.problemTypeService.createProblemType(params).subscribe((data) => {
           this.router.navigate(['problem-types', data.id]);
         });
