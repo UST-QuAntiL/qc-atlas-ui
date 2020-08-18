@@ -14,9 +14,9 @@ import { BehaviorSubject } from 'rxjs';
 import { EntityModelProblemTypeDto } from 'generated/api/models/entity-model-problem-type-dto';
 import { LinkObject } from '../../generics/data-list/data-list.component';
 
-export class FileNode {
+export class TreeNode {
   problemType: EntityModelProblemTypeDto;
-  parents?: FileNode[];
+  parents?: TreeNode[];
   hasParents: boolean;
   isLowestLevelNode: boolean;
 }
@@ -41,18 +41,20 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
   >();
 
   @Input() title = '';
-  @Input() treeData: FileNode[];
+  @Input() treeData: TreeNode[];
   @Input() linkObject: LinkObject;
+  @Input() allowDelete = false;
+  @Input() deleteIcon = 'delete';
 
   inputValue = '';
 
-  nestedTreeControl: NestedTreeControl<FileNode> = new NestedTreeControl<
-    FileNode
+  nestedTreeControl: NestedTreeControl<TreeNode> = new NestedTreeControl<
+    TreeNode
   >((node) => node.parents);
   nestedDataSource: MatTreeNestedDataSource<
-    FileNode
-  > = new MatTreeNestedDataSource<FileNode>();
-  dataChange: BehaviorSubject<FileNode[]> = new BehaviorSubject<FileNode[]>([]);
+    TreeNode
+  > = new MatTreeNestedDataSource<TreeNode>();
+  dataChange: BehaviorSubject<TreeNode[]> = new BehaviorSubject<TreeNode[]>([]);
 
   constructor() {}
 
@@ -70,7 +72,7 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
     return this.treeData == null || this.treeData.length < 1;
   }
 
-  expandNode(node: FileNode): void {
+  expandNode(node: TreeNode): void {
     if (
       node.isLowestLevelNode &&
       this.nestedTreeControl.isExpanded(node) &&
@@ -80,6 +82,10 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
     }
   }
 
-  hasNestedChild = (_: number, nodeData: FileNode): boolean =>
+  hasNestedChild = (_: number, nodeData: TreeNode): boolean =>
     nodeData.hasParents;
+
+  onSingleDelete(element: TreeNode) {
+    this.onRemoveElement.emit(element.problemType);
+  }
 }

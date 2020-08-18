@@ -29,6 +29,7 @@
                                [title]='"Problem types"'
                                [treeData]="problemTypeTreeData"
                                [linkObject]="problemTypeLinkObject"
+                               [allowDelete]="true"
                                (onAddElement)="onAddProblemType.emit($event)"
                                (onRemoveElement)="onRemoveProblemType.emit($event)"
                                (onExpandParents)="getParentsForNode($event)"

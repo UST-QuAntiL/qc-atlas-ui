@@ -18,12 +18,10 @@ import { ProblemTypeService } from 'api/services/problem-type.service';
 import { AlgorithmService } from 'api/services/algorithm.service';
 import { ApplicationAreasService } from 'api/services/application-areas.service';
 import {
-  FileNode,
+  TreeNode,
   ProblemTypeTreeComponent,
 } from '../problem-type-tree/problem-type-tree.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type-dialog.component';
-import { RemoveProblemTypeDialogComponent } from '../dialogs/remove-problem-type-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import {
   quantumComputationModelOptions,
@@ -60,7 +58,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   @ViewChild('problemTypeTree')
   problemTypeTreeComponent: ProblemTypeTreeComponent;
-  problemTypeTreeData: FileNode[] = [];
+  problemTypeTreeData: TreeNode[] = [];
 
   problemTypeLinkObject: LinkObject = {
     title: 'Link problem type with ',
@@ -107,7 +105,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes.hasOwnProperty('problemTypes') &&
+      changes.hasOwnProperty('linkedProblemTypes') &&
       this.linkedProblemTypes != null
     ) {
       this.problemTypeTreeData = [];
@@ -117,7 +115,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   createInitTreeData(): void {
     this.linkedProblemTypes.forEach((problemType) => {
-      const node: FileNode = {
+      const node: TreeNode = {
         problemType,
         parents: [],
         hasParents: problemType.parentProblemType != null,
@@ -135,7 +133,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         (parents) => {
           if (parents._embedded) {
             const parentProblemTypes = parents._embedded.problemTypes;
-            let parentNodes: FileNode[] = [];
+            let parentNodes: TreeNode[] = [];
             if (parentProblemTypes.length > 1) {
               parentNodes = this.buildProblemTypeParentTree(parentProblemTypes);
             }
@@ -161,10 +159,14 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       );
   }
 
-  buildProblemTypeParentTree(parents: EntityModelProblemTypeDto[]): FileNode[] {
+  getParentsForNode(problemType: EntityModelProblemTypeDto): void {
+    this.addParentTreeToProblemType(problemType);
+  }
+
+  buildProblemTypeParentTree(parents: EntityModelProblemTypeDto[]): TreeNode[] {
     parents.shift();
     const type = parents.pop();
-    let parent: FileNode[] = [
+    let parent: TreeNode[] = [
       {
         problemType: type,
         parents: [],
@@ -257,52 +259,6 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   removeApplicationAreaEvent(applicationArea: any): void {
     this.removeApplicationArea.emit(applicationArea);
-  }
-
-  getParentsForNode(problemType: EntityModelProblemTypeDto): void {
-    this.addParentTreeToProblemType(problemType);
-  }
-
-  addProblemTypeEvent(): void {
-    this.utilService
-      .createDialog(AddProblemTypeDialogComponent, {
-        title: 'Add new problem type',
-        usedProblemTypes: this.linkedProblemTypes,
-      })
-      .afterClosed()
-      .subscribe((dialogResult) => {
-        if (dialogResult) {
-          let problemTypeDto: EntityModelProblemTypeDto = {
-            name: dialogResult.name,
-          };
-          if (
-            dialogResult.parentProblemType != null &&
-            dialogResult.parentProblemType.id != null
-          ) {
-            problemTypeDto.parentProblemType =
-              dialogResult.parentProblemType.id;
-          }
-          if (dialogResult.selectedProblemType != null) {
-            problemTypeDto = dialogResult.selectedProblemType;
-          }
-          this.onAddProblemType.emit(problemTypeDto);
-        }
-      });
-  }
-
-  removeProblemTypeEvent(): void {
-    this.utilService
-      .createDialog(RemoveProblemTypeDialogComponent, {
-        title: 'Remove problem types',
-        existingProblemTypes: this.linkedProblemTypes,
-        selectedProblemTypes: [],
-      })
-      .afterClosed()
-      .subscribe((dialogResult) => {
-        if (dialogResult) {
-          this.onRemoveProblemType.emit(dialogResult.selectedProblemTypes);
-        }
-      });
   }
 
   addComputeResourceProperty(
