@@ -116,7 +116,7 @@ export class ComputeResourceListComponent implements OnInit {
         if (dialogResult) {
           for (const computeResource of deleteParams.elements) {
             this.executionEnvironmentsService
-              .deleteSoftwarePlatform({ id: computeResource.id })
+              .deleteComputeResource({ id: computeResource.id })
               .subscribe(() => {
                 // Refresh Algorithms after delete
                 this.getComputeResources(deleteParams.queryParams);
