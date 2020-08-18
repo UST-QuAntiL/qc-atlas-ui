@@ -35,6 +35,15 @@
               [multiline]="true"
             ></app-text-input>
           </mat-card>
+          <mat-card class="w-100 m-4">
+            <app-text-input
+              class="p-2"
+              name="Contributors"
+              (onSaveChanges)="onChangeImpl()"
+              [(ngModel)]="impl.contributors"
+              [multiline]="true"
+            ></app-text-input>
+          </mat-card>
         </div>
         <div class="d-flex">
           <mat-card class="w-100 m-4">
@@ -47,7 +56,15 @@
           </mat-card>
           <mat-card class="w-100 m-4">
             <app-text-input
-              class="w-100 p-2"
+              class="p-2"
+              name="Parameter"
+              (onSaveChanges)="onChangeImpl()"
+              [(ngModel)]="impl.parameter"
+            ></app-text-input>
+          </mat-card>
+          <mat-card class="w-100 m-4">
+            <app-text-input
+              class="p-2"
               name="Output Format"
               (onSaveChanges)="onChangeImpl()"
               [(ngModel)]="impl.outputFormat"
@@ -58,21 +75,19 @@
           <mat-card class="w-100 m-4">
             <app-text-input
               class="p-2"
-              name="Contributors"
+              name="Dependencies"
               (onSaveChanges)="onChangeImpl()"
-              [(ngModel)]="impl.contributors"
-              [multiline]="true"
+              [(ngModel)]="impl.dependencies"
             ></app-text-input>
           </mat-card>
+          <mat-card class="w-100 m-4">
+            <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
+                                                (updateProperty)="updateComputeResourceProperty($event)"
+                                                (deleteProperty)="deleteComputeResourceProperty($event)"
+                                                [resourceProperties]="computeResourceProperties">
+            </app-compute-resource-property-list>
+          </mat-card>
         </div>
-
-        <mat-card class="m-4">
-          <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
-                                              (updateProperty)="updateComputeResourceProperty($event)"
-                                              (deleteProperty)="deleteComputeResourceProperty($event)"
-                                              [resourceProperties]="computeResourceProperties">
-          </app-compute-resource-property-list>
-        </mat-card>
       </div>
     </mat-tab>
     <mat-tab label="Publications">
