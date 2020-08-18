@@ -17,6 +17,7 @@ import { CardsModule } from 'angular-bootstrap-md';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
+import { AddProblemTypeDialogComponent } from '../problem-types/dialogs/add-problem-type-dialog.component';
 import { NisqAnalyzerModule } from './nisq-analyzer/nisq-analyzer.module';
 import { AlgorithmListComponent } from './algorithm-list/algorithm-list.component';
 import { AlgorithmViewComponent } from './algorithm-view/algorithm-view.component';
@@ -25,8 +26,6 @@ import { AlgorithmRelatedAlgosListComponent } from './algorithm-related-algos-li
 import { AlgorithmPropertiesComponent } from './algorithm-properties/algorithm-properties.component';
 import { AlgorithmPublicationsListComponent } from './algorithm-publications-list/algorithm-publications-list.component';
 import { AddAlgorithmDialogComponent } from './dialogs/add-algorithm-dialog.component';
-import { AddProblemTypeDialogComponent } from './dialogs/add-problem-type-dialog.component';
-import { RemoveProblemTypeDialogComponent } from './dialogs/remove-problem-type-dialog.component';
 import { CreateImplementationDialogComponent } from './dialogs/create-implementation-dialog.component';
 import { ProblemTypeTreeComponent } from './problem-type-tree/problem-type-tree.component';
 import { AlgorithmRelatedPatternsComponent } from './algorithm-related-patterns/algorithm-related-patterns.component';
@@ -44,7 +43,6 @@ import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-rel
     ProblemTypeTreeComponent,
     AddAlgorithmDialogComponent,
     AddProblemTypeDialogComponent,
-    RemoveProblemTypeDialogComponent,
     CreateImplementationDialogComponent,
     AlgorithmRelatedPatternsComponent,
     AddPatternRelationDialogComponent,
@@ -82,7 +80,6 @@ import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-rel
     ProblemTypeTreeComponent,
     AddAlgorithmDialogComponent,
     AddProblemTypeDialogComponent,
-    RemoveProblemTypeDialogComponent,
     CreateImplementationDialogComponent,
     AddPatternRelationDialogComponent,
     AddAlgorithmRelationDialogComponent,
