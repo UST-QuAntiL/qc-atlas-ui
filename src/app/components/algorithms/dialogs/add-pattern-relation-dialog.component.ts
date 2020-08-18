@@ -51,7 +51,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
           this.patternRelationTypes =
             relationTypes._embedded.patternRelationTypes;
           this.stateGroups.push({
-            optionName: 'Existing Pattern-Relations',
+            optionName: 'Existing Relation-Types',
             patternRelationTypes: this.patternRelationTypes,
           });
           // Set filtered Types if update-dialog
@@ -149,12 +149,12 @@ export class AddPatternRelationDialogComponent implements OnInit {
   }
 
   isFirstElementNew(): boolean {
-    return this.stateGroups[0].optionName !== 'New Pattern-Relation';
+    return this.stateGroups[0].optionName !== 'New Relation-Type';
   }
 
   pushNewRelationType(type): void {
     this.stateGroups.unshift({
-      optionName: 'New Pattern-Relation',
+      optionName: 'New Relation-Type',
       patternRelationTypes: [type],
     });
   }

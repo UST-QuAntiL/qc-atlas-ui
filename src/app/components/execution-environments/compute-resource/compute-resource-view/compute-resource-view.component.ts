@@ -51,6 +51,10 @@ export class ComputeResourceViewComponent implements OnInit {
     );
   }
 
+  ngOnDestroy(): void {
+    this.fieldUpdateSubscription.unsubscribe();
+  }
+
   updateComputeResourceField(fieldUpdate: FieldUpdate): void {
     this.computeResource[fieldUpdate.field] = fieldUpdate.value;
     this.executionEnvironmentsService

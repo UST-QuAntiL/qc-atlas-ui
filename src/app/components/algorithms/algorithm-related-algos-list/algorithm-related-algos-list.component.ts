@@ -139,7 +139,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         message:
           'Are you sure you want to delete the following algorithm relation(s):',
         data: event.elements,
-        variableName: 'name',
+        variableName: 'targetAlgName',
         yesButtonText: 'yes',
         noButtonText: 'no',
       },
