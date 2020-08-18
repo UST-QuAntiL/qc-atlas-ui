@@ -10,7 +10,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { ProblemTypeService } from 'api/services/problem-type.service';
+import { ProblemTypeService } from 'generated/api/services/problem-type.service';
 import { EntityModelProblemTypeDto } from 'generated/api/models';
 
 @Component({
@@ -101,17 +101,10 @@ export class AddProblemTypeDialogComponent implements OnInit {
 
   filterProblemTypes(value: string): EntityModelProblemTypeDto[] {
     if (value == null) {
-      return this.existingProblemTypes.filter(
-        (type) =>
-          !this.data.usedProblemTypes.some(
-            (usedType) => usedType.id === type.id
-          )
-      );
+      return this.existingProblemTypes;
     }
-    return this.existingProblemTypes.filter(
-      (type) =>
-        type.name.toLowerCase().includes(value.toLowerCase()) &&
-        !this.data.usedProblemTypes.some((usedType) => usedType.id === type.id)
+    return this.existingProblemTypes.filter((type) =>
+      type.name.toLowerCase().includes(value.toLowerCase())
     );
   }
 
@@ -135,5 +128,4 @@ export interface DialogData {
   name: string;
   selectedProblemType: EntityModelProblemTypeDto;
   parentProblemType: EntityModelProblemTypeDto;
-  usedProblemTypes: EntityModelProblemTypeDto[];
 }
