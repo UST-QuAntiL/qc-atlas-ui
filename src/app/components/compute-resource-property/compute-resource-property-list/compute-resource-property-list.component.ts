@@ -16,6 +16,7 @@ import { UtilService } from '../../../util/util.service';
   styleUrls: ['./compute-resource-property-list.component.scss'],
 })
 export class ComputeResourcePropertyListComponent implements OnInit {
+  @Input() title: string;
   @Input()
   resourceProperties: EntityModelComputeResourcePropertyDto[] = [];
 
