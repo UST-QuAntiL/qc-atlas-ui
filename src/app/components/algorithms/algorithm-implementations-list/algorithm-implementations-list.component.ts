@@ -4,7 +4,6 @@ import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
 import { EntityModelImplementationDto } from 'api/models/entity-model-implementation-dto';
 import { ImplementationDto } from 'api/models/implementation-dto';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
 import { UtilService } from '../../../util/util.service';
 import { CreateImplementationDialogComponent } from '../dialogs/create-implementation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -24,8 +23,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   constructor(
     private algorithmService: AlgorithmService,
     private utilService: UtilService,
-    private router: Router,
-    private dialog: MatDialog
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -81,16 +79,14 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   }
 
   onDeleteImplementation(event): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Confirm Deletion',
-        message:
-          'Are you sure you want to delete the following implementation(s):',
-        data: event.elements,
-        variableName: 'name',
-        yesButtonText: 'yes',
-        noButtonText: 'no',
-      },
+    const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
+      title: 'Confirm Deletion',
+      message:
+        'Are you sure you want to delete the following implementation(s):',
+      data: event.elements,
+      variableName: 'name',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
     });
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
