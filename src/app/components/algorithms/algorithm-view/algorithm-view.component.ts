@@ -40,9 +40,13 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       this.algorithmService.getAlgorithm({ algoId }).subscribe(
         (algo: EntityModelAlgorithmDto) => {
           this.algorithm = algo;
+          let subheading = this.algorithm.computationModel
+            .toString()
+            .toLowerCase();
+          subheading = subheading[0].toUpperCase() + subheading.slice(1);
           this.links[0] = {
             heading: this.algorithm.name,
-            subHeading: this.algorithm.computationModel + ' Algorithm',
+            subHeading: subheading + ' Algorithm',
           };
           this.getApplicationAreasForAlgorithm(algoId);
           this.getProblemTypesForAlgorithm(algoId);

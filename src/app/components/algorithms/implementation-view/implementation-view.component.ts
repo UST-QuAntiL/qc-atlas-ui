@@ -76,9 +76,12 @@ export class ImplementationViewComponent implements OnInit {
         this.utilService.callSnackBar('Successfully updated implementation');
       });
     // live refresh name
+    let subheading = this.algo.computationModel.toString().toLowerCase();
+    subheading =
+      subheading[0].toUpperCase() + subheading.slice(1) + ' Implementation';
     this.links[1] = {
       heading: this.impl.name,
-      subHeading: '',
+      subHeading: subheading,
     };
   }
 
@@ -198,21 +201,21 @@ export class ImplementationViewComponent implements OnInit {
     this.activatedRoute.params.subscribe(({ algoId, implId }) => {
       this.algorithmService.getAlgorithm({ algoId }).subscribe((algo) => {
         this.algo = algo;
+        let subheading = this.algo.computationModel.toString().toLowerCase();
+        subheading = subheading[0].toUpperCase() + subheading.slice(1);
         this.links[0] = {
           heading: this.algo.name,
-          subHeading: this.algo.computationModel + ' Algorithm',
+          subHeading: subheading + ' Algorithm',
           link: '/algorithms/' + algoId,
         };
+        this.links[1].subHeading = subheading + ' Implementation';
       });
 
       this.algorithmService
         .getImplementation({ algoId, implId })
         .subscribe((impl) => {
           this.impl = impl;
-          this.links[1] = {
-            heading: this.impl.name,
-            subHeading: '',
-          };
+          this.links[1].heading = this.impl.name;
           this.fetchComputeResourceProperties();
         });
     });
