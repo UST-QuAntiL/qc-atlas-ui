@@ -45,24 +45,20 @@
         <mat-label>Search Pattern Language by name</mat-label>
         <input matInput type="text" [(ngModel)]="patternLanguageSearch" [ngModelOptions]="{standalone: true}">
       </mat-form-field>
-      <div class="container">
-        <div class="row card-content">
-          <ng-container *ngFor="let language of patternLanguages">
-            <div class="m-1 col">
-              <mat-card>
-                <mat-card-header>
-                  <mat-card-title>{{ language.name }}</mat-card-title>
-                </mat-card-header>
-                <div class="image">
-                  <img mat-card-image src="{{ language.logo }}" class="img-responsive fit-image">
-                </div>
-                <mat-card-actions>
-                  <a mat-button href="{{ language.uri }}" target="_blank">URL</a>
-                </mat-card-actions>
-              </mat-card>
+      <div class="content-list">
+        <ng-container *ngFor="let language of patternLanguages">
+          <mat-card class="content">
+            <mat-card-header>
+              <mat-card-title><span>{{ language.name }}</span></mat-card-title>
+            </mat-card-header>
+            <div class="image">
+              <img mat-card-image src="{{ language.logo }}" class="fit-image">
             </div>
-          </ng-container>
-        </div>
+            <mat-card-actions>
+              <a mat-button href="{{ language.uri }}" target="_blank">URL</a>
+            </mat-card-actions>
+          </mat-card>
+        </ng-container>
       </div>
       <div>
         <button mat-button matStepperNext>Next</button>
