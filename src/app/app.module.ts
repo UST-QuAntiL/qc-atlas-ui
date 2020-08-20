@@ -50,7 +50,9 @@ import { ServicesModule } from './services/services.module';
     HttpClientModule,
     ReactiveFormsModule,
     AtlasAPIModule.forRoot({ rootUrl: environment.API_URL }),
-    PatternAltasAPIModule.forRoot({ rootUrl: environment.PATTERN_ATLAS_API_URL }),
+    PatternAltasAPIModule.forRoot({
+      rootUrl: environment.PATTERN_ATLAS_API_URL,
+    }),
     AppRoutingModule,
     // material modules
     MatSidenavModule,
