@@ -27,7 +27,8 @@ export class AddPatternRelationDialogComponent implements OnInit {
   stateGroups: StateGroup[] = [];
 
   // Pattern Language fields
-  patternLanguages: PatternLanguage[];
+  patternLanguages: PatternLanguage[] = [];
+  filteredPatternLanguages: PatternLanguage[] = [];
   selectedPatternLanguage: PatternLanguage = {};
   patternLanguageSearch = '';
 
@@ -116,6 +117,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
         const lng = JSON.parse(JSON.stringify(languages));
 
         this.patternLanguages = lng._embedded.patternLanguageModels;
+        this.filteredPatternLanguages = this.patternLanguages;
         this.patternLanguages.push(this.patternLanguages[0]);
         this.patternLanguages.push(this.patternLanguages[0]);
         this.patternLanguages.push(this.patternLanguages[0]);
@@ -227,6 +229,23 @@ export class AddPatternRelationDialogComponent implements OnInit {
       this.selectedPatternLanguage = {};
     } else {
       this.selectedPatternLanguage = language;
+    }
+  }
+
+  onLanguageSearch(): void {
+    this.filteredPatternLanguages = [];
+    if (!this.patternLanguageSearch) {
+      this.filteredPatternLanguages = this.patternLanguages;
+      return;
+    }
+    for (const language of this.patternLanguages) {
+      if (
+        language.name
+          .toLowerCase()
+          .includes(this.patternLanguageSearch.toLowerCase())
+      ) {
+        this.filteredPatternLanguages.push(language);
+      }
     }
   }
 }

@@ -43,10 +43,10 @@
       <ng-template matStepLabel>Choose Pattern Language</ng-template>
       <mat-form-field class="w-100">
         <mat-label>Search Pattern Language by name</mat-label>
-        <input matInput type="text" [(ngModel)]="patternLanguageSearch" [ngModelOptions]="{standalone: true}">
+        <input matInput type="text" [(ngModel)]="patternLanguageSearch" (ngModelChange)="onLanguageSearch()" [ngModelOptions]="{standalone: true}">
       </mat-form-field>
       <div class="content-list">
-        <ng-container *ngFor="let language of patternLanguages">
+        <ng-container *ngFor="let language of filteredPatternLanguages">
           <mat-card [class]="{'content-selected': language.id === selectedPatternLanguage.id}" class="content" (click)="onLanguageClick(language)">
             <mat-card-header>
               <mat-card-title><span>{{ language.name }}</span></mat-card-title>
@@ -54,14 +54,14 @@
             <div class="image">
               <img mat-card-image src="{{ language.logo }}" class="fit-image">
             </div>
-            <mat-card-actions>
+            <mat-card-actions (click)="$event.stopPropagation()">
               <a mat-button href="{{ language.uri }}" target="_blank">URL</a>
             </mat-card-actions>
           </mat-card>
         </ng-container>
       </div>
       <div>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button matStepperNext [disabled]="!selectedPatternLanguage.id">Next</button>
       </div>
     </form>
   </mat-step>
