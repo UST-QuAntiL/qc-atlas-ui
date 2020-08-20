@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api/models/entity-model-software-platform-dto';
+import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 
 @Component({

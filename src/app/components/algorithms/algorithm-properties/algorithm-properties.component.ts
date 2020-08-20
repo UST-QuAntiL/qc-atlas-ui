@@ -8,15 +8,15 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
+import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 import {
   EntityModelApplicationAreaDto,
   EntityModelComputeResourcePropertyDto,
   EntityModelProblemTypeDto,
-} from 'api/models';
-import { ProblemTypeService } from 'api/services/problem-type.service';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { ApplicationAreasService } from 'api/services/application-areas.service';
+} from 'api-atlas/models';
+import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import {
   FileNode,
   ProblemTypeTreeComponent,

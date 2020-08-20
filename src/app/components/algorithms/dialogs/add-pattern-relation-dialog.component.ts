@@ -6,10 +6,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { EntityModelPatternRelationTypeDto } from 'api/models/entity-model-pattern-relation-type-dto';
-import { PatternRelationTypeService } from 'api/services/pattern-relation-type.service';
-import { PatternRelationTypeDto } from 'api/models/pattern-relation-type-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { EntityModelPatternRelationTypeDto } from 'api-atlas/models/entity-model-pattern-relation-type-dto';
+import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
+import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
 
 @Component({
   selector: 'app-add-pattern-relation-dialog',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { BaseService } from 'api/base-service';
-import { ApiConfiguration } from 'api/api-configuration';
+import { BaseService } from 'api-atlas/base-service';
+import { ApiConfiguration } from 'api-atlas/api-configuration';
 
 @Injectable({
   providedIn: 'root',

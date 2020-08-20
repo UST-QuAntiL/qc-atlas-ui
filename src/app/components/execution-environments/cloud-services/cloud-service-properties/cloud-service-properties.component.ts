@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CloudServiceDto } from 'api/models/cloud-service-dto';
+import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 
 @Component({

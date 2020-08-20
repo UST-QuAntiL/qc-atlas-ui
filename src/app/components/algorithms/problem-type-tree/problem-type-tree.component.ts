@@ -11,7 +11,7 @@ import {
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
-import { EntityModelProblemTypeDto } from 'generated/api/models/entity-model-problem-type-dto';
+import { EntityModelProblemTypeDto } from 'generated/api-atlas/models/entity-model-problem-type-dto';
 
 export class FileNode {
   problemType: EntityModelProblemTypeDto;

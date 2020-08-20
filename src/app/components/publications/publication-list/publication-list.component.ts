@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { PublicationService } from 'api/services/publication.service';
-import { PublicationDto } from 'api/models/publication-dto';
-import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
+import { PublicationService } from 'api-atlas/services/publication.service';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
+import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
 import {

@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
-import { AlgorithmService } from 'api/services/algorithm.service';
+import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { EntityModelApplicationAreaDto } from 'api/models/entity-model-application-area-dto';
-import { ApplicationAreasService } from 'api/services/application-areas.service';
-import { EntityModelProblemTypeDto } from 'api/models/entity-model-problem-type-dto';
-import { ProblemTypeService } from 'api/services/problem-type.service';
-import { ProblemTypeDto } from 'api/models/problem-type-dto';
+import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
+import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
+import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
+import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
+import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
 
