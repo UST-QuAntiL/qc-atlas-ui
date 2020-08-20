@@ -1,94 +1,117 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
-<!-- <div mat-dialog-content>
-  <form [formGroup]="patternRelationForm">
-    <mat-form-field class="input-field">
-      <mat-label>Pattern</mat-label>
-      <input formControlName="pattern" placeholder="blog.cdemi.io/design-patterns-competing-consumer-pattern" matInput
-             required>
+
+<mat-horizontal-stepper linear #stepper>
+  <mat-step>
+    <ng-template matStepLabel>Choose Pattern Language</ng-template>
+    <mat-form-field class="w-100">
+      <mat-label>Search Pattern Language by name</mat-label>
+      <input matInput type="text" [(ngModel)]="patternLanguageSearch" (ngModelChange)="onLanguageSearch()">
     </mat-form-field>
-    <mat-form-field class="input-field">
+    <div class="content-list">
+      <ng-container *ngFor="let language of filteredPatternLanguages">
+        <mat-card
+          [class]="{'content-selected': (selectedPatternLanguage && language.id === selectedPatternLanguage.id)}"
+          class="content"
+          (click)="onLanguageClick(language)">
+          <mat-card-header>
+            <mat-card-title><span>{{ language.name }}</span></mat-card-title>
+          </mat-card-header>
+          <div class="image">
+            <img mat-card-image src="{{ language.logo }}" class="fit-image">
+          </div>
+          <mat-card-actions (click)="$event.stopPropagation()">
+            <a mat-button href="{{ language.uri }}" target="_blank">URL</a>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+    </div>
+    <div>
+      <button mat-button matStepperNext [disabled]="!selectedPatternLanguage"
+              (click)="getPatterns(selectedPatternLanguage.id)">Next
+      </button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Choose Pattern</ng-template>
+    <mat-form-field class="w-100">
+      <mat-label>Search Pattern by name</mat-label>
+      <input matInput type="text" [(ngModel)]="patternSearch" (ngModelChange)="onPatternSearch()">
+    </mat-form-field>
+    <div class="content-list">
+      <ng-container *ngFor="let pattern of filteredPatterns">
+        <mat-card [class]="{'content-selected': (selectedPattern && pattern.id === selectedPattern.id)}" class="content"
+                  (click)="onPatternClick(pattern)">
+          <mat-card-header>
+            <mat-card-title><span>{{ pattern.name }}</span></mat-card-title>
+          </mat-card-header>
+          <div class="image">
+            <img mat-card-image src="{{ pattern.iconUrl }}" class="fit-image">
+          </div>
+          <mat-card-actions (click)="$event.stopPropagation()">
+            <a mat-button href="{{ pattern.uri }}" target="_blank">URL</a>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+    </div>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext [disabled]="!selectedPatternLanguage || !selectedPattern"
+              (click)="getRelationTypes()">Next
+      </button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Describe Relationship</ng-template>
+    <mat-form-field class="w-100">
       <mat-label>Description</mat-label>
-      <textarea formControlName="description" matInput required></textarea>
+      <textarea matInput [(ngModel)]="relationDescription" placeholder="Describe the relation" reqired></textarea>
     </mat-form-field>
-    <mat-form-field class="input-field">
+    <mat-form-field class="w-100">
       <mat-label>Relation Type</mat-label>
       <input
-        formControlName="patternRelationType"
         [matAutocomplete]="relationType"
-        placeholder="Competing Consumer"
-        (ngModelChange)="onPatternRelationInputChanged()"
+        [(ngModel)]="relationTypeSearch"
+        (ngModelChange)="onRelationTypeSearch()"
+        (focusout)="!selectedRelationType && onRelationTypeFocusOut()"
         matInput
         required>
-      <mat-autocomplete #relationType="matAutocomplete" (optionSelected)="setPatternRelationType($event.option.value)" [displayWith]="displayRelation">
+      <mat-autocomplete #relationType="matAutocomplete" (optionSelected)="setRelationType($event.option.value)"
+                        [displayWith]="displayRelation">
         <mat-optgroup *ngFor="let stateGroup of stateGroups" [label]="stateGroup.optionName">
           <mat-option
-            *ngFor="let type of stateGroup.patternRelationTypes"
-            [value]="type"
-            (click)="setPatternRelationType(type)">
+            *ngFor="let type of stateGroup.relationTypes"
+            [value]="type">
             {{type.name}}
           </mat-option>
         </mat-optgroup>
       </mat-autocomplete>
     </mat-form-field>
-  </form>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok</button>
-</div> -->
-
-<mat-horizontal-stepper linear #stepper>
-  <mat-step [stepControl]="patternLanguageForm">
-    <form [formGroup]="patternForm">
-      <ng-template matStepLabel>Choose Pattern Language</ng-template>
-      <mat-form-field class="w-100">
-        <mat-label>Search Pattern Language by name</mat-label>
-        <input matInput type="text" [(ngModel)]="patternLanguageSearch" (ngModelChange)="onLanguageSearch()" [ngModelOptions]="{standalone: true}">
-      </mat-form-field>
-      <div class="content-list">
-        <ng-container *ngFor="let language of filteredPatternLanguages">
-          <mat-card [class]="{'content-selected': language.id === selectedPatternLanguage.id}" class="content" (click)="onLanguageClick(language)">
-            <mat-card-header>
-              <mat-card-title><span>{{ language.name }}</span></mat-card-title>
-            </mat-card-header>
-            <div class="image">
-              <img mat-card-image src="{{ language.logo }}" class="fit-image">
-            </div>
-            <mat-card-actions (click)="$event.stopPropagation()">
-              <a mat-button href="{{ language.uri }}" target="_blank">URL</a>
-            </mat-card-actions>
-          </mat-card>
-        </ng-container>
-      </div>
-      <div>
-        <button mat-button matStepperNext [disabled]="!selectedPatternLanguage.id">Next</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="patternForm">
-    <form [formGroup]="patternForm">
-      <ng-template matStepLabel>Choose Pattern</ng-template>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="patternRelationForm">
-    <form [formGroup]="patternRelationForm">
-      <ng-template matStepLabel>Add Details</ng-template>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext
+              [disabled]="!selectedPatternLanguage || !selectedPattern || !selectedRelationType || !relationDescription">
+        Next
+      </button>
+    </div>
   </mat-step>
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
+    <ng-template matStepLabel>Verify</ng-template>
+    <mat-form-field *ngIf="relationDescription" class="w-100">
+      <mat-label>Description</mat-label>
+      <textarea matInput [(ngModel)]="relationDescription" readonly></textarea>
+    </mat-form-field>
+    <mat-form-field *ngIf="selectedRelationType" class="w-100">
+      <mat-label>Relation Type</mat-label>
+      <input matInput [(ngModel)]="selectedRelationType.name" readonly>
+    </mat-form-field>
+    <mat-form-field *ngIf="selectedPattern" class="w-100">
+      <mat-label>Pattern</mat-label>
+      <input matInput [(ngModel)]="selectedPattern.name" readonly>
+    </mat-form-field>
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-button [mat-dialog-close]="data" >Confirm</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

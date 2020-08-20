@@ -143,7 +143,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
   onElementClicked(event): void {
     const dialogRef = this.dialog.open(AddPatternRelationDialogComponent, {
-      width: '400px',
+      width: '1000px',
       data: {
         title: 'Edit pattern relation',
         algoId: this.algorithm.id,
