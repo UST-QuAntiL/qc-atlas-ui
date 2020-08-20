@@ -8,9 +8,16 @@
       <span (click)="goToHome()">QC Atlas</span>
     </mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item (click)="collapseContent.hide()" [routerLink]="'./algorithms'" routerLinkActive="routerLinkActive">
+      <a mat-list-item (click)="algorithmCollapse.toggle()" [routerLink]="'./algorithms'" routerLinkActive="routerLinkActive">
         Algorithms
+        <mat-icon class="collapse-arrow-icon">{{ algorithmCollapse.isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
       </a>
+      <div mat-list-item mdbCollapse #algorithmCollapse="bs-collapse">
+        <a class="sub-tab" mat-list-item [routerLink]="'./problem-types'"
+           routerLinkActive="routerLinkActive">
+          <span class="pl-3">Manage Problem Types</span>
+        </a>
+      </div>
       <a mat-list-item (click)="collapseContent.hide()" [routerLink]="'./publications'" routerLinkActive="routerLinkActive">
         Publications
       </a>
