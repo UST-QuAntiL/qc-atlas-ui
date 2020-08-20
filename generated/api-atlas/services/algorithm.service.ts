@@ -13,7 +13,6 @@ import { AlgorithmDto } from '../models/algorithm-dto';
 import { AlgorithmRelationDto } from '../models/algorithm-relation-dto';
 import { ApplicationAreaDto } from '../models/application-area-dto';
 import { ClassicAlgorithmDto } from '../models/classic-algorithm-dto';
-import { ClassicImplementationDto } from '../models/classic-implementation-dto';
 import { ComputeResourcePropertyDto } from '../models/compute-resource-property-dto';
 import { ComputeResourcePropertyTypeDto } from '../models/compute-resource-property-type-dto';
 import { EntityModelAlgorithmDto } from '../models/entity-model-algorithm-dto';
@@ -33,7 +32,6 @@ import { PatternRelationTypeDto } from '../models/pattern-relation-type-dto';
 import { ProblemTypeDto } from '../models/problem-type-dto';
 import { PublicationDto } from '../models/publication-dto';
 import { QuantumAlgorithmDto } from '../models/quantum-algorithm-dto';
-import { QuantumImplementationDto } from '../models/quantum-implementation-dto';
 import { SoftwarePlatformDto } from '../models/software-platform-dto';
 
 @Injectable({
@@ -1732,12 +1730,19 @@ export class AlgorithmService extends BaseService {
     algoId: string;
     body: ImplementationDto;
   }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      link?: string;
+      inputFormat?: string;
+      outputFormat?: string;
+      description?: string;
+      contributors?: string;
+      assumptions?: string;
+      parameter?: string;
+      dependencies?: string;
+      _links?: Array<Link>;
+    }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -1759,12 +1764,19 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>;
         })
       );
   }
@@ -1780,26 +1792,49 @@ export class AlgorithmService extends BaseService {
   createImplementation(params: {
     algoId: string;
     body: ImplementationDto;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<{
+    id?: string;
+    name: string;
+    link?: string;
+    inputFormat?: string;
+    outputFormat?: string;
+    description?: string;
+    contributors?: string;
+    assumptions?: string;
+    parameter?: string;
+    dependencies?: string;
+    _links?: Array<Link>;
+  }> {
     return this.createImplementation$Response(params).pipe(
       map(
         (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>
         ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+          r.body as {
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }
       )
     );
   }
@@ -1822,12 +1857,19 @@ export class AlgorithmService extends BaseService {
     algoId: string;
     implId: string;
   }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      link?: string;
+      inputFormat?: string;
+      outputFormat?: string;
+      description?: string;
+      contributors?: string;
+      assumptions?: string;
+      parameter?: string;
+      dependencies?: string;
+      _links?: Array<Link>;
+    }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -1848,12 +1890,19 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>;
         })
       );
   }
@@ -1869,26 +1918,49 @@ export class AlgorithmService extends BaseService {
   getImplementation(params: {
     algoId: string;
     implId: string;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<{
+    id?: string;
+    name: string;
+    link?: string;
+    inputFormat?: string;
+    outputFormat?: string;
+    description?: string;
+    contributors?: string;
+    assumptions?: string;
+    parameter?: string;
+    dependencies?: string;
+    _links?: Array<Link>;
+  }> {
     return this.getImplementation$Response(params).pipe(
       map(
         (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>
         ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+          r.body as {
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }
       )
     );
   }
@@ -1912,12 +1984,19 @@ export class AlgorithmService extends BaseService {
     implId: string;
     body: ImplementationDto;
   }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      link?: string;
+      inputFormat?: string;
+      outputFormat?: string;
+      description?: string;
+      contributors?: string;
+      assumptions?: string;
+      parameter?: string;
+      dependencies?: string;
+      _links?: Array<Link>;
+    }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -1940,12 +2019,19 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>;
         })
       );
   }
@@ -1962,26 +2048,49 @@ export class AlgorithmService extends BaseService {
     algoId: string;
     implId: string;
     body: ImplementationDto;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<{
+    id?: string;
+    name: string;
+    link?: string;
+    inputFormat?: string;
+    outputFormat?: string;
+    description?: string;
+    contributors?: string;
+    assumptions?: string;
+    parameter?: string;
+    dependencies?: string;
+    _links?: Array<Link>;
+  }> {
     return this.updateImplementation$Response(params).pipe(
       map(
         (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>
         ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+          r.body as {
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }
       )
     );
   }

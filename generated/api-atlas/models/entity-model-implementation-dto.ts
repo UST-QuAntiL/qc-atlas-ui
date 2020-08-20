@@ -1,6 +1,6 @@
 /* tslint:disable */
-import { ClassicAlgorithmDto } from './classic-algorithm-dto';
-export type ClassicImplementationDto = {
+import { Link } from './link';
+export type EntityModelImplementationDto = {
   id?: string;
   name: string;
   link?: string;
@@ -11,5 +11,5 @@ export type ClassicImplementationDto = {
   assumptions?: string;
   parameter?: string;
   dependencies?: string;
-  algorithm?: ClassicAlgorithmDto;
+  _links?: Array<Link>;
 };
