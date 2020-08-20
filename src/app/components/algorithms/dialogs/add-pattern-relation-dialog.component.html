@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
-<div mat-dialog-content>
+<!-- <div mat-dialog-content>
   <form [formGroup]="patternRelationForm">
     <mat-form-field class="input-field">
       <mat-label>Pattern</mat-label>
@@ -35,4 +35,64 @@
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>
   <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok</button>
-</div>
+</div> -->
+
+<mat-horizontal-stepper linear #stepper>
+  <mat-step [stepControl]="patternLanguageForm">
+    <form [formGroup]="patternForm">
+      <ng-template matStepLabel>Choose Pattern Language</ng-template>
+      <mat-form-field class="w-100">
+        <mat-label>Search Pattern Language by name</mat-label>
+        <input matInput type="text" [(ngModel)]="patternLanguageSearch" [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+      <div class="container">
+        <div class="row card-content">
+          <ng-container *ngFor="let language of patternLanguages">
+            <div class="m-1 col">
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>{{ language.name }}</mat-card-title>
+                </mat-card-header>
+                <div class="image">
+                  <img mat-card-image src="{{ language.logo }}" class="img-responsive fit-image">
+                </div>
+                <mat-card-actions>
+                  <a mat-button href="{{ language.uri }}" target="_blank">URL</a>
+                </mat-card-actions>
+              </mat-card>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="patternForm">
+    <form [formGroup]="patternForm">
+      <ng-template matStepLabel>Choose Pattern</ng-template>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="patternRelationForm">
+    <form [formGroup]="patternRelationForm">
+      <ng-template matStepLabel>Add Details</ng-template>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

@@ -10,6 +10,9 @@ import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { EntityModelPatternRelationTypeDto } from 'api-atlas/models/entity-model-pattern-relation-type-dto';
 import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
 import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
+import { PatternLanguage } from 'api-patternpedia/models/pattern-language';
+import { Pattern } from 'api-patternpedia/models/pattern';
+import { PatternLanguageControllerService } from 'api-patternpedia/services/pattern-language-controller.service';
 
 @Component({
   selector: 'app-add-pattern-relation-dialog',
@@ -17,19 +20,54 @@ import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-d
   styleUrls: ['./add-pattern-relation-dialog.component.scss'],
 })
 export class AddPatternRelationDialogComponent implements OnInit {
+  patternLanguageForm: FormGroup;
+  patternForm: FormGroup;
   patternRelationForm: FormGroup;
   patternRelationTypes: EntityModelPatternRelationTypeDto[] = [];
   stateGroups: StateGroup[] = [];
 
+  // Pattern Language fields
+  patternLanguages: PatternLanguage[];
+  patternLanguage: PatternLanguage;
+  patternLanguageSearch = '';
+
+  somePattern: Pattern;
+
   constructor(
     private algorithmService: AlgorithmService,
     private patternRelationTypeService: PatternRelationTypeService,
+    private patternLanguageService: PatternLanguageControllerService,
     public dialogRef: MatDialogRef<AddPatternRelationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
 
   ngOnInit(): void {
+    this.patternLanguageForm = new FormGroup({
+      patternLanguage: new FormControl(this.patternLanguage, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+    });
+    this.patternForm = new FormGroup({
+      pattern: new FormControl(this.somePattern, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+    });
     this.patternRelationForm = new FormGroup({
+      relationType: new FormControl(this.data.patternRelationType, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+      description: new FormControl(this.data.description, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+    });
+
+    this.getPatternLanguages();
+
+    /* this.patternRelationForm = new FormGroup({
       description: new FormControl(this.data.description),
       // eslint-disable-next-line @typescript-eslint/unbound-method
       pattern: new FormControl(this.data.pattern, [Validators.required]),
@@ -37,7 +75,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-    });
+    }); */
 
     // Fill PatternRelationType if dialog is used for editing
     if (this.data.patternRelationType) {
@@ -68,6 +106,23 @@ export class AddPatternRelationDialogComponent implements OnInit {
         this.patternRelationType.value
       );
     });
+  }
+
+  getPatternLanguages(): void {
+    this.patternLanguageService
+      .getAllPatternLanguages()
+      .subscribe((languages) => {
+        // TODO: Check if this can be avoided
+        const lng = JSON.parse(JSON.stringify(languages));
+
+        this.patternLanguages = lng._embedded.patternLanguageModels;
+        this.patternLanguages.push(this.patternLanguages[0]);
+        this.patternLanguages.push(this.patternLanguages[0]);
+        this.patternLanguages.push(this.patternLanguages[0]);
+        this.patternLanguages.push(this.patternLanguages[0]);
+        this.patternLanguages.push(this.patternLanguages[0]);
+        console.log(this.patternLanguages);
+      });
   }
 
   filterTypes(type: string): void {

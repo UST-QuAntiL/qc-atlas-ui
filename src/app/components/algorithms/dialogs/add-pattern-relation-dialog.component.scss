@@ -1,0 +1,11 @@
+.card-content {
+  height: 500px;
+  width: 800px;
+  overflow-x: auto;
+}
+
+.fit-image {
+  width: 50%;
+  object-fit: cover;
+  height: 200px; /* only if you want fixed height */
+}

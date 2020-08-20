@@ -14,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTreeModule } from '@angular/material/tree';
 import { CardsModule } from 'angular-bootstrap-md';
+import { MatStepperModule } from '@angular/material/stepper';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
@@ -71,6 +72,7 @@ import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-rel
     ComputeResourcePropertyModule,
     CardsModule,
     NisqAnalyzerModule,
+    MatStepperModule,
   ],
   exports: [
     AlgorithmListComponent,
