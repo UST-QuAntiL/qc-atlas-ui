@@ -1,7 +1,9 @@
+@import "theme";
+
 .content-list {
   display: inline-grid;
   grid-auto-flow: column;
-  grid-gap: 10px;
+  grid-gap: 20px;
   height: 400px;
   width: 800px;
   overflow-x: auto;
@@ -11,11 +13,30 @@
 .content {
   width: 300px;
   height: 300px;
+  left: 10px;
+  top: 10px;
+}
+
+.content:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.content-selected {
+  border-color: mat-color($qc-atlas-ui-primary);
+  border-style: solid;
+  border-width: 2px;
 }
 
 span {
   font-size: 15px;
   font-weight: bold;
+}
+
+.image {
+  position: relative;
+  text-align: center;
+  align-content: center;
 }
 
 .fit-image {

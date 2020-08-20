@@ -28,7 +28,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
 
   // Pattern Language fields
   patternLanguages: PatternLanguage[];
-  patternLanguage: PatternLanguage;
+  selectedPatternLanguage: PatternLanguage = {};
   patternLanguageSearch = '';
 
   somePattern: Pattern;
@@ -43,7 +43,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.patternLanguageForm = new FormGroup({
-      patternLanguage: new FormControl(this.patternLanguage, [
+      patternLanguage: new FormControl(this.selectedPatternLanguage, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
@@ -220,6 +220,14 @@ export class AddPatternRelationDialogComponent implements OnInit {
       this.patternRelationType.errors?.required ||
       this.description.errors?.required
     );
+  }
+
+  onLanguageClick(language: PatternLanguage): void {
+    if (language.id === this.selectedPatternLanguage.id) {
+      this.selectedPatternLanguage = {};
+    } else {
+      this.selectedPatternLanguage = language;
+    }
   }
 }
 

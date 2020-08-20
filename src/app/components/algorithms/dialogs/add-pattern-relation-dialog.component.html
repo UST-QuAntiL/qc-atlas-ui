@@ -47,7 +47,7 @@
       </mat-form-field>
       <div class="content-list">
         <ng-container *ngFor="let language of patternLanguages">
-          <mat-card class="content">
+          <mat-card [class]="{'content-selected': language.id === selectedPatternLanguage.id}" class="content" (click)="onLanguageClick(language)">
             <mat-card-header>
               <mat-card-title><span>{{ language.name }}</span></mat-card-title>
             </mat-card-header>
