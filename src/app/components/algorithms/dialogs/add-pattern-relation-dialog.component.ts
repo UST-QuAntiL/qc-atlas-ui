@@ -53,11 +53,12 @@ export class AddPatternRelationDialogComponent implements OnInit {
   ngOnInit(): void {
     this.getPatternLanguages();
 
-    if (this.isAllDataAvailable()) {
+    // TODO: Check if endpoint can be added to get pattern + pattern via pattern-uri
+    /* if (this.isAllDataAvailable()) {
       this.relationDescription = this.data.description;
       this.selectedRelationType = this.data.patternRelationType;
       this.relationTypeSearch = this.data.patternRelationType.name;
-    }
+    } */
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.pattern = this.selectedPattern.uri;

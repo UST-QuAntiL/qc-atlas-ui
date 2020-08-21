@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 
-<mat-horizontal-stepper linear #stepper>
-  <mat-step>
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step [completed]="selectedPatternLanguage">
     <ng-template matStepLabel>Choose Pattern Language</ng-template>
     <div *ngIf="!arePatternLanguagesLoaded" class="w-100 row d-flex justify-content-center">
       <mat-spinner></mat-spinner>
@@ -36,7 +36,7 @@
       </button>
     </div>
   </mat-step>
-  <mat-step>
+  <mat-step [completed]="selectedPatternLanguage && selectedPattern">
     <ng-template matStepLabel>Choose Pattern</ng-template>
     <div *ngIf="!arePatternsLoaded" class="w-100 row d-flex justify-content-center">
       <mat-spinner></mat-spinner>
@@ -70,7 +70,7 @@
       </button>
     </div>
   </mat-step>
-  <mat-step>
+  <mat-step [completed]="selectedPatternLanguage && selectedPattern && selectedRelationType && relationDescription">
     <ng-template matStepLabel>Describe Relationship</ng-template>
     <div *ngIf="!areRelationTypesLoaded" class="w-100 row d-flex justify-content-center">
       <mat-spinner></mat-spinner>
