@@ -17,8 +17,8 @@
             [class]="{'content-selected': (selectedPatternLanguage && language.id === selectedPatternLanguage.id)}"
             class="content"
             (click)="onLanguageClick(language)">
-            <mat-card-header>
-              <mat-card-title><span>{{ language.name }}</span></mat-card-title>
+            <mat-card-header class="d-flex justify-content-center">
+              <mat-card-title><div class="w-100 content-title">{{ language.name }}</div></mat-card-title>
             </mat-card-header>
             <div class="image">
               <img mat-card-image src="{{ language.logo }}" class="fit-image">
@@ -54,8 +54,8 @@
         <ng-container *ngFor="let pattern of filteredPatterns">
           <mat-card [class]="{'content-selected': (selectedPattern && pattern.id === selectedPattern.id)}" class="content"
                     (click)="onPatternClick(pattern)">
-            <mat-card-header>
-              <mat-card-title><span>{{ pattern.name }}</span></mat-card-title>
+            <mat-card-header class="d-flex justify-content-center">
+              <mat-card-title><div class="w-100 content-title">{{ pattern.name }}</div></mat-card-title>
             </mat-card-header>
             <div class="image">
               <img mat-card-image src="{{ pattern.iconUrl }}" class="fit-image">
