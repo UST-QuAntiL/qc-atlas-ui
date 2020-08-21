@@ -34,6 +34,11 @@ span {
   font-weight: bold;
 }
 
+mat-icon:hover {
+  color: mat-color($qc-atlas-ui-primary);
+  transform: scale(1.05);
+}
+
 .image {
   position: relative;
   text-align: center;

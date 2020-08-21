@@ -24,7 +24,11 @@
               <img mat-card-image src="{{ language.logo }}" class="fit-image">
             </div>
             <mat-card-actions (click)="$event.stopPropagation()">
-              <a mat-button href="{{ language.uri }}" target="_blank">URL</a>
+              <div class="d-flex justify-content-center">
+                <a mat-icon-button href="{{ language.uri }}" target="_blank" aria-label="Open pattern in new tab">
+                  <mat-icon>open_in_browser</mat-icon>
+                </a>
+              </div>
             </mat-card-actions>
           </mat-card>
         </ng-container>
@@ -51,13 +55,17 @@
           <mat-card [class]="{'content-selected': (selectedPattern && pattern.id === selectedPattern.id)}" class="content"
                     (click)="onPatternClick(pattern)">
             <mat-card-header>
-              <mat-card-title><span>{{ pattern.name }}</span></mat-card-title>
+              <mat-card-title><span class="text-justify">{{ pattern.name }}</span></mat-card-title>
             </mat-card-header>
             <div class="image">
               <img mat-card-image src="{{ pattern.iconUrl }}" class="fit-image">
             </div>
             <mat-card-actions (click)="$event.stopPropagation()">
-              <a mat-button href="{{ pattern.uri }}" target="_blank">URL</a>
+              <div class="d-flex justify-content-center">
+                <a mat-icon-button href="{{ pattern.uri }}" target="_blank" aria-label="Open pattern in new tab">
+                  <mat-icon>open_in_browser</mat-icon>
+                </a>
+              </div>
             </mat-card-actions>
           </mat-card>
         </ng-container>
