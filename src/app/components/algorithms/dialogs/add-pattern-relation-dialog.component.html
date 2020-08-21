@@ -3,27 +3,32 @@
 <mat-horizontal-stepper linear #stepper>
   <mat-step>
     <ng-template matStepLabel>Choose Pattern Language</ng-template>
-    <mat-form-field class="w-100">
-      <mat-label>Search Pattern Language by name</mat-label>
-      <input matInput type="text" [(ngModel)]="patternLanguageSearch" (ngModelChange)="onLanguageSearch()">
-    </mat-form-field>
-    <div class="content-list">
-      <ng-container *ngFor="let language of filteredPatternLanguages">
-        <mat-card
-          [class]="{'content-selected': (selectedPatternLanguage && language.id === selectedPatternLanguage.id)}"
-          class="content"
-          (click)="onLanguageClick(language)">
-          <mat-card-header>
-            <mat-card-title><span>{{ language.name }}</span></mat-card-title>
-          </mat-card-header>
-          <div class="image">
-            <img mat-card-image src="{{ language.logo }}" class="fit-image">
-          </div>
-          <mat-card-actions (click)="$event.stopPropagation()">
-            <a mat-button href="{{ language.uri }}" target="_blank">URL</a>
-          </mat-card-actions>
-        </mat-card>
-      </ng-container>
+    <div *ngIf="!arePatternLanguagesLoaded" class="w-100 row d-flex justify-content-center">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="arePatternLanguagesLoaded">
+      <mat-form-field class="w-100">
+        <mat-label>Search Pattern Language by name</mat-label>
+        <input matInput type="text" [(ngModel)]="patternLanguageSearch" (ngModelChange)="onLanguageSearch()">
+      </mat-form-field>
+      <div class="content-list">
+        <ng-container *ngFor="let language of filteredPatternLanguages">
+          <mat-card
+            [class]="{'content-selected': (selectedPatternLanguage && language.id === selectedPatternLanguage.id)}"
+            class="content"
+            (click)="onLanguageClick(language)">
+            <mat-card-header>
+              <mat-card-title><span>{{ language.name }}</span></mat-card-title>
+            </mat-card-header>
+            <div class="image">
+              <img mat-card-image src="{{ language.logo }}" class="fit-image">
+            </div>
+            <mat-card-actions (click)="$event.stopPropagation()">
+              <a mat-button href="{{ language.uri }}" target="_blank">URL</a>
+            </mat-card-actions>
+          </mat-card>
+        </ng-container>
+      </div>
     </div>
     <div>
       <button mat-button matStepperNext [disabled]="!selectedPatternLanguage"
@@ -33,25 +38,30 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Choose Pattern</ng-template>
-    <mat-form-field class="w-100">
-      <mat-label>Search Pattern by name</mat-label>
-      <input matInput type="text" [(ngModel)]="patternSearch" (ngModelChange)="onPatternSearch()">
-    </mat-form-field>
-    <div class="content-list">
-      <ng-container *ngFor="let pattern of filteredPatterns">
-        <mat-card [class]="{'content-selected': (selectedPattern && pattern.id === selectedPattern.id)}" class="content"
-                  (click)="onPatternClick(pattern)">
-          <mat-card-header>
-            <mat-card-title><span>{{ pattern.name }}</span></mat-card-title>
-          </mat-card-header>
-          <div class="image">
-            <img mat-card-image src="{{ pattern.iconUrl }}" class="fit-image">
-          </div>
-          <mat-card-actions (click)="$event.stopPropagation()">
-            <a mat-button href="{{ pattern.uri }}" target="_blank">URL</a>
-          </mat-card-actions>
-        </mat-card>
-      </ng-container>
+    <div *ngIf="!arePatternsLoaded" class="w-100 row d-flex justify-content-center">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="arePatternsLoaded">
+      <mat-form-field class="w-100">
+        <mat-label>Search Pattern by name</mat-label>
+        <input matInput type="text" [(ngModel)]="patternSearch" (ngModelChange)="onPatternSearch()">
+      </mat-form-field>
+      <div class="content-list">
+        <ng-container *ngFor="let pattern of filteredPatterns">
+          <mat-card [class]="{'content-selected': (selectedPattern && pattern.id === selectedPattern.id)}" class="content"
+                    (click)="onPatternClick(pattern)">
+            <mat-card-header>
+              <mat-card-title><span>{{ pattern.name }}</span></mat-card-title>
+            </mat-card-header>
+            <div class="image">
+              <img mat-card-image src="{{ pattern.iconUrl }}" class="fit-image">
+            </div>
+            <mat-card-actions (click)="$event.stopPropagation()">
+              <a mat-button href="{{ pattern.uri }}" target="_blank">URL</a>
+            </mat-card-actions>
+          </mat-card>
+        </ng-container>
+      </div>
     </div>
     <div>
       <button mat-button matStepperPrevious>Back</button>
@@ -62,30 +72,35 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Describe Relationship</ng-template>
-    <mat-form-field class="w-100">
-      <mat-label>Description</mat-label>
-      <textarea matInput [(ngModel)]="relationDescription" placeholder="Describe the relation" reqired></textarea>
-    </mat-form-field>
-    <mat-form-field class="w-100">
-      <mat-label>Relation Type</mat-label>
-      <input
-        [matAutocomplete]="relationType"
-        [(ngModel)]="relationTypeSearch"
-        (ngModelChange)="onRelationTypeSearch()"
-        (focusout)="!selectedRelationType && onRelationTypeFocusOut()"
-        matInput
-        required>
-      <mat-autocomplete #relationType="matAutocomplete" (optionSelected)="setRelationType($event.option.value)"
-                        [displayWith]="displayRelation">
-        <mat-optgroup *ngFor="let stateGroup of stateGroups" [label]="stateGroup.optionName">
-          <mat-option
-            *ngFor="let type of stateGroup.relationTypes"
-            [value]="type">
-            {{type.name}}
-          </mat-option>
-        </mat-optgroup>
-      </mat-autocomplete>
-    </mat-form-field>
+    <div *ngIf="!areRelationTypesLoaded" class="w-100 row d-flex justify-content-center">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="areRelationTypesLoaded">
+      <mat-form-field class="w-100">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="relationDescription" placeholder="Describe the relation" reqired></textarea>
+      </mat-form-field>
+      <mat-form-field class="w-100">
+        <mat-label>Relation Type</mat-label>
+        <input
+          [matAutocomplete]="relationType"
+          [(ngModel)]="relationTypeSearch"
+          (ngModelChange)="onRelationTypeSearch()"
+          (focusout)="!selectedRelationType && onRelationTypeFocusOut()"
+          matInput
+          required>
+        <mat-autocomplete #relationType="matAutocomplete" (optionSelected)="setRelationType($event.option.value)"
+                          [displayWith]="displayRelation">
+          <mat-optgroup *ngFor="let stateGroup of stateGroups" [label]="stateGroup.optionName">
+            <mat-option
+              *ngFor="let type of stateGroup.relationTypes"
+              [value]="type">
+              {{type.name}}
+            </mat-option>
+          </mat-optgroup>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button matStepperNext
@@ -111,7 +126,7 @@
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button (click)="stepper.reset()">Reset</button>
-      <button mat-button [mat-dialog-close]="data" >Confirm</button>
+      <button mat-button [mat-dialog-close]="data">Confirm</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

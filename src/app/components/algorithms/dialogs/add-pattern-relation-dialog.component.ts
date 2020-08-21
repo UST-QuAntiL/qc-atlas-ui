@@ -36,6 +36,11 @@ export class AddPatternRelationDialogComponent implements OnInit {
   selectedRelationType: PatternRelationTypeDto = undefined;
   relationTypeSearch: any = '';
 
+  // Loading fields
+  arePatternLanguagesLoaded = false;
+  arePatternsLoaded = false;
+  areRelationTypesLoaded = false;
+
   constructor(
     private algorithmService: AlgorithmService,
     private patternRelationTypeService: PatternRelationTypeService,
@@ -75,6 +80,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
   }
 
   getPatternLanguages(): void {
+    this.arePatternLanguagesLoaded = false;
     this.patternLanguageService
       .getAllPatternLanguages()
       .subscribe((languages) => {
@@ -82,10 +88,12 @@ export class AddPatternRelationDialogComponent implements OnInit {
         const lng = JSON.parse(JSON.stringify(languages));
         this.patternLanguages = lng._embedded.patternLanguageModels;
         this.filteredPatternLanguages = this.patternLanguages;
+        this.arePatternLanguagesLoaded = true;
       });
   }
 
   getPatterns(patternLanguageId: string): void {
+    this.arePatternsLoaded = false;
     this.patternService
       .getPatternsOfPatternLanguage({ patternLanguageId })
       .subscribe((patterns) => {
@@ -93,10 +101,12 @@ export class AddPatternRelationDialogComponent implements OnInit {
         const pat = JSON.parse(JSON.stringify(patterns));
         this.patterns = pat._embedded.patternModels;
         this.filteredPatterns = this.patterns;
+        this.arePatternsLoaded = true;
       });
   }
 
   getRelationTypes(): void {
+    this.areRelationTypesLoaded = false;
     this.patternRelationTypeService
       .getPatternRelationTypes({})
       .subscribe((relationTypes) => {
@@ -108,6 +118,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
             relationTypes: this.relationTypes,
           });
         }
+        this.areRelationTypesLoaded = true;
       });
   }
 
