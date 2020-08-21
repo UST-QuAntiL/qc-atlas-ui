@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 
-<mat-horizontal-stepper [linear]="true" #stepper>
+<mat-horizontal-stepper (selectionChange)="stepperSelectionChanged($event)" [linear]="true" #stepper>
   <mat-step [completed]="selectedPatternLanguage">
     <ng-template matStepLabel>Choose Pattern Language</ng-template>
     <div *ngIf="!arePatternLanguagesLoaded" class="w-100 row d-flex justify-content-center">

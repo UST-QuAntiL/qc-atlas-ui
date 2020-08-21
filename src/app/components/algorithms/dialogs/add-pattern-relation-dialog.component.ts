@@ -7,6 +7,7 @@ import { PatternLanguage } from 'api-patternpedia/models/pattern-language';
 import { Pattern } from 'api-patternpedia/models/pattern';
 import { PatternLanguageControllerService } from 'api-patternpedia/services/pattern-language-controller.service';
 import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-add-pattern-relation-dialog',
@@ -247,6 +248,15 @@ export class AddPatternRelationDialogComponent implements OnInit {
     if (this.stateGroups.length === 2) {
       this.filterExistingRelationTypes('');
       this.stateGroups.shift();
+    }
+  }
+
+  stepperSelectionChanged(event: StepperSelectionEvent): void {
+    if (event.selectedIndex === 1) {
+      this.getPatterns(this.selectedPatternLanguage.id);
+    }
+    if (event.selectedIndex === 2) {
+      this.getRelationTypes();
     }
   }
 }
