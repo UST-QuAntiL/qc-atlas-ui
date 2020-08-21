@@ -115,13 +115,25 @@ export class AddPatternRelationDialogComponent implements OnInit {
         if (relationTypes._embedded) {
           this.relationTypes = relationTypes._embedded.patternRelationTypes;
           this.filteredRelationTypes = this.relationTypes;
-          this.stateGroups.push({
-            optionName: 'Existing Relation-Types',
-            relationTypes: this.relationTypes,
-          });
+          this.pushExistingRelationTypesToGroup();
         }
         this.areRelationTypesLoaded = true;
       });
+  }
+
+  pushExistingRelationTypesToGroup(): void {
+    const index = this.stateGroups.findIndex(
+      (group) => group.optionName === 'Existing Relation-Types'
+    );
+
+    if (index === -1) {
+      this.stateGroups.push({
+        optionName: 'Existing Relation-Types',
+        relationTypes: this.relationTypes,
+      });
+    } else {
+      this.stateGroups[index].relationTypes = this.relationTypes;
+    }
   }
 
   displayRelation(type: PatternRelationTypeDto): string {
