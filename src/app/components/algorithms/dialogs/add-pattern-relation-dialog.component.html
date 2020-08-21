@@ -55,7 +55,7 @@
           <mat-card [class]="{'content-selected': (selectedPattern && pattern.id === selectedPattern.id)}" class="content"
                     (click)="onPatternClick(pattern)">
             <mat-card-header>
-              <mat-card-title><span class="text-justify">{{ pattern.name }}</span></mat-card-title>
+              <mat-card-title><span>{{ pattern.name }}</span></mat-card-title>
             </mat-card-header>
             <div class="image">
               <img mat-card-image src="{{ pattern.iconUrl }}" class="fit-image">
