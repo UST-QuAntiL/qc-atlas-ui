@@ -226,6 +226,14 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  createBreadcrumbHeader(algorithm: AlgorithmDto): string {
+    const header = this.algorithm.name;
+
+    return this.algorithm.acronym
+      ? header + ' (' + this.algorithm.acronym + ')'
+      : header;
+  }
+
   private getTagsForAlgorithm(algoId: string): void {
     this.algorithmService.getTagsOfAlgorithm({ algoId }).subscribe((next) => {
       if (next._embedded?.tags) {
@@ -235,13 +243,5 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         }));
       }
     });
-  }
-
-  createBreadcrumbHeader(algorithm: AlgorithmDto): string {
-    const header = this.algorithm.name;
-
-    return this.algorithm.acronym
-      ? header + ' (' + this.algorithm.acronym + ')'
-      : header;
   }
 }
