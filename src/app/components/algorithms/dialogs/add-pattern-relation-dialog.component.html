@@ -107,8 +107,7 @@
             <mat-option
               *ngFor="let type of stateGroup.relationTypes"
               [value]="type"
-              (mousedown)="setRelationType(type)"
-              (keydown.enter)="setRelationType(type)">
+              (mousedown)="setRelationType(type)">
               {{type.name}}
             </mat-option>
           </mat-optgroup>
