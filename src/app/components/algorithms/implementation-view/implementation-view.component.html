@@ -1,17 +1,10 @@
 <div *ngIf="impl">
   <div class="header-container p-2" *ngIf="algo">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-    <div class="badge-list">
-      <mat-chip-list>
-        <mat-chip
-          *ngFor="let element of [1, 2, 2, 3, 53, 3]"
-          [removable]="true"
-        >
-          {{ element }}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-    </div>
+    <app-tags-component [allowRemoving]="true"
+                        [tags]="tags"
+                        (onRemove)="removeTag($event)"
+                        (onAdd)="addTag($event)"></app-tags-component>
   </div>
 
   <mat-tab-group (selectedIndexChange)="changeTab($event)">
@@ -69,6 +62,7 @@
           <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
                                               (updateProperty)="updateComputeResourceProperty($event)"
                                               (deleteProperty)="deleteComputeResourceProperty($event)"
+                                              [title]="'Required compute resource properties'"
                                               [resourceProperties]="computeResourceProperties">
           </app-compute-resource-property-list>
         </mat-card>

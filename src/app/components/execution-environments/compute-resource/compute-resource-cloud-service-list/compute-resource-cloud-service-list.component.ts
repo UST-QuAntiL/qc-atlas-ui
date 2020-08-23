@@ -23,7 +23,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
   variableNames = ['name', 'provider', 'description', 'costModel', 'URL'];
   linkObject: LinkObject = {
-    title: 'Link software platform with ',
+    title: 'Link cloud service with ',
     subtitle: 'Search cloud services by name',
     displayVariable: 'name',
     data: [],

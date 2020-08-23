@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>Add a new Tag</h1>
+<div mat-dialog-content>
+  <form [formGroup]="formGroup">
+    <mat-form-field class="input-field">
+      <mat-label>Tag Value</mat-label>
+      <input
+        formControlName="value"
+        [matAutocomplete]="autoProblemType"
+        matInput
+        required>
+      <mat-autocomplete #autoProblemType="matAutocomplete" >
+        <mat-option
+          *ngFor="let value of getValues()"
+          [value]="value"
+          (click)="onTagValueSelected(value)">
+          {{ value }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field class="input-field">
+      <mat-label>Tag Category</mat-label>
+      <input
+        formControlName="category"
+        [matAutocomplete]="categoriesAutocomplete"
+        matInput
+        required>
+      <mat-autocomplete #categoriesAutocomplete="matAutocomplete" >
+        <mat-option
+          *ngFor="let category of getCategories(data.allTags)"
+          [value]="category"
+          (click)="onTagCategorySelected(category)">
+          <span class="dot" [ngStyle]="{'background-color': data.categoryToColor[category]}"></span>
+          {{ category }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [disabled]="formGroup.status !== 'VALID'" [mat-dialog-close]="this.formGroup.value">Add</button>
+</div>

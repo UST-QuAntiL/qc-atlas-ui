@@ -84,6 +84,7 @@
     <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
                                         (updateProperty)="updateComputeResourceProperty($event)"
                                         (deleteProperty)="deleteComputeResourceProperty($event)"
+                                        [title]="'Required compute resource properties'"
                                         [resourceProperties]="computeResourceProperties">
     </app-compute-resource-property-list>
   </mat-card>

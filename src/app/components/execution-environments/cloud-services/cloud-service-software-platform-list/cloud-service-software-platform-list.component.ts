@@ -25,7 +25,7 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
   tableColumns = ['Name', 'Version', 'Licence', 'Link'];
   variableNames = ['name', 'version', 'licence', 'link'];
   linkObject: LinkObject = {
-    title: 'Link cloud service with ',
+    title: 'Link software platform with ',
     subtitle: 'Search software platform by name',
     displayVariable: 'name',
     data: [],

@@ -19,7 +19,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
   tableColumns = ['Title', 'URL', 'DOI', 'Authors'];
   variableNames = ['title', 'url', 'doi', 'authors'];
   linkObject: any = {
-    title: 'Link implementation with ',
+    title: 'Link publication with ',
     subtitle: 'Search publication by title',
     displayVariable: 'title',
     data: [],

@@ -1,10 +1,13 @@
 /* tslint:disable */
-import { ClassicImplementationDto } from './classic-implementation-dto';
-import { QuantumImplementationDto } from './quantum-implementation-dto';
-
-/**
- * Either a quantum or a classic implementation
- */
-export type ImplementationDto =
-  | ClassicImplementationDto
-  | QuantumImplementationDto;
+export type ImplementationDto = {
+  id?: string;
+  name: string;
+  link?: string;
+  inputFormat?: string;
+  outputFormat?: string;
+  description?: string;
+  contributors?: string;
+  assumptions?: string;
+  parameter?: string;
+  dependencies?: string;
+};

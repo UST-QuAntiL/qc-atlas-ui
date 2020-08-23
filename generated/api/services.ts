@@ -8,3 +8,4 @@ export { PatternRelationTypeService } from './services/pattern-relation-type.ser
 export { ProblemTypeService } from './services/problem-type.service';
 export { PublicationService } from './services/publication.service';
 export { RootService } from './services/root.service';
+export { TagService } from './services/tag.service';
