@@ -1,5 +1,26 @@
 @import "theme";
 
+.step-button:enabled {
+  border-width: 2px;
+  border-color: mat-color($qc-atlas-ui-primary);
+  color: mat-color($qc-atlas-ui-primary);
+  font-weight: bold;
+}
+
+.step-button:enabled mat-icon {
+  color: mat-color($qc-atlas-ui-primary);
+}
+
+.step-button:hover {
+  background-color: mat-color($qc-atlas-ui-primary);
+  color: white;
+  font-weight: bold;
+}
+
+.step-button:hover mat-icon {
+  color: white;
+}
+
 .content-list {
   display: flex;
   overflow-x: auto;
@@ -35,7 +56,7 @@
   border-width: 2px;
 }
 
-mat-icon:hover {
+.url-icon:hover {
   color: mat-color($qc-atlas-ui-primary);
   transform: scale(1.05);
 }
