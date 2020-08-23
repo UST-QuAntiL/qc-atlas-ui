@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { EntityModelPatternRelationDto } from 'api-atlas/models/entity-model-pattern-relation-dto';
-import { MatDialog } from '@angular/material/dialog';
 import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
@@ -26,7 +25,6 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   externalLinkVariables: string[] = ['pattern'];
 
   constructor(
-    private dialog: MatDialog,
     private patternRelationTypeService: PatternRelationTypeService,
     private algorithmService: AlgorithmService,
     private utilService: UtilService
@@ -69,10 +67,14 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const dialogRef = this.dialog.open(AddPatternRelationDialogComponent, {
-      width: '1000px',
-      data: { title: 'Add new pattern relation', algoId: this.algorithm.id },
-    });
+    const dialogRef = this.utilService.createDialog(
+      AddPatternRelationDialogComponent,
+      {
+        title: 'Add new pattern relation',
+        algoId: this.algorithm.id,
+      },
+      '1000px'
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
@@ -106,16 +108,14 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   }
 
   onDeleteElements(event): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Confirm Deletion',
-        message:
-          'Are you sure you want to delete the relations to the following pattern(s):',
-        data: event.elements,
-        variableName: 'pattern',
-        yesButtonText: 'yes',
-        noButtonText: 'no',
-      },
+    const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
+      title: 'Confirm Deletion',
+      message:
+        'Are you sure you want to delete the relations to the following pattern(s):',
+      data: event.elements,
+      variableName: 'pattern',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
     });
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
@@ -142,16 +142,17 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   }
 
   onElementClicked(event): void {
-    const dialogRef = this.dialog.open(AddPatternRelationDialogComponent, {
-      width: '1000px',
-      data: {
+    const dialogRef = this.utilService.createDialog(
+      AddPatternRelationDialogComponent,
+      {
         title: 'Edit pattern relation',
         algoId: this.algorithm.id,
         pattern: event.pattern,
         description: event.description,
         patternRelationType: event.patternTypeObject,
       },
-    });
+      '1000px'
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
