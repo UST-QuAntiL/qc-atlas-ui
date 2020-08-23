@@ -31,9 +31,8 @@ export class AddPatternRelationDialogComponent implements OnInit {
   relationDescription = '';
 
   // Relation Type fields
-  stateGroups: StateGroup[] = [];
+  relationTypeGroups: StateGroup[] = [];
   relationTypes: PatternRelationTypeDto[] = [];
-  filteredRelationTypes: PatternRelationTypeDto[] = [];
   selectedRelationType: PatternRelationTypeDto = undefined;
   relationTypeSearch: any = '';
 
@@ -115,7 +114,6 @@ export class AddPatternRelationDialogComponent implements OnInit {
       .subscribe((relationTypes) => {
         if (relationTypes._embedded) {
           this.relationTypes = relationTypes._embedded.patternRelationTypes;
-          this.filteredRelationTypes = this.relationTypes;
           this.pushExistingRelationTypesToGroup();
         }
         this.areRelationTypesLoaded = true;
@@ -123,17 +121,17 @@ export class AddPatternRelationDialogComponent implements OnInit {
   }
 
   pushExistingRelationTypesToGroup(): void {
-    const index = this.stateGroups.findIndex(
+    const index = this.relationTypeGroups.findIndex(
       (group) => group.optionName === 'Existing Relation-Types'
     );
 
     if (index === -1) {
-      this.stateGroups.push({
+      this.relationTypeGroups.push({
         optionName: 'Existing Relation-Types',
         relationTypes: this.relationTypes,
       });
     } else {
-      this.stateGroups[index].relationTypes = this.relationTypes;
+      this.relationTypeGroups[index].relationTypes = this.relationTypes;
     }
   }
 
@@ -210,26 +208,28 @@ export class AddPatternRelationDialogComponent implements OnInit {
       if (this.typesNotEmpty() || this.isFirstElementNew()) {
         this.pushNewRelationType(searchType);
       } else if (!this.isFirstElementNew()) {
-        this.stateGroups[0].relationTypes[0] = searchType;
+        this.relationTypeGroups[0].relationTypes[0] = searchType;
       }
     } else {
       if (!this.isFirstElementNew()) {
-        this.stateGroups.shift();
+        this.relationTypeGroups.shift();
       }
     }
   }
 
   filterExistingRelationTypes(searchType: string): void {
-    const stateGroupLength = this.stateGroups.length;
-    this.stateGroups[stateGroupLength - 1].relationTypes = [];
+    const stateGroupLength = this.relationTypeGroups.length;
+    this.relationTypeGroups[stateGroupLength - 1].relationTypes = [];
     if (!searchType) {
-      this.stateGroups[stateGroupLength - 1].relationTypes = this.relationTypes;
+      this.relationTypeGroups[
+        stateGroupLength - 1
+      ].relationTypes = this.relationTypes;
     } else {
       for (const relationType of this.relationTypes) {
         if (
           relationType.name.toLowerCase().includes(searchType.toLowerCase())
         ) {
-          this.stateGroups[stateGroupLength - 1].relationTypes.push(
+          this.relationTypeGroups[stateGroupLength - 1].relationTypes.push(
             relationType
           );
         }
@@ -238,15 +238,15 @@ export class AddPatternRelationDialogComponent implements OnInit {
   }
 
   typesNotEmpty(): boolean {
-    return !this.stateGroups[0];
+    return !this.relationTypeGroups[0];
   }
 
   isFirstElementNew(): boolean {
-    return this.stateGroups[0].optionName !== 'New Relation-Type';
+    return this.relationTypeGroups[0].optionName !== 'New Relation-Type';
   }
 
   pushNewRelationType(type: PatternRelationTypeDto): void {
-    this.stateGroups.unshift({
+    this.relationTypeGroups.unshift({
       optionName: 'New Relation-Type',
       relationTypes: [type],
     });
@@ -258,9 +258,9 @@ export class AddPatternRelationDialogComponent implements OnInit {
 
   onRelationTypeFocusOut(): void {
     this.relationTypeSearch = '';
-    if (this.stateGroups.length === 2) {
+    if (this.relationTypeGroups.length === 2) {
       this.filterExistingRelationTypes('');
-      this.stateGroups.shift();
+      this.relationTypeGroups.shift();
     }
   }
 
