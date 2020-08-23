@@ -103,9 +103,9 @@
           required>
         <mat-autocomplete #relationType="matAutocomplete" (optionSelected)="setRelationType($event.option.value)"
                           [displayWith]="displayRelation">
-          <mat-optgroup *ngFor="let stateGroup of relationTypeGroups" [label]="stateGroup.optionName">
+          <mat-optgroup *ngFor="let typeGroup of relationTypeGroups" [label]="typeGroup.optionName">
             <mat-option
-              *ngFor="let type of stateGroup.relationTypes"
+              *ngFor="let type of typeGroup.relationTypes"
               [value]="type"
               (mousedown)="setRelationType(type)">
               {{type.name}}
