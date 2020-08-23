@@ -67,7 +67,6 @@ export class AddPatternRelationDialogComponent implements OnInit {
       }
       this.data.patternRelationType = this.selectedRelationType;
       this.data.description = this.relationDescription;
-      console.log('Finish Clicked');
     });
   }
 
@@ -254,12 +253,10 @@ export class AddPatternRelationDialogComponent implements OnInit {
   }
 
   setRelationType(type: PatternRelationTypeDto): void {
-    console.log('Type selected!');
     this.selectedRelationType = type;
   }
 
   onRelationTypeFocusOut(): void {
-    console.log('Focus Out!');
     this.relationTypeSearch = '';
     if (this.stateGroups.length === 2) {
       this.filterExistingRelationTypes('');
