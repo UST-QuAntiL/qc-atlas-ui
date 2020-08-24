@@ -91,15 +91,15 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const dialogRef = this.dialog.open(AddAlgorithmRelationDialogComponent, {
-      width: '400px',
-      data: {
+    const dialogRef = this.utilService.createDialog(
+      AddAlgorithmRelationDialogComponent,
+      {
         title: 'Add new algorithm relation',
         algoId: this.algorithm.id,
         existingRelations: this.algorithmRelations,
         disableAlg: false,
-      },
-    });
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
@@ -169,9 +169,9 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onUpdateClicked(event): void {
-    const dialogRef = this.dialog.open(AddAlgorithmRelationDialogComponent, {
-      width: '400px',
-      data: {
+    const dialogRef = this.utilService.createDialog(
+      AddAlgorithmRelationDialogComponent,
+      {
         title: 'Update algorithm relation',
         algoId: this.algorithm.id,
         algoRelationId: event.id,
@@ -180,8 +180,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         targetAlg: event.targetAlgObject,
         description: event.description,
         disableAlg: true,
-      },
-    });
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {

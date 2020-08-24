@@ -8,7 +8,6 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { ClassicImplementationDto } from '../models/classic-implementation-dto';
 import { CloudServiceDto } from '../models/cloud-service-dto';
 import { ComputeResourceDto } from '../models/compute-resource-dto';
 import { ComputeResourcePropertyDto } from '../models/compute-resource-property-dto';
@@ -20,7 +19,6 @@ import { EntityModelImplementationDto } from '../models/entity-model-implementat
 import { EntityModelSoftwarePlatformDto } from '../models/entity-model-software-platform-dto';
 import { Link } from '../models/link';
 import { PageMetadata } from '../models/page-metadata';
-import { QuantumImplementationDto } from '../models/quantum-implementation-dto';
 import { SoftwarePlatformDto } from '../models/software-platform-dto';
 
 @Injectable({
@@ -3173,12 +3171,19 @@ export class ExecutionEnvironmentsService extends BaseService {
     id: string;
     implId: string;
   }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      link?: string;
+      inputFormat?: string;
+      outputFormat?: string;
+      description?: string;
+      contributors?: string;
+      assumptions?: string;
+      parameter?: string;
+      dependencies?: string;
+      _links?: Array<Link>;
+    }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -3199,12 +3204,19 @@ export class ExecutionEnvironmentsService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>;
         })
       );
   }
@@ -3220,26 +3232,49 @@ export class ExecutionEnvironmentsService extends BaseService {
   getImplementationForSoftwarePlatform(params: {
     id: string;
     implId: string;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<{
+    id?: string;
+    name: string;
+    link?: string;
+    inputFormat?: string;
+    outputFormat?: string;
+    description?: string;
+    contributors?: string;
+    assumptions?: string;
+    parameter?: string;
+    dependencies?: string;
+    _links?: Array<Link>;
+  }> {
     return this.getImplementationForSoftwarePlatform$Response(params).pipe(
       map(
         (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>
         ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+          r.body as {
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }
       )
     );
   }

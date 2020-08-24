@@ -128,6 +128,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
       this.typeDescription = '';
       this.typeName = '';
     }
+
     this.propertyTypeService
       .getResourcePropertyTypes({
         page: -1,

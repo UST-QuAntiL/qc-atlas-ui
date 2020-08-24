@@ -17,11 +17,10 @@ import { UtilService } from '../../../util/util.service';
   styleUrls: ['./algorithm-view.component.scss'],
 })
 export class AlgorithmViewComponent implements OnInit, OnDestroy {
-  testTags: string[] = ['test tag', 'quantum', 'algorithm'];
-
   algorithm: EntityModelAlgorithmDto;
   applicationAreas: EntityModelApplicationAreaDto[];
   problemTypes: EntityModelProblemTypeDto[];
+  tags: TagDto[] = [];
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
@@ -40,12 +39,17 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       this.algorithmService.getAlgorithm({ algoId }).subscribe(
         (algo: EntityModelAlgorithmDto) => {
           this.algorithm = algo;
+          let subheading = this.algorithm.computationModel
+            .toString()
+            .toLowerCase();
+          subheading = subheading[0].toUpperCase() + subheading.slice(1);
           this.links[0] = {
-            heading: this.algorithm.name,
-            subHeading: this.algorithm.computationModel + ' Algorithm',
+            heading: this.createBreadcrumbHeader(this.algorithm),
+            subHeading: subheading + ' Algorithm',
           };
           this.getApplicationAreasForAlgorithm(algoId);
           this.getProblemTypesForAlgorithm(algoId);
+          this.getTagsForAlgorithm(algoId);
         },
         (error) => {
           console.log(error);
@@ -89,16 +93,32 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     );
   }
 
-  addTag(): void {
-    console.log('add tag');
-    // TODO: create tag dialog
+  addTag(tag: TagDto): void {
+    this.algorithmService
+      .addTagToAlgorithm({
+        algoId: this.algorithm.id,
+        body: tag,
+      })
+      .subscribe((next) => {
+        this.tags = next._embedded.tags.map((t) => ({
+          value: t.value,
+          category: t.category,
+        }));
+      });
   }
 
-  removeTag(tag: string): void {
-    const index = this.testTags.indexOf(tag);
-    if (index !== -1) {
-      this.testTags.splice(index, 1);
-    }
+  removeTag(tag: TagDto): void {
+    this.algorithmService
+      .removeTagFromAlgorithm({
+        algoId: this.algorithm.id,
+        body: tag,
+      })
+      .subscribe((next) => {
+        this.tags = next._embedded.tags.map((t) => ({
+          value: t.value,
+          category: t.category,
+        }));
+      });
   }
 
   updateAlgorithmField(event: { field; value }): void {
@@ -108,6 +128,10 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       .subscribe(
         (algo) => {
           this.algorithm = algo;
+          this.links[0] = {
+            heading: this.createBreadcrumbHeader(this.algorithm),
+            subHeading: this.algorithm.computationModel + ' Algorithm',
+          };
           this.utilService.callSnackBar('Successfully updated algorithm');
         },
         (error) => {
@@ -197,6 +221,25 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
             console.log(error);
           }
         );
+    });
+  }
+
+  createBreadcrumbHeader(algorithm: AlgorithmDto): string {
+    const header = this.algorithm.name;
+
+    return this.algorithm.acronym
+      ? header + ' (' + this.algorithm.acronym + ')'
+      : header;
+  }
+
+  private getTagsForAlgorithm(algoId: string): void {
+    this.algorithmService.getTagsOfAlgorithm({ algoId }).subscribe((next) => {
+      if (next._embedded?.tags) {
+        this.tags = next._embedded.tags.map((t) => ({
+          value: t.value,
+          category: t.category,
+        }));
+      }
     });
   }
 }

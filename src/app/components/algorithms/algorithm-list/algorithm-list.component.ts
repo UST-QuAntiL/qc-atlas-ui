@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { AlgorithmService } from 'api/services/algorithm.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AlgorithmDto } from 'api-atlas/models';
+import { AlgorithmDto } from 'api/models';
 import { Router } from '@angular/router';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
 import { UtilService } from '../../../util/util.service';
-import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'app-algorithm-list',
@@ -26,7 +29,6 @@ export class AlgorithmListComponent implements OnInit {
   constructor(
     private algorithmService: AlgorithmService,
     private genericDataService: GenericDataService,
-    private dialog: MatDialog,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -62,10 +64,12 @@ export class AlgorithmListComponent implements OnInit {
 
   onAddElement(): void {
     const params: any = {};
-    const dialogRef = this.dialog.open(AddAlgorithmDialogComponent, {
-      width: '400px',
-      data: { title: 'Add new algorithm' },
-    });
+    const dialogRef = this.utilService.createDialog(
+      AddAlgorithmDialogComponent,
+      {
+        title: 'Add new algorithm',
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
@@ -90,16 +94,18 @@ export class AlgorithmListComponent implements OnInit {
   }
 
   onDeleteElements(event): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Confirm Deletion',
-        message: 'Are you sure you want to delete the following algorithm(s):',
-        data: event.elements,
-        variableName: 'name',
-        yesButtonText: 'yes',
-        noButtonText: 'no',
-      },
-    });
+    const dialogData: ConfirmDialogData = {
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete the following algorithm(s):',
+      data: event.elements,
+      variableName: 'name',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    };
+    const dialogRef = this.utilService.createDialog(
+      ConfirmDialogComponent,
+      dialogData
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
