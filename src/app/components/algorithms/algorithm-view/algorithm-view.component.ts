@@ -8,6 +8,8 @@ import { ApplicationAreasService } from 'api-atlas/services/application-areas.se
 import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
+import { TagDto } from 'api-atlas/models/tag-dto';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
 

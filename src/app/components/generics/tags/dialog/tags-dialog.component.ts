@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Tag } from 'api/models';
+import { Tag } from 'api-atlas/models';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
