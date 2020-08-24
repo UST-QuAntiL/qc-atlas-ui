@@ -9,6 +9,7 @@ import { EntityModelProblemTypeDto } from 'api/models/entity-model-problem-type-
 import { ProblemTypeService } from 'api/services/problem-type.service';
 import { ProblemTypeDto } from 'api/models/problem-type-dto';
 import { TagDto } from 'api/models/tag-dto';
+import { AlgorithmDto } from 'api/models/algorithm-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
 
@@ -45,7 +46,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
             .toLowerCase();
           subheading = subheading[0].toUpperCase() + subheading.slice(1);
           this.links[0] = {
-            heading: this.algorithm.name,
+            heading: this.createBreadcrumbHeader(this.algorithm),
             subHeading: subheading + ' Algorithm',
           };
           this.getApplicationAreasForAlgorithm(algoId);
@@ -129,6 +130,10 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       .subscribe(
         (algo) => {
           this.algorithm = algo;
+          this.links[0] = {
+            heading: this.createBreadcrumbHeader(this.algorithm),
+            subHeading: this.algorithm.computationModel + ' Algorithm',
+          };
           this.utilService.callSnackBar('Successfully updated algorithm');
         },
         (error) => {
@@ -219,6 +224,14 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
           }
         );
     });
+  }
+
+  createBreadcrumbHeader(algorithm: AlgorithmDto): string {
+    const header = this.algorithm.name;
+
+    return this.algorithm.acronym
+      ? header + ' (' + this.algorithm.acronym + ')'
+      : header;
   }
 
   private getTagsForAlgorithm(algoId: string): void {
