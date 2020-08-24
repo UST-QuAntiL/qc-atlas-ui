@@ -6,9 +6,7 @@ import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
 import { PatternRelationDto } from 'api-atlas/models';
 import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
-import { Pattern } from 'api-patternpedia/models/pattern';
 import { EntityModelPattern } from 'api-patternpedia/models/entity-model-pattern';
-import { EntityModelPatternLanguage } from 'api-patternpedia/models/entity-model-pattern-language';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -208,7 +206,6 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     this.patternService
       .getPatternByUri({ encodedUri: relation.pattern })
       .subscribe((pattern) => {
-        console.log(pattern);
         this.tableObjects.push({
           id: relation.id,
           description: relation.description,
