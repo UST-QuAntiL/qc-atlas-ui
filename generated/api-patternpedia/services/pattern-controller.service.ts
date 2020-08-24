@@ -632,4 +632,62 @@ export class PatternControllerService extends BaseService {
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
   }
+
+  /**
+   * Path part for operation getPatternByUri
+   */
+  static readonly GetPatternByUriPath = '/patterns/search/findByUri';
+
+  /**
+   * Retrieve patterns by pattern uri
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPatternByUri()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPatternByUri$Response(params: {
+    encodedUri: string;
+  }): Observable<StrictHttpResponse<EntityModelPattern>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternControllerService.GetPatternByUriPath,
+      'get'
+    );
+    if (params) {
+      rb.query('encodedUri', params.encodedUri, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelPattern>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve patterns by pattern uri
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getPatternByUri$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPatternByUri(params: {
+    encodedUri: string;
+  }): Observable<EntityModelPattern> {
+    return this.getPatternByUri$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<EntityModelPattern>) =>
+          r.body as EntityModelPattern
+      )
+    );
+  }
 }

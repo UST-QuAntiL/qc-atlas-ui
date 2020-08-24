@@ -189,24 +189,24 @@ export class PatternViewControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getPatternViewById1
+   * Path part for operation getPatternViewById
    */
-  static readonly GetPatternViewById1Path = '/patternViews/{patternViewId}';
+  static readonly GetPatternViewByIdPath = '/patternViews/{patternViewId}';
 
   /**
    * Retrieve pattern view by id
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPatternViewById1()` instead.
+   * To access only the response body, use `getPatternViewById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternViewById1$Response(params: {
+  getPatternViewById$Response(params: {
     patternViewId: string;
   }): Observable<StrictHttpResponse<EntityModelPatternView>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternViewControllerService.GetPatternViewById1Path,
+      PatternViewControllerService.GetPatternViewByIdPath,
       'get'
     );
     if (params) {
@@ -231,14 +231,14 @@ export class PatternViewControllerService extends BaseService {
    * Retrieve pattern view by id
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPatternViewById1$Response()` instead.
+   * To access the full response (for headers, for example), `getPatternViewById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternViewById1(params: {
+  getPatternViewById(params: {
     patternViewId: string;
   }): Observable<EntityModelPatternView> {
-    return this.getPatternViewById1$Response(params).pipe(
+    return this.getPatternViewById$Response(params).pipe(
       map(
         (r: StrictHttpResponse<EntityModelPatternView>) =>
           r.body as EntityModelPatternView
@@ -306,24 +306,24 @@ export class PatternViewControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getPatternViewById
+   * Path part for operation getPatternViewById1
    */
-  static readonly GetPatternViewByIdPath = '/patternViews/{patternViewId}';
+  static readonly GetPatternViewById1Path = '/patternViews/{patternViewId}';
 
   /**
    * Delete pattern view by id
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPatternViewById()` instead.
+   * To access only the response body, use `getPatternViewById1()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternViewById$Response(params: {
+  getPatternViewById1$Response(params: {
     patternViewId: string;
   }): Observable<StrictHttpResponse<{}>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternViewControllerService.GetPatternViewByIdPath,
+      PatternViewControllerService.GetPatternViewById1Path,
       'delete'
     );
     if (params) {
@@ -348,12 +348,12 @@ export class PatternViewControllerService extends BaseService {
    * Delete pattern view by id
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPatternViewById$Response()` instead.
+   * To access the full response (for headers, for example), `getPatternViewById1$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternViewById(params: { patternViewId: string }): Observable<{}> {
-    return this.getPatternViewById$Response(params).pipe(
+  getPatternViewById1(params: { patternViewId: string }): Observable<{}> {
+    return this.getPatternViewById1$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
   }

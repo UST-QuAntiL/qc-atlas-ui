@@ -5,6 +5,10 @@ import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
 import { PatternRelationDto } from 'api-atlas/models';
+import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
+import { Pattern } from 'api-patternpedia/models/pattern';
+import { EntityModelPattern } from 'api-patternpedia/models/entity-model-pattern';
+import { EntityModelPatternLanguage } from 'api-patternpedia/models/entity-model-pattern-language';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -20,13 +24,14 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
   patternRelations: EntityModelPatternRelationDto[];
   tableObjects: PatternRelationTableObject[] = [];
-  variableNames: string[] = ['pattern', 'patternType', 'description'];
+  variableNames: string[] = ['patternName', 'patternType', 'description'];
   tableColumns: string[] = ['Pattern', 'Relation Type', 'Description'];
   externalLinkVariables: string[] = ['pattern'];
 
   constructor(
     private patternRelationTypeService: PatternRelationTypeService,
     private algorithmService: AlgorithmService,
+    private patternService: PatternControllerService,
     private utilService: UtilService
   ) {}
 
@@ -113,7 +118,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
       message:
         'Are you sure you want to delete the relations to the following pattern(s):',
       data: event.elements,
-      variableName: 'pattern',
+      variableName: 'patternName',
       yesButtonText: 'yes',
       noButtonText: 'no',
     });
@@ -195,14 +200,25 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   generateTableObjects(): void {
     this.tableObjects = [];
     for (const relation of this.patternRelations) {
-      this.tableObjects.push({
-        id: relation.id,
-        description: relation.description,
-        patternType: relation.patternRelationType.name,
-        pattern: relation.pattern,
-        patternTypeObject: relation.patternRelationType,
-      });
+      this.getPattern(relation);
     }
+  }
+
+  getPattern(relation: PatternRelationDto): void {
+    this.patternService
+      .getPatternByUri({ encodedUri: relation.pattern })
+      .subscribe((pattern) => {
+        console.log(pattern);
+        this.tableObjects.push({
+          id: relation.id,
+          description: relation.description,
+          patternType: relation.patternRelationType.name,
+          pattern: relation.pattern,
+          patternTypeObject: relation.patternRelationType,
+          patternObject: pattern,
+          patternName: pattern.name,
+        });
+      });
   }
 
   generatePatternRelationDto(
@@ -227,4 +243,6 @@ export interface PatternRelationTableObject {
   description: string;
   pattern: string;
   patternTypeObject: PatternRelationTypeDto;
+  patternObject: EntityModelPattern;
+  patternName: string;
 }
