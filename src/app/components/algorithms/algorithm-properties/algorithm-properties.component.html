@@ -1,22 +1,19 @@
 <div class="p-4">
   <div class="d-flex">
-    <mat-card class="w-100 m-4">
-      <app-text-input class="p-2"
-                      name="Acronym"
+    <mat-card class="w-100 mx-4 my-2">
+      <app-text-input name="Acronym"
                       [(ngModel)]="algorithm.acronym"
                       (onSaveChanges)="onChangesSaved($event, 'acronym')"></app-text-input>
     </mat-card>
-    <mat-card class="w-100 m-4">
-      <app-text-input class="p-2"
-                      name="Intent"
+    <mat-card class="w-100 mx-4 my-2">
+      <app-text-input name="Intent"
                       [(ngModel)]="algorithm.intent"
                       [multiline]="true"
                       [maxLines]="5"
                       (onSaveChanges)="onChangesSaved($event, 'intent')"></app-text-input>
     </mat-card>
-    <mat-card class="w-100 m-4">
-      <app-text-input class="p-2"
-                      name="Problem"
+    <mat-card class="w-100 mx-4 my-2">
+      <app-text-input name="Problem"
                       [(ngModel)]="algorithm.problem"
                       [multiline]="true"
                       [maxLines]="5"
@@ -36,7 +33,6 @@
     </mat-card>
 
     <mat-card class="w-100 m-4">
-      <div class="mx-3 my-2">
         <app-chip-collection class="w-100"
                              [title]="'Application areas'"
                              [elements]="linkedApplicationAreas"
@@ -46,33 +42,28 @@
                              (onAddElement)="addApplicationAreaEvent($event)"
                              (onRemoveElement)="removeApplicationAreaEvent($event)"
                              (onSearchTextChanged)="searchUnlinkedApplicationAreas($event)"></app-chip-collection>
-      </div>
     </mat-card>
   </div>
 
-  <!-- TODO: Add related patterns -->
   <div class="d-flex">
-    <mat-card class="w-100 m-4">
-      <app-text-input class="p-2"
-                      name="Input format"
+    <mat-card class="w-100 mx-4 my-2">
+      <app-text-input name="Input format"
                       [(ngModel)]="algorithm.inputFormat"
                       [multiline]="true"
                       [maxLines]="5"
                       (onSaveChanges)="onChangesSaved($event, 'inputFormat')"></app-text-input>
     </mat-card>
 
-    <mat-card class="w-100 m-4">
-      <app-text-input class="p-2"
-                      name="Parameters"
+    <mat-card class="w-100 mx-4 my-2">
+      <app-text-input name="Parameters"
                       [(ngModel)]="algorithm.algoParameter"
                       [multiline]="true"
                       [maxLines]="5"
                       (onSaveChanges)="onChangesSaved($event, 'algoParameter')"></app-text-input>
     </mat-card>
 
-    <mat-card class="w-100 m-4">
-      <app-text-input class="p-2"
-                      name="Output format"
+    <mat-card class="w-100 mx-4 my-2">
+      <app-text-input name="Output format"
                       [(ngModel)]="algorithm.outputFormat"
                       [multiline]="true"
                       [maxLines]="5"
@@ -90,18 +81,16 @@
   </mat-card>
 
   <div class="d-flex">
-    <mat-card class="w-100 m-4">
-      <app-text-input class="p-2"
-                      name="Solution"
+    <mat-card class="w-100 mx-4 my-2">
+      <app-text-input name="Solution"
                       [(ngModel)]="algorithm.solution"
                       [multiline]="true"
                       [maxLines]="5"
                       (onSaveChanges)="onChangesSaved($event, 'solution')"></app-text-input>
     </mat-card>
 
-    <mat-card class="w-100 m-4">
-      <app-text-input class="p-2"
-                      name="Assumptions"
+    <mat-card class="w-100 mx-4 my-2">
+      <app-text-input name="Assumptions"
                       [(ngModel)]="algorithm.assumptions"
                       [multiline]="true"
                       [maxLines]="5"
@@ -110,15 +99,13 @@
   </div>
 
   <div class="d-flex">
-    <mat-card class="w-100 m-4" *ngIf="algorithm.computationModel === 'QUANTUM'">
-      <app-text-input class="p-2"
-                      name="Speedup"
+    <mat-card class="w-100 mx-4 my-4" *ngIf="algorithm.computationModel === 'QUANTUM'">
+      <app-text-input name="Speedup"
                       [(ngModel)]="algorithm.speedUp"
                       (onSaveChanges)="onChangesSaved($event, 'speedUp')"></app-text-input>
     </mat-card>
-    <mat-card class="w-100 m-4" *ngIf="algorithm.computationModel === 'QUANTUM'">
-      <app-checkbox-input class="p-2"
-                          name="NISQ ready"
+    <mat-card class="w-100 mx-4 my-4" *ngIf="algorithm.computationModel === 'QUANTUM'">
+      <app-checkbox-input name="NISQ ready"
                           [(ngModel)]="algorithm.nisqReady"
                           (onSaveChanges)="onChangesSaved($event, 'nisqReady')">
       </app-checkbox-input>
@@ -127,16 +114,14 @@
 
   <!-- TODO: finish Sketch -->
   <div class="d-flex">
-    <mat-card class="w-100 m-4" *ngIf="algorithm.computationModel === 'QUANTUM'">
-      <app-select-input class="p-2"
-                        name="Quantum computation model"
+    <mat-card class="w-100 mx-4 my-2" *ngIf="algorithm.computationModel === 'QUANTUM'">
+      <app-select-input name="Quantum computation model"
                         [(ngModel)]="algorithm.quantumComputationModel"
                         [choices]="availableQuantumComputationModelOptions"></app-select-input>
 
     </mat-card>
-    <mat-card class="w-100 m-4">
-        <app-select-input class="p-2"
-                          name="Sketch type"
+    <mat-card class="w-100 mx-4 my-2">
+        <app-select-input name="Sketch type"
                           [(ngModel)]="algorithm.sketches"
                           [includeEmpty]="true"
                           [choices]="availableSketchOptions"
