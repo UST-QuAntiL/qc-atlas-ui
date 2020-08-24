@@ -126,17 +126,17 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Verify</ng-template>
-    <mat-form-field *ngIf="relationDescription" class="w-100">
-      <mat-label>Description</mat-label>
-      <textarea matInput [(ngModel)]="relationDescription" readonly></textarea>
+    <mat-form-field *ngIf="selectedPattern" class="w-100">
+      <mat-label>Pattern</mat-label>
+      <input matInput [(ngModel)]="selectedPattern.name" readonly>
     </mat-form-field>
     <mat-form-field *ngIf="selectedRelationType" class="w-100">
       <mat-label>Relation Type</mat-label>
       <input matInput [(ngModel)]="selectedRelationType.name" readonly>
     </mat-form-field>
-    <mat-form-field *ngIf="selectedPattern" class="w-100">
-      <mat-label>Pattern</mat-label>
-      <input matInput [(ngModel)]="selectedPattern.name" readonly>
+    <mat-form-field *ngIf="relationDescription" class="w-100">
+      <mat-label>Description</mat-label>
+      <textarea matInput [(ngModel)]="relationDescription" readonly></textarea>
     </mat-form-field>
     <div>
       <button class="step-button" mat-stroked-button matStepperPrevious>
