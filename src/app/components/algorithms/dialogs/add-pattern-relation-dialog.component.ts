@@ -125,14 +125,11 @@ export class AddPatternRelationDialogComponent implements OnInit {
       (group) => group.optionName === 'Existing Relation-Types'
     );
 
-    console.log(index);
-
     if (index === -1) {
       this.relationTypeGroups.push({
         optionName: 'Existing Relation-Types',
         relationTypes: this.relationTypes,
       });
-      console.log(this.relationTypeGroups.length);
     } else {
       this.relationTypeGroups[index].relationTypes = this.relationTypes;
     }
