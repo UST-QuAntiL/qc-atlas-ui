@@ -18,6 +18,7 @@ import { PatternRelationTypeService } from './services/pattern-relation-type.ser
 import { ProblemTypeService } from './services/problem-type.service';
 import { PublicationService } from './services/publication.service';
 import { RootService } from './services/root.service';
+import { TagService } from './services/tag.service';
 
 /**
  * Module that provides all services and configuration.
@@ -37,6 +38,7 @@ import { RootService } from './services/root.service';
     ProblemTypeService,
     PublicationService,
     RootService,
+    TagService,
     ApiConfiguration,
   ],
 })

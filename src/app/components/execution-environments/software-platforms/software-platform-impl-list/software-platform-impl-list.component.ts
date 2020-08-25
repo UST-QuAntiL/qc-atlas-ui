@@ -24,7 +24,7 @@ export class SoftwarePlatformImplListComponent implements OnInit {
   variableNames: string[] = ['name', 'description', 'dependencies'];
   tableColumns: string[] = ['Name', 'Description', 'Dependencies'];
   linkObject: LinkObject = {
-    title: 'Link software platform with ',
+    title: 'Link implementation with ',
     subtitle: 'Search implementation by name',
     displayVariable: 'name',
     data: [],
