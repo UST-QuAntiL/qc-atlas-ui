@@ -9,65 +9,14 @@
 
   <mat-tab-group (selectedIndexChange)="changeTab($event)">
     <mat-tab label="General">
-      <div class="p-4">
-        <div class="d-flex">
-          <mat-card class="w-100 my-2 mx-4">
-            <app-text-input
-              name="Description"
-              (onSaveChanges)="onChangeImpl()"
-              [(ngModel)]="impl.description"
-              [multiline]="true"
-            ></app-text-input>
-          </mat-card>
-          <mat-card class="w-100 my-2 mx-4">
-            <app-text-input
-              name="Contributors"
-              (onSaveChanges)="onChangeImpl()"
-              [(ngModel)]="impl.contributors"
-              [multiline]="true"
-            ></app-text-input>
-          </mat-card>
-        </div>
-        <div class="d-flex">
-          <mat-card class="w-100 w-100 my-2 mx-4">
-            <app-text-input
-              name="Dependencies"
-              (onSaveChanges)="onChangeImpl()"
-              [(ngModel)]="impl.dependencies"
-            ></app-text-input>
-          </mat-card>
-          <mat-card class="w-100 my-2 mx-4">
-            <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
-                                                (updateProperty)="updateComputeResourceProperty($event)"
-                                                (deleteProperty)="deleteComputeResourceProperty($event)"
-                                                [resourceProperties]="computeResourceProperties">
-            </app-compute-resource-property-list>
-          </mat-card>
-        </div>
-        <div class="d-flex">
-          <mat-card class="w-100 my-2 mx-4">
-            <app-text-input
-              name="Input Format"
-              (onSaveChanges)="onChangeImpl()"
-              [(ngModel)]="impl.inputFormat"
-            ></app-text-input>
-          </mat-card>
-          <mat-card class="w-100 my-2 mx-4">
-            <app-text-input
-              name="Parameter"
-              (onSaveChanges)="onChangeImpl()"
-              [(ngModel)]="impl.parameter"
-            ></app-text-input>
-          </mat-card>
-          <mat-card class="w-100 my-2 mx-4">
-            <app-text-input
-              name="Output Format"
-              (onSaveChanges)="onChangeImpl()"
-              [(ngModel)]="impl.outputFormat"
-            ></app-text-input>
-          </mat-card>
-        </div>
-      </div>
+      <app-implementation-properties
+        [computeResourceProperties]="computeResourceProperties"
+        [implementation]="impl"
+        (updateImplementationField)="updateImplementationField($event)"
+        (deleteComputeResourceProperty)="deleteComputeResourceProperty($event)"
+        (addComputeResourceProperty)="addComputeResourceProperty($event)"
+        (updateComputeResourceProperty)="updateComputeResourceProperty($event)">
+      </app-implementation-properties>
     </mat-tab>
     <mat-tab label="Publications">
       <div>

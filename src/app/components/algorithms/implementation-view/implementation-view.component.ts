@@ -6,7 +6,7 @@ import { ImplementationDto } from 'api/models/implementation-dto';
 import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
 import { PublicationService } from 'api/services/publication.service';
 import { EntityModelComputeResourcePropertyDto } from 'api/models/entity-model-compute-resource-property-dto';
-import { TagDto } from 'api/models';
+import { TagDto } from 'api/models/tag-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import {
@@ -68,35 +68,12 @@ export class ImplementationViewComponent implements OnInit {
     this.loadGeneral();
   }
 
-  onChangeImpl(): void {
-    this.algorithmService
-      .updateImplementation({
-        algoId: this.algo.id,
-        implId: this.impl.id,
-        body: this.impl,
-      })
-      .subscribe(() => {
-        this.utilService.callSnackBar('Successfully updated implementation');
-      });
-    // live refresh name
-    let subheading = this.algo.computationModel.toString().toLowerCase();
-    subheading =
-      subheading[0].toUpperCase() + subheading.slice(1) + ' Implementation';
-    this.links[1] = {
-      heading: this.impl.name,
-      subHeading: subheading,
-    };
-  }
-
   changeTab(tabNumber: number): void {
     // replace with switch case once quantum resource etc works in the backend
     if (tabNumber === 0) {
       this.loadGeneral();
     }
   }
-  onAddQuantumResource(): void {}
-
-  onDeleteQuantumResource($event: DeleteParams): void {}
 
   onDatalistConfigChanged(params: QueryParams): void {
     this.publicationService.getPublications(params).subscribe((data) => {
@@ -113,26 +90,10 @@ export class ImplementationViewComponent implements OnInit {
     ]);
   }
 
-  onPageChanged($event: string): void {}
-
-  addComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
-    this.algorithmService
-      .addComputingResourceByImplementation({
-        algoId: this.algo.id,
-        implId: this.impl.id,
-        body: property,
-      })
-      .subscribe((e) => {
-        this.fetchComputeResourceProperties();
-        this.utilService.callSnackBar('Successfully added property');
-      });
-  }
-
   updateComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
+    console.log(property);
     this.algorithmService
       .updateComputingResourceByImplementation({
         algoId: this.algo.id,
@@ -143,6 +104,22 @@ export class ImplementationViewComponent implements OnInit {
       .subscribe((e) => {
         this.fetchComputeResourceProperties();
         this.utilService.callSnackBar('Successfully updated property');
+      });
+  }
+
+  addComputeResourceProperty(
+    property: EntityModelComputeResourcePropertyDto
+  ): void {
+    console.log(property);
+    this.algorithmService
+      .addComputingResourceByImplementation({
+        algoId: this.algo.id,
+        implId: this.impl.id,
+        body: property,
+      })
+      .subscribe((e) => {
+        this.fetchComputeResourceProperties();
+        this.utilService.callSnackBar('Successfully added property');
       });
   }
 
@@ -220,6 +197,35 @@ export class ImplementationViewComponent implements OnInit {
           category: t.category,
         }));
       });
+  }
+
+  updateImplementationField(event: { field; value }): void {
+    this.impl[event.field] = event.value;
+    this.algorithmService
+      .updateImplementation({
+        algoId: this.algo.id,
+        implId: this.impl.id,
+        body: this.impl,
+      })
+      .subscribe(
+        (impl) => {
+          this.impl = impl;
+          // live refresh name
+          let subheading = this.algo.computationModel.toString().toLowerCase();
+          subheading =
+            subheading[0].toUpperCase() +
+            subheading.slice(1) +
+            ' Implementation';
+          this.links[1] = {
+            heading: this.impl.name,
+            subHeading: subheading,
+          };
+          this.utilService.callSnackBar('Successfully updated implementation');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   private loadGeneral(): void {

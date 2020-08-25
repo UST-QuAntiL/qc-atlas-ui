@@ -21,6 +21,7 @@ import { ImplSelectionCriteriaComponent } from '../impl-selection-criteria/impl-
 import { ImplementationViewComponent } from './implementation-view.component';
 import { ImplementationPublicationsListComponent } from './implementation-publications-list/implementation-publications-list.component';
 import { ImplementationSoftwareplatformListComponent } from './implementation-softwareplatform-list/implementation-softwareplatform-list.component';
+import { AlgorithmModule } from '../algorithm.module';
 
 @NgModule({
   declarations: [
@@ -29,25 +30,26 @@ import { ImplementationSoftwareplatformListComponent } from './implementation-so
     ImplSelectionCriteriaComponent,
     ImplementationSoftwareplatformListComponent,
   ],
-  imports: [
-    CommonModule,
-    BreadcrumbModule,
-    BadgeModule,
-    IconsModule,
-    MatChipsModule,
-    MatTabsModule,
-    MatIconModule,
-    CommonModule,
-    NavigationBreadcrumbModule,
-    GenericsModule,
-    FormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    ComputeResourcePropertyModule,
-    MatCardModule,
-    CardsModule,
-    MatCheckboxModule,
-  ],
+    imports: [
+        CommonModule,
+        BreadcrumbModule,
+        BadgeModule,
+        IconsModule,
+        MatChipsModule,
+        MatTabsModule,
+        MatIconModule,
+        CommonModule,
+        NavigationBreadcrumbModule,
+        GenericsModule,
+        FormsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        ComputeResourcePropertyModule,
+        MatCardModule,
+        CardsModule,
+        MatCheckboxModule,
+        AlgorithmModule,
+    ],
 })
 export class ImplementationViewModule {}
