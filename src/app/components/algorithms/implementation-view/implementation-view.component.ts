@@ -9,10 +9,7 @@ import { EntityModelComputeResourcePropertyDto } from 'api/models/entity-model-c
 import { TagDto } from 'api/models/tag-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import {
-  DeleteParams,
-  QueryParams,
-} from '../../generics/data-list/data-list.component';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 import { InputParameter } from '../impl-selection-criteria/impl-selection-criteria.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
