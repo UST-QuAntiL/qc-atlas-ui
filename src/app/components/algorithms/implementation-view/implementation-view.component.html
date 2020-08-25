@@ -5,8 +5,7 @@
       <mat-chip-list>
         <mat-chip
           *ngFor="let element of [1, 2, 2, 3, 53, 3]"
-          [removable]="true"
-        >
+          [removable]="true">
           {{ element }}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
@@ -18,26 +17,16 @@
     <mat-tab label="General">
       <div class="p-4">
         <div class="d-flex">
-          <mat-card class="w-100 m-4">
-            <app-text-input
-              (onSaveChanges)="onChangeImpl()"
-              name="Name"
-              class="p-2"
-              [(ngModel)]="impl.name"
-            ></app-text-input>
-          </mat-card>
-          <mat-card class="w-100 m-4">
+          <mat-card class="w-100 my-2 mx-4">
             <app-text-input
               name="Description"
-              class="p-2"
               (onSaveChanges)="onChangeImpl()"
               [(ngModel)]="impl.description"
               [multiline]="true"
             ></app-text-input>
           </mat-card>
-          <mat-card class="w-100 m-4">
+          <mat-card class="w-100 my-2 mx-4">
             <app-text-input
-              class="p-2"
               name="Contributors"
               (onSaveChanges)="onChangeImpl()"
               [(ngModel)]="impl.contributors"
@@ -46,46 +35,42 @@
           </mat-card>
         </div>
         <div class="d-flex">
-          <mat-card class="w-100 m-4">
+          <mat-card class="w-100 w-100 my-2 mx-4">
             <app-text-input
-              class="p-2"
-              name="Input Format"
-              (onSaveChanges)="onChangeImpl()"
-              [(ngModel)]="impl.inputFormat"
-            ></app-text-input>
-          </mat-card>
-          <mat-card class="w-100 m-4">
-            <app-text-input
-              class="p-2"
-              name="Parameter"
-              (onSaveChanges)="onChangeImpl()"
-              [(ngModel)]="impl.parameter"
-            ></app-text-input>
-          </mat-card>
-          <mat-card class="w-100 m-4">
-            <app-text-input
-              class="p-2"
-              name="Output Format"
-              (onSaveChanges)="onChangeImpl()"
-              [(ngModel)]="impl.outputFormat"
-            ></app-text-input>
-          </mat-card>
-        </div>
-        <div class="d-flex">
-          <mat-card class="w-100 m-4">
-            <app-text-input
-              class="p-2"
               name="Dependencies"
               (onSaveChanges)="onChangeImpl()"
               [(ngModel)]="impl.dependencies"
             ></app-text-input>
           </mat-card>
-          <mat-card class="w-100 m-4">
+          <mat-card class="w-100 my-2 mx-4">
             <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
                                                 (updateProperty)="updateComputeResourceProperty($event)"
                                                 (deleteProperty)="deleteComputeResourceProperty($event)"
                                                 [resourceProperties]="computeResourceProperties">
             </app-compute-resource-property-list>
+          </mat-card>
+        </div>
+        <div class="d-flex">
+          <mat-card class="w-100 my-2 mx-4">
+            <app-text-input
+              name="Input Format"
+              (onSaveChanges)="onChangeImpl()"
+              [(ngModel)]="impl.inputFormat"
+            ></app-text-input>
+          </mat-card>
+          <mat-card class="w-100 my-2 mx-4">
+            <app-text-input
+              name="Parameter"
+              (onSaveChanges)="onChangeImpl()"
+              [(ngModel)]="impl.parameter"
+            ></app-text-input>
+          </mat-card>
+          <mat-card class="w-100 my-2 mx-4">
+            <app-text-input
+              name="Output Format"
+              (onSaveChanges)="onChangeImpl()"
+              [(ngModel)]="impl.outputFormat"
+            ></app-text-input>
           </mat-card>
         </div>
       </div>
