@@ -18,10 +18,10 @@ import { ComputeResourcePropertyModule } from '../../compute-resource-property/c
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../../generics/generics.module';
 import { ImplSelectionCriteriaComponent } from '../impl-selection-criteria/impl-selection-criteria.component';
+import { AlgorithmModule } from '../algorithm.module';
 import { ImplementationViewComponent } from './implementation-view.component';
 import { ImplementationPublicationsListComponent } from './implementation-publications-list/implementation-publications-list.component';
 import { ImplementationSoftwareplatformListComponent } from './implementation-softwareplatform-list/implementation-softwareplatform-list.component';
-import { AlgorithmModule } from '../algorithm.module';
 
 @NgModule({
   declarations: [
@@ -30,26 +30,26 @@ import { AlgorithmModule } from '../algorithm.module';
     ImplSelectionCriteriaComponent,
     ImplementationSoftwareplatformListComponent,
   ],
-    imports: [
-        CommonModule,
-        BreadcrumbModule,
-        BadgeModule,
-        IconsModule,
-        MatChipsModule,
-        MatTabsModule,
-        MatIconModule,
-        CommonModule,
-        NavigationBreadcrumbModule,
-        GenericsModule,
-        FormsModule,
-        MatCardModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        ComputeResourcePropertyModule,
-        MatCardModule,
-        CardsModule,
-        MatCheckboxModule,
-        AlgorithmModule,
-    ],
+  imports: [
+    CommonModule,
+    BreadcrumbModule,
+    BadgeModule,
+    IconsModule,
+    MatChipsModule,
+    MatTabsModule,
+    MatIconModule,
+    CommonModule,
+    NavigationBreadcrumbModule,
+    GenericsModule,
+    FormsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    ComputeResourcePropertyModule,
+    MatCardModule,
+    CardsModule,
+    MatCheckboxModule,
+    AlgorithmModule,
+  ],
 })
 export class ImplementationViewModule {}
