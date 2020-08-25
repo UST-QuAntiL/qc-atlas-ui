@@ -1,0 +1,32 @@
+<mat-card *ngIf="isLinkingEnabled" class="m-2">
+  <div class="mx-3 my-2">
+    <app-link-input
+      [linkObject]="linkObject"
+      [isDisableable]=true
+      (searchTextChanged)="searchUnlinkedPlatforms($event)"
+      (linkElement)="linkPlatform($event)"
+      (disable)="onToggleLink()">>
+    </app-link-input>
+  </div>
+</mat-card>
+
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table
+      [data]=linkedPlatforms
+      [variableNames]=variableNames
+      [dataColumns]=tableColumns
+      [allowAdd]=tableAddAllowed
+      [allowSelection]=true
+      [allowSort]=true
+      [emptyTableMessage]="'No linked software platforms found'"
+      [pagination]=pagingInfo
+      [paginatorConfig]=paginatorConfig
+      (elementClicked)="onElementClicked($event)"
+      (datalistConfigChanged)="onDatalistConfigChanged($event)"
+      (submitSelectedElements)="unlinkPlatforms($event)"
+      (addElement)="onToggleLink()"
+      (pageChange)="onPageChanged($event)">
+    </app-table>
+  </div>
+</mat-card>
