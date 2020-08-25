@@ -36,12 +36,13 @@
   text-align: center;
   font-size: 13px;
   font-weight: bold;
+  height: 20%;
 }
 
 .content {
-  width: 300px;
-  height: 300px;
-  margin: 10px;
+  width: 200px;
+  height: 250px;
+  margin: 5px;
   flex: 0 0 auto;
 }
 
@@ -51,9 +52,7 @@
 }
 
 .content-selected {
-  border-color: mat-color($qc-atlas-ui-primary);
-  border-style: solid;
-  border-width: 2px;
+  box-shadow: 0 0 10px mat-color($qc-atlas-ui-primary) inset !important;
 }
 
 .url-icon:hover {
@@ -62,16 +61,19 @@
 }
 
 .image-container {
-  height: 200px;
+  height: 70%;
   text-align: center;
   align-content: center;
 }
 
 .image-container img {
-  display: block;
   margin: 0;
   padding: 0;
   max-width: 100%;
   max-height: 100%;
   object-fit: scale-down;
+}
+
+.actions-container {
+  height: 10%;
 }
