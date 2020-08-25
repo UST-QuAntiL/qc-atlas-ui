@@ -110,6 +110,52 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     });
   }
 
+  onUpdateClicked(event: any): void {
+    const dialogRef = this.utilService.createDialog(
+      AddPatternRelationDialogComponent,
+      {
+        title: 'Edit pattern relation',
+        algoId: this.algorithm.id,
+        pattern: event.pattern,
+        description: event.description,
+        patternRelationType: event.patternTypeObject,
+      },
+      '1000px'
+    );
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        if (!dialogResult.patternRelationType.id) {
+          this.patternRelationTypeService
+            .createPatternRelationType({
+              body: dialogResult.patternRelationType,
+            })
+            .subscribe((createdType) => {
+              this.updatePatternRelation(
+                event.id,
+                this.generatePatternRelationDto(
+                  createdType,
+                  dialogResult.description,
+                  dialogResult.pattern,
+                  event.id
+                )
+              );
+            });
+        } else {
+          this.updatePatternRelation(
+            event.id,
+            this.generatePatternRelationDto(
+              dialogResult.patternRelationType,
+              dialogResult.description,
+              dialogResult.pattern,
+              event.id
+            )
+          );
+        }
+      }
+    });
+  }
+
   onDeleteElements(event): void {
     const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
       title: 'Confirm Deletion',
