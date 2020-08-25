@@ -9,10 +9,7 @@ import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-m
 import { TagDto } from 'api-atlas/models';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import {
-  DeleteParams,
-  QueryParams,
-} from '../../generics/data-list/data-list.component';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 import { InputParameter } from '../impl-selection-criteria/impl-selection-criteria.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -68,35 +65,12 @@ export class ImplementationViewComponent implements OnInit {
     this.loadGeneral();
   }
 
-  onChangeImpl(): void {
-    this.algorithmService
-      .updateImplementation({
-        algoId: this.algo.id,
-        implId: this.impl.id,
-        body: this.impl,
-      })
-      .subscribe(() => {
-        this.utilService.callSnackBar('Successfully updated implementation');
-      });
-    // live refresh name
-    let subheading = this.algo.computationModel.toString().toLowerCase();
-    subheading =
-      subheading[0].toUpperCase() + subheading.slice(1) + ' Implementation';
-    this.links[1] = {
-      heading: this.impl.name,
-      subHeading: subheading,
-    };
-  }
-
   changeTab(tabNumber: number): void {
     // replace with switch case once quantum resource etc works in the backend
     if (tabNumber === 0) {
       this.loadGeneral();
     }
   }
-  onAddQuantumResource(): void {}
-
-  onDeleteQuantumResource($event: DeleteParams): void {}
 
   onDatalistConfigChanged(params: QueryParams): void {
     this.publicationService.getPublications(params).subscribe((data) => {
@@ -113,34 +87,36 @@ export class ImplementationViewComponent implements OnInit {
     ]);
   }
 
-  onPageChanged($event: string): void {}
-
-  addComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
-    this.algorithmService
-      .addComputingResource({
-        algoId: this.algo.id,
-        body: property,
-      })
-      .subscribe((e) => {
-        this.fetchComputeResourceProperties();
-        this.utilService.callSnackBar('Successfully added property');
-      });
-  }
-
   updateComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
+    console.log(property);
     this.algorithmService
-      .updateComputingResource({
+      .updateComputingResourceByImplementation({
         algoId: this.algo.id,
+        implId: this.impl.id,
         resourceId: property.id,
         body: property,
       })
       .subscribe((e) => {
         this.fetchComputeResourceProperties();
         this.utilService.callSnackBar('Successfully updated property');
+      });
+  }
+
+  addComputeResourceProperty(
+    property: EntityModelComputeResourcePropertyDto
+  ): void {
+    console.log(property);
+    this.algorithmService
+      .addComputingResourceByImplementation({
+        algoId: this.algo.id,
+        implId: this.impl.id,
+        body: property,
+      })
+      .subscribe((e) => {
+        this.fetchComputeResourceProperties();
+        this.utilService.callSnackBar('Successfully added property');
       });
   }
 
@@ -160,8 +136,9 @@ export class ImplementationViewComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           this.algorithmService
-            .deleteComputingResource({
+            .deleteComputingResourceByImplementation({
               algoId: this.algo.id,
+              implId: this.impl.id,
               resourceId: property.id,
             })
             .subscribe((e) => {
@@ -217,6 +194,35 @@ export class ImplementationViewComponent implements OnInit {
           category: t.category,
         }));
       });
+  }
+
+  updateImplementationField(event: { field; value }): void {
+    this.impl[event.field] = event.value;
+    this.algorithmService
+      .updateImplementation({
+        algoId: this.algo.id,
+        implId: this.impl.id,
+        body: this.impl,
+      })
+      .subscribe(
+        (impl) => {
+          this.impl = impl;
+          // live refresh name
+          let subheading = this.algo.computationModel.toString().toLowerCase();
+          subheading =
+            subheading[0].toUpperCase() +
+            subheading.slice(1) +
+            ' Implementation';
+          this.links[1] = {
+            heading: this.impl.name,
+            subHeading: subheading,
+          };
+          this.utilService.callSnackBar('Successfully updated implementation');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   private loadGeneral(): void {

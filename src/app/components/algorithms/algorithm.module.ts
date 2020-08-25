@@ -34,6 +34,7 @@ import { ProblemTypeTreeComponent } from './problem-type-tree/problem-type-tree.
 import { AlgorithmRelatedPatternsComponent } from './algorithm-related-patterns/algorithm-related-patterns.component';
 import { AddPatternRelationDialogComponent } from './dialogs/add-pattern-relation-dialog.component';
 import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-relation-dialog.component';
+import { ImplementationPropertiesComponent } from './implementation-properties/implementation-properties.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-rel
     AlgorithmRelatedPatternsComponent,
     AddPatternRelationDialogComponent,
     AddAlgorithmRelationDialogComponent,
+    ImplementationPropertiesComponent,
   ],
   imports: [
     MatTabsModule,
@@ -90,6 +92,7 @@ import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-rel
     CreateImplementationDialogComponent,
     AddPatternRelationDialogComponent,
     AddAlgorithmRelationDialogComponent,
+    ImplementationPropertiesComponent,
   ],
 })
 export class AlgorithmModule {}

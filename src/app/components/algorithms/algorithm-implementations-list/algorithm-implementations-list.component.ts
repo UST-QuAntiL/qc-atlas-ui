@@ -6,6 +6,7 @@ import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { Router } from '@angular/router';
 import { UtilService } from '../../../util/util.service';
 import { CreateImplementationDialogComponent } from '../dialogs/create-implementation-dialog.component';
+import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'app-algorithm-implementations-list',
@@ -18,11 +19,6 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   implementations: EntityModelImplementationDto[];
   variableNames: string[] = ['name', 'description', 'dependencies'];
   tableColumns: string[] = ['Name', 'Description', 'Dependencies'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
-    amountChoices: [10, 25, 50],
-    selectedAmount: 10,
-  };
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -31,6 +27,10 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getImplementations();
+  }
+
+  getImplementations(): void {
     this.algorithmService
       .getImplementations({ algoId: this.algorithm.id })
       .subscribe(
@@ -78,11 +78,36 @@ export class AlgorithmImplementationsListComponent implements OnInit {
       });
   }
 
-  onDeleteImplementation(event): void {}
-
-  onDatalistConfigChanged(event): void {}
-
-  onPageChanged(event): void {}
+  onDeleteImplementation(event): void {
+    const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
+      title: 'Confirm Deletion',
+      message:
+        'Are you sure you want to delete the following implementation(s):',
+      data: event.elements,
+      variableName: 'name',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    });
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        // Iterate all selected algorithms and delete them
+        for (const implementation of event.elements) {
+          this.algorithmService
+            .deleteImplementation({
+              algoId: this.algorithm.id,
+              implId: implementation.id,
+            })
+            .subscribe(() => {
+              // Refresh Algorithms after delete
+              this.getImplementations();
+              this.utilService.callSnackBar(
+                'Successfully deleted implementation(s)'
+              );
+            });
+        }
+      }
+    });
+  }
 
   onImplementationClicked(implementation: EntityModelImplementationDto): void {
     this.router.navigate([
