@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 
 <mat-horizontal-stepper (selectionChange)="stepperSelectionChanged($event)" [linear]="true" #stepper>
-  <mat-step [completed]="selectedPatternLanguage">
+  <mat-step *ngIf="!isUpdateModal" [completed]="selectedPatternLanguage">
     <ng-template matStepLabel>Choose Pattern Language</ng-template>
     <div *ngIf="!arePatternLanguagesLoaded" class="w-100 row d-flex justify-content-center">
       <mat-spinner></mat-spinner>
@@ -39,7 +39,7 @@
       </button>
     </div>
   </mat-step>
-  <mat-step [completed]="selectedPatternLanguage && selectedPattern">
+  <mat-step *ngIf="!isUpdateModal" [completed]="selectedPatternLanguage && selectedPattern">
     <ng-template matStepLabel>Choose Pattern</ng-template>
     <div *ngIf="!arePatternsLoaded" class="w-100 row d-flex justify-content-center">
       <mat-spinner></mat-spinner>
@@ -81,39 +81,41 @@
     </div>
   </mat-step>
   <mat-step [completed]="selectedPatternLanguage && selectedPattern && selectedRelationType && relationDescription">
-    <ng-template matStepLabel>Describe Relationship</ng-template>
+    <ng-template matStepLabel>{{ !isUpdateModal ? 'Describe Relationship' : 'Update Relationship'}}</ng-template>
     <div *ngIf="!areRelationTypesLoaded" class="w-100 row d-flex justify-content-center">
       <mat-spinner></mat-spinner>
     </div>
     <div *ngIf="areRelationTypesLoaded">
-      <mat-form-field class="w-100">
-        <mat-label>Relation Type</mat-label>
-        <input
-          [matAutocomplete]="relationType"
-          [(ngModel)]="relationTypeSearch"
-          (ngModelChange)="onRelationTypeSearch()"
-          (focusout)="!selectedRelationType && onRelationTypeFocusOut()"
-          matInput
-          required>
-        <mat-autocomplete #relationType="matAutocomplete" (optionSelected)="setRelationType($event.option.value)"
-                          [displayWith]="displayRelation">
-          <mat-optgroup *ngFor="let typeGroup of relationTypeGroups" [label]="typeGroup.optionName">
-            <mat-option
-              *ngFor="let type of typeGroup.relationTypes"
-              [value]="type"
-              (mousedown)="setRelationType(type)">
-              {{type.name}}
-            </mat-option>
-          </mat-optgroup>
-        </mat-autocomplete>
-      </mat-form-field>
+      <form [formGroup]="relationTypeForm">
+        <mat-form-field class="w-100">
+          <mat-label>Relation Type</mat-label>
+          <input
+            [matAutocomplete]="relationTypeAuto"
+            formControlName="relationType"
+            (ngModelChange)="onRelationTypeSearch()"
+            (focusout)="!selectedRelationType && onRelationTypeFocusOut()"
+            matInput
+            required>
+          <mat-autocomplete #relationTypeAuto="matAutocomplete" (optionSelected)="setRelationType($event.option.value)"
+                            [displayWith]="displayRelation">
+            <mat-optgroup *ngFor="let typeGroup of relationTypeGroups" [label]="typeGroup.optionName">
+              <mat-option
+                *ngFor="let type of typeGroup.relationTypes"
+                [value]="type"
+                (mousedown)="setRelationType(type)">
+                {{type.name}}
+              </mat-option>
+            </mat-optgroup>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
       <mat-form-field class="w-100">
         <mat-label>Description</mat-label>
         <textarea matInput [(ngModel)]="relationDescription" placeholder="Describe the relation" reqired></textarea>
       </mat-form-field>
     </div>
     <div>
-      <button class="step-button" mat-stroked-button matStepperPrevious>
+      <button *ngIf="!isUpdateModal" class="step-button" mat-stroked-button matStepperPrevious>
         <mat-icon>navigate_before</mat-icon>
       </button>
       <button class="step-button ml-1" mat-stroked-button matStepperNext

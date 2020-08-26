@@ -117,6 +117,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
         title: 'Edit pattern relation',
         algoId: this.algorithm.id,
         pattern: event.pattern,
+        patternObject: event.patternObject,
         description: event.description,
         patternRelationType: event.patternTypeObject,
       },

@@ -8,6 +8,7 @@ import { Pattern } from 'api-patternpedia/models/pattern';
 import { PatternLanguageControllerService } from 'api-patternpedia/services/pattern-language-controller.service';
 import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-pattern-relation-dialog',
@@ -34,12 +35,14 @@ export class AddPatternRelationDialogComponent implements OnInit {
   relationTypeGroups: StateGroup[] = [];
   relationTypes: PatternRelationTypeDto[] = [];
   selectedRelationType: PatternRelationTypeDto = undefined;
-  relationTypeSearch: any = '';
+  relationTypeForm: FormGroup;
 
   // Loading fields
   arePatternLanguagesLoaded = false;
   arePatternsLoaded = false;
   areRelationTypesLoaded = false;
+
+  isUpdateModal = false;
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -51,14 +54,22 @@ export class AddPatternRelationDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getPatternLanguages();
+    this.relationTypeForm = new FormGroup({
+      relationType: new FormControl(this.data.patternRelationType),
+    });
 
-    // TODO: Check if endpoint can be added to get pattern + pattern via pattern-uri
-    /* if (this.isAllDataAvailable()) {
+    // Pre-Select values for update
+    if (this.isAllDataAvailable()) {
+      this.isUpdateModal = true;
+      this.getRelationTypes();
+      this.setRelationType(this.data.patternRelationType);
       this.relationDescription = this.data.description;
-      this.selectedRelationType = this.data.patternRelationType;
-      this.relationTypeSearch = this.data.patternRelationType.name;
-    } */
+      this.selectedPattern = this.data.patternObject;
+      // Define some PatternLanguage since it is not used during update
+      this.selectedPatternLanguage = {};
+    } else {
+      this.getPatternLanguages();
+    }
 
     this.dialogRef.beforeClosed().subscribe(() => {
       if (this.selectedPattern) {
@@ -67,6 +78,15 @@ export class AddPatternRelationDialogComponent implements OnInit {
       this.data.patternRelationType = this.selectedRelationType;
       this.data.description = this.relationDescription;
     });
+  }
+
+  setRelationType(value): void {
+    this.relationTypeForm.get('relationType').setValue(value);
+    this.selectedRelationType = value;
+  }
+
+  get relationType(): AbstractControl | null {
+    return this.relationTypeForm.get('relationType');
   }
 
   onNoClick(): void {
@@ -191,9 +211,9 @@ export class AddPatternRelationDialogComponent implements OnInit {
   }
 
   onRelationTypeSearch(): void {
-    const searchType = this.relationTypeSearch.name
-      ? this.relationTypeSearch
-      : { name: this.relationTypeSearch };
+    const searchType = this.relationType.value.name
+      ? this.relationType.value
+      : { name: this.relationType.value };
     this.filterExistingRelationTypes(searchType.name);
     // Return Type from Input if it exists
     const existingRelationType = this.relationTypes.find(
@@ -252,12 +272,9 @@ export class AddPatternRelationDialogComponent implements OnInit {
     });
   }
 
-  setRelationType(type: PatternRelationTypeDto): void {
-    this.selectedRelationType = type;
-  }
-
   onRelationTypeFocusOut(): void {
-    this.relationTypeSearch = '';
+    this.setRelationType('');
+    this.selectedRelationType = undefined;
     if (this.relationTypeGroups.length === 2) {
       this.filterExistingRelationTypes('');
       this.relationTypeGroups.shift();
@@ -265,10 +282,13 @@ export class AddPatternRelationDialogComponent implements OnInit {
   }
 
   stepperSelectionChanged(event: StepperSelectionEvent): void {
-    if (event.selectedIndex === 1) {
+    if (!this.isUpdateModal && event.selectedIndex === 1) {
       this.getPatterns(this.selectedPatternLanguage.id);
     }
-    if (event.selectedIndex === 2) {
+    if (
+      (!this.isUpdateModal && event.selectedIndex === 2) ||
+      (this.isUpdateModal && event.selectedIndex === 0)
+    ) {
       this.getRelationTypes();
     }
   }
@@ -277,9 +297,10 @@ export class AddPatternRelationDialogComponent implements OnInit {
 export interface DialogData {
   title: string;
   algoId: string;
-  pattern: string;
-  patternRelationType: PatternRelationTypeDto;
-  description: string;
+  pattern?: string;
+  patternObject?: Pattern;
+  patternRelationType?: PatternRelationTypeDto;
+  description?: string;
 }
 
 export interface StateGroup {
