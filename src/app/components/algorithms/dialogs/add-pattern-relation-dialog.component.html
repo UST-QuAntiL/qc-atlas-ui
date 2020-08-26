@@ -87,10 +87,6 @@
     </div>
     <div *ngIf="areRelationTypesLoaded">
       <mat-form-field class="w-100">
-        <mat-label>Description</mat-label>
-        <textarea matInput [(ngModel)]="relationDescription" placeholder="Describe the relation" reqired></textarea>
-      </mat-form-field>
-      <mat-form-field class="w-100">
         <mat-label>Relation Type</mat-label>
         <input
           [matAutocomplete]="relationType"
@@ -110,6 +106,10 @@
             </mat-option>
           </mat-optgroup>
         </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field class="w-100">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="relationDescription" placeholder="Describe the relation" reqired></textarea>
       </mat-form-field>
     </div>
     <div>
