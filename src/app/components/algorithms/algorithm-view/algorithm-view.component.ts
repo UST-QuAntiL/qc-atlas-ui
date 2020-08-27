@@ -105,10 +105,12 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   }
 
   removeTag(tag: TagDto): void {
-    this.algorithmService.removeTagFromAlgorithm({
-      algoId: this.algorithm.id,
-      body: tag,
-    }).subscribe();
+    this.algorithmService
+      .removeTagFromAlgorithm({
+        algoId: this.algorithm.id,
+        body: tag,
+      })
+      .subscribe();
   }
 
   updateAlgorithmField(event: { field; value }): void {
