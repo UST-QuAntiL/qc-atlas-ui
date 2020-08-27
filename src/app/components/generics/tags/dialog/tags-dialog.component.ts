@@ -1,11 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Tag } from 'api-atlas/models';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { TagDto } from 'api-atlas/models';
 
 @Component({
   selector: 'app-tags-dialog-component',
@@ -21,7 +21,7 @@ export class TagsDialogComponent {
   });
 
   selectedCategory: string;
-  resultTag: Tag;
+  resultTag: TagDto;
 
   constructor(
     public dialogRef: MatDialogRef<TagsDialogComponent>,
@@ -60,12 +60,12 @@ export class TagsDialogComponent {
     return this.data.allTags.map((tag) => tag.value);
   }
 
-  getCategories(allTags: Tag[]): string[] {
+  getCategories(allTags: TagDto[]): string[] {
     return Array.from(new Set(allTags.map((tag) => tag.category)));
   }
 }
 
 export interface TagsDialogData {
-  allTags: Tag[];
+  allTags: TagDto[];
   categoryToColor: Record<string, string>;
 }

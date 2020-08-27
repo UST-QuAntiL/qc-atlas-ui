@@ -24,24 +24,24 @@ export class PatternLanguageControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation getAllPatternLanguages
+   * Path part for operation getAllPatternLanguageModels
    */
-  static readonly GetAllPatternLanguagesPath = '/patternLanguages';
+  static readonly GetAllPatternLanguageModelsPath = '/patternLanguages';
 
   /**
    * Retrieve all pattern languages
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAllPatternLanguages()` instead.
+   * To access only the response body, use `getAllPatternLanguageModels()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAllPatternLanguages$Response(params?: {}): Observable<
+  getAllPatternLanguageModels$Response(params?: {}): Observable<
     StrictHttpResponse<CollectionModelEntityModelPatternLanguageModel>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternLanguageControllerService.GetAllPatternLanguagesPath,
+      PatternLanguageControllerService.GetAllPatternLanguageModelsPath,
       'get'
     );
     if (params) {
@@ -67,14 +67,14 @@ export class PatternLanguageControllerService extends BaseService {
    * Retrieve all pattern languages
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAllPatternLanguages$Response()` instead.
+   * To access the full response (for headers, for example), `getAllPatternLanguageModels$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAllPatternLanguages(params?: {}): Observable<
+  getAllPatternLanguageModels(params?: {}): Observable<
     CollectionModelEntityModelPatternLanguageModel
   > {
-    return this.getAllPatternLanguages$Response(params).pipe(
+    return this.getAllPatternLanguageModels$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<CollectionModelEntityModelPatternLanguageModel>
@@ -98,7 +98,7 @@ export class PatternLanguageControllerService extends BaseService {
    */
   createPatternLanguage$Response(params: {
     body: PatternLanguage;
-  }): Observable<StrictHttpResponse<{}>> {
+  }): Observable<StrictHttpResponse<EntityModelPatternLanguage>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternLanguageControllerService.CreatePatternLanguagePath,
@@ -117,7 +117,7 @@ export class PatternLanguageControllerService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
+          return r as StrictHttpResponse<EntityModelPatternLanguage>;
         })
       );
   }
@@ -130,9 +130,14 @@ export class PatternLanguageControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createPatternLanguage(params: { body: PatternLanguage }): Observable<{}> {
+  createPatternLanguage(params: {
+    body: PatternLanguage;
+  }): Observable<EntityModelPatternLanguage> {
     return this.createPatternLanguage$Response(params).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body as {})
+      map(
+        (r: StrictHttpResponse<EntityModelPatternLanguage>) =>
+          r.body as EntityModelPatternLanguage
+      )
     );
   }
 
@@ -270,7 +275,7 @@ export class PatternLanguageControllerService extends BaseService {
   updatePatternLanguage$Response(params: {
     patternLanguageId: string;
     body: PatternLanguage;
-  }): Observable<StrictHttpResponse<{}>> {
+  }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternLanguageControllerService.UpdatePatternLanguagePath,
@@ -284,14 +289,16 @@ export class PatternLanguageControllerService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
+          responseType: 'text',
+          accept: '*/*',
         })
       )
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
         })
       );
   }
@@ -307,9 +314,9 @@ export class PatternLanguageControllerService extends BaseService {
   updatePatternLanguage(params: {
     patternLanguageId: string;
     body: PatternLanguage;
-  }): Observable<{}> {
+  }): Observable<void> {
     return this.updatePatternLanguage$Response(params).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body as {})
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
@@ -329,7 +336,7 @@ export class PatternLanguageControllerService extends BaseService {
    */
   deletePatternLanguage$Response(params: {
     patternLanguageId: string;
-  }): Observable<StrictHttpResponse<{}>> {
+  }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternLanguageControllerService.DeletePatternLanguagePath,
@@ -341,14 +348,16 @@ export class PatternLanguageControllerService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
+          responseType: 'text',
+          accept: '*/*',
         })
       )
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
         })
       );
   }
@@ -361,9 +370,11 @@ export class PatternLanguageControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deletePatternLanguage(params: { patternLanguageId: string }): Observable<{}> {
+  deletePatternLanguage(params: {
+    patternLanguageId: string;
+  }): Observable<void> {
     return this.deletePatternLanguage$Response(params).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body as {})
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
@@ -443,7 +454,7 @@ export class PatternLanguageControllerService extends BaseService {
   putPatternLanguageGraph$Response(params: {
     patternLanguageId: string;
     body: {};
-  }): Observable<StrictHttpResponse<{}>> {
+  }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternLanguageControllerService.PutPatternLanguageGraphPath,
@@ -457,14 +468,16 @@ export class PatternLanguageControllerService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
+          responseType: 'text',
+          accept: '*/*',
         })
       )
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
         })
       );
   }
@@ -480,9 +493,9 @@ export class PatternLanguageControllerService extends BaseService {
   putPatternLanguageGraph(params: {
     patternLanguageId: string;
     body: {};
-  }): Observable<{}> {
+  }): Observable<void> {
     return this.putPatternLanguageGraph$Response(params).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body as {})
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
@@ -503,7 +516,7 @@ export class PatternLanguageControllerService extends BaseService {
   postPatternLanguageGraph$Response(params: {
     patternLanguageId: string;
     body: {};
-  }): Observable<StrictHttpResponse<{}>> {
+  }): Observable<StrictHttpResponse<string>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternLanguageControllerService.PostPatternLanguageGraphPath,
@@ -524,7 +537,7 @@ export class PatternLanguageControllerService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
+          return r as StrictHttpResponse<string>;
         })
       );
   }
@@ -540,9 +553,9 @@ export class PatternLanguageControllerService extends BaseService {
   postPatternLanguageGraph(params: {
     patternLanguageId: string;
     body: {};
-  }): Observable<{}> {
+  }): Observable<string> {
     return this.postPatternLanguageGraph$Response(params).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body as {})
+      map((r: StrictHttpResponse<string>) => r.body as string)
     );
   }
 
@@ -562,7 +575,7 @@ export class PatternLanguageControllerService extends BaseService {
    */
   deletePatternLanguageGraph$Response(params: {
     patternLanguageId: string;
-  }): Observable<StrictHttpResponse<{}>> {
+  }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternLanguageControllerService.DeletePatternLanguageGraphPath,
@@ -574,14 +587,16 @@ export class PatternLanguageControllerService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
+          responseType: 'text',
+          accept: '*/*',
         })
       )
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
         })
       );
   }
@@ -596,9 +611,9 @@ export class PatternLanguageControllerService extends BaseService {
    */
   deletePatternLanguageGraph(params: {
     patternLanguageId: string;
-  }): Observable<{}> {
+  }): Observable<void> {
     return this.deletePatternLanguageGraph$Response(params).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body as {})
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
@@ -678,7 +693,7 @@ export class PatternLanguageControllerService extends BaseService {
   updatePatternSchema$Response(params: {
     patternLanguageId: string;
     body: PatternSchema;
-  }): Observable<StrictHttpResponse<{}>> {
+  }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternLanguageControllerService.UpdatePatternSchemaPath,
@@ -692,14 +707,16 @@ export class PatternLanguageControllerService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
+          responseType: 'text',
+          accept: '*/*',
         })
       )
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
         })
       );
   }
@@ -715,9 +732,9 @@ export class PatternLanguageControllerService extends BaseService {
   updatePatternSchema(params: {
     patternLanguageId: string;
     body: PatternSchema;
-  }): Observable<{}> {
+  }): Observable<void> {
     return this.updatePatternSchema$Response(params).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body as {})
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 }

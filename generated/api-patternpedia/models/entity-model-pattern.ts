@@ -1,10 +1,10 @@
 /* tslint:disable */
-import { Link } from './link';
+import { Links } from './links';
 export type EntityModelPattern = {
   id?: string;
   uri?: string;
   name?: string;
   iconUrl?: string;
   content?: {};
-  links?: Array<Link>;
+  _links?: Links;
 };

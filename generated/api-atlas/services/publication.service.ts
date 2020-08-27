@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { ClassicAlgorithmDto } from '../models/classic-algorithm-dto';
+import { ClassicImplementationDto } from '../models/classic-implementation-dto';
 import { EntityModelAlgorithmDto } from '../models/entity-model-algorithm-dto';
 import { EntityModelImplementationDto } from '../models/entity-model-implementation-dto';
 import { EntityModelPublicationDto } from '../models/entity-model-publication-dto';
@@ -16,6 +17,7 @@ import { Link } from '../models/link';
 import { PageMetadata } from '../models/page-metadata';
 import { PublicationDto } from '../models/publication-dto';
 import { QuantumAlgorithmDto } from '../models/quantum-algorithm-dto';
+import { QuantumImplementationDto } from '../models/quantum-implementation-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -861,19 +863,12 @@ export class PublicationService extends BaseService {
     id: string;
     implId: string;
   }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      name: string;
-      link?: string;
-      inputFormat?: string;
-      outputFormat?: string;
-      description?: string;
-      contributors?: string;
-      assumptions?: string;
-      parameter?: string;
-      dependencies?: string;
-      _links?: Array<Link>;
-    }>
+    StrictHttpResponse<
+      { _links?: Array<Link> } & (
+        | ClassicImplementationDto
+        | QuantumImplementationDto
+      )
+    >
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -894,19 +889,12 @@ export class PublicationService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            name: string;
-            link?: string;
-            inputFormat?: string;
-            outputFormat?: string;
-            description?: string;
-            contributors?: string;
-            assumptions?: string;
-            parameter?: string;
-            dependencies?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<
+            { _links?: Array<Link> } & (
+              | ClassicImplementationDto
+              | QuantumImplementationDto
+            )
+          >;
         })
       );
   }
@@ -922,49 +910,26 @@ export class PublicationService extends BaseService {
   getPublicationImplementation(params: {
     id: string;
     implId: string;
-  }): Observable<{
-    id?: string;
-    name: string;
-    link?: string;
-    inputFormat?: string;
-    outputFormat?: string;
-    description?: string;
-    contributors?: string;
-    assumptions?: string;
-    parameter?: string;
-    dependencies?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<
+    { _links?: Array<Link> } & (
+      | ClassicImplementationDto
+      | QuantumImplementationDto
+    )
+  > {
     return this.getPublicationImplementation$Response(params).pipe(
       map(
         (
-          r: StrictHttpResponse<{
-            id?: string;
-            name: string;
-            link?: string;
-            inputFormat?: string;
-            outputFormat?: string;
-            description?: string;
-            contributors?: string;
-            assumptions?: string;
-            parameter?: string;
-            dependencies?: string;
-            _links?: Array<Link>;
-          }>
+          r: StrictHttpResponse<
+            { _links?: Array<Link> } & (
+              | ClassicImplementationDto
+              | QuantumImplementationDto
+            )
+          >
         ) =>
-          r.body as {
-            id?: string;
-            name: string;
-            link?: string;
-            inputFormat?: string;
-            outputFormat?: string;
-            description?: string;
-            contributors?: string;
-            assumptions?: string;
-            parameter?: string;
-            dependencies?: string;
-            _links?: Array<Link>;
-          }
+          r.body as { _links?: Array<Link> } & (
+            | ClassicImplementationDto
+            | QuantumImplementationDto
+          )
       )
     );
   }

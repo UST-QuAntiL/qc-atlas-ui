@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { Link } from './link';
+import { Links } from './links';
 export type EntityModelPatternModel = {
   id?: string;
   uri?: string;
@@ -7,5 +7,5 @@ export type EntityModelPatternModel = {
   iconUrl?: string;
   patternLanguageId?: string;
   patternLanguageName?: string;
-  links?: Array<Link>;
+  _links?: Links;
 };

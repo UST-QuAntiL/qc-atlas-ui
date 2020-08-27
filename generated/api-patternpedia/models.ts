@@ -25,6 +25,7 @@ export { EntityModelUndirectedEdgeModel } from './models/entity-model-undirected
 export { Issue } from './models/issue';
 export { IssueComment } from './models/issue-comment';
 export { Link } from './models/link';
+export { Links } from './models/links';
 export { Pattern } from './models/pattern';
 export { PatternLanguage } from './models/pattern-language';
 export { PatternSchema } from './models/pattern-schema';

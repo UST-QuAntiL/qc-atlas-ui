@@ -101,26 +101,14 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         algoId: this.algorithm.id,
         body: tag,
       })
-      .subscribe((next) => {
-        this.tags = next._embedded.tags.map((t) => ({
-          value: t.value,
-          category: t.category,
-        }));
-      });
+      .subscribe();
   }
 
   removeTag(tag: TagDto): void {
-    this.algorithmService
-      .removeTagFromAlgorithm({
-        algoId: this.algorithm.id,
-        body: tag,
-      })
-      .subscribe((next) => {
-        this.tags = next._embedded.tags.map((t) => ({
-          value: t.value,
-          category: t.category,
-        }));
-      });
+    this.algorithmService.removeTagFromAlgorithm({
+      algoId: this.algorithm.id,
+      body: tag,
+    }).subscribe();
   }
 
   updateAlgorithmField(event: { field; value }): void {

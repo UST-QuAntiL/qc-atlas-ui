@@ -127,7 +127,7 @@ export class TagsComponent {
     return this.colorPalette[rand];
   }
 
-  removeTag(tag: Tag): void {
+  removeTag(tag: TagDto): void {
     this.tags = this.tags.filter((t) => t.value !== tag.value);
     this.onRemove.emit(tag);
   }
@@ -175,9 +175,4 @@ export class TagsComponent {
   toggleCategories(): void {
     this.showCategories = !this.showCategories;
   }
-}
-
-export interface Tag {
-  value: string;
-  category: string;
 }

@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { EntityModelUndirectedEdgeModel } from './entity-model-undirected-edge-model';
-import { Link } from './link';
+import { Links } from './links';
 export type CollectionModelEntityModelUndirectedEdgeModel = {
-  links?: Array<Link>;
-  content?: Array<EntityModelUndirectedEdgeModel>;
+  _embedded?: { undirectedEdgeModels?: Array<EntityModelUndirectedEdgeModel> };
+  _links?: Links;
 };

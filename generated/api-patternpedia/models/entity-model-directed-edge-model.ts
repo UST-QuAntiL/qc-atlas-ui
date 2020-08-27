@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { Link } from './link';
+import { Links } from './links';
 export type EntityModelDirectedEdgeModel = {
   id?: string;
   description?: {};
@@ -10,5 +10,5 @@ export type EntityModelDirectedEdgeModel = {
   targetPatternName?: string;
   targetPatternId?: string;
   targetPatternUri?: string;
-  links?: Array<Link>;
+  _links?: Links;
 };

@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { Link } from './link';
+import { Links } from './links';
 export type EntityModelUndirectedEdgeModel = {
   id?: string;
   description?: {};
@@ -10,5 +10,5 @@ export type EntityModelUndirectedEdgeModel = {
   pattern2Name?: string;
   pattern2Id?: string;
   pattern2Uri?: string;
-  links?: Array<Link>;
+  _links?: Links;
 };

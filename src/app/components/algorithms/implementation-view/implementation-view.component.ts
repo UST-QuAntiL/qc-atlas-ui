@@ -174,12 +174,7 @@ export class ImplementationViewComponent implements OnInit {
         implId: this.impl.id,
         body: tag,
       })
-      .subscribe((next) => {
-        this.tags = next._embedded.tags.map((t) => ({
-          value: t.value,
-          category: t.category,
-        }));
-      });
+      .subscribe();
   }
 
   removeTag(tag: TagDto): void {
@@ -188,12 +183,7 @@ export class ImplementationViewComponent implements OnInit {
         implId: this.impl.id,
         body: tag,
       })
-      .subscribe((next) => {
-        this.tags = next._embedded.tags.map((t) => ({
-          value: t.value,
-          category: t.category,
-        }));
-      });
+      .subscribe();
   }
 
   updateImplementationField(event: { field; value }): void {

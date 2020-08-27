@@ -1,6 +1,6 @@
 /* tslint:disable */
 import { CandidateComment } from './candidate-comment';
-import { Link } from './link';
+import { Links } from './links';
 export type EntityModelCandidateModel = {
   id?: string;
   uri?: string;
@@ -12,5 +12,5 @@ export type EntityModelCandidateModel = {
   version?: string;
   rating?: number;
   comments?: Array<CandidateComment>;
-  links?: Array<Link>;
+  _links?: Links;
 };

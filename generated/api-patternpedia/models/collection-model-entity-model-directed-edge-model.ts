@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { EntityModelDirectedEdgeModel } from './entity-model-directed-edge-model';
-import { Link } from './link';
+import { Links } from './links';
 export type CollectionModelEntityModelDirectedEdgeModel = {
-  links?: Array<Link>;
-  content?: Array<EntityModelDirectedEdgeModel>;
+  _embedded?: { directedEdgeModels?: Array<EntityModelDirectedEdgeModel> };
+  _links?: Links;
 };

@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { EntityModelCandidateModel } from './entity-model-candidate-model';
-import { Link } from './link';
+import { Links } from './links';
 export type CollectionModelEntityModelCandidateModel = {
-  links?: Array<Link>;
-  content?: Array<EntityModelCandidateModel>;
+  _embedded?: { candidateModels?: Array<EntityModelCandidateModel> };
+  _links?: Links;
 };

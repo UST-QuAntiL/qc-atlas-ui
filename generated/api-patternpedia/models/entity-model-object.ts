@@ -1,3 +1,3 @@
 /* tslint:disable */
-import { Link } from './link';
-export type EntityModelObject = { content?: {}; links?: Array<Link> };
+import { Links } from './links';
+export type EntityModelObject = { content?: {}; _links?: Links };

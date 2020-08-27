@@ -104,7 +104,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
   getPatternLanguages(): void {
     this.arePatternLanguagesLoaded = false;
     this.patternLanguageService
-      .getAllPatternLanguages()
+      .getAllPatternLanguageModels()
       .subscribe((languages) => {
         // TODO: Check if this can be avoided
         const lng = JSON.parse(JSON.stringify(languages));

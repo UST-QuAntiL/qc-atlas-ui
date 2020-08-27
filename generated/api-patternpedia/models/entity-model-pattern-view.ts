@@ -1,9 +1,9 @@
 /* tslint:disable */
-import { Link } from './link';
+import { Links } from './links';
 export type EntityModelPatternView = {
   id?: string;
   uri?: string;
   name?: string;
   graph?: {};
-  links?: Array<Link>;
+  _links?: Links;
 };

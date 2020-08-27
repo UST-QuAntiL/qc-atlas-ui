@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { EntityModelPatternView } from './entity-model-pattern-view';
-import { Link } from './link';
+import { Links } from './links';
 export type CollectionModelEntityModelPatternView = {
-  links?: Array<Link>;
-  content?: Array<EntityModelPatternView>;
+  _embedded?: { patternViews?: Array<EntityModelPatternView> };
+  _links?: Links;
 };

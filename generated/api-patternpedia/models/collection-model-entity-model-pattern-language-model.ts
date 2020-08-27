@@ -1,7 +1,9 @@
 /* tslint:disable */
 import { EntityModelPatternLanguageModel } from './entity-model-pattern-language-model';
-import { Link } from './link';
+import { Links } from './links';
 export type CollectionModelEntityModelPatternLanguageModel = {
-  links?: Array<Link>;
-  content?: Array<EntityModelPatternLanguageModel>;
+  _embedded?: {
+    patternLanguageModels?: Array<EntityModelPatternLanguageModel>;
+  };
+  _links?: Links;
 };
