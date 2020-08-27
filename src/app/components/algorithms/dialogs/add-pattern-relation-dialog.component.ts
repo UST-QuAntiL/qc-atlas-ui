@@ -9,6 +9,7 @@ import { PatternLanguageControllerService } from 'api-patternpedia/services/patt
 import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { EntityModelPatternModel } from 'api-patternpedia/models/entity-model-pattern-model';
 
 @Component({
   selector: 'app-add-pattern-relation-dialog',
@@ -23,8 +24,8 @@ export class AddPatternRelationDialogComponent implements OnInit {
   patternLanguageSearch = '';
 
   // Pattern fields
-  patterns: Pattern[] = [];
-  filteredPatterns: Pattern[] = [];
+  patterns: EntityModelPatternModel[] = [];
+  filteredPatterns: EntityModelPatternModel[] = [];
   selectedPattern: Pattern = undefined;
   patternSearch = '';
 
@@ -106,9 +107,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
     this.patternLanguageService
       .getAllPatternLanguageModels()
       .subscribe((languages) => {
-        // TODO: Check if this can be avoided
-        const lng = JSON.parse(JSON.stringify(languages));
-        this.patternLanguages = lng._embedded.patternLanguageModels;
+        this.patternLanguages = languages._embedded.patternLanguageModels;
         this.filteredPatternLanguages = this.patternLanguages;
         this.arePatternLanguagesLoaded = true;
       });
@@ -119,9 +118,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
     this.patternService
       .getPatternsOfPatternLanguage({ patternLanguageId })
       .subscribe((patterns) => {
-        // TODO: Check if this can be avoided
-        const pat = JSON.parse(JSON.stringify(patterns));
-        this.patterns = pat._embedded.patternModels;
+        this.patterns = patterns._embedded.patternModels;
         this.filteredPatterns = this.patterns;
         this.arePatternsLoaded = true;
       });
