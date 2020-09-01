@@ -1,29 +1,33 @@
 <div class="p-4">
-  <div class="d-flex">
-    <mat-card class="w-100 m-4">
-      <app-text-input class="p-2"
-                      name="DOI"
-                      [(ngModel)]="publication.doi"
-                      (onSaveChanges)="onChangesSaved($event, 'doi')"></app-text-input>
-    </mat-card>
-    <mat-card class="w-100 m-4">
-      <app-text-input class="p-2"
-                      name="URL"
-                      [(ngModel)]="publication.url"
-                      [isLink]=true
-                      (onSaveChanges)="onChangesSaved($event, 'url')"></app-text-input>
-    </mat-card>
+  <div class="d-flex row">
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input name="DOI"
+                        [(ngModel)]="publication.doi"
+                        (onSaveChanges)="onChangesSaved($event, 'doi')"></app-text-input>
+      </mat-card>
+    </div>
+
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input name="URL"
+                        [(ngModel)]="publication.url"
+                        [isLink]=true
+                        (onSaveChanges)="onChangesSaved($event, 'url')"></app-text-input>
+      </mat-card>
+    </div>
   </div>
 
-  <div class="d-flex">
-    <mat-card class="w-100 m-4">
-      <app-chip-collection class="w-100"
-                           [title]="'Authors'"
-                           [elements]="publication.authors"
-                           [allowEmpty]=false
-                           (onAddElement)="addAuthorEvent($event)"
-                           (onRemoveElement)="removeAuthorEvent($event)">
-      </app-chip-collection>
-    </mat-card>
+  <div class="d-flex row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-chip-collection [title]="'Authors'"
+                             [elements]="publication.authors"
+                             [allowEmpty]=false
+                             (onAddElement)="addAuthorEvent($event)"
+                             (onRemoveElement)="removeAuthorEvent($event)">
+        </app-chip-collection>
+      </mat-card>
+    </div>
   </div>
 </div>
