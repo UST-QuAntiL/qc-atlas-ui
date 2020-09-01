@@ -7,7 +7,7 @@ import { EntityModelPublicationDto } from 'api/models/entity-model-publication-d
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
 import {
-  DeleteParams,
+  SelectParams,
   QueryParams,
   UrlData,
 } from '../../generics/data-list/data-list.component';
@@ -94,7 +94,7 @@ export class PublicationListComponent implements OnInit {
     });
   }
 
-  onDeleteElements(event: DeleteParams): void {
+  onDeleteElements(event: SelectParams): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Confirm Deletion',

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { EntityModelComputeResourceDto } from 'api/models/entity-model-compute-resource-dto';
 import { ComputeResourceDto } from 'api/models/compute-resource-dto';
 import {
-  DeleteParams,
+  SelectParams,
   LinkObject,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
@@ -94,7 +94,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
       });
   }
 
-  async unlinkComputeResources(event: DeleteParams): Promise<void> {
+  async unlinkComputeResources(event: SelectParams): Promise<void> {
     for (const computeResource of event.elements) {
       await this.executionEnvironmentsService
         .deleteComputeResourceReferenceFromCloudService({

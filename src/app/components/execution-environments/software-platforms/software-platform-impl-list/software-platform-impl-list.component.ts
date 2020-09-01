@@ -6,7 +6,7 @@ import { EntityModelImplementationDto } from 'api/models/entity-model-implementa
 import { ImplementationDto } from 'api/models/implementation-dto';
 import { AlgorithmService } from 'api/services/algorithm.service';
 import {
-  DeleteParams,
+  SelectParams,
   LinkObject,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
@@ -96,7 +96,7 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       });
   }
 
-  async unlinkImplementations(event: DeleteParams): Promise<void> {
+  async unlinkImplementations(event: SelectParams): Promise<void> {
     for (const implementation of event.elements) {
       await this.executionEnvironmentsService
         .deleteImplementationReferenceFromSoftwarePlatform({

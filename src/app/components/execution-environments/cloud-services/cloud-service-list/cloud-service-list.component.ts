@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { CloudServiceDto } from 'api/models/cloud-service-dto';
 import { UtilService } from '../../../../util/util.service';
 import {
-  DeleteParams,
+  SelectParams,
   QueryParams,
 } from '../../../generics/data-list/data-list.component';
 import { CreateCloudServiceDialogComponent } from '../dialogs/create-cloud-service-dialog.component';
@@ -97,7 +97,7 @@ export class CloudServiceListComponent implements OnInit {
       });
   }
 
-  onDeleteCloudServices(deleteParams: DeleteParams): void {
+  onDeleteCloudServices(deleteParams: SelectParams): void {
     this.utilService
       .createDialog(ConfirmDialogComponent, {
         title: 'Confirm Deletion',

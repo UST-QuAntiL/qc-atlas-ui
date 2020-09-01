@@ -5,7 +5,7 @@ import { ExecutionEnvironmentsService } from 'api/services/execution-environment
 import { Router } from '@angular/router';
 import { CloudServiceDto } from 'api/models/cloud-service-dto';
 import {
-  DeleteParams,
+  SelectParams,
   LinkObject,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
@@ -93,7 +93,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
       });
   }
 
-  async unlinkCloudServices(event: DeleteParams): Promise<void> {
+  async unlinkCloudServices(event: SelectParams): Promise<void> {
     for (const cloudService of event.elements) {
       await this.executionEnvironmentsService
         .deleteComputeResourceReferenceFromCloudService({

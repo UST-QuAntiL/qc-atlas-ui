@@ -16,6 +16,8 @@ export class DataListComponent implements OnInit {
   @Input() addIcon = 'playlist_add';
   @Input() allowSelection: boolean;
   @Input() submitSelectionIcon = 'delete';
+  @Input() submitSelectionButtonColor = 'red';
+  @Input() submitSelectionButton = 'delete-button';
   @Input() allowSearch: boolean;
   @Input() allowSort: boolean;
   @Input() pagination: any;
@@ -26,7 +28,7 @@ export class DataListComponent implements OnInit {
   @Output() urlClicked = new EventEmitter<UrlData>();
   @Output() updateClicked = new EventEmitter<any>();
   @Output() addElement = new EventEmitter<void>();
-  @Output() submitSelectedElements = new EventEmitter<DeleteParams>(); // changed
+  @Output() submitSelectedElements = new EventEmitter<SelectParams>(); // changed
   @Output() pageChange = new EventEmitter<string>();
   @Output() datalistConfigChanged = new EventEmitter<QueryParams>();
   selection = new SelectionModel<any>(true, []);
@@ -93,13 +95,13 @@ export class DataListComponent implements OnInit {
 
   // changed
   onSelectionSubmitted(): void {
-    this.submitSelectedElements.emit(this.generateDeleteParameter());
+    this.submitSelectedElements.emit(this.generateSelectParameter());
     this.selection.clear();
   }
 
   onSingleDelete(element): void {
     const deleteElement: any[] = [element];
-    const deleteParams = this.generateDeleteParameter();
+    const deleteParams = this.generateSelectParameter();
     deleteParams.elements = deleteElement;
     this.submitSelectedElements.emit(deleteParams);
     this.selection.clear();
@@ -133,7 +135,7 @@ export class DataListComponent implements OnInit {
     }
   }
 
-  private generateDeleteParameter(): DeleteParams {
+  private generateSelectParameter(): SelectParams {
     return {
       elements: this.selection.selected,
       queryParams: this.generateGetParameter(),
@@ -181,7 +183,7 @@ export interface QueryParams {
   search?: string;
 }
 
-export interface DeleteParams {
+export interface SelectParams {
   elements: any;
   queryParams: QueryParams;
 }

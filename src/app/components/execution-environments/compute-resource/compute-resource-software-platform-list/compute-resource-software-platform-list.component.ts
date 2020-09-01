@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { SoftwarePlatformDto } from 'api/models/software-platform-dto';
 import { EntityModelComputeResourceDto } from 'api/models/entity-model-compute-resource-dto';
 import {
-  DeleteParams,
+  SelectParams,
   LinkObject,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
@@ -95,7 +95,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
       });
   }
 
-  async unlinkSoftwarePlatforms(event: DeleteParams): Promise<void> {
+  async unlinkSoftwarePlatforms(event: SelectParams): Promise<void> {
     for (const softwarePlatform of event.elements) {
       await this.executionEnvironmentsService
         .deleteComputeResourceReferenceFromSoftwarePlatform({

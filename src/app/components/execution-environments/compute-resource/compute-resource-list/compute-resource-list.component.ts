@@ -4,7 +4,7 @@ import { ExecutionEnvironmentsService } from 'api/services/execution-environment
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api/models/compute-resource-dto';
 import {
-  DeleteParams,
+  SelectParams,
   QueryParams,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
@@ -100,7 +100,7 @@ export class ComputeResourceListComponent implements OnInit {
       });
   }
 
-  onDeleteComputeResources(deleteParams: DeleteParams): void {
+  onDeleteComputeResources(deleteParams: SelectParams): void {
     this.utilService
       .createDialog(ConfirmDialogComponent, {
         title: 'Confirm Deletion',

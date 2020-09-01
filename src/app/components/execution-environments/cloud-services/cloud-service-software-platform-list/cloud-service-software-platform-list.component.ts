@@ -7,7 +7,7 @@ import { ComputeResourceDto } from 'api/models/compute-resource-dto';
 import { EntityModelSoftwarePlatformDto } from 'api/models/entity-model-software-platform-dto';
 import { SoftwarePlatformDto } from 'api/models/software-platform-dto';
 import {
-  DeleteParams,
+  SelectParams,
   LinkObject,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
@@ -97,7 +97,7 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       });
   }
 
-  async unlinkSoftwarePlatforms(event: DeleteParams): Promise<void> {
+  async unlinkSoftwarePlatforms(event: SelectParams): Promise<void> {
     for (const softwarePlatform of event.elements) {
       await this.executionEnvironmentsService
         .deleteCloudServiceReferenceFromSoftwarePlatform({

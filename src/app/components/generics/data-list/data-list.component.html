@@ -22,9 +22,9 @@
           (click)="onAdd()" mdbWavesEffect>
     <span class="material-icons">{{addIcon}}</span>
   </button>
-  <!-- Delete-Selected-Button -->
-  <button mdbBtn *ngIf="allowSelection && selection.hasValue()" class="control-button delete-button btn-sm"
-          type="button" color="red" outline="true"
+  <!-- Submit-Selected-Button -->
+  <button mdbBtn *ngIf="allowSelection && selection.hasValue()" class="control-button {{submitSelectionButton}} btn-sm"
+          type="button" color={{submitSelectionButtonColor}} outline="true"
           (click)="onSelectionSubmitted()" mdbWavesEffect>
     <mat-icon>{{submitSelectionIcon}}</mat-icon>
   </button>
@@ -77,7 +77,7 @@
         </button>
         <button *ngIf="allowSelection" mat-icon-button class="delete-small"
                 (click)="onSingleDelete(dataEntry); $event.stopPropagation()">
-          <mat-icon>{{submitSelectionIcon}}</mat-icon>
+          <mat-icon>delete</mat-icon>
         </button>
       </td>
     </tr>

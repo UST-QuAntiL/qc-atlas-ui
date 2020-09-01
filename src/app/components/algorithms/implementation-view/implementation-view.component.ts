@@ -9,7 +9,7 @@ import { EntityModelComputeResourcePropertyDto } from 'api/models/entity-model-c
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import {
-  DeleteParams,
+  SelectParams,
   QueryParams,
 } from '../../generics/data-list/data-list.component';
 import { InputParameter } from '../impl-selection-criteria/impl-selection-criteria.component';
@@ -90,7 +90,7 @@ export class ImplementationViewComponent implements OnInit {
   }
   onAddQuantumResource(): void {}
 
-  onDeleteQuantumResource($event: DeleteParams): void {}
+  onDeleteQuantumResource($event: SelectParams): void {}
 
   onDatalistConfigChanged(params: QueryParams): void {
     this.publicationService.getPublications(params).subscribe((data) => {
