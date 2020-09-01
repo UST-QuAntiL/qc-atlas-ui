@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
 import { AlgorithmService } from 'api/services/algorithm.service';
 import { EntityModelAlgorithmRelationDto } from 'api/models/entity-model-algorithm-relation-dto';
-import { MatDialog } from '@angular/material/dialog';
 import { AlgorithmRelationDto } from 'api/models/algorithm-relation-dto';
 import { AlgorithmDto } from 'api/models/algorithm-dto';
 import { AlgoRelationTypeDto } from 'api/models/algo-relation-type-dto';
@@ -35,7 +34,6 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   };
 
   constructor(
-    private dialog: MatDialog,
     private algorithmService: AlgorithmService,
     private algorithmRelationTypeService: AlgorithmRelationTypeService,
     private utilService: UtilService,
@@ -91,15 +89,15 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const dialogRef = this.dialog.open(AddAlgorithmRelationDialogComponent, {
-      width: '400px',
-      data: {
+    const dialogRef = this.utilService.createDialog(
+      AddAlgorithmRelationDialogComponent,
+      {
         title: 'Add new algorithm relation',
         algoId: this.algorithm.id,
         existingRelations: this.algorithmRelations,
         disableAlg: false,
-      },
-    });
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
@@ -133,16 +131,14 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onDeleteElements(event): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Confirm Deletion',
-        message:
-          'Are you sure you want to delete the following algorithm relation(s):',
-        data: event.elements,
-        variableName: 'targetAlgName',
-        yesButtonText: 'yes',
-        noButtonText: 'no',
-      },
+    const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
+      title: 'Confirm Deletion',
+      message:
+        'Are you sure you want to delete the following algorithm relation(s):',
+      data: event.elements,
+      variableName: 'targetAlgName',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
     });
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
@@ -169,9 +165,9 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onUpdateClicked(event): void {
-    const dialogRef = this.dialog.open(AddAlgorithmRelationDialogComponent, {
-      width: '400px',
-      data: {
+    const dialogRef = this.utilService.createDialog(
+      AddAlgorithmRelationDialogComponent,
+      {
         title: 'Update algorithm relation',
         algoId: this.algorithm.id,
         algoRelationId: event.id,
@@ -180,8 +176,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         targetAlg: event.targetAlgObject,
         description: event.description,
         disableAlg: true,
-      },
-    });
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {

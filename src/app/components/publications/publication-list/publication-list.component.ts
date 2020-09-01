@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api/services/publication.service';
 import { PublicationDto } from 'api/models/publication-dto';
@@ -33,7 +32,6 @@ export class PublicationListComponent implements OnInit {
   constructor(
     private publicationService: PublicationService,
     private genericDataService: GenericDataService,
-    private dialog: MatDialog,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -74,10 +72,12 @@ export class PublicationListComponent implements OnInit {
 
   onAddElement(): void {
     const params: any = {};
-    const dialogRef = this.dialog.open(AddPublicationDialogComponent, {
-      width: '400px',
-      data: { title: 'Add new publication' },
-    });
+    const dialogRef = this.utilService.createDialog(
+      AddPublicationDialogComponent,
+      {
+        data: { title: 'Add new publication' },
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
@@ -93,18 +93,15 @@ export class PublicationListComponent implements OnInit {
       }
     });
   }
-
   onDeleteElements(event: SelectParams): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Confirm Deletion',
-        message:
-          'Are you sure you want to delete the following publication(s): ',
-        data: event.elements,
-        variableName: 'title',
-        yesButtonText: 'yes',
-        noButtonText: 'no',
-      },
+    const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
+      title: 'Confirm Deletion',
+      message:
+        'Are you sure you want to delete the following publication(s): ',
+      data: event.elements,
+      variableName: 'title',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
     });
 
     dialogRef.afterClosed().subscribe((dialogResult) => {

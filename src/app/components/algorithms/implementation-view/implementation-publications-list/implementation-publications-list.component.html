@@ -17,6 +17,7 @@
                [dataColumns]=tableColumns
                [allowAdd]=tableAddAllowed
                [allowSelection]=true
+               [emptyTableMessage]="'No linked publications found'"
                (elementClicked)="onElementClicked($event)"
                (datalistConfigChanged)="onDatalistConfigChanged($event)"
                (submitSelectedElements)="unlinkPublications($event)"

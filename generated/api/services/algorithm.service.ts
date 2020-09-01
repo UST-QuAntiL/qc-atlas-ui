@@ -13,7 +13,6 @@ import { AlgorithmDto } from '../models/algorithm-dto';
 import { AlgorithmRelationDto } from '../models/algorithm-relation-dto';
 import { ApplicationAreaDto } from '../models/application-area-dto';
 import { ClassicAlgorithmDto } from '../models/classic-algorithm-dto';
-import { ClassicImplementationDto } from '../models/classic-implementation-dto';
 import { ComputeResourcePropertyDto } from '../models/compute-resource-property-dto';
 import { ComputeResourcePropertyTypeDto } from '../models/compute-resource-property-type-dto';
 import { EntityModelAlgorithmDto } from '../models/entity-model-algorithm-dto';
@@ -25,6 +24,7 @@ import { EntityModelPatternRelationDto } from '../models/entity-model-pattern-re
 import { EntityModelProblemTypeDto } from '../models/entity-model-problem-type-dto';
 import { EntityModelPublicationDto } from '../models/entity-model-publication-dto';
 import { EntityModelSoftwarePlatformDto } from '../models/entity-model-software-platform-dto';
+import { EntityModelTagDto } from '../models/entity-model-tag-dto';
 import { ImplementationDto } from '../models/implementation-dto';
 import { Link } from '../models/link';
 import { PageMetadata } from '../models/page-metadata';
@@ -33,8 +33,8 @@ import { PatternRelationTypeDto } from '../models/pattern-relation-type-dto';
 import { ProblemTypeDto } from '../models/problem-type-dto';
 import { PublicationDto } from '../models/publication-dto';
 import { QuantumAlgorithmDto } from '../models/quantum-algorithm-dto';
-import { QuantumImplementationDto } from '../models/quantum-implementation-dto';
 import { SoftwarePlatformDto } from '../models/software-platform-dto';
+import { TagDto } from '../models/tag-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -1732,12 +1732,19 @@ export class AlgorithmService extends BaseService {
     algoId: string;
     body: ImplementationDto;
   }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      link?: string;
+      inputFormat?: string;
+      outputFormat?: string;
+      description?: string;
+      contributors?: string;
+      assumptions?: string;
+      parameter?: string;
+      dependencies?: string;
+      _links?: Array<Link>;
+    }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -1759,12 +1766,19 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>;
         })
       );
   }
@@ -1780,26 +1794,49 @@ export class AlgorithmService extends BaseService {
   createImplementation(params: {
     algoId: string;
     body: ImplementationDto;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<{
+    id?: string;
+    name: string;
+    link?: string;
+    inputFormat?: string;
+    outputFormat?: string;
+    description?: string;
+    contributors?: string;
+    assumptions?: string;
+    parameter?: string;
+    dependencies?: string;
+    _links?: Array<Link>;
+  }> {
     return this.createImplementation$Response(params).pipe(
       map(
         (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>
         ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+          r.body as {
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }
       )
     );
   }
@@ -1822,12 +1859,19 @@ export class AlgorithmService extends BaseService {
     algoId: string;
     implId: string;
   }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      link?: string;
+      inputFormat?: string;
+      outputFormat?: string;
+      description?: string;
+      contributors?: string;
+      assumptions?: string;
+      parameter?: string;
+      dependencies?: string;
+      _links?: Array<Link>;
+    }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -1848,12 +1892,19 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>;
         })
       );
   }
@@ -1869,26 +1920,49 @@ export class AlgorithmService extends BaseService {
   getImplementation(params: {
     algoId: string;
     implId: string;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<{
+    id?: string;
+    name: string;
+    link?: string;
+    inputFormat?: string;
+    outputFormat?: string;
+    description?: string;
+    contributors?: string;
+    assumptions?: string;
+    parameter?: string;
+    dependencies?: string;
+    _links?: Array<Link>;
+  }> {
     return this.getImplementation$Response(params).pipe(
       map(
         (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>
         ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+          r.body as {
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }
       )
     );
   }
@@ -1912,12 +1986,19 @@ export class AlgorithmService extends BaseService {
     implId: string;
     body: ImplementationDto;
   }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
+    StrictHttpResponse<{
+      id?: string;
+      name: string;
+      link?: string;
+      inputFormat?: string;
+      outputFormat?: string;
+      description?: string;
+      contributors?: string;
+      assumptions?: string;
+      parameter?: string;
+      dependencies?: string;
+      _links?: Array<Link>;
+    }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -1940,12 +2021,19 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>;
         })
       );
   }
@@ -1962,26 +2050,49 @@ export class AlgorithmService extends BaseService {
     algoId: string;
     implId: string;
     body: ImplementationDto;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<{
+    id?: string;
+    name: string;
+    link?: string;
+    inputFormat?: string;
+    outputFormat?: string;
+    description?: string;
+    contributors?: string;
+    assumptions?: string;
+    parameter?: string;
+    dependencies?: string;
+    _links?: Array<Link>;
+  }> {
     return this.updateImplementation$Response(params).pipe(
       map(
         (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
+          r: StrictHttpResponse<{
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }>
         ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+          r.body as {
+            id?: string;
+            name: string;
+            link?: string;
+            inputFormat?: string;
+            outputFormat?: string;
+            description?: string;
+            contributors?: string;
+            assumptions?: string;
+            parameter?: string;
+            dependencies?: string;
+            _links?: Array<Link>;
+          }
       )
     );
   }
@@ -3199,6 +3310,203 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Path part for operation getTagsOfImplementation
+   */
+  static readonly GetTagsOfImplementationPath =
+    '/v1/algorithms/{algoId}/implementations/{implId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTagsOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTagsOfImplementation$Response(params: {
+    algoId: string;
+    implId: string;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetTagsOfImplementationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algoId', params.algoId, {});
+      rb.path('implId', params.implId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getTagsOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTagsOfImplementation(params: {
+    algoId: string;
+    implId: string;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.getTagsOfImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation addTagToImplementation
+   */
+  static readonly AddTagToImplementationPath =
+    '/v1/algorithms/{algoId}/implementations/{implId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addTagToImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addTagToImplementation$Response(params: {
+    implId: string;
+    body: TagDto;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.AddTagToImplementationPath,
+      'put'
+    );
+    if (params) {
+      rb.path('implId', params.implId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `addTagToImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addTagToImplementation(params: {
+    implId: string;
+    body: TagDto;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.addTagToImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation removeTagFromImplementation
+   */
+  static readonly RemoveTagFromImplementationPath =
+    '/v1/algorithms/{algoId}/implementations/{implId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeTagFromImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  removeTagFromImplementation$Response(params: {
+    implId: string;
+    body: TagDto;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.RemoveTagFromImplementationPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('implId', params.implId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeTagFromImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  removeTagFromImplementation(params: {
+    implId: string;
+    body: TagDto;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.removeTagFromImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
    * Path part for operation getPatternRelations
    */
   static readonly GetPatternRelationsPath =
@@ -4251,6 +4559,197 @@ export class AlgorithmService extends BaseService {
   }): Observable<void> {
     return this.deleteReferenceToPublication$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getTagsOfAlgorithm
+   */
+  static readonly GetTagsOfAlgorithmPath = '/v1/algorithms/{algoId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTagsOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTagsOfAlgorithm$Response(params: {
+    algoId: string;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetTagsOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algoId', params.algoId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getTagsOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTagsOfAlgorithm(params: {
+    algoId: string;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.getTagsOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation addTagToAlgorithm
+   */
+  static readonly AddTagToAlgorithmPath = '/v1/algorithms/{algoId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addTagToAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addTagToAlgorithm$Response(params: {
+    algoId: string;
+    body: TagDto;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.AddTagToAlgorithmPath,
+      'put'
+    );
+    if (params) {
+      rb.path('algoId', params.algoId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `addTagToAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addTagToAlgorithm(params: {
+    algoId: string;
+    body: TagDto;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.addTagToAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation removeTagFromAlgorithm
+   */
+  static readonly RemoveTagFromAlgorithmPath = '/v1/algorithms/{algoId}/tags';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeTagFromAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  removeTagFromAlgorithm$Response(params: {
+    algoId: string;
+    body: TagDto;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.RemoveTagFromAlgorithmPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algoId', params.algoId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeTagFromAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  removeTagFromAlgorithm(params: {
+    algoId: string;
+    body: TagDto;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.removeTagFromAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
     );
   }
 

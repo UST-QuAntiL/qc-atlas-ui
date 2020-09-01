@@ -1,0 +1,59 @@
+<div class="p-4">
+  <div class="d-flex">
+    <mat-card class="w-100 my-2 mx-4">
+      <app-text-input
+        name="Description"
+        (onSaveChanges)="onChangesSaved($event,'description')"
+        [(ngModel)]="implementation.description"
+        [multiline]="true"
+      ></app-text-input>
+    </mat-card>
+    <mat-card class="w-100 my-2 mx-4">
+      <app-text-input
+        name="Contributors"
+        (onSaveChanges)="onChangesSaved($event,'contributors')"
+        [(ngModel)]="implementation.contributors"
+        [multiline]="true"
+      ></app-text-input>
+    </mat-card>
+  </div>
+  <div class="d-flex">
+    <mat-card class="w-100 w-100 my-2 mx-4">
+      <app-text-input
+        name="Dependencies"
+        (onSaveChanges)="onChangesSaved($event,'dependencies')"
+        [(ngModel)]="implementation.dependencies"
+      ></app-text-input>
+    </mat-card>
+    <mat-card class="w-100 my-2 mx-4">
+      <app-compute-resource-property-list (addProperty)="onAddComputeResourceProperty($event)"
+                                          (updateProperty)="onUpdateComputeResourceProperty($event)"
+                                          (deleteProperty)="onDeleteComputeResourceProperty($event)"
+                                          [resourceProperties]="computeResourceProperties">
+      </app-compute-resource-property-list>
+    </mat-card>
+  </div>
+  <div class="d-flex">
+    <mat-card class="w-100 my-2 mx-4">
+      <app-text-input
+        name="Input Format"
+        (onSaveChanges)="onChangesSaved($event,'inputFormat')"
+        [(ngModel)]="implementation.inputFormat"
+      ></app-text-input>
+    </mat-card>
+    <mat-card class="w-100 my-2 mx-4">
+      <app-text-input
+        name="Parameter"
+        (onSaveChanges)="onChangesSaved($event,'parameter')"
+        [(ngModel)]="implementation.parameter"
+      ></app-text-input>
+    </mat-card>
+    <mat-card class="w-100 my-2 mx-4">
+      <app-text-input
+        name="Output Format"
+        (onSaveChanges)="onChangesSaved($event,'outputFormat')"
+        [(ngModel)]="implementation.outputFormat"
+      ></app-text-input>
+    </mat-card>
+  </div>
+</div>
