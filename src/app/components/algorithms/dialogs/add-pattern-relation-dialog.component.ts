@@ -26,7 +26,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
   // Pattern fields
   patterns: EntityModelPatternModel[] = [];
   filteredPatterns: EntityModelPatternModel[] = [];
-  selectedPattern: Pattern = undefined;
+  selectedPattern: EntityModelPatternModel = undefined;
   patternSearch = '';
 
   // Description fields
@@ -110,6 +110,10 @@ export class AddPatternRelationDialogComponent implements OnInit {
         this.patternLanguages = languages._embedded.patternLanguageModels;
         this.filteredPatternLanguages = this.patternLanguages;
         this.arePatternLanguagesLoaded = true;
+        if (this.selectedPatternLanguage) {
+          this.patternLanguageSearch = this.selectedPatternLanguage.name;
+        }
+        this.onLanguageSearch();
       });
   }
 
@@ -121,6 +125,10 @@ export class AddPatternRelationDialogComponent implements OnInit {
         this.patterns = patterns._embedded.patternModels;
         this.filteredPatterns = this.patterns;
         this.arePatternsLoaded = true;
+        if (this.selectedPattern) {
+          this.patternSearch = this.selectedPattern.name;
+        }
+        this.onPatternSearch();
       });
   }
 
@@ -184,7 +192,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
     }
   }
 
-  onPatternClick(pattern: Pattern): void {
+  onPatternClick(pattern: EntityModelPatternModel): void {
     if (!this.selectedPattern || pattern.id !== this.selectedPattern.id) {
       this.selectedPattern = pattern;
     } else {
@@ -281,6 +289,9 @@ export class AddPatternRelationDialogComponent implements OnInit {
   stepperSelectionChanged(event: StepperSelectionEvent): void {
     if (!this.isUpdateModal && event.selectedIndex === 1) {
       this.getPatterns(this.selectedPatternLanguage.id);
+    }
+    if (!this.isUpdateModal && event.selectedIndex === 0) {
+      this.getPatternLanguages();
     }
     if (
       (!this.isUpdateModal && event.selectedIndex === 2) ||
