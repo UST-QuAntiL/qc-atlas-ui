@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiModule } from 'api/api.module';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MatCardModule } from '@angular/material/card';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,6 +31,7 @@ import { ComputeResourcePropertyModule } from './components/compute-resource-pro
 import { ExecutionEnvironmentsModule } from './components/execution-environments/execution-environments.module';
 import { PublicationModule } from './components/publications/publication.module';
 import { ServicesModule } from './services/services.module';
+import { LinkItemListDialogComponent } from './components/generics/dialogs/link-item-list-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { ServicesModule } from './services/services.module';
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
     NavigationComponent,
+    LinkItemListDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -69,6 +72,7 @@ import { ServicesModule } from './services/services.module';
     ComputeResourcePropertyModule,
     ExecutionEnvironmentsModule,
     ServicesModule,
+    MatCardModule,
   ],
   bootstrap: [AppComponent],
   exports: [],

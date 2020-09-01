@@ -5,9 +5,15 @@ import { EntityModelPublicationDto } from 'api/models/entity-model-publication-d
 import { PublicationService } from 'api/services/publication.service';
 import { Router } from '@angular/router';
 import { PublicationDto } from 'api/models/publication-dto';
-import { LinkObject } from '../../generics/data-list/data-list.component';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  LinkObject,
+  QueryParams,
+} from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
+import { LinkItemListDialogComponent } from '../../generics/dialogs/link-item-list-dialog.component';
+import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-publications-list',
@@ -19,6 +25,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   @Input() linkedPublications: EntityModelPublicationDto[] = [];
 
   publications: EntityModelPublicationDto[];
+  linkablePublications: EntityModelPublicationDto[];
   variableNames: string[] = ['title', 'authors', 'doi'];
   tableColumns: string[] = ['Title', 'Authors', 'DOI'];
   linkObject: LinkObject = {
@@ -29,12 +36,19 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   };
   tableAddAllowed = true;
   isLinkingEnabled = false;
+  pagingInfo: any = {};
+  paginatorConfig: any = {
+    amountChoices: [10, 25, 50],
+    selectedAmount: 10,
+  };
 
   constructor(
     private algorithmService: AlgorithmService,
     private publicationService: PublicationService,
+    private genericDataService: GenericDataService,
     private router: Router,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -54,15 +68,35 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       });
   }
 
-  searchUnlinkedPublications(search: string): void {
+  getUnlinkedPublications(params: any): void {
     // Search for unlinked algorithms if search-text is not empty
-    if (search) {
-      this.publicationService.getPublications({ search }).subscribe((data) => {
-        this.updateLinkablePublications(data._embedded);
+    if (params) {
+      this.publicationService.getPublications(params).subscribe((data) => {
+        this.preparePublicationData(JSON.parse(JSON.stringify(data)));
       });
     } else {
       this.linkObject.data = [];
     }
+  }
+
+  preparePublicationData(data): void {
+    // Read all incoming data
+    // If linkable publications found
+    this.linkObject.data = [];
+    if (data._embedded) {
+      // Clear list of linkable algorithms
+      this.linkablePublications = data._embedded.publications;
+      // Search algorithms and filter only those that are not already linked
+      for (const publication of data._embedded.publications) {
+        if (
+          !this.linkedPublications.some((publ) => publ.id === publication.id)
+        ) {
+          this.linkObject.data.push(publication);
+        }
+      }
+    }
+    this.pagingInfo.page = data.page;
+    this.pagingInfo._links = data._links;
   }
 
   linkPublication(publication: PublicationDto): void {
@@ -91,8 +125,6 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     }
   }
 
-  onAddElement(): void {}
-
   onDatalistConfigChanged(event): void {
     this.getLinkedPublications({ algoId: this.algorithm.id });
   }
@@ -101,24 +133,58 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.router.navigate(['publications', publication.id]);
   }
 
-  updateLinkablePublications(publicationData): void {
-    // Clear list of linkable algorithms
-    this.linkObject.data = [];
-    // If linkable algorithms found
-    if (publicationData) {
-      // Search algorithms and filter only those that are not already linked
-      for (const publication of publicationData.publications) {
-        if (
-          !this.linkedPublications.some((publ) => publ.id === publication.id)
-        ) {
-          this.linkObject.data.push(publication);
-        }
-      }
-    }
-  }
-
   onToggleLink(): void {
     this.isLinkingEnabled = !this.isLinkingEnabled;
     this.tableAddAllowed = !this.tableAddAllowed;
+  }
+
+  openLinkDialog() {
+    this.publicationService.getPublications().subscribe((data) => {
+      this.preparePublicationData(JSON.parse(JSON.stringify(data)));
+      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
+        width: '800px',
+        data: {
+          title: 'Link existing publication',
+          data: this.linkObject.data,
+          tableColumns: ['Name', 'Authors'],
+          variableNames: ['title', 'authors'],
+          pagingInfo: this.pagingInfo,
+          paginatorConfig: this.paginatorConfig,
+          noButtonText: 'Cancel',
+        },
+      });
+      const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+        (search: QueryParams) => {
+          this.publicationService
+            .getPublications(search)
+            .subscribe((updatedData) => {
+              if (updatedData._embedded) {
+                this.preparePublicationData(
+                  JSON.parse(JSON.stringify(updatedData))
+                );
+                dialogRef.componentInstance.data.data = this.linkObject.data;
+              }
+            });
+        }
+      );
+      const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
+        (page: string) => {
+          this.genericDataService.getData(page).subscribe((pageData) => {
+            this.preparePublicationData(pageData);
+            dialogRef.componentInstance.data.data = this.linkObject.data;
+          });
+        }
+      );
+
+      dialogRef.afterClosed().subscribe((dialogResult) => {
+        searchTextSub.unsubscribe();
+        pagingSub.unsubscribe();
+        if (dialogResult) {
+          for (const publication of dialogResult.selectedItems) {
+            this.linkPublication(publication);
+          }
+        }
+      });
+    });
   }
 }

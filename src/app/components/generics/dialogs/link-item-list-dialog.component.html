@@ -1,0 +1,29 @@
+<div>
+  <mat-card id="title-container">
+    <h1 mat-dialog-title id="title" >{{data.title}}</h1>
+  </mat-card>
+  <div class="mx-3 mb-2">
+    <app-table [data]=data.data
+               [variableNames]=data.variableNames
+               [dataColumns]=data.tableColumns
+               [allowAdd]=false
+               [allowSelection]=true
+               [submitSelectionIcon]="'link'"
+               [submitSelectionButtonColor]="'green'"
+               [submitSelectionButton]="'add-button'"
+               [allowSearch]=true
+               [allowSort]=true
+               [pagination]=data.pagingInfo
+               [paginatorConfig]=data.paginatorConfig
+               (elementClicked)="onElementClicked($event)"
+               (submitSelectedElements)="onLinkElements($event)"
+               (datalistConfigChanged)="onDataListConfigChanged.emit($event)"
+               (pageChange)="onPageChanged.emit($event)">
+    </app-table>
+  </div>
+  <mat-divider></mat-divider>
+  <div mat-dialog-actions class="d-flex">
+    <button type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect
+            (click)="onNoClick()">{{data.noButtonText}}</button>
+  </div>
+</div>
