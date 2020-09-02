@@ -1,8 +1,8 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="(isHandset$ | async) === false">
+    [attr.role]="hideNav ? 'dialog' : 'navigation'"
+    [mode]="hideNav ? 'over' : 'side'"
+    [opened]="hideNav === false">
     <mat-toolbar color="primary">
       <img (click)="goToHome()" src="../assets/logo.png" class="logo-img">
       <span (click)="goToHome()">QC Atlas</span>
@@ -43,7 +43,7 @@
           aria-label="Toggle sidenav"
           mat-icon-button
           (click)="drawer.toggle()"
-          *ngIf="isHandset$ | async">
+          *ngIf="hideNav">
           <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
         </button>
         <button class="settings-button" (click)="onSettings()" mat-button>
