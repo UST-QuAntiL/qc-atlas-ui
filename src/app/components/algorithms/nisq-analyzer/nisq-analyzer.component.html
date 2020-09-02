@@ -4,52 +4,64 @@
     <form [formGroup]="inputFormGroup">
       <div formArrayName="params">
         <div *ngFor="let param of params; let i = index" [formGroupName]="i">
-          <mat-form-field class="w-25">
-            <mat-label>{{ param.label }}</mat-label>
-            <input
-              matInput
-              pattern="[0-9]+"
-              [placeholder]="param.placeholder"
-              [formControlName]="param.name"
-              [required]="!!param.required"
-            />
+          <div class="row">
+            <div class="col-xl-6 col-lg-9 col-md-12">
+              <mat-form-field class="w-100">
+                <mat-label>{{ param.label }}</mat-label>
+                <input
+                  matInput
+                  pattern="[0-9]+"
+                  [placeholder]="param.placeholder"
+                  [formControlName]="param.name"
+                  [required]="!!param.required"/>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-6 col-lg-9 col-md-12">
+          <mat-form-field class="w-100">
+            <mat-select formControlName="cloudService" placeholder="Select cloud service">
+              <mat-option *ngFor="let cs of cloudServices" [value]="cs.name">
+                {{ cs.label }}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
       </div>
-      <div>
-        <mat-form-field class="w-25">
-          <mat-select formControlName="cloudService">
-            <mat-label>Cloud Services</mat-label>
-            <mat-option *ngFor="let cs of cloudServices" [value]="cs.name">{{
-              cs.label
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
+
+      <div class="row">
+        <div class="col-xl-6 col-lg-9 col-md-12">
+          <mat-form-field class="w-100">
+            <mat-label>Number of shots (for later execution)</mat-label>
+            <input matInput pattern="[0-9]+" required formControlName="shotCount"/>
+          </mat-form-field>
+        </div>
       </div>
-      <div>
-        <mat-form-field class="w-25">
-          <mat-label>Number of shots (for later execution)</mat-label>
-          <input matInput pattern="[0-9]+" required formControlName="shotCount" />
-        </mat-form-field>
+
+      <div class="row">
+        <div class="col-xl-6 col-lg-9 col-md-12">
+          <mat-form-field class="w-100">
+            <mat-label>Your Qiskit token</mat-label>
+            <input matInput required formControlName="qiskitToken"/>
+          </mat-form-field>
+        </div>
       </div>
-      <div>
-        <mat-form-field class="w-25">
-          <mat-label>Your Qiskit token</mat-label>
-          <input matInput required formControlName="qiskitToken" />
-        </mat-form-field>
-      </div>
+
       <div>
         <button
           mat-raised-button
           type="submit"
           [disabled]="inputFormGroup.invalid"
-          (click)="submit() && stepper.next()"
-        >
+          (click)="submit() && stepper.next()">
           Analyze!
         </button>
       </div>
     </form>
   </mat-step>
+
   <mat-step [editable]="false" label="Analyzer Results">
     <div class="p-2" *ngFor="let result of analyzerResults">
       <h4>{{ result.implementationName }}</h4>
