@@ -36,7 +36,7 @@
     <thead class="data-header">
     <tr>
       <!-- Optional Select-All Checkbox Element in first Header-Column -->
-      <th class="align-middle center-text" *ngIf="allowSelection">
+      <th class="align-middle center-text table-select" *ngIf="allowSelection">
         <div class="d-flex align-baseline justify-content-center">
           <mat-checkbox color="warn" (change)="$event ? masterToggle() : null"
                         [checked]="selection.hasValue() && isAllSelected()"
@@ -45,13 +45,13 @@
       </th>
       <!-- One column for each needed data variable -->
       <ng-container *ngFor="let column of dataColumns; let i = index">
-        <th class="th-lg hide-arrow" mat-sort-header="{{ variableNames[i] }}"
+        <th class="table-data" class="th-lg hide-arrow align-middle table-data" mat-sort-header="{{ variableNames[i] }}"
             [disabled]="!allowSort " aria-controls="tableSortExample"
             scope="col">
           <a>{{ column }}</a>
         </th>
       </ng-container>
-      <th *ngIf="allowSelection || allowEdit">
+      <th class="align-middle table-actions" *ngIf="allowSelection || allowEdit">
         <a> Actions </a>
       </th>
     </tr>
@@ -60,17 +60,17 @@
     <tbody *ngIf="data && data.length > 0" align-middle justify-content-center>
     <tr class="data-element" *ngFor="let dataEntry of data">
       <!-- Optional Select-Checkbox Element in first Body-Column -->
-      <th class="align-middle center-text" *ngIf="allowSelection">
+      <th class="align-middle center-text table-select" *ngIf="allowSelection">
         <mat-checkbox color="warn" [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
                       (change)="$event ? rowToggle(dataEntry) : null"></mat-checkbox>
       </th>
       <!-- One column for each needed data variable value -->
-      <td class="crop align-middle" *ngFor="let variableName of variableNames"
+      <td class="crop align-middle table-data" *ngFor="let variableName of variableNames"
           (click)="onElementClicked(dataEntry)">
         <!-- Apply URL-Class and Event if variable has a link -->
         <a [ngClass]="{'table-url': isLink(variableName)}" (click)="isLink(variableName) && onUrlClicked($event, dataEntry, variableName)">{{ dataEntry[variableName] }}</a>
       </td>
-      <td *ngIf="allowSelection || allowEdit">
+      <td class="table-actions" *ngIf="allowSelection || allowEdit">
         <button *ngIf="allowEdit" mat-icon-button [ngClass]="{'mr-1': allowSelection}" class="update-small"
                 (click)="onUpdateClicked(dataEntry); $event.stopPropagation()">
           <mat-icon>create</mat-icon>
