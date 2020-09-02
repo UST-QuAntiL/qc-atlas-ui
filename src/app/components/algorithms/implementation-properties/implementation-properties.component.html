@@ -1,7 +1,7 @@
-<div class="container-fluid p-4">
+<div class="p-4">
   <div class="row">
-    <div class="col-md-6">
-      <mat-card>
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
         <app-text-input
           name="Description"
           (onSaveChanges)="onChangesSaved($event,'description')"
@@ -10,8 +10,8 @@
         ></app-text-input>
       </mat-card>
     </div>
-    <div class="col-md-6">
-      <mat-card>
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
         <app-text-input
           name="Contributors"
           (onSaveChanges)="onChangesSaved($event,'contributors')"
@@ -21,43 +21,56 @@
       </mat-card>
     </div>
   </div>
+
   <div class="row">
-    <mat-card class="col-md-6">
-      <app-text-input
-        name="Dependencies"
-        (onSaveChanges)="onChangesSaved($event,'dependencies')"
-        [(ngModel)]="implementation.dependencies"
-      ></app-text-input>
-    </mat-card>
-    <mat-card class="col-md-6">
-      <app-compute-resource-property-list (addProperty)="onAddComputeResourceProperty($event)"
-                                          (updateProperty)="onUpdateComputeResourceProperty($event)"
-                                          (deleteProperty)="onDeleteComputeResourceProperty($event)"
-                                          [resourceProperties]="computeResourceProperties">
-      </app-compute-resource-property-list>
-    </mat-card>
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input
+          name="Dependencies"
+          (onSaveChanges)="onChangesSaved($event,'dependencies')"
+          [(ngModel)]="implementation.dependencies"
+        ></app-text-input>
+      </mat-card>
+    </div>
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-compute-resource-property-list (addProperty)="onAddComputeResourceProperty($event)"
+                                            (updateProperty)="onUpdateComputeResourceProperty($event)"
+                                            (deleteProperty)="onDeleteComputeResourceProperty($event)"
+                                            [title]="'Compute resource properties'"
+                                            [resourceProperties]="computeResourceProperties">
+        </app-compute-resource-property-list>
+      </mat-card>
+    </div>
   </div>
+
   <div class="row">
-    <mat-card class="col-md-4">
-      <app-text-input
-        name="Input Format"
-        (onSaveChanges)="onChangesSaved($event,'inputFormat')"
-        [(ngModel)]="implementation.inputFormat"
-      ></app-text-input>
-    </mat-card>
-    <mat-card class="col-md-4">
-      <app-text-input
-        name="Parameter"
-        (onSaveChanges)="onChangesSaved($event,'parameter')"
-        [(ngModel)]="implementation.parameter"
-      ></app-text-input>
-    </mat-card>
-    <mat-card class="col-md-4">
-      <app-text-input
-        name="Output Format"
-        (onSaveChanges)="onChangesSaved($event,'outputFormat')"
-        [(ngModel)]="implementation.outputFormat"
-      ></app-text-input>
-    </mat-card>
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
+        <app-text-input
+          name="Input Format"
+          (onSaveChanges)="onChangesSaved($event,'inputFormat')"
+          [(ngModel)]="implementation.inputFormat"
+        ></app-text-input>
+      </mat-card>
+    </div>
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
+        <app-text-input
+          name="Parameter"
+          (onSaveChanges)="onChangesSaved($event,'parameter')"
+          [(ngModel)]="implementation.parameter"
+        ></app-text-input>
+      </mat-card>
+    </div>
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
+        <app-text-input
+          name="Output Format"
+          (onSaveChanges)="onChangesSaved($event,'outputFormat')"
+          [(ngModel)]="implementation.outputFormat"
+        ></app-text-input>
+      </mat-card>
+    </div>
   </div>
 </div>
