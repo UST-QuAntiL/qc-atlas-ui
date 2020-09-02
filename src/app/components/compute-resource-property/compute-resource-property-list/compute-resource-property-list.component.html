@@ -1,15 +1,21 @@
-<mat-label class="property-label">
-  {{title}}
-</mat-label>
-<button
-  mat-button
-  matSuffix
-  mat-icon-button
-  aria-label="Add a property"
-  (click)="onAdd()"
->
-  <mat-icon>add</mat-icon>
-</button>
+<div class="row">
+  <div class="col-12">
+    <mat-form-field class="w-100">
+      <mat-label>
+        {{title}}
+      </mat-label>
+      <input matInput disabled>
+      <button
+        mat-button
+        matSuffix
+        mat-icon-button
+        aria-label="Add a property"
+        (click)="onAdd()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>
 <mat-list *ngIf="resourceProperties.length > 0">
   <mat-list-item
     *ngFor="let property of resourceProperties"
