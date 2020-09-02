@@ -65,11 +65,7 @@
   <mat-step [editable]="false" label="Analyzer Results">
     <div class="p-2 overflow-auto" *ngFor="let result of analyzerResults">
       <h4>{{ result.implementationName }}</h4>
-      <table class="results-table"
-        mat-table
-        [dataSource]="result.backendExecutionParams"
-        multiTemplateDataRows>
-
+      <table mat-table [dataSource]="result.backendExecutionParams" multiTemplateDataRows>
         <ng-container matColumnDef="backendName">
           <th class="backend-column" mat-header-cell *matHeaderCellDef>Backend Name</th>
           <td class="backend-column" mat-cell *matCellDef="let element">{{ element.backendName }}</td>
