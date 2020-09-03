@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { AlgorithmDto } from 'api/models';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { AlgorithmDto } from 'api-atlas/models';
 import { Router } from '@angular/router';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';

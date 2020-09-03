@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelCloudServiceDto } from 'api/models/entity-model-cloud-service-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
-import { CloudServiceDto } from 'api/models/cloud-service-dto';
+import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { UtilService } from '../../../../util/util.service';
 import {
   DeleteParams,

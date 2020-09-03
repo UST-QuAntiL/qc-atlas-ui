@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
-import { ComputeResourceDto } from 'api/models/compute-resource-dto';
-import { EntityModelComputeResourcePropertyDto } from 'api/models/entity-model-compute-resource-property-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
+import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
+import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
 import { quantumComputationModelOptions } from '../../../../util/options';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 

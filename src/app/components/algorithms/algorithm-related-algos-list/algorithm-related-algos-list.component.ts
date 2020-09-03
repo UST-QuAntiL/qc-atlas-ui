@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { EntityModelAlgorithmRelationDto } from 'api/models/entity-model-algorithm-relation-dto';
-import { AlgorithmRelationDto } from 'api/models/algorithm-relation-dto';
-import { AlgorithmDto } from 'api/models/algorithm-dto';
-import { AlgoRelationTypeDto } from 'api/models/algo-relation-type-dto';
-import { AlgorithmRelationTypeService } from 'api/services/algorithm-relation-type.service';
+import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { EntityModelAlgorithmRelationDto } from 'api-atlas/models/entity-model-algorithm-relation-dto';
+import { MatDialog } from '@angular/material/dialog';
+import { AlgorithmRelationDto } from 'api-atlas/models/algorithm-relation-dto';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
+import { AlgoRelationTypeDto } from 'api-atlas/models/algo-relation-type-dto';
+import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
 import { Router } from '@angular/router';
 import { UtilService } from '../../../util/util.service';
 import { AddAlgorithmRelationDialogComponent } from '../dialogs/add-algorithm-relation-dialog.component';
@@ -34,6 +35,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   };
 
   constructor(
+    private dialog: MatDialog,
     private algorithmService: AlgorithmService,
     private algorithmRelationTypeService: AlgorithmRelationTypeService,
     private utilService: UtilService,
@@ -131,14 +133,16 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onDeleteElements(event): void {
-    const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
-      title: 'Confirm Deletion',
-      message:
-        'Are you sure you want to delete the following algorithm relation(s):',
-      data: event.elements,
-      variableName: 'targetAlgName',
-      yesButtonText: 'yes',
-      noButtonText: 'no',
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirm Deletion',
+        message:
+          'Are you sure you want to delete the following algorithm relation(s):',
+        data: event.elements,
+        variableName: 'targetAlgName',
+        yesButtonText: 'yes',
+        noButtonText: 'no',
+      },
     });
 
     dialogRef.afterClosed().subscribe((dialogResult) => {

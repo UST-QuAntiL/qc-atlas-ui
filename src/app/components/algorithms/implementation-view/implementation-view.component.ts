@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AlgorithmService } from 'api/services/algorithm.service';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlgorithmDto } from 'api/models/algorithm-dto';
-import { ImplementationDto } from 'api/models/implementation-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
-import { PublicationService } from 'api/services/publication.service';
-import { EntityModelComputeResourcePropertyDto } from 'api/models/entity-model-compute-resource-property-dto';
-import { TagDto } from 'api/models/tag-dto';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
+import { ImplementationDto } from 'api-atlas/models/implementation-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
+import { PublicationService } from 'api-atlas/services/publication.service';
+import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
+import { TagDto } from 'api-atlas/models';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import { QueryParams } from '../../generics/data-list/data-list.component';
@@ -174,12 +174,7 @@ export class ImplementationViewComponent implements OnInit {
         implId: this.impl.id,
         body: tag,
       })
-      .subscribe((next) => {
-        this.tags = next._embedded.tags.map((t) => ({
-          value: t.value,
-          category: t.category,
-        }));
-      });
+      .subscribe();
   }
 
   removeTag(tag: TagDto): void {
@@ -188,12 +183,7 @@ export class ImplementationViewComponent implements OnInit {
         implId: this.impl.id,
         body: tag,
       })
-      .subscribe((next) => {
-        this.tags = next._embedded.tags.map((t) => ({
-          value: t.value,
-          category: t.category,
-        }));
-      });
+      .subscribe();
   }
 
   updateImplementationField(event: { field; value }): void {
