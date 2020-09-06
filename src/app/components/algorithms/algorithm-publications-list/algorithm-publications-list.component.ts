@@ -68,17 +68,6 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       });
   }
 
-  getUnlinkedPublications(params: any): void {
-    // Search for unlinked algorithms if search-text is not empty
-    if (params) {
-      this.publicationService.getPublications(params).subscribe((data) => {
-        this.preparePublicationData(JSON.parse(JSON.stringify(data)));
-      });
-    } else {
-      this.linkObject.data = [];
-    }
-  }
-
   preparePublicationData(data): void {
     // Read all incoming data
     // If linkable publications found
