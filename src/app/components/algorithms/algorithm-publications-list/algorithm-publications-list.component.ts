@@ -162,12 +162,10 @@ export class AlgorithmPublicationsListComponent implements OnInit {
           this.publicationService
             .getPublications(search)
             .subscribe((updatedData) => {
-              if (updatedData._embedded) {
-                this.preparePublicationData(
-                  JSON.parse(JSON.stringify(updatedData))
-                );
-                dialogRef.componentInstance.data.data = this.linkObject.data;
-              }
+              this.preparePublicationData(
+                JSON.parse(JSON.stringify(updatedData))
+              );
+              dialogRef.componentInstance.data.data = this.linkObject.data;
             });
         }
       );
