@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
-import { PublicationService } from 'api/services/publication.service';
+import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
+import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
 import { PublicationDto } from 'api/models/publication-dto';
 import { MatDialog } from '@angular/material/dialog';

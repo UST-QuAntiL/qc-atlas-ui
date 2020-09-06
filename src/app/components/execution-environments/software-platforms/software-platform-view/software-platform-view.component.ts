@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api/models/entity-model-software-platform-dto';
+import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 import { FieldUpdate } from '../../../../util/FieldUpdate';

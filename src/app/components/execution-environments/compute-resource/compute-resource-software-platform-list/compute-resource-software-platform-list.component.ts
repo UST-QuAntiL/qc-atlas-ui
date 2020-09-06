@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api/models/entity-model-software-platform-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
-import { SoftwarePlatformDto } from 'api/models/software-platform-dto';
-import { EntityModelComputeResourceDto } from 'api/models/entity-model-compute-resource-dto';
+import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
+import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
 import {
   SelectParams,
   LinkObject,

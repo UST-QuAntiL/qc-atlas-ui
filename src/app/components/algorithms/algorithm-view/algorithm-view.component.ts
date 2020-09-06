@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
-import { AlgorithmService } from 'api/services/algorithm.service';
+import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { EntityModelApplicationAreaDto } from 'api/models/entity-model-application-area-dto';
-import { ApplicationAreasService } from 'api/services/application-areas.service';
-import { EntityModelProblemTypeDto } from 'api/models/entity-model-problem-type-dto';
-import { ProblemTypeService } from 'api/services/problem-type.service';
-import { ProblemTypeDto } from 'api/models/problem-type-dto';
-import { TagDto } from 'api/models/tag-dto';
-import { AlgorithmDto } from 'api/models/algorithm-dto';
+import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
+import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
+import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
+import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
+import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
+import { TagDto } from 'api-atlas/models/tag-dto';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
 
@@ -101,12 +101,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         algoId: this.algorithm.id,
         body: tag,
       })
-      .subscribe((next) => {
-        this.tags = next._embedded.tags.map((t) => ({
-          value: t.value,
-          category: t.category,
-        }));
-      });
+      .subscribe();
   }
 
   removeTag(tag: TagDto): void {
@@ -115,12 +110,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         algoId: this.algorithm.id,
         body: tag,
       })
-      .subscribe((next) => {
-        this.tags = next._embedded.tags.map((t) => ({
-          value: t.value,
-          category: t.category,
-        }));
-      });
+      .subscribe();
   }
 
   updateAlgorithmField(event: { field; value }): void {

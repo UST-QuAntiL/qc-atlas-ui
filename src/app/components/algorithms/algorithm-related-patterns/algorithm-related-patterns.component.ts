@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AlgorithmDto } from 'api/models/algorithm-dto';
-import { EntityModelPatternRelationDto } from 'api/models/entity-model-pattern-relation-dto';
-import { PatternRelationTypeService } from 'api/services/pattern-relation-type.service';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { PatternRelationTypeDto } from 'api/models/pattern-relation-type-dto';
-import { PatternRelationDto } from 'api/models';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
+import { EntityModelPatternRelationDto } from 'api-atlas/models/entity-model-pattern-relation-dto';
+import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
+import { PatternRelationDto } from 'api-atlas/models';
+import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
+import { EntityModelPattern } from 'api-patternpedia/models/entity-model-pattern';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -20,13 +22,14 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
   patternRelations: EntityModelPatternRelationDto[];
   tableObjects: PatternRelationTableObject[] = [];
-  variableNames: string[] = ['pattern', 'patternType', 'description'];
+  variableNames: string[] = ['patternName', 'patternType', 'description'];
   tableColumns: string[] = ['Pattern', 'Relation Type', 'Description'];
   externalLinkVariables: string[] = ['pattern'];
 
   constructor(
     private patternRelationTypeService: PatternRelationTypeService,
     private algorithmService: AlgorithmService,
+    private patternService: PatternControllerService,
     private utilService: UtilService
   ) {}
 
@@ -72,7 +75,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
       {
         title: 'Add new pattern relation',
         algoId: this.algorithm.id,
-      }
+      },
+      '1000px'
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
@@ -106,50 +110,18 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     });
   }
 
-  onDeleteElements(event): void {
-    const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
-      title: 'Confirm Deletion',
-      message:
-        'Are you sure you want to delete the following pattern relation(s):',
-      data: event.elements,
-      variableName: 'patternType',
-      yesButtonText: 'yes',
-      noButtonText: 'no',
-    });
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        for (const relation of event.elements) {
-          this.algorithmService
-            .deletePatternRelationByAlgorithm({
-              algoId: this.algorithm.id,
-              relationId: relation.id,
-            })
-            .subscribe((data) => {
-              this.getPatternRelations({ algoId: this.algorithm.id });
-              this.utilService.callSnackBar(
-                'Successfully removed pattern relation'
-              );
-            });
-        }
-      }
-    });
-  }
-
-  onDatalistConfigChanged(event): void {
-    this.getPatternRelations({ algoId: this.algorithm.id });
-  }
-
-  onElementClicked(event): void {
+  onUpdateClicked(event: any): void {
     const dialogRef = this.utilService.createDialog(
       AddPatternRelationDialogComponent,
       {
         title: 'Edit pattern relation',
         algoId: this.algorithm.id,
         pattern: event.pattern,
+        patternObject: event.patternObject,
         description: event.description,
         patternRelationType: event.patternTypeObject,
-      }
+      },
+      '1000px'
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
@@ -185,6 +157,44 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     });
   }
 
+  onDeleteElements(event): void {
+    const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
+      title: 'Confirm Deletion',
+      message:
+        'Are you sure you want to delete the relations to the following pattern(s):',
+      data: event.elements,
+      variableName: 'patternName',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        for (const relation of event.elements) {
+          this.algorithmService
+            .deletePatternRelationByAlgorithm({
+              algoId: this.algorithm.id,
+              relationId: relation.id,
+            })
+            .subscribe((data) => {
+              this.getPatternRelations({ algoId: this.algorithm.id });
+              this.utilService.callSnackBar(
+                'Successfully removed pattern relation'
+              );
+            });
+        }
+      }
+    });
+  }
+
+  onDatalistConfigChanged(event): void {
+    this.getPatternRelations({ algoId: this.algorithm.id });
+  }
+
+  onElementClicked(event): void {
+    window.open(event.pattern, '_blank');
+  }
+
   onUrlClicked(urlData: UrlData): void {
     // No check needed since pattern-relations have only one url-field called 'pattern'
     window.open(urlData.element['pattern'], '_blank');
@@ -193,14 +203,24 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   generateTableObjects(): void {
     this.tableObjects = [];
     for (const relation of this.patternRelations) {
-      this.tableObjects.push({
-        id: relation.id,
-        description: relation.description,
-        patternType: relation.patternRelationType.name,
-        pattern: relation.pattern,
-        patternTypeObject: relation.patternRelationType,
-      });
+      this.getPattern(relation);
     }
+  }
+
+  getPattern(relation: PatternRelationDto): void {
+    this.patternService
+      .getPatternByUri({ encodedUri: relation.pattern })
+      .subscribe((pattern) => {
+        this.tableObjects.push({
+          id: relation.id,
+          description: relation.description,
+          patternType: relation.patternRelationType.name,
+          pattern: relation.pattern,
+          patternTypeObject: relation.patternRelationType,
+          patternObject: pattern,
+          patternName: pattern.name,
+        });
+      });
   }
 
   generatePatternRelationDto(
@@ -225,4 +245,6 @@ export interface PatternRelationTableObject {
   description: string;
   pattern: string;
   patternTypeObject: PatternRelationTypeDto;
+  patternObject: EntityModelPattern;
+  patternName: string;
 }

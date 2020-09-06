@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api/models/entity-model-software-platform-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
-import { EntityModelImplementationDto } from 'api/models/entity-model-implementation-dto';
-import { ImplementationDto } from 'api/models/implementation-dto';
-import { AlgorithmService } from 'api/services/algorithm.service';
+import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
+import { ImplementationDto } from 'api-atlas/models/implementation-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import {
   SelectParams,
   LinkObject,
