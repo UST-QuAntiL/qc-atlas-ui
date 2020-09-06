@@ -4,7 +4,7 @@ import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
-import { PublicationDto } from 'api/models/publication-dto';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { MatDialog } from '@angular/material/dialog';
 import {
   LinkObject,
