@@ -14,10 +14,8 @@ export class DataListComponent implements OnInit {
   @Input() allowAdd: boolean;
   @Input() allowEdit: boolean;
   @Input() addIcon = 'playlist_add';
-  @Input() allowSelection: boolean;
-  @Input() submitSelectionIcon = 'delete';
-  @Input() submitSelectionButtonColor = 'red';
-  @Input() submitSelectionButton = 'delete-button';
+  @Input() allowDelete: boolean;
+  @Input() allowLink: boolean;
   @Input() allowSearch: boolean;
   @Input() allowSort: boolean;
   @Input() pagination: any;
@@ -28,7 +26,8 @@ export class DataListComponent implements OnInit {
   @Output() urlClicked = new EventEmitter<UrlData>();
   @Output() updateClicked = new EventEmitter<any>();
   @Output() addElement = new EventEmitter<void>();
-  @Output() submitSelectedElements = new EventEmitter<SelectParams>(); // changed
+  @Output() submitDeleteElements = new EventEmitter<SelectParams>();
+  @Output() submitLinkElements = new EventEmitter<SelectParams>();
   @Output() pageChange = new EventEmitter<string>();
   @Output() datalistConfigChanged = new EventEmitter<QueryParams>();
   selection = new SelectionModel<any>(true, []);
@@ -93,9 +92,13 @@ export class DataListComponent implements OnInit {
     this.urlClicked.emit(urlData);
   }
 
-  // changed
-  onSelectionSubmitted(): void {
-    this.submitSelectedElements.emit(this.generateSelectParameter());
+  onDeleteSubmitted(): void {
+    this.submitDeleteElements.emit(this.generateSelectParameter());
+    this.selection.clear();
+  }
+
+  onLinkSubmitted() {
+    this.submitLinkElements.emit(this.generateSelectParameter());
     this.selection.clear();
   }
 
@@ -103,7 +106,15 @@ export class DataListComponent implements OnInit {
     const deleteElement: any[] = [element];
     const deleteParams = this.generateSelectParameter();
     deleteParams.elements = deleteElement;
-    this.submitSelectedElements.emit(deleteParams);
+    this.submitDeleteElements.emit(deleteParams);
+    this.selection.clear();
+  }
+
+  onSingleLink(element): void {
+    const linkElement: any[] = [element];
+    const linkParams = this.generateSelectParameter();
+    linkParams.elements = linkElement;
+    this.submitLinkElements.emit(linkParams);
     this.selection.clear();
   }
 

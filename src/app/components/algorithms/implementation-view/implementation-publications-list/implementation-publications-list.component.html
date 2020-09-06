@@ -16,11 +16,11 @@
                [variableNames]=variableNames
                [dataColumns]=tableColumns
                [allowAdd]=tableAddAllowed
-               [allowSelection]=true
+               [allowDelete]="true"
                [emptyTableMessage]="'No linked publications found'"
                (elementClicked)="onElementClicked($event)"
                (datalistConfigChanged)="onDatalistConfigChanged($event)"
-               (submitSelectedElements)="unlinkPublications($event)"
+               (submitDeleteElements)="unlinkPublications($event)"
                (addElement)="onToggleLink()">
     </app-table>
   </div>

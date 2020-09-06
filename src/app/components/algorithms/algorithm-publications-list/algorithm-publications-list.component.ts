@@ -130,6 +130,10 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   }
 
   onElementClicked(publication: PublicationDto): void {
+    this.routeTo(publication);
+  }
+
+  routeTo(publication: PublicationDto): void {
     this.router.navigate(['publications', publication.id]);
   }
 
@@ -173,6 +177,12 @@ export class AlgorithmPublicationsListComponent implements OnInit {
             this.preparePublicationData(pageData);
             dialogRef.componentInstance.data.data = this.linkObject.data;
           });
+        }
+      );
+      const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
+        (element: PublicationDto) => {
+          this.routeTo(element);
+          dialogRef.close();
         }
       );
 

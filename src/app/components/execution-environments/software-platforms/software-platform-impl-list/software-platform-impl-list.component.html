@@ -17,11 +17,11 @@
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
-      [allowSelection]=true
+      [allowDelete]="true"
       [emptyTableMessage]="'No linked implementations found'"
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged()"
-      (submitSelectedElements)="unlinkImplementations($event)"
+      (submitDeleteElements)="unlinkImplementations($event)"
       (addElement)="onToggleLink()">
     </app-table>
   </div>

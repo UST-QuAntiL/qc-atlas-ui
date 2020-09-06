@@ -17,11 +17,11 @@
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
-      [allowSelection]=true
+      [allowDelete]="true"
       [emptyTableMessage]="'No linked algorithms found'"
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged($event)"
-      (submitSelectedElements)="unlinkAlgorithms($event)"
+      (submitDeleteElements)="unlinkAlgorithms($event)"
       (addElement)="onToggleLink()">
     </app-table>
   </div>

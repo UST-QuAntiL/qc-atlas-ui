@@ -17,14 +17,14 @@
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
-      [allowSelection]=true
+      [allowDelete]="true"
       [allowSort]=true
       [emptyTableMessage]="'No linked software platforms found'"
       [pagination]=pagingInfo
       [paginatorConfig]=paginatorConfig
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged($event)"
-      (submitSelectedElements)="unlinkPlatforms($event)"
+      (submitDeleteElements)="unlinkPlatforms($event)"
       (addElement)="onToggleLink()"
       (pageChange)="onPageChanged($event)">
     </app-table>

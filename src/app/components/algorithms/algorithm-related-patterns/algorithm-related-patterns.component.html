@@ -6,10 +6,10 @@
                [externalLinkVariables]=externalLinkVariables
                [allowAdd]=true
                [allowEdit]=true
-               [allowSelection]=true
+               [allowDelete]="true"
                [emptyTableMessage]="'No related patterns found'"
                (addElement)="onAddElement()"
-               (submitSelectedElements)="onDeleteElements($event)"
+               (submitDeleteElements)="onDeleteElements($event)"
                (datalistConfigChanged)="onDatalistConfigChanged($event)"
                (elementClicked)="onElementClicked($event)"
                (updateClicked)="onUpdateClicked($event)"

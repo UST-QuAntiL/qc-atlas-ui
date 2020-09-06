@@ -17,11 +17,11 @@
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
-      [allowSelection]=true
+      [allowDelete]="true"
       [emptyTableMessage]="'No linked compute resources found'"
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged()"
-      (submitSelectedElements)="unlinkComputeResources($event)"
+      (submitDeleteElements)="unlinkComputeResources($event)"
       (addElement)="onToggleLink()">
     </app-table>
   </div>

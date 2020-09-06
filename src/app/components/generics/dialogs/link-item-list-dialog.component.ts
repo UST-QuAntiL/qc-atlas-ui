@@ -14,6 +14,7 @@ import { QueryParams } from '../data-list/data-list.component';
 export class LinkItemListDialogComponent implements OnInit {
   @Output() onDataListConfigChanged = new EventEmitter<QueryParams>();
   @Output() onPageChanged = new EventEmitter<string>();
+  @Output() onElementClicked = new EventEmitter<any>();
 
   constructor(
     public dialogRef: MatDialogRef<LinkItemListDialogComponent>,
@@ -25,11 +26,6 @@ export class LinkItemListDialogComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  onElementClicked(event): void {
-    this.data.selectedItems = [event];
-    this.dialogRef.close(this.data);
   }
 
   onLinkElements(event): void {

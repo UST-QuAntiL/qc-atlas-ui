@@ -7,16 +7,14 @@
                [variableNames]=data.variableNames
                [dataColumns]=data.tableColumns
                [allowAdd]=false
-               [allowSelection]=true
-               [submitSelectionIcon]="'link'"
-               [submitSelectionButtonColor]="'green'"
-               [submitSelectionButton]="'add-button'"
+               [allowDelete]="false"
+               [allowLink]="true"
                [allowSearch]=true
                [allowSort]=true
                [pagination]=data.pagingInfo
                [paginatorConfig]=data.paginatorConfig
-               (elementClicked)="onElementClicked($event)"
-               (submitSelectedElements)="onLinkElements($event)"
+               (elementClicked)="onElementClicked.emit($event)"
+               (submitLinkElements)="onLinkElements($event)"
                (datalistConfigChanged)="onDataListConfigChanged.emit($event)"
                (pageChange)="onPageChanged.emit($event)">
     </app-table>

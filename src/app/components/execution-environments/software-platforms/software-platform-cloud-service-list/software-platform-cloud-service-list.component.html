@@ -17,11 +17,11 @@
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
-      [allowSelection]=true
+      [allowDelete]="true"
       [emptyTableMessage]="'No linked cloud services found'"
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged()"
-      (submitSelectedElements)="unlinkCloudServices($event)"
+      (submitDeleteElements)="unlinkCloudServices($event)"
       (addElement)="onToggleLink()">
     </app-table>
   </div>
