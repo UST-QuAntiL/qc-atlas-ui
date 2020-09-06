@@ -187,6 +187,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       dialogRef.afterClosed().subscribe((dialogResult) => {
         searchTextSub.unsubscribe();
         pagingSub.unsubscribe();
+        elementClickedSub.unsubscribe();
         if (dialogResult) {
           for (const publication of dialogResult.selectedItems) {
             this.linkPublication(publication);
