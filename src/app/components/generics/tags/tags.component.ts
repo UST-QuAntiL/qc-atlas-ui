@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TagService } from 'api/services/tag.service';
-import { TagDto } from 'api/models/tag-dto';
+import { TagService } from 'api-atlas/services/tag.service';
+import { TagDto } from 'api-atlas/models/tag-dto';
 import { TagsDialogComponent } from './dialog/tags-dialog.component';
 
 @Component({
@@ -175,9 +175,4 @@ export class TagsComponent {
   toggleCategories(): void {
     this.showCategories = !this.showCategories;
   }
-}
-
-export interface Tag {
-  value: string;
-  category: string;
 }

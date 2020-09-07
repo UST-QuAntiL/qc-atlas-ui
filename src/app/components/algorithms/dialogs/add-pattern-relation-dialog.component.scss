@@ -1,0 +1,79 @@
+@import "theme";
+
+.step-button:enabled {
+  border-width: 2px;
+  border-color: mat-color($qc-atlas-ui-primary);
+  color: mat-color($qc-atlas-ui-primary);
+  font-weight: bold;
+}
+
+.step-button:enabled mat-icon {
+  color: mat-color($qc-atlas-ui-primary);
+}
+
+.step-button:hover {
+  background-color: mat-color($qc-atlas-ui-primary);
+  color: white;
+  font-weight: bold;
+}
+
+.step-button:hover mat-icon {
+  color: white;
+}
+
+.content-list {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.content-list:after {
+  content: "";
+  padding-right: 10px;
+}
+
+.content-title {
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  height: 20%;
+}
+
+.content {
+  width: 200px;
+  height: 250px;
+  margin: 5px;
+  flex: 0 0 auto;
+}
+
+.content:hover {
+  box-shadow: 0 0 10px mat-color($qc-atlas-ui-primary);
+  cursor: pointer;
+}
+
+.content-selected {
+  box-shadow: 0 0 10px mat-color($qc-atlas-ui-primary) inset !important;
+}
+
+.url-icon:hover {
+  color: mat-color($qc-atlas-ui-primary);
+  transform: scale(1.05);
+}
+
+.image-container {
+  height: 70%;
+  text-align: center;
+  align-content: center;
+}
+
+.image-container img {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: scale-down;
+}
+
+.actions-container {
+  height: 10%;
+}

@@ -1,17 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { AlgorithmRelationTypeService } from 'api/services/algorithm-relation-type.service';
-import { EntityModelAlgoRelationTypeDto } from 'api/models/entity-model-algo-relation-type-dto';
-import { AlgorithmRelationDto } from 'api/models/algorithm-relation-dto';
-import { AlgorithmDto } from 'api/models/algorithm-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
+import { EntityModelAlgoRelationTypeDto } from 'api-atlas/models/entity-model-algo-relation-type-dto';
+import { AlgorithmRelationDto } from 'api-atlas/models/algorithm-relation-dto';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import {
   AbstractControl,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { AlgoRelationTypeDto } from 'api/models/algo-relation-type-dto';
+import { AlgoRelationTypeDto } from 'api-atlas/models/algo-relation-type-dto';
 
 @Component({
   selector: 'app-add-algorithm-relation-dialog',

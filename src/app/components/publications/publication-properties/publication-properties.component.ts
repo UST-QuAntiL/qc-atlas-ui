@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
+import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
 
 @Component({
   selector: 'app-publication-properties',

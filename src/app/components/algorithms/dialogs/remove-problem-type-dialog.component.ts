@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { EntityModelProblemTypeDto } from 'api/models/entity-model-problem-type-dto';
+import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
