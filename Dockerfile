@@ -1,7 +1,6 @@
 FROM node:14.9.0-alpine
 
-# adds envsubst
-RUN apk add gettext
+RUN apk add --no-cache git gettext
 
 ENV ALTAS_URL localhost
 ENV ATLAS_PORT 8080
