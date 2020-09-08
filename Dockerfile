@@ -16,12 +16,8 @@ COPY package*.json ./
 COPY . .
 
 RUN npm install -g @angular/cli @angular-devkit/build-angular && npm install
+RUN chmod +x docker-entrypoint.sh
 
-# setup variables - uses environments/environments.ts.template file to copy correct ARG variables
-RUN envsubst < src/environments/environment.ts.template > src/environments/environment.ts && npx ng build
-RUN cat src/environments/environment.ts
+EXPOSE 4200
 
-# Deploy Angular App
-FROM nginx:1.19.2-alpine
-COPY --from=0 /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=0 /usr/src/app/dist/qc-atlas-ui /usr/share/nginx/html
+CMD ["sh", "docker-entrypoint.sh"]
