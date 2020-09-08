@@ -23,6 +23,11 @@
   align-items: center;
 }
 
+.tags-container {
+  display: inline-flex;
+  flex-direction: row;
+}
+
 .tags-content {
   overflow-x: auto;
   white-space: nowrap;
@@ -33,9 +38,9 @@
   max-width: 35vw;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .tags-size {
-    max-width: 80vw;
+    max-width: 60vw;
   }
 
   .categories-size {
