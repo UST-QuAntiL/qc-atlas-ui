@@ -30,7 +30,7 @@
           <mat-select formControlName="cloudService">
             <mat-label>Cloud Services</mat-label>
             <mat-option
-              (onSelectionChange)="isCloudServiceClicked = true"
+              (onSelectionChange)="onCloudServiceChanged($event.source.value)"
               *ngFor="let cs of cloudServices"
               [value]="cs.name"
               >{{ cs.name }}</mat-option
@@ -44,7 +44,7 @@
           <input matInput pattern="[0-9]+" formControlName="shotCount" />
         </mat-form-field>
       </div>
-      <div [hidden]="!isCloudServiceClicked">
+      <div *ngIf="!inputFormGroup.controls.qiskitToken.disabled">
         <mat-form-field class="w-25">
           <mat-label>Your token</mat-label>
           <input matInput required formControlName="qiskitToken" />

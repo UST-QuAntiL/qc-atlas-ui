@@ -55,7 +55,6 @@ export class NisqAnalyzerComponent implements OnInit {
   // 2) Analyze phase
   analyzeParams: {};
   analyzerResults: AnalysisResultDto[] = [];
-  isCloudServiceClicked = false;
 
   // 3) Execution
   executedAnalyseResult: AnalysisResultDto;
@@ -92,11 +91,13 @@ export class NisqAnalyzerComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         qiskitToken: ['', Validators.required],
       });
+      this.onCloudServiceChanged('');
     });
   }
 
   submit(): boolean {
     const value = this.inputFormGroup.value;
+    // Merge a list of parameter objects into a single parameter object.
     this.analyzeParams = Object.assign.apply(undefined, [
       {
         token: value.qiskitToken,
@@ -149,11 +150,11 @@ export class NisqAnalyzerComponent implements OnInit {
     const results: GroupedResults[] = [];
 
     for (const analysisResult of analysisResults) {
-      const tmp = results.find(
+      const group = results.find(
         (res) => res.implementation.id === analysisResult.implementation.id
       );
-      if (tmp) {
-        tmp.results.push(analysisResult);
+      if (group) {
+        group.results.push(analysisResult);
       } else {
         results.push({
           implementation: analysisResult.implementation,
@@ -164,14 +165,11 @@ export class NisqAnalyzerComponent implements OnInit {
     return results;
   }
 
-  filterInputParams(inputParameters: {}): {} {
-    const result = {};
-    for (const key in inputParameters) {
-      if (key !== 'token') {
-        result[key] = inputParameters[key];
-      }
-    }
-    return result;
+  filterInputParams(inputParameters: any): {} {
+    // Remove token from input parameters, as it is handled separately.
+    inputParameters = Object.assign({}, inputParameters);
+    delete inputParameters.token;
+    return inputParameters;
   }
 
   beautifyResult(result: string): string {
@@ -188,6 +186,14 @@ export class NisqAnalyzerComponent implements OnInit {
         return '[+-]?([0-9]*[.])?[0-9]+';
       default:
         return undefined;
+    }
+  }
+
+  onCloudServiceChanged(value: string): void {
+    if (value === 'IBMQ') {
+      this.inputFormGroup.controls.qiskitToken.enable();
+    } else {
+      this.inputFormGroup.controls.qiskitToken.disable();
     }
   }
 }

@@ -5,7 +5,6 @@ import { ImplementationService, RootService } from 'api-nisq/services';
 import {
   AnalysisResultDto,
   ExecutionRequestDto,
-  ImplementationListDto,
   ParameterDto,
   SelectionRequestDto,
 } from 'api-nisq/models';
