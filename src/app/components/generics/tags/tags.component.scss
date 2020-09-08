@@ -1,3 +1,5 @@
+@import "theme";
+
 .dot {
   height: 0.7rem;
   width: 0.7rem;
@@ -45,4 +47,18 @@
   .categories-size {
     max-width: 80vw;
   }
+}
+
+div::-webkit-scrollbar {
+  height: 8px;
+}
+
+div::-webkit-scrollbar-track {
+  height: 6px;
+}
+
+div::-webkit-scrollbar-thumb {
+  background-color: mat-color($qc-atlas-ui-primary);
+  border-radius: 10px;
+  height: 4px;
 }
