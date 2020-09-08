@@ -2,12 +2,43 @@
   height: 0.7rem;
   width: 0.7rem;
   border-radius: 50%;
-  display: inline-block;
+  margin-right: 7px;
 }
 
-.categories {
-  display: flex;
+.categories-container {
+  display: inline-flex;
   flex-direction: row;
-  justify-content: flex-end;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  float: right;
+}
+
+.categories-size {
+  max-width: 40vw;
+}
+
+.category {
+  display: inline-flex;
+  text-align: center;
+  align-items: center;
+}
+
+.tags-content {
+  overflow-x: auto;
+  white-space: nowrap;
+  float: right;
+}
+
+.tags-size {
+  max-width: 35vw;
+}
+
+@media (max-width: 700px) {
+  .tags-size {
+    max-width: 80vw;
+  }
+
+  .categories-size {
+    max-width: 80vw;
+  }
 }
