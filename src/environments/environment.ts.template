@@ -13,4 +13,10 @@ export const environment = {
     ':' +
     '${NISQ_ANALYZER_PORT}' +
     '/nisq-analyzer',
+  PATTERN_ATLAS_UI_URL:
+    'http://' +
+    '${PATTERN_ATLAS_UI_URL}' +
+    ':' +
+    '${PATTERN_ATLAS_UI_PORT}' +
+    '/nisq-analyzer',
 };
