@@ -1,0 +1,22 @@
+export const environment = {
+  production: false,
+  API_URL: 'http://' + '${ALTAS_URL}' + ':' + '${ATLAS_PORT}' + '/atlas',
+  PATTERN_ATLAS_API_URL:
+    'http://' +
+    '${PATTERNPEDIA_URL}' +
+    ':' +
+    '${PATTERNPEDIA_PORT}' +
+    '/patternpedia',
+  NISQ_API_URL:
+    'http://' +
+    '${NISQ_ANALYZER_URL}' +
+    ':' +
+    '${NISQ_ANALYZER_PORT}' +
+    '/nisq-analyzer',
+  PATTERN_ATLAS_UI_URL:
+    'http://' +
+    '${PATTERN_ATLAS_UI_URL}' +
+    ':' +
+    '${PATTERN_ATLAS_UI_PORT}' +
+    '/nisq-analyzer',
+};
