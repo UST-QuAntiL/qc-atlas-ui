@@ -35,10 +35,16 @@ export class PublicationAlgorithmsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.linkObject.title += this.publication.title;
-    this.getLinkedAlgorithms({ id: this.publication.id });
+    this.getLinkedAlgorithms({ publicationId: this.publication.id });
   }
 
-  getLinkedAlgorithms(params): void {
+  getLinkedAlgorithms(params: {
+    publicationId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.publicationService
       .getAlgorithmsOfPublication(params)
       .subscribe((algorithms) => {
@@ -85,7 +91,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
         body: algorithm,
       })
       .subscribe(() => {
-        this.getLinkedAlgorithms({ id: this.publication.id });
+        this.getLinkedAlgorithms({ publicationId: this.publication.id });
         this.utilService.callSnackBar('Successfully linked Algorithm');
       });
   }
@@ -104,7 +110,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     }
 
     Promise.all(outputPromises).then(() => {
-      this.getLinkedAlgorithms({ id: this.publication.id });
+      this.getLinkedAlgorithms({ publicationId: this.publication.id });
       this.utilService.callSnackBar('Successfully unlinked Algorithm');
     });
   }
@@ -114,7 +120,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   }
 
   onDatalistConfigChanged(event): void {
-    this.getLinkedAlgorithms({ id: this.publication.id });
+    this.getLinkedAlgorithms({ publicationId: this.publication.id });
   }
 
   onToggleLink(): void {

@@ -116,17 +116,22 @@ export class SoftwarePlatformListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
           for (const softwarePlatform of deleteParams.elements) {
-            this.executionEnvironmentsService
-              .deleteSoftwarePlatform({ softwarePlatformId: softwarePlatform.id })
-              .subscribe(() => {
-                // Refresh Algorithms after delete
-                this.getSoftwarePlatforms(deleteParams.queryParams);
-                this.utilService.callSnackBar(
-                  'Successfully deleted software platform(s)'
-                );
-              });
+            promises.push(
+              this.executionEnvironmentsService
+                .deleteSoftwarePlatform({
+                  softwarePlatformId: softwarePlatform.id,
+                })
+                .toPromise()
+            );
           }
+          Promise.all(promises).then(() => {
+            this.getSoftwarePlatforms(deleteParams.queryParams);
+            this.utilService.callSnackBar(
+              'Successfully deleted software platform(s)'
+            );
+          });
         }
       });
   }

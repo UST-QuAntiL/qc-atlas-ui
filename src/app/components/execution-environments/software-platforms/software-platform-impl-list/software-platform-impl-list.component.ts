@@ -44,7 +44,9 @@ export class SoftwarePlatformImplListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.softwarePlatform.name;
     this.getImplementations();
-    this.getLinkedImplementations({ id: this.softwarePlatform.id });
+    this.getLinkedImplementations({
+      softwarePlatformId: this.softwarePlatform.id,
+    });
   }
 
   getImplementations(): void {
@@ -59,7 +61,13 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       });
   }
 
-  getLinkedImplementations(params: any): void {
+  getLinkedImplementations(params: {
+    softwarePlatformId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
       .getImplementationsOfSoftwarePlatform(params)
       .subscribe((implementations) => {
@@ -93,7 +101,9 @@ export class SoftwarePlatformImplListComponent implements OnInit {
         body: implementation,
       })
       .subscribe(() => {
-        this.getLinkedImplementations({ id: this.softwarePlatform.id });
+        this.getLinkedImplementations({
+          softwarePlatformId: this.softwarePlatform.id,
+        });
         this.utilService.callSnackBar('Successfully linked implementation');
       });
   }
@@ -111,7 +121,9 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       );
     }
     Promise.all(promises).then(() => {
-      this.getLinkedImplementations({ id: this.softwarePlatform.id });
+      this.getLinkedImplementations({
+        softwarePlatformId: this.softwarePlatform.id,
+      });
       this.utilService.callSnackBar('Successfully unlinked implementation');
     });
   }
@@ -119,7 +131,9 @@ export class SoftwarePlatformImplListComponent implements OnInit {
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedImplementations({ id: this.softwarePlatform.id });
+    this.getLinkedImplementations({
+      softwarePlatformId: this.softwarePlatform.id,
+    });
   }
 
   onElementClicked(implementation: ImplementationDto): void {

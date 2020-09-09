@@ -40,7 +40,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.cloudService.name;
     this.getComputeResources();
-    this.getLinkedComputeResources({ id: this.cloudService.id });
+    this.getLinkedComputeResources({ cloudServiceId: this.cloudService.id });
   }
 
   getComputeResources(): void {
@@ -55,7 +55,13 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
       });
   }
 
-  getLinkedComputeResources(params: any): void {
+  getLinkedComputeResources(params: {
+    cloudServiceId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
       .getComputeResourcesOfCloudService(params)
       .subscribe((computeResource) => {
@@ -89,7 +95,9 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
         body: computeResource,
       })
       .subscribe((data) => {
-        this.getLinkedComputeResources({ id: this.cloudService.id });
+        this.getLinkedComputeResources({
+          cloudServiceId: this.cloudService.id,
+        });
         this.utilService.callSnackBar('Successfully linked compute resource');
       });
   }
@@ -107,7 +115,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
       );
     }
     Promise.all(promises).then(() => {
-      this.getLinkedComputeResources({ id: this.cloudService.id });
+      this.getLinkedComputeResources({ cloudServiceId: this.cloudService.id });
       this.utilService.callSnackBar('Successfully unlinked compute resource');
     });
   }
@@ -115,7 +123,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedComputeResources({ id: this.cloudService.id });
+    this.getLinkedComputeResources({ cloudServiceId: this.cloudService.id });
   }
 
   onElementClicked(computeResource: ComputeResourceDto): void {

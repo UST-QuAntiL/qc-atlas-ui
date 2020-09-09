@@ -40,7 +40,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.computeResource.name;
     this.getCloudServices();
-    this.getLinkedCloudServices({ id: this.computeResource.id });
+    this.getLinkedCloudServices({ computeResourceId: this.computeResource.id });
   }
 
   getCloudServices(): void {
@@ -55,9 +55,15 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
       });
   }
 
-  getLinkedCloudServices(params: any): void {
+  getLinkedCloudServices(params: {
+    computeResourceId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
-      .getCloudServicesOfSoftwarePlatform(params)
+      .getCloudServicesOfComputeResource(params)
       .subscribe((cloudServices) => {
         if (cloudServices._embedded) {
           this.linkedCloudServices = cloudServices._embedded.cloudServices;
@@ -88,7 +94,9 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
         body: this.computeResource,
       })
       .subscribe(() => {
-        this.getLinkedCloudServices({ id: this.computeResource.id });
+        this.getLinkedCloudServices({
+          computeResourceId: this.computeResource.id,
+        });
         this.utilService.callSnackBar('Successfully linked cloud service');
       });
   }
@@ -106,7 +114,9 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
       );
     }
     Promise.all(outputPromises).then(() => {
-      this.getLinkedCloudServices({ id: this.computeResource.id });
+      this.getLinkedCloudServices({
+        computeResourceId: this.computeResource.id,
+      });
       this.utilService.callSnackBar('Successfully unlinked cloud services');
     });
   }
@@ -114,7 +124,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedCloudServices({ id: this.computeResource.id });
+    this.getLinkedCloudServices({ computeResourceId: this.computeResource.id });
   }
 
   onElementClicked(cloudService: CloudServiceDto): void {

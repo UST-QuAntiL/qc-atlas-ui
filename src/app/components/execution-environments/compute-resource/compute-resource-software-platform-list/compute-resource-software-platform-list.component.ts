@@ -40,7 +40,9 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.computeResource.name;
     this.getSoftwarePlatforms();
-    this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
+    this.getLinkedSoftwarePlatforms({
+      computeResourceId: this.computeResource.id,
+    });
   }
 
   getSoftwarePlatforms(): void {
@@ -56,7 +58,13 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
       });
   }
 
-  getLinkedSoftwarePlatforms(params: any): void {
+  getLinkedSoftwarePlatforms(params: {
+    computeResourceId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
       .getSoftwarePlatformsOfComputeResource(params)
       .subscribe((softwarePlatforms) => {
@@ -90,7 +98,9 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
         body: this.computeResource,
       })
       .subscribe(() => {
-        this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
+        this.getLinkedSoftwarePlatforms({
+          computeResourceId: this.computeResource.id,
+        });
         this.utilService.callSnackBar('Successfully linked software platform');
       });
   }
@@ -108,7 +118,9 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
       );
     }
     Promise.all(promises).then(() => {
-      this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
+      this.getLinkedSoftwarePlatforms({
+        computeResourceId: this.computeResource.id,
+      });
       this.utilService.callSnackBar('Successfully unlinked software platforms');
     });
   }
@@ -116,7 +128,9 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
+    this.getLinkedSoftwarePlatforms({
+      computeResourceId: this.computeResource.id,
+    });
   }
 
   onElementClicked(softwarePlatform: SoftwarePlatformDto): void {

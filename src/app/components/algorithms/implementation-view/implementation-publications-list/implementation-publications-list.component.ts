@@ -89,8 +89,8 @@ export class ImplementationPublicationsListComponent implements OnInit {
       promises.push(
         this.algorithmService
           .unlinkImplementationAndPublication({
-            algorithmId: this.implementation.id,
-            implementationId: this.implementation.implementedAlgorithmId,
+            algorithmId: this.implementation.implementedAlgorithmId,
+            implementationId: this.implementation.id,
             publicationId: publication.id,
           })
           .toPromise()

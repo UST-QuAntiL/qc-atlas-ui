@@ -40,7 +40,9 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.softwarePlatform.name;
     this.getCloudServices();
-    this.getLinkedCloudServices({ id: this.softwarePlatform.id });
+    this.getLinkedCloudServices({
+      softwarePlatformId: this.softwarePlatform.id,
+    });
   }
 
   getCloudServices(): void {
@@ -55,7 +57,13 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       });
   }
 
-  getLinkedCloudServices(params: any): void {
+  getLinkedCloudServices(params: {
+    softwarePlatformId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
       .getCloudServicesOfSoftwarePlatform(params)
       .subscribe((cloudServices) => {
@@ -88,7 +96,9 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
         body: cloudService,
       })
       .subscribe(() => {
-        this.getLinkedCloudServices({ id: this.softwarePlatform.id });
+        this.getLinkedCloudServices({
+          softwarePlatformId: this.softwarePlatform.id,
+        });
         this.utilService.callSnackBar('Successfully linked compute resource');
       });
   }
@@ -106,7 +116,9 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       );
     }
     Promise.all(promises).then(() => {
-      this.getLinkedCloudServices({ id: this.softwarePlatform.id });
+      this.getLinkedCloudServices({
+        softwarePlatformId: this.softwarePlatform.id,
+      });
       this.utilService.callSnackBar('Successfully unlinked compute resource');
     });
   }
@@ -114,7 +126,9 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedCloudServices({ id: this.softwarePlatform.id });
+    this.getLinkedCloudServices({
+      softwarePlatformId: this.softwarePlatform.id,
+    });
   }
 
   onElementClicked(cloudService: CloudServiceDto): void {

@@ -30,14 +30,20 @@ export class PublicationImplementationsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getLinkedImplementations({ id: this.publication.id });
+    this.getLinkedImplementations({ publicationId: this.publication.id });
   }
 
   onDatalistConfigChanged(event): void {
-    this.getLinkedImplementations({ id: this.publication.id });
+    this.getLinkedImplementations({ publicationId: this.publication.id });
   }
 
-  getLinkedImplementations(params): void {
+  getLinkedImplementations(params: {
+    publicationId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.publicationService
       .getImplementationsOfPublication(params)
       .subscribe((data) => {
