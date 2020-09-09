@@ -35,6 +35,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   });
 
   baseElement: EntityModelComputeResourcePropertyDto = {
+    id: null,
     value: '',
     type: {
       datatype: 'STRING',
@@ -177,6 +178,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
       this.propertyTypeService
         .createComputingResourcePropertyType({
           body: {
+            id: null,
             name: this.typeName,
             description: this.typeDescription,
             datatype: this.typeDatatype,

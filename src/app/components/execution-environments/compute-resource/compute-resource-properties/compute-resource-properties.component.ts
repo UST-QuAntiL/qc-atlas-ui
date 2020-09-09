@@ -42,7 +42,7 @@ export class ComputeResourcePropertiesComponent implements OnInit {
         computeResourceId: this.computeResource.id,
         body: property,
       })
-      .subscribe((e) => {
+      .subscribe(() => {
         this.fetchComputeResourceProperties();
       });
   }
@@ -56,7 +56,7 @@ export class ComputeResourcePropertiesComponent implements OnInit {
         computeResourcePropertyId: property.id,
         body: property,
       })
-      .subscribe((e) => {
+      .subscribe(() => {
         this.fetchComputeResourceProperties();
       });
   }
@@ -69,7 +69,7 @@ export class ComputeResourcePropertiesComponent implements OnInit {
         computeResourceId: this.computeResource.id,
         computeResourcePropertyId: property.id,
       })
-      .subscribe((e) => {
+      .subscribe(() => {
         this.computeResourceProperties = this.computeResourceProperties.filter(
           (elem: EntityModelComputeResourcePropertyDto) =>
             elem.id !== property.id

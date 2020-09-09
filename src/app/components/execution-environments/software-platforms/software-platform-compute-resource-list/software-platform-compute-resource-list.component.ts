@@ -88,7 +88,7 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
         softwarePlatformId: this.softwarePlatform.id,
         body: computeResource,
       })
-      .subscribe((data) => {
+      .subscribe(() => {
         this.getLinkedComputeResources({ id: this.softwarePlatform.id });
         this.utilService.callSnackBar('Successfully linked compute resource');
       });

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api-atlas/services/publication.service';
-import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
@@ -81,11 +80,11 @@ export class PublicationListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const publicationDto: PublicationDto = {
+        params.body = {
+          id: null,
           title: dialogResult.publicationTitle,
           authors: dialogResult.authors,
         };
-        params.body = publicationDto;
         this.publicationService.createPublication(params).subscribe((data) => {
           this.router.navigate(['publications', data.id]);
           this.utilService.callSnackBar('Successfully created publication');
@@ -109,7 +108,7 @@ export class PublicationListComponent implements OnInit {
         // Iterate all selected algorithms and delete them
         for (const publication of event.elements) {
           this.publicationService
-            .deletePublication({ id: publication.id })
+            .deletePublication({ publicationId: publication.id })
             .subscribe(() => {
               // Refresh Algorithms after delete
               this.getPublications(event.queryParams);

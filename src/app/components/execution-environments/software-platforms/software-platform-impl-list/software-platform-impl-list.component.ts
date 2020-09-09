@@ -92,7 +92,7 @@ export class SoftwarePlatformImplListComponent implements OnInit {
         softwarePlatformId: this.softwarePlatform.id,
         body: implementation,
       })
-      .subscribe((data) => {
+      .subscribe(() => {
         this.getLinkedImplementations({ id: this.softwarePlatform.id });
         this.utilService.callSnackBar('Successfully linked implementation');
       });

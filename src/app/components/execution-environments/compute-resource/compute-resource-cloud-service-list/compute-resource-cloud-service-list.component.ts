@@ -87,7 +87,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
         cloudServiceId: cloudService.id,
         body: this.computeResource,
       })
-      .subscribe((data) => {
+      .subscribe(() => {
         this.getLinkedCloudServices({ id: this.computeResource.id });
         this.utilService.callSnackBar('Successfully linked cloud service');
       });
