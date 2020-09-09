@@ -32,7 +32,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
 
   getImplementations(): void {
     this.algorithmService
-      .getImplementations({ algoId: this.algorithm.id })
+      .getImplementationsOfAlgorithm({ algorithmId: this.algorithm.id })
       .subscribe(
         (impls) => {
           if (impls._embedded) {
@@ -56,17 +56,18 @@ export class AlgorithmImplementationsListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const implementationDto: ImplementationDto = {
+            id: null,
             name: dialogResult.name,
           };
           this.algorithmService
             .createImplementation({
-              algoId: this.algorithm.id,
+              algorithmId: this.algorithm.id,
               body: implementationDto,
             })
             .subscribe((data) => {
               this.router.navigate([
                 'algorithms',
-                this.algorithm.id,
+                data.implementedAlgorithmId,
                 'implementations',
                 data.id,
               ]);
@@ -94,8 +95,8 @@ export class AlgorithmImplementationsListComponent implements OnInit {
         for (const implementation of event.elements) {
           this.algorithmService
             .deleteImplementation({
-              algoId: this.algorithm.id,
-              implId: implementation.id,
+              algorithmId: this.algorithm.id,
+              implementationId: implementation.id,
             })
             .subscribe(() => {
               // Refresh Algorithms after delete

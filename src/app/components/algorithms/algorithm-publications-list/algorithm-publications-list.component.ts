@@ -44,7 +44,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
 
   getLinkedPublications(params): void {
     this.algorithmService
-      .getPublicationsByAlgorithm(params)
+      .getPublicationsOfAlgorithm(params)
       .subscribe((publications) => {
         if (publications._embedded) {
           this.linkedPublications = publications._embedded.publications;
@@ -70,25 +70,32 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.linkObject.data = [];
     // Link algorithm
     this.algorithmService
-      .addPublication({ algoId: this.algorithm.id, body: publication })
-      .subscribe((data) => {
+      .linkAlgorithmAndPublication({
+        algorithmId: this.algorithm.id,
+        body: publication,
+      })
+      .subscribe(() => {
         this.getLinkedPublications({ algoId: this.algorithm.id });
         this.utilService.callSnackBar('Successfully linked Publication');
       });
   }
 
-  async unlinkPublications(event): Promise<void> {
-    // Iterate all selected algorithms
+  unlinkPublications(event): void {
+    const promises: Array<Promise<void>> = [];
     for (const publication of event.elements) {
-      await this.algorithmService
-        .deleteReferenceToPublication({
-          algoId: this.algorithm.id,
-          publicationId: publication.id,
-        })
-        .toPromise();
+      promises.push(
+        this.algorithmService
+          .unlinkAlgorithmAndPublication({
+            algorithmId: this.algorithm.id,
+            publicationId: publication.id,
+          })
+          .toPromise()
+      );
+    }
+    Promise.all(promises).then(() => {
       this.getLinkedPublications({ algoId: this.algorithm.id });
       this.utilService.callSnackBar('Successfully unlinked Publication');
-    }
+    });
   }
 
   onAddElement(): void {}
