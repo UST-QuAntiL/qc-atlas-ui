@@ -45,3 +45,15 @@ tr.element-row:not(.expanded-row):active {
 .element-description-attribution {
   opacity: 0.5;
 }
+
+.backend-column {
+  min-width: 300px;
+}
+
+.value-column {
+  min-width: 75px;
+}
+
+.action-column {
+  min-width: 125px;
+}
