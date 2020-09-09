@@ -197,14 +197,21 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   }
 
   onElementClicked(event): void {
-    const encodedUri = encodeURI(
+    const encodedUri =
       Env.PATTERN_ATLAS_UI_URL +
-        '/pattern-languages/' +
-        encodeURIComponent(event.languageObject.uri) +
-        '/' +
-        encodeURIComponent(event.pattern)
-    );
+      '/pattern-languages/' +
+      this.fixedEncodeURIComponent(event.languageObject.uri) +
+      '/' +
+      this.fixedEncodeURIComponent(event.pattern);
+    console.log(encodedUri);
     window.open(encodedUri, '_blank');
+  }
+
+  fixedEncodeURIComponent(str): string {
+    return encodeURIComponent(str).replace(
+      /[!'()*]/g,
+      (c) => '%' + c.charCodeAt(0).toString(16)
+    );
   }
 
   onUrlClicked(urlData: UrlData): void {

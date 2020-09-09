@@ -306,13 +306,20 @@ export class AddPatternRelationDialogComponent implements OnInit {
     let encodedUri =
       Env.PATTERN_ATLAS_UI_URL +
       '/pattern-languages/' +
-      encodeURIComponent(languageUri);
+      this.fixedEncodeURIComponent(languageUri);
 
     if (patternUri) {
-      encodedUri = encodedUri + '/' + encodeURIComponent(patternUri);
+      encodedUri = encodedUri + '/' + this.fixedEncodeURIComponent(patternUri);
     }
 
     window.open(encodedUri, '_blank');
+  }
+
+  fixedEncodeURIComponent(str): string {
+    return encodeURIComponent(str).replace(
+      /[!'()*]/g,
+      (c) => '%' + c.charCodeAt(0).toString(16)
+    );
   }
 }
 
