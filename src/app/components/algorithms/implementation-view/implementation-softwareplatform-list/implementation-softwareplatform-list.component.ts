@@ -9,6 +9,7 @@ import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { LinkObject } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { GenericDataService } from '../../../../util/generic-data.service';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-implementation-softwareplatform-list',
@@ -53,9 +54,9 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
 
   getAllLinkedPlatforms(): void {
     this.algorithmService
-      .getSoftwarePlatformsByImplementation({
-        implId: this.implementation.id,
-        algoId: this.algorithm.id,
+      .getSoftwarePlatformsOfImplementation({
+        implementationId: this.implementation.id,
+        algorithmId: this.algorithm.id,
       })
       .subscribe((data) => {
         // Read all incoming data
@@ -69,7 +70,7 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
 
   getLinkedPlatforms(params): void {
     this.algorithmService
-      .getSoftwarePlatformsByImplementation(params)
+      .getSoftwarePlatformOfImplementation(params)
       .subscribe((data) => {
         this.prepareLinkedPlatformsData(data);
       });
@@ -122,9 +123,10 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
     // Empty unlinked algorithms
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addImplementationReferenceToSoftwarePlatform(
-        this.generateLinkParams(platform.id)
-      )
+      .linkSoftwarePlatformAndImplementation({
+        softwarePlatformId: platform.id,
+        body: this.implementation,
+      })
       .subscribe((data) => {
         this.getLinkedPlatformsHateoas(this.pagingInfo._links.self.href);
         this.getAllLinkedPlatforms();
@@ -132,28 +134,25 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
       });
   }
 
-  async unlinkPlatforms(event): Promise<void> {
-    // Iterate all selected algorithms
+  unlinkPlatforms(event): void {
+    const promises: Array<Promise<void>> = [];
     for (const platform of event.elements) {
-      await // Build params using path ids and perform delete request
-      this.executionEnvironmentsService
-        .deleteImplementationReferenceFromSoftwarePlatform(
-          this.generateLinkParams(platform.id)
-        )
-        .toPromise();
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkSoftwarePlatformAndImplementation({
+            softwarePlatformId: platform.id,
+            implementationId: this.implementation.id,
+          })
+          .toPromise()
+      );
+    }
+    Promise.all(promises).then(() => {
       this.utilService.callSnackBar(
         'Successfully unlinked software platform(s)'
       );
-    }
-    this.loadCorrectPageAfterDelete(event.elements.length);
-    this.getAllLinkedPlatforms();
-  }
-
-  generateLinkParams(id: string): any {
-    return {
-      id,
-      implId: this.implementation.id,
-    };
+      this.loadCorrectPageAfterDelete(event.elements.length);
+      this.getAllLinkedPlatforms();
+    });
   }
 
   onDatalistConfigChanged(event): void {

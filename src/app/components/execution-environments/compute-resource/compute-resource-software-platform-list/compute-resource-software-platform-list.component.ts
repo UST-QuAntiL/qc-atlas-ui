@@ -58,7 +58,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
 
   getLinkedSoftwarePlatforms(params: any): void {
     this.executionEnvironmentsService
-      .getSoftwarePlatformsForComputeResource(params)
+      .getSoftwarePlatformsOfComputeResource(params)
       .subscribe((softwarePlatforms) => {
         if (softwarePlatforms._embedded) {
           this.linkedSoftwarePlatforms =
@@ -85,9 +85,9 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
   linkSoftwarePlatform(softwarePlatform: SoftwarePlatformDto): void {
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addComputeResourceReferenceToSoftwarePlatform({
-        id: softwarePlatform.id,
-        crId: this.computeResource.id,
+      .linkSoftwarePlatformAndComputeResource({
+        softwarePlatformId: softwarePlatform.id,
+        body: this.computeResource,
       })
       .subscribe((data) => {
         this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
@@ -95,17 +95,22 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
       });
   }
 
-  async unlinkSoftwarePlatforms(event: DeleteParams): Promise<void> {
+  unlinkSoftwarePlatforms(event: DeleteParams): void {
+    const promises: Array<Promise<void>> = [];
     for (const softwarePlatform of event.elements) {
-      await this.executionEnvironmentsService
-        .deleteComputeResourceReferenceFromSoftwarePlatform({
-          id: softwarePlatform.id,
-          crId: this.computeResource.id,
-        })
-        .toPromise();
-      this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
-      this.utilService.callSnackBar('Successfully unlinked software platform');
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkSoftwarePlatformAndComputeResource({
+            softwarePlatformId: softwarePlatform.id,
+            computeResourceId: this.computeResource.id,
+          })
+          .toPromise()
+      );
     }
+    Promise.all(promises).then(() => {
+      this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
+      this.utilService.callSnackBar('Successfully unlinked software platforms');
+    });
   }
 
   onAddElement(): void {}

@@ -1420,7 +1420,7 @@ export class AlgorithmService extends BaseService {
     '/v1/algorithms/{algorithmId}/compute-resource-properties';
 
   /**
-   * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. For computr resource property type only ID is required, other compute resource property type attributes will not change.
+   * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createComputeResourcePropertyForAlgorithm()` instead.
@@ -1469,7 +1469,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. For computr resource property type only ID is required, other compute resource property type attributes will not change.
+   * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createComputeResourcePropertyForAlgorithm$Response()` instead.
@@ -2420,20 +2420,20 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getComputeResourceProperty1
+   * Path part for operation getComputeResourcePropertyOfImplementation
    */
-  static readonly GetComputeResourceProperty1Path =
+  static readonly GetComputeResourcePropertyOfImplementationPath =
     '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Retrieve a specific compute resource property of an implementation
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getComputeResourceProperty1()` instead.
+   * To access only the response body, use `getComputeResourcePropertyOfImplementation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputeResourceProperty1$Response(params: {
+  getComputeResourcePropertyOfImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
@@ -2447,7 +2447,7 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetComputeResourceProperty1Path,
+      AlgorithmService.GetComputeResourcePropertyOfImplementationPath,
       'get'
     );
     if (params) {
@@ -2483,11 +2483,11 @@ export class AlgorithmService extends BaseService {
    * Retrieve a specific compute resource property of an implementation
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getComputeResourceProperty1$Response()` instead.
+   * To access the full response (for headers, for example), `getComputeResourcePropertyOfImplementation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputeResourceProperty1(params: {
+  getComputeResourcePropertyOfImplementation(params: {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
@@ -2497,7 +2497,9 @@ export class AlgorithmService extends BaseService {
     type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.getComputeResourceProperty1$Response(params).pipe(
+    return this.getComputeResourcePropertyOfImplementation$Response(
+      params
+    ).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -2518,20 +2520,20 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation updateComputeResourcePropertyOfAlgorithm2
+   * Path part for operation updateComputeResourcePropertyOfImplementation
    */
-  static readonly UpdateComputeResourcePropertyOfAlgorithm2Path =
+  static readonly UpdateComputeResourcePropertyOfImplementationPath =
     '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Update a Compute resource property of an implementation. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateComputeResourcePropertyOfAlgorithm2()` instead.
+   * To access only the response body, use `updateComputeResourcePropertyOfImplementation()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateComputeResourcePropertyOfAlgorithm2$Response(params: {
+  updateComputeResourcePropertyOfImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
@@ -2546,7 +2548,7 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.UpdateComputeResourcePropertyOfAlgorithm2Path,
+      AlgorithmService.UpdateComputeResourcePropertyOfImplementationPath,
       'put'
     );
     if (params) {
@@ -2584,11 +2586,11 @@ export class AlgorithmService extends BaseService {
    * Update a Compute resource property of an implementation. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updateComputeResourcePropertyOfAlgorithm2$Response()` instead.
+   * To access the full response (for headers, for example), `updateComputeResourcePropertyOfImplementation$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateComputeResourcePropertyOfAlgorithm2(params: {
+  updateComputeResourcePropertyOfImplementation(params: {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
@@ -2599,7 +2601,9 @@ export class AlgorithmService extends BaseService {
     type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.updateComputeResourcePropertyOfAlgorithm2$Response(params).pipe(
+    return this.updateComputeResourcePropertyOfImplementation$Response(
+      params
+    ).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -2620,27 +2624,27 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteComputeResourceProperty1
+   * Path part for operation deleteComputeResourcePropertyOfImplementation
    */
-  static readonly DeleteComputeResourceProperty1Path =
+  static readonly DeleteComputeResourcePropertyOfImplementationPath =
     '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Delete a Compute resource property of an implementation
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteComputeResourceProperty1()` instead.
+   * To access only the response body, use `deleteComputeResourcePropertyOfImplementation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteComputeResourceProperty1$Response(params: {
+  deleteComputeResourcePropertyOfImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.DeleteComputeResourceProperty1Path,
+      AlgorithmService.DeleteComputeResourcePropertyOfImplementationPath,
       'delete'
     );
     if (params) {
@@ -2673,18 +2677,18 @@ export class AlgorithmService extends BaseService {
    * Delete a Compute resource property of an implementation
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteComputeResourceProperty1$Response()` instead.
+   * To access the full response (for headers, for example), `deleteComputeResourcePropertyOfImplementation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteComputeResourceProperty1(params: {
+  deleteComputeResourcePropertyOfImplementation(params: {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
   }): Observable<void> {
-    return this.deleteComputeResourceProperty1$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
-    );
+    return this.deleteComputeResourcePropertyOfImplementation$Response(
+      params
+    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
   }
 
   /**

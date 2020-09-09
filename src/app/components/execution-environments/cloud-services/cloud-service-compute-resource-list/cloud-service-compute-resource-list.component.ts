@@ -57,7 +57,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
 
   getLinkedComputeResources(params: any): void {
     this.executionEnvironmentsService
-      .getComputeResourcesForCloudService(params)
+      .getComputeResourcesOfCloudService(params)
       .subscribe((computeResource) => {
         if (computeResource._embedded) {
           this.linkedComputeResources =
@@ -84,9 +84,9 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
   linkComputeResource(computeResource: ComputeResourceDto): void {
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addComputeResourceReferenceToCloudService({
-        id: this.cloudService.id,
-        crId: computeResource.id,
+      .linkCloudServiceAndComputeResource({
+        cloudServiceId: this.cloudService.id,
+        body: computeResource,
       })
       .subscribe((data) => {
         this.getLinkedComputeResources({ id: this.cloudService.id });
@@ -94,17 +94,22 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
       });
   }
 
-  async unlinkComputeResources(event: DeleteParams): Promise<void> {
+  unlinkComputeResources(event: DeleteParams): void {
+    const promises: Array<Promise<void>> = [];
     for (const computeResource of event.elements) {
-      await this.executionEnvironmentsService
-        .deleteComputeResourceReferenceFromCloudService({
-          id: this.cloudService.id,
-          crId: computeResource.id,
-        })
-        .toPromise();
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkCloudServiceAndComputeResource({
+            cloudServiceId: this.cloudService.id,
+            computeResourceId: computeResource.id,
+          })
+          .toPromise()
+      );
+    }
+    Promise.all(promises).then(() => {
       this.getLinkedComputeResources({ id: this.cloudService.id });
       this.utilService.callSnackBar('Successfully unlinked compute resource');
-    }
+    });
   }
 
   onAddElement(): void {}

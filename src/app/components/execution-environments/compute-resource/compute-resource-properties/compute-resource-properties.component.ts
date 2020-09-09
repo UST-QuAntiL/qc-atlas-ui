@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
-import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
-import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
-import { quantumComputationModelOptions } from '../../../../util/options';
-import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {ExecutionEnvironmentsService} from 'api-atlas/services/execution-environments.service';
+import {ComputeResourceDto} from 'api-atlas/models/compute-resource-dto';
+import {EntityModelComputeResourcePropertyDto} from 'api-atlas/models/entity-model-compute-resource-property-dto';
+import {quantumComputationModelOptions} from '../../../../util/options';
+import {UpdateFieldEventService} from '../../../../services/update-field-event.service';
 
 @Component({
   selector: 'app-compute-resource-properties',
@@ -21,7 +21,8 @@ export class ComputeResourcePropertiesComponent implements OnInit {
   constructor(
     private executionEnvironmentService: ExecutionEnvironmentsService,
     private updateFieldService: UpdateFieldEventService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.fetchComputeResourceProperties();
@@ -37,11 +38,9 @@ export class ComputeResourcePropertiesComponent implements OnInit {
   addComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
-    console.log('add compute resource property');
-    console.log(property);
     this.executionEnvironmentService
-      .addComputingResourcePropertyToComputeResource({
-        id: this.computeResource.id,
+      .createComputeResourcePropertyForComputeResource({
+        computeResourceId: this.computeResource.id,
         body: property,
       })
       .subscribe((e) => {
@@ -53,9 +52,9 @@ export class ComputeResourcePropertiesComponent implements OnInit {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.executionEnvironmentService
-      .updateComputingResourceResourcePropertyOfComputeResource({
-        crid: this.computeResource.id,
-        resourceId: property.id,
+      .updateComputeResourcePropertyOfComputeResource({
+        computeResourceId: this.computeResource.id,
+        computeResourcePropertyId: property.id,
         body: property,
       })
       .subscribe((e) => {
@@ -67,9 +66,9 @@ export class ComputeResourcePropertiesComponent implements OnInit {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.executionEnvironmentService
-      .deleteComputingResourcePropertyFromComputeResource({
-        crid: this.computeResource.id,
-        resourceId: property.id,
+      .deleteComputeResourcePropertyOfComputeResource({
+        computeResourceId: this.computeResource.id,
+        computeResourcePropertyId: property.id,
       })
       .subscribe((e) => {
         this.computeResourceProperties = this.computeResourceProperties.filter(
@@ -82,8 +81,8 @@ export class ComputeResourcePropertiesComponent implements OnInit {
 
   fetchComputeResourceProperties(): void {
     this.executionEnvironmentService
-      .getComputingResourcePropertiesForComputeResource({
-        id: this.computeResource.id,
+      .getComputeResourcePropertiesOfComputeResource({
+        computeResourceId: this.computeResource.id,
         size: -1,
       })
       .subscribe((e) => {

@@ -60,7 +60,7 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
 
   getLinkedSoftwarePlatforms(params: any): void {
     this.executionEnvironmentsService
-      .getSoftwarePlatformsForCloudService(params)
+      .getSoftwarePlatformsOfCloudService(params)
       .subscribe((softwarePlatforms) => {
         if (softwarePlatforms._embedded) {
           this.linkedSoftwarePlatforms =
@@ -87,9 +87,9 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
   linkSoftwarePlatform(softwarePlatform: SoftwarePlatformDto): void {
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addCloudServiceReferenceToSoftwarePlatform({
-        id: softwarePlatform.id,
-        csId: this.cloudService.id,
+      .linkSoftwarePlatformAndCloudService({
+        softwarePlatformId: softwarePlatform.id,
+        body: this.cloudService,
       })
       .subscribe((data) => {
         this.getLinkedSoftwarePlatforms({ id: this.cloudService.id });
@@ -97,17 +97,22 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       });
   }
 
-  async unlinkSoftwarePlatforms(event: DeleteParams): Promise<void> {
+  unlinkSoftwarePlatforms(event: DeleteParams): void {
+    const promises: Array<Promise<void>> = [];
     for (const softwarePlatform of event.elements) {
-      await this.executionEnvironmentsService
-        .deleteCloudServiceReferenceFromSoftwarePlatform({
-          id: softwarePlatform.id,
-          csId: this.cloudService.id,
-        })
-        .toPromise();
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkSoftwarePlatformAndCloudService({
+            softwarePlatformId: softwarePlatform.id,
+            cloudServiceId: this.cloudService.id,
+          })
+          .toPromise()
+      );
+    }
+    Promise.all(promises).then(() => {
       this.getLinkedSoftwarePlatforms({ id: this.cloudService.id });
       this.utilService.callSnackBar('Successfully unlinked software platform');
-    }
+    });
   }
 
   onAddElement(): void {}

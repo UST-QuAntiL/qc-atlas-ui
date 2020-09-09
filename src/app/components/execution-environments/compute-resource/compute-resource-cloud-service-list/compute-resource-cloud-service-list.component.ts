@@ -57,7 +57,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
 
   getLinkedCloudServices(params: any): void {
     this.executionEnvironmentsService
-      .getCloudServicesForComputeResource(params)
+      .getCloudServicesOfSoftwarePlatform(params)
       .subscribe((cloudServices) => {
         if (cloudServices._embedded) {
           this.linkedCloudServices = cloudServices._embedded.cloudServices;
@@ -83,27 +83,32 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
   linkCloudService(cloudService: CloudServiceDto): void {
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addComputeResourceReferenceToCloudService({
-        id: cloudService.id,
-        crId: this.computeResource.id,
+      .linkCloudServiceAndComputeResource({
+        cloudServiceId: cloudService.id,
+        body: this.computeResource,
       })
       .subscribe((data) => {
         this.getLinkedCloudServices({ id: this.computeResource.id });
-        this.utilService.callSnackBar('Successfully linked compute resource');
+        this.utilService.callSnackBar('Successfully linked cloud service');
       });
   }
 
-  async unlinkCloudServices(event: DeleteParams): Promise<void> {
+  unlinkCloudServices(event: DeleteParams): void {
+    const outputPromises: Array<Promise<void>> = [];
     for (const cloudService of event.elements) {
-      await this.executionEnvironmentsService
-        .deleteComputeResourceReferenceFromCloudService({
-          id: cloudService.id,
-          crId: this.computeResource.id,
-        })
-        .toPromise();
-      this.getLinkedCloudServices({ id: this.computeResource.id });
-      this.utilService.callSnackBar('Successfully unlinked compute resource');
+      outputPromises.push(
+        this.executionEnvironmentsService
+          .unlinkCloudServiceAndComputeResource({
+            cloudServiceId: cloudService.id,
+            computeResourceId: this.computeResource.id,
+          })
+          .toPromise()
+      );
     }
+    Promise.all(outputPromises).then(() => {
+      this.getLinkedCloudServices({ id: this.computeResource.id });
+      this.utilService.callSnackBar('Successfully unlinked cloud services');
+    });
   }
 
   onAddElement(): void {}

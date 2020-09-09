@@ -1534,20 +1534,20 @@ export class ExecutionEnvironmentsService extends BaseService {
   }
 
   /**
-   * Path part for operation getComputingResourcePropertiesOfComputeResource
+   * Path part for operation getComputeResourcePropertiesOfComputeResource
    */
-  static readonly GetComputingResourcePropertiesOfComputeResourcePath =
+  static readonly GetComputeResourcePropertiesOfComputeResourcePath =
     '/v1/compute-resources/{computeResourceId}/compute-resource-properties';
 
   /**
    * Get referenced compute resource properties for a compute resource.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getComputingResourcePropertiesOfComputeResource()` instead.
+   * To access only the response body, use `getComputeResourcePropertiesOfComputeResource()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputingResourcePropertiesOfComputeResource$Response(params: {
+  getComputeResourcePropertiesOfComputeResource$Response(params: {
     computeResourceId: string;
 
     /**
@@ -1581,7 +1581,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      ExecutionEnvironmentsService.GetComputingResourcePropertiesOfComputeResourcePath,
+      ExecutionEnvironmentsService.GetComputeResourcePropertiesOfComputeResourcePath,
       'get'
     );
     if (params) {
@@ -1617,11 +1617,11 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Get referenced compute resource properties for a compute resource.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getComputingResourcePropertiesOfComputeResource$Response()` instead.
+   * To access the full response (for headers, for example), `getComputeResourcePropertiesOfComputeResource$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputingResourcePropertiesOfComputeResource(params: {
+  getComputeResourcePropertiesOfComputeResource(params: {
     computeResourceId: string;
 
     /**
@@ -1649,7 +1649,7 @@ export class ExecutionEnvironmentsService extends BaseService {
     };
     page?: PageMetadata;
   }> {
-    return this.getComputingResourcePropertiesOfComputeResource$Response(
+    return this.getComputeResourcePropertiesOfComputeResource$Response(
       params
     ).pipe(
       map(
@@ -1676,20 +1676,20 @@ export class ExecutionEnvironmentsService extends BaseService {
   }
 
   /**
-   * Path part for operation createComputingResourcePropertyForComputeResource
+   * Path part for operation createComputeResourcePropertyForComputeResource
    */
-  static readonly CreateComputingResourcePropertyForComputeResourcePath =
+  static readonly CreateComputeResourcePropertyForComputeResourcePath =
     '/v1/compute-resources/{computeResourceId}/compute-resource-properties';
 
   /**
    * Define the basic properties of a compute resource property and add a reference to the defined compute resource property. Custom ID will be ignored.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `createComputingResourcePropertyForComputeResource()` instead.
+   * To access only the response body, use `createComputeResourcePropertyForComputeResource()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createComputingResourcePropertyForComputeResource$Response(params: {
+  createComputeResourcePropertyForComputeResource$Response(params: {
     computeResourceId: string;
     body: ComputeResourcePropertyDto;
   }): Observable<
@@ -1707,7 +1707,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      ExecutionEnvironmentsService.CreateComputingResourcePropertyForComputeResourcePath,
+      ExecutionEnvironmentsService.CreateComputeResourcePropertyForComputeResourcePath,
       'post'
     );
     if (params) {
@@ -1744,11 +1744,11 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Define the basic properties of a compute resource property and add a reference to the defined compute resource property. Custom ID will be ignored.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `createComputingResourcePropertyForComputeResource$Response()` instead.
+   * To access the full response (for headers, for example), `createComputeResourcePropertyForComputeResource$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createComputingResourcePropertyForComputeResource(params: {
+  createComputeResourcePropertyForComputeResource(params: {
     computeResourceId: string;
     body: ComputeResourcePropertyDto;
   }): Observable<{
@@ -1762,7 +1762,7 @@ export class ExecutionEnvironmentsService extends BaseService {
       | 'QUANTUM_ANNEALING';
     _links?: Array<Link>;
   }> {
-    return this.createComputingResourcePropertyForComputeResource$Response(
+    return this.createComputeResourcePropertyForComputeResource$Response(
       params
     ).pipe(
       map(
@@ -1795,20 +1795,20 @@ export class ExecutionEnvironmentsService extends BaseService {
   }
 
   /**
-   * Path part for operation getComputeResourceProperty
+   * Path part for operation getComputeResourcePropertyOfComputeResource
    */
-  static readonly GetComputeResourcePropertyPath =
+  static readonly GetComputeResourcePropertyOfComputeResourcePath =
     '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Retrieve a specific compute resource property of an compute resource
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getComputeResourceProperty()` instead.
+   * To access only the response body, use `getComputeResourcePropertyOfComputeResource()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputeResourceProperty$Response(params: {
+  getComputeResourcePropertyOfComputeResource$Response(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
   }): Observable<
@@ -1821,7 +1821,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      ExecutionEnvironmentsService.GetComputeResourcePropertyPath,
+      ExecutionEnvironmentsService.GetComputeResourcePropertyOfComputeResourcePath,
       'get'
     );
     if (params) {
@@ -1856,11 +1856,11 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Retrieve a specific compute resource property of an compute resource
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getComputeResourceProperty$Response()` instead.
+   * To access the full response (for headers, for example), `getComputeResourcePropertyOfComputeResource$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputeResourceProperty(params: {
+  getComputeResourcePropertyOfComputeResource(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
   }): Observable<{
@@ -1869,7 +1869,9 @@ export class ExecutionEnvironmentsService extends BaseService {
     type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.getComputeResourceProperty$Response(params).pipe(
+    return this.getComputeResourcePropertyOfComputeResource$Response(
+      params
+    ).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -1890,20 +1892,20 @@ export class ExecutionEnvironmentsService extends BaseService {
   }
 
   /**
-   * Path part for operation updateComputeResourcePropertyOfAlgorithm1
+   * Path part for operation updateComputeResourcePropertyOfComputeResource
    */
-  static readonly UpdateComputeResourcePropertyOfAlgorithm1Path =
+  static readonly UpdateComputeResourcePropertyOfComputeResourcePath =
     '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Update a Compute resource property of an compute resource. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateComputeResourcePropertyOfAlgorithm1()` instead.
+   * To access only the response body, use `updateComputeResourcePropertyOfComputeResource()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateComputeResourcePropertyOfAlgorithm1$Response(params: {
+  updateComputeResourcePropertyOfComputeResource$Response(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
     body: ComputeResourcePropertyDto;
@@ -1917,7 +1919,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      ExecutionEnvironmentsService.UpdateComputeResourcePropertyOfAlgorithm1Path,
+      ExecutionEnvironmentsService.UpdateComputeResourcePropertyOfComputeResourcePath,
       'put'
     );
     if (params) {
@@ -1954,11 +1956,11 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Update a Compute resource property of an compute resource. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updateComputeResourcePropertyOfAlgorithm1$Response()` instead.
+   * To access the full response (for headers, for example), `updateComputeResourcePropertyOfComputeResource$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateComputeResourcePropertyOfAlgorithm1(params: {
+  updateComputeResourcePropertyOfComputeResource(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
     body: ComputeResourcePropertyDto;
@@ -1968,7 +1970,9 @@ export class ExecutionEnvironmentsService extends BaseService {
     type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.updateComputeResourcePropertyOfAlgorithm1$Response(params).pipe(
+    return this.updateComputeResourcePropertyOfComputeResource$Response(
+      params
+    ).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -1989,26 +1993,26 @@ export class ExecutionEnvironmentsService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteComputeResourceProperty
+   * Path part for operation deleteComputeResourcePropertyOfComputeResource
    */
-  static readonly DeleteComputeResourcePropertyPath =
+  static readonly DeleteComputeResourcePropertyOfComputeResourcePath =
     '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Delete a Compute resource property of an compute resource
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteComputeResourceProperty()` instead.
+   * To access only the response body, use `deleteComputeResourcePropertyOfComputeResource()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteComputeResourceProperty$Response(params: {
+  deleteComputeResourcePropertyOfComputeResource$Response(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      ExecutionEnvironmentsService.DeleteComputeResourcePropertyPath,
+      ExecutionEnvironmentsService.DeleteComputeResourcePropertyOfComputeResourcePath,
       'delete'
     );
     if (params) {
@@ -2040,17 +2044,17 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Delete a Compute resource property of an compute resource
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteComputeResourceProperty$Response()` instead.
+   * To access the full response (for headers, for example), `deleteComputeResourcePropertyOfComputeResource$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteComputeResourceProperty(params: {
+  deleteComputeResourcePropertyOfComputeResource(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
   }): Observable<void> {
-    return this.deleteComputeResourceProperty$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
-    );
+    return this.deleteComputeResourcePropertyOfComputeResource$Response(
+      params
+    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
   }
 
   /**

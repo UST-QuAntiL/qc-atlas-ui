@@ -92,9 +92,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
 
   unlinkAlgorithms(algorithmList): void {
     const outputPromises: Array<Promise<void>> = [];
-    // Iterate all selected algorithms
     for (const element of algorithmList.elements) {
-      // Build params using path ids and perform delete request
       outputPromises.push(
         this.publicationService
           .unlinkPublicationAndAlgorithm({
@@ -106,7 +104,6 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     }
 
     Promise.all(outputPromises).then(() => {
-      // Update table after deletion
       this.getLinkedAlgorithms({ id: this.publication.id });
       this.utilService.callSnackBar('Successfully unlinked Algorithm');
     });
