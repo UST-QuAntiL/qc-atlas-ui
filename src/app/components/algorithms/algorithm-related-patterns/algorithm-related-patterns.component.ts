@@ -7,10 +7,13 @@ import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-d
 import { PatternRelationDto } from 'api-atlas/models';
 import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
 import { EntityModelPattern } from 'api-patternpedia/models/entity-model-pattern';
+import { EntityModelPatternLanguage } from 'api-patternpedia/models';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { UrlData } from '../../generics/data-list/data-list.component';
+import { environment as Env } from '../../../../environments/environment';
+import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-related-patterns',
@@ -30,7 +33,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     private patternRelationTypeService: PatternRelationTypeService,
     private algorithmService: AlgorithmService,
     private patternService: PatternControllerService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private dataService: GenericDataService
   ) {}
 
   ngOnInit(): void {}
@@ -192,7 +196,14 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   }
 
   onElementClicked(event): void {
-    window.open(event.pattern, '_blank');
+    const encodedUri = encodeURI(
+      Env.PATTERN_ATLAS_UI_URL +
+        '/pattern-languages/' +
+        encodeURIComponent(event.languageObject.uri) +
+        '/' +
+        encodeURIComponent(event.pattern)
+    );
+    window.open(encodedUri, '_blank');
   }
 
   onUrlClicked(urlData: UrlData): void {
@@ -211,16 +222,28 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     this.patternService
       .getPatternByUri({ encodedUri: relation.pattern })
       .subscribe((pattern) => {
-        this.tableObjects.push({
-          id: relation.id,
-          description: relation.description,
-          patternType: relation.patternRelationType.name,
-          pattern: relation.pattern,
-          patternTypeObject: relation.patternRelationType,
-          patternObject: pattern,
-          patternName: pattern.name,
-        });
+        this.getPatternLanguage(relation, pattern);
       });
+  }
+
+  getPatternLanguage(
+    relation: PatternRelationDto,
+    pattern: EntityModelPattern
+  ): void {
+    const languageUrl = JSON.parse(JSON.stringify(pattern._links))
+      .patternLanguage.href;
+    this.dataService.getData(languageUrl).subscribe((language) => {
+      this.tableObjects.push({
+        id: relation.id,
+        description: relation.description,
+        patternType: relation.patternRelationType.name,
+        pattern: relation.pattern,
+        patternTypeObject: relation.patternRelationType,
+        patternObject: pattern,
+        languageObject: language,
+        patternName: pattern.name,
+      });
+    });
   }
 
   generatePatternRelationDto(
@@ -246,5 +269,6 @@ export interface PatternRelationTableObject {
   pattern: string;
   patternTypeObject: PatternRelationTypeDto;
   patternObject: EntityModelPattern;
+  languageObject: EntityModelPatternLanguage;
   patternName: string;
 }
