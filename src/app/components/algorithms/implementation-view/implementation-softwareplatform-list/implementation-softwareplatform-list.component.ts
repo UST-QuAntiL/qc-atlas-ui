@@ -6,10 +6,10 @@ import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { Router } from '@angular/router';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
+import { element } from 'protractor';
 import { LinkObject } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { GenericDataService } from '../../../../util/generic-data.service';
-import { element } from 'protractor';
 
 @Component({
   selector: 'app-implementation-softwareplatform-list',

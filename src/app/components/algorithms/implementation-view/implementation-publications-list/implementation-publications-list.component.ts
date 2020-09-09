@@ -1,3 +1,4 @@
+import { chmod } from 'fs';
 import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
@@ -7,7 +8,6 @@ import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-impl
 import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { GenericDataService } from '../../../../util/generic-data.service';
 import { UtilService } from '../../../../util/util.service';
-import { chmod } from 'fs';
 
 @Component({
   selector: 'app-implementation-publications-list',

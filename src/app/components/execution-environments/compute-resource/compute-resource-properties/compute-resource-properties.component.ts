@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ExecutionEnvironmentsService} from 'api-atlas/services/execution-environments.service';
-import {ComputeResourceDto} from 'api-atlas/models/compute-resource-dto';
-import {EntityModelComputeResourcePropertyDto} from 'api-atlas/models/entity-model-compute-resource-property-dto';
-import {quantumComputationModelOptions} from '../../../../util/options';
-import {UpdateFieldEventService} from '../../../../services/update-field-event.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
+import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
+import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
+import { quantumComputationModelOptions } from '../../../../util/options';
+import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 
 @Component({
   selector: 'app-compute-resource-properties',
@@ -21,8 +21,7 @@ export class ComputeResourcePropertiesComponent implements OnInit {
   constructor(
     private executionEnvironmentService: ExecutionEnvironmentsService,
     private updateFieldService: UpdateFieldEventService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.fetchComputeResourceProperties();

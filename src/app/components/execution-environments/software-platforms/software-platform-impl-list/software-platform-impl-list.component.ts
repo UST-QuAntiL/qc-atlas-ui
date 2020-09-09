@@ -5,12 +5,12 @@ import { Router } from '@angular/router';
 import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import {
   DeleteParams,
   LinkObject,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
-import { ImplementationsService } from 'api-atlas/services/implementations.service';
 
 @Component({
   selector: 'app-software-platform-impl-list',
