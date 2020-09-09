@@ -1,5 +1,5 @@
-<div *ngIf="impl">
-  <div class="header-container p-2" *ngIf="algo">
+<div *ngIf="implementation">
+  <div class="header-container p-2" *ngIf="algorithm">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
     <app-tags-component [allowRemoving]="true"
                         [tags]="tags"
@@ -11,7 +11,7 @@
     <mat-tab label="General">
       <app-implementation-properties
         [computeResourceProperties]="computeResourceProperties"
-        [implementation]="impl"
+        [implementation]="implementation"
         (updateImplementationField)="updateImplementationField($event)"
         (deleteComputeResourceProperty)="deleteComputeResourceProperty($event)"
         (addComputeResourceProperty)="addComputeResourceProperty($event)"
@@ -20,14 +20,14 @@
     </mat-tab>
     <mat-tab label="Publications">
       <div>
-        <app-implementation-publications-list [implementation]=impl>
+        <app-implementation-publications-list [implementation]=implementation>
         </app-implementation-publications-list>
       </div>
     </mat-tab>
     <mat-tab label="Software Platforms">
       <app-implementation-softwareplatform-list
-        [implementation]="impl"
-        [algorithm]="algo"
+        [implementation]="implementation"
+        [algorithm]="algorithm"
       ></app-implementation-softwareplatform-list>
     </mat-tab>
     <mat-tab label="Selection Criteria">
@@ -47,6 +47,6 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-<div *ngIf="impl === undefined">
+<div *ngIf="implementation === undefined">
   Loading..
 </div>
