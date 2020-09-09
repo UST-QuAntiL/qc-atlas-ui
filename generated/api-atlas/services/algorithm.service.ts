@@ -610,8 +610,8 @@ export class AlgorithmService extends BaseService {
       id: string;
       sourceAlgorithmId: string;
       targetAlgorithmId: string;
-      algoRelationType: AlgorithmRelationTypeDto;
       description?: string;
+      algoRelationType: AlgorithmRelationTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -639,8 +639,8 @@ export class AlgorithmService extends BaseService {
             id: string;
             sourceAlgorithmId: string;
             targetAlgorithmId: string;
-            algoRelationType: AlgorithmRelationTypeDto;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -662,8 +662,8 @@ export class AlgorithmService extends BaseService {
     id: string;
     sourceAlgorithmId: string;
     targetAlgorithmId: string;
-    algoRelationType: AlgorithmRelationTypeDto;
     description?: string;
+    algoRelationType: AlgorithmRelationTypeDto;
     _links?: Array<Link>;
   }> {
     return this.createAlgorithmRelation$Response(params).pipe(
@@ -673,8 +673,8 @@ export class AlgorithmService extends BaseService {
             id: string;
             sourceAlgorithmId: string;
             targetAlgorithmId: string;
-            algoRelationType: AlgorithmRelationTypeDto;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
@@ -682,8 +682,8 @@ export class AlgorithmService extends BaseService {
             id: string;
             sourceAlgorithmId: string;
             targetAlgorithmId: string;
-            algoRelationType: AlgorithmRelationTypeDto;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -710,8 +710,8 @@ export class AlgorithmService extends BaseService {
       id: string;
       sourceAlgorithmId: string;
       targetAlgorithmId: string;
-      algoRelationType: AlgorithmRelationTypeDto;
       description?: string;
+      algoRelationType: AlgorithmRelationTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -738,8 +738,8 @@ export class AlgorithmService extends BaseService {
             id: string;
             sourceAlgorithmId: string;
             targetAlgorithmId: string;
-            algoRelationType: AlgorithmRelationTypeDto;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -759,8 +759,8 @@ export class AlgorithmService extends BaseService {
     id: string;
     sourceAlgorithmId: string;
     targetAlgorithmId: string;
-    algoRelationType: AlgorithmRelationTypeDto;
     description?: string;
+    algoRelationType: AlgorithmRelationTypeDto;
     _links?: Array<Link>;
   }> {
     return this.getAlgorithmRelation$Response(params).pipe(
@@ -770,8 +770,8 @@ export class AlgorithmService extends BaseService {
             id: string;
             sourceAlgorithmId: string;
             targetAlgorithmId: string;
-            algoRelationType: AlgorithmRelationTypeDto;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
@@ -779,8 +779,8 @@ export class AlgorithmService extends BaseService {
             id: string;
             sourceAlgorithmId: string;
             targetAlgorithmId: string;
-            algoRelationType: AlgorithmRelationTypeDto;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -810,8 +810,8 @@ export class AlgorithmService extends BaseService {
       id: string;
       sourceAlgorithmId: string;
       targetAlgorithmId: string;
-      algoRelationType: AlgorithmRelationTypeDto;
       description?: string;
+      algoRelationType: AlgorithmRelationTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -840,8 +840,8 @@ export class AlgorithmService extends BaseService {
             id: string;
             sourceAlgorithmId: string;
             targetAlgorithmId: string;
-            algoRelationType: AlgorithmRelationTypeDto;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -864,8 +864,8 @@ export class AlgorithmService extends BaseService {
     id: string;
     sourceAlgorithmId: string;
     targetAlgorithmId: string;
-    algoRelationType: AlgorithmRelationTypeDto;
     description?: string;
+    algoRelationType: AlgorithmRelationTypeDto;
     _links?: Array<Link>;
   }> {
     return this.updateAlgorithmRelation$Response(params).pipe(
@@ -875,8 +875,8 @@ export class AlgorithmService extends BaseService {
             id: string;
             sourceAlgorithmId: string;
             targetAlgorithmId: string;
-            algoRelationType: AlgorithmRelationTypeDto;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
@@ -884,8 +884,8 @@ export class AlgorithmService extends BaseService {
             id: string;
             sourceAlgorithmId: string;
             targetAlgorithmId: string;
-            algoRelationType: AlgorithmRelationTypeDto;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -1093,7 +1093,7 @@ export class AlgorithmService extends BaseService {
    */
   linkAlgorithmAndApplicationArea$Response(params: {
     algorithmId: string;
-    body?: ApplicationAreaDto;
+    body: ApplicationAreaDto;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -1132,7 +1132,7 @@ export class AlgorithmService extends BaseService {
    */
   linkAlgorithmAndApplicationArea(params: {
     algorithmId: string;
-    body?: ApplicationAreaDto;
+    body: ApplicationAreaDto;
   }): Observable<void> {
     return this.linkAlgorithmAndApplicationArea$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
@@ -3192,12 +3192,8 @@ export class AlgorithmService extends BaseService {
   linkImplementationAndSoftwarePlatform$Response(params: {
     algorithmId: string;
     implementationId: string;
-    body?: SoftwarePlatformDto;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-    }>
-  > {
+    body: SoftwarePlatformDto;
+  }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.LinkImplementationAndSoftwarePlatformPath,
@@ -3212,18 +3208,16 @@ export class AlgorithmService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
+          responseType: 'text',
+          accept: '*/*',
         })
       )
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>;
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
         })
       );
   }
@@ -3239,25 +3233,10 @@ export class AlgorithmService extends BaseService {
   linkImplementationAndSoftwarePlatform(params: {
     algorithmId: string;
     implementationId: string;
-    body?: SoftwarePlatformDto;
-  }): Observable<{
-    _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-  }> {
+    body: SoftwarePlatformDto;
+  }): Observable<void> {
     return this.linkImplementationAndSoftwarePlatform$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }
-      )
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

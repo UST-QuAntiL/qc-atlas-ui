@@ -5,7 +5,7 @@ export type EntityModelAlgorithmRelationDto = {
   id: string;
   sourceAlgorithmId: string;
   targetAlgorithmId: string;
-  algoRelationType: AlgorithmRelationTypeDto;
   description?: string;
+  algoRelationType: AlgorithmRelationTypeDto;
   _links?: Array<Link>;
 };

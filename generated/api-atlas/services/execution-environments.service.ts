@@ -3297,12 +3297,8 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   linkSoftwarePlatformAndImplementation$Response(params: {
     softwarePlatformId: string;
-    body?: ImplementationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-    }>
-  > {
+    body: ImplementationDto;
+  }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ExecutionEnvironmentsService.LinkSoftwarePlatformAndImplementationPath,
@@ -3316,18 +3312,16 @@ export class ExecutionEnvironmentsService extends BaseService {
     return this.http
       .request(
         rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
+          responseType: 'text',
+          accept: '*/*',
         })
       )
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>;
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
         })
       );
   }
@@ -3342,25 +3336,10 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   linkSoftwarePlatformAndImplementation(params: {
     softwarePlatformId: string;
-    body?: ImplementationDto;
-  }): Observable<{
-    _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-  }> {
+    body: ImplementationDto;
+  }): Observable<void> {
     return this.linkSoftwarePlatformAndImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }
-      )
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

@@ -4,6 +4,6 @@ export type AlgorithmRelationDto = {
   id: string;
   sourceAlgorithmId: string;
   targetAlgorithmId: string;
-  algoRelationType: AlgorithmRelationTypeDto;
   description?: string;
+  algoRelationType: AlgorithmRelationTypeDto;
 };
