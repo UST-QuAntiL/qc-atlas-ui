@@ -14,6 +14,7 @@ export class TextInputComponent extends AbstractValueAccessor {
   @Input() multiline = false;
   @Input() maxLines = 1;
   @Input() isLink: boolean;
+  @Input() isSaveable: false;
 
   isBeingEdited = false;
 

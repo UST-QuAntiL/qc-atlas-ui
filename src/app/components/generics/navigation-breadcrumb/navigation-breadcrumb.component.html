@@ -23,6 +23,9 @@
       <div class="breadcrumb-item-container">
         <div class="heading">
           {{ links[links.length - 1].heading }}
+          <button (click)="toggleEdit()" mat-icon-button>
+            <mat-icon>{{ isBeingEdited ? 'save' : 'edit' }}</mat-icon>
+          </button>
         </div>
         <h6 style="color: gray;">
           {{ links[links.length - 1].subHeading }}
