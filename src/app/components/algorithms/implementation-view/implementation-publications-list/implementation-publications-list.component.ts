@@ -1,4 +1,3 @@
-import { chmod } from 'fs';
 import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
