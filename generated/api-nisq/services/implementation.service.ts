@@ -215,7 +215,7 @@ export class ImplementationService extends BaseService {
     const rb = new RequestBuilder(
       this.rootUrl,
       ImplementationService.UpdateImplementationPath,
-      'post'
+      'put'
     );
     if (params) {
       rb.path('implId', params.implId, {});
