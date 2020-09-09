@@ -5,7 +5,6 @@ import { PublicationService } from 'api-atlas/services/publication.service';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
-import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-publication-implementations-list',

@@ -80,6 +80,7 @@ export class ComputeResourceListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const computeResourceDto: ComputeResourceDto = {
+            id: null,
             name: dialogResult.name,
           };
           this.executionEnvironmentsService
@@ -116,7 +117,7 @@ export class ComputeResourceListComponent implements OnInit {
         if (dialogResult) {
           for (const computeResource of deleteParams.elements) {
             this.executionEnvironmentsService
-              .deleteComputeResource({ id: computeResource.id })
+              .deleteComputeResource({ computeResourceId: computeResource.id })
               .subscribe(() => {
                 // Refresh Algorithms after delete
                 this.getComputeResources(deleteParams.queryParams);

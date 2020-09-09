@@ -87,7 +87,7 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
         softwarePlatformId: this.softwarePlatform.id,
         body: cloudService,
       })
-      .subscribe((data) => {
+      .subscribe(() => {
         this.getLinkedCloudServices({ id: this.softwarePlatform.id });
         this.utilService.callSnackBar('Successfully linked compute resource');
       });

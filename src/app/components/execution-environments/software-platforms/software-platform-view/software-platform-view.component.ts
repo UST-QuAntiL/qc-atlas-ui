@@ -29,7 +29,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ spId }) => {
       this.executionEnvironmentsService
-        .getSoftwarePlatform({ id: spId })
+        .getSoftwarePlatform({ softwarePlatformId: spId })
         .subscribe(
           (softwarePlatform: EntityModelSoftwarePlatformDto) => {
             this.softwarePlatform = softwarePlatform;
@@ -59,7 +59,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
     this.softwarePlatform[fieldUpdate.field] = fieldUpdate.value;
     this.executionEnvironmentsService
       .updateSoftwarePlatform({
-        id: this.softwarePlatform.id,
+        softwarePlatformId: this.softwarePlatform.id,
         body: this.softwarePlatform,
       })
       .subscribe(

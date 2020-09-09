@@ -89,7 +89,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
         softwarePlatformId: softwarePlatform.id,
         body: this.computeResource,
       })
-      .subscribe((data) => {
+      .subscribe(() => {
         this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
         this.utilService.callSnackBar('Successfully linked software platform');
       });
