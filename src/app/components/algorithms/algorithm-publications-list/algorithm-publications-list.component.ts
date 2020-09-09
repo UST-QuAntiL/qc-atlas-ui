@@ -39,10 +39,16 @@ export class AlgorithmPublicationsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.linkObject.title += this.algorithm.name;
-    this.getLinkedPublications({ algoId: this.algorithm.id });
+    this.getLinkedPublications({ algorithmId: this.algorithm.id });
   }
 
-  getLinkedPublications(params): void {
+  getLinkedPublications(params: {
+    algorithmId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.algorithmService
       .getPublicationsOfAlgorithm(params)
       .subscribe((publications) => {
@@ -75,7 +81,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
         body: publication,
       })
       .subscribe(() => {
-        this.getLinkedPublications({ algoId: this.algorithm.id });
+        this.getLinkedPublications({ algorithmId: this.algorithm.id });
         this.utilService.callSnackBar('Successfully linked Publication');
       });
   }
@@ -93,7 +99,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       );
     }
     Promise.all(promises).then(() => {
-      this.getLinkedPublications({ algoId: this.algorithm.id });
+      this.getLinkedPublications({ algorithmId: this.algorithm.id });
       this.utilService.callSnackBar('Successfully unlinked Publication');
     });
   }
@@ -101,7 +107,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   onAddElement(): void {}
 
   onDatalistConfigChanged(event): void {
-    this.getLinkedPublications({ algoId: this.algorithm.id });
+    this.getLinkedPublications({ algorithmId: this.algorithm.id });
   }
 
   onElementClicked(publication: PublicationDto): void {

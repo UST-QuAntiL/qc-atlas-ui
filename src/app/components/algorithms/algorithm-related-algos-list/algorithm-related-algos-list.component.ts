@@ -44,7 +44,13 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getAlgorithmRelations(params): void {
+  getAlgorithmRelations(params: {
+    algorithmId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.algorithmService.getAlgorithmRelationsOfAlgorithm(params).subscribe(
       (relations) => {
         if (relations._embedded) {
@@ -67,8 +73,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         algorithmId: this.algorithm.id,
         body: algorithmRelationDto,
       })
-      .subscribe((data) => {
-        this.getAlgorithmRelations({ algoId: this.algorithm.id });
+      .subscribe(() => {
+        this.getAlgorithmRelations({ algorithmId: this.algorithm.id });
         this.utilService.callSnackBar(
           'Successfully created algorithm relation'
         );
@@ -85,8 +91,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         algorithmRelationId: relationId,
         body: algorithmRelationDto,
       })
-      .subscribe((data) => {
-        this.getAlgorithmRelations({ algoId: this.algorithm.id });
+      .subscribe(() => {
+        this.getAlgorithmRelations({ algorithmId: this.algorithm.id });
         this.utilService.callSnackBar(
           'Successfully updated algorithm relation'
         );
@@ -156,8 +162,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
               algorithmId: this.algorithm.id,
               algorithmRelationId: relation.id,
             })
-            .subscribe((data) => {
-              this.getAlgorithmRelations({ algoId: this.algorithm.id });
+            .subscribe(() => {
+              this.getAlgorithmRelations({ algorithmId: this.algorithm.id });
               this.utilService.callSnackBar(
                 'Successfully removed algorithm relation(s)'
               );
@@ -168,7 +174,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onDatalistConfigChanged(event): void {
-    this.getAlgorithmRelations({ algoId: this.algorithm.id });
+    this.getAlgorithmRelations({ algorithmId: this.algorithm.id });
   }
 
   onUpdateClicked(event): void {

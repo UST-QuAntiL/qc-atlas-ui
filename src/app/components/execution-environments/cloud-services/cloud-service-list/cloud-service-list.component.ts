@@ -79,6 +79,7 @@ export class CloudServiceListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const cloudServiceDto: CloudServiceDto = {
+            id: null,
             name: dialogResult.name,
           };
           this.executionEnvironmentsService
@@ -113,7 +114,7 @@ export class CloudServiceListComponent implements OnInit {
         if (dialogResult) {
           for (const cloudService of deleteParams.elements) {
             this.executionEnvironmentsService
-              .deleteCloudService({ id: cloudService.id })
+              .deleteCloudService({ cloudServiceId: cloudService.id })
               .subscribe(() => {
                 // Refresh Algorithms after delete
                 this.getCloudServices(deleteParams.queryParams);

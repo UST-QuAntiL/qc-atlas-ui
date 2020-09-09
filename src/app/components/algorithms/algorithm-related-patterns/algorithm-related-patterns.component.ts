@@ -39,7 +39,13 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getPatternRelations(params): void {
+  getPatternRelations(params: {
+    algorithmId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.algorithmService
       .getPatternRelationsOfAlgorithm(params)
       .subscribe((relations) => {
@@ -59,8 +65,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
         algorithmId: this.algorithm.id,
         body: patternRelationDto,
       })
-      .subscribe((data) => {
-        this.getPatternRelations({ algoId: this.algorithm.id });
+      .subscribe(() => {
+        this.getPatternRelations({ algorithmId: this.algorithm.id });
         this.utilService.callSnackBar('Successfully created pattern relation');
       });
   }
@@ -75,8 +81,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
         patternRelationId: relationId,
         body: patternRelationDto,
       })
-      .subscribe((data) => {
-        this.getPatternRelations({ algoId: this.algorithm.id });
+      .subscribe(() => {
+        this.getPatternRelations({ algorithmId: this.algorithm.id });
         this.utilService.callSnackBar('Successfully updated pattern relation');
       });
   }
@@ -189,8 +195,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
               algorithmId: this.algorithm.id,
               patternRelationId: relation.id,
             })
-            .subscribe((data) => {
-              this.getPatternRelations({ algoId: this.algorithm.id });
+            .subscribe(() => {
+              this.getPatternRelations({ algorithmId: this.algorithm.id });
               this.utilService.callSnackBar(
                 'Successfully removed pattern relation'
               );
@@ -201,7 +207,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   }
 
   onDatalistConfigChanged(event): void {
-    this.getPatternRelations({ algoId: this.algorithm.id });
+    this.getPatternRelations({ algorithmId: this.algorithm.id });
   }
 
   onElementClicked(event): void {
