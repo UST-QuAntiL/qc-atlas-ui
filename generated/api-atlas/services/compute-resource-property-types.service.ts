@@ -34,8 +34,25 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getResourcePropertyTypes$Response(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: {
@@ -52,8 +69,10 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       'get'
     );
     if (params) {
+      rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -84,8 +103,25 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getResourcePropertyTypes(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: {
       computeResourcePropertyTypes?: Array<
@@ -125,7 +161,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
     '/v1/compute-resource-property-types';
 
   /**
-   * Custom ID will be ignored.
+   * Custom ID will not be accepted.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createComputingResourcePropertyType()` instead.
@@ -136,7 +172,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
     body: ComputeResourcePropertyTypeDto;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       name: string;
       datatype: 'INTEGER' | 'STRING' | 'FLOAT';
       description?: string;
@@ -162,7 +198,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             datatype: 'INTEGER' | 'STRING' | 'FLOAT';
             description?: string;
@@ -173,7 +209,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Custom ID will not be accepted.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createComputingResourcePropertyType$Response()` instead.
@@ -183,7 +219,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   createComputingResourcePropertyType(params: {
     body: ComputeResourcePropertyTypeDto;
   }): Observable<{
-    id?: string;
+    id: string;
     name: string;
     datatype: 'INTEGER' | 'STRING' | 'FLOAT';
     description?: string;
@@ -193,7 +229,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             datatype: 'INTEGER' | 'STRING' | 'FLOAT';
             description?: string;
@@ -201,7 +237,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             name: string;
             datatype: 'INTEGER' | 'STRING' | 'FLOAT';
             description?: string;
@@ -215,7 +251,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * Path part for operation getComputingResourcePropertyType
    */
   static readonly GetComputingResourcePropertyTypePath =
-    '/v1/compute-resource-property-types/{id}';
+    '/v1/compute-resource-property-types/{computeResourcePropertyTypeId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -224,10 +260,10 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getComputingResourcePropertyType$Response(params: {
-    id: string;
+    computeResourcePropertyTypeId: string;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       name: string;
       datatype: 'INTEGER' | 'STRING' | 'FLOAT';
       description?: string;
@@ -240,7 +276,11 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       'get'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path(
+        'computeResourcePropertyTypeId',
+        params.computeResourcePropertyTypeId,
+        {}
+      );
     }
     return this.http
       .request(
@@ -253,7 +293,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             datatype: 'INTEGER' | 'STRING' | 'FLOAT';
             description?: string;
@@ -270,9 +310,9 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * This method doesn't expect any request body.
    */
   getComputingResourcePropertyType(params: {
-    id: string;
+    computeResourcePropertyTypeId: string;
   }): Observable<{
-    id?: string;
+    id: string;
     name: string;
     datatype: 'INTEGER' | 'STRING' | 'FLOAT';
     description?: string;
@@ -282,7 +322,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             datatype: 'INTEGER' | 'STRING' | 'FLOAT';
             description?: string;
@@ -290,7 +330,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             name: string;
             datatype: 'INTEGER' | 'STRING' | 'FLOAT';
             description?: string;
@@ -304,7 +344,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * Path part for operation updateComputingResourcePropertyType
    */
   static readonly UpdateComputingResourcePropertyTypePath =
-    '/v1/compute-resource-property-types/{id}';
+    '/v1/compute-resource-property-types/{computeResourcePropertyTypeId}';
 
   /**
    * Custom ID will be ignored.
@@ -315,11 +355,11 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateComputingResourcePropertyType$Response(params: {
-    id: string;
+    computeResourcePropertyTypeId: string;
     body: ComputeResourcePropertyTypeDto;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       name: string;
       datatype: 'INTEGER' | 'STRING' | 'FLOAT';
       description?: string;
@@ -332,7 +372,11 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       'put'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path(
+        'computeResourcePropertyTypeId',
+        params.computeResourcePropertyTypeId,
+        {}
+      );
 
       rb.body(params.body, 'application/json');
     }
@@ -347,7 +391,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             datatype: 'INTEGER' | 'STRING' | 'FLOAT';
             description?: string;
@@ -366,10 +410,10 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateComputingResourcePropertyType(params: {
-    id: string;
+    computeResourcePropertyTypeId: string;
     body: ComputeResourcePropertyTypeDto;
   }): Observable<{
-    id?: string;
+    id: string;
     name: string;
     datatype: 'INTEGER' | 'STRING' | 'FLOAT';
     description?: string;
@@ -379,7 +423,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             datatype: 'INTEGER' | 'STRING' | 'FLOAT';
             description?: string;
@@ -387,7 +431,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             name: string;
             datatype: 'INTEGER' | 'STRING' | 'FLOAT';
             description?: string;
@@ -401,7 +445,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * Path part for operation deleteComputingResourcePropertyType
    */
   static readonly DeleteComputingResourcePropertyTypePath =
-    '/v1/compute-resource-property-types/{id}';
+    '/v1/compute-resource-property-types/{computeResourcePropertyTypeId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -410,7 +454,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteComputingResourcePropertyType$Response(params: {
-    id: string;
+    computeResourcePropertyTypeId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -418,7 +462,11 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       'delete'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path(
+        'computeResourcePropertyTypeId',
+        params.computeResourcePropertyTypeId,
+        {}
+      );
     }
     return this.http
       .request(
@@ -444,7 +492,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteComputingResourcePropertyType(params: {
-    id: string;
+    computeResourcePropertyTypeId: string;
   }): Observable<void> {
     return this.deleteComputingResourcePropertyType$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)

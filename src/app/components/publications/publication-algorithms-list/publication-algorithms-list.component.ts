@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { LinkObject } from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
-
 @Component({
   selector: 'app-publication-algorithms-list',
   templateUrl: './publication-algorithms-list.component.html',
@@ -41,7 +40,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
 
   getLinkedAlgorithms(params): void {
     this.publicationService
-      .getPublicationAlgorithms(params)
+      .getAlgorithmsOfPublication(params)
       .subscribe((algorithms) => {
         if (algorithms._embedded) {
           this.linkedAlgorithms = algorithms._embedded.algorithms;
@@ -77,31 +76,40 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   }
 
   linkAlgorithm(algorithm: AlgorithmDto): void {
-    // Generate parameters
-    const params = this.generateLinkParams(algorithm.id);
     // Empty unlinked algorithms
     this.linkObject.data = [];
     // Link algorithm
     this.publicationService
-      .linkAlgorithmWithPublication(params)
-      .subscribe((linkedAlgorithm) => {
+      .linkPublicationAndAlgorithm({
+        publicationId: this.publication.id,
+        body: algorithm,
+      })
+      .subscribe(() => {
         this.getLinkedAlgorithms({ id: this.publication.id });
         this.utilService.callSnackBar('Successfully linked Algorithm');
       });
   }
 
-  unlinkAlgorithms(event): void {
+  unlinkAlgorithms(algorithmList): void {
+    const outputPromises: Array<Promise<void>> = [];
     // Iterate all selected algorithms
-    for (const element of event.elements) {
+    for (const element of algorithmList.elements) {
       // Build params using path ids and perform delete request
-      this.publicationService
-        .unlinkAlgorithmFromPublication(this.generateLinkParams(element.id))
-        .subscribe((data) => {
-          // Update table after deletion
-          this.getLinkedAlgorithms({ id: this.publication.id });
-          this.utilService.callSnackBar('Successfully unlinked Algorithm');
-        });
+      outputPromises.push(
+        this.publicationService
+          .unlinkPublicationAndAlgorithm({
+            algorithmId: element.id,
+            publicationId: this.publication.id,
+          })
+          .toPromise()
+      );
     }
+
+    Promise.all(outputPromises).then(() => {
+      // Update table after deletion
+      this.getLinkedAlgorithms({ id: this.publication.id });
+      this.utilService.callSnackBar('Successfully unlinked Algorithm');
+    });
   }
 
   onElementClicked(algorithm: any): void {
@@ -110,13 +118,6 @@ export class PublicationAlgorithmsListComponent implements OnInit {
 
   onDatalistConfigChanged(event): void {
     this.getLinkedAlgorithms({ id: this.publication.id });
-  }
-
-  generateLinkParams(algorithmId: string): any {
-    return {
-      id: this.publication.id,
-      algoId: algorithmId,
-    };
   }
 
   onToggleLink(): void {
