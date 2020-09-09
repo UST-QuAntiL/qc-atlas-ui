@@ -7,6 +7,10 @@
   margin-right: 7px;
 }
 
+.clickable-chip {
+  cursor: pointer;
+}
+
 .categories-container {
   display: inline-flex;
   flex-direction: row;
@@ -50,15 +54,15 @@
 }
 
 div::-webkit-scrollbar {
-  height: 8px;
+  height: 4px;
 }
 
 div::-webkit-scrollbar-track {
-  height: 6px;
+  height: 3px;
 }
 
 div::-webkit-scrollbar-thumb {
   background-color: mat-color($qc-atlas-ui-primary);
   border-radius: 10px;
-  height: 4px;
+  height: 2px;
 }
