@@ -4298,20 +4298,20 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getProblemType
+   * Path part for operation getProblemTypeOfAlgorithm
    */
-  static readonly GetProblemTypePath =
+  static readonly GetProblemTypeOfAlgorithmPath =
     '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
 
   /**
    * Retrieve a specific problem type of an algorithm
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getProblemType()` instead.
+   * To access only the response body, use `getProblemTypeOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getProblemType$Response(params: {
+  getProblemTypeOfAlgorithm$Response(params: {
     algorithmId: string;
     problemTypeId: string;
   }): Observable<
@@ -4324,7 +4324,7 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetProblemTypePath,
+      AlgorithmService.GetProblemTypeOfAlgorithmPath,
       'get'
     );
     if (params) {
@@ -4355,11 +4355,11 @@ export class AlgorithmService extends BaseService {
    * Retrieve a specific problem type of an algorithm
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getProblemType$Response()` instead.
+   * To access the full response (for headers, for example), `getProblemTypeOfAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getProblemType(params: {
+  getProblemTypeOfAlgorithm(params: {
     algorithmId: string;
     problemTypeId: string;
   }): Observable<{
@@ -4368,7 +4368,7 @@ export class AlgorithmService extends BaseService {
     parentProblemType?: string;
     _links?: Array<Link>;
   }> {
-    return this.getProblemType$Response(params).pipe(
+    return this.getProblemTypeOfAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
