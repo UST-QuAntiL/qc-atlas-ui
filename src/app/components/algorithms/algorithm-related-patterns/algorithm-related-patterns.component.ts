@@ -94,7 +94,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
         title: 'Add new pattern relation',
         algoId: this.algorithm.id,
       },
-      '1000px'
+      '1000px',
+      '600px'
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {

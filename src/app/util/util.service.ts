@@ -20,10 +20,12 @@ export class UtilService {
   public createDialog(
     dialogComponent: any,
     data: any,
-    width?: any
+    width?: any,
+    height?: any
   ): MatDialogRef<any> {
     return this.dialog.open(dialogComponent, {
       width: width || '400px',
+      height: height || undefined,
       data,
     });
   }
