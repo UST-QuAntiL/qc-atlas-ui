@@ -1,12 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
-import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { Router } from '@angular/router';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
-import { element } from 'protractor';
 import { LinkObject } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { GenericDataService } from '../../../../util/generic-data.service';
@@ -18,7 +16,6 @@ import { GenericDataService } from '../../../../util/generic-data.service';
 })
 export class ImplementationSoftwareplatformListComponent implements OnInit {
   @Input() implementation: ImplementationDto;
-  @Input() algorithm: AlgorithmDto;
   @Input() linkedPlatforms: EntityModelSoftwarePlatformDto[] = [];
   allLinkedPlatforms: EntityModelSoftwarePlatformDto[] = [];
 
@@ -56,7 +53,7 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
     this.algorithmService
       .getSoftwarePlatformsOfImplementation({
         implementationId: this.implementation.id,
-        algorithmId: this.algorithm.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
       })
       .subscribe((data) => {
         // Read all incoming data
@@ -68,7 +65,11 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
       });
   }
 
-  getLinkedPlatforms(params): void {
+  getLinkedPlatforms(params: {
+    algorithmId: string;
+    implementationId: string;
+    softwarePlatformId: string;
+  }): void {
     this.algorithmService
       .getSoftwarePlatformOfImplementation(params)
       .subscribe((data) => {
@@ -156,8 +157,8 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
   }
 
   onDatalistConfigChanged(event): void {
-    event.algoId = this.algorithm.id;
-    event.implId = this.implementation.id;
+    event.algorithmId = this.implementation.implementedAlgorithmId;
+    event.implementationId = this.implementation.id;
     this.getLinkedPlatforms(event);
   }
 

@@ -80,34 +80,38 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   }
 
   onDeleteImplementation(event): void {
-    const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
-      title: 'Confirm Deletion',
-      message:
-        'Are you sure you want to delete the following implementation(s):',
-      data: event.elements,
-      variableName: 'name',
-      yesButtonText: 'yes',
-      noButtonText: 'no',
-    });
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        // Iterate all selected algorithms and delete them
-        for (const implementation of event.elements) {
-          this.algorithmService
-            .deleteImplementation({
-              algorithmId: this.algorithm.id,
-              implementationId: implementation.id,
-            })
-            .subscribe(() => {
-              // Refresh Algorithms after delete
-              this.getImplementations();
-              this.utilService.callSnackBar(
-                'Successfully deleted implementation(s)'
-              );
-            });
+    this.utilService
+      .createDialog(ConfirmDialogComponent, {
+        title: 'Confirm Deletion',
+        message:
+          'Are you sure you want to delete the following implementation(s):',
+        data: event.elements,
+        variableName: 'name',
+        yesButtonText: 'yes',
+        noButtonText: 'no',
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
+          for (const implementation of event.elements) {
+            promises.push(
+              this.algorithmService
+                .deleteImplementation({
+                  algorithmId: this.algorithm.id,
+                  implementationId: implementation.id,
+                })
+                .toPromise()
+            );
+          }
+          Promise.all(promises).then(() => {
+            this.getImplementations();
+            this.utilService.callSnackBar(
+              'Successfully deleted implementation(s)'
+            );
+          });
         }
-      }
-    });
+      });
   }
 
   onImplementationClicked(implementation: EntityModelImplementationDto): void {

@@ -1,4 +1,4 @@
-<div *ngIf="implementation" class="m-2">
+<div *ngIf="implementation && algorithm" class="m-2">
   <div class="row p-2 m-0 align-items-center">
     <div class="col">
       <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
@@ -35,7 +35,6 @@
     <mat-tab label="Software Platforms">
       <app-implementation-softwareplatform-list
         [implementation]="implementation"
-        [algorithm]="algorithm"
       ></app-implementation-softwareplatform-list>
     </mat-tab>
     <mat-tab label="Selection Criteria">

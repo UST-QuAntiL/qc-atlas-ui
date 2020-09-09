@@ -100,77 +100,80 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const dialogRef = this.utilService.createDialog(
-      AddAlgorithmRelationDialogComponent,
-      {
+    this.utilService
+      .createDialog(AddAlgorithmRelationDialogComponent, {
         title: 'Add new algorithm relation',
         algoId: this.algorithm.id,
         existingRelations: this.algorithmRelations,
         disableAlg: false,
-      }
-    );
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        if (!dialogResult.relationType.id) {
-          this.algorithmRelationTypeService
-            .createAlgorithmRelationType({ body: dialogResult.relationType })
-            .subscribe((createdType) => {
-              this.createAlgorithmRelation(
-                this.generateRelationDto(
-                  null,
-                  this.algorithm,
-                  dialogResult.targetAlg,
-                  createdType,
-                  dialogResult.description
-                )
-              );
-            });
-        } else {
-          this.createAlgorithmRelation(
-            this.generateRelationDto(
-              null,
-              this.algorithm,
-              dialogResult.targetAlg,
-              dialogResult.relationType,
-              dialogResult.description
-            )
-          );
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          if (!dialogResult.relationType.id) {
+            this.algorithmRelationTypeService
+              .createAlgorithmRelationType({ body: dialogResult.relationType })
+              .subscribe((createdType) => {
+                this.createAlgorithmRelation(
+                  this.generateRelationDto(
+                    null,
+                    this.algorithm,
+                    dialogResult.targetAlg,
+                    createdType,
+                    dialogResult.description
+                  )
+                );
+              });
+          } else {
+            this.createAlgorithmRelation(
+              this.generateRelationDto(
+                null,
+                this.algorithm,
+                dialogResult.targetAlg,
+                dialogResult.relationType,
+                dialogResult.description
+              )
+            );
+          }
         }
-      }
-    });
+      });
   }
 
   onDeleteElements(event): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Confirm Deletion',
-        message:
-          'Are you sure you want to delete the following algorithm relation(s):',
-        data: event.elements,
-        variableName: 'targetAlgName',
-        yesButtonText: 'yes',
-        noButtonText: 'no',
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        for (const relation of event.elements) {
-          this.algorithmService
-            .deleteAlgorithmRelation({
-              algorithmId: this.algorithm.id,
-              algorithmRelationId: relation.id,
-            })
-            .subscribe(() => {
-              this.getAlgorithmRelations({ algorithmId: this.algorithm.id });
-              this.utilService.callSnackBar(
-                'Successfully removed algorithm relation(s)'
-              );
-            });
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: 'Confirm Deletion',
+          message:
+            'Are you sure you want to delete the following algorithm relation(s):',
+          data: event.elements,
+          variableName: 'targetAlgName',
+          yesButtonText: 'yes',
+          noButtonText: 'no',
+        },
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
+          for (const relation of event.elements) {
+            promises.push(
+              this.algorithmService
+                .deleteAlgorithmRelation({
+                  algorithmId: this.algorithm.id,
+                  algorithmRelationId: relation.id,
+                })
+                .toPromise()
+            );
+          }
+          Promise.all(promises).then(() => {
+            this.getAlgorithmRelations({ algorithmId: this.algorithm.id });
+            this.utilService.callSnackBar(
+              'Successfully removed algorithm relation(s)'
+            );
+          });
         }
-      }
-    });
+      });
   }
 
   onDatalistConfigChanged(event): void {
@@ -178,9 +181,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   onUpdateClicked(event): void {
-    const dialogRef = this.utilService.createDialog(
-      AddAlgorithmRelationDialogComponent,
-      {
+    this.utilService
+      .createDialog(AddAlgorithmRelationDialogComponent, {
         title: 'Update algorithm relation',
         algoId: this.algorithm.id,
         algoRelationId: event.id,
@@ -189,40 +191,39 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         targetAlg: event.targetAlgObject,
         description: event.description,
         disableAlg: true,
-      }
-    );
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        if (!dialogResult.relationType.id) {
-          this.algorithmRelationTypeService
-            .createAlgorithmRelationType({ body: dialogResult.relationType })
-            .subscribe((createdType) => {
-              this.updateAlgorithmRelation(
-                dialogResult.algoRelationId,
-                this.generateRelationDto(
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          if (!dialogResult.relationType.id) {
+            this.algorithmRelationTypeService
+              .createAlgorithmRelationType({ body: dialogResult.relationType })
+              .subscribe((createdType) => {
+                this.updateAlgorithmRelation(
                   dialogResult.algoRelationId,
-                  this.algorithm,
-                  dialogResult.targetAlg,
-                  createdType,
-                  dialogResult.description
-                )
-              );
-            });
-        } else {
-          this.updateAlgorithmRelation(
-            dialogResult.algoRelationId,
-            this.generateRelationDto(
+                  this.generateRelationDto(
+                    dialogResult.algoRelationId,
+                    this.algorithm,
+                    dialogResult.targetAlg,
+                    createdType,
+                    dialogResult.description
+                  )
+                );
+              });
+          } else {
+            this.updateAlgorithmRelation(
               dialogResult.algoRelationId,
-              this.algorithm,
-              dialogResult.targetAlg,
-              dialogResult.relationType,
-              dialogResult.description
-            )
-          );
+              this.generateRelationDto(
+                dialogResult.algoRelationId,
+                this.algorithm,
+                dialogResult.targetAlg,
+                dialogResult.relationType,
+                dialogResult.description
+              )
+            );
+          }
         }
-      }
-    });
+      });
   }
 
   onElementClicked(event): void {

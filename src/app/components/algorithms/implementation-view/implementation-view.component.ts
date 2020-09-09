@@ -81,7 +81,7 @@ export class ImplementationViewComponent implements OnInit {
   onElementClicked(implementation: any): void {
     this.router.navigate([
       'algorithms',
-      this.algorithm.id,
+      implementation.implementedAlgorithmId,
       'implementations',
       implementation.id,
     ]);
@@ -90,10 +90,9 @@ export class ImplementationViewComponent implements OnInit {
   updateComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
-    console.log(property);
     this.algorithmService
       .updateComputeResourcePropertyOfImplementation({
-        algorithmId: this.algorithm.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
         implementationId: this.implementation.id,
         computeResourcePropertyId: property.id,
         body: property,
@@ -107,10 +106,9 @@ export class ImplementationViewComponent implements OnInit {
   addComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
-    console.log(property);
     this.algorithmService
       .createComputeResourcePropertyForImplementation({
-        algorithmId: this.algorithm.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
         implementationId: this.implementation.id,
         body: property,
       })
@@ -137,7 +135,7 @@ export class ImplementationViewComponent implements OnInit {
         if (dialogResult) {
           this.algorithmService
             .deleteComputeResourcePropertyOfImplementation({
-              algorithmId: this.algorithm.id,
+              algorithmId: this.implementation.implementedAlgorithmId,
               implementationId: this.implementation.id,
               computeResourcePropertyId: property.id,
             })
@@ -156,7 +154,7 @@ export class ImplementationViewComponent implements OnInit {
   fetchComputeResourceProperties(): void {
     this.algorithmService
       .getComputeResourcePropertiesOfImplementation({
-        algorithmId: this.algorithm.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
         implementationId: this.implementation.id,
         page: -1,
       })
@@ -171,7 +169,7 @@ export class ImplementationViewComponent implements OnInit {
   addTag(tag: TagDto): void {
     this.algorithmService
       .addTagToImplementation({
-        algorithmId: this.algorithm.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
         implementationId: this.implementation.id,
         body: tag,
       })
@@ -181,7 +179,7 @@ export class ImplementationViewComponent implements OnInit {
   removeTag(tag: TagDto): void {
     this.algorithmService
       .removeTagFromImplementation({
-        algorithmId: this.algorithm.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
         implementationId: this.implementation.id,
         body: tag,
       })
@@ -192,7 +190,7 @@ export class ImplementationViewComponent implements OnInit {
     this.implementation[event.field] = event.value;
     this.algorithmService
       .updateImplementation({
-        algorithmId: this.algorithm.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
         implementationId: this.implementation.id,
         body: this.implementation,
       })
