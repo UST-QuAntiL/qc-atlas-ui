@@ -5,9 +5,9 @@ import { EntityModelAlgorithmRelationDto } from 'api-atlas/models/entity-model-a
 import { MatDialog } from '@angular/material/dialog';
 import { AlgorithmRelationDto } from 'api-atlas/models/algorithm-relation-dto';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
-import { AlgoRelationTypeDto } from 'api-atlas/models/algo-relation-type-dto';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
 import { Router } from '@angular/router';
+import { AlgorithmRelationTypeDto } from 'api-atlas/models';
 import { UtilService } from '../../../util/util.service';
 import { AddAlgorithmRelationDialogComponent } from '../dialogs/add-algorithm-relation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -45,7 +45,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   ngOnInit(): void {}
 
   getAlgorithmRelations(params): void {
-    this.algorithmService.getAlgorithmRelations(params).subscribe(
+    this.algorithmService.getAlgorithmRelationsOfAlgorithm(params).subscribe(
       (relations) => {
         if (relations._embedded) {
           this.algorithmRelations = relations._embedded.algorithmRelations;
@@ -61,9 +61,12 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     );
   }
 
-  createAlgorithmRelation(body: AlgorithmRelationDto): void {
+  createAlgorithmRelation(algorithmRelationDto: AlgorithmRelationDto): void {
     this.algorithmService
-      .addAlgorithmRelation({ algoId: this.algorithm.id, body })
+      .createAlgorithmRelation({
+        algorithmId: this.algorithm.id,
+        body: algorithmRelationDto,
+      })
       .subscribe((data) => {
         this.getAlgorithmRelations({ algoId: this.algorithm.id });
         this.utilService.callSnackBar(
@@ -74,13 +77,13 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
 
   updateAlgorithmRelation(
     relationId: string,
-    body: AlgorithmRelationDto
+    algorithmRelationDto: AlgorithmRelationDto
   ): void {
     this.algorithmService
       .updateAlgorithmRelation({
-        algoId: this.algorithm.id,
-        relationId,
-        body,
+        algorithmId: this.algorithm.id,
+        algorithmRelationId: relationId,
+        body: algorithmRelationDto,
       })
       .subscribe((data) => {
         this.getAlgorithmRelations({ algoId: this.algorithm.id });
@@ -105,7 +108,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
       if (dialogResult) {
         if (!dialogResult.relationType.id) {
           this.algorithmRelationTypeService
-            .createAlgoRelationType({ body: dialogResult.relationType })
+            .createAlgorithmRelationType({ body: dialogResult.relationType })
             .subscribe((createdType) => {
               this.createAlgorithmRelation(
                 this.generateRelationDto(
@@ -150,8 +153,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         for (const relation of event.elements) {
           this.algorithmService
             .deleteAlgorithmRelation({
-              algoId: this.algorithm.id,
-              relationId: relation.id,
+              algorithmId: this.algorithm.id,
+              algorithmRelationId: relation.id,
             })
             .subscribe((data) => {
               this.getAlgorithmRelations({ algoId: this.algorithm.id });
@@ -187,7 +190,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
       if (dialogResult) {
         if (!dialogResult.relationType.id) {
           this.algorithmRelationTypeService
-            .createAlgoRelationType({ body: dialogResult.relationType })
+            .createAlgorithmRelationType({ body: dialogResult.relationType })
             .subscribe((createdType) => {
               this.updateAlgorithmRelation(
                 dialogResult.algoRelationId,
@@ -230,20 +233,24 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   generateTableObjects(): void {
     this.tableObjects = [];
     for (const relation of this.algorithmRelations) {
-      let targetAlg: AlgorithmDto;
-      if (this.algorithm.id !== relation.targetAlgorithm.id) {
-        targetAlg = relation.targetAlgorithm;
+      let targetAlgId: string;
+      if (this.algorithm.id !== relation.targetAlgorithmId) {
+        targetAlgId = relation.targetAlgorithmId;
       } else {
-        targetAlg = relation.sourceAlgorithm;
+        targetAlgId = relation.sourceAlgorithmId;
       }
-      this.tableObjects.push({
-        id: relation.id,
-        description: relation.description,
-        targetAlgName: targetAlg.name,
-        targetAlgObject: targetAlg,
-        relationTypeName: relation.algoRelationType.name,
-        relationTypeObject: relation.algoRelationType,
-      });
+      this.algorithmService
+        .getAlgorithm({ algorithmId: targetAlgId })
+        .subscribe((algorithm) => {
+          this.tableObjects.push({
+            id: relation.id,
+            description: relation.description,
+            targetAlgName: algorithm.name,
+            targetAlgObject: algorithm,
+            relationTypeName: relation.algoRelationType.name,
+            relationTypeObject: relation.algoRelationType,
+          });
+        });
     }
   }
 
@@ -251,13 +258,13 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     id: string,
     sourceAlgorithm: AlgorithmDto,
     targetAlgorithm: AlgorithmDto,
-    algoRelationType: AlgoRelationTypeDto,
+    algoRelationType: AlgorithmRelationTypeDto,
     description: string
   ): AlgorithmRelationDto {
     return {
       id,
-      sourceAlgorithm,
-      targetAlgorithm,
+      sourceAlgorithmId: sourceAlgorithm.id,
+      targetAlgorithmId: targetAlgorithm.id,
       algoRelationType,
       description,
     };
@@ -270,5 +277,5 @@ export interface AlgorithmRelationTableObject {
   targetAlgName: string;
   targetAlgObject: AlgorithmDto;
   relationTypeName: string;
-  relationTypeObject: AlgoRelationTypeDto;
+  relationTypeObject: AlgorithmRelationTypeDto;
 }

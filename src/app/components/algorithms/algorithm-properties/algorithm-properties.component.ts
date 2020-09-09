@@ -109,7 +109,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   addParentTreeToProblemType(problemType: EntityModelProblemTypeDto): void {
     this.problemTypeService
-      .getProblemTypeParentList({ id: problemType.id })
+      .getProblemTypeParentList({ problemTypeId: problemType.id })
       .subscribe(
         (parents) => {
           if (parents._embedded) {
@@ -223,6 +223,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const problemTypeDto: EntityModelProblemTypeDto = {
+            id: null,
             name: dialogResult.name,
           };
           if (
@@ -256,11 +257,9 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   addComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
-    console.log('add compute resource property');
-    console.log(property);
     this.algorithmService
-      .addComputingResource({
-        algoId: this.algorithm.id,
+      .createComputeResourcePropertyForAlgorithm({
+        algorithmId: this.algorithm.id,
         body: property,
       })
       .subscribe((e) => {
@@ -272,9 +271,9 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
-      .updateComputingResource({
-        algoId: this.algorithm.id,
-        resourceId: property.id,
+      .updateComputeResourcePropertyOfAlgorithm({
+        algorithmId: this.algorithm.id,
+        computeResourcePropertyId: property.id,
         body: property,
       })
       .subscribe((e) => {
@@ -286,9 +285,9 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
-      .deleteComputingResource({
-        algoId: this.algorithm.id,
-        resourceId: property.id,
+      .deleteComputeResourcePropertyOfAlgorithm({
+        algorithmId: this.algorithm.id,
+        computeResourcePropertyId: property.id,
       })
       .subscribe((e) => {
         this.computeResourceProperties = this.computeResourceProperties.filter(
@@ -301,8 +300,8 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   fetchComputeResourceProperties(): void {
     this.algorithmService
-      .getComputingResourcesByAlgorithm({
-        algoId: this.algorithm.id,
+      .getComputeResourcePropertiesOfAlgorithm({
+        algorithmId: this.algorithm.id,
         size: -1,
       })
       .subscribe((e) => {
