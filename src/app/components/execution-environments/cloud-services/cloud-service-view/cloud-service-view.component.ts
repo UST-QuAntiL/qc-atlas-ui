@@ -28,18 +28,20 @@ export class CloudServiceViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ csId }) => {
-      this.executionEnvironmentsService.getCloudService({ id: csId }).subscribe(
-        (cloudService: EntityModelCloudServiceDto) => {
-          this.cloudService = cloudService;
-          this.links[0] = {
-            heading: this.cloudService.name,
-            subHeading: '',
-          };
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      this.executionEnvironmentsService
+        .getCloudService({ cloudServiceId: csId })
+        .subscribe(
+          (cloudService: EntityModelCloudServiceDto) => {
+            this.cloudService = cloudService;
+            this.links[0] = {
+              heading: this.cloudService.name,
+              subHeading: '',
+            };
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     });
 
     this.fieldUpdateSubscription = this.updateFieldService.updateCloudServiceFieldChannel.subscribe(
@@ -56,7 +58,10 @@ export class CloudServiceViewComponent implements OnInit {
   updateCloudServiceField(fieldUpdate: FieldUpdate): void {
     this.cloudService[fieldUpdate.field] = fieldUpdate.value;
     this.executionEnvironmentsService
-      .updateCloudService({ id: this.cloudService.id, body: this.cloudService })
+      .updateCloudService({
+        cloudServiceId: this.cloudService.id,
+        body: this.cloudService,
+      })
       .subscribe(
         (cloudSvc) => {
           this.cloudService = cloudSvc;

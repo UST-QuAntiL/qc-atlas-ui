@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
-import { EntityModelAlgoRelationTypeDto } from 'api-atlas/models/entity-model-algo-relation-type-dto';
 import { AlgorithmRelationDto } from 'api-atlas/models/algorithm-relation-dto';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import {
@@ -11,7 +10,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { AlgoRelationTypeDto } from 'api-atlas/models/algo-relation-type-dto';
+import { AlgorithmRelationTypeDto } from 'api-atlas/models';
 
 @Component({
   selector: 'app-add-algorithm-relation-dialog',
@@ -21,7 +20,7 @@ import { AlgoRelationTypeDto } from 'api-atlas/models/algo-relation-type-dto';
 export class AddAlgorithmRelationDialogComponent implements OnInit {
   algorithmRelationForm: FormGroup;
   stateGroups: StateGroup[] = [];
-  algoRelationTypes: EntityModelAlgoRelationTypeDto[] = [];
+  algoRelationTypes: AlgorithmRelationTypeDto[] = [];
   linkableAlgorithms: AlgorithmDto[] = [];
   selectedAlgorithm: AlgorithmDto;
   isUpdateDialog = false;
@@ -62,7 +61,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
 
     // Init list of available relation types
     this.algoRelationTypeService
-      .getAlgoRelationTypes({})
+      .getAlgorithmRelationTypes()
       .subscribe((relationTypes) => {
         if (relationTypes._embedded) {
           this.algoRelationTypes = relationTypes._embedded.algoRelationTypes;
@@ -96,7 +95,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     );
   }
 
-  generateRelationType(type): AlgoRelationTypeDto {
+  generateRelationType(type): AlgorithmRelationTypeDto {
     if (type && type.id) {
       return type;
     } else {
@@ -106,9 +105,9 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     }
   }
 
-  findObjectByName(name): AlgoRelationTypeDto {
+  findObjectByName(name): AlgorithmRelationTypeDto {
     const foundType = this.algoRelationTypes.find((x) => x.name === name);
-    return foundType ? foundType : { name };
+    return foundType ? foundType : { id: null, name };
   }
 
   get description(): AbstractControl | null {
@@ -132,7 +131,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     return this.algorithmRelationForm.get('relationType');
   }
 
-  displayRelation(type: AlgoRelationTypeDto): string {
+  displayRelation(type: AlgorithmRelationTypeDto): string {
     return type && type.name ? type.name : '';
   }
 
@@ -173,8 +172,8 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   isAlreadyLinked(algorithm: AlgorithmDto): boolean {
     for (const relation of this.data.existingRelations) {
       if (
-        relation.sourceAlgorithm.id === algorithm.id ||
-        relation.targetAlgorithm.id === algorithm.id
+        relation.sourceAlgorithmId === algorithm.id ||
+        relation.targetAlgorithmId === algorithm.id
       ) {
         return true;
       }
@@ -240,7 +239,7 @@ export interface DialogData {
   title: string;
   algoId: string;
   algoRelationId: string;
-  relationType: AlgoRelationTypeDto;
+  relationType: AlgorithmRelationTypeDto;
   targetAlg: AlgorithmDto;
   description: string;
   existingRelations: AlgorithmRelationDto[];
@@ -250,5 +249,5 @@ export interface DialogData {
 
 export interface StateGroup {
   optionName: string;
-  algoRelationTypes: EntityModelAlgoRelationTypeDto[];
+  algoRelationTypes: AlgorithmRelationTypeDto[];
 }
