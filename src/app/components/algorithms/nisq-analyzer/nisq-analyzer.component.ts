@@ -11,23 +11,16 @@ import {
 import { interval } from 'rxjs';
 import { exhaustMap, first } from 'rxjs/operators';
 
-import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
-import { ParameterDto } from 'api-nisq/models/parameter-dto';
-import { SdkDto } from 'api-nisq/models/sdk-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services';
+import { AlgorithmDto, CloudServiceDto } from 'api-atlas/models';
 import {
+  ParameterDto,
   AnalysisResultDto,
   ExecutionRequestDto,
   ExecutionResultDto,
   ImplementationDto as NISQImplementationDto,
 } from 'api-nisq/models';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
-
-// TODO: ID instead of name?
-const DUMMY_CLOUD_SERVICES: SdkDto[] = [
-  {
-    name: 'IBMQ',
-  },
-];
 
 @Component({
   selector: 'app-algorithm-nisq-analyzer',
@@ -49,7 +42,7 @@ export class NisqAnalyzerComponent implements OnInit {
 
   // 1) Selection
   params: ParameterDto[];
-  cloudServices = DUMMY_CLOUD_SERVICES;
+  cloudServices: CloudServiceDto[];
   inputFormGroup: FormGroup;
 
   // 2) Analyze phase
@@ -66,12 +59,18 @@ export class NisqAnalyzerComponent implements OnInit {
   expandedElement: ExecutionRequestDto | null;
 
   constructor(
+    private executionEnvironmentsService: ExecutionEnvironmentsService,
     private nisqAnalyzerService: NisqAnalyzerService,
     private formBuilder: FormBuilder,
     private http: HttpClient
   ) {}
 
   ngOnInit(): void {
+    this.executionEnvironmentsService
+      .getCloudServices()
+      .subscribe(
+        (value) => (this.cloudServices = value._embedded.cloudServices ?? [])
+      );
     this.nisqAnalyzerService.getParams(this.algo.id).subscribe((params) => {
       this.params = this.nisqAnalyzerService.collapseParams(
         params.filter((p) => p.name !== 'token')
