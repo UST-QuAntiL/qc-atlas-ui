@@ -1,22 +1,24 @@
 <div class="m-4">
-  <div class="header">
-    <label class="mr-4">{{title}}</label>
-    <mat-form-field *ngIf="!useToAddLinks">
-      <input [(ngModel)]="inputValue" matInput>
-    </mat-form-field>
-    <button *ngIf="!useToAddLinks" (click)="addElement()"
-            mat-button
-            matSuffix
-            mat-icon-button
-            aria-label="Clear">
-      <mat-icon>add</mat-icon>
-    </button>
-    <app-link-input *ngIf="useToAddLinks"
-                    [linkObject]="linkObject"
-                    [isDisableable]=false
-                    (searchTextChanged)="onSearchTextChanged.emit($event)"
-                    (linkElement)="onAddElement.emit($event)">
-    </app-link-input>
+  <div class="row">
+    <div class="col-12">
+      <mat-form-field *ngIf="!useToAddLinks">
+        <mat-label>{{ title }}</mat-label>
+        <input matInput [(ngModel)]="inputValue" matInput (keydown.enter)="addElement()">
+        <button *ngIf="!useToAddLinks" (click)="addElement()"
+                mat-button
+                matSuffix
+                mat-icon-button
+                aria-label="Clear">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-form-field>
+      <app-link-input *ngIf="useToAddLinks"
+                      [linkObject]="linkObject"
+                      [isDisableable]=false
+                      (searchTextChanged)="onSearchTextChanged.emit($event)"
+                      (linkElement)="onAddElement.emit($event)">
+      </app-link-input>
+    </div>
   </div>
   <mat-chip-list>
     <mat-chip *ngFor="let element of elements" [removable]="allowEmpty || (!allowEmpty && elements.length > 1)" (removed)="removeElement(element)">

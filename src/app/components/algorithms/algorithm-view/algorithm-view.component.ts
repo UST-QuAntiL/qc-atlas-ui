@@ -41,7 +41,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ algoId }) => {
-      this.algorithmService.getAlgorithm({ algoId }).subscribe(
+      this.algorithmService.getAlgorithm({ algorithmId: algoId }).subscribe(
         (algo: EntityModelAlgorithmDto) => {
           this.algorithm = algo;
           let subheading = this.algorithm.computationModel
@@ -68,40 +68,44 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   }
 
   getApplicationAreasForAlgorithm(algoId: string): void {
-    this.algorithmService.getApplicationAreasByAlgorithm({ algoId }).subscribe(
-      (areas) => {
-        if (areas._embedded) {
-          this.applicationAreas = areas._embedded.applicationAreas;
-        } else {
+    this.algorithmService
+      .getApplicationAreasOfAlgorithm({ algorithmId: algoId })
+      .subscribe(
+        (areas) => {
+          if (areas._embedded) {
+            this.applicationAreas = areas._embedded.applicationAreas;
+          } else {
+            this.applicationAreas = [];
+          }
+        },
+        (error) => {
+          console.log(error);
           this.applicationAreas = [];
         }
-      },
-      (error) => {
-        console.log(error);
-        this.applicationAreas = [];
-      }
-    );
+      );
   }
 
   getProblemTypesForAlgorithm(algoId: string): void {
-    this.algorithmService.getProblemTypesByAlgorithm({ algoId }).subscribe(
-      (problems) => {
-        if (problems._embedded) {
-          this.problemTypes = problems._embedded.problemTypes;
-        } else {
-          this.problemTypes = [];
+    this.algorithmService
+      .getProblemTypesOfAlgorithm({ algorithmId: algoId })
+      .subscribe(
+        (problems) => {
+          if (problems._embedded) {
+            this.problemTypes = problems._embedded.problemTypes;
+          } else {
+            this.problemTypes = [];
+          }
+        },
+        (error) => {
+          console.log(error);
         }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      );
   }
 
   addTag(tag: TagDto): void {
     this.algorithmService
       .addTagToAlgorithm({
-        algoId: this.algorithm.id,
+        algorithmId: this.algorithm.id,
         body: tag,
       })
       .subscribe();
@@ -110,7 +114,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   removeTag(tag: TagDto): void {
     this.algorithmService
       .removeTagFromAlgorithm({
-        algoId: this.algorithm.id,
+        algorithmId: this.algorithm.id,
         body: tag,
       })
       .subscribe();
@@ -119,7 +123,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   updateAlgorithmField(event: { field; value }): void {
     this.algorithm[event.field] = event.value;
     this.algorithmService
-      .updateAlgorithm({ algoId: this.algorithm.id, body: this.algorithm })
+      .updateAlgorithm({ algorithmId: this.algorithm.id, body: this.algorithm })
       .subscribe(
         (algo) => {
           this.algorithm = algo;
@@ -137,32 +141,30 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
 
   addApplicationArea(applicationArea: EntityModelApplicationAreaDto): void {
     this.algorithmService
-      .addApplicationArea({
-        algoId: this.algorithm.id,
+      .linkAlgorithmAndApplicationArea({
+        algorithmId: this.algorithm.id,
         body: applicationArea,
       })
-      .subscribe((areas) => {
-        if (areas._embedded) {
-          this.applicationAreas = areas._embedded.applicationAreas;
-          this.utilService.callSnackBar(
-            'Successfully linked application area "' +
-              applicationArea.name +
-              '" to algorithm "' +
-              this.algorithm.name +
-              '"'
-          );
-        }
+      .subscribe(() => {
+        this.getApplicationAreasForAlgorithm(this.algorithm.id);
+        this.utilService.callSnackBar(
+          'Successfully linked application area "' +
+            applicationArea.name +
+            '" to algorithm "' +
+            this.algorithm.name +
+            '"'
+        );
       });
   }
 
   removeApplicationArea(applicationArea: EntityModelApplicationAreaDto): void {
     this.algorithmService
-      .deleteReferenceToApplicationArea({
-        algoId: this.algorithm.id,
+      .unlinkAlgorithmAndApplicationArea({
+        algorithmId: this.algorithm.id,
         applicationAreaId: applicationArea.id,
       })
       .subscribe(
-        (res) => {
+        () => {
           this.getApplicationAreasForAlgorithm(this.algorithm.id);
           this.utilService.callSnackBar(
             'Successfully removed link to application area "' +
@@ -182,17 +184,22 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     this.problemTypeService.createProblemType({ body: problemType }).subscribe(
       (type) => {
         this.algorithmService
-          .addProblemType({ algoId: this.algorithm.id, body: type })
+          .linkAlgorithmAndProblemType({
+            algorithmId: this.algorithm.id,
+            body: type,
+          })
           .subscribe(
-            (types) => {
-              if (types._embedded) {
-                this.problemTypes = types._embedded.problemTypes;
-              }
-              console.log(types);
+            () => {
+              this.getProblemTypesForAlgorithm(this.algorithm.id);
+              this.utilService.callSnackBar(
+                'Successfully linked application area "' +
+                  type.name +
+                  '" to algorithm "' +
+                  this.algorithm.name +
+                  '"'
+              );
             },
-            (error) => {
-              console.log(error);
-            }
+            (error) => console.log(error)
           );
       },
       (error) => {
@@ -204,13 +211,20 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   removeProblemType(problemTypes: EntityModelProblemTypeDto[]): void {
     problemTypes.forEach((problemType) => {
       this.algorithmService
-        .deleteReferenceToProblemTypes({
-          algoId: this.algorithm.id,
+        .unlinkAlgorithmAndProblemType({
+          algorithmId: this.algorithm.id,
           problemTypeId: problemType.id,
         })
         .subscribe(
-          (type) => {
+          () => {
             this.getProblemTypesForAlgorithm(this.algorithm.id);
+            this.utilService.callSnackBar(
+              'Successfully removed link to problem type "' +
+                problemType.name +
+                '" from algorithm "' +
+                this.algorithm.name +
+                '"'
+            );
           },
           (error) => {
             console.log(error);
@@ -228,13 +242,15 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   }
 
   private getTagsForAlgorithm(algoId: string): void {
-    this.algorithmService.getTagsOfAlgorithm({ algoId }).subscribe((next) => {
-      if (next._embedded?.tags) {
-        this.tags = next._embedded.tags.map((t) => ({
-          value: t.value,
-          category: t.category,
-        }));
-      }
-    });
+    this.algorithmService
+      .getTagsOfAlgorithm({ algorithmId: algoId })
+      .subscribe((next) => {
+        if (next._embedded?.tags) {
+          this.tags = next._embedded.tags.map((t) => ({
+            value: t.value,
+            category: t.category,
+          }));
+        }
+      });
   }
 }

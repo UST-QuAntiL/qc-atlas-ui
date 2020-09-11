@@ -39,12 +39,18 @@ export class AlgorithmPublicationsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.linkObject.title += this.algorithm.name;
-    this.getLinkedPublications({ algoId: this.algorithm.id });
+    this.getLinkedPublications({ algorithmId: this.algorithm.id });
   }
 
-  getLinkedPublications(params): void {
+  getLinkedPublications(params: {
+    algorithmId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.algorithmService
-      .getPublicationsByAlgorithm(params)
+      .getPublicationsOfAlgorithm(params)
       .subscribe((publications) => {
         if (publications._embedded) {
           this.linkedPublications = publications._embedded.publications;
@@ -70,31 +76,38 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.linkObject.data = [];
     // Link algorithm
     this.algorithmService
-      .addPublication({ algoId: this.algorithm.id, body: publication })
-      .subscribe((data) => {
-        this.getLinkedPublications({ algoId: this.algorithm.id });
+      .linkAlgorithmAndPublication({
+        algorithmId: this.algorithm.id,
+        body: publication,
+      })
+      .subscribe(() => {
+        this.getLinkedPublications({ algorithmId: this.algorithm.id });
         this.utilService.callSnackBar('Successfully linked Publication');
       });
   }
 
-  async unlinkPublications(event): Promise<void> {
-    // Iterate all selected algorithms
+  unlinkPublications(event): void {
+    const promises: Array<Promise<void>> = [];
     for (const publication of event.elements) {
-      await this.algorithmService
-        .deleteReferenceToPublication({
-          algoId: this.algorithm.id,
-          publicationId: publication.id,
-        })
-        .toPromise();
-      this.getLinkedPublications({ algoId: this.algorithm.id });
-      this.utilService.callSnackBar('Successfully unlinked Publication');
+      promises.push(
+        this.algorithmService
+          .unlinkAlgorithmAndPublication({
+            algorithmId: this.algorithm.id,
+            publicationId: publication.id,
+          })
+          .toPromise()
+      );
     }
+    Promise.all(promises).then(() => {
+      this.getLinkedPublications({ algorithmId: this.algorithm.id });
+      this.utilService.callSnackBar('Successfully unlinked Publication');
+    });
   }
 
   onAddElement(): void {}
 
   onDatalistConfigChanged(event): void {
-    this.getLinkedPublications({ algoId: this.algorithm.id });
+    this.getLinkedPublications({ algorithmId: this.algorithm.id });
   }
 
   onElementClicked(publication: PublicationDto): void {

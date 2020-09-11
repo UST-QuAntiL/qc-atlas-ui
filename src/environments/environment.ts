@@ -8,6 +8,7 @@ export const environment = {
   API_URL: 'http://localhost:8080/atlas',
   NISQ_API_URL: 'http://localhost:8081/nisq-analyzer',
   PATTERN_ATLAS_API_URL: 'http://localhost:8082/patternpedia',
+  PATTERN_ATLAS_UI_URL: 'http://localhost:4201',
 };
 
 /*

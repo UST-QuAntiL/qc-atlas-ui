@@ -10,6 +10,7 @@ import { PatternControllerService } from 'api-patternpedia/services/pattern-cont
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { EntityModelPatternModel } from 'api-patternpedia/models/entity-model-pattern-model';
+import { environment as Env } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-add-pattern-relation-dialog',
@@ -299,6 +300,26 @@ export class AddPatternRelationDialogComponent implements OnInit {
     ) {
       this.getRelationTypes();
     }
+  }
+
+  onOpen(languageUri: string, patternUri: string): void {
+    let encodedUri =
+      Env.PATTERN_ATLAS_UI_URL +
+      '/pattern-languages/' +
+      this.fixedEncodeURIComponent(languageUri);
+
+    if (patternUri) {
+      encodedUri = encodedUri + '/' + this.fixedEncodeURIComponent(patternUri);
+    }
+
+    window.open(encodedUri, '_blank');
+  }
+
+  fixedEncodeURIComponent(str): string {
+    return encodeURIComponent(str).replace(
+      /[!'()*]/g,
+      (c) => '%' + c.charCodeAt(0).toString(16)
+    );
   }
 }
 

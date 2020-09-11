@@ -1,12 +1,18 @@
 <div *ngIf="algorithm" class="m-2">
-  <div class="header-container p-2">
-    <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-    <app-tags-component
-      [allowRemoving]="true"
-      [tags]="tags"
-      (onRemove)="removeTag($event)"
-      (onAdd)="addTag($event)"
-    ></app-tags-component>
+  <div class="row p-2 m-0 align-items-center">
+    <div class="col">
+      <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+    </div>
+    <div class="col">
+      <div class="float-right mx-2">
+        <app-tags-component
+          [allowRemoving]="true"
+          [tags]="tags"
+          (onRemove)="removeTag($event)"
+          (onAdd)="addTag($event)">
+        </app-tags-component>
+      </div>
+    </div>
   </div>
 
   <mat-tab-group>

@@ -14,42 +14,60 @@
     <form [formGroup]="inputFormGroup">
       <div formArrayName="params">
         <div *ngFor="let param of params; let i = index" [formGroupName]="i">
-          <mat-form-field class="w-25">
-            <mat-label>{{ param.name }}</mat-label>
+          <div class="row">
+            <div class="col-xl-6 col-lg-9 col-md-12">
+              <mat-form-field class="w-100">
+                <mat-label>{{ param.name }}</mat-label>
+                <input
+                  matInput
+                  [pattern]="patternForParam(param)"
+                  [placeholder]="param.description"
+                  [formControlName]="param.name"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-6 col-lg-9 col-md-12">
+          <mat-form-field class="w-100">
+            <mat-select
+              formControlName="cloudService"
+              (selectionChange)="onCloudServiceChanged($event.value)"
+            >
+              <mat-option *ngFor="let cs of cloudServices" [value]="cs.name">
+                {{ cs.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row" [hidden]="true">
+        <div class="col-xl-6 col-lg-9 col-md-12">
+          <mat-form-field class="w-100">
+            <mat-label>Number of shots (for later execution)</mat-label>
             <input
               matInput
-              [pattern]="patternForParam(param)"
-              [placeholder]="param.description"
-              [formControlName]="param.name"
+              pattern="[0-9]+"
+              required
+              formControlName="shotCount"
             />
           </mat-form-field>
         </div>
       </div>
-      <div>
-        <mat-form-field class="w-25">
-          <mat-select
-            formControlName="cloudService"
-            (selectionChange)="onCloudServiceChanged($event.value)"
-          >
-            <mat-label>Cloud Services</mat-label>
-            <mat-option *ngFor="let cs of cloudServices" [value]="cs.name">{{
-              cs.name
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
+
+      <div class="row" *ngIf="!inputFormGroup.controls.qiskitToken.disabled">
+        <div class="col-xl-6 col-lg-9 col-md-12">
+          <mat-form-field class="w-100">
+            <mat-label>Your Qiskit token</mat-label>
+            <input matInput required formControlName="qiskitToken" />
+          </mat-form-field>
+        </div>
       </div>
-      <div [hidden]="true">
-        <mat-form-field class="w-25">
-          <mat-label>Number of shots (for later execution)</mat-label>
-          <input matInput pattern="[0-9]+" formControlName="shotCount" />
-        </mat-form-field>
-      </div>
-      <div *ngIf="!inputFormGroup.controls.qiskitToken.disabled">
-        <mat-form-field class="w-25">
-          <mat-label>Your token</mat-label>
-          <input matInput required formControlName="qiskitToken" />
-        </mat-form-field>
-      </div>
+
       <div>
         <button
           mat-raised-button
@@ -62,6 +80,7 @@
       </div>
     </form>
   </mat-step>
+
   <mat-step [editable]="false" label="Analyzer Results">
     <div
       *ngIf="!analyzerResults"
@@ -71,38 +90,41 @@
     </div>
     <ng-container *ngIf="analyzerResults">
       <div
-        class="p-2"
+        class="p-2 overflow-auto"
         *ngFor="let result of groupResultsByImplementation(analyzerResults)"
       >
         <h4>{{ result.implementation.name }}</h4>
-        <table
-          mat-table
-          [dataSource]="result.results"
-          multiTemplateDataRows
-          class="w-100"
-        >
+        <table mat-table [dataSource]="result.results" multiTemplateDataRows>
           <ng-container matColumnDef="backendName">
-            <th mat-header-cell *matHeaderCellDef>Backend Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.qpu.name }}</td>
+            <th class="backend-column" mat-header-cell *matHeaderCellDef>
+              Backend Name
+            </th>
+            <td class="backend-column" mat-cell *matCellDef="let element">
+              {{ element.qpu.name }}
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="width">
-            <th mat-header-cell *matHeaderCellDef>Width</th>
-            <td mat-cell *matCellDef="let element">
+            <th class="value-column" mat-header-cell *matHeaderCellDef>
+              Width
+            </th>
+            <td class="value-column" mat-cell *matCellDef="let element">
               {{ element.analysedWidth }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="depth">
-            <th mat-header-cell *matHeaderCellDef>Depth</th>
-            <td mat-cell *matCellDef="let element">
+            <th class="value-column" mat-header-cell *matHeaderCellDef>
+              Depth
+            </th>
+            <td class="value-column" mat-cell *matCellDef="let element">
               {{ element.analysedDepth }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="execution">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
+            <th class="action-column" mat-header-cell *matHeaderCellDef></th>
+            <td class="action-column" mat-cell *matCellDef="let element">
               <button
                 class="btn"
                 type="button"
@@ -126,9 +148,8 @@
                   element == expandedElement ? 'expanded' : 'collapsed'
                 "
               >
-                <!--
-                Max gate time: {{ element.qpu.maxGateTime }} Qbits:
-                {{ element.qpu.numberOfQubits }} T1: {{ element.qpu.t1 }} -->
+                Max depth: {{ element.maxDepth }} Qbits:
+                {{ element.qbits }} Provider: {{ element.backendProviderName }}
               </div>
             </td>
           </ng-container>
@@ -152,6 +173,7 @@
       </div>
     </ng-container>
   </mat-step>
+
   <mat-step [editable]="false" label="Execution Results">
     <div
       *ngIf="!results"
@@ -173,31 +195,36 @@
           <span>{{ resParam.value }}</span>
         </div>
       </div>
-      <div class="p-2">
+      <div class="p-2 overflow-auto">
         <h5>Implementation: {{ executedAnalyseResult.implementation.name }}</h5>
         <table
           mat-table
           [dataSource]="[executedAnalyseResult]"
           multiTemplateDataRows
-          class="w-100"
         >
           <ng-container matColumnDef="backendName">
-            <th mat-header-cell *matHeaderCellDef>Backend Name</th>
-            <td mat-cell *matCellDef="let element">
+            <th class="backend-column" mat-header-cell *matHeaderCellDef>
+              Backend Name
+            </th>
+            <td class="backend-column" mat-cell *matCellDef="let element">
               {{ element.qpu.name }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="width">
-            <th mat-header-cell *matHeaderCellDef>Width</th>
-            <td mat-cell *matCellDef="let element">
+            <th class="value-column" mat-header-cell *matHeaderCellDef>
+              Width
+            </th>
+            <td class="value-column" mat-cell *matCellDef="let element">
               {{ element.analysedWidth }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="depth">
-            <th mat-header-cell *matHeaderCellDef>Depth</th>
-            <td mat-cell *matCellDef="let element">
+            <th class="value-column" mat-header-cell *matHeaderCellDef>
+              Depth
+            </th>
+            <td class="value-column" mat-cell *matCellDef="let element">
               {{ element.analysedDepth }}
             </td>
           </ng-container>

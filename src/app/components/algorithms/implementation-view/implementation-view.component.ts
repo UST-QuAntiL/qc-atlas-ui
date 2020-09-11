@@ -19,8 +19,8 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./implementation-view.component.scss'],
 })
 export class ImplementationViewComponent implements OnInit {
-  impl: ImplementationDto;
-  algo: AlgorithmDto;
+  implementation: ImplementationDto;
+  algorithm: AlgorithmDto;
   softwarePlatformOptions: Option[];
   tags: TagDto[] = [];
 
@@ -69,7 +69,7 @@ export class ImplementationViewComponent implements OnInit {
   onElementClicked(implementation: any): void {
     this.router.navigate([
       'algorithms',
-      this.algo.id,
+      implementation.implementedAlgorithmId,
       'implementations',
       implementation.id,
     ]);
@@ -78,15 +78,14 @@ export class ImplementationViewComponent implements OnInit {
   updateComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
-    console.log(property);
     this.algorithmService
-      .updateComputingResourceByImplementation({
-        algoId: this.algo.id,
-        implId: this.impl.id,
-        resourceId: property.id,
+      .updateComputeResourcePropertyOfImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
+        computeResourcePropertyId: property.id,
         body: property,
       })
-      .subscribe((e) => {
+      .subscribe(() => {
         this.fetchComputeResourceProperties();
         this.utilService.callSnackBar('Successfully updated property');
       });
@@ -95,14 +94,13 @@ export class ImplementationViewComponent implements OnInit {
   addComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
-    console.log(property);
     this.algorithmService
-      .addComputingResourceByImplementation({
-        algoId: this.algo.id,
-        implId: this.impl.id,
+      .createComputeResourcePropertyForImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
         body: property,
       })
-      .subscribe((e) => {
+      .subscribe(() => {
         this.fetchComputeResourceProperties();
         this.utilService.callSnackBar('Successfully added property');
       });
@@ -124,12 +122,12 @@ export class ImplementationViewComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           this.algorithmService
-            .deleteComputingResourceByImplementation({
-              algoId: this.algo.id,
-              implId: this.impl.id,
-              resourceId: property.id,
+            .deleteComputeResourcePropertyOfImplementation({
+              algorithmId: this.implementation.implementedAlgorithmId,
+              implementationId: this.implementation.id,
+              computeResourcePropertyId: property.id,
             })
-            .subscribe((e) => {
+            .subscribe(() => {
               this.computeResourceProperties = this.computeResourceProperties.filter(
                 (elem: EntityModelComputeResourcePropertyDto) =>
                   elem.id !== property.id
@@ -143,9 +141,9 @@ export class ImplementationViewComponent implements OnInit {
 
   fetchComputeResourceProperties(): void {
     this.algorithmService
-      .getComputingResources({
-        algoId: this.algo.id,
-        implId: this.impl.id,
+      .getComputeResourcePropertiesOfImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
         page: -1,
       })
       .subscribe((e) => {
@@ -159,7 +157,8 @@ export class ImplementationViewComponent implements OnInit {
   addTag(tag: TagDto): void {
     this.algorithmService
       .addTagToImplementation({
-        implId: this.impl.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
         body: tag,
       })
       .subscribe();
@@ -168,31 +167,34 @@ export class ImplementationViewComponent implements OnInit {
   removeTag(tag: TagDto): void {
     this.algorithmService
       .removeTagFromImplementation({
-        implId: this.impl.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
         body: tag,
       })
       .subscribe();
   }
 
   updateImplementationField(event: { field; value }): void {
-    this.impl[event.field] = event.value;
+    this.implementation[event.field] = event.value;
     this.algorithmService
       .updateImplementation({
-        algoId: this.algo.id,
-        implId: this.impl.id,
-        body: this.impl,
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
+        body: this.implementation,
       })
       .subscribe(
         (impl) => {
-          this.impl = impl;
+          this.implementation = impl;
           // live refresh name
-          let subheading = this.algo.computationModel.toString().toLowerCase();
+          let subheading = this.algorithm.computationModel
+            .toString()
+            .toLowerCase();
           subheading =
             subheading[0].toUpperCase() +
             subheading.slice(1) +
             ' Implementation';
           this.links[1] = {
-            heading: this.impl.name,
+            heading: this.implementation.name,
             subHeading: subheading,
           };
           this.utilService.callSnackBar('Successfully updated implementation');
@@ -214,23 +216,27 @@ export class ImplementationViewComponent implements OnInit {
         }));
       });
     this.activatedRoute.params.subscribe(({ algoId, implId }) => {
-      this.algorithmService.getAlgorithm({ algoId }).subscribe((algo) => {
-        this.algo = algo;
-        let subheading = this.algo.computationModel.toString().toLowerCase();
-        subheading = subheading[0].toUpperCase() + subheading.slice(1);
-        this.links[0] = {
-          heading: this.algo.name,
-          subHeading: subheading + ' Algorithm',
-          link: '/algorithms/' + algoId,
-        };
-        this.links[1].subHeading = subheading + ' Implementation';
-      });
+      this.algorithmService
+        .getAlgorithm({ algorithmId: algoId })
+        .subscribe((algo) => {
+          this.algorithm = algo;
+          let subheading = this.algorithm.computationModel
+            .toString()
+            .toLowerCase();
+          subheading = subheading[0].toUpperCase() + subheading.slice(1);
+          this.links[0] = {
+            heading: this.algorithm.name,
+            subHeading: subheading + ' Algorithm',
+            link: '/algorithms/' + algoId,
+          };
+          this.links[1].subHeading = subheading + ' Implementation';
+        });
 
       this.algorithmService
-        .getImplementation({ algoId, implId })
+        .getImplementation({ algorithmId: algoId, implementationId: implId })
         .subscribe((impl) => {
-          this.impl = impl;
-          this.links[1].heading = this.impl.name;
+          this.implementation = impl;
+          this.links[1].heading = this.implementation.name;
           this.fetchComputeResourceProperties();
           this.getTagsForImplementation(algoId, implId);
         });
@@ -239,7 +245,10 @@ export class ImplementationViewComponent implements OnInit {
 
   private getTagsForImplementation(algoId: string, implId: string): void {
     this.algorithmService
-      .getTagsOfImplementation({ algoId, implId })
+      .getTagsOfImplementation({
+        algorithmId: algoId,
+        implementationId: implId,
+      })
       .subscribe((next) => {
         if (next._embedded?.tags) {
           this.tags = next._embedded.tags.map((t) => ({

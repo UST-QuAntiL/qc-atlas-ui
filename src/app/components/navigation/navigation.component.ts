@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import {
+  BreakpointObserver,
+  Breakpoints,
+  BreakpointState,
+} from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -11,20 +15,24 @@ import { Router } from '@angular/router';
 })
 export class NavigationComponent implements OnInit {
   title = 'qc-atlas-ui';
-
-  isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(Breakpoints.Handset)
-    .pipe(
-      map((result) => result.matches),
-      shareReplay()
-    );
+  hideNav = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.breakpointObserver
+      .observe([Breakpoints.Small, Breakpoints.XSmall])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.hideNav = true;
+        } else {
+          this.hideNav = false;
+        }
+      });
+  }
 
   goToHome(): void {
     this.router.navigate(['/']);

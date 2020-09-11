@@ -101,27 +101,27 @@ export class AlgorithmListComponent implements OnInit {
       yesButtonText: 'yes',
       noButtonText: 'no',
     };
-    const dialogRef = this.utilService.createDialog(
-      ConfirmDialogComponent,
-      dialogData
-    );
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        // Iterate all selected algorithms and delete them
-        for (const algorithm of event.elements) {
-          this.algorithmService
-            .deleteAlgorithm(this.generateDeleteParams(algorithm.id))
-            .subscribe(() => {
-              // Refresh Algorithms after delete
-              this.getAlgorithms(event.queryParams);
-              this.utilService.callSnackBar(
-                'Successfully deleted algorithm(s)'
-              );
-            });
+    this.utilService
+      .createDialog(ConfirmDialogComponent, dialogData)
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
+          for (const algorithm of event.elements) {
+            promises.push(
+              this.algorithmService
+                .deleteAlgorithm({
+                  algorithmId: algorithm.id,
+                })
+                .toPromise()
+            );
+          }
+          Promise.all(promises).then(() => {
+            this.getAlgorithms(event.queryParams);
+            this.utilService.callSnackBar('Successfully deleted algorithm(s)');
+          });
         }
-      }
-    });
+      });
   }
 
   onPageChanged(event): void {
@@ -130,11 +130,5 @@ export class AlgorithmListComponent implements OnInit {
 
   onDatalistConfigChanged(event): void {
     this.getAlgorithms(event);
-  }
-
-  generateDeleteParams(algoId: string): any {
-    const params: any = {};
-    params.algoId = algoId;
-    return params;
   }
 }

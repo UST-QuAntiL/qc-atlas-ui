@@ -8,8 +8,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { AlgoRelationTypeDto } from '../models/algo-relation-type-dto';
-import { EntityModelAlgoRelationTypeDto } from '../models/entity-model-algo-relation-type-dto';
+import { AlgorithmRelationTypeDto } from '../models/algorithm-relation-type-dto';
+import { EntityModelAlgorithmRelationTypeDto } from '../models/entity-model-algorithm-relation-type-dto';
 import { Link } from '../models/link';
 import { PageMetadata } from '../models/page-metadata';
 
@@ -22,33 +22,55 @@ export class AlgorithmRelationTypeService extends BaseService {
   }
 
   /**
-   * Path part for operation getAlgoRelationTypes
+   * Path part for operation getAlgorithmRelationTypes
    */
-  static readonly GetAlgoRelationTypesPath = '/v1/algorithm-relation-types';
+  static readonly GetAlgorithmRelationTypesPath =
+    '/v1/algorithm-relation-types';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAlgoRelationTypes()` instead.
+   * To access only the response body, use `getAlgorithmRelationTypes()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAlgoRelationTypes$Response(params?: {
+  getAlgorithmRelationTypes$Response(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
-      _embedded?: { algoRelationTypes?: Array<EntityModelAlgoRelationTypeDto> };
+      _embedded?: {
+        algoRelationTypes?: Array<EntityModelAlgorithmRelationTypeDto>;
+      };
       page?: PageMetadata;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmRelationTypeService.GetAlgoRelationTypesPath,
+      AlgorithmRelationTypeService.GetAlgorithmRelationTypesPath,
       'get'
     );
     if (params) {
+      rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -62,7 +84,7 @@ export class AlgorithmRelationTypeService extends BaseService {
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
             _embedded?: {
-              algoRelationTypes?: Array<EntityModelAlgoRelationTypeDto>;
+              algoRelationTypes?: Array<EntityModelAlgorithmRelationTypeDto>;
             };
             page?: PageMetadata;
           }>;
@@ -72,30 +94,49 @@ export class AlgorithmRelationTypeService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAlgoRelationTypes$Response()` instead.
+   * To access the full response (for headers, for example), `getAlgorithmRelationTypes$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAlgoRelationTypes(params?: {
+  getAlgorithmRelationTypes(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
-    _embedded?: { algoRelationTypes?: Array<EntityModelAlgoRelationTypeDto> };
+    _embedded?: {
+      algoRelationTypes?: Array<EntityModelAlgorithmRelationTypeDto>;
+    };
     page?: PageMetadata;
   }> {
-    return this.getAlgoRelationTypes$Response(params).pipe(
+    return this.getAlgorithmRelationTypes$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
             _embedded?: {
-              algoRelationTypes?: Array<EntityModelAlgoRelationTypeDto>;
+              algoRelationTypes?: Array<EntityModelAlgorithmRelationTypeDto>;
             };
             page?: PageMetadata;
           }>
         ) =>
           r.body as {
             _embedded?: {
-              algoRelationTypes?: Array<EntityModelAlgoRelationTypeDto>;
+              algoRelationTypes?: Array<EntityModelAlgorithmRelationTypeDto>;
             };
             page?: PageMetadata;
           }
@@ -104,26 +145,27 @@ export class AlgorithmRelationTypeService extends BaseService {
   }
 
   /**
-   * Path part for operation createAlgoRelationType
+   * Path part for operation createAlgorithmRelationType
    */
-  static readonly CreateAlgoRelationTypePath = '/v1/algorithm-relation-types';
+  static readonly CreateAlgorithmRelationTypePath =
+    '/v1/algorithm-relation-types';
 
   /**
    * Custom ID will be ignored.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `createAlgoRelationType()` instead.
+   * To access only the response body, use `createAlgorithmRelationType()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createAlgoRelationType$Response(params: {
-    body: AlgoRelationTypeDto;
+  createAlgorithmRelationType$Response(params: {
+    body: AlgorithmRelationTypeDto;
   }): Observable<
-    StrictHttpResponse<{ id?: string; name: string; _links?: Array<Link> }>
+    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmRelationTypeService.CreateAlgoRelationTypePath,
+      AlgorithmRelationTypeService.CreateAlgorithmRelationTypePath,
       'post'
     );
     if (params) {
@@ -140,7 +182,7 @@ export class AlgorithmRelationTypeService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             _links?: Array<Link>;
           }>;
@@ -152,50 +194,50 @@ export class AlgorithmRelationTypeService extends BaseService {
    * Custom ID will be ignored.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `createAlgoRelationType$Response()` instead.
+   * To access the full response (for headers, for example), `createAlgorithmRelationType$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createAlgoRelationType(params: {
-    body: AlgoRelationTypeDto;
-  }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
-    return this.createAlgoRelationType$Response(params).pipe(
+  createAlgorithmRelationType(params: {
+    body: AlgorithmRelationTypeDto;
+  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+    return this.createAlgorithmRelationType$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             _links?: Array<Link>;
           }>
-        ) => r.body as { id?: string; name: string; _links?: Array<Link> }
+        ) => r.body as { id: string; name: string; _links?: Array<Link> }
       )
     );
   }
 
   /**
-   * Path part for operation getAlgoRelationTypeById
+   * Path part for operation getAlgorithmRelationType
    */
-  static readonly GetAlgoRelationTypeByIdPath =
-    '/v1/algorithm-relation-types/{id}';
+  static readonly GetAlgorithmRelationTypePath =
+    '/v1/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAlgoRelationTypeById()` instead.
+   * To access only the response body, use `getAlgorithmRelationType()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAlgoRelationTypeById$Response(params: {
-    id: string;
+  getAlgorithmRelationType$Response(params: {
+    algorithmRelationTypeId: string;
   }): Observable<
-    StrictHttpResponse<{ id?: string; name: string; _links?: Array<Link> }>
+    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmRelationTypeService.GetAlgoRelationTypeByIdPath,
+      AlgorithmRelationTypeService.GetAlgorithmRelationTypePath,
       'get'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path('algorithmRelationTypeId', params.algorithmRelationTypeId, {});
     }
     return this.http
       .request(
@@ -208,7 +250,7 @@ export class AlgorithmRelationTypeService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             _links?: Array<Link>;
           }>;
@@ -218,53 +260,53 @@ export class AlgorithmRelationTypeService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAlgoRelationTypeById$Response()` instead.
+   * To access the full response (for headers, for example), `getAlgorithmRelationType$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAlgoRelationTypeById(params: {
-    id: string;
-  }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
-    return this.getAlgoRelationTypeById$Response(params).pipe(
+  getAlgorithmRelationType(params: {
+    algorithmRelationTypeId: string;
+  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+    return this.getAlgorithmRelationType$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             _links?: Array<Link>;
           }>
-        ) => r.body as { id?: string; name: string; _links?: Array<Link> }
+        ) => r.body as { id: string; name: string; _links?: Array<Link> }
       )
     );
   }
 
   /**
-   * Path part for operation updateAlgoRelationType
+   * Path part for operation updateAlgorithmRelationType
    */
-  static readonly UpdateAlgoRelationTypePath =
-    '/v1/algorithm-relation-types/{id}';
+  static readonly UpdateAlgorithmRelationTypePath =
+    '/v1/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
    * Custom ID will be ignored.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateAlgoRelationType()` instead.
+   * To access only the response body, use `updateAlgorithmRelationType()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateAlgoRelationType$Response(params: {
-    id: string;
-    body: AlgoRelationTypeDto;
+  updateAlgorithmRelationType$Response(params: {
+    algorithmRelationTypeId: string;
+    body: AlgorithmRelationTypeDto;
   }): Observable<
-    StrictHttpResponse<{ id?: string; name: string; _links?: Array<Link> }>
+    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmRelationTypeService.UpdateAlgoRelationTypePath,
+      AlgorithmRelationTypeService.UpdateAlgorithmRelationTypePath,
       'put'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path('algorithmRelationTypeId', params.algorithmRelationTypeId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -279,7 +321,7 @@ export class AlgorithmRelationTypeService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             _links?: Array<Link>;
           }>;
@@ -291,49 +333,49 @@ export class AlgorithmRelationTypeService extends BaseService {
    * Custom ID will be ignored.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updateAlgoRelationType$Response()` instead.
+   * To access the full response (for headers, for example), `updateAlgorithmRelationType$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateAlgoRelationType(params: {
-    id: string;
-    body: AlgoRelationTypeDto;
-  }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
-    return this.updateAlgoRelationType$Response(params).pipe(
+  updateAlgorithmRelationType(params: {
+    algorithmRelationTypeId: string;
+    body: AlgorithmRelationTypeDto;
+  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+    return this.updateAlgorithmRelationType$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             _links?: Array<Link>;
           }>
-        ) => r.body as { id?: string; name: string; _links?: Array<Link> }
+        ) => r.body as { id: string; name: string; _links?: Array<Link> }
       )
     );
   }
 
   /**
-   * Path part for operation deleteAlgoRelationType
+   * Path part for operation deleteAlgorithmRelationType
    */
-  static readonly DeleteAlgoRelationTypePath =
-    '/v1/algorithm-relation-types/{id}';
+  static readonly DeleteAlgorithmRelationTypePath =
+    '/v1/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteAlgoRelationType()` instead.
+   * To access only the response body, use `deleteAlgorithmRelationType()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteAlgoRelationType$Response(params: {
-    id: string;
+  deleteAlgorithmRelationType$Response(params: {
+    algorithmRelationTypeId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmRelationTypeService.DeleteAlgoRelationTypePath,
+      AlgorithmRelationTypeService.DeleteAlgorithmRelationTypePath,
       'delete'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path('algorithmRelationTypeId', params.algorithmRelationTypeId, {});
     }
     return this.http
       .request(
@@ -354,12 +396,14 @@ export class AlgorithmRelationTypeService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteAlgoRelationType$Response()` instead.
+   * To access the full response (for headers, for example), `deleteAlgorithmRelationType$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteAlgoRelationType(params: { id: string }): Observable<void> {
-    return this.deleteAlgoRelationType$Response(params).pipe(
+  deleteAlgorithmRelationType(params: {
+    algorithmRelationTypeId: string;
+  }): Observable<void> {
+    return this.deleteAlgorithmRelationType$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }

@@ -52,45 +52,58 @@
   </div>
   <div *ngFor="let param of nisqImpl.inputParameters.parameters; let i = index">
     <mat-card class="m-4">
-      <div class="d-flex justify-content-between align-self-center">
-        <div class="align-self-center">
+      <div class="row">
+        <div class="col-md-1 col-sm-2 col-2 text-center align-self-center">
           <mat-checkbox
             color="warn"
             [checked]="selection.isSelected(i)"
             (click)="$event.stopPropagation()"
             (change)="$event ? selection.toggle(i) : null"
-          ></mat-checkbox>
+          >
+          </mat-checkbox>
         </div>
-        <app-text-input
-          class="p-2"
-          name="Name of the Parameter"
-          [ngModel]="param.name"
-          (onSaveChanges)="saveParameter(param, $event)"
-        ></app-text-input>
-        <app-text-input
-          class="w-50 p-2"
-          name="Description"
-          prolog
-          [(ngModel)]="param.description"
-          (onSaveChanges)="saveParameter(param)"
-        ></app-text-input>
-        <app-select-input
-          class="w-25 p-2"
-          name="Datatype"
-          [(ngModel)]="param.type"
-          [choices]="[
-            { value: 'Integer', label: 'Integer' },
-            { value: 'Float', label: 'Float' },
-            { value: 'String', label: 'String' }
-          ]"
-          (onSaveChanges)="saveParameter(param)"
-        ></app-select-input>
-        <app-text-input
-          class="w-25 p-2"
-          name="Restriction"
-          [(ngModel)]="param.restriction"
-          (onSaveChanges)="saveParameter(param)"
-        ></app-text-input>
+        <div class="col-md-11 col-sm-10 col-10">
+          <div class="row justify-content-between">
+            <div class="col">
+              <app-text-input
+                name="Name of the Parameter"
+                [ngModel]="param.name"
+                (onSaveChanges)="saveParameter(param, $event)"
+              >
+              </app-text-input>
+            </div>
+            <div class="col">
+              <app-text-input
+                name="Description"
+                prolog
+                [(ngModel)]="param.description"
+                (onSaveChanges)="saveParameter(param)"
+              >
+              </app-text-input>
+            </div>
+            <div class="col">
+              <app-select-input
+                name="Datatype"
+                [(ngModel)]="param.type"
+                [choices]="[
+                  { value: 'Integer', label: 'Integer' },
+                  { value: 'Float', label: 'Float' },
+                  { value: 'String', label: 'String' }
+                ]"
+                (onSaveChanges)="saveParameter(param)"
+              >
+              </app-select-input>
+            </div>
+            <div class="col">
+              <app-text-input
+                name="Restriction"
+                [(ngModel)]="param.restriction"
+                (onSaveChanges)="saveParameter(param)"
+              >
+              </app-text-input>
+            </div>
+          </div>
+        </div>
       </div>
     </mat-card>
   </div>
@@ -98,25 +111,33 @@
     <h4>Prolog Rules</h4>
   </div>
   <mat-card class="m-4">
-    <app-prolog-input
-      class="p-2"
-      name="Selection Rule (in PROLOG)"
-      [(ngModel)]="nisqImpl.selectionRule"
-      (onSaveChanges)="saveImplementation()"
-    ></app-prolog-input>
-    <div class="d-flex justify-content-between">
-      <app-prolog-input
-        class="w-50 p-2"
-        name="Width Rule (in PROLOG)"
-        [(ngModel)]="nisqImpl.widthRule"
-        (onSaveChanges)="saveImplementation()"
-      ></app-prolog-input>
-      <app-prolog-input
-        class="w-50 p-2"
-        name="Depth Rule (in PROLOG)"
-        [(ngModel)]="nisqImpl.depthRule"
-        (onSaveChanges)="saveImplementation()"
-      ></app-prolog-input>
+    <div class="row">
+      <div class="col-12">
+        <app-prolog-input
+          class="p-2"
+          name="Selection Rule (in PROLOG)"
+          [(ngModel)]="nisqImpl.selectionRule"
+          (onSaveChanges)="saveImplementation()"
+        ></app-prolog-input>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <app-prolog-input
+          class="w-50 p-2"
+          name="Width Rule (in PROLOG)"
+          [(ngModel)]="nisqImpl.widthRule"
+          (onSaveChanges)="saveImplementation()"
+        ></app-prolog-input>
+      </div>
+      <div class="col-lg-6 col-md-12">
+        <app-prolog-input
+          class="w-50 p-2"
+          name="Depth Rule (in PROLOG)"
+          [(ngModel)]="nisqImpl.depthRule"
+          (onSaveChanges)="saveImplementation()"
+        ></app-prolog-input>
+      </div>
     </div>
   </mat-card>
 </div>
