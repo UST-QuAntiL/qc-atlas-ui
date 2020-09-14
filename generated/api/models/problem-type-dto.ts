@@ -1,6 +1,6 @@
 /* tslint:disable */
 export type ProblemTypeDto = {
-  id?: string;
+  id: string;
   name: string;
   parentProblemType?: string;
 };

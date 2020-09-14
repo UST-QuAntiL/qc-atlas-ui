@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { Link } from './link';
-export type EntityModelAlgoRelationTypeDto = {
-  id?: string;
-  name: string;
+export type EntityModelTagDto = {
+  category?: string;
+  value: string;
   _links?: Array<Link>;
 };

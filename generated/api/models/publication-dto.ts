@@ -1,6 +1,6 @@
 /* tslint:disable */
 export type PublicationDto = {
-  id?: string;
+  id: string;
   title: string;
   doi?: string;
   url?: string;
