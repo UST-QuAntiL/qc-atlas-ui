@@ -1,89 +1,41 @@
-<div *ngIf="impl">
-  <div class="header-container p-2" *ngIf="algo">
-    <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-    <div class="badge-list">
-      <mat-chip-list>
-        <mat-chip
-          *ngFor="let element of [1, 2, 2, 3, 53, 3]"
-          [removable]="true"
-        >
-          {{ element }}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
+<div *ngIf="implementation && algorithm" class="m-2">
+  <div class="row p-2 m-0 align-items-center">
+    <div class="col">
+      <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+    </div>
+    <div class="col">
+      <div class="float-right mx-2">
+        <app-tags-component
+          [allowRemoving]="true"
+          [tags]="tags"
+          (onRemove)="removeTag($event)"
+          (onAdd)="addTag($event)">
+        </app-tags-component>
+      </div>
     </div>
   </div>
 
   <mat-tab-group (selectedIndexChange)="changeTab($event)">
     <mat-tab label="General">
-      <div class="tab-body p-4">
-        <div class="d-flex justify-content-between">
-          <app-text-input
-            (onSaveChanges)="onChangeImpl()"
-            name="Name"
-            class="w-100 p-2"
-            [(ngModel)]="impl.name"
-          ></app-text-input>
-          <app-select-input
-            class="w-100 p-2"
-            name="Software Platform"
-            (onSaveChanges)="onChangeImpl()"
-            [choices]="softwarePlatformOptions"
-            [includeEmpty]="true"
-          ></app-select-input>
-        </div>
-        <div class="d-flex">
-          <app-text-input
-            name="Description"
-            class="w-100 p-2"
-            (onSaveChanges)="onChangeImpl()"
-            [(ngModel)]="impl.description"
-            [multiline]="true"
-          ></app-text-input>
-        </div>
-        <div class="d-flex justify-content-between">
-          <app-text-input
-            class="w-100 p-2"
-            name="Input Format"
-            (onSaveChanges)="onChangeImpl()"
-            [(ngModel)]="impl.inputFormat"
-          ></app-text-input>
-          <app-text-input
-            class="w-100 p-2"
-            name="Output Format"
-            (onSaveChanges)="onChangeImpl()"
-            [(ngModel)]="impl.outputFormat"
-          ></app-text-input>
-        </div>
-        <div class="d-flex justify-content-between">
-          <app-text-input
-            class="w-100 p-2"
-            name="Contributors"
-            (onSaveChanges)="onChangeImpl()"
-            [(ngModel)]="impl.contributors"
-            [multiline]="true"
-          ></app-text-input>
-        </div>
-
-        <mat-card class="m-4">
-          <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
-                                              (updateProperty)="updateComputeResourceProperty($event)"
-                                              (deleteProperty)="deleteComputeResourceProperty($event)"
-                                              [resourceProperties]="computeResourceProperties">
-          </app-compute-resource-property-list>
-        </mat-card>
-      </div>
+      <app-implementation-properties
+        [computeResourceProperties]="computeResourceProperties"
+        [implementation]="implementation"
+        (updateImplementationField)="updateImplementationField($event)"
+        (deleteComputeResourceProperty)="deleteComputeResourceProperty($event)"
+        (addComputeResourceProperty)="addComputeResourceProperty($event)"
+        (updateComputeResourceProperty)="updateComputeResourceProperty($event)">
+      </app-implementation-properties>
     </mat-tab>
     <mat-tab label="Publications">
       <div>
-        <app-implementation-publications-list [implementation]=impl>
+        <app-implementation-publications-list [implementation]=implementation>
         </app-implementation-publications-list>
       </div>
     </mat-tab>
-    <mat-tab label="Discussion">
-      <div class="tab-body p-4">
-        <h1>Discussion WIP</h1>
-      </div>
+    <mat-tab label="Software Platforms">
+      <app-implementation-softwareplatform-list
+        [implementation]="implementation"
+      ></app-implementation-softwareplatform-list>
     </mat-tab>
     <mat-tab label="Selection Criteria">
       <div class="tab-body p-4">
@@ -95,8 +47,13 @@
         </app-impl-selection-criteria>
       </div>
     </mat-tab>
+    <mat-tab label="Discussion">
+      <div class="tab-body p-4">
+        <h1>Discussion WIP</h1>
+      </div>
+    </mat-tab>
   </mat-tab-group>
 </div>
-<div *ngIf="impl === undefined">
+<div *ngIf="implementation === undefined">
   Loading..
 </div>

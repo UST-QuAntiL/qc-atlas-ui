@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { EntityModelComputeResourceDto } from 'api/models/entity-model-compute-resource-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
@@ -29,7 +29,7 @@ export class ComputeResourceViewComponent implements OnInit {
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ crId }) => {
       this.executionEnvironmentsService
-        .getComputeResource({ id: crId })
+        .getComputeResource({ computeResourceId: crId })
         .subscribe(
           (computeResource: EntityModelComputeResourceDto) => {
             this.computeResource = computeResource;
@@ -51,11 +51,15 @@ export class ComputeResourceViewComponent implements OnInit {
     );
   }
 
+  ngOnDestroy(): void {
+    this.fieldUpdateSubscription.unsubscribe();
+  }
+
   updateComputeResourceField(fieldUpdate: FieldUpdate): void {
     this.computeResource[fieldUpdate.field] = fieldUpdate.value;
     this.executionEnvironmentsService
       .updateComputeResource({
-        id: this.computeResource.id,
+        computeResourceId: this.computeResource.id,
         body: this.computeResource,
       })
       .subscribe(

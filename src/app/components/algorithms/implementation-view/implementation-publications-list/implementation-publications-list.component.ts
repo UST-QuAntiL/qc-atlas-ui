@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { PublicationService } from 'api/services/publication.service';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { PublicationService } from 'api-atlas/services/publication.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
-import { EntityModelImplementationDto } from 'api/models/entity-model-implementation-dto';
-import { PublicationDto } from 'api/models/publication-dto';
+import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
+import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { GenericDataService } from '../../../../util/generic-data.service';
 import { UtilService } from '../../../../util/util.service';
 
@@ -19,12 +19,11 @@ export class ImplementationPublicationsListComponent implements OnInit {
   tableColumns = ['Title', 'URL', 'DOI', 'Authors'];
   variableNames = ['title', 'url', 'doi', 'authors'];
   linkObject: any = {
-    title: 'Link implementation with ',
+    title: 'Link publication with ',
     subtitle: 'Search publication by title',
     displayVariable: 'title',
     data: [],
   };
-  algoId: string;
   tableAddAllowed = true;
   isLinkingEnabled = false;
 
@@ -39,20 +38,18 @@ export class ImplementationPublicationsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.linkObject.title += this.implementation.name;
-    this.activatedRoute.params.subscribe(({ algoId }) => {
-      this.algoId = algoId;
+    this.activatedRoute.params.subscribe(() => {
       this.getLinkedPublications();
     });
   }
 
   getLinkedPublications(): void {
     this.algorithmService
-      .getPublicationsByImplementation({
-        algoId: this.algoId,
-        implId: this.implementation.id,
+      .getPublicationsOfImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
       })
       .subscribe((data) => {
-        // Read all incoming data
         if (data._embedded) {
           this.linkedPublications = data._embedded.publications;
         } else {
@@ -75,25 +72,34 @@ export class ImplementationPublicationsListComponent implements OnInit {
     // Empty unlinked algorithms
     this.linkObject.data = [];
     this.algorithmService
-      .addPublicationByImplementation(this.generateLinkParams(publication.id))
-      .subscribe((data) => {
+      .linkImplementationAndPublication({
+        implementationId: this.implementation.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
+        body: publication,
+      })
+      .subscribe(() => {
         this.getLinkedPublications();
         this.utilService.callSnackBar('Successfully linked publication');
       });
   }
 
-  async unlinkPublications(event): Promise<void> {
-    // Iterate all selected algorithms
+  unlinkPublications(event): void {
+    const promises: Array<Promise<void>> = [];
     for (const publication of event.elements) {
-      await // Build params using path ids and perform delete request
-      this.algorithmService
-        .deleteReferenceToPublicationByImplementation(
-          this.generateLinkParams(publication.id)
-        )
-        .toPromise();
+      promises.push(
+        this.algorithmService
+          .unlinkImplementationAndPublication({
+            algorithmId: this.implementation.implementedAlgorithmId,
+            implementationId: this.implementation.id,
+            publicationId: publication.id,
+          })
+          .toPromise()
+      );
+    }
+    Promise.all(promises).then(() => {
       this.getLinkedPublications();
       this.utilService.callSnackBar('Successfully unlinked publication(s)');
-    }
+    });
   }
 
   onElementClicked(publication: any): void {
@@ -104,18 +110,11 @@ export class ImplementationPublicationsListComponent implements OnInit {
     this.getLinkedPublications();
   }
 
-  onSelectToLink(publication: any): void {
-    this.linkPublication(this.generateLinkParams(publication.id));
-    this.linkObject.data = [];
-  }
-
-  generateLinkParams(publicationId: string): any {
-    return {
-      publId: publicationId,
-      algoId: this.algoId,
-      implId: this.implementation.id,
-    };
-  }
+  // TODO: Determine if this is still neeeded
+  //  onSelectToLink(publication: any): void {
+  //    this.linkPublication(this.generateLinkParams(publication.id));
+  //    this.linkObject.data = [];
+  //  }
 
   updateLinkablePublications(publicationData) {
     // Clear list of linkable algorithms

@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
-import { PublicationService } from 'api/services/publication.service';
+import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
+import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
-import { PublicationDto } from 'api/models/publication-dto';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { LinkObject } from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -39,12 +39,18 @@ export class AlgorithmPublicationsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.linkObject.title += this.algorithm.name;
-    this.getLinkedPublications({ algoId: this.algorithm.id });
+    this.getLinkedPublications({ algorithmId: this.algorithm.id });
   }
 
-  getLinkedPublications(params): void {
+  getLinkedPublications(params: {
+    algorithmId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.algorithmService
-      .getPublicationsByAlgorithm(params)
+      .getPublicationsOfAlgorithm(params)
       .subscribe((publications) => {
         if (publications._embedded) {
           this.linkedPublications = publications._embedded.publications;
@@ -70,31 +76,38 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.linkObject.data = [];
     // Link algorithm
     this.algorithmService
-      .addPublication({ algoId: this.algorithm.id, body: publication })
-      .subscribe((data) => {
-        this.getLinkedPublications({ algoId: this.algorithm.id });
+      .linkAlgorithmAndPublication({
+        algorithmId: this.algorithm.id,
+        body: publication,
+      })
+      .subscribe(() => {
+        this.getLinkedPublications({ algorithmId: this.algorithm.id });
         this.utilService.callSnackBar('Successfully linked Publication');
       });
   }
 
-  async unlinkPublications(event): Promise<void> {
-    // Iterate all selected algorithms
+  unlinkPublications(event): void {
+    const promises: Array<Promise<void>> = [];
     for (const publication of event.elements) {
-      await this.algorithmService
-        .deleteReferenceToPublication({
-          algoId: this.algorithm.id,
-          publicationId: publication.id,
-        })
-        .toPromise();
-      this.getLinkedPublications({ algoId: this.algorithm.id });
-      this.utilService.callSnackBar('Successfully unlinked Publication');
+      promises.push(
+        this.algorithmService
+          .unlinkAlgorithmAndPublication({
+            algorithmId: this.algorithm.id,
+            publicationId: publication.id,
+          })
+          .toPromise()
+      );
     }
+    Promise.all(promises).then(() => {
+      this.getLinkedPublications({ algorithmId: this.algorithm.id });
+      this.utilService.callSnackBar('Successfully unlinked Publication');
+    });
   }
 
   onAddElement(): void {}
 
   onDatalistConfigChanged(event): void {
-    this.getLinkedPublications({ algoId: this.algorithm.id });
+    this.getLinkedPublications({ algorithmId: this.algorithm.id });
   }
 
   onElementClicked(publication: PublicationDto): void {

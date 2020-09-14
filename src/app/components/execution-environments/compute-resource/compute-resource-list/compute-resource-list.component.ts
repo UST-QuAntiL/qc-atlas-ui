@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelComputeResourceDto } from 'api/models/entity-model-compute-resource-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
-import { ComputeResourceDto } from 'api/models/compute-resource-dto';
+import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import {
   DeleteParams,
   QueryParams,
@@ -80,6 +80,7 @@ export class ComputeResourceListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const computeResourceDto: ComputeResourceDto = {
+            id: null,
             name: dialogResult.name,
           };
           this.executionEnvironmentsService
@@ -114,17 +115,22 @@ export class ComputeResourceListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
           for (const computeResource of deleteParams.elements) {
-            this.executionEnvironmentsService
-              .deleteSoftwarePlatform({ id: computeResource.id })
-              .subscribe(() => {
-                // Refresh Algorithms after delete
-                this.getComputeResources(deleteParams.queryParams);
-                this.utilService.callSnackBar(
-                  'Successfully deleted compute resource(s)'
-                );
-              });
+            promises.push(
+              this.executionEnvironmentsService
+                .deleteComputeResource({
+                  computeResourceId: computeResource.id,
+                })
+                .toPromise()
+            );
           }
+          Promise.all(promises).then(() => {
+            this.getComputeResources(deleteParams.queryParams);
+            this.utilService.callSnackBar(
+              'Successfully deleted compute resource(s)'
+            );
+          });
         }
       });
   }

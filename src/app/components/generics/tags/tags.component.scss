@@ -1,0 +1,68 @@
+@import "theme";
+
+.dot {
+  height: 0.7rem;
+  width: 0.7rem;
+  border-radius: 50%;
+  margin-right: 7px;
+}
+
+.clickable-chip {
+  cursor: pointer;
+}
+
+.categories-container {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  float: right;
+}
+
+.categories-size {
+  max-width: 40vw;
+}
+
+.category {
+  display: inline-flex;
+  text-align: center;
+  align-items: center;
+}
+
+.tags-container {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.tags-content {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.tags-size {
+  max-width: 35vw;
+}
+
+@media (max-width: 800px) {
+  .tags-size {
+    max-width: 60vw;
+  }
+
+  .categories-size {
+    max-width: 80vw;
+  }
+}
+
+div::-webkit-scrollbar {
+  height: 4px;
+}
+
+div::-webkit-scrollbar-track {
+  height: 3px;
+}
+
+div::-webkit-scrollbar-thumb {
+  background-color: mat-color($qc-atlas-ui-primary);
+  border-radius: 10px;
+  height: 2px;
+}

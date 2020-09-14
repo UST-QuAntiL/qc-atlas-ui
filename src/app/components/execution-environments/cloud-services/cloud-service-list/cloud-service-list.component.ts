@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelCloudServiceDto } from 'api/models/entity-model-cloud-service-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
-import { CloudServiceDto } from 'api/models/cloud-service-dto';
+import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { UtilService } from '../../../../util/util.service';
 import {
   DeleteParams,
@@ -79,6 +79,7 @@ export class CloudServiceListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const cloudServiceDto: CloudServiceDto = {
+            id: null,
             name: dialogResult.name,
           };
           this.executionEnvironmentsService
@@ -111,17 +112,20 @@ export class CloudServiceListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
           for (const cloudService of deleteParams.elements) {
-            this.executionEnvironmentsService
-              .deleteCloudService({ id: cloudService.id })
-              .subscribe(() => {
-                // Refresh Algorithms after delete
-                this.getCloudServices(deleteParams.queryParams);
-                this.utilService.callSnackBar(
-                  'Successfully deleted cloud service(s)'
-                );
-              });
+            promises.push(
+              this.executionEnvironmentsService
+                .deleteCloudService({ cloudServiceId: cloudService.id })
+                .toPromise()
+            );
           }
+          Promise.all(promises).then(() => {
+            this.getCloudServices(deleteParams.queryParams);
+            this.utilService.callSnackBar(
+              'Successfully deleted cloud service(s)'
+            );
+          });
         }
       });
   }

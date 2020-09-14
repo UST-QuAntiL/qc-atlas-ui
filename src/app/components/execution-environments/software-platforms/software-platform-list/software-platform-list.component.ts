@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api/models/entity-model-software-platform-dto';
-import { SoftwarePlatformDto } from 'api/models/software-platform-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
+import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import {
   DeleteParams,
@@ -81,6 +81,7 @@ export class SoftwarePlatformListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const softwarePlatformDto: SoftwarePlatformDto = {
+            id: null,
             name: dialogResult.name,
           };
           this.executionEnvironmentsService
@@ -115,17 +116,22 @@ export class SoftwarePlatformListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
           for (const softwarePlatform of deleteParams.elements) {
-            this.executionEnvironmentsService
-              .deleteSoftwarePlatform({ id: softwarePlatform.id })
-              .subscribe(() => {
-                // Refresh Algorithms after delete
-                this.getSoftwarePlatforms(deleteParams.queryParams);
-                this.utilService.callSnackBar(
-                  'Successfully deleted software platform(s)'
-                );
-              });
+            promises.push(
+              this.executionEnvironmentsService
+                .deleteSoftwarePlatform({
+                  softwarePlatformId: softwarePlatform.id,
+                })
+                .toPromise()
+            );
           }
+          Promise.all(promises).then(() => {
+            this.getSoftwarePlatforms(deleteParams.queryParams);
+            this.utilService.callSnackBar(
+              'Successfully deleted software platform(s)'
+            );
+          });
         }
       });
   }

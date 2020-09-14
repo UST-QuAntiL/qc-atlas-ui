@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { AlgorithmService } from 'api/services/algorithm.service';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlgorithmDto } from 'api/models/algorithm-dto';
-import { ImplementationDto } from 'api/models/implementation-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
-import { PublicationService } from 'api/services/publication.service';
-import { EntityModelComputeResourcePropertyDto } from 'api/models/entity-model-compute-resource-property-dto';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
+import { ImplementationDto } from 'api-atlas/models/implementation-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
+import { PublicationService } from 'api-atlas/services/publication.service';
+import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
+import { TagDto } from 'api-atlas/models';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import {
-  DeleteParams,
-  QueryParams,
-} from '../../generics/data-list/data-list.component';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 import { InputParameter } from '../impl-selection-criteria/impl-selection-criteria.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -21,9 +19,10 @@ import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.co
   styleUrls: ['./implementation-view.component.scss'],
 })
 export class ImplementationViewComponent implements OnInit {
-  impl: ImplementationDto;
-  algo: AlgorithmDto;
+  implementation: ImplementationDto;
+  algorithm: AlgorithmDto;
   softwarePlatformOptions: Option[];
+  tags: TagDto[] = [];
 
   tableColumns = ['Name', 'Datatype', 'Description', 'Value'];
   variableNames = ['name', 'datatype', 'description', 'value'];
@@ -54,6 +53,7 @@ export class ImplementationViewComponent implements OnInit {
 
   constructor(
     private algorithmService: AlgorithmService,
+    private softwarePlatformService: ExecutionEnvironmentsService,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private publicationService: PublicationService,
     private activatedRoute: ActivatedRoute,
@@ -65,32 +65,12 @@ export class ImplementationViewComponent implements OnInit {
     this.loadGeneral();
   }
 
-  onChangeImpl(): void {
-    this.algorithmService
-      .updateImplementation({
-        algoId: this.algo.id,
-        implId: this.impl.id,
-        body: this.impl,
-      })
-      .subscribe(() => {
-        this.utilService.callSnackBar('Successfully updated implementation');
-      });
-    // live refresh name
-    this.links[1] = {
-      heading: this.impl.name,
-      subHeading: '',
-    };
-  }
-
   changeTab(tabNumber: number): void {
     // replace with switch case once quantum resource etc works in the backend
     if (tabNumber === 0) {
       this.loadGeneral();
     }
   }
-  onAddQuantumResource(): void {}
-
-  onDeleteQuantumResource($event: DeleteParams): void {}
 
   onDatalistConfigChanged(params: QueryParams): void {
     this.publicationService.getPublications(params).subscribe((data) => {
@@ -101,40 +81,40 @@ export class ImplementationViewComponent implements OnInit {
   onElementClicked(implementation: any): void {
     this.router.navigate([
       'algorithms',
-      this.algo.id,
+      implementation.implementedAlgorithmId,
       'implementations',
       implementation.id,
     ]);
-  }
-
-  onPageChanged($event: string): void {}
-
-  addComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
-    this.algorithmService
-      .addComputingResource({
-        algoId: this.algo.id,
-        body: property,
-      })
-      .subscribe((e) => {
-        this.fetchComputeResourceProperties();
-        this.utilService.callSnackBar('Successfully added property');
-      });
   }
 
   updateComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
-      .updateComputingResource({
-        algoId: this.algo.id,
-        resourceId: property.id,
+      .updateComputeResourcePropertyOfImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
+        computeResourcePropertyId: property.id,
         body: property,
       })
-      .subscribe((e) => {
+      .subscribe(() => {
         this.fetchComputeResourceProperties();
         this.utilService.callSnackBar('Successfully updated property');
+      });
+  }
+
+  addComputeResourceProperty(
+    property: EntityModelComputeResourcePropertyDto
+  ): void {
+    this.algorithmService
+      .createComputeResourcePropertyForImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
+        body: property,
+      })
+      .subscribe(() => {
+        this.fetchComputeResourceProperties();
+        this.utilService.callSnackBar('Successfully added property');
       });
   }
 
@@ -154,11 +134,12 @@ export class ImplementationViewComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           this.algorithmService
-            .deleteComputingResource({
-              algoId: this.algo.id,
-              resourceId: property.id,
+            .deleteComputeResourcePropertyOfImplementation({
+              algorithmId: this.implementation.implementedAlgorithmId,
+              implementationId: this.implementation.id,
+              computeResourcePropertyId: property.id,
             })
-            .subscribe((e) => {
+            .subscribe(() => {
               this.computeResourceProperties = this.computeResourceProperties.filter(
                 (elem: EntityModelComputeResourcePropertyDto) =>
                   elem.id !== property.id
@@ -172,9 +153,9 @@ export class ImplementationViewComponent implements OnInit {
 
   fetchComputeResourceProperties(): void {
     this.algorithmService
-      .getComputingResources({
-        algoId: this.algo.id,
-        implId: this.impl.id,
+      .getComputeResourcePropertiesOfImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
         page: -1,
       })
       .subscribe((e) => {
@@ -183,6 +164,57 @@ export class ImplementationViewComponent implements OnInit {
             e._embedded.computeResourceProperties;
         }
       });
+  }
+
+  addTag(tag: TagDto): void {
+    this.algorithmService
+      .addTagToImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
+        body: tag,
+      })
+      .subscribe();
+  }
+
+  removeTag(tag: TagDto): void {
+    this.algorithmService
+      .removeTagFromImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
+        body: tag,
+      })
+      .subscribe();
+  }
+
+  updateImplementationField(event: { field; value }): void {
+    this.implementation[event.field] = event.value;
+    this.algorithmService
+      .updateImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
+        body: this.implementation,
+      })
+      .subscribe(
+        (impl) => {
+          this.implementation = impl;
+          // live refresh name
+          let subheading = this.algorithm.computationModel
+            .toString()
+            .toLowerCase();
+          subheading =
+            subheading[0].toUpperCase() +
+            subheading.slice(1) +
+            ' Implementation';
+          this.links[1] = {
+            heading: this.implementation.name,
+            subHeading: subheading,
+          };
+          this.utilService.callSnackBar('Successfully updated implementation');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   private loadGeneral(): void {
@@ -196,25 +228,46 @@ export class ImplementationViewComponent implements OnInit {
         }));
       });
     this.activatedRoute.params.subscribe(({ algoId, implId }) => {
-      this.algorithmService.getAlgorithm({ algoId }).subscribe((algo) => {
-        this.algo = algo;
-        this.links[0] = {
-          heading: this.algo.name,
-          subHeading: this.algo.computationModel + ' Algorithm',
-          link: '/algorithms/' + algoId,
-        };
-      });
+      this.algorithmService
+        .getAlgorithm({ algorithmId: algoId })
+        .subscribe((algo) => {
+          this.algorithm = algo;
+          let subheading = this.algorithm.computationModel
+            .toString()
+            .toLowerCase();
+          subheading = subheading[0].toUpperCase() + subheading.slice(1);
+          this.links[0] = {
+            heading: this.algorithm.name,
+            subHeading: subheading + ' Algorithm',
+            link: '/algorithms/' + algoId,
+          };
+          this.links[1].subHeading = subheading + ' Implementation';
+        });
 
       this.algorithmService
-        .getImplementation({ algoId, implId })
+        .getImplementation({ algorithmId: algoId, implementationId: implId })
         .subscribe((impl) => {
-          this.impl = impl;
-          this.links[1] = {
-            heading: this.impl.name,
-            subHeading: '',
-          };
+          this.implementation = impl;
+          this.links[1].heading = this.implementation.name;
           this.fetchComputeResourceProperties();
+          this.getTagsForImplementation(algoId, implId);
         });
     });
+  }
+
+  private getTagsForImplementation(algoId: string, implId: string): void {
+    this.algorithmService
+      .getTagsOfImplementation({
+        algorithmId: algoId,
+        implementationId: implId,
+      })
+      .subscribe((next) => {
+        if (next._embedded?.tags) {
+          this.tags = next._embedded.tags.map((t) => ({
+            value: t.value,
+            category: t.category,
+          }));
+        }
+      });
   }
 }

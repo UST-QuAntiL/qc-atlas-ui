@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PublicationService } from 'api/services/publication.service';
-import { EntityModelPublicationDto } from 'api/models/entity-model-publication-dto';
+import { PublicationService } from 'api-atlas/services/publication.service';
+import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
@@ -25,7 +25,7 @@ export class PublicationViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ publicationId }) => {
-      this.publicationService.getPublication({ id: publicationId }).subscribe(
+      this.publicationService.getPublication({ publicationId }).subscribe(
         (publication: EntityModelPublicationDto) => {
           this.publication = publication;
           this.links[0] = {
@@ -55,7 +55,10 @@ export class PublicationViewComponent implements OnInit {
   updatePublicationField(event: { field; value }): void {
     this.publication[event.field] = event.value;
     this.publicationService
-      .updatePublication({ id: this.publication.id, body: this.publication })
+      .updatePublication({
+        publicationId: this.publication.id,
+        body: this.publication,
+      })
       .subscribe(
         (publication) => {
           this.publication = publication;

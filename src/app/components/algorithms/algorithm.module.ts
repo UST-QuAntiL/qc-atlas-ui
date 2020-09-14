@@ -14,6 +14,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTreeModule } from '@angular/material/tree';
 import { CardsModule } from 'angular-bootstrap-md';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
@@ -31,6 +33,7 @@ import { ProblemTypeTreeComponent } from './problem-type-tree/problem-type-tree.
 import { AlgorithmRelatedPatternsComponent } from './algorithm-related-patterns/algorithm-related-patterns.component';
 import { AddPatternRelationDialogComponent } from './dialogs/add-pattern-relation-dialog.component';
 import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-relation-dialog.component';
+import { ImplementationPropertiesComponent } from './implementation-properties/implementation-properties.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +50,7 @@ import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-rel
     AlgorithmRelatedPatternsComponent,
     AddPatternRelationDialogComponent,
     AddAlgorithmRelationDialogComponent,
+    ImplementationPropertiesComponent,
   ],
   imports: [
     MatTabsModule,
@@ -69,6 +73,8 @@ import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-rel
     ComputeResourcePropertyModule,
     CardsModule,
     NisqAnalyzerModule,
+    MatStepperModule,
+    MatProgressSpinnerModule,
   ],
   exports: [
     AlgorithmListComponent,
@@ -83,6 +89,7 @@ import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-rel
     CreateImplementationDialogComponent,
     AddPatternRelationDialogComponent,
     AddAlgorithmRelationDialogComponent,
+    ImplementationPropertiesComponent,
   ],
 })
 export class AlgorithmModule {}

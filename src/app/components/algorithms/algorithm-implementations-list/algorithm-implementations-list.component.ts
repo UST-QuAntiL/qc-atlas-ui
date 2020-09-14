@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
-import { EntityModelImplementationDto } from 'api/models/entity-model-implementation-dto';
-import { ImplementationDto } from 'api/models/implementation-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
+import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
+import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { Router } from '@angular/router';
 import { UtilService } from '../../../util/util.service';
 import { CreateImplementationDialogComponent } from '../dialogs/create-implementation-dialog.component';
+import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'app-algorithm-implementations-list',
@@ -18,11 +19,6 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   implementations: EntityModelImplementationDto[];
   variableNames: string[] = ['name', 'description', 'dependencies'];
   tableColumns: string[] = ['Name', 'Description', 'Dependencies'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
-    amountChoices: [10, 25, 50],
-    selectedAmount: 10,
-  };
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -31,8 +27,12 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getImplementations();
+  }
+
+  getImplementations(): void {
     this.algorithmService
-      .getImplementations({ algoId: this.algorithm.id })
+      .getImplementationsOfAlgorithm({ algorithmId: this.algorithm.id })
       .subscribe(
         (impls) => {
           if (impls._embedded) {
@@ -56,17 +56,18 @@ export class AlgorithmImplementationsListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const implementationDto: ImplementationDto = {
+            id: null,
             name: dialogResult.name,
           };
           this.algorithmService
             .createImplementation({
-              algoId: this.algorithm.id,
+              algorithmId: this.algorithm.id,
               body: implementationDto,
             })
             .subscribe((data) => {
               this.router.navigate([
                 'algorithms',
-                this.algorithm.id,
+                data.implementedAlgorithmId,
                 'implementations',
                 data.id,
               ]);
@@ -78,11 +79,40 @@ export class AlgorithmImplementationsListComponent implements OnInit {
       });
   }
 
-  onDeleteImplementation(event): void {}
-
-  onDatalistConfigChanged(event): void {}
-
-  onPageChanged(event): void {}
+  onDeleteImplementation(event): void {
+    this.utilService
+      .createDialog(ConfirmDialogComponent, {
+        title: 'Confirm Deletion',
+        message:
+          'Are you sure you want to delete the following implementation(s):',
+        data: event.elements,
+        variableName: 'name',
+        yesButtonText: 'yes',
+        noButtonText: 'no',
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
+          for (const implementation of event.elements) {
+            promises.push(
+              this.algorithmService
+                .deleteImplementation({
+                  algorithmId: this.algorithm.id,
+                  implementationId: implementation.id,
+                })
+                .toPromise()
+            );
+          }
+          Promise.all(promises).then(() => {
+            this.getImplementations();
+            this.utilService.callSnackBar(
+              'Successfully deleted implementation(s)'
+            );
+          });
+        }
+      });
+  }
 
   onImplementationClicked(implementation: EntityModelImplementationDto): void {
     this.router.navigate([

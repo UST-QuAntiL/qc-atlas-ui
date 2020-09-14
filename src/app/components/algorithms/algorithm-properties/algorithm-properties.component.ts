@@ -8,15 +8,15 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api/models/entity-model-algorithm-dto';
+import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 import {
   EntityModelApplicationAreaDto,
   EntityModelComputeResourcePropertyDto,
   EntityModelProblemTypeDto,
-} from 'api/models';
-import { ProblemTypeService } from 'api/services/problem-type.service';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { ApplicationAreasService } from 'api/services/application-areas.service';
+} from 'api-atlas/models';
+import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import {
   TreeNode,
   ProblemTypeTreeComponent,
@@ -128,7 +128,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   addParentTreeToProblemType(problemType: EntityModelProblemTypeDto): void {
     this.problemTypeService
-      .getProblemTypeParentList({ id: problemType.id })
+      .getProblemTypeParentList({ problemTypeId: problemType.id })
       .subscribe(
         (parents) => {
           if (parents._embedded) {
@@ -264,11 +264,9 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   addComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
-    console.log('add compute resource property');
-    console.log(property);
     this.algorithmService
-      .addComputingResource({
-        algoId: this.algorithm.id,
+      .createComputeResourcePropertyForAlgorithm({
+        algorithmId: this.algorithm.id,
         body: property,
       })
       .subscribe((e) => {
@@ -280,9 +278,9 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
-      .updateComputingResource({
-        algoId: this.algorithm.id,
-        resourceId: property.id,
+      .updateComputeResourcePropertyOfAlgorithm({
+        algorithmId: this.algorithm.id,
+        computeResourcePropertyId: property.id,
         body: property,
       })
       .subscribe((e) => {
@@ -294,9 +292,9 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
-      .deleteComputingResource({
-        algoId: this.algorithm.id,
-        resourceId: property.id,
+      .deleteComputeResourcePropertyOfAlgorithm({
+        algorithmId: this.algorithm.id,
+        computeResourcePropertyId: property.id,
       })
       .subscribe((e) => {
         this.computeResourceProperties = this.computeResourceProperties.filter(
@@ -309,8 +307,8 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   fetchComputeResourceProperties(): void {
     this.algorithmService
-      .getComputingResourcesByAlgorithm({
-        algoId: this.algorithm.id,
+      .getComputeResourcePropertiesOfAlgorithm({
+        algorithmId: this.algorithm.id,
         size: -1,
       })
       .subscribe((e) => {

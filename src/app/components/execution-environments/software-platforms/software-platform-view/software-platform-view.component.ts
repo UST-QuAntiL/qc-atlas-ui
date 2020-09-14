@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api/models/entity-model-software-platform-dto';
+import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 import { FieldUpdate } from '../../../../util/FieldUpdate';
@@ -29,7 +29,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ spId }) => {
       this.executionEnvironmentsService
-        .getSoftwarePlatform({ id: spId })
+        .getSoftwarePlatform({ softwarePlatformId: spId })
         .subscribe(
           (softwarePlatform: EntityModelSoftwarePlatformDto) => {
             this.softwarePlatform = softwarePlatform;
@@ -51,11 +51,15 @@ export class SoftwarePlatformViewComponent implements OnInit {
     );
   }
 
+  ngOnDestroy(): void {
+    this.fieldUpdateSubscription.unsubscribe();
+  }
+
   updateSoftwarePlatformField(fieldUpdate: FieldUpdate): void {
     this.softwarePlatform[fieldUpdate.field] = fieldUpdate.value;
     this.executionEnvironmentsService
       .updateSoftwarePlatform({
-        id: this.softwarePlatform.id,
+        softwarePlatformId: this.softwarePlatform.id,
         body: this.softwarePlatform,
       })
       .subscribe(

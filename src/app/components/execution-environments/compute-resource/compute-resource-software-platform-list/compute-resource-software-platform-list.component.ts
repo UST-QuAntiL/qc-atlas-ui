@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api/models/entity-model-software-platform-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
-import { SoftwarePlatformDto } from 'api/models/software-platform-dto';
-import { EntityModelComputeResourceDto } from 'api/models/entity-model-compute-resource-dto';
+import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
+import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
 import {
   DeleteParams,
   LinkObject,
@@ -23,7 +23,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
   tableColumns = ['Name', 'Version', 'Licence', 'Link'];
   variableNames = ['name', 'version', 'licence', 'link'];
   linkObject: LinkObject = {
-    title: 'Link compute resource with ',
+    title: 'Link software platform with ',
     subtitle: 'Search software platform by name',
     displayVariable: 'name',
     data: [],
@@ -40,7 +40,9 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.computeResource.name;
     this.getSoftwarePlatforms();
-    this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
+    this.getLinkedSoftwarePlatforms({
+      computeResourceId: this.computeResource.id,
+    });
   }
 
   getSoftwarePlatforms(): void {
@@ -56,9 +58,15 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
       });
   }
 
-  getLinkedSoftwarePlatforms(params: any): void {
+  getLinkedSoftwarePlatforms(params: {
+    computeResourceId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
-      .getSoftwarePlatformsForComputeResource(params)
+      .getSoftwarePlatformsOfComputeResource(params)
       .subscribe((softwarePlatforms) => {
         if (softwarePlatforms._embedded) {
           this.linkedSoftwarePlatforms =
@@ -85,33 +93,44 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
   linkSoftwarePlatform(softwarePlatform: SoftwarePlatformDto): void {
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addComputeResourceReferenceToSoftwarePlatform({
-        id: softwarePlatform.id,
-        crId: this.computeResource.id,
+      .linkSoftwarePlatformAndComputeResource({
+        softwarePlatformId: softwarePlatform.id,
+        body: this.computeResource,
       })
-      .subscribe((data) => {
-        this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
+      .subscribe(() => {
+        this.getLinkedSoftwarePlatforms({
+          computeResourceId: this.computeResource.id,
+        });
         this.utilService.callSnackBar('Successfully linked software platform');
       });
   }
 
-  async unlinkSoftwarePlatforms(event: DeleteParams): Promise<void> {
+  unlinkSoftwarePlatforms(event: DeleteParams): void {
+    const promises: Array<Promise<void>> = [];
     for (const softwarePlatform of event.elements) {
-      await this.executionEnvironmentsService
-        .deleteComputeResourceReferenceFromSoftwarePlatform({
-          id: softwarePlatform.id,
-          crId: this.computeResource.id,
-        })
-        .toPromise();
-      this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
-      this.utilService.callSnackBar('Successfully unlinked software platform');
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkSoftwarePlatformAndComputeResource({
+            softwarePlatformId: softwarePlatform.id,
+            computeResourceId: this.computeResource.id,
+          })
+          .toPromise()
+      );
     }
+    Promise.all(promises).then(() => {
+      this.getLinkedSoftwarePlatforms({
+        computeResourceId: this.computeResource.id,
+      });
+      this.utilService.callSnackBar('Successfully unlinked software platforms');
+    });
   }
 
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedSoftwarePlatforms({ id: this.computeResource.id });
+    this.getLinkedSoftwarePlatforms({
+      computeResourceId: this.computeResource.id,
+    });
   }
 
   onElementClicked(softwarePlatform: SoftwarePlatformDto): void {

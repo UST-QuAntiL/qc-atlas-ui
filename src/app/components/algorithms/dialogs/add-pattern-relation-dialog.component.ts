@@ -1,15 +1,16 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { AlgorithmService } from 'api/services/algorithm.service';
-import { EntityModelPatternRelationTypeDto } from 'api/models/entity-model-pattern-relation-type-dto';
-import { PatternRelationTypeService } from 'api/services/pattern-relation-type.service';
-import { PatternRelationTypeDto } from 'api/models/pattern-relation-type-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
+import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
+import { PatternLanguage } from 'api-patternpedia/models/pattern-language';
+import { Pattern } from 'api-patternpedia/models/pattern';
+import { PatternLanguageControllerService } from 'api-patternpedia/services/pattern-language-controller.service';
+import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { EntityModelPatternModel } from 'api-patternpedia/models/entity-model-pattern-model';
+import { environment as Env } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-add-pattern-relation-dialog',
@@ -17,153 +18,307 @@ import { PatternRelationTypeDto } from 'api/models/pattern-relation-type-dto';
   styleUrls: ['./add-pattern-relation-dialog.component.scss'],
 })
 export class AddPatternRelationDialogComponent implements OnInit {
-  patternRelationForm: FormGroup;
-  patternRelationTypes: EntityModelPatternRelationTypeDto[] = [];
-  stateGroups: StateGroup[] = [];
+  // Pattern Language fields
+  patternLanguages: PatternLanguage[] = [];
+  filteredPatternLanguages: PatternLanguage[] = [];
+  selectedPatternLanguage: PatternLanguage = undefined;
+  patternLanguageSearch = '';
+
+  // Pattern fields
+  patterns: EntityModelPatternModel[] = [];
+  filteredPatterns: EntityModelPatternModel[] = [];
+  selectedPattern: EntityModelPatternModel = undefined;
+  patternSearch = '';
+
+  // Description fields
+  relationDescription = '';
+
+  // Relation Type fields
+  relationTypeGroups: StateGroup[] = [];
+  relationTypes: PatternRelationTypeDto[] = [];
+  selectedRelationType: PatternRelationTypeDto = undefined;
+  relationTypeForm: FormGroup;
+
+  // Loading fields
+  arePatternLanguagesLoaded = false;
+  arePatternsLoaded = false;
+  areRelationTypesLoaded = false;
+
+  isUpdateModal = false;
 
   constructor(
     private algorithmService: AlgorithmService,
     private patternRelationTypeService: PatternRelationTypeService,
+    private patternLanguageService: PatternLanguageControllerService,
+    private patternService: PatternControllerService,
     public dialogRef: MatDialogRef<AddPatternRelationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
 
   ngOnInit(): void {
-    this.patternRelationForm = new FormGroup({
-      description: new FormControl(this.data.description),
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      pattern: new FormControl(this.data.pattern, [Validators.required]),
-      patternRelationType: new FormControl(this.data.patternRelationType, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
+    this.relationTypeForm = new FormGroup({
+      relationType: new FormControl(this.data.patternRelationType),
     });
 
-    // Fill PatternRelationType if dialog is used for editing
-    if (this.data.patternRelationType) {
-      this.setPatternRelationType(this.data.patternRelationType);
+    // Pre-Select values for update
+    if (this.isAllDataAvailable()) {
+      this.isUpdateModal = true;
+      this.getRelationTypes();
+      this.setRelationType(this.data.patternRelationType);
+      this.relationDescription = this.data.description;
+      this.selectedPattern = this.data.patternObject;
+      // Define some PatternLanguage since it is not used during update
+      this.selectedPatternLanguage = {};
+    } else {
+      this.getPatternLanguages();
     }
-
-    this.patternRelationTypeService
-      .getPatternRelationTypes({})
-      .subscribe((relationTypes) => {
-        if (relationTypes._embedded) {
-          this.patternRelationTypes =
-            relationTypes._embedded.patternRelationTypes;
-          this.stateGroups.push({
-            optionName: 'Existing Pattern-Relations',
-            patternRelationTypes: this.patternRelationTypes,
-          });
-          // Set filtered Types if update-dialog
-          if (this.patternRelationType.value) {
-            this.filterTypes(this.patternRelationType.value.name);
-          }
-        }
-      });
 
     this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.pattern = this.pattern.value;
-      this.data.description = this.description.value;
-      this.data.patternRelationType = this.generateRelationType(
-        this.patternRelationType.value
-      );
+      if (this.selectedPattern) {
+        this.data.pattern = this.selectedPattern.uri;
+      }
+      this.data.patternRelationType = this.selectedRelationType;
+      this.data.description = this.relationDescription;
     });
   }
 
-  filterTypes(type: string): void {
-    this.stateGroups[
-      this.stateGroups.length - 1
-    ].patternRelationTypes = this.patternRelationTypes.filter(
-      (filterType) =>
-        filterType.name.toLowerCase().indexOf(type.toLowerCase()) === 0
-    );
+  setRelationType(value): void {
+    this.relationTypeForm.get('relationType').setValue(value);
+    this.selectedRelationType = value;
   }
 
-  generateRelationType(type): PatternRelationTypeDto {
-    if (type && type.id) {
-      return type;
-    } else {
-      return type && type.name
-        ? this.findRelationTypeByName(type.name)
-        : this.findRelationTypeByName(type);
-    }
-  }
-
-  findRelationTypeByName(name): PatternRelationTypeDto {
-    const foundType = this.patternRelationTypes.find((x) => x.name === name);
-    return foundType ? foundType : { name };
-  }
-
-  get pattern(): AbstractControl | null {
-    return this.patternRelationForm.get('pattern');
-  }
-
-  setPatternRelationType(value): void {
-    this.patternRelationForm.get('patternRelationType').setValue(value);
-  }
-
-  get patternRelationType(): AbstractControl | null {
-    return this.patternRelationForm.get('patternRelationType');
-  }
-
-  get description(): AbstractControl | null {
-    return this.patternRelationForm.get('description');
-  }
-
-  displayRelation(type: PatternRelationTypeDto): string {
-    return type && type.name ? type.name : '';
+  get relationType(): AbstractControl | null {
+    return this.relationTypeForm.get('relationType');
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  onPatternRelationInputChanged(): void {
-    // Don't do anything if option selected
-    const searchType = this.patternRelationType.value.name
-      ? this.patternRelationType.value
-      : { name: this.patternRelationType.value };
-    // Filter existing types
-    this.filterTypes(searchType.name);
+  isAllDataAvailable(): boolean {
+    return !!(
+      this.data.description &&
+      this.data.patternRelationType &&
+      this.data.pattern
+    );
+  }
+
+  getPatternLanguages(): void {
+    this.arePatternLanguagesLoaded = false;
+    this.patternLanguageService
+      .getAllPatternLanguageModels()
+      .subscribe((languages) => {
+        this.patternLanguages = languages._embedded.patternLanguageModels;
+        this.filteredPatternLanguages = this.patternLanguages;
+        this.arePatternLanguagesLoaded = true;
+        if (this.selectedPatternLanguage) {
+          this.patternLanguageSearch = this.selectedPatternLanguage.name;
+        }
+        this.onLanguageSearch();
+      });
+  }
+
+  getPatterns(patternLanguageId: string): void {
+    this.arePatternsLoaded = false;
+    this.patternService
+      .getPatternsOfPatternLanguage({ patternLanguageId })
+      .subscribe((patterns) => {
+        this.patterns = patterns._embedded.patternModels;
+        this.filteredPatterns = this.patterns;
+        this.arePatternsLoaded = true;
+        if (this.selectedPattern) {
+          this.patternSearch = this.selectedPattern.name;
+        }
+        this.onPatternSearch();
+      });
+  }
+
+  getRelationTypes(): void {
+    this.areRelationTypesLoaded = false;
+    this.patternRelationTypeService
+      .getPatternRelationTypes({})
+      .subscribe((relationTypes) => {
+        if (relationTypes._embedded) {
+          this.relationTypes = relationTypes._embedded.patternRelationTypes;
+        }
+        this.pushExistingRelationTypesToGroup();
+        this.areRelationTypesLoaded = true;
+      });
+  }
+
+  pushExistingRelationTypesToGroup(): void {
+    const index = this.relationTypeGroups.findIndex(
+      (group) => group.optionName === 'Existing Relation-Types'
+    );
+
+    if (index === -1) {
+      this.relationTypeGroups.push({
+        optionName: 'Existing Relation-Types',
+        relationTypes: this.relationTypes,
+      });
+    } else {
+      this.relationTypeGroups[index].relationTypes = this.relationTypes;
+    }
+  }
+
+  displayRelation(type: PatternRelationTypeDto): string {
+    return type && type.name ? type.name : '';
+  }
+
+  onLanguageClick(language: PatternLanguage): void {
+    if (
+      !this.selectedPatternLanguage ||
+      language.id !== this.selectedPatternLanguage.id
+    ) {
+      this.selectedPatternLanguage = language;
+    } else {
+      this.selectedPatternLanguage = undefined;
+    }
+  }
+
+  onLanguageSearch(): void {
+    this.filteredPatternLanguages = [];
+    if (!this.patternLanguageSearch) {
+      this.filteredPatternLanguages = this.patternLanguages;
+      return;
+    }
+    for (const language of this.patternLanguages) {
+      if (
+        language.name
+          .toLowerCase()
+          .includes(this.patternLanguageSearch.toLowerCase())
+      ) {
+        this.filteredPatternLanguages.push(language);
+      }
+    }
+  }
+
+  onPatternClick(pattern: EntityModelPatternModel): void {
+    if (!this.selectedPattern || pattern.id !== this.selectedPattern.id) {
+      this.selectedPattern = pattern;
+    } else {
+      this.selectedPattern = undefined;
+    }
+  }
+
+  onPatternSearch(): void {
+    this.filteredPatterns = [];
+    if (!this.patternSearch) {
+      this.filteredPatterns = this.patterns;
+      return;
+    }
+    for (const pattern of this.patterns) {
+      if (
+        pattern.name.toLowerCase().includes(this.patternSearch.toLowerCase())
+      ) {
+        this.filteredPatterns.push(pattern);
+      }
+    }
+  }
+
+  onRelationTypeSearch(): void {
+    const searchType = this.relationType.value.name
+      ? this.relationType.value
+      : { name: this.relationType.value };
+    this.filterExistingRelationTypes(searchType.name);
     // Return Type from Input if it exists
-    const existingRelationType = this.patternRelationTypes.find(
+    const existingRelationType = this.relationTypes.find(
       (x) => x.name === searchType.name
     );
     // If searched type does not exist
+    this.selectedRelationType = existingRelationType
+      ? existingRelationType
+      : undefined;
     if (!existingRelationType && searchType.name) {
       // If pattern type does not exist and first element is existing type
       if (this.typesNotEmpty() || this.isFirstElementNew()) {
         this.pushNewRelationType(searchType);
       } else if (!this.isFirstElementNew()) {
-        this.stateGroups[0].patternRelationTypes[0] = searchType;
+        this.relationTypeGroups[0].relationTypes[0] = searchType;
       }
     } else {
       if (!this.isFirstElementNew()) {
-        this.stateGroups.shift();
+        this.relationTypeGroups.shift();
+      }
+    }
+  }
+
+  filterExistingRelationTypes(searchType: string): void {
+    const stateGroupLength = this.relationTypeGroups.length;
+    this.relationTypeGroups[stateGroupLength - 1].relationTypes = [];
+    if (!searchType) {
+      this.relationTypeGroups[
+        stateGroupLength - 1
+      ].relationTypes = this.relationTypes;
+    } else {
+      for (const relationType of this.relationTypes) {
+        if (
+          relationType.name.toLowerCase().includes(searchType.toLowerCase())
+        ) {
+          this.relationTypeGroups[stateGroupLength - 1].relationTypes.push(
+            relationType
+          );
+        }
       }
     }
   }
 
   typesNotEmpty(): boolean {
-    return !this.stateGroups[0];
+    return !this.relationTypeGroups[0];
   }
 
   isFirstElementNew(): boolean {
-    return this.stateGroups[0].optionName !== 'New Pattern-Relation';
+    return this.relationTypeGroups[0].optionName !== 'New Relation-Type';
   }
 
-  pushNewRelationType(type): void {
-    this.stateGroups.unshift({
-      optionName: 'New Pattern-Relation',
-      patternRelationTypes: [type],
+  pushNewRelationType(type: PatternRelationTypeDto): void {
+    this.relationTypeGroups.unshift({
+      optionName: 'New Relation-Type',
+      relationTypes: [type],
     });
   }
 
-  isRequiredDataMissing(): boolean {
-    return (
-      this.pattern.errors?.required ||
-      this.patternRelationType.errors?.required ||
-      this.description.errors?.required
+  onRelationTypeFocusOut(): void {
+    this.setRelationType('');
+    this.selectedRelationType = undefined;
+    if (this.relationTypeGroups.length === 2) {
+      this.filterExistingRelationTypes('');
+      this.relationTypeGroups.shift();
+    }
+  }
+
+  stepperSelectionChanged(event: StepperSelectionEvent): void {
+    if (!this.isUpdateModal && event.selectedIndex === 1) {
+      this.getPatterns(this.selectedPatternLanguage.id);
+    }
+    if (!this.isUpdateModal && event.selectedIndex === 0) {
+      this.getPatternLanguages();
+    }
+    if (
+      (!this.isUpdateModal && event.selectedIndex === 2) ||
+      (this.isUpdateModal && event.selectedIndex === 0)
+    ) {
+      this.getRelationTypes();
+    }
+  }
+
+  onOpen(languageUri: string, patternUri: string): void {
+    let encodedUri =
+      Env.PATTERN_ATLAS_UI_URL +
+      '/pattern-languages/' +
+      this.fixedEncodeURIComponent(languageUri);
+
+    if (patternUri) {
+      encodedUri = encodedUri + '/' + this.fixedEncodeURIComponent(patternUri);
+    }
+
+    window.open(encodedUri, '_blank');
+  }
+
+  fixedEncodeURIComponent(str): string {
+    return encodeURIComponent(str).replace(
+      /[!'()*]/g,
+      (c) => '%' + c.charCodeAt(0).toString(16)
     );
   }
 }
@@ -171,12 +326,13 @@ export class AddPatternRelationDialogComponent implements OnInit {
 export interface DialogData {
   title: string;
   algoId: string;
-  pattern: string;
-  patternRelationType: EntityModelPatternRelationTypeDto;
-  description: string;
+  pattern?: string;
+  patternObject?: Pattern;
+  patternRelationType?: PatternRelationTypeDto;
+  description?: string;
 }
 
 export interface StateGroup {
   optionName: string;
-  patternRelationTypes: EntityModelPatternRelationTypeDto[];
+  relationTypes: PatternRelationTypeDto[];
 }

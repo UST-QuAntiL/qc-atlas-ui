@@ -1,20 +1,17 @@
 <div *ngIf="algorithm" class="m-2">
-  <div class="header-container p-2">
-    <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-    <div>
-      <mat-chip-list>
-        <mat-chip
-          *ngFor="let tag of testTags"
-          [removable]="true"
-          (removed)="removeTag(tag)"
-        >
-          {{ tag }}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-        <mat-chip class="clickable-chip" (click)="addTag()">
-          <mat-icon>add</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
+  <div class="row p-2 m-0 align-items-center">
+    <div class="col">
+      <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+    </div>
+    <div class="col">
+      <div class="float-right mx-2">
+        <app-tags-component
+          [allowRemoving]="true"
+          [tags]="tags"
+          (onRemove)="removeTag($event)"
+          (onAdd)="addTag($event)">
+        </app-tags-component>
+      </div>
     </div>
   </div>
 
@@ -51,7 +48,7 @@
         [algorithm]="algorithm"
       ></app-algorithm-publications-list>
     </mat-tab>
-    <mat-tab label="NISQ Analyser">
+    <mat-tab label="NISQ Analyzer">
       <app-algorithm-nisq-analyzer></app-algorithm-nisq-analyzer>
     </mat-tab>
     <mat-tab label="Discussion">

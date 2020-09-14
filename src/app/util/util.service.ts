@@ -17,9 +17,15 @@ export class UtilService {
     });
   }
 
-  public createDialog(dialogComponent: any, data: any): MatDialogRef<any> {
+  public createDialog(
+    dialogComponent: any,
+    data: any,
+    width?: any,
+    height?: any
+  ): MatDialogRef<any> {
     return this.dialog.open(dialogComponent, {
-      width: '400px',
+      width: width || '400px',
+      height: height || undefined,
       data,
     });
   }

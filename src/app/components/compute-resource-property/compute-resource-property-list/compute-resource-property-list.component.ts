@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EntityModelComputeResourcePropertyDto } from 'api/models/entity-model-compute-resource-property-dto';
+import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
@@ -16,6 +16,7 @@ import { UtilService } from '../../../util/util.service';
   styleUrls: ['./compute-resource-property-list.component.scss'],
 })
 export class ComputeResourcePropertyListComponent implements OnInit {
+  @Input() title: string;
   @Input()
   resourceProperties: EntityModelComputeResourcePropertyDto[] = [];
 
@@ -47,22 +48,7 @@ export class ComputeResourcePropertyListComponent implements OnInit {
   }
 
   onDelete(element: EntityModelComputeResourcePropertyDto): void {
-    const dialogData: ConfirmDialogData = {
-      title: 'Confirm Delete',
-      message: 'Do you really want to delete this compute resource property?',
-      yesButtonText: 'Yes',
-      noButtonText: 'No',
-    };
-    const dialogRef = this.utilService.createDialog(
-      ConfirmDialogComponent,
-      dialogData
-    );
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult != null) {
-        this.deleteProperty.emit(element);
-      }
-    });
+    this.deleteProperty.emit(element);
   }
 
   onEdit(element: EntityModelComputeResourcePropertyDto): void {

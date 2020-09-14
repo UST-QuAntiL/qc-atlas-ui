@@ -12,9 +12,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { ApiModule } from 'api/api.module';
+import { ApiModule as AtlasAPIModule } from 'api-atlas/api.module';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { MatCardModule } from '@angular/material/card';
+import { ApiModule as PatternAltasAPIModule } from 'api-patternpedia/api.module';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -53,7 +54,10 @@ import { ProblemTypesViewComponent } from './components/problem-types/problem-ty
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    ApiModule.forRoot({ rootUrl: environment.API_URL }),
+    AtlasAPIModule.forRoot({ rootUrl: environment.API_URL }),
+    PatternAltasAPIModule.forRoot({
+      rootUrl: environment.PATTERN_ATLAS_API_URL,
+    }),
     AppRoutingModule,
     // material modules
     MatSidenavModule,

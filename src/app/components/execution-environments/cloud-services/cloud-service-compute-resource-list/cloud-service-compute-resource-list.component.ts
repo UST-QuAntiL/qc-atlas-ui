@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelCloudServiceDto } from 'api/models/entity-model-cloud-service-dto';
-import { ExecutionEnvironmentsService } from 'api/services/execution-environments.service';
+import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
-import { EntityModelComputeResourceDto } from 'api/models/entity-model-compute-resource-dto';
-import { ComputeResourceDto } from 'api/models/compute-resource-dto';
+import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
+import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import {
   DeleteParams,
   LinkObject,
@@ -23,7 +23,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
   linkObject: LinkObject = {
-    title: 'Link cloud service with ',
+    title: 'Link compute resource with ',
     subtitle: 'Search compute resources by name',
     displayVariable: 'name',
     data: [],
@@ -40,7 +40,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.cloudService.name;
     this.getComputeResources();
-    this.getLinkedComputeResources({ id: this.cloudService.id });
+    this.getLinkedComputeResources({ cloudServiceId: this.cloudService.id });
   }
 
   getComputeResources(): void {
@@ -55,9 +55,15 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
       });
   }
 
-  getLinkedComputeResources(params: any): void {
+  getLinkedComputeResources(params: {
+    cloudServiceId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
-      .getComputeResourcesForCloudService(params)
+      .getComputeResourcesOfCloudService(params)
       .subscribe((computeResource) => {
         if (computeResource._embedded) {
           this.linkedComputeResources =
@@ -84,33 +90,40 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
   linkComputeResource(computeResource: ComputeResourceDto): void {
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addComputeResourceReferenceToCloudService({
-        id: this.cloudService.id,
-        crId: computeResource.id,
+      .linkCloudServiceAndComputeResource({
+        cloudServiceId: this.cloudService.id,
+        body: computeResource,
       })
       .subscribe((data) => {
-        this.getLinkedComputeResources({ id: this.cloudService.id });
+        this.getLinkedComputeResources({
+          cloudServiceId: this.cloudService.id,
+        });
         this.utilService.callSnackBar('Successfully linked compute resource');
       });
   }
 
-  async unlinkComputeResources(event: DeleteParams): Promise<void> {
+  unlinkComputeResources(event: DeleteParams): void {
+    const promises: Array<Promise<void>> = [];
     for (const computeResource of event.elements) {
-      await this.executionEnvironmentsService
-        .deleteComputeResourceReferenceFromCloudService({
-          id: this.cloudService.id,
-          crId: computeResource.id,
-        })
-        .toPromise();
-      this.getLinkedComputeResources({ id: this.cloudService.id });
-      this.utilService.callSnackBar('Successfully unlinked compute resource');
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkCloudServiceAndComputeResource({
+            cloudServiceId: this.cloudService.id,
+            computeResourceId: computeResource.id,
+          })
+          .toPromise()
+      );
     }
+    Promise.all(promises).then(() => {
+      this.getLinkedComputeResources({ cloudServiceId: this.cloudService.id });
+      this.utilService.callSnackBar('Successfully unlinked compute resource');
+    });
   }
 
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedComputeResources({ id: this.cloudService.id });
+    this.getLinkedComputeResources({ cloudServiceId: this.cloudService.id });
   }
 
   onElementClicked(computeResource: ComputeResourceDto): void {
