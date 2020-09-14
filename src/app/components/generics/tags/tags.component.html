@@ -1,25 +1,42 @@
-<div>
-  <mat-chip-list>
-    <mat-chip class="clickable-chip" (click)="addTag()">
-      <mat-icon>add</mat-icon>
-    </mat-chip>
-    <mat-chip
-      *ngFor="let tag of this.tags"
-      [ngStyle]="{'background-color': this.categoryToColor ? this.categoryToColor[tag.category] : 'none' }"
-      [removable]="true"
-      (removed)="removeTag(tag)"
-    >
-      {{ tag.value }}
-      <mat-icon matChipRemove>cancel</mat-icon>
-    </mat-chip>
-    <button mat-icon-button (click)="toggleCategories()" class="help">
-      <mat-icon>help_outline</mat-icon>
-    </button>
-  </mat-chip-list>
-  <div *ngIf="showCategories" class="categories">
-    <div *ngFor="let key of getCategories()" class="m-2">
-      <span class="dot" [ngStyle]="{'background-color': this.categoryToColor ? this.categoryToColor[key] : 'none'}"></span>
-      {{key}}
+<div class="row mb-3">
+  <div class="col">
+    <mat-chip-list class="float-right">
+      <div class="tags-container">
+        <div>
+          <mat-chip class="clickable-chip" (click)="addTag()">
+            <mat-icon>add</mat-icon>
+          </mat-chip>
+        </div>
+        <div class="tags-content tags-size">
+          <mat-chip
+            *ngFor="let tag of this.tags"
+            [ngStyle]="{'background-color': this.categoryToColor ? this.categoryToColor[tag.category] : 'none' }"
+            [removable]="true"
+            (removed)="removeTag(tag)">
+            {{ tag.value }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </div>
+        <div>
+          <button mat-icon-button (click)="toggleCategories()">
+            <mat-icon>help_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-chip-list>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div *ngIf="showCategories" class="categories-container categories-size">
+      <div *ngFor="let key of getCategories()" class="category m-2 text-justify-center">
+    <span class="dot"
+          [ngStyle]="{'background-color': this.categoryToColor ? this.categoryToColor[key] : 'none'}"></span>
+        {{key}}
+      </div>
     </div>
   </div>
 </div>
+
+

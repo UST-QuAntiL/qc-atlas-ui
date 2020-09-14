@@ -8,9 +8,9 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { AlgoRelationTypeDto } from '../models/algo-relation-type-dto';
 import { AlgorithmDto } from '../models/algorithm-dto';
 import { AlgorithmRelationDto } from '../models/algorithm-relation-dto';
+import { AlgorithmRelationTypeDto } from '../models/algorithm-relation-type-dto';
 import { ApplicationAreaDto } from '../models/application-area-dto';
 import { ClassicAlgorithmDto } from '../models/classic-algorithm-dto';
 import { ClassicImplementationDto } from '../models/classic-implementation-dto';
@@ -168,7 +168,7 @@ export class AlgorithmService extends BaseService {
   static readonly CreateAlgorithmPath = '/v1/algorithms';
 
   /**
-   * Define the basic properties of an algorithm. References to subobjects (e.g. a problemtype) can be added via subroutes (e.g. /algorithm/id/problem-types). Custom ID will be ignored.
+   * Define the basic properties of an algorithm. References to sub-objects (e.g. a ProblemType) can be added via sub-routes (e.g. POST on /algorithms/{algorithmId}/problem-types).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createAlgorithm()` instead.
@@ -211,7 +211,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Define the basic properties of an algorithm. References to subobjects (e.g. a problemtype) can be added via subroutes (e.g. /algorithm/id/problem-types). Custom ID will be ignored.
+   * Define the basic properties of an algorithm. References to sub-objects (e.g. a ProblemType) can be added via sub-routes (e.g. POST on /algorithms/{algorithmId}/problem-types).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createAlgorithm$Response()` instead.
@@ -244,7 +244,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getAlgorithm
    */
-  static readonly GetAlgorithmPath = '/v1/algorithms/{algoId}';
+  static readonly GetAlgorithmPath = '/v1/algorithms/{algorithmId}';
 
   /**
    * Retrieve a specific algorithm and its basic properties.
@@ -255,7 +255,7 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAlgorithm$Response(params: {
-    algoId: string;
+    algorithmId: string;
   }): Observable<
     StrictHttpResponse<
       { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
@@ -267,7 +267,7 @@ export class AlgorithmService extends BaseService {
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
     }
     return this.http
       .request(
@@ -298,7 +298,7 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAlgorithm(params: {
-    algoId: string;
+    algorithmId: string;
   }): Observable<
     { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
   > {
@@ -323,10 +323,10 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation updateAlgorithm
    */
-  static readonly UpdateAlgorithmPath = '/v1/algorithms/{algoId}';
+  static readonly UpdateAlgorithmPath = '/v1/algorithms/{algorithmId}';
 
   /**
-   * Update the basic properties of an algorithm (e.g. name). References to subobjects (e.g. a problemtype) are not updated via this operation - use the corresponding subroute for updating them (e.g. algorithm/{id}/problem-type). Custom ID will be ignored.
+   * Update the basic properties of an algorithm (e.g. name). References to sub-objects (e.g. a ProblemType) are not updated via this operation - use the corresponding sub-route for updating them (e.g. /problem-types).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateAlgorithm()` instead.
@@ -334,7 +334,7 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateAlgorithm$Response(params: {
-    algoId: string;
+    algorithmId: string;
     body: AlgorithmDto;
   }): Observable<
     StrictHttpResponse<
@@ -347,7 +347,7 @@ export class AlgorithmService extends BaseService {
       'put'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -372,7 +372,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Update the basic properties of an algorithm (e.g. name). References to subobjects (e.g. a problemtype) are not updated via this operation - use the corresponding subroute for updating them (e.g. algorithm/{id}/problem-type). Custom ID will be ignored.
+   * Update the basic properties of an algorithm (e.g. name). References to sub-objects (e.g. a ProblemType) are not updated via this operation - use the corresponding sub-route for updating them (e.g. /problem-types).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateAlgorithm$Response()` instead.
@@ -380,7 +380,7 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateAlgorithm(params: {
-    algoId: string;
+    algorithmId: string;
     body: AlgorithmDto;
   }): Observable<
     { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
@@ -406,10 +406,10 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation deleteAlgorithm
    */
-  static readonly DeleteAlgorithmPath = '/v1/algorithms/{algoId}';
+  static readonly DeleteAlgorithmPath = '/v1/algorithms/{algorithmId}';
 
   /**
-   * Delete an algorithm. This also deletes all entities that depend on it (e.g., the algorithm's relation to another algorithm).
+   * Delete an algorithm. This also deletes all entities that depend on it (e.g., the algorithm's relations to other algorithms).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteAlgorithm()` instead.
@@ -417,7 +417,7 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteAlgorithm$Response(params: {
-    algoId: string;
+    algorithmId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -425,7 +425,7 @@ export class AlgorithmService extends BaseService {
       'delete'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
     }
     return this.http
       .request(
@@ -445,49 +445,74 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete an algorithm. This also deletes all entities that depend on it (e.g., the algorithm's relation to another algorithm).
+   * Delete an algorithm. This also deletes all entities that depend on it (e.g., the algorithm's relations to other algorithms).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteAlgorithm(params: { algoId: string }): Observable<void> {
+  deleteAlgorithm(params: { algorithmId: string }): Observable<void> {
     return this.deleteAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getAlgorithmRelations
+   * Path part for operation getAlgorithmRelationsOfAlgorithm
    */
-  static readonly GetAlgorithmRelationsPath =
-    '/v1/algorithms/{algoId}/algorithm-relations';
+  static readonly GetAlgorithmRelationsOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/algorithm-relations';
 
   /**
    * Retrieve all relations for an algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAlgorithmRelations()` instead.
+   * To access only the response body, use `getAlgorithmRelationsOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAlgorithmRelations$Response(params: {
-    algoId: string;
+  getAlgorithmRelationsOfAlgorithm$Response(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: {
         algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
       };
+      page?: PageMetadata;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetAlgorithmRelationsPath,
+      AlgorithmService.GetAlgorithmRelationsOfAlgorithmPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -503,6 +528,7 @@ export class AlgorithmService extends BaseService {
             _embedded?: {
               algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
             };
+            page?: PageMetadata;
           }>;
         })
       );
@@ -512,67 +538,90 @@ export class AlgorithmService extends BaseService {
    * Retrieve all relations for an algorithm.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAlgorithmRelations$Response()` instead.
+   * To access the full response (for headers, for example), `getAlgorithmRelationsOfAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAlgorithmRelations(params: {
-    algoId: string;
+  getAlgorithmRelationsOfAlgorithm(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: { algorithmRelations?: Array<EntityModelAlgorithmRelationDto> };
+    page?: PageMetadata;
   }> {
-    return this.getAlgorithmRelations$Response(params).pipe(
+    return this.getAlgorithmRelationsOfAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
             _embedded?: {
               algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
             };
+            page?: PageMetadata;
           }>
         ) =>
           r.body as {
             _embedded?: {
               algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
             };
+            page?: PageMetadata;
           }
       )
     );
   }
 
   /**
-   * Path part for operation addAlgorithmRelation
+   * Path part for operation createAlgorithmRelation
    */
-  static readonly AddAlgorithmRelationPath =
-    '/v1/algorithms/{algoId}/algorithm-relations';
+  static readonly CreateAlgorithmRelationPath =
+    '/v1/algorithms/{algorithmId}/algorithm-relations';
 
   /**
-   * Add an algorithm relation from this algorithm to another given algorithm. Custom ID will be ignored. For algorithm relation type only ID is required, other algorithm relation type attributes will not change.
+   * Custom ID will be ignored.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addAlgorithmRelation()` instead.
+   * To access only the response body, use `createAlgorithmRelation()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addAlgorithmRelation$Response(params: {
-    algoId: string;
+  createAlgorithmRelation$Response(params: {
+    algorithmId: string;
     body: AlgorithmRelationDto;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
-      sourceAlgorithm: AlgorithmDto;
-      targetAlgorithm: AlgorithmDto;
-      algoRelationType: AlgoRelationTypeDto;
+      id: string;
+      sourceAlgorithmId: string;
+      targetAlgorithmId: string;
       description?: string;
+      algoRelationType: AlgorithmRelationTypeDto;
       _links?: Array<Link>;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.AddAlgorithmRelationPath,
+      AlgorithmService.CreateAlgorithmRelationPath,
       'post'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -587,11 +636,11 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
-            sourceAlgorithm: AlgorithmDto;
-            targetAlgorithm: AlgorithmDto;
-            algoRelationType: AlgoRelationTypeDto;
+            id: string;
+            sourceAlgorithmId: string;
+            targetAlgorithmId: string;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -599,42 +648,42 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add an algorithm relation from this algorithm to another given algorithm. Custom ID will be ignored. For algorithm relation type only ID is required, other algorithm relation type attributes will not change.
+   * Custom ID will be ignored.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addAlgorithmRelation$Response()` instead.
+   * To access the full response (for headers, for example), `createAlgorithmRelation$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addAlgorithmRelation(params: {
-    algoId: string;
+  createAlgorithmRelation(params: {
+    algorithmId: string;
     body: AlgorithmRelationDto;
   }): Observable<{
-    id?: string;
-    sourceAlgorithm: AlgorithmDto;
-    targetAlgorithm: AlgorithmDto;
-    algoRelationType: AlgoRelationTypeDto;
+    id: string;
+    sourceAlgorithmId: string;
+    targetAlgorithmId: string;
     description?: string;
+    algoRelationType: AlgorithmRelationTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.addAlgorithmRelation$Response(params).pipe(
+    return this.createAlgorithmRelation$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
-            sourceAlgorithm: AlgorithmDto;
-            targetAlgorithm: AlgorithmDto;
-            algoRelationType: AlgoRelationTypeDto;
+            id: string;
+            sourceAlgorithmId: string;
+            targetAlgorithmId: string;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
-            sourceAlgorithm: AlgorithmDto;
-            targetAlgorithm: AlgorithmDto;
-            algoRelationType: AlgoRelationTypeDto;
+            id: string;
+            sourceAlgorithmId: string;
+            targetAlgorithmId: string;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -645,7 +694,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getAlgorithmRelation
    */
   static readonly GetAlgorithmRelationPath =
-    '/v1/algorithms/{algoId}/algorithm-relations/{relationId}';
+    '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -654,15 +703,15 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAlgorithmRelation$Response(params: {
-    algoId: string;
-    relationId: string;
+    algorithmId: string;
+    algorithmRelationId: string;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
-      sourceAlgorithm: AlgorithmDto;
-      targetAlgorithm: AlgorithmDto;
-      algoRelationType: AlgoRelationTypeDto;
+      id: string;
+      sourceAlgorithmId: string;
+      targetAlgorithmId: string;
       description?: string;
+      algoRelationType: AlgorithmRelationTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -672,8 +721,8 @@ export class AlgorithmService extends BaseService {
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('relationId', params.relationId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('algorithmRelationId', params.algorithmRelationId, {});
     }
     return this.http
       .request(
@@ -686,11 +735,11 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
-            sourceAlgorithm: AlgorithmDto;
-            targetAlgorithm: AlgorithmDto;
-            algoRelationType: AlgoRelationTypeDto;
+            id: string;
+            sourceAlgorithmId: string;
+            targetAlgorithmId: string;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -704,34 +753,34 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAlgorithmRelation(params: {
-    algoId: string;
-    relationId: string;
+    algorithmId: string;
+    algorithmRelationId: string;
   }): Observable<{
-    id?: string;
-    sourceAlgorithm: AlgorithmDto;
-    targetAlgorithm: AlgorithmDto;
-    algoRelationType: AlgoRelationTypeDto;
+    id: string;
+    sourceAlgorithmId: string;
+    targetAlgorithmId: string;
     description?: string;
+    algoRelationType: AlgorithmRelationTypeDto;
     _links?: Array<Link>;
   }> {
     return this.getAlgorithmRelation$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
-            sourceAlgorithm: AlgorithmDto;
-            targetAlgorithm: AlgorithmDto;
-            algoRelationType: AlgoRelationTypeDto;
+            id: string;
+            sourceAlgorithmId: string;
+            targetAlgorithmId: string;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
-            sourceAlgorithm: AlgorithmDto;
-            targetAlgorithm: AlgorithmDto;
-            algoRelationType: AlgoRelationTypeDto;
+            id: string;
+            sourceAlgorithmId: string;
+            targetAlgorithmId: string;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -742,10 +791,10 @@ export class AlgorithmService extends BaseService {
    * Path part for operation updateAlgorithmRelation
    */
   static readonly UpdateAlgorithmRelationPath =
-    '/v1/algorithms/{algoId}/algorithm-relations/{relationId}';
+    '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
-   * Change an algorithm relation from this algorithm to another given algorithm. Custom ID will be ignored. For algorithm relation type only ID is required, other algorithm relation type attributes will not change.
+   * Custom ID will be ignored.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateAlgorithmRelation()` instead.
@@ -753,16 +802,16 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateAlgorithmRelation$Response(params: {
-    algoId: string;
-    relationId: string;
+    algorithmId: string;
+    algorithmRelationId: string;
     body: AlgorithmRelationDto;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
-      sourceAlgorithm: AlgorithmDto;
-      targetAlgorithm: AlgorithmDto;
-      algoRelationType: AlgoRelationTypeDto;
+      id: string;
+      sourceAlgorithmId: string;
+      targetAlgorithmId: string;
       description?: string;
+      algoRelationType: AlgorithmRelationTypeDto;
       _links?: Array<Link>;
     }>
   > {
@@ -772,8 +821,8 @@ export class AlgorithmService extends BaseService {
       'put'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('relationId', params.relationId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('algorithmRelationId', params.algorithmRelationId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -788,11 +837,11 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
-            sourceAlgorithm: AlgorithmDto;
-            targetAlgorithm: AlgorithmDto;
-            algoRelationType: AlgoRelationTypeDto;
+            id: string;
+            sourceAlgorithmId: string;
+            targetAlgorithmId: string;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>;
         })
@@ -800,7 +849,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Change an algorithm relation from this algorithm to another given algorithm. Custom ID will be ignored. For algorithm relation type only ID is required, other algorithm relation type attributes will not change.
+   * Custom ID will be ignored.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateAlgorithmRelation$Response()` instead.
@@ -808,35 +857,35 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateAlgorithmRelation(params: {
-    algoId: string;
-    relationId: string;
+    algorithmId: string;
+    algorithmRelationId: string;
     body: AlgorithmRelationDto;
   }): Observable<{
-    id?: string;
-    sourceAlgorithm: AlgorithmDto;
-    targetAlgorithm: AlgorithmDto;
-    algoRelationType: AlgoRelationTypeDto;
+    id: string;
+    sourceAlgorithmId: string;
+    targetAlgorithmId: string;
     description?: string;
+    algoRelationType: AlgorithmRelationTypeDto;
     _links?: Array<Link>;
   }> {
     return this.updateAlgorithmRelation$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
-            sourceAlgorithm: AlgorithmDto;
-            targetAlgorithm: AlgorithmDto;
-            algoRelationType: AlgoRelationTypeDto;
+            id: string;
+            sourceAlgorithmId: string;
+            targetAlgorithmId: string;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
-            sourceAlgorithm: AlgorithmDto;
-            targetAlgorithm: AlgorithmDto;
-            algoRelationType: AlgoRelationTypeDto;
+            id: string;
+            sourceAlgorithmId: string;
+            targetAlgorithmId: string;
             description?: string;
+            algoRelationType: AlgorithmRelationTypeDto;
             _links?: Array<Link>;
           }
       )
@@ -847,19 +896,17 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deleteAlgorithmRelation
    */
   static readonly DeleteAlgorithmRelationPath =
-    '/v1/algorithms/{algoId}/algorithm-relations/{relationId}';
+    '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
-   * Delete a relation of the algorithm.
-   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteAlgorithmRelation()` instead.
    *
    * This method doesn't expect any request body.
    */
   deleteAlgorithmRelation$Response(params: {
-    algoId: string;
-    relationId: string;
+    algorithmId: string;
+    algorithmRelationId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -867,8 +914,8 @@ export class AlgorithmService extends BaseService {
       'delete'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('relationId', params.relationId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('algorithmRelationId', params.algorithmRelationId, {});
     }
     return this.http
       .request(
@@ -888,16 +935,14 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a relation of the algorithm.
-   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteAlgorithmRelation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
   deleteAlgorithmRelation(params: {
-    algoId: string;
-    relationId: string;
+    algorithmId: string;
+    algorithmRelationId: string;
   }): Observable<void> {
     return this.deleteAlgorithmRelation$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
@@ -905,33 +950,58 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getApplicationAreasByAlgorithm
+   * Path part for operation getApplicationAreasOfAlgorithm
    */
-  static readonly GetApplicationAreasByAlgorithmPath =
-    '/v1/algorithms/{algoId}/application-areas';
+  static readonly GetApplicationAreasOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/application-areas';
 
   /**
-   * Get the problem types for an algorithm.
+   * Get the application areas for an algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getApplicationAreasByAlgorithm()` instead.
+   * To access only the response body, use `getApplicationAreasOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getApplicationAreasByAlgorithm$Response(params: {
-    algoId: string;
+  getApplicationAreasOfAlgorithm$Response(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
+      page?: PageMetadata;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetApplicationAreasByAlgorithmPath,
+      AlgorithmService.GetApplicationAreasOfAlgorithmPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -947,152 +1017,155 @@ export class AlgorithmService extends BaseService {
             _embedded?: {
               applicationAreas?: Array<EntityModelApplicationAreaDto>;
             };
+            page?: PageMetadata;
           }>;
         })
       );
   }
 
   /**
-   * Get the problem types for an algorithm.
+   * Get the application areas for an algorithm.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getApplicationAreasByAlgorithm$Response()` instead.
+   * To access the full response (for headers, for example), `getApplicationAreasOfAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getApplicationAreasByAlgorithm(params: {
-    algoId: string;
+  getApplicationAreasOfAlgorithm(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
+    page?: PageMetadata;
   }> {
-    return this.getApplicationAreasByAlgorithm$Response(params).pipe(
+    return this.getApplicationAreasOfAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
             _embedded?: {
               applicationAreas?: Array<EntityModelApplicationAreaDto>;
             };
+            page?: PageMetadata;
           }>
         ) =>
           r.body as {
             _embedded?: {
               applicationAreas?: Array<EntityModelApplicationAreaDto>;
             };
+            page?: PageMetadata;
           }
       )
     );
   }
 
   /**
-   * Path part for operation addApplicationArea
+   * Path part for operation linkAlgorithmAndApplicationArea
    */
-  static readonly AddApplicationAreaPath =
-    '/v1/algorithms/{algoId}/application-areas';
+  static readonly LinkAlgorithmAndApplicationAreaPath =
+    '/v1/algorithms/{algorithmId}/application-areas';
 
   /**
-   * Add a reference to an existing application area (that was previously created via a POST on /application-area/). For application area only ID is required, other attributes will not change. If the applicationArea doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing application area (that was previously created via a POST on /application-areas). For application area only ID is required, other attributes will not change. If the applicationArea doesn't exist yet, a 404 error is thrown.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addApplicationArea()` instead.
+   * To access only the response body, use `linkAlgorithmAndApplicationArea()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addApplicationArea$Response(params: {
-    algoId: string;
+  linkAlgorithmAndApplicationArea$Response(params: {
+    algorithmId: string;
     body: ApplicationAreaDto;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
-    }>
-  > {
+  }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.AddApplicationAreaPath,
+      AlgorithmService.LinkAlgorithmAndApplicationAreaPath,
       'post'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
     return this.http
       .request(
         rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
+          responseType: 'text',
+          accept: '*/*',
         })
       )
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-          }>;
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
         })
       );
   }
 
   /**
-   * Add a reference to an existing application area (that was previously created via a POST on /application-area/). For application area only ID is required, other attributes will not change. If the applicationArea doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing application area (that was previously created via a POST on /application-areas). For application area only ID is required, other attributes will not change. If the applicationArea doesn't exist yet, a 404 error is thrown.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addApplicationArea$Response()` instead.
+   * To access the full response (for headers, for example), `linkAlgorithmAndApplicationArea$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addApplicationArea(params: {
-    algoId: string;
+  linkAlgorithmAndApplicationArea(params: {
+    algorithmId: string;
     body: ApplicationAreaDto;
-  }): Observable<{
-    _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
-  }> {
-    return this.addApplicationArea$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-          }
-      )
+  }): Observable<void> {
+    return this.linkAlgorithmAndApplicationArea$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getApplicationArea
+   * Path part for operation getApplicationAreaOfAlgorithm
    */
-  static readonly GetApplicationAreaPath =
-    '/v1/algorithms/{algoId}/application-areas/{applicationAreaId}';
+  static readonly GetApplicationAreaOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
 
   /**
-   * Get a specific applicationArea of an algorithm.
+   * Get a specific application area of an algorithm
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getApplicationArea()` instead.
+   * To access only the response body, use `getApplicationAreaOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getApplicationArea$Response(params: {
-    algoId: string;
+  getApplicationAreaOfAlgorithm$Response(params: {
+    algorithmId: string;
     applicationAreaId: string;
   }): Observable<
-    StrictHttpResponse<{ id?: string; name: string; _links?: Array<Link> }>
+    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetApplicationAreaPath,
+      AlgorithmService.GetApplicationAreaOfAlgorithmPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
       rb.path('applicationAreaId', params.applicationAreaId, {});
     }
     return this.http
@@ -1106,7 +1179,7 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             _links?: Array<Link>;
           }>;
@@ -1115,55 +1188,55 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Get a specific applicationArea of an algorithm.
+   * Get a specific application area of an algorithm
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getApplicationArea$Response()` instead.
+   * To access the full response (for headers, for example), `getApplicationAreaOfAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getApplicationArea(params: {
-    algoId: string;
+  getApplicationAreaOfAlgorithm(params: {
+    algorithmId: string;
     applicationAreaId: string;
-  }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
-    return this.getApplicationArea$Response(params).pipe(
+  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+    return this.getApplicationAreaOfAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             _links?: Array<Link>;
           }>
-        ) => r.body as { id?: string; name: string; _links?: Array<Link> }
+        ) => r.body as { id: string; name: string; _links?: Array<Link> }
       )
     );
   }
 
   /**
-   * Path part for operation deleteReferenceToApplicationArea
+   * Path part for operation unlinkAlgorithmAndApplicationArea
    */
-  static readonly DeleteReferenceToApplicationAreaPath =
-    '/v1/algorithms/{algoId}/application-areas/{applicationAreaId}';
+  static readonly UnlinkAlgorithmAndApplicationAreaPath =
+    '/v1/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
 
   /**
-   * Delete a reference to a applicationArea of an algorithm.
+   * Delete a reference to an application area of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/problem-types/{problemTypeId}).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteReferenceToApplicationArea()` instead.
+   * To access only the response body, use `unlinkAlgorithmAndApplicationArea()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteReferenceToApplicationArea$Response(params: {
-    algoId: string;
+  unlinkAlgorithmAndApplicationArea$Response(params: {
+    algorithmId: string;
     applicationAreaId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.DeleteReferenceToApplicationAreaPath,
+      AlgorithmService.UnlinkAlgorithmAndApplicationAreaPath,
       'delete'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
       rb.path('applicationAreaId', params.applicationAreaId, {});
     }
     return this.http
@@ -1184,40 +1257,58 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a reference to a applicationArea of an algorithm.
+   * Delete a reference to an application area of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/problem-types/{problemTypeId}).
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteReferenceToApplicationArea$Response()` instead.
+   * To access the full response (for headers, for example), `unlinkAlgorithmAndApplicationArea$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteReferenceToApplicationArea(params: {
-    algoId: string;
+  unlinkAlgorithmAndApplicationArea(params: {
+    algorithmId: string;
     applicationAreaId: string;
   }): Observable<void> {
-    return this.deleteReferenceToApplicationArea$Response(params).pipe(
+    return this.unlinkAlgorithmAndApplicationArea$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getComputingResourcesByAlgorithm
+   * Path part for operation getComputeResourcePropertiesOfAlgorithm
    */
-  static readonly GetComputingResourcesByAlgorithmPath =
-    '/v1/algorithms/{algoId}/compute-resource-properties';
+  static readonly GetComputeResourcePropertiesOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/compute-resource-properties';
 
   /**
-   * Retrieve the required computing resources of an algorithm
+   * Retrieve the required compute resource properties of an algorithm
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getComputingResourcesByAlgorithm()` instead.
+   * To access only the response body, use `getComputeResourcePropertiesOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputingResourcesByAlgorithm$Response(params: {
-    algoId: string;
+  getComputeResourcePropertiesOfAlgorithm$Response(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: {
@@ -1230,13 +1321,15 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetComputingResourcesByAlgorithmPath,
+      AlgorithmService.GetComputeResourcePropertiesOfAlgorithmPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -1261,24 +1354,42 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve the required computing resources of an algorithm
+   * Retrieve the required compute resource properties of an algorithm
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getComputingResourcesByAlgorithm$Response()` instead.
+   * To access the full response (for headers, for example), `getComputeResourcePropertiesOfAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputingResourcesByAlgorithm(params: {
-    algoId: string;
+  getComputeResourcePropertiesOfAlgorithm(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: {
       computeResourceProperties?: Array<EntityModelComputeResourcePropertyDto>;
     };
     page?: PageMetadata;
   }> {
-    return this.getComputingResourcesByAlgorithm$Response(params).pipe(
+    return this.getComputeResourcePropertiesOfAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -1303,25 +1414,25 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation addComputingResource
+   * Path part for operation createComputeResourcePropertyForAlgorithm
    */
-  static readonly AddComputingResourcePath =
-    '/v1/algorithms/{algoId}/compute-resource-properties';
+  static readonly CreateComputeResourcePropertyForAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/compute-resource-properties';
 
   /**
-   * Add a computing resource (e.g. a certain number of qubits) that is required by an algorithm. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change.
+   * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addComputingResource()` instead.
+   * To access only the response body, use `createComputeResourcePropertyForAlgorithm()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addComputingResource$Response(params: {
-    algoId: string;
+  createComputeResourcePropertyForAlgorithm$Response(params: {
+    algorithmId: string;
     body: ComputeResourcePropertyDto;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       value?: string;
       type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
@@ -1329,11 +1440,11 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.AddComputingResourcePath,
+      AlgorithmService.CreateComputeResourcePropertyForAlgorithmPath,
       'post'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -1348,7 +1459,7 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -1358,34 +1469,34 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a computing resource (e.g. a certain number of qubits) that is required by an algorithm. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change.
+   * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addComputingResource$Response()` instead.
+   * To access the full response (for headers, for example), `createComputeResourcePropertyForAlgorithm$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addComputingResource(params: {
-    algoId: string;
+  createComputeResourcePropertyForAlgorithm(params: {
+    algorithmId: string;
     body: ComputeResourcePropertyDto;
   }): Observable<{
-    id?: string;
+    id: string;
     value?: string;
     type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.addComputingResource$Response(params).pipe(
+    return this.createComputeResourcePropertyForAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -1395,23 +1506,25 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getComputingResource
+   * Path part for operation getComputeResourcePropertyOfAlgorithm
    */
-  static readonly GetComputingResourcePath =
-    '/v1/algorithms/{algoId}/compute-resource-properties/{resourceId}';
+  static readonly GetComputeResourcePropertyOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
+   * Retrieve a specific compute resource property of an algorithm
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getComputingResource()` instead.
+   * To access only the response body, use `getComputeResourcePropertyOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputingResource$Response(params: {
-    algoId: string;
-    resourceId: string;
+  getComputeResourcePropertyOfAlgorithm$Response(params: {
+    algorithmId: string;
+    computeResourcePropertyId: string;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       value?: string;
       type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
@@ -1419,12 +1532,16 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetComputingResourcePath,
+      AlgorithmService.GetComputeResourcePropertyOfAlgorithmPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('resourceId', params.resourceId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path(
+        'computeResourcePropertyId',
+        params.computeResourcePropertyId,
+        {}
+      );
     }
     return this.http
       .request(
@@ -1437,7 +1554,7 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -1447,32 +1564,34 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Retrieve a specific compute resource property of an algorithm
+   *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getComputingResource$Response()` instead.
+   * To access the full response (for headers, for example), `getComputeResourcePropertyOfAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputingResource(params: {
-    algoId: string;
-    resourceId: string;
+  getComputeResourcePropertyOfAlgorithm(params: {
+    algorithmId: string;
+    computeResourcePropertyId: string;
   }): Observable<{
-    id?: string;
+    id: string;
     value?: string;
     type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.getComputingResource$Response(params).pipe(
+    return this.getComputeResourcePropertyOfAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -1482,26 +1601,26 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation updateComputingResource
+   * Path part for operation updateComputeResourcePropertyOfAlgorithm
    */
-  static readonly UpdateComputingResourcePath =
-    '/v1/algorithms/{algoId}/compute-resource-properties/{resourceId}';
+  static readonly UpdateComputeResourcePropertyOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
-   * Update a computing resource of the algorithm. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change.
+   * Update a Compute resource property of an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateComputingResource()` instead.
+   * To access only the response body, use `updateComputeResourcePropertyOfAlgorithm()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateComputingResource$Response(params: {
-    algoId: string;
-    resourceId: string;
+  updateComputeResourcePropertyOfAlgorithm$Response(params: {
+    algorithmId: string;
+    computeResourcePropertyId: string;
     body: ComputeResourcePropertyDto;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       value?: string;
       type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
@@ -1509,12 +1628,16 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.UpdateComputingResourcePath,
+      AlgorithmService.UpdateComputeResourcePropertyOfAlgorithmPath,
       'put'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('resourceId', params.resourceId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path(
+        'computeResourcePropertyId',
+        params.computeResourcePropertyId,
+        {}
+      );
 
       rb.body(params.body, 'application/json');
     }
@@ -1529,7 +1652,7 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -1539,35 +1662,35 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Update a computing resource of the algorithm. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change.
+   * Update a Compute resource property of an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updateComputingResource$Response()` instead.
+   * To access the full response (for headers, for example), `updateComputeResourcePropertyOfAlgorithm$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateComputingResource(params: {
-    algoId: string;
-    resourceId: string;
+  updateComputeResourcePropertyOfAlgorithm(params: {
+    algorithmId: string;
+    computeResourcePropertyId: string;
     body: ComputeResourcePropertyDto;
   }): Observable<{
-    id?: string;
+    id: string;
     value?: string;
     type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.updateComputingResource$Response(params).pipe(
+    return this.updateComputeResourcePropertyOfAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -1577,31 +1700,35 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteComputingResource
+   * Path part for operation deleteComputeResourcePropertyOfAlgorithm
    */
-  static readonly DeleteComputingResourcePath =
-    '/v1/algorithms/{algoId}/compute-resource-properties/{resourceId}';
+  static readonly DeleteComputeResourcePropertyOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
-   * Delete a computing resource of the algorithm.
+   * Delete a Compute resource property of an algorithm
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteComputingResource()` instead.
+   * To access only the response body, use `deleteComputeResourcePropertyOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteComputingResource$Response(params: {
-    algoId: string;
-    resourceId: string;
+  deleteComputeResourcePropertyOfAlgorithm$Response(params: {
+    algorithmId: string;
+    computeResourcePropertyId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.DeleteComputingResourcePath,
+      AlgorithmService.DeleteComputeResourcePropertyOfAlgorithmPath,
       'delete'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('resourceId', params.resourceId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path(
+        'computeResourcePropertyId',
+        params.computeResourcePropertyId,
+        {}
+      );
     }
     return this.http
       .request(
@@ -1621,50 +1748,51 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a computing resource of the algorithm.
+   * Delete a Compute resource property of an algorithm
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteComputingResource$Response()` instead.
+   * To access the full response (for headers, for example), `deleteComputeResourcePropertyOfAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteComputingResource(params: {
-    algoId: string;
-    resourceId: string;
+  deleteComputeResourcePropertyOfAlgorithm(params: {
+    algorithmId: string;
+    computeResourcePropertyId: string;
   }): Observable<void> {
-    return this.deleteComputingResource$Response(params).pipe(
+    return this.deleteComputeResourcePropertyOfAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getImplementations
+   * Path part for operation getImplementationsOfAlgorithm
    */
-  static readonly GetImplementationsPath =
-    '/v1/algorithms/{algoId}/implementations';
+  static readonly GetImplementationsOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/implementations';
 
   /**
-   * Retrieve all implementations for the algorithm
+   * Retrieve all implementations for an algorithm
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getImplementations()` instead.
+   * To access only the response body, use `getImplementationsOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getImplementations$Response(params: {
-    algoId: string;
+  getImplementationsOfAlgorithm$Response(params: {
+    algorithmId: string;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+      page?: PageMetadata;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetImplementationsPath,
+      AlgorithmService.GetImplementationsOfAlgorithmPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
     }
     return this.http
       .request(
@@ -1680,37 +1808,41 @@ export class AlgorithmService extends BaseService {
             _embedded?: {
               implementations?: Array<EntityModelImplementationDto>;
             };
+            page?: PageMetadata;
           }>;
         })
       );
   }
 
   /**
-   * Retrieve all implementations for the algorithm
+   * Retrieve all implementations for an algorithm
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getImplementations$Response()` instead.
+   * To access the full response (for headers, for example), `getImplementationsOfAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getImplementations(params: {
-    algoId: string;
+  getImplementationsOfAlgorithm(params: {
+    algorithmId: string;
   }): Observable<{
     _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+    page?: PageMetadata;
   }> {
-    return this.getImplementations$Response(params).pipe(
+    return this.getImplementationsOfAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
             _embedded?: {
               implementations?: Array<EntityModelImplementationDto>;
             };
+            page?: PageMetadata;
           }>
         ) =>
           r.body as {
             _embedded?: {
               implementations?: Array<EntityModelImplementationDto>;
             };
+            page?: PageMetadata;
           }
       )
     );
@@ -1720,10 +1852,10 @@ export class AlgorithmService extends BaseService {
    * Path part for operation createImplementation
    */
   static readonly CreateImplementationPath =
-    '/v1/algorithms/{algoId}/implementations';
+    '/v1/algorithms/{algorithmId}/implementations';
 
   /**
-   * Create a new implementation for the algorithm. Custom ID will be ignored.
+   * Create a new implementation for the algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createImplementation()` instead.
@@ -1731,7 +1863,7 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createImplementation$Response(params: {
-    algoId: string;
+    algorithmId: string;
     body: ImplementationDto;
   }): Observable<
     StrictHttpResponse<
@@ -1747,7 +1879,7 @@ export class AlgorithmService extends BaseService {
       'post'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
+      rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -1772,7 +1904,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Create a new implementation for the algorithm. Custom ID will be ignored.
+   * Create a new implementation for the algorithm.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createImplementation$Response()` instead.
@@ -1780,7 +1912,7 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createImplementation(params: {
-    algoId: string;
+    algorithmId: string;
     body: ImplementationDto;
   }): Observable<
     { _links?: Array<Link> } & (
@@ -1810,10 +1942,10 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getImplementation
    */
   static readonly GetImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}';
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
-   * Retrieve a specific implemention of the algorithm.
+   * Retrieve a specific implementation of the algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getImplementation()` instead.
@@ -1821,8 +1953,8 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getImplementation$Response(params: {
-    algoId: string;
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
   }): Observable<
     StrictHttpResponse<
       { _links?: Array<Link> } & (
@@ -1837,8 +1969,8 @@ export class AlgorithmService extends BaseService {
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
     }
     return this.http
       .request(
@@ -1861,7 +1993,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve a specific implemention of the algorithm.
+   * Retrieve a specific implementation of the algorithm.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getImplementation$Response()` instead.
@@ -1869,8 +2001,8 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getImplementation(params: {
-    algoId: string;
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
   }): Observable<
     { _links?: Array<Link> } & (
       | ClassicImplementationDto
@@ -1899,7 +2031,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation updateImplementation
    */
   static readonly UpdateImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}';
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
    * Custom ID will be ignored.
@@ -1910,8 +2042,8 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateImplementation$Response(params: {
-    algoId: string;
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
     body: ImplementationDto;
   }): Observable<
     StrictHttpResponse<
@@ -1927,8 +2059,8 @@ export class AlgorithmService extends BaseService {
       'put'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -1961,8 +2093,8 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateImplementation(params: {
-    algoId: string;
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
     body: ImplementationDto;
   }): Observable<
     { _links?: Array<Link> } & (
@@ -1992,7 +2124,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deleteImplementation
    */
   static readonly DeleteImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}';
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -2001,8 +2133,8 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteImplementation$Response(params: {
-    algoId: string;
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -2010,8 +2142,8 @@ export class AlgorithmService extends BaseService {
       'delete'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
     }
     return this.http
       .request(
@@ -2037,8 +2169,8 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteImplementation(params: {
-    algoId: string;
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
   }): Observable<void> {
     return this.deleteImplementation$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
@@ -2046,24 +2178,42 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getComputingResources
+   * Path part for operation getComputeResourcePropertiesOfImplementation
    */
-  static readonly GetComputingResourcesPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/compute-resource-properties';
+  static readonly GetComputeResourcePropertiesOfImplementationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
 
   /**
    * Retrieve the required computing resources of an implementation
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getComputingResources()` instead.
+   * To access only the response body, use `getComputeResourcePropertiesOfImplementation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputingResources$Response(params: {
-    algoId: string;
-    implId: string;
+  getComputeResourcePropertiesOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: {
@@ -2076,14 +2226,16 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetComputingResourcesPath,
+      AlgorithmService.GetComputeResourcePropertiesOfImplementationPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -2111,22 +2263,42 @@ export class AlgorithmService extends BaseService {
    * Retrieve the required computing resources of an implementation
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getComputingResources$Response()` instead.
+   * To access the full response (for headers, for example), `getComputeResourcePropertiesOfImplementation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputingResources(params: {
-    algoId: string;
-    implId: string;
+  getComputeResourcePropertiesOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: {
       computeResourceProperties?: Array<EntityModelComputeResourcePropertyDto>;
     };
     page?: PageMetadata;
   }> {
-    return this.getComputingResources$Response(params).pipe(
+    return this.getComputeResourcePropertiesOfImplementation$Response(
+      params
+    ).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -2151,26 +2323,26 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation addComputingResourceByImplementation
+   * Path part for operation createComputeResourcePropertyForImplementation
    */
-  static readonly AddComputingResourceByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/compute-resource-properties';
+  static readonly CreateComputeResourcePropertyForImplementationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
 
   /**
-   * Add a computing resource (e.g. a certain number of qubits) that is requiered by an implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
+   * Add a computing resource (e.g. a certain number of qubits) that is required by an implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addComputingResourceByImplementation()` instead.
+   * To access only the response body, use `createComputeResourcePropertyForImplementation()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addComputingResourceByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
+  createComputeResourcePropertyForImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
     body: ComputeResourcePropertyDto;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       value?: string;
       type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
@@ -2178,12 +2350,12 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.AddComputingResourceByImplementationPath,
+      AlgorithmService.CreateComputeResourcePropertyForImplementationPath,
       'post'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -2198,7 +2370,7 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -2208,35 +2380,37 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a computing resource (e.g. a certain number of qubits) that is requiered by an implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
+   * Add a computing resource (e.g. a certain number of qubits) that is required by an implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addComputingResourceByImplementation$Response()` instead.
+   * To access the full response (for headers, for example), `createComputeResourcePropertyForImplementation$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addComputingResourceByImplementation(params: {
-    algoId: string;
-    implId: string;
+  createComputeResourcePropertyForImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
     body: ComputeResourcePropertyDto;
   }): Observable<{
-    id?: string;
+    id: string;
     value?: string;
     type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.addComputingResourceByImplementation$Response(params).pipe(
+    return this.createComputeResourcePropertyForImplementation$Response(
+      params
+    ).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -2246,24 +2420,26 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getComputingResourceByImplementation
+   * Path part for operation getComputeResourcePropertyOfImplementation
    */
-  static readonly GetComputingResourceByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/compute-resource-properties/{resourceId}';
+  static readonly GetComputeResourcePropertyOfImplementationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
+   * Retrieve a specific compute resource property of an implementation
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getComputingResourceByImplementation()` instead.
+   * To access only the response body, use `getComputeResourcePropertyOfImplementation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputingResourceByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
-    resourceId: string;
+  getComputeResourcePropertyOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    computeResourcePropertyId: string;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       value?: string;
       type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
@@ -2271,13 +2447,17 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetComputingResourceByImplementationPath,
+      AlgorithmService.GetComputeResourcePropertyOfImplementationPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-      rb.path('resourceId', params.resourceId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path(
+        'computeResourcePropertyId',
+        params.computeResourcePropertyId,
+        {}
+      );
     }
     return this.http
       .request(
@@ -2290,7 +2470,7 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -2300,33 +2480,37 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Retrieve a specific compute resource property of an implementation
+   *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getComputingResourceByImplementation$Response()` instead.
+   * To access the full response (for headers, for example), `getComputeResourcePropertyOfImplementation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getComputingResourceByImplementation(params: {
-    algoId: string;
-    implId: string;
-    resourceId: string;
+  getComputeResourcePropertyOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    computeResourcePropertyId: string;
   }): Observable<{
-    id?: string;
+    id: string;
     value?: string;
     type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.getComputingResourceByImplementation$Response(params).pipe(
+    return this.getComputeResourcePropertyOfImplementation$Response(
+      params
+    ).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -2336,27 +2520,27 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation updateComputingResourceByImplementation
+   * Path part for operation updateComputeResourcePropertyOfImplementation
    */
-  static readonly UpdateComputingResourceByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/compute-resource-properties/{resourceId}';
+  static readonly UpdateComputeResourcePropertyOfImplementationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
-   * Update a computing resource of the implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
+   * Update a Compute resource property of an implementation. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateComputingResourceByImplementation()` instead.
+   * To access only the response body, use `updateComputeResourcePropertyOfImplementation()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateComputingResourceByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
-    resourceId: string;
+  updateComputeResourcePropertyOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    computeResourcePropertyId: string;
     body: ComputeResourcePropertyDto;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       value?: string;
       type: ComputeResourcePropertyTypeDto;
       _links?: Array<Link>;
@@ -2364,13 +2548,17 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.UpdateComputingResourceByImplementationPath,
+      AlgorithmService.UpdateComputeResourcePropertyOfImplementationPath,
       'put'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-      rb.path('resourceId', params.resourceId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path(
+        'computeResourcePropertyId',
+        params.computeResourcePropertyId,
+        {}
+      );
 
       rb.body(params.body, 'application/json');
     }
@@ -2385,7 +2573,7 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -2395,36 +2583,38 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Update a computing resource of the implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
+   * Update a Compute resource property of an implementation. For compute resource property type only ID is required, other compute resource property type attributes will not change.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updateComputingResourceByImplementation$Response()` instead.
+   * To access the full response (for headers, for example), `updateComputeResourcePropertyOfImplementation$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateComputingResourceByImplementation(params: {
-    algoId: string;
-    implId: string;
-    resourceId: string;
+  updateComputeResourcePropertyOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    computeResourcePropertyId: string;
     body: ComputeResourcePropertyDto;
   }): Observable<{
-    id?: string;
+    id: string;
     value?: string;
     type: ComputeResourcePropertyTypeDto;
     _links?: Array<Link>;
   }> {
-    return this.updateComputingResourceByImplementation$Response(params).pipe(
+    return this.updateComputeResourcePropertyOfImplementation$Response(
+      params
+    ).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             value?: string;
             type: ComputeResourcePropertyTypeDto;
             _links?: Array<Link>;
@@ -2434,33 +2624,37 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteComputingResourceByImplementation
+   * Path part for operation deleteComputeResourcePropertyOfImplementation
    */
-  static readonly DeleteComputingResourceByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/compute-resource-properties/{resourceId}';
+  static readonly DeleteComputeResourcePropertyOfImplementationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
-   * Delete a computing resource of the implementation.
+   * Delete a Compute resource property of an implementation
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteComputingResourceByImplementation()` instead.
+   * To access only the response body, use `deleteComputeResourcePropertyOfImplementation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteComputingResourceByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
-    resourceId: string;
+  deleteComputeResourcePropertyOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    computeResourcePropertyId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.DeleteComputingResourceByImplementationPath,
+      AlgorithmService.DeleteComputeResourcePropertyOfImplementationPath,
       'delete'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-      rb.path('resourceId', params.resourceId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path(
+        'computeResourcePropertyId',
+        params.computeResourcePropertyId,
+        {}
+      );
     }
     return this.http
       .request(
@@ -2480,53 +2674,78 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a computing resource of the implementation.
+   * Delete a Compute resource property of an implementation
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteComputingResourceByImplementation$Response()` instead.
+   * To access the full response (for headers, for example), `deleteComputeResourcePropertyOfImplementation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteComputingResourceByImplementation(params: {
-    algoId: string;
-    implId: string;
-    resourceId: string;
+  deleteComputeResourcePropertyOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    computeResourcePropertyId: string;
   }): Observable<void> {
-    return this.deleteComputingResourceByImplementation$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
-    );
+    return this.deleteComputeResourcePropertyOfImplementation$Response(
+      params
+    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
   }
 
   /**
-   * Path part for operation getPublicationsByImplementation
+   * Path part for operation getPublicationsOfImplementation
    */
-  static readonly GetPublicationsByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/publications';
+  static readonly GetPublicationsOfImplementationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications';
 
   /**
    * Get referenced publications for an implementation
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPublicationsByImplementation()` instead.
+   * To access only the response body, use `getPublicationsOfImplementation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPublicationsByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
+  getPublicationsOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: { publications?: Array<EntityModelPublicationDto> };
+      page?: PageMetadata;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetPublicationsByImplementationPath,
+      AlgorithmService.GetPublicationsOfImplementationPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -2540,6 +2759,7 @@ export class AlgorithmService extends BaseService {
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
             _embedded?: { publications?: Array<EntityModelPublicationDto> };
+            page?: PageMetadata;
           }>;
         })
       );
@@ -2549,51 +2769,139 @@ export class AlgorithmService extends BaseService {
    * Get referenced publications for an implementation
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPublicationsByImplementation$Response()` instead.
+   * To access the full response (for headers, for example), `getPublicationsOfImplementation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPublicationsByImplementation(params: {
-    algoId: string;
-    implId: string;
+  getPublicationsOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: { publications?: Array<EntityModelPublicationDto> };
+    page?: PageMetadata;
   }> {
-    return this.getPublicationsByImplementation$Response(params).pipe(
+    return this.getPublicationsOfImplementation$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
             _embedded?: { publications?: Array<EntityModelPublicationDto> };
+            page?: PageMetadata;
           }>
         ) =>
           r.body as {
             _embedded?: { publications?: Array<EntityModelPublicationDto> };
+            page?: PageMetadata;
           }
       )
     );
   }
 
   /**
-   * Path part for operation getPublicationByImplementation
+   * Path part for operation linkImplementationAndPublication
    */
-  static readonly GetPublicationByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/publications/{publId}';
+  static readonly LinkImplementationAndPublicationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications';
 
   /**
-   * Get a specific referenced publication of an implementation.
+   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPublicationByImplementation()` instead.
+   * To access only the response body, use `linkImplementationAndPublication()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  linkImplementationAndPublication$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    body: PublicationDto;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.LinkImplementationAndPublicationPath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `linkImplementationAndPublication$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  linkImplementationAndPublication(params: {
+    algorithmId: string;
+    implementationId: string;
+    body: PublicationDto;
+  }): Observable<void> {
+    return this.linkImplementationAndPublication$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getPublicationOfImplementation
+   */
+  static readonly GetPublicationOfImplementationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
+
+  /**
+   * Retrieve a publication of an implementation
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPublicationOfImplementation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPublicationByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
-    publId: string;
+  getPublicationOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    publicationId: string;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       title: string;
       doi?: string;
       url?: string;
@@ -2603,13 +2911,13 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetPublicationByImplementationPath,
+      AlgorithmService.GetPublicationOfImplementationPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-      rb.path('publId', params.publId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('publicationId', params.publicationId, {});
     }
     return this.http
       .request(
@@ -2622,7 +2930,7 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             title: string;
             doi?: string;
             url?: string;
@@ -2634,30 +2942,30 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Get a specific referenced publication of an implementation.
+   * Retrieve a publication of an implementation
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPublicationByImplementation$Response()` instead.
+   * To access the full response (for headers, for example), `getPublicationOfImplementation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPublicationByImplementation(params: {
-    algoId: string;
-    implId: string;
-    publId: string;
+  getPublicationOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    publicationId: string;
   }): Observable<{
-    id?: string;
+    id: string;
     title: string;
     doi?: string;
     url?: string;
     authors: Array<string>;
     _links?: Array<Link>;
   }> {
-    return this.getPublicationByImplementation$Response(params).pipe(
+    return this.getPublicationOfImplementation$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             title: string;
             doi?: string;
             url?: string;
@@ -2666,7 +2974,7 @@ export class AlgorithmService extends BaseService {
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             title: string;
             doi?: string;
             url?: string;
@@ -2678,112 +2986,33 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation addPublicationByImplementation
+   * Path part for operation unlinkImplementationAndPublication
    */
-  static readonly AddPublicationByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/publications/{publId}';
-
-  /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addPublicationByImplementation()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  addPublicationByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
-    publId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { publications?: Array<EntityModelPublicationDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.AddPublicationByImplementationPath,
-      'post'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-      rb.path('publId', params.publId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addPublicationByImplementation$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  addPublicationByImplementation(params: {
-    algoId: string;
-    implId: string;
-    publId: string;
-  }): Observable<{
-    _embedded?: { publications?: Array<EntityModelPublicationDto> };
-  }> {
-    return this.addPublicationByImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation deleteReferenceToPublicationByImplementation
-   */
-  static readonly DeleteReferenceToPublicationByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/publications/{publId}';
+  static readonly UnlinkImplementationAndPublicationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
 
   /**
    * Delete a reference to a publication of the implementation.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteReferenceToPublicationByImplementation()` instead.
+   * To access only the response body, use `unlinkImplementationAndPublication()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteReferenceToPublicationByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
-    publId: string;
+  unlinkImplementationAndPublication$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    publicationId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.DeleteReferenceToPublicationByImplementationPath,
+      AlgorithmService.UnlinkImplementationAndPublicationPath,
       'delete'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-      rb.path('publId', params.publId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('publicationId', params.publicationId, {});
     }
     return this.http
       .request(
@@ -2806,37 +3035,37 @@ export class AlgorithmService extends BaseService {
    * Delete a reference to a publication of the implementation.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteReferenceToPublicationByImplementation$Response()` instead.
+   * To access the full response (for headers, for example), `unlinkImplementationAndPublication$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteReferenceToPublicationByImplementation(params: {
-    algoId: string;
-    implId: string;
-    publId: string;
+  unlinkImplementationAndPublication(params: {
+    algorithmId: string;
+    implementationId: string;
+    publicationId: string;
   }): Observable<void> {
-    return this.deleteReferenceToPublicationByImplementation$Response(
-      params
-    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
+    return this.unlinkImplementationAndPublication$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
-   * Path part for operation getSoftwarePlatformsByImplementation
+   * Path part for operation getSoftwarePlatformsOfImplementation
    */
-  static readonly GetSoftwarePlatformsByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/software-platforms';
+  static readonly GetSoftwarePlatformsOfImplementationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
 
   /**
    * Get referenced software platform for an implementation
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getSoftwarePlatformsByImplementation()` instead.
+   * To access only the response body, use `getSoftwarePlatformsOfImplementation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatformsByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
+  getSoftwarePlatformsOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
 
     /**
      * Filter criteria for this query
@@ -2864,12 +3093,12 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetSoftwarePlatformsByImplementationPath,
+      AlgorithmService.GetSoftwarePlatformsOfImplementationPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
@@ -2898,13 +3127,13 @@ export class AlgorithmService extends BaseService {
    * Get referenced software platform for an implementation
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getSoftwarePlatformsByImplementation$Response()` instead.
+   * To access the full response (for headers, for example), `getSoftwarePlatformsOfImplementation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatformsByImplementation(params: {
-    algoId: string;
-    implId: string;
+  getSoftwarePlatformsOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
 
     /**
      * Filter criteria for this query
@@ -2928,7 +3157,7 @@ export class AlgorithmService extends BaseService {
   }): Observable<{
     _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
   }> {
-    return this.getSoftwarePlatformsByImplementation$Response(params).pipe(
+    return this.getSoftwarePlatformsOfImplementation$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
@@ -2947,112 +3176,91 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation addSoftwarePlatformByImplementation
+   * Path part for operation linkImplementationAndSoftwarePlatform
    */
-  static readonly AddSoftwarePlatformByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/software-platforms';
+  static readonly LinkImplementationAndSoftwarePlatformPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
 
   /**
-   * Add a reference to an existing software platform (that was previously created via a POST on /software-platforms/). Custom ID will be ignored. For software platform only ID is required, other software platform attributes will not change. If the software platform doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing software platform(that was previously created via a POST on /software-platforms/).Custom ID will be ignored. For software platform only ID is required,other software platform attributes will not change.If the software platform doesn't exist yet, a 404 error is thrown.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addSoftwarePlatformByImplementation()` instead.
+   * To access only the response body, use `linkImplementationAndSoftwarePlatform()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addSoftwarePlatformByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
+  linkImplementationAndSoftwarePlatform$Response(params: {
+    algorithmId: string;
+    implementationId: string;
     body: SoftwarePlatformDto;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-    }>
-  > {
+  }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.AddSoftwarePlatformByImplementationPath,
+      AlgorithmService.LinkImplementationAndSoftwarePlatformPath,
       'post'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
     return this.http
       .request(
         rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
+          responseType: 'text',
+          accept: '*/*',
         })
       )
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>;
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
         })
       );
   }
 
   /**
-   * Add a reference to an existing software platform (that was previously created via a POST on /software-platforms/). Custom ID will be ignored. For software platform only ID is required, other software platform attributes will not change. If the software platform doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing software platform(that was previously created via a POST on /software-platforms/).Custom ID will be ignored. For software platform only ID is required,other software platform attributes will not change.If the software platform doesn't exist yet, a 404 error is thrown.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addSoftwarePlatformByImplementation$Response()` instead.
+   * To access the full response (for headers, for example), `linkImplementationAndSoftwarePlatform$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addSoftwarePlatformByImplementation(params: {
-    algoId: string;
-    implId: string;
+  linkImplementationAndSoftwarePlatform(params: {
+    algorithmId: string;
+    implementationId: string;
     body: SoftwarePlatformDto;
-  }): Observable<{
-    _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-  }> {
-    return this.addSoftwarePlatformByImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }
-      )
+  }): Observable<void> {
+    return this.linkImplementationAndSoftwarePlatform$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation getSoftwarePlatformByImplementation
+   * Path part for operation getSoftwarePlatformOfImplementation
    */
-  static readonly GetSoftwarePlatformByImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/software-platforms/{platformId}';
+  static readonly GetSoftwarePlatformOfImplementationPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
 
   /**
-   * Get a specific referenced software platform of an implementation
+   * Retrieve a specific software platform and its basic properties.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getSoftwarePlatformByImplementation()` instead.
+   * To access only the response body, use `getSoftwarePlatformOfImplementation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatformByImplementation$Response(params: {
-    algoId: string;
-    implId: string;
-    platformId: string;
+  getSoftwarePlatformOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    softwarePlatformId: string;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       name: string;
       link?: string;
       licence?: string;
@@ -3062,13 +3270,13 @@ export class AlgorithmService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetSoftwarePlatformByImplementationPath,
+      AlgorithmService.GetSoftwarePlatformOfImplementationPath,
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-      rb.path('platformId', params.platformId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('softwarePlatformId', params.softwarePlatformId, {});
     }
     return this.http
       .request(
@@ -3081,7 +3289,7 @@ export class AlgorithmService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             link?: string;
             licence?: string;
@@ -3093,30 +3301,30 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Get a specific referenced software platform of an implementation
+   * Retrieve a specific software platform and its basic properties.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getSoftwarePlatformByImplementation$Response()` instead.
+   * To access the full response (for headers, for example), `getSoftwarePlatformOfImplementation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getSoftwarePlatformByImplementation(params: {
-    algoId: string;
-    implId: string;
-    platformId: string;
+  getSoftwarePlatformOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    softwarePlatformId: string;
   }): Observable<{
-    id?: string;
+    id: string;
     name: string;
     link?: string;
     licence?: string;
     version?: string;
     _links?: Array<Link>;
   }> {
-    return this.getSoftwarePlatformByImplementation$Response(params).pipe(
+    return this.getSoftwarePlatformOfImplementation$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             link?: string;
             licence?: string;
@@ -3125,7 +3333,7 @@ export class AlgorithmService extends BaseService {
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             name: string;
             link?: string;
             licence?: string;
@@ -3137,33 +3345,33 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteReferenceToSoftwarePlatform
+   * Path part for operation unlinkImplementationAndSoftwarePlatform
    */
-  static readonly DeleteReferenceToSoftwarePlatformPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/software-platforms/{platformId}';
+  static readonly UnlinkImplementationAndSoftwarePlatformPath =
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
 
   /**
    * Delete a reference to a software platform of the implementation
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteReferenceToSoftwarePlatform()` instead.
+   * To access only the response body, use `unlinkImplementationAndSoftwarePlatform()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteReferenceToSoftwarePlatform$Response(params: {
-    algoId: string;
-    implId: string;
-    platformId: string;
+  unlinkImplementationAndSoftwarePlatform$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    softwarePlatformId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.DeleteReferenceToSoftwarePlatformPath,
+      AlgorithmService.UnlinkImplementationAndSoftwarePlatformPath,
       'delete'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
-      rb.path('platformId', params.platformId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('softwarePlatformId', params.softwarePlatformId, {});
     }
     return this.http
       .request(
@@ -3186,16 +3394,16 @@ export class AlgorithmService extends BaseService {
    * Delete a reference to a software platform of the implementation
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteReferenceToSoftwarePlatform$Response()` instead.
+   * To access the full response (for headers, for example), `unlinkImplementationAndSoftwarePlatform$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteReferenceToSoftwarePlatform(params: {
-    algoId: string;
-    implId: string;
-    platformId: string;
+  unlinkImplementationAndSoftwarePlatform(params: {
+    algorithmId: string;
+    implementationId: string;
+    softwarePlatformId: string;
   }): Observable<void> {
-    return this.deleteReferenceToSoftwarePlatform$Response(params).pipe(
+    return this.unlinkImplementationAndSoftwarePlatform$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
@@ -3204,7 +3412,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getTagsOfImplementation
    */
   static readonly GetTagsOfImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/tags';
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -3213,8 +3421,8 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTagsOfImplementation$Response(params: {
-    algoId: string;
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
   }): Observable<
     StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
   > {
@@ -3224,8 +3432,8 @@ export class AlgorithmService extends BaseService {
       'get'
     );
     if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
     }
     return this.http
       .request(
@@ -3251,8 +3459,8 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTagsOfImplementation(params: {
-    algoId: string;
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
   }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
     return this.getTagsOfImplementation$Response(params).pipe(
       map(
@@ -3269,7 +3477,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation addTagToImplementation
    */
   static readonly AddTagToImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/tags';
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -3278,16 +3486,18 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   addTagToImplementation$Response(params: {
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
     body: TagDto;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.AddTagToImplementationPath,
-      'put'
+      'post'
     );
     if (params) {
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -3315,7 +3525,8 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   addTagToImplementation(params: {
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
     body: TagDto;
   }): Observable<void> {
     return this.addTagToImplementation$Response(params).pipe(
@@ -3327,7 +3538,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation removeTagFromImplementation
    */
   static readonly RemoveTagFromImplementationPath =
-    '/v1/algorithms/{algoId}/implementations/{implId}/tags';
+    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -3336,7 +3547,8 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   removeTagFromImplementation$Response(params: {
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
     body: TagDto;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
@@ -3345,7 +3557,8 @@ export class AlgorithmService extends BaseService {
       'delete'
     );
     if (params) {
-      rb.path('implId', params.implId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -3373,7 +3586,8 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   removeTagFromImplementation(params: {
-    implId: string;
+    algorithmId: string;
+    implementationId: string;
     body: TagDto;
   }): Observable<void> {
     return this.removeTagFromImplementation$Response(params).pipe(
@@ -3382,1250 +3596,22 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getPatternRelations
+   * Path part for operation getPatternRelationsOfAlgorithm
    */
-  static readonly GetPatternRelationsPath =
-    '/v1/algorithms/{algoId}/pattern-relations';
+  static readonly GetPatternRelationsOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/pattern-relations';
 
   /**
-   * Get pattern relations for an algorithms.
+   * Retrieve pattern relations for an algorithms.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPatternRelations()` instead.
+   * To access only the response body, use `getPatternRelationsOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatternRelations$Response(params: {
-    algoId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetPatternRelationsPath,
-      'get'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-          }>;
-        })
-      );
-  }
+  getPatternRelationsOfAlgorithm$Response(params: {
+    algorithmId: string;
 
-  /**
-   * Get pattern relations for an algorithms.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPatternRelations$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPatternRelations(params: {
-    algoId: string;
-  }): Observable<{
-    _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
-  }> {
-    return this.getPatternRelations$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation createPatternRelationByAlgorithm
-   */
-  static readonly CreatePatternRelationByAlgorithmPath =
-    '/v1/algorithms/{algoId}/pattern-relations';
-
-  /**
-   * Add a Pattern Relation from this Algorithm to a given Pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `createPatternRelationByAlgorithm()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  createPatternRelationByAlgorithm$Response(params: {
-    algoId: string;
-    body: PatternRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      algorithm: AlgorithmDto;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.CreatePatternRelationByAlgorithmPath,
-      'post'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            algorithm: AlgorithmDto;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Add a Pattern Relation from this Algorithm to a given Pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `createPatternRelationByAlgorithm$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  createPatternRelationByAlgorithm(params: {
-    algoId: string;
-    body: PatternRelationDto;
-  }): Observable<{
-    id?: string;
-    algorithm: AlgorithmDto;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
-    return this.createPatternRelationByAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id?: string;
-            algorithm: AlgorithmDto;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id?: string;
-            algorithm: AlgorithmDto;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation getPatternRelationByAlgorithm
-   */
-  static readonly GetPatternRelationByAlgorithmPath =
-    '/v1/algorithms/{algoId}/pattern-relations/{relationId}';
-
-  /**
-   * Get a certain pattern relation for an algorithm.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPatternRelationByAlgorithm()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPatternRelationByAlgorithm$Response(params: {
-    algoId: string;
-    relationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      algorithm: AlgorithmDto;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetPatternRelationByAlgorithmPath,
-      'get'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('relationId', params.relationId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            algorithm: AlgorithmDto;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Get a certain pattern relation for an algorithm.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPatternRelationByAlgorithm$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPatternRelationByAlgorithm(params: {
-    algoId: string;
-    relationId: string;
-  }): Observable<{
-    id?: string;
-    algorithm: AlgorithmDto;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
-    return this.getPatternRelationByAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id?: string;
-            algorithm: AlgorithmDto;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id?: string;
-            algorithm: AlgorithmDto;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation updatePatternRelations
-   */
-  static readonly UpdatePatternRelationsPath =
-    '/v1/algorithms/{algoId}/pattern-relations/{relationId}';
-
-  /**
-   * Update a references to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updatePatternRelations()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updatePatternRelations$Response(params: {
-    algoId: string;
-    relationId: string;
-    body: PatternRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      algorithm: AlgorithmDto;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UpdatePatternRelationsPath,
-      'put'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('relationId', params.relationId, {});
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            algorithm: AlgorithmDto;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Update a references to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `updatePatternRelations$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updatePatternRelations(params: {
-    algoId: string;
-    relationId: string;
-    body: PatternRelationDto;
-  }): Observable<{
-    id?: string;
-    algorithm: AlgorithmDto;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
-    return this.updatePatternRelations$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id?: string;
-            algorithm: AlgorithmDto;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id?: string;
-            algorithm: AlgorithmDto;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation deletePatternRelationByAlgorithm
-   */
-  static readonly DeletePatternRelationByAlgorithmPath =
-    '/v1/algorithms/{algoId}/pattern-relations/{relationId}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deletePatternRelationByAlgorithm()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deletePatternRelationByAlgorithm$Response(params: {
-    algoId: string;
-    relationId: string;
-  }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.DeletePatternRelationByAlgorithmPath,
-      'delete'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('relationId', params.relationId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deletePatternRelationByAlgorithm$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deletePatternRelationByAlgorithm(params: {
-    algoId: string;
-    relationId: string;
-  }): Observable<void> {
-    return this.deletePatternRelationByAlgorithm$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
-    );
-  }
-
-  /**
-   * Path part for operation getProblemTypesByAlgorithm
-   */
-  static readonly GetProblemTypesByAlgorithmPath =
-    '/v1/algorithms/{algoId}/problem-types';
-
-  /**
-   * Get the problem types for an algorithm.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getProblemTypesByAlgorithm()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getProblemTypesByAlgorithm$Response(params: {
-    algoId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetProblemTypesByAlgorithmPath,
-      'get'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Get the problem types for an algorithm.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getProblemTypesByAlgorithm$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getProblemTypesByAlgorithm(params: {
-    algoId: string;
-  }): Observable<{
-    _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-  }> {
-    return this.getProblemTypesByAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation addProblemType
-   */
-  static readonly AddProblemTypePath = '/v1/algorithms/{algoId}/problem-types';
-
-  /**
-   * Add a reference to an existing problemType (that was previously created via a POST on /problem-types/). Custom ID will be ignored. For problem type only ID is required, other problem type attributes will not change. If the problemType doesn't exist yet, a 404 error is thrown.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addProblemType()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  addProblemType$Response(params: {
-    algoId: string;
-    body: ProblemTypeDto;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.AddProblemTypePath,
-      'post'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Add a reference to an existing problemType (that was previously created via a POST on /problem-types/). Custom ID will be ignored. For problem type only ID is required, other problem type attributes will not change. If the problemType doesn't exist yet, a 404 error is thrown.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addProblemType$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  addProblemType(params: {
-    algoId: string;
-    body: ProblemTypeDto;
-  }): Observable<{
-    _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-  }> {
-    return this.addProblemType$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation getSpecificProblemTypes
-   */
-  static readonly GetSpecificProblemTypesPath =
-    '/v1/algorithms/{algoId}/problem-types/{problemTypeId}';
-
-  /**
-   * Get a specific problem type for an algorithm.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getSpecificProblemTypes()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getSpecificProblemTypes$Response(params: {
-    algoId: string;
-    problemTypeId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      name: string;
-      parentProblemType?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetSpecificProblemTypesPath,
-      'get'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('problemTypeId', params.problemTypeId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Get a specific problem type for an algorithm.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getSpecificProblemTypes$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getSpecificProblemTypes(params: {
-    algoId: string;
-    problemTypeId: string;
-  }): Observable<{
-    id?: string;
-    name: string;
-    parentProblemType?: string;
-    _links?: Array<Link>;
-  }> {
-    return this.getSpecificProblemTypes$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id?: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id?: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation deleteReferenceToProblemTypes
-   */
-  static readonly DeleteReferenceToProblemTypesPath =
-    '/v1/algorithms/{algoId}/problem-types/{problemTypeId}';
-
-  /**
-   * Delete a reference to a problem types of the algorithm.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteReferenceToProblemTypes()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteReferenceToProblemTypes$Response(params: {
-    algoId: string;
-    problemTypeId: string;
-  }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.DeleteReferenceToProblemTypesPath,
-      'delete'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('problemTypeId', params.problemTypeId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
-  }
-
-  /**
-   * Delete a reference to a problem types of the algorithm.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteReferenceToProblemTypes$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteReferenceToProblemTypes(params: {
-    algoId: string;
-    problemTypeId: string;
-  }): Observable<void> {
-    return this.deleteReferenceToProblemTypes$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
-    );
-  }
-
-  /**
-   * Path part for operation getPublicationsByAlgorithm
-   */
-  static readonly GetPublicationsByAlgorithmPath =
-    '/v1/algorithms/{algoId}/publications';
-
-  /**
-   * Get referenced publications for an algorithm.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPublicationsByAlgorithm()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPublicationsByAlgorithm$Response(params: {
-    algoId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { publications?: Array<EntityModelPublicationDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetPublicationsByAlgorithmPath,
-      'get'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Get referenced publications for an algorithm.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPublicationsByAlgorithm$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPublicationsByAlgorithm(params: {
-    algoId: string;
-  }): Observable<{
-    _embedded?: { publications?: Array<EntityModelPublicationDto> };
-  }> {
-    return this.getPublicationsByAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation addPublication
-   */
-  static readonly AddPublicationPath = '/v1/algorithms/{algoId}/publications';
-
-  /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addPublication()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  addPublication$Response(params: {
-    algoId: string;
-    body: PublicationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { publications?: Array<EntityModelPublicationDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.AddPublicationPath,
-      'post'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addPublication$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  addPublication(params: {
-    algoId: string;
-    body: PublicationDto;
-  }): Observable<{
-    _embedded?: { publications?: Array<EntityModelPublicationDto> };
-  }> {
-    return this.addPublication$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation getPublicationByAlgorithm
-   */
-  static readonly GetPublicationByAlgorithmPath =
-    '/v1/algorithms/{algoId}/publications/{publicationId}';
-
-  /**
-   * Get a specific referenced publication of an algorithm.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPublicationByAlgorithm()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPublicationByAlgorithm$Response(params: {
-    algoId: string;
-    publicationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      title: string;
-      doi?: string;
-      url?: string;
-      authors: Array<string>;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetPublicationByAlgorithmPath,
-      'get'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('publicationId', params.publicationId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
-  }
-
-  /**
-   * Get a specific referenced publication of an algorithm.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPublicationByAlgorithm$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPublicationByAlgorithm(params: {
-    algoId: string;
-    publicationId: string;
-  }): Observable<{
-    id?: string;
-    title: string;
-    doi?: string;
-    url?: string;
-    authors: Array<string>;
-    _links?: Array<Link>;
-  }> {
-    return this.getPublicationByAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id?: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id?: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation deleteReferenceToPublication
-   */
-  static readonly DeleteReferenceToPublicationPath =
-    '/v1/algorithms/{algoId}/publications/{publicationId}';
-
-  /**
-   * Delete a reference to a publication of the algorithm.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteReferenceToPublication()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteReferenceToPublication$Response(params: {
-    algoId: string;
-    publicationId: string;
-  }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.DeleteReferenceToPublicationPath,
-      'delete'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-      rb.path('publicationId', params.publicationId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
-  }
-
-  /**
-   * Delete a reference to a publication of the algorithm.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `deleteReferenceToPublication$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteReferenceToPublication(params: {
-    algoId: string;
-    publicationId: string;
-  }): Observable<void> {
-    return this.deleteReferenceToPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
-    );
-  }
-
-  /**
-   * Path part for operation getTagsOfAlgorithm
-   */
-  static readonly GetTagsOfAlgorithmPath = '/v1/algorithms/{algoId}/tags';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getTagsOfAlgorithm()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getTagsOfAlgorithm$Response(params: {
-    algoId: string;
-  }): Observable<
-    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetTagsOfAlgorithmPath,
-      'get'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-          }>;
-        })
-      );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getTagsOfAlgorithm$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getTagsOfAlgorithm(params: {
-    algoId: string;
-  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
-    return this.getTagsOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-          }>
-        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
-      )
-    );
-  }
-
-  /**
-   * Path part for operation addTagToAlgorithm
-   */
-  static readonly AddTagToAlgorithmPath = '/v1/algorithms/{algoId}/tags';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addTagToAlgorithm()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  addTagToAlgorithm$Response(params: {
-    algoId: string;
-    body: TagDto;
-  }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.AddTagToAlgorithmPath,
-      'put'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `addTagToAlgorithm$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  addTagToAlgorithm(params: {
-    algoId: string;
-    body: TagDto;
-  }): Observable<void> {
-    return this.addTagToAlgorithm$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
-    );
-  }
-
-  /**
-   * Path part for operation removeTagFromAlgorithm
-   */
-  static readonly RemoveTagFromAlgorithmPath = '/v1/algorithms/{algoId}/tags';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `removeTagFromAlgorithm()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  removeTagFromAlgorithm$Response(params: {
-    algoId: string;
-    body: TagDto;
-  }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.RemoveTagFromAlgorithmPath,
-      'delete'
-    );
-    if (params) {
-      rb.path('algoId', params.algoId, {});
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `removeTagFromAlgorithm$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  removeTagFromAlgorithm(params: {
-    algoId: string;
-    body: TagDto;
-  }): Observable<void> {
-    return this.removeTagFromAlgorithm$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
-    );
-  }
-
-  /**
-   * Path part for operation getAllImplementations
-   */
-  static readonly GetAllImplementationsPath = '/v1/implementations';
-
-  /**
-   * Retrieve all implementations
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAllImplementations()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAllImplementations$Response(params?: {
     /**
      * Filter criteria for this query
      */
@@ -4647,16 +3633,17 @@ export class AlgorithmService extends BaseService {
     sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
-      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+      _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
       page?: PageMetadata;
     }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetAllImplementationsPath,
+      AlgorithmService.GetPatternRelationsOfAlgorithmPath,
       'get'
     );
     if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
@@ -4674,7 +3661,7 @@ export class AlgorithmService extends BaseService {
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
             _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
+              patternRelations?: Array<EntityModelPatternRelationDto>;
             };
             page?: PageMetadata;
           }>;
@@ -4683,14 +3670,16 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve all implementations
+   * Retrieve pattern relations for an algorithms.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getAllImplementations$Response()` instead.
+   * To access the full response (for headers, for example), `getPatternRelationsOfAlgorithm$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAllImplementations(params?: {
+  getPatternRelationsOfAlgorithm(params: {
+    algorithmId: string;
+
     /**
      * Filter criteria for this query
      */
@@ -4711,22 +3700,22 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
   }): Observable<{
-    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+    _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
     page?: PageMetadata;
   }> {
-    return this.getAllImplementations$Response(params).pipe(
+    return this.getPatternRelationsOfAlgorithm$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
             _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
+              patternRelations?: Array<EntityModelPatternRelationDto>;
             };
             page?: PageMetadata;
           }>
         ) =>
           r.body as {
             _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
+              patternRelations?: Array<EntityModelPatternRelationDto>;
             };
             page?: PageMetadata;
           }
@@ -4735,32 +3724,41 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Path part for operation getImplementedAlgorithm
+   * Path part for operation createPatternRelationForAlgorithm
    */
-  static readonly GetImplementedAlgorithmPath = '/v1/implementations/{id}';
+  static readonly CreatePatternRelationForAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/pattern-relations';
 
   /**
-   * Retrieve a specific algorithm and its basic properties.
+   * Add a pattern relation from an algorithm to a given pattern.Custom ID will be ignored. For pattern relation type only ID is required,other pattern relation type attributes will not change.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getImplementedAlgorithm()` instead.
+   * To access only the response body, use `createPatternRelationForAlgorithm()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  getImplementedAlgorithm$Response(params: {
-    id: string;
+  createPatternRelationForAlgorithm$Response(params: {
+    algorithmId: string;
+    body: PatternRelationDto;
   }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-    >
+    StrictHttpResponse<{
+      id: string;
+      algorithmId: string;
+      pattern: string;
+      patternRelationType: PatternRelationTypeDto;
+      description?: string;
+      _links?: Array<Link>;
+    }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      AlgorithmService.GetImplementedAlgorithmPath,
-      'get'
+      AlgorithmService.CreatePatternRelationForAlgorithmPath,
+      'post'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path('algorithmId', params.algorithmId, {});
+
+      rb.body(params.body, 'application/json');
     }
     return this.http
       .request(
@@ -4772,44 +3770,1195 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >;
+          return r as StrictHttpResponse<{
+            id: string;
+            algorithmId: string;
+            pattern: string;
+            patternRelationType: PatternRelationTypeDto;
+            description?: string;
+            _links?: Array<Link>;
+          }>;
         })
       );
   }
 
   /**
-   * Retrieve a specific algorithm and its basic properties.
+   * Add a pattern relation from an algorithm to a given pattern.Custom ID will be ignored. For pattern relation type only ID is required,other pattern relation type attributes will not change.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getImplementedAlgorithm$Response()` instead.
+   * To access the full response (for headers, for example), `createPatternRelationForAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createPatternRelationForAlgorithm(params: {
+    algorithmId: string;
+    body: PatternRelationDto;
+  }): Observable<{
+    id: string;
+    algorithmId: string;
+    pattern: string;
+    patternRelationType: PatternRelationTypeDto;
+    description?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.createPatternRelationForAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            algorithmId: string;
+            pattern: string;
+            patternRelationType: PatternRelationTypeDto;
+            description?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            algorithmId: string;
+            pattern: string;
+            patternRelationType: PatternRelationTypeDto;
+            description?: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getPatternRelationOfAlgorithm
+   */
+  static readonly GetPatternRelationOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
+
+  /**
+   * Retrieve a specific pattern relation
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPatternRelationOfAlgorithm()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getImplementedAlgorithm(params: {
-    id: string;
+  getPatternRelationOfAlgorithm$Response(params: {
+    algorithmId: string;
+    patternRelationId: string;
   }): Observable<
-    { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
+    StrictHttpResponse<{
+      id: string;
+      algorithmId: string;
+      pattern: string;
+      patternRelationType: PatternRelationTypeDto;
+      description?: string;
+      _links?: Array<Link>;
+    }>
   > {
-    return this.getImplementedAlgorithm$Response(params).pipe(
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetPatternRelationOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('patternRelationId', params.patternRelationId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            algorithmId: string;
+            pattern: string;
+            patternRelationType: PatternRelationTypeDto;
+            description?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve a specific pattern relation
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getPatternRelationOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPatternRelationOfAlgorithm(params: {
+    algorithmId: string;
+    patternRelationId: string;
+  }): Observable<{
+    id: string;
+    algorithmId: string;
+    pattern: string;
+    patternRelationType: PatternRelationTypeDto;
+    description?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.getPatternRelationOfAlgorithm$Response(params).pipe(
       map(
         (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >
+          r: StrictHttpResponse<{
+            id: string;
+            algorithmId: string;
+            pattern: string;
+            patternRelationType: PatternRelationTypeDto;
+            description?: string;
+            _links?: Array<Link>;
+          }>
         ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicAlgorithmDto
-            | QuantumAlgorithmDto
-          )
+          r.body as {
+            id: string;
+            algorithmId: string;
+            pattern: string;
+            patternRelationType: PatternRelationTypeDto;
+            description?: string;
+            _links?: Array<Link>;
+          }
       )
+    );
+  }
+
+  /**
+   * Path part for operation updatePatternRelationOfAlgorithm
+   */
+  static readonly UpdatePatternRelationOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
+
+  /**
+   * Update a reference to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updatePatternRelationOfAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updatePatternRelationOfAlgorithm$Response(params: {
+    algorithmId: string;
+    patternRelationId: string;
+    body: PatternRelationDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      algorithmId: string;
+      pattern: string;
+      patternRelationType: PatternRelationTypeDto;
+      description?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UpdatePatternRelationOfAlgorithmPath,
+      'put'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('patternRelationId', params.patternRelationId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            algorithmId: string;
+            pattern: string;
+            patternRelationType: PatternRelationTypeDto;
+            description?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Update a reference to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updatePatternRelationOfAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updatePatternRelationOfAlgorithm(params: {
+    algorithmId: string;
+    patternRelationId: string;
+    body: PatternRelationDto;
+  }): Observable<{
+    id: string;
+    algorithmId: string;
+    pattern: string;
+    patternRelationType: PatternRelationTypeDto;
+    description?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.updatePatternRelationOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            algorithmId: string;
+            pattern: string;
+            patternRelationType: PatternRelationTypeDto;
+            description?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            algorithmId: string;
+            pattern: string;
+            patternRelationType: PatternRelationTypeDto;
+            description?: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deletePatternRelationOfAlgorithm
+   */
+  static readonly DeletePatternRelationOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
+
+  /**
+   * Delete a pattern relation of an specific algorithm
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deletePatternRelationOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deletePatternRelationOfAlgorithm$Response(params: {
+    algorithmId: string;
+    patternRelationId: string;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.DeletePatternRelationOfAlgorithmPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('patternRelationId', params.patternRelationId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete a pattern relation of an specific algorithm
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deletePatternRelationOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deletePatternRelationOfAlgorithm(params: {
+    algorithmId: string;
+    patternRelationId: string;
+  }): Observable<void> {
+    return this.deletePatternRelationOfAlgorithm$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getProblemTypesOfAlgorithm
+   */
+  static readonly GetProblemTypesOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/problem-types';
+
+  /**
+   * Get the problem types for an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProblemTypesOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProblemTypesOfAlgorithm$Response(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetProblemTypesOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
+            page?: PageMetadata;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Get the problem types for an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getProblemTypesOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProblemTypesOfAlgorithm(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
+    page?: PageMetadata;
+  }> {
+    return this.getProblemTypesOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
+            page?: PageMetadata;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation linkAlgorithmAndProblemType
+   */
+  static readonly LinkAlgorithmAndProblemTypePath =
+    '/v1/algorithms/{algorithmId}/problem-types';
+
+  /**
+   * Add a reference to an existing ProblemType (that was previously created via a POST on /problem-types). For problem type only ID is required, other problem type attributes will not change. If the ProblemType doesn't exist yet, a 404 error is thrown.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `linkAlgorithmAndProblemType()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  linkAlgorithmAndProblemType$Response(params: {
+    algorithmId: string;
+    body: ProblemTypeDto;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.LinkAlgorithmAndProblemTypePath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Add a reference to an existing ProblemType (that was previously created via a POST on /problem-types). For problem type only ID is required, other problem type attributes will not change. If the ProblemType doesn't exist yet, a 404 error is thrown.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `linkAlgorithmAndProblemType$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  linkAlgorithmAndProblemType(params: {
+    algorithmId: string;
+    body: ProblemTypeDto;
+  }): Observable<void> {
+    return this.linkAlgorithmAndProblemType$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getProblemTypeOfAlgorithm
+   */
+  static readonly GetProblemTypeOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
+
+  /**
+   * Retrieve a specific problem type of an algorithm
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProblemTypeOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProblemTypeOfAlgorithm$Response(params: {
+    algorithmId: string;
+    problemTypeId: string;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      name: string;
+      parentProblemType?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetProblemTypeOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('problemTypeId', params.problemTypeId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            name: string;
+            parentProblemType?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve a specific problem type of an algorithm
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getProblemTypeOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProblemTypeOfAlgorithm(params: {
+    algorithmId: string;
+    problemTypeId: string;
+  }): Observable<{
+    id: string;
+    name: string;
+    parentProblemType?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.getProblemTypeOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            name: string;
+            parentProblemType?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            name: string;
+            parentProblemType?: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation unlinkAlgorithmAndProblemType
+   */
+  static readonly UnlinkAlgorithmAndProblemTypePath =
+    '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
+
+  /**
+   * Delete a reference to a problem types of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/problem-types/{problemTypeId}).
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `unlinkAlgorithmAndProblemType()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unlinkAlgorithmAndProblemType$Response(params: {
+    algorithmId: string;
+    problemTypeId: string;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UnlinkAlgorithmAndProblemTypePath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('problemTypeId', params.problemTypeId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete a reference to a problem types of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/problem-types/{problemTypeId}).
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `unlinkAlgorithmAndProblemType$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unlinkAlgorithmAndProblemType(params: {
+    algorithmId: string;
+    problemTypeId: string;
+  }): Observable<void> {
+    return this.unlinkAlgorithmAndProblemType$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getPublicationsOfAlgorithm
+   */
+  static readonly GetPublicationsOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/publications';
+
+  /**
+   * Get referenced publications for an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPublicationsOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPublicationsOfAlgorithm$Response(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { publications?: Array<EntityModelPublicationDto> };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetPublicationsOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { publications?: Array<EntityModelPublicationDto> };
+            page?: PageMetadata;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Get referenced publications for an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getPublicationsOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPublicationsOfAlgorithm(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    _embedded?: { publications?: Array<EntityModelPublicationDto> };
+    page?: PageMetadata;
+  }> {
+    return this.getPublicationsOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { publications?: Array<EntityModelPublicationDto> };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: { publications?: Array<EntityModelPublicationDto> };
+            page?: PageMetadata;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation linkAlgorithmAndPublication
+   */
+  static readonly LinkAlgorithmAndPublicationPath =
+    '/v1/algorithms/{algorithmId}/publications';
+
+  /**
+   * Add a reference to an existing publication (that was previously created via a POST on /publications). For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is returned.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `linkAlgorithmAndPublication()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  linkAlgorithmAndPublication$Response(params: {
+    algorithmId: string;
+    body: PublicationDto;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.LinkAlgorithmAndPublicationPath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Add a reference to an existing publication (that was previously created via a POST on /publications). For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is returned.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `linkAlgorithmAndPublication$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  linkAlgorithmAndPublication(params: {
+    algorithmId: string;
+    body: PublicationDto;
+  }): Observable<void> {
+    return this.linkAlgorithmAndPublication$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getPublicationOfAlgorithm
+   */
+  static readonly GetPublicationOfAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/publications/{publicationId}';
+
+  /**
+   * Retrieve a publication of an algorithm
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPublicationOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPublicationOfAlgorithm$Response(params: {
+    algorithmId: string;
+    publicationId: string;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      title: string;
+      doi?: string;
+      url?: string;
+      authors: Array<string>;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetPublicationOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('publicationId', params.publicationId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            title: string;
+            doi?: string;
+            url?: string;
+            authors: Array<string>;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve a publication of an algorithm
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getPublicationOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPublicationOfAlgorithm(params: {
+    algorithmId: string;
+    publicationId: string;
+  }): Observable<{
+    id: string;
+    title: string;
+    doi?: string;
+    url?: string;
+    authors: Array<string>;
+    _links?: Array<Link>;
+  }> {
+    return this.getPublicationOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            title: string;
+            doi?: string;
+            url?: string;
+            authors: Array<string>;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            title: string;
+            doi?: string;
+            url?: string;
+            authors: Array<string>;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation unlinkAlgorithmAndPublication
+   */
+  static readonly UnlinkAlgorithmAndPublicationPath =
+    '/v1/algorithms/{algorithmId}/publications/{publicationId}';
+
+  /**
+   * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications/{publicationId}).
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `unlinkAlgorithmAndPublication()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unlinkAlgorithmAndPublication$Response(params: {
+    algorithmId: string;
+    publicationId: string;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UnlinkAlgorithmAndPublicationPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('publicationId', params.publicationId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications/{publicationId}).
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `unlinkAlgorithmAndPublication$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unlinkAlgorithmAndPublication(params: {
+    algorithmId: string;
+    publicationId: string;
+  }): Observable<void> {
+    return this.unlinkAlgorithmAndPublication$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getTagsOfAlgorithm
+   */
+  static readonly GetTagsOfAlgorithmPath = '/v1/algorithms/{algorithmId}/tags';
+
+  /**
+   * Retrieve all tags associated with a specific algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTagsOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTagsOfAlgorithm$Response(params: {
+    algorithmId: string;
+  }): Observable<
+    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetTagsOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve all tags associated with a specific algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getTagsOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTagsOfAlgorithm(params: {
+    algorithmId: string;
+  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+    return this.getTagsOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { tags?: Array<EntityModelTagDto> };
+          }>
+        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation addTagToAlgorithm
+   */
+  static readonly AddTagToAlgorithmPath = '/v1/algorithms/{algorithmId}/tags';
+
+  /**
+   * Add a tag to an algorithm. The tag does not have to exist before adding it.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addTagToAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addTagToAlgorithm$Response(params: {
+    algorithmId: string;
+    body: TagDto;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.AddTagToAlgorithmPath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Add a tag to an algorithm. The tag does not have to exist before adding it.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `addTagToAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addTagToAlgorithm(params: {
+    algorithmId: string;
+    body: TagDto;
+  }): Observable<void> {
+    return this.addTagToAlgorithm$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation removeTagFromAlgorithm
+   */
+  static readonly RemoveTagFromAlgorithmPath =
+    '/v1/algorithms/{algorithmId}/tags';
+
+  /**
+   * Remove a tag from an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeTagFromAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  removeTagFromAlgorithm$Response(params: {
+    algorithmId: string;
+    body: TagDto;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.RemoveTagFromAlgorithmPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Remove a tag from an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `removeTagFromAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  removeTagFromAlgorithm(params: {
+    algorithmId: string;
+    body: TagDto;
+  }): Observable<void> {
+    return this.removeTagFromAlgorithm$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 }

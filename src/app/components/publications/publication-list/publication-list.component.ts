@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api-atlas/services/publication.service';
-import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
@@ -71,54 +70,58 @@ export class PublicationListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const params: any = {};
-    const dialogRef = this.utilService.createDialog(
-      AddPublicationDialogComponent,
-      {
+    this.utilService
+      .createDialog(AddPublicationDialogComponent, {
         data: { title: 'Add new publication' },
-      }
-    );
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        const publicationDto: PublicationDto = {
-          title: dialogResult.publicationTitle,
-          authors: dialogResult.authors,
-        };
-        params.body = publicationDto;
-        this.publicationService.createPublication(params).subscribe((data) => {
-          this.router.navigate(['publications', data.id]);
-          this.utilService.callSnackBar('Successfully created publication');
-        });
-      }
-    });
-  }
-  onDeleteElements(event: SelectParams): void {
-    const dialogRef = this.utilService.createDialog(ConfirmDialogComponent, {
-      title: 'Confirm Deletion',
-      message:
-        'Are you sure you want to delete the following publication(s): ',
-      data: event.elements,
-      variableName: 'title',
-      yesButtonText: 'yes',
-      noButtonText: 'no',
-    });
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        // Iterate all selected algorithms and delete them
-        for (const publication of event.elements) {
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
           this.publicationService
-            .deletePublication({ id: publication.id })
-            .subscribe(() => {
-              // Refresh Algorithms after delete
-              this.getPublications(event.queryParams);
-              this.utilService.callSnackBar(
-                'Successfully removed publication(s)'
-              );
+            .createPublication({
+              body: {
+                id: null,
+                title: dialogResult.publicationTitle,
+                authors: dialogResult.authors,
+              },
+            })
+            .subscribe((data) => {
+              this.router.navigate(['publications', data.id]);
+              this.utilService.callSnackBar('Successfully created publication');
             });
         }
-      }
-    });
+      });
+  }
+
+  onDeleteElements(event: DeleteParams): void {
+    this.utilService
+      .createDialog(ConfirmDialogComponent, {
+        title: 'Confirm Deletion',
+        message:
+          'Are you sure you want to delete the following publication(s): ',
+        data: event.elements,
+        variableName: 'title',
+        yesButtonText: 'yes',
+        noButtonText: 'no',
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
+          for (const publication of event.elements) {
+            promises.push(
+              this.publicationService
+                .deletePublication({ publicationId: publication.id })
+                .toPromise()
+            );
+          }
+          Promise.all(promises).then(() => {
+            this.getPublications(event.queryParams);
+            this.utilService.callSnackBar(
+              'Successfully removed publication(s)'
+            );
+          });
+        }
+      });
   }
 }

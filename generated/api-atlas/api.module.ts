@@ -13,6 +13,7 @@ import { AlgorithmRelationTypeService } from './services/algorithm-relation-type
 import { ApplicationAreasService } from './services/application-areas.service';
 import { ComputeResourcePropertyTypesService } from './services/compute-resource-property-types.service';
 import { ExecutionEnvironmentsService } from './services/execution-environments.service';
+import { ImplementationsService } from './services/implementations.service';
 import { PatternRelationService } from './services/pattern-relation.service';
 import { PatternRelationTypeService } from './services/pattern-relation-type.service';
 import { ProblemTypeService } from './services/problem-type.service';
@@ -33,6 +34,7 @@ import { TagService } from './services/tag.service';
     ApplicationAreasService,
     ComputeResourcePropertyTypesService,
     ExecutionEnvironmentsService,
+    ImplementationsService,
     PatternRelationService,
     PatternRelationTypeService,
     ProblemTypeService,

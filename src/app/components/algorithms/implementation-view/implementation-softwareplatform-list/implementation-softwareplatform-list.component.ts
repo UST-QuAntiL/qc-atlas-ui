@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
-import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { Router } from '@angular/router';
@@ -17,7 +16,6 @@ import { GenericDataService } from '../../../../util/generic-data.service';
 })
 export class ImplementationSoftwareplatformListComponent implements OnInit {
   @Input() implementation: ImplementationDto;
-  @Input() algorithm: AlgorithmDto;
   @Input() linkedPlatforms: EntityModelSoftwarePlatformDto[] = [];
   allLinkedPlatforms: EntityModelSoftwarePlatformDto[] = [];
 
@@ -53,9 +51,9 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
 
   getAllLinkedPlatforms(): void {
     this.algorithmService
-      .getSoftwarePlatformsByImplementation({
-        implId: this.implementation.id,
-        algoId: this.algorithm.id,
+      .getSoftwarePlatformsOfImplementation({
+        implementationId: this.implementation.id,
+        algorithmId: this.implementation.implementedAlgorithmId,
       })
       .subscribe((data) => {
         // Read all incoming data
@@ -67,9 +65,13 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
       });
   }
 
-  getLinkedPlatforms(params): void {
+  getLinkedPlatforms(params: {
+    algorithmId: string;
+    implementationId: string;
+    softwarePlatformId: string;
+  }): void {
     this.algorithmService
-      .getSoftwarePlatformsByImplementation(params)
+      .getSoftwarePlatformOfImplementation(params)
       .subscribe((data) => {
         this.prepareLinkedPlatformsData(data);
       });
@@ -122,9 +124,10 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
     // Empty unlinked algorithms
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addImplementationReferenceToSoftwarePlatform(
-        this.generateLinkParams(platform.id)
-      )
+      .linkSoftwarePlatformAndImplementation({
+        softwarePlatformId: platform.id,
+        body: this.implementation,
+      })
       .subscribe((data) => {
         this.getLinkedPlatformsHateoas(this.pagingInfo._links.self.href);
         this.getAllLinkedPlatforms();
@@ -132,33 +135,30 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
       });
   }
 
-  async unlinkPlatforms(event): Promise<void> {
-    // Iterate all selected algorithms
+  unlinkPlatforms(event): void {
+    const promises: Array<Promise<void>> = [];
     for (const platform of event.elements) {
-      await // Build params using path ids and perform delete request
-      this.executionEnvironmentsService
-        .deleteImplementationReferenceFromSoftwarePlatform(
-          this.generateLinkParams(platform.id)
-        )
-        .toPromise();
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkSoftwarePlatformAndImplementation({
+            softwarePlatformId: platform.id,
+            implementationId: this.implementation.id,
+          })
+          .toPromise()
+      );
+    }
+    Promise.all(promises).then(() => {
       this.utilService.callSnackBar(
         'Successfully unlinked software platform(s)'
       );
-    }
-    this.loadCorrectPageAfterDelete(event.elements.length);
-    this.getAllLinkedPlatforms();
-  }
-
-  generateLinkParams(id: string): any {
-    return {
-      id,
-      implId: this.implementation.id,
-    };
+      this.loadCorrectPageAfterDelete(event.elements.length);
+      this.getAllLinkedPlatforms();
+    });
   }
 
   onDatalistConfigChanged(event): void {
-    event.algoId = this.algorithm.id;
-    event.implId = this.implementation.id;
+    event.algorithmId = this.implementation.implementedAlgorithmId;
+    event.implementationId = this.implementation.id;
     this.getLinkedPlatforms(event);
   }
 

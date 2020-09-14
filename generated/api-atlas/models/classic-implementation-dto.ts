@@ -1,7 +1,8 @@
 /* tslint:disable */
 import { ClassicAlgorithmDto } from './classic-algorithm-dto';
 export type ClassicImplementationDto = {
-  id?: string;
+  id: string;
+  implementedAlgorithmId?: string;
   name: string;
   link?: string;
   inputFormat?: string;

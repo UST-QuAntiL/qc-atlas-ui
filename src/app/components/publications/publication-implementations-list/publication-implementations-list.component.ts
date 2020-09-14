@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
-import { GenericDataService } from '../../../util/generic-data.service';
+import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 
 @Component({
   selector: 'app-publication-implementations-list',
@@ -24,23 +24,28 @@ export class PublicationImplementationsListComponent implements OnInit {
   ];
 
   constructor(
-    private genericDataService: GenericDataService,
     private publicationService: PublicationService,
     private algorithmService: AlgorithmService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.getLinkedImplementations({ id: this.publication.id });
+    this.getLinkedImplementations({ publicationId: this.publication.id });
   }
 
   onDatalistConfigChanged(event): void {
-    this.getLinkedImplementations({ id: this.publication.id });
+    this.getLinkedImplementations({ publicationId: this.publication.id });
   }
 
-  getLinkedImplementations(params): void {
+  getLinkedImplementations(params: {
+    publicationId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.publicationService
-      .getPublicationImplementations(params)
+      .getImplementationsOfPublication(params)
       .subscribe((data) => {
         // Read all incoming data
         if (data._embedded) {
@@ -51,17 +56,12 @@ export class PublicationImplementationsListComponent implements OnInit {
       });
   }
 
-  onElementClicked(implementation: any): void {
-    this.genericDataService
-      .getData(implementation._links.implementedAlgorithm.href)
-      .subscribe((data) => {
-        const algo = JSON.parse(JSON.stringify(data));
-        this.router.navigate([
-          'algorithms',
-          algo.id,
-          'implementations',
-          implementation.id,
-        ]);
-      });
+  onElementClicked(implementation: ImplementationDto): void {
+    this.router.navigate([
+      'algorithms',
+      implementation.implementedAlgorithmId,
+      'implementations',
+      implementation.id,
+    ]);
   }
 }

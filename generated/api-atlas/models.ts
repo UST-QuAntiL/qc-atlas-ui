@@ -1,6 +1,6 @@
-export { AlgoRelationTypeDto } from './models/algo-relation-type-dto';
 export { AlgorithmDto } from './models/algorithm-dto';
 export { AlgorithmRelationDto } from './models/algorithm-relation-dto';
+export { AlgorithmRelationTypeDto } from './models/algorithm-relation-type-dto';
 export { ApplicationAreaDto } from './models/application-area-dto';
 export { ClassicAlgorithmDto } from './models/classic-algorithm-dto';
 export { ClassicImplementationDto } from './models/classic-implementation-dto';
@@ -8,9 +8,9 @@ export { CloudServiceDto } from './models/cloud-service-dto';
 export { ComputeResourceDto } from './models/compute-resource-dto';
 export { ComputeResourcePropertyDto } from './models/compute-resource-property-dto';
 export { ComputeResourcePropertyTypeDto } from './models/compute-resource-property-type-dto';
-export { EntityModelAlgoRelationTypeDto } from './models/entity-model-algo-relation-type-dto';
 export { EntityModelAlgorithmDto } from './models/entity-model-algorithm-dto';
 export { EntityModelAlgorithmRelationDto } from './models/entity-model-algorithm-relation-dto';
+export { EntityModelAlgorithmRelationTypeDto } from './models/entity-model-algorithm-relation-type-dto';
 export { EntityModelApplicationAreaDto } from './models/entity-model-application-area-dto';
 export { EntityModelCloudServiceDto } from './models/entity-model-cloud-service-dto';
 export { EntityModelComputeResourceDto } from './models/entity-model-compute-resource-dto';

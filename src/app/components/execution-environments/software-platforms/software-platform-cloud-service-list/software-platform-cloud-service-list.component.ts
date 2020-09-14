@@ -40,7 +40,9 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.softwarePlatform.name;
     this.getCloudServices();
-    this.getLinkedCloudServices({ id: this.softwarePlatform.id });
+    this.getLinkedCloudServices({
+      softwarePlatformId: this.softwarePlatform.id,
+    });
   }
 
   getCloudServices(): void {
@@ -55,9 +57,15 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       });
   }
 
-  getLinkedCloudServices(params: any): void {
+  getLinkedCloudServices(params: {
+    softwarePlatformId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
-      .getCloudServicesForSoftwarePlatform(params)
+      .getCloudServicesOfSoftwarePlatform(params)
       .subscribe((cloudServices) => {
         if (cloudServices._embedded) {
           this.linkedCloudServices = cloudServices._embedded.cloudServices;
@@ -83,33 +91,44 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
   linkCloudService(cloudService: CloudServiceDto): void {
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addCloudServiceReferenceToSoftwarePlatform({
-        id: this.softwarePlatform.id,
-        csId: cloudService.id,
+      .linkSoftwarePlatformAndCloudService({
+        softwarePlatformId: this.softwarePlatform.id,
+        body: cloudService,
       })
-      .subscribe((data) => {
-        this.getLinkedCloudServices({ id: this.softwarePlatform.id });
+      .subscribe(() => {
+        this.getLinkedCloudServices({
+          softwarePlatformId: this.softwarePlatform.id,
+        });
         this.utilService.callSnackBar('Successfully linked compute resource');
       });
   }
 
-  async unlinkCloudServices(event: SelectParams): Promise<void> {
+  unlinkCloudServices(event: DeleteParams): void {
+    const promises: Array<Promise<void>> = [];
     for (const cloudService of event.elements) {
-      await this.executionEnvironmentsService
-        .deleteCloudServiceReferenceFromSoftwarePlatform({
-          id: this.softwarePlatform.id,
-          csId: cloudService.id,
-        })
-        .toPromise();
-      this.getLinkedCloudServices({ id: this.softwarePlatform.id });
-      this.utilService.callSnackBar('Successfully unlinked compute resource');
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkSoftwarePlatformAndCloudService({
+            softwarePlatformId: this.softwarePlatform.id,
+            cloudServiceId: cloudService.id,
+          })
+          .toPromise()
+      );
     }
+    Promise.all(promises).then(() => {
+      this.getLinkedCloudServices({
+        softwarePlatformId: this.softwarePlatform.id,
+      });
+      this.utilService.callSnackBar('Successfully unlinked compute resource');
+    });
   }
 
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedCloudServices({ id: this.softwarePlatform.id });
+    this.getLinkedCloudServices({
+      softwarePlatformId: this.softwarePlatform.id,
+    });
   }
 
   onElementClicked(cloudService: CloudServiceDto): void {

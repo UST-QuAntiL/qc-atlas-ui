@@ -1,5 +1,17 @@
 @import "theme";
 
+.table-select {
+  min-width: 50px;
+}
+
+.table-data {
+  min-width: 200px;
+}
+
+.table-actions {
+  min-width: 100px;
+}
+
 .table-container {
   position: relative;
 }
@@ -33,7 +45,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: 50px;
-}​
+}
 
 mat-grid-list {
   position: relative;

@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { Link } from './link';
 export type EntityModelComputeResourceDto = {
-  id?: string;
+  id: string;
   name: string;
   vendor?: string;
   technology?: string;

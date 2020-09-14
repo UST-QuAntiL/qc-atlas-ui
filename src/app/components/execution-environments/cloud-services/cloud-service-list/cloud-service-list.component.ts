@@ -79,6 +79,7 @@ export class CloudServiceListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const cloudServiceDto: CloudServiceDto = {
+            id: null,
             name: dialogResult.name,
           };
           this.executionEnvironmentsService
@@ -111,17 +112,20 @@ export class CloudServiceListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
           for (const cloudService of deleteParams.elements) {
-            this.executionEnvironmentsService
-              .deleteCloudService({ id: cloudService.id })
-              .subscribe(() => {
-                // Refresh Algorithms after delete
-                this.getCloudServices(deleteParams.queryParams);
-                this.utilService.callSnackBar(
-                  'Successfully deleted cloud service(s)'
-                );
-              });
+            promises.push(
+              this.executionEnvironmentsService
+                .deleteCloudService({ cloudServiceId: cloudService.id })
+                .toPromise()
+            );
           }
+          Promise.all(promises).then(() => {
+            this.getCloudServices(deleteParams.queryParams);
+            this.utilService.callSnackBar(
+              'Successfully deleted cloud service(s)'
+            );
+          });
         }
       });
   }
