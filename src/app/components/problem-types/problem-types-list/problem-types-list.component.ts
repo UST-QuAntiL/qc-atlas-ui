@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ProblemTypeService } from 'api/services/problem-type.service';
-import { ProblemTypeDto } from 'api/models/problem-type-dto';
-import { EntityModelProblemTypeDto } from 'api/models/entity-model-problem-type-dto';
+import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
+import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type-dialog.component';
 
@@ -69,6 +68,7 @@ export class ProblemTypesListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
         const problemTypeDto: EntityModelProblemTypeDto = {
+          id: dialogResult.id,
           name: dialogResult.name,
         };
         if (

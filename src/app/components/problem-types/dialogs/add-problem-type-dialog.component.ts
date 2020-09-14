@@ -83,7 +83,7 @@ export class AddProblemTypeDialogComponent implements OnInit {
     this.data.selectedProblemType = type;
     this.filteredParentProblemTypes = this.filterParents(type);
     this.problemTypeService
-      .getProblemTypeById({ id: type.parentProblemType })
+      .getProblemType({ problemTypeId: type.parentProblemType })
       .subscribe(
         (parentType) => {
           if (parentType) {
