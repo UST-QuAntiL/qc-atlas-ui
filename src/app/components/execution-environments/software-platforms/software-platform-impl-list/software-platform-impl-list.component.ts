@@ -108,7 +108,7 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       });
   }
 
-  unlinkImplementations(event: DeleteParams): void {
+  unlinkImplementations(event: SelectParams): void {
     const promises: Array<Promise<void>> = [];
     for (const implementation of event.elements) {
       promises.push(

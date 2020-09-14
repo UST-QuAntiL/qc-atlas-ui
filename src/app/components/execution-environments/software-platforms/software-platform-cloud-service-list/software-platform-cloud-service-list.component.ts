@@ -103,7 +103,7 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       });
   }
 
-  unlinkCloudServices(event: DeleteParams): void {
+  unlinkCloudServices(event: SelectParams): void {
     const promises: Array<Promise<void>> = [];
     for (const cloudService of event.elements) {
       promises.push(

@@ -93,7 +93,7 @@ export class PublicationListComponent implements OnInit {
       });
   }
 
-  onDeleteElements(event: DeleteParams): void {
+  onDeleteElements(event: SelectParams): void {
     this.utilService
       .createDialog(ConfirmDialogComponent, {
         title: 'Confirm Deletion',

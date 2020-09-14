@@ -75,16 +75,16 @@
         <!-- Apply URL-Class and Event if variable has a link -->
         <a [ngClass]="{'table-url': isLink(variableName)}" (click)="isLink(variableName) && onUrlClicked($event, dataEntry, variableName)">{{ dataEntry[variableName] }}</a>
       </td>
-      <td class="table-actions" *ngIf="allowSelection || allowEdit || allowLink">
-        <button *ngIf="allowEdit" mat-icon-button [ngClass]="{'mr-1': allowSelection}" class="update-small"
+      <td class="table-actions" *ngIf="allowEdit || allowDelete || allowLink">
+        <button *ngIf="allowEdit" mat-icon-button [ngClass]="{'mr-1': allowEdit}" class="update-small"
                 (click)="onUpdateClicked(dataEntry); $event.stopPropagation()">
           <mat-icon>create</mat-icon>
         </button>
-        <button *ngIf="allowDelete" mat-icon-button class="delete-small"
+        <button *ngIf="allowDelete" mat-icon-button [ngClass]="{'mr-1': allowDelete}" class="delete-small"
                 (click)="onSingleDelete(dataEntry); $event.stopPropagation()">
           <mat-icon>delete</mat-icon>
         </button>
-        <button *ngIf="allowLink" mat-icon-button class="link-small"
+        <button *ngIf="allowLink" mat-icon-button [ngClass]="{'mr-1': allowLink}" class="link-small"
                 (click)="onSingleLink(dataEntry); $event.stopPropagation()">
           <mat-icon>link</mat-icon>
         </button>

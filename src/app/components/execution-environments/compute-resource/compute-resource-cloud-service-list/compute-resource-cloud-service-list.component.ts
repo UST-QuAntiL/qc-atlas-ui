@@ -101,7 +101,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
       });
   }
 
-  unlinkCloudServices(event: DeleteParams): void {
+  unlinkCloudServices(event: SelectParams): void {
     const outputPromises: Array<Promise<void>> = [];
     for (const cloudService of event.elements) {
       outputPromises.push(

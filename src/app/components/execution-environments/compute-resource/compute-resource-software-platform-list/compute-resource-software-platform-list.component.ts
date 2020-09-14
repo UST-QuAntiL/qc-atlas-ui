@@ -105,7 +105,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
       });
   }
 
-  unlinkSoftwarePlatforms(event: DeleteParams): void {
+  unlinkSoftwarePlatforms(event: SelectParams): void {
     const promises: Array<Promise<void>> = [];
     for (const softwarePlatform of event.elements) {
       promises.push(
