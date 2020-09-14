@@ -1,9 +1,10 @@
 /* tslint:disable */
-import { AlgorithmRelationTypeDto } from './algorithm-relation-type-dto';
+import { AlgoRelationTypeDto } from './algo-relation-type-dto';
+import { AlgorithmDto } from './algorithm-dto';
 export type AlgorithmRelationDto = {
-  id: string;
-  sourceAlgorithmId: string;
-  targetAlgorithmId: string;
+  id?: string;
+  sourceAlgorithm: AlgorithmDto;
+  targetAlgorithm: AlgorithmDto;
+  algoRelationType: AlgoRelationTypeDto;
   description?: string;
-  algoRelationType: AlgorithmRelationTypeDto;
 };

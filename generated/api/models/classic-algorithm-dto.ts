@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { Sketch } from './sketch';
 export type ClassicAlgorithmDto = {
-  id: string;
+  id?: string;
   name: string;
   acronym?: string;
   intent?: string;

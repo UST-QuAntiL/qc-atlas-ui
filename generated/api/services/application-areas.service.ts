@@ -155,7 +155,7 @@ export class ApplicationAreasService extends BaseService {
   createApplicationArea$Response(params: {
     body: ApplicationAreaDto;
   }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
+    StrictHttpResponse<{ id?: string; name: string; _links?: Array<Link> }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -176,7 +176,7 @@ export class ApplicationAreasService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id: string;
+            id?: string;
             name: string;
             _links?: Array<Link>;
           }>;
@@ -194,44 +194,43 @@ export class ApplicationAreasService extends BaseService {
    */
   createApplicationArea(params: {
     body: ApplicationAreaDto;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+  }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
     return this.createApplicationArea$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id: string;
+            id?: string;
             name: string;
             _links?: Array<Link>;
           }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
+        ) => r.body as { id?: string; name: string; _links?: Array<Link> }
       )
     );
   }
 
   /**
-   * Path part for operation getApplicationArea
+   * Path part for operation getApplicationAreaById
    */
-  static readonly GetApplicationAreaPath =
-    '/v1/application-areas/{applicationAreaId}';
+  static readonly GetApplicationAreaByIdPath = '/v1/application-areas/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getApplicationArea()` instead.
+   * To access only the response body, use `getApplicationAreaById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getApplicationArea$Response(params: {
-    applicationAreaId: string;
+  getApplicationAreaById$Response(params: {
+    id: string;
   }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
+    StrictHttpResponse<{ id?: string; name: string; _links?: Array<Link> }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      ApplicationAreasService.GetApplicationAreaPath,
+      ApplicationAreasService.GetApplicationAreaByIdPath,
       'get'
     );
     if (params) {
-      rb.path('applicationAreaId', params.applicationAreaId, {});
+      rb.path('id', params.id, {});
     }
     return this.http
       .request(
@@ -244,7 +243,7 @@ export class ApplicationAreasService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id: string;
+            id?: string;
             name: string;
             _links?: Array<Link>;
           }>;
@@ -254,22 +253,22 @@ export class ApplicationAreasService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getApplicationArea$Response()` instead.
+   * To access the full response (for headers, for example), `getApplicationAreaById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getApplicationArea(params: {
-    applicationAreaId: string;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
-    return this.getApplicationArea$Response(params).pipe(
+  getApplicationAreaById(params: {
+    id: string;
+  }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
+    return this.getApplicationAreaById$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id: string;
+            id?: string;
             name: string;
             _links?: Array<Link>;
           }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
+        ) => r.body as { id?: string; name: string; _links?: Array<Link> }
       )
     );
   }
@@ -277,8 +276,7 @@ export class ApplicationAreasService extends BaseService {
   /**
    * Path part for operation updateApplicationArea
    */
-  static readonly UpdateApplicationAreaPath =
-    '/v1/application-areas/{applicationAreaId}';
+  static readonly UpdateApplicationAreaPath = '/v1/application-areas/{id}';
 
   /**
    * Custom ID will be ignored.
@@ -289,10 +287,10 @@ export class ApplicationAreasService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateApplicationArea$Response(params: {
-    applicationAreaId: string;
+    id: string;
     body: ApplicationAreaDto;
   }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
+    StrictHttpResponse<{ id?: string; name: string; _links?: Array<Link> }>
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -300,7 +298,7 @@ export class ApplicationAreasService extends BaseService {
       'put'
     );
     if (params) {
-      rb.path('applicationAreaId', params.applicationAreaId, {});
+      rb.path('id', params.id, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -315,7 +313,7 @@ export class ApplicationAreasService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id: string;
+            id?: string;
             name: string;
             _links?: Array<Link>;
           }>;
@@ -332,18 +330,18 @@ export class ApplicationAreasService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateApplicationArea(params: {
-    applicationAreaId: string;
+    id: string;
     body: ApplicationAreaDto;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+  }): Observable<{ id?: string; name: string; _links?: Array<Link> }> {
     return this.updateApplicationArea$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id: string;
+            id?: string;
             name: string;
             _links?: Array<Link>;
           }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
+        ) => r.body as { id?: string; name: string; _links?: Array<Link> }
       )
     );
   }
@@ -351,8 +349,7 @@ export class ApplicationAreasService extends BaseService {
   /**
    * Path part for operation deleteApplicationArea
    */
-  static readonly DeleteApplicationAreaPath =
-    '/v1/application-areas/{applicationAreaId}';
+  static readonly DeleteApplicationAreaPath = '/v1/application-areas/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -361,7 +358,7 @@ export class ApplicationAreasService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteApplicationArea$Response(params: {
-    applicationAreaId: string;
+    id: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -369,7 +366,7 @@ export class ApplicationAreasService extends BaseService {
       'delete'
     );
     if (params) {
-      rb.path('applicationAreaId', params.applicationAreaId, {});
+      rb.path('id', params.id, {});
     }
     return this.http
       .request(
@@ -394,9 +391,7 @@ export class ApplicationAreasService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteApplicationArea(params: {
-    applicationAreaId: string;
-  }): Observable<void> {
+  deleteApplicationArea(params: { id: string }): Observable<void> {
     return this.deleteApplicationArea$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );

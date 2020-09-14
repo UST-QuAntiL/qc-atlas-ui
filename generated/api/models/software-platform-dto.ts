@@ -1,6 +1,6 @@
 /* tslint:disable */
 export type SoftwarePlatformDto = {
-  id: string;
+  id?: string;
   name: string;
   link?: string;
   licence?: string;

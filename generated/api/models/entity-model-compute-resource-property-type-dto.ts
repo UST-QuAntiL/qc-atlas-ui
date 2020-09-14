@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { Link } from './link';
 export type EntityModelComputeResourcePropertyTypeDto = {
-  id: string;
+  id?: string;
   name: string;
   datatype: 'INTEGER' | 'STRING' | 'FLOAT';
   description?: string;

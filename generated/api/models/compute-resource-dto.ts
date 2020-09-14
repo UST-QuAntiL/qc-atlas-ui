@@ -1,6 +1,6 @@
 /* tslint:disable */
 export type ComputeResourceDto = {
-  id: string;
+  id?: string;
   name: string;
   vendor?: string;
   technology?: string;

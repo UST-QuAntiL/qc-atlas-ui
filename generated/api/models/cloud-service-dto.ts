@@ -1,6 +1,6 @@
 /* tslint:disable */
 export type CloudServiceDto = {
-  id: string;
+  id?: string;
   name: string;
   provider?: string;
   url?: string;
