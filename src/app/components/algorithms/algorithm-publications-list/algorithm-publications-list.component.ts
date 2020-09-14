@@ -22,10 +22,7 @@ import { GenericDataService } from '../../../util/generic-data.service';
 })
 export class AlgorithmPublicationsListComponent implements OnInit {
   @Input() algorithm: EntityModelAlgorithmDto;
-  @Input() linkedPublications: EntityModelPublicationDto[] = [];
 
-  publications: EntityModelPublicationDto[];
-  linkablePublications: EntityModelPublicationDto[];
   variableNames: string[] = ['title', 'authors', 'doi'];
   tableColumns: string[] = ['Title', 'Authors', 'DOI'];
   linkObject: LinkObject = {
@@ -41,6 +38,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
+  linkedPublications: EntityModelPublicationDto[] = [];
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -60,10 +58,9 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.algorithmService
       .getPublicationsByAlgorithm(params)
       .subscribe((publications) => {
+        // this.linkedPublications = [];
         if (publications._embedded) {
           this.linkedPublications = publications._embedded.publications;
-        } else {
-          this.linkedPublications = [];
         }
       });
   }
@@ -71,18 +68,19 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   preparePublicationData(data): void {
     // Read all incoming data
     // If linkable publications found
-    this.linkObject.data = [];
+    // this.linkObject.data = [];
     if (data._embedded) {
-      // Clear list of linkable algorithms
-      this.linkablePublications = data._embedded.publications;
-      // Search algorithms and filter only those that are not already linked
-      for (const publication of data._embedded.publications) {
-        if (
-          !this.linkedPublications.some((publ) => publ.id === publication.id)
-        ) {
-          this.linkObject.data.push(publication);
-        }
-      }
+      this.linkObject.data = data._embedded.publications;
+      // // Clear list of linkable algorithms
+      // // Search algorithms and filter only those that are not already linked
+      // for (const publication of data._embedded.publications) {
+      //   this.linkObject.data.push(publication);
+      //   if (
+      //     !this.linkedPublications.some((publ) => publ.id === publication.id)
+      //   ) {
+      //     this.unlinkedPublications.push(publication);
+      //   }
+      // }
     }
     this.pagingInfo.page = data.page;
     this.pagingInfo._links = data._links;
@@ -131,7 +129,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.tableAddAllowed = !this.tableAddAllowed;
   }
 
-  openLinkDialog() {
+  openLinkPublicationDialog() {
     this.publicationService.getPublications().subscribe((data) => {
       this.preparePublicationData(JSON.parse(JSON.stringify(data)));
       const dialogRef = this.dialog.open(LinkItemListDialogComponent, {

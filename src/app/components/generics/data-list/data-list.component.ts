@@ -14,10 +14,10 @@ export class DataListComponent implements OnInit {
   @Input() allowAdd: boolean;
   @Input() allowEdit: boolean;
   @Input() addIcon = 'playlist_add';
-  @Input() allowDelete: boolean;
-  @Input() allowLink: boolean;
-  @Input() allowSearch: boolean;
-  @Input() allowSort: boolean;
+  @Input() allowDelete = false;
+  @Input() allowLink = false;
+  @Input() allowSearch = false;
+  @Input() allowSort = false;
   @Input() pagination: any;
   @Input() paginatorConfig: any;
   @Input() emptyTableMessage = 'No elements found';

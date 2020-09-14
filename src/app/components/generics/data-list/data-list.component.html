@@ -65,7 +65,7 @@
     <tbody *ngIf="data && data.length > 0" align-middle justify-content-center>
     <tr class="data-element" *ngFor="let dataEntry of data">
       <!-- Optional Select-Checkbox Element in first Body-Column -->
-      <th class="align-middle center-text" *ngIf="allowDelete || allowLink">
+      <th class="align-middle center-text" *ngIf="(allowDelete || allowLink)">
         <mat-checkbox color="warn" [checked]="selection.isSelected(dataEntry)" (click)="$event.stopPropagation()"
                       (change)="$event ? rowToggle(dataEntry) : null"></mat-checkbox>
       </th>

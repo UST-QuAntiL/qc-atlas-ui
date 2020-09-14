@@ -18,7 +18,7 @@ export class LinkItemListDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<LinkItemListDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog
   ) {}
 
@@ -34,7 +34,7 @@ export class LinkItemListDialogComponent implements OnInit {
   }
 }
 
-export interface ConfirmDialogData {
+export interface DialogData {
   title: string;
   data?: any[];
   selectedItems?: any[];
