@@ -6,26 +6,28 @@
   <mat-spinner></mat-spinner>
 </div>
 <div *ngIf="nisqImpl">
-  <div
-    class="d-flex justify-content-between align-self-center header-container"
-  >
-    <app-text-input
-      class="w-25 p-2"
-      name="File Location"
-      [(ngModel)]="nisqImpl.fileLocation"
-      (onSaveChanges)="saveImplementation()"
-    ></app-text-input>
-    <app-select-input
-      class="w-25 p-2"
-      name="SDK"
-      [(ngModel)]="nisqImpl.sdk"
-      [choices]="[
-        { value: 'Qiskit', label: 'Qiskit' },
-        { value: 'Forrest', label: 'Forrest' }
-      ]"
-      (onSaveChanges)="saveImplementation()"
-    ></app-select-input>
-  </div>
+  <mat-card class="m-4">
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <app-text-input
+          name="File Location"
+          [(ngModel)]="nisqImpl.fileLocation"
+          (onSaveChanges)="saveImplementation()"
+        ></app-text-input>
+      </div>
+      <div class="col-lg-6 col-md-12">
+        <app-select-input
+          name="SDK"
+          [(ngModel)]="nisqImpl.sdk"
+          [choices]="[
+            { value: 'Qiskit', label: 'Qiskit' },
+            { value: 'Forrest', label: 'Forrest' }
+          ]"
+          (onSaveChanges)="saveImplementation()"
+        ></app-select-input>
+      </div>
+    </div>
+  </mat-card>
   <div class="d-flex justify-content-between header-container">
     <h4>Input Parameters</h4>
     <div class="d-flex">
@@ -114,7 +116,6 @@
     <div class="row">
       <div class="col-12">
         <app-prolog-input
-          class="p-2"
           name="Selection Rule (in PROLOG)"
           [(ngModel)]="nisqImpl.selectionRule"
           (onSaveChanges)="saveImplementation()"
@@ -124,7 +125,6 @@
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <app-prolog-input
-          class="w-50 p-2"
           name="Width Rule (in PROLOG)"
           [(ngModel)]="nisqImpl.widthRule"
           (onSaveChanges)="saveImplementation()"
@@ -132,7 +132,6 @@
       </div>
       <div class="col-lg-6 col-md-12">
         <app-prolog-input
-          class="w-50 p-2"
           name="Depth Rule (in PROLOG)"
           [(ngModel)]="nisqImpl.depthRule"
           (onSaveChanges)="saveImplementation()"
