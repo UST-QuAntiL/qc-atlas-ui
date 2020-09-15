@@ -1,5 +1,6 @@
 export const environment = {
   production: false,
+  nisqAnalyzer: true,
   API_URL: 'http://' + '${ALTAS_URL}' + ':' + '${ATLAS_PORT}' + '/atlas',
   PATTERN_ATLAS_API_URL:
     'http://' +
@@ -17,6 +18,5 @@ export const environment = {
     'http://' +
     '${PATTERN_ATLAS_UI_URL}' +
     ':' +
-    '${PATTERN_ATLAS_UI_PORT}' +
-    '/nisq-analyzer',
-};
+    '${PATTERN_ATLAS_UI_PORT}',
+  };

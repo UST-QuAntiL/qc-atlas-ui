@@ -9,7 +9,8 @@
           [allowRemoving]="true"
           [tags]="tags"
           (onRemove)="removeTag($event)"
-          (onAdd)="addTag($event)">
+          (onAdd)="addTag($event)"
+        >
         </app-tags-component>
       </div>
     </div>
@@ -23,12 +24,13 @@
         (updateImplementationField)="updateImplementationField($event)"
         (deleteComputeResourceProperty)="deleteComputeResourceProperty($event)"
         (addComputeResourceProperty)="addComputeResourceProperty($event)"
-        (updateComputeResourceProperty)="updateComputeResourceProperty($event)">
+        (updateComputeResourceProperty)="updateComputeResourceProperty($event)"
+      >
       </app-implementation-properties>
     </mat-tab>
     <mat-tab label="Publications">
       <div>
-        <app-implementation-publications-list [implementation]=implementation>
+        <app-implementation-publications-list [implementation]="implementation">
         </app-implementation-publications-list>
       </div>
     </mat-tab>
@@ -37,14 +39,12 @@
         [implementation]="implementation"
       ></app-implementation-softwareplatform-list>
     </mat-tab>
-    <mat-tab label="Selection Criteria">
+    <mat-tab [hidden]="isNisqUsed" label="Selection Criteria">
       <div class="tab-body p-4">
         <app-impl-selection-criteria
-          [params]="this.placeholderInputParams"
-          [depthRule]="placeholderPrologRule"
-          [widthRule]="placeholderPrologRule"
-          [selectionRule]="placeholderPrologRule">
-        </app-impl-selection-criteria>
+          [algo]="algorithm"
+          [impl]="implementation"
+        ></app-impl-selection-criteria>
       </div>
     </mat-tab>
     <mat-tab label="Discussion">
@@ -54,6 +54,9 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-<div *ngIf="implementation === undefined">
-  Loading..
+<div
+  *ngIf="!implementation || !algorithm"
+  class="d-flex align-content-center justify-content-center"
+>
+  <mat-spinner></mat-spinner>
 </div>

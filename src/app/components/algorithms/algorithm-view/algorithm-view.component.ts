@@ -12,6 +12,7 @@ import { TagDto } from 'api-atlas/models/tag-dto';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-algorithm-view',
@@ -19,6 +20,8 @@ import { UtilService } from '../../../util/util.service';
   styleUrls: ['./algorithm-view.component.scss'],
 })
 export class AlgorithmViewComponent implements OnInit, OnDestroy {
+  isNisqUsed = environment.nisqAnalyzer;
+
   algorithm: EntityModelAlgorithmDto;
   applicationAreas: EntityModelApplicationAreaDto[];
   problemTypes: EntityModelProblemTypeDto[];
