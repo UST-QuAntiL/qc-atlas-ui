@@ -1,5 +1,5 @@
 <div class="p-4">
-  <div class="row">
+  <div class="d-flex">
     <div class="col-xl-4 col-lg-12">
       <mat-card class="m-2">
         <app-text-input name="Acronym"
@@ -28,10 +28,9 @@
   </div>
 
   <div class="d-flex">
-    <mat-card class="w-100 m-4">
-      <div class="mx-3 my-2">
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
         <app-problem-type-tree #problemTypeTree
-                               class="w-100"
                                [title]='"Problem types"'
                                [treeData]="problemTypeTreeData"
                                [linkObject]="problemTypeLinkObject"
@@ -40,8 +39,8 @@
                                (onRemoveElement)="onRemoveProblemType.emit($event)"
                                (onExpandParents)="getParentsForNode($event)"
                                (onSearchTextChanged)="searchUnlinkedProblemTypes($event)"></app-problem-type-tree>
-      </div>
-    </mat-card>
+      </mat-card>
+    </div>
 
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
@@ -57,7 +56,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="d-flex">
     <div class="col-xl-4 col-lg-12">
       <mat-card class="m-2">
         <app-text-input name="Input format"
@@ -89,7 +88,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="d-flex">
     <div class="col-12">
       <mat-card class="m-2">
         <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
@@ -102,7 +101,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="d-flex">
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input name="Solution"
@@ -124,7 +123,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="d-flex">
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2" *ngIf="algorithm.computationModel === 'QUANTUM'">
         <app-text-input name="Speedup"
@@ -144,7 +143,7 @@
   </div>
 
   <!-- TODO: finish Sketch -->
-  <div class="row">
+  <div class="d-flex">
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2" *ngIf="algorithm.computationModel === 'QUANTUM'">
         <app-select-input name="Quantum computation model"
