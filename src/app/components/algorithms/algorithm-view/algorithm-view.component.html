@@ -19,13 +19,13 @@
     <mat-tab label="General">
       <app-algorithm-properties
         [algorithm]="algorithm"
+        [linkedProblemTypes]="problemTypes"
         [linkedApplicationAreas]="applicationAreas"
-        [problemTypes]="problemTypes"
         (updateAlgorithmField)="updateAlgorithmField($event)"
         (addApplicationArea)="addApplicationArea($event)"
         (removeApplicationArea)="removeApplicationArea($event)"
-        (addProblemType)="addProblemType($event)"
-        (removeProblemType)="removeProblemType($event)"
+        (onAddProblemType)="addProblemType($event)"
+        (onRemoveProblemType)="removeProblemTypeFromAlgorithm($event)"
       ></app-algorithm-properties>
     </mat-tab>
     <mat-tab label="Implementations">

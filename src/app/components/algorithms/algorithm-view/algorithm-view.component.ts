@@ -178,56 +178,72 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   }
 
   addProblemType(problemType: ProblemTypeDto): void {
-    this.problemTypeService.createProblemType({ body: problemType }).subscribe(
-      (type) => {
-        this.algorithmService
-          .linkAlgorithmAndProblemType({
-            algorithmId: this.algorithm.id,
-            body: type,
-          })
-          .subscribe(
-            () => {
-              this.getProblemTypesForAlgorithm(this.algorithm.id);
-              this.utilService.callSnackBar(
-                'Successfully linked application area "' +
-                  type.name +
-                  '" to algorithm "' +
-                  this.algorithm.name +
-                  '"'
-              );
-            },
-            (error) => console.log(error)
+    this.algorithmService
+      .linkAlgorithmAndProblemType({
+        algorithmId: this.algorithm.id,
+        body: problemType,
+      })
+      .subscribe(
+        () => {
+          this.getProblemTypesForAlgorithm(this.algorithm.id);
+          this.utilService.callSnackBar(
+            'Successfully linked problem type "' +
+              problemType.name +
+              '" to algorithm "' +
+              this.algorithm.name +
+              '"'
           );
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+        },
+        (error) => console.log(error)
+      );
+    // this.problemTypeService.createProblemType({ body: problemType }).subscribe(
+    //   (type) => {
+    //     this.algorithmService
+    //       .linkAlgorithmAndProblemType({
+    //         algorithmId: this.algorithm.id,
+    //         body: type,
+    //       })
+    //       .subscribe(
+    //         () => {
+    //           this.getProblemTypesForAlgorithm(this.algorithm.id);
+    //           this.utilService.callSnackBar(
+    //             'Successfully linked application area "' +
+    //               type.name +
+    //               '" to algorithm "' +
+    //               this.algorithm.name +
+    //               '"'
+    //           );
+    //         },
+    //         (error) => console.log(error)
+    //       );
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   }
+    // );
   }
 
-  removeProblemType(problemTypes: EntityModelProblemTypeDto[]): void {
-    problemTypes.forEach((problemType) => {
-      this.algorithmService
-        .unlinkAlgorithmAndProblemType({
-          algorithmId: this.algorithm.id,
-          problemTypeId: problemType.id,
-        })
-        .subscribe(
-          () => {
-            this.getProblemTypesForAlgorithm(this.algorithm.id);
-            this.utilService.callSnackBar(
-              'Successfully removed link to problem type "' +
-                problemType.name +
-                '" from algorithm "' +
-                this.algorithm.name +
-                '"'
-            );
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-    });
+  removeProblemTypeFromAlgorithm(problemType: EntityModelProblemTypeDto): void {
+    this.algorithmService
+      .unlinkAlgorithmAndProblemType({
+        algorithmId: this.algorithm.id,
+        problemTypeId: problemType.id,
+      })
+      .subscribe(
+        () => {
+          this.getProblemTypesForAlgorithm(this.algorithm.id);
+          this.utilService.callSnackBar(
+            'Successfully removed link to problem type "' +
+              problemType.name +
+              '" from algorithm "' +
+              this.algorithm.name +
+              '"'
+          );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   createBreadcrumbHeader(algorithm: AlgorithmDto): string {

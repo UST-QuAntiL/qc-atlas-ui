@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiModule as AtlasAPIModule } from 'api-atlas/api.module';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MatCardModule } from '@angular/material/card';
 import { ApiModule as PatternAltasAPIModule } from 'api-patternpedia/api.module';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -31,6 +32,8 @@ import { ComputeResourcePropertyModule } from './components/compute-resource-pro
 import { ExecutionEnvironmentsModule } from './components/execution-environments/execution-environments.module';
 import { PublicationModule } from './components/publications/publication.module';
 import { ServicesModule } from './services/services.module';
+import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
+import { ProblemTypesViewComponent } from './components/problem-types/problem-types-view/problem-types-view.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,8 @@ import { ServicesModule } from './services/services.module';
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
     NavigationComponent,
+    ProblemTypesListComponent,
+    ProblemTypesViewComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -73,6 +78,7 @@ import { ServicesModule } from './services/services.module';
     ComputeResourcePropertyModule,
     ExecutionEnvironmentsModule,
     ServicesModule,
+    MatCardModule,
   ],
   bootstrap: [AppComponent],
   exports: [],
