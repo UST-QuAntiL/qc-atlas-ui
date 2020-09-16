@@ -13,6 +13,8 @@ import { PublicationViewComponent } from './components/publications/publication-
 import { SoftwarePlatformListComponent } from './components/execution-environments/software-platforms/software-platform-list/software-platform-list.component';
 import { CloudServiceListComponent } from './components/execution-environments/cloud-services/cloud-service-list/cloud-service-list.component';
 import { ComputeResourceListComponent } from './components/execution-environments/compute-resource/compute-resource-list/compute-resource-list.component';
+import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
+import { ProblemTypesViewComponent } from './components/problem-types/problem-types-view/problem-types-view.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -56,6 +58,11 @@ const routes: Routes = [
   },
   { path: 'publications', component: PublicationListComponent },
   { path: 'publications/:publicationId', component: PublicationViewComponent },
+  { path: 'problem-types', component: ProblemTypesListComponent },
+  {
+    path: 'problem-types/:problemTypeId',
+    component: ProblemTypesViewComponent,
+  },
   {
     path: '',
     redirectTo: '/algorithms',

@@ -16,6 +16,7 @@ import {
 import { InputParameter } from '../impl-selection-criteria/impl-selection-criteria.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   templateUrl: './implementation-view.component.html',
@@ -27,6 +28,7 @@ export class ImplementationViewComponent implements OnInit {
   softwarePlatformOptions: Option[];
   tags: TagDto[] = [];
 
+  isNisqUsed = environment.nisqAnalyzer;
   tableColumns = ['Name', 'Datatype', 'Description', 'Value'];
   variableNames = ['name', 'datatype', 'description', 'value'];
   pagingInfo: any = {};
@@ -40,19 +42,6 @@ export class ImplementationViewComponent implements OnInit {
     { heading: '', subHeading: '' },
   ];
   computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
-
-  placeholderInputParams: InputParameter[] = [
-    {
-      name: 'N',
-      datatype: 'Integer',
-    },
-    {
-      name: 'M',
-      datatype: 'String',
-    },
-  ];
-
-  placeholderPrologRule = 'executable(N, shor-general-qiskit) :- N > 2.';
 
   constructor(
     private algorithmService: AlgorithmService,
