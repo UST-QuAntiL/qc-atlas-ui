@@ -167,4 +167,63 @@ export class QpuService extends BaseService {
       map((r: StrictHttpResponse<QpuDto>) => r.body as QpuDto)
     );
   }
+
+  /**
+   * Path part for operation updateQpu
+   */
+  static readonly UpdateQpuPath = '/qpus/{qpuId}';
+
+  /**
+   * Update a QPU
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateQpu()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateQpu$Response(params: {
+    qpuId: string;
+    body: CreateQpuRequestDto;
+  }): Observable<StrictHttpResponse<QpuDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      QpuService.UpdateQpuPath,
+      'put'
+    );
+    if (params) {
+      rb.path('qpuId', params.qpuId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<QpuDto>;
+        })
+      );
+  }
+
+  /**
+   * Update a QPU
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateQpu$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateQpu(params: {
+    qpuId: string;
+    body: CreateQpuRequestDto;
+  }): Observable<QpuDto> {
+    return this.updateQpu$Response(params).pipe(
+      map((r: StrictHttpResponse<QpuDto>) => r.body as QpuDto)
+    );
+  }
 }
