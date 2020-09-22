@@ -1,19 +1,7 @@
-<mat-card *ngIf="isLinkingEnabled" class="m-2">
-  <div class="mx-3 my-2">
-    <app-link-input
-      [linkObject]="linkObject"
-      [isDisableable]=true
-      (searchTextChanged)="searchUnlinkedAlgorithms($event)"
-      (linkElement)="linkAlgorithm($event)"
-      (disable)="onToggleLink()">
-    </app-link-input>
-  </div>
-</mat-card>
-
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
     <app-table
-      [data]=linkedAlgorithms
+      [data]=linkObject.linkedData
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
@@ -22,7 +10,7 @@
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged($event)"
       (submitDeleteElements)="unlinkAlgorithms($event)"
-      (addElement)="onToggleLink()">
+      (addElement)="openLinkAlgorithmDialog()">
     </app-table>
   </div>
 </mat-card>
