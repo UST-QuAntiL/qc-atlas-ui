@@ -33,7 +33,6 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     linkedData: [],
   };
   tableAddAllowed = true;
-  isLinkingEnabled = false;
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
@@ -71,7 +70,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       });
   }
 
-  preparePublicationData(data): void {
+  updatePublicationData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If publications found
@@ -120,21 +119,16 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   }
 
   onElementClicked(publication: PublicationDto): void {
-    this.routeTo(publication);
+    this.routeToPublication(publication);
   }
 
-  routeTo(publication: PublicationDto): void {
+  routeToPublication(publication: PublicationDto): void {
     this.router.navigate(['publications', publication.id]);
-  }
-
-  onToggleLink(): void {
-    this.isLinkingEnabled = !this.isLinkingEnabled;
-    this.tableAddAllowed = !this.tableAddAllowed;
   }
 
   openLinkPublicationDialog() {
     this.publicationService.getPublications().subscribe((data) => {
-      this.preparePublicationData(JSON.parse(JSON.stringify(data)));
+      this.updatePublicationData(JSON.parse(JSON.stringify(data)));
       const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
         width: '800px',
         data: {
@@ -152,7 +146,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
           this.publicationService
             .getPublications(search)
             .subscribe((updatedData) => {
-              this.preparePublicationData(
+              this.updatePublicationData(
                 JSON.parse(JSON.stringify(updatedData))
               );
               dialogRef.componentInstance.data.linkObject = this.linkObject;
@@ -162,14 +156,14 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
         (page: string) => {
           this.genericDataService.getData(page).subscribe((pageData) => {
-            this.preparePublicationData(pageData);
+            this.updatePublicationData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
         }
       );
       const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
         (element: PublicationDto) => {
-          this.routeTo(element);
+          this.routeToPublication(element);
           dialogRef.close();
         }
       );
