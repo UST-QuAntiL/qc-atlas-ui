@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
 import { PublicationDto } from 'api-atlas/models/publication-dto';
@@ -11,7 +10,6 @@ import {
   QueryParams,
 } from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
-import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { LinkItemListDialogComponent } from '../../generics/dialogs/link-item-list-dialog.component';
 import { GenericDataService } from '../../../util/generic-data.service';
 
