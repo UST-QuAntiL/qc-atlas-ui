@@ -8,6 +8,13 @@ import { SelectionModel } from '@angular/cdk/collections';
 })
 export class DataListComponent implements OnInit {
   @Input() data: any[];
+  @Input() linkObject: LinkObject = {
+    data: [],
+    linkedData: [],
+    title: '',
+    displayVariable: '',
+    subtitle: '',
+  };
   @Input() variableNames: string[];
   @Input() dataColumns: string[];
   @Input() externalLinkVariables: string[];
@@ -34,6 +41,7 @@ export class DataListComponent implements OnInit {
   searchText = '';
   sortDirection = '';
   sortActiveElement = '';
+  disabledDataEntries: Set<any> = new Set<any>();
 
   constructor() {}
 
@@ -41,18 +49,14 @@ export class DataListComponent implements OnInit {
     if (this.pagination) {
       this.generateInitialPaginator();
     }
-
     this.datalistConfigChanged.emit(this.generateGetParameter());
+    this.initializeDataEntryDisabled();
   }
 
   isAllSelected(): boolean {
-    return this.data.length === this.selection.selected.length;
-  }
-
-  isLink(variableName): boolean {
     return (
-      this.externalLinkVariables &&
-      this.externalLinkVariables.includes(variableName)
+      this.data.length ===
+      this.selection.selected.length + this.disabledDataEntries.size
     );
   }
 
@@ -60,12 +64,21 @@ export class DataListComponent implements OnInit {
   masterToggle(): void {
     const isAllSelected = this.isAllSelected();
     this.data.forEach((element) => {
-      this.changeSelection(element, !isAllSelected);
+      if (!this.dataEntryIsDisabled(element)) {
+        this.changeSelection(element, !isAllSelected);
+      }
     });
   }
 
   rowToggle(row: any): void {
     this.changeSelection(row, !this.selection.isSelected(row));
+  }
+
+  isLink(variableName): boolean {
+    return (
+      this.externalLinkVariables &&
+      this.externalLinkVariables.includes(variableName)
+    );
   }
 
   changePage(link: string): void {
@@ -140,6 +153,22 @@ export class DataListComponent implements OnInit {
     this.selection.clear();
   }
 
+  initializeDataEntryDisabled(): void {
+    for (const dataEntry of this.data) {
+      if (this.linkObject.linkedData.length > 0) {
+        for (const linkedObject of this.linkObject.linkedData) {
+          if (dataEntry.id === linkedObject.id) {
+            this.disabledDataEntries.add(dataEntry.id);
+          }
+        }
+      }
+    }
+  }
+
+  dataEntryIsDisabled(dataEntry: any): boolean {
+    return this.disabledDataEntries.has(dataEntry.id);
+  }
+
   private changeSelection(row: any, select: boolean): void {
     if (select !== this.selection.isSelected(row)) {
       this.selection.toggle(row);
@@ -204,6 +233,7 @@ export interface LinkObject {
   subtitle: string;
   displayVariable: string;
   data: any[];
+  linkedData?: any[];
 }
 
 export interface UrlData {
