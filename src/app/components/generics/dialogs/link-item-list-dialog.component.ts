@@ -4,7 +4,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { QueryParams } from '../data-list/data-list.component';
+import { LinkObject, QueryParams } from '../data-list/data-list.component';
 
 @Component({
   selector: 'app-link-item-list-dialog',
@@ -36,7 +36,7 @@ export class LinkItemListDialogComponent implements OnInit {
 
 export interface DialogData {
   title: string;
-  data?: any[];
+  linkObject: LinkObject;
   selectedItems?: any[];
   variableNames: string[];
   tableColumns: string[];

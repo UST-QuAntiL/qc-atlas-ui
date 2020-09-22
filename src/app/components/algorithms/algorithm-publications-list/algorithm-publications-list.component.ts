@@ -30,6 +30,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     subtitle: 'Search publications by title',
     displayVariable: 'title',
     data: [],
+    linkedData: [],
   };
   tableAddAllowed = true;
   isLinkingEnabled = false;
@@ -38,7 +39,6 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
-  linkedPublications: EntityModelPublicationDto[] = [];
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -64,29 +64,19 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.algorithmService
       .getPublicationsOfAlgorithm(params)
       .subscribe((publications) => {
-        // this.linkedPublications = [];
+        this.linkObject.linkedData = [];
         if (publications._embedded) {
-          this.linkedPublications = publications._embedded.publications;
+          this.linkObject.linkedData = publications._embedded.publications;
         }
       });
   }
 
   preparePublicationData(data): void {
-    // Read all incoming data
-    // If linkable publications found
-    // this.linkObject.data = [];
+    // clear link object data
+    this.linkObject.data = [];
+    // If publications found
     if (data._embedded) {
       this.linkObject.data = data._embedded.publications;
-      // // Clear list of linkable algorithms
-      // // Search algorithms and filter only those that are not already linked
-      // for (const publication of data._embedded.publications) {
-      //   this.linkObject.data.push(publication);
-      //   if (
-      //     !this.linkedPublications.some((publ) => publ.id === publication.id)
-      //   ) {
-      //     this.unlinkedPublications.push(publication);
-      //   }
-      // }
     }
     this.pagingInfo.page = data.page;
     this.pagingInfo._links = data._links;
@@ -149,7 +139,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
         width: '800px',
         data: {
           title: 'Link existing publication',
-          data: this.linkObject.data,
+          linkObject: this.linkObject,
           tableColumns: ['Name', 'Authors'],
           variableNames: ['title', 'authors'],
           pagingInfo: this.pagingInfo,
@@ -165,7 +155,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
               this.preparePublicationData(
                 JSON.parse(JSON.stringify(updatedData))
               );
-              dialogRef.componentInstance.data.data = this.linkObject.data;
+              dialogRef.componentInstance.data.linkObject = this.linkObject;
             });
         }
       );
@@ -173,7 +163,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
         (page: string) => {
           this.genericDataService.getData(page).subscribe((pageData) => {
             this.preparePublicationData(pageData);
-            dialogRef.componentInstance.data.data = this.linkObject.data;
+            dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
         }
       );

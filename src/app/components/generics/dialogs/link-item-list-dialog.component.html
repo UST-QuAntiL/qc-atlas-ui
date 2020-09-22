@@ -3,7 +3,8 @@
     <h1 mat-dialog-title id="title" >{{data.title}}</h1>
   </mat-card>
   <div class="mx-3 mb-2">
-    <app-table [data]=data.data
+    <app-table [data]=data.linkObject.data
+               [linkObject]=data.linkObject
                [variableNames]=data.variableNames
                [dataColumns]=data.tableColumns
                [allowAdd]=false
