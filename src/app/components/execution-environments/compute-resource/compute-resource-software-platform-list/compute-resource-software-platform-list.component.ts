@@ -1,14 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
+import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
+import { MatDialog } from '@angular/material/dialog';
 import {
   SelectParams,
   LinkObject,
+  QueryParams,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
+import { LinkItemListDialogComponent } from '../../../generics/dialogs/link-item-list-dialog.component';
+import { GenericDataService } from '../../../../util/generic-data.service';
 
 @Component({
   selector: 'app-compute-resource-software-platform-list',
@@ -17,8 +21,6 @@ import { UtilService } from '../../../../util/util.service';
 })
 export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
   @Input() computeResource: EntityModelComputeResourceDto;
-  softwarePlatforms: EntityModelSoftwarePlatformDto[];
-  linkedSoftwarePlatforms: EntityModelSoftwarePlatformDto[] = [];
 
   tableColumns = ['Name', 'Version', 'Licence', 'Link'];
   variableNames = ['name', 'version', 'licence', 'link'];
@@ -27,14 +29,21 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
     subtitle: 'Search software platform by name',
     displayVariable: 'name',
     data: [],
+    linkedData: [],
   };
   tableAddAllowed = true;
-  isLinkingEnabled = false;
+  pagingInfo: any = {};
+  paginatorConfig: any = {
+    amountChoices: [10, 25, 50],
+    selectedAmount: 10,
+  };
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
+    private genericDataService: GenericDataService,
+    private router: Router,
     private utilService: UtilService,
-    private router: Router
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -49,13 +58,22 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
     this.executionEnvironmentsService
       .getSoftwarePlatforms({ page: -1 })
       .subscribe((softwarePlatforms) => {
+        this.linkObject.data = [];
         if (softwarePlatforms._embedded) {
-          this.softwarePlatforms =
-            softwarePlatforms._embedded.softwarePlatforms;
-        } else {
-          this.softwarePlatforms = [];
+          this.linkObject.data = softwarePlatforms._embedded.softwarePlatforms;
         }
       });
+  }
+
+  updateSoftwarePlatformData(data): void {
+    // clear link object data
+    this.linkObject.data = [];
+    // If software platforms found
+    if (data._embedded) {
+      this.linkObject.data = data._embedded.softwarePlatforms;
+    }
+    this.pagingInfo.page = data.page;
+    this.pagingInfo._links = data._links;
   }
 
   getLinkedSoftwarePlatforms(params: {
@@ -68,26 +86,69 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
     this.executionEnvironmentsService
       .getSoftwarePlatformsOfComputeResource(params)
       .subscribe((softwarePlatforms) => {
+        this.linkObject.linkedData = [];
         if (softwarePlatforms._embedded) {
-          this.linkedSoftwarePlatforms =
+          this.linkObject.linkedData =
             softwarePlatforms._embedded.softwarePlatforms;
-        } else {
-          this.linkedSoftwarePlatforms = [];
         }
       });
   }
 
-  searchUnlinkedSoftwarePlatforms(search: string): void {
-    if (search) {
-      search = search.toLocaleLowerCase();
-      this.linkObject.data = this.softwarePlatforms.filter(
-        (softwarePlatform: EntityModelSoftwarePlatformDto) =>
-          softwarePlatform.name.toLocaleLowerCase().startsWith(search) &&
-          !this.linkedSoftwarePlatforms.includes(softwarePlatform)
-      );
-    } else {
-      this.linkObject.data = [];
-    }
+  openLinkSoftwarePlatformDialog(): void {
+    this.executionEnvironmentsService
+      .getSoftwarePlatforms()
+      .subscribe((data) => {
+        this.updateSoftwarePlatformData(JSON.parse(JSON.stringify(data)));
+        const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
+          width: '800px',
+          data: {
+            title: 'Link existing software platforms',
+            linkObject: this.linkObject,
+            tableColumns: ['Name', 'Version', 'Licence'],
+            variableNames: ['name', 'version', 'licence'],
+            pagingInfo: this.pagingInfo,
+            paginatorConfig: this.paginatorConfig,
+            noButtonText: 'Cancel',
+          },
+        });
+        const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+          (search: QueryParams) => {
+            this.executionEnvironmentsService
+              .getSoftwarePlatforms(search)
+              .subscribe((updatedData) => {
+                this.updateSoftwarePlatformData(
+                  JSON.parse(JSON.stringify(updatedData))
+                );
+                dialogRef.componentInstance.data.linkObject = this.linkObject;
+              });
+          }
+        );
+        const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
+          (page: string) => {
+            this.genericDataService.getData(page).subscribe((pageData) => {
+              this.updateSoftwarePlatformData(pageData);
+              dialogRef.componentInstance.data.linkObject = this.linkObject;
+            });
+          }
+        );
+        const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
+          (element: ComputeResourceDto) => {
+            this.routeToSoftwarePlatform(element);
+            dialogRef.close();
+          }
+        );
+
+        dialogRef.afterClosed().subscribe((dialogResult) => {
+          searchTextSub.unsubscribe();
+          pagingSub.unsubscribe();
+          elementClickedSub.unsubscribe();
+          if (dialogResult) {
+            for (const computeResource of dialogResult.selectedItems) {
+              this.linkSoftwarePlatform(computeResource);
+            }
+          }
+        });
+      });
   }
 
   linkSoftwarePlatform(softwarePlatform: SoftwarePlatformDto): void {
@@ -125,8 +186,6 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
     });
   }
 
-  onAddElement(): void {}
-
   onDatalistConfigChanged(): void {
     this.getLinkedSoftwarePlatforms({
       computeResourceId: this.computeResource.id,
@@ -134,15 +193,14 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
   }
 
   onElementClicked(softwarePlatform: SoftwarePlatformDto): void {
+    this.routeToSoftwarePlatform(softwarePlatform);
+  }
+
+  routeToSoftwarePlatform(softwarePlatform: SoftwarePlatformDto): void {
     this.router.navigate([
       'execution-environments',
       'software-platforms',
       softwarePlatform.id,
     ]);
-  }
-
-  onToggleLink(): void {
-    this.isLinkingEnabled = !this.isLinkingEnabled;
-    this.tableAddAllowed = !this.tableAddAllowed;
   }
 }

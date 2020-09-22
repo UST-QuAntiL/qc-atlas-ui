@@ -1,19 +1,7 @@
-<mat-card *ngIf="isLinkingEnabled" class="m-2">
-  <div class="mx-3 my-2">
-    <app-link-input
-      [linkObject]="linkObject"
-      [isDisableable]=true
-      (searchTextChanged)="searchUnlinkedCloudServices($event)"
-      (linkElement)="linkCloudService($event)"
-      (disable)="onToggleLink()">
-    </app-link-input>
-  </div>
-</mat-card>
-
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
     <app-table
-      [data]=linkedCloudServices
+      [data]=linkObject.linkedData
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
@@ -22,7 +10,7 @@
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged()"
       (submitDeleteElements)="unlinkCloudServices($event)"
-      (addElement)="onToggleLink()">
+      (addElement)="openLinkCloudServiceDialog()">
     </app-table>
   </div>
 </mat-card>
