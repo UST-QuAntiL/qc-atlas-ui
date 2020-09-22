@@ -8,13 +8,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 })
 export class DataListComponent implements OnInit {
   @Input() data: any[];
-  @Input() linkObject: LinkObject = {
-    data: [],
-    linkedData: [],
-    title: '',
-    displayVariable: '',
-    subtitle: '',
-  };
+  @Input() disabledData: any[];
   @Input() variableNames: string[];
   @Input() dataColumns: string[];
   @Input() externalLinkVariables: string[];
@@ -155,8 +149,8 @@ export class DataListComponent implements OnInit {
 
   initializeDataEntryDisabled(): void {
     for (const dataEntry of this.data) {
-      if (this.linkObject.linkedData.length > 0) {
-        for (const linkedObject of this.linkObject.linkedData) {
+      if (this.disabledData.length > 0) {
+        for (const linkedObject of this.disabledData) {
           if (dataEntry.id === linkedObject.id) {
             this.disabledDataEntries.add(dataEntry.id);
           }

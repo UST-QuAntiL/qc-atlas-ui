@@ -4,7 +4,7 @@
   </mat-card>
   <div class="mx-3 mb-2">
     <app-table [data]=data.linkObject.data
-               [linkObject]=data.linkObject
+               [disabledData]=data.linkObject.linkedData
                [variableNames]=data.variableNames
                [dataColumns]=data.tableColumns
                [allowAdd]=false
