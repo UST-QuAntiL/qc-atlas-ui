@@ -190,19 +190,23 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
+        const promises: Array<Promise<void>> = [];
         for (const relation of event.elements) {
-          this.algorithmService
-            .deletePatternRelationOfAlgorithm({
-              algorithmId: this.algorithm.id,
-              patternRelationId: relation.id,
-            })
-            .subscribe(() => {
-              this.getPatternRelations({ algorithmId: this.algorithm.id });
-              this.utilService.callSnackBar(
-                'Successfully removed pattern relation'
-              );
-            });
+          promises.push(
+            this.algorithmService
+              .deletePatternRelationOfAlgorithm({
+                algorithmId: this.algorithm.id,
+                patternRelationId: relation.id,
+              })
+              .toPromise()
+          );
         }
+        Promise.all(promises).then(() => {
+          this.getPatternRelations({ algorithmId: this.algorithm.id });
+          this.utilService.callSnackBar(
+            'Successfully removed pattern relation(s)'
+          );
+        });
       }
     });
   }
