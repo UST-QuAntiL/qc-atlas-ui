@@ -6,7 +6,7 @@
           name="Description"
           [multiline]="true"
           [maxLines]="5"
-          [(ngModel)]="cloudService.description"
+          [value]="cloudService.description"
           (onSaveChanges)="onChangesSaved($event, 'description')"
         ></app-text-input>
       </mat-card>
@@ -16,7 +16,7 @@
       <mat-card class="m-2">
         <app-text-input
           name="Provider"
-          [(ngModel)]="cloudService.provider"
+          [value]="cloudService.provider"
           (onSaveChanges)="onChangesSaved($event, 'provider')"
         ></app-text-input>
       </mat-card>

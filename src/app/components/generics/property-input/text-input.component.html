@@ -1,33 +1,30 @@
-<div [ngClass]="{'url-input': (isLink && !isBeingEdited && value)}">
+<div [ngClass]="{'url-input': (isLink && inputValue)}">
   <mat-form-field>
     <mat-label class="input-label">{{ name }}</mat-label>
     <input
       *ngIf="!multiline"
       type="text"
-      [readonly]="!isBeingEdited"
-      [(ngModel)]="value"
+      [(ngModel)]="inputValue"
       matInput
-      (click)="(isLink && !isBeingEdited && value) ? openLink() : false"
-      (keydown.enter)="toggleEdit()"
+      (click)="(isLink && inputValue) ? openLink() : false"
+      (keydown.enter)="saveChanges()"
     />
     <textarea
       *ngIf="multiline"
-      [readonly]="!isBeingEdited"
-      [(ngModel)]="value"
+      [(ngModel)]="inputValue"
       [matAutosizeMaxRows]="maxLines"
       [matAutosizeMinRows]="2"
       [matTextareaAutosize]="true"
       matInput
     ></textarea>
     <button
-      *ngIf="isSaveable"
+      *ngIf="inputValue !== value"
       mat-button
       matSuffix
       mat-icon-button
       aria-label="Clear"
-      (click)="toggleEdit()"
-    >
-      <mat-icon>{{ isBeingEdited ? 'save' : 'edit' }}</mat-icon>
+      (click)="saveChanges()">
+      <mat-icon>save</mat-icon>
     </button>
   </mat-form-field>
 </div>

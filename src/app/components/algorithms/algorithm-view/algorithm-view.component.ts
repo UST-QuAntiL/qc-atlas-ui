@@ -64,6 +64,10 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     this.routeSub.unsubscribe();
   }
 
+  saveAlgorithm() {
+    console.log(this.algorithm);
+  }
+
   getApplicationAreasForAlgorithm(algoId: string): void {
     this.algorithmService.getApplicationAreasByAlgorithm({ algoId }).subscribe(
       (areas) => {

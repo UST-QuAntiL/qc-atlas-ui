@@ -4,7 +4,7 @@
       <mat-card class="m-2">
         <app-text-input
           name="Vendor"
-          [(ngModel)]="computeResource.vendor"
+          [value]="computeResource.vendor"
           (onSaveChanges)="onChangesSaved($event, 'vendor')">
         </app-text-input>
       </mat-card>
@@ -14,7 +14,7 @@
       <mat-card class="m-2">
         <app-text-input
           name="Technology"
-          [(ngModel)]="computeResource.technology"
+          [value]="computeResource.technology"
           (onSaveChanges)="onChangesSaved($event, 'technology')">
         </app-text-input>
       </mat-card>
@@ -24,7 +24,7 @@
       <mat-card class="m-2">
         <app-select-input
           name="Quantum computation model"
-          [(ngModel)]="computeResource.quantumComputationModel"
+          [value]="computeResource.quantumComputationModel"
           [choices]="availableQuantumComputationModelOptions"
           (onSaveChanges)="onChangesSaved($event, 'quantumComputationModel')">
         </app-select-input>
