@@ -258,6 +258,9 @@ export class ImplementationViewComponent implements OnInit {
         .getImplementation({ algoId, implId })
         .subscribe((impl) => {
           this.impl = impl;
+          this.frontendImpl = JSON.parse(
+            JSON.stringify(impl)
+          ) as EntityModelAlgorithmDto;
           this.links[1].heading = this.impl.name;
           this.fetchComputeResourceProperties();
           this.getTagsForImplementation(algoId, implId);
