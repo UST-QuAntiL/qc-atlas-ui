@@ -2,6 +2,10 @@
   <div class="row p-2 m-0 align-items-center">
     <div class="col">
       <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+      <button *ngIf="!utilService.objectsEqual(frontendImpl, impl)" mat-flat-button color="primary" (click)="saveImplementation()">
+        Save
+        <mat-icon>save</mat-icon>
+      </button>
     </div>
     <div class="col">
       <div class="float-right mx-2">

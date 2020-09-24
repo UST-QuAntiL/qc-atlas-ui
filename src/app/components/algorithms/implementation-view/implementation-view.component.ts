@@ -6,7 +6,7 @@ import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
-import { TagDto } from 'api-atlas/models';
+import { EntityModelAlgorithmDto, TagDto } from 'api-atlas/models';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import { QueryParams } from '../../generics/data-list/data-list.component';
@@ -20,6 +20,7 @@ import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.co
 })
 export class ImplementationViewComponent implements OnInit {
   impl: ImplementationDto;
+  frontendImpl: ImplementationDto;
   algo: AlgorithmDto;
   softwarePlatformOptions: Option[];
   tags: TagDto[] = [];
@@ -58,11 +59,26 @@ export class ImplementationViewComponent implements OnInit {
     private publicationService: PublicationService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private utilService: UtilService
+    public utilService: UtilService
   ) {}
 
   ngOnInit(): void {
     this.loadGeneral();
+  }
+
+  saveImplementation() {
+    this.algorithmService
+      .updateImplementation({
+        algoId: this.algo.id,
+        implId: this.impl.id,
+        body: this.frontendImpl,
+      })
+      .subscribe((impl) => {
+        this.impl = impl;
+        this.frontendImpl = JSON.parse(
+          JSON.stringify(impl)
+        ) as ImplementationDto;
+      });
   }
 
   changeTab(tabNumber: number): void {
