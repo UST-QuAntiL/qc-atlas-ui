@@ -3,8 +3,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
+import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type-dialog.component';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../generics/dialogs/confirm-dialog.component';
+import { UtilService } from '../../../util/util.service';
+import { AddAlgorithmDialogComponent } from '../../algorithms/dialogs/add-algorithm-dialog.component';
 
 @Component({
   selector: 'app-problem-types-list',
@@ -25,7 +33,8 @@ export class ProblemTypesListComponent implements OnInit {
     private problemTypeService: ProblemTypeService,
     private genericDataService: GenericDataService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {}
@@ -61,7 +70,6 @@ export class ProblemTypesListComponent implements OnInit {
   onAddElement(): void {
     const params: any = {};
     const dialogRef = this.dialog.open(AddProblemTypeDialogComponent, {
-      width: '400px',
       data: { title: 'Add new problem type' },
     });
 
@@ -80,6 +88,7 @@ export class ProblemTypesListComponent implements OnInit {
 
         params.body = problemTypeDto;
         this.problemTypeService.createProblemType(params).subscribe((data) => {
+          this.utilService.callSnackBar('Successfully added problem type');
           this.router.navigate(['problem-types', data.id]);
         });
       }
@@ -87,15 +96,37 @@ export class ProblemTypesListComponent implements OnInit {
   }
 
   onDeleteElements(event): void {
-    // Iterate all selected algorithms and delete them
-    for (const problemType of event.elements) {
-      this.problemTypeService
-        .deleteProblemType(this.generateDeleteParams(problemType.id))
-        .subscribe(() => {
-          // Refresh Problem Types after delete
-          this.getProblemTypes(event.queryParams);
-        });
-    }
+    const dialogData: ConfirmDialogData = {
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete the following problem type(s):',
+      data: event.elements,
+      variableName: 'name',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    };
+    this.utilService
+      .createDialog(ConfirmDialogComponent, dialogData)
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
+          for (const problemType of event.elements) {
+            promises.push(
+              this.problemTypeService
+                .deleteProblemType({
+                  problemTypeId: problemType.id,
+                })
+                .toPromise()
+            );
+          }
+          Promise.all(promises).then(() => {
+            this.getProblemTypes(event.queryParams);
+            this.utilService.callSnackBar(
+              'Successfully deleted problem type(s)'
+            );
+          });
+        }
+      });
   }
 
   generateDeleteParams(problemTypeId: string): any {

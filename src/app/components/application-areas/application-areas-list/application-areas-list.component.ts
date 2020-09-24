@@ -5,6 +5,11 @@ import { ApplicationAreasService } from 'api-atlas/services/application-areas.se
 import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddApplicationAreaDialogComponent } from '../dialogs/add-application-area-dialog.component';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../generics/dialogs/confirm-dialog.component';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-application-areas-list',
@@ -25,7 +30,8 @@ export class ApplicationAreasListComponent implements OnInit {
     private applicationAreasService: ApplicationAreasService,
     private genericDataService: GenericDataService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {}
@@ -63,7 +69,6 @@ export class ApplicationAreasListComponent implements OnInit {
   onAddElement(): void {
     const params: any = {};
     const dialogRef = this.dialog.open(AddApplicationAreaDialogComponent, {
-      width: '400px',
       data: { title: 'Add new application area' },
     });
 
@@ -78,6 +83,9 @@ export class ApplicationAreasListComponent implements OnInit {
         this.applicationAreasService
           .createApplicationArea(params)
           .subscribe((data) => {
+            this.utilService.callSnackBar(
+              'Successfully added application area'
+            );
             this.router.navigate(['application-areas', data.id]);
           });
       }
@@ -85,15 +93,38 @@ export class ApplicationAreasListComponent implements OnInit {
   }
 
   onDeleteElements(event): void {
-    // Iterate all selected algorithms and delete them
-    for (const applicationArea of event.elements) {
-      this.applicationAreasService
-        .deleteApplicationArea(this.generateDeleteParams(applicationArea.id))
-        .subscribe(() => {
-          // Refresh application areas after delete
-          this.getApplicationAreas(event.queryParams);
-        });
-    }
+    const dialogData: ConfirmDialogData = {
+      title: 'Confirm Deletion',
+      message:
+        'Are you sure you want to delete the following application area(s):',
+      data: event.elements,
+      variableName: 'name',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    };
+    this.utilService
+      .createDialog(ConfirmDialogComponent, dialogData)
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const promises: Array<Promise<void>> = [];
+          for (const applicationArea of event.elements) {
+            promises.push(
+              this.applicationAreasService
+                .deleteApplicationArea({
+                  applicationAreaId: applicationArea.id,
+                })
+                .toPromise()
+            );
+          }
+          Promise.all(promises).then(() => {
+            this.getApplicationAreas(event.queryParams);
+            this.utilService.callSnackBar(
+              'Successfully deleted application area(s)'
+            );
+          });
+        }
+      });
   }
 
   generateDeleteParams(applicationAreaId: string): any {
