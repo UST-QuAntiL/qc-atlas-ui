@@ -17,6 +17,8 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { MatCardModule } from '@angular/material/card';
 import { ApiModule as PatternAltasAPIModule } from 'api-patternpedia/api.module';
 import { ApiModule as NisqApiModule } from 'api-nisq/api.module';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,18 +37,26 @@ import { PublicationModule } from './components/publications/publication.module'
 import { ServicesModule } from './services/services.module';
 import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
 import { ProblemTypesViewComponent } from './components/problem-types/problem-types-view/problem-types-view.component';
+import { AddProblemTypeDialogComponent } from './components/problem-types/dialogs/add-problem-type-dialog.component';
+import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
+import { ApplicationAreasViewComponent } from './components/application-areas/application-areas-view/application-areas-view.component';
+import { AddApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-application-area-dialog.component';
 
 @NgModule({
   declarations: [
     // components
     AppComponent,
     PageNotFoundComponent,
+    ApplicationAreasListComponent,
+    ApplicationAreasViewComponent,
+    ProblemTypesListComponent,
+    ProblemTypesViewComponent,
     // dialogs
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
     NavigationComponent,
-    ProblemTypesListComponent,
-    ProblemTypesViewComponent,
+    AddProblemTypeDialogComponent,
+    AddApplicationAreaDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -81,6 +91,8 @@ import { ProblemTypesViewComponent } from './components/problem-types/problem-ty
     ExecutionEnvironmentsModule,
     ServicesModule,
     MatCardModule,
+    MatAutocompleteModule,
+    MatSelectModule,
   ],
   bootstrap: [AppComponent],
   exports: [],

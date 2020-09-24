@@ -15,6 +15,8 @@ import { CloudServiceListComponent } from './components/execution-environments/c
 import { ComputeResourceListComponent } from './components/execution-environments/compute-resource/compute-resource-list/compute-resource-list.component';
 import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
 import { ProblemTypesViewComponent } from './components/problem-types/problem-types-view/problem-types-view.component';
+import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
+import { ApplicationAreasViewComponent } from './components/application-areas/application-areas-view/application-areas-view.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -62,6 +64,11 @@ const routes: Routes = [
   {
     path: 'problem-types/:problemTypeId',
     component: ProblemTypesViewComponent,
+  },
+  { path: 'application-areas', component: ApplicationAreasListComponent },
+  {
+    path: 'application-areas/:applicationAreaId',
+    component: ApplicationAreasViewComponent,
   },
   {
     path: '',
