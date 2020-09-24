@@ -55,6 +55,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   }> = new EventEmitter<{ field; value }>();
 
   @Input() algorithm: EntityModelAlgorithmDto;
+  @Input() frontendAlgorithm: EntityModelAlgorithmDto;
   @Input() linkedApplicationAreas: EntityModelApplicationAreaDto[];
   @Input() problemTypes: EntityModelProblemTypeDto[];
 
@@ -166,6 +167,10 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   onChangesSaved(value: any, field: string): void {
     this.updateAlgorithmField.emit({ field, value });
+  }
+
+  onPropertyChanged(value: any, field: string): void {
+    this.frontendAlgorithm[field] = value;
   }
 
   addApplicationAreaEvent(

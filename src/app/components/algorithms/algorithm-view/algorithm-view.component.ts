@@ -20,6 +20,7 @@ import { UtilService } from '../../../util/util.service';
 })
 export class AlgorithmViewComponent implements OnInit, OnDestroy {
   algorithm: EntityModelAlgorithmDto;
+  frontendAlgorithm: EntityModelAlgorithmDto;
   applicationAreas: EntityModelApplicationAreaDto[];
   problemTypes: EntityModelProblemTypeDto[];
   tags: TagDto[] = [];
@@ -32,8 +33,8 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     private algorithmService: AlgorithmService,
     private applicationAreasService: ApplicationAreasService,
     private problemTypeService: ProblemTypeService,
-    private utilService: UtilService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +42,9 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       this.algorithmService.getAlgorithm({ algoId }).subscribe(
         (algo: EntityModelAlgorithmDto) => {
           this.algorithm = algo;
+          this.frontendAlgorithm = JSON.parse(
+            JSON.stringify(algo)
+          ) as EntityModelAlgorithmDto;
           let subheading = this.algorithm.computationModel
             .toString()
             .toLowerCase();
@@ -65,7 +69,17 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   }
 
   saveAlgorithm() {
-    console.log(this.algorithm);
+    this.algorithmService
+      .updateAlgorithm({
+        algoId: this.algorithm.id,
+        body: this.frontendAlgorithm,
+      })
+      .subscribe((algo) => {
+        this.algorithm = algo;
+        this.frontendAlgorithm = JSON.parse(
+          JSON.stringify(algo)
+        ) as EntityModelAlgorithmDto;
+      });
   }
 
   getApplicationAreasForAlgorithm(algoId: string): void {

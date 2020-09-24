@@ -5,6 +5,7 @@
       *ngIf="!multiline"
       type="text"
       [(ngModel)]="inputValue"
+      (ngModelChange)="inputChanged()"
       matInput
       (click)="(isLink && inputValue) ? openLink() : false"
       (keydown.enter)="saveChanges()"
@@ -12,6 +13,7 @@
     <textarea
       *ngIf="multiline"
       [(ngModel)]="inputValue"
+      (ngModelChange)="inputChanged()"
       [matAutosizeMaxRows]="maxLines"
       [matAutosizeMinRows]="2"
       [matTextareaAutosize]="true"
