@@ -49,7 +49,7 @@ export class PublicationViewComponent implements OnInit {
     this.publicationService
       .updatePublication({
         id: this.publication.id,
-        body: this.publication,
+        body: this.frontendPublication,
       })
       .subscribe((publication) => {
         this.publication = publication;
