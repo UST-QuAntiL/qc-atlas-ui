@@ -28,6 +28,7 @@
           name="Quantum computation model"
           [value]="computeResource.quantumComputationModel"
           [choices]="availableQuantumComputationModelOptions"
+          (onChange)="onPropertyChanged($event,   'quantumComputationModel')"
           (onSaveChanges)="onChangesSaved($event, 'quantumComputationModel')">
         </app-select-input>
       </mat-card>

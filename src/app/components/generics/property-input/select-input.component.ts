@@ -14,7 +14,7 @@ export interface Option {
 })
 export class SelectInputComponent implements OnInit {
   @Output() onSaveChanges: EventEmitter<string> = new EventEmitter<string>();
-
+  @Output() onChange: EventEmitter<string> = new EventEmitter<string>();
   @Input() name = '';
   @Input() value: string;
   @Input() choices: Option[] = [];
@@ -29,6 +29,10 @@ export class SelectInputComponent implements OnInit {
 
   get selectedValue() {
     return this.choices.find((opt) => opt.value === this.value)?.label || 'n/a';
+  }
+
+  inputChanged(): void {
+    this.onChange.emit(this.inputValue);
   }
 
   ngOnInit(): void {

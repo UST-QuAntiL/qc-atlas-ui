@@ -156,9 +156,11 @@
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2" *ngIf="algorithm.computationModel === 'QUANTUM'">
         <app-select-input name="Quantum computation model"
-                          [(ngModel)]="algorithm.quantumComputationModel"
-                          [choices]="availableQuantumComputationModelOptions"></app-select-input>
-
+                          [value]="algorithm.quantumComputationModel"
+                          [choices]="availableQuantumComputationModelOptions"
+                          (onChange)="onPropertyChanged($event,   'quantumComputationModel')"
+                          (onSaveChanges)="onChangesSaved($event,   'quantumComputationModel')">
+        </app-select-input>
       </mat-card>
     </div>
 
