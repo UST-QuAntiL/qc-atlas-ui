@@ -8,6 +8,7 @@ import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publica
 })
 export class PublicationPropertiesComponent implements OnInit {
   @Input() publication: EntityModelPublicationDto;
+  @Input() frontendPublication: EntityModelPublicationDto;
   @Output() updatePublicationField: EventEmitter<{
     field;
     value;
@@ -16,6 +17,10 @@ export class PublicationPropertiesComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  onPropertyChanged(value: any, field: string): void {
+    this.frontendPublication[field] = value;
+  }
 
   onChangesSaved(value: any, field: string): void {
     this.updatePublicationField.emit({ field, value });

@@ -11,7 +11,9 @@
 
   <mat-tab-group>
     <mat-tab label="General">
-      <app-publication-properties [publication]="publication"
+      <app-publication-properties
+                                  [frontendPublication]="frontendPublication"
+                                  [publication]="publication"
                                   (updatePublicationField)="updatePublicationField($event)"></app-publication-properties>
     </mat-tab>
     <mat-tab label="Algorithms">

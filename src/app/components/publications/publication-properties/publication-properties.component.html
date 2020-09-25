@@ -4,6 +4,7 @@
       <mat-card class="m-2">
         <app-text-input name="DOI"
                         [value]="publication.doi"
+                        (onChange)="onPropertyChanged($event, 'doi')"
                         (onSaveChanges)="onChangesSaved($event, 'doi')"></app-text-input>
       </mat-card>
     </div>
@@ -13,6 +14,7 @@
         <app-text-input name="URL"
                         [value]="publication.url"
                         [isLink]=true
+                        (onChange)="onPropertyChanged($event, 'url')"
                         (onSaveChanges)="onChangesSaved($event, 'url')"></app-text-input>
       </mat-card>
     </div>
