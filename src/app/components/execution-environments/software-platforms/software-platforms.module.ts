@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { SoftwarePlatformViewComponent } from './software-platform-view/software-platform-view.component';
@@ -16,7 +17,6 @@ import { SoftwarePlatformImplListComponent } from './software-platform-impl-list
 import { SoftwarePlatformCloudServiceListComponent } from './software-platform-cloud-service-list/software-platform-cloud-service-list.component';
 import { SoftwarePlatformComputeResourceListComponent } from './software-platform-compute-resource-list/software-platform-compute-resource-list.component';
 import { CreateSoftwarePlatformDialogComponent } from './dialogs/create-software-platform-dialog.component';
-import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -28,20 +28,20 @@ import { MatIconModule } from '@angular/material/icon';
     SoftwarePlatformComputeResourceListComponent,
     CreateSoftwarePlatformDialogComponent,
   ],
-    imports: [
-        CommonModule,
-        MatTabsModule,
-        GenericsModule,
-        MatCardModule,
-        NavigationBreadcrumbModule,
-        MatDialogModule,
-        MatButtonModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        FormsModule,
-        MatIconModule,
-    ],
+  imports: [
+    CommonModule,
+    MatTabsModule,
+    GenericsModule,
+    MatCardModule,
+    NavigationBreadcrumbModule,
+    MatDialogModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatIconModule,
+  ],
   exports: [SoftwarePlatformViewComponent, SoftwarePlatformListComponent],
 })
 export class SoftwarePlatformsModule {}

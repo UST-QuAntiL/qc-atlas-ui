@@ -7,6 +7,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
@@ -16,7 +17,6 @@ import { ComputeResourcePropertiesComponent } from './compute-resource-propertie
 import { ComputeResourceViewComponent } from './compute-resource-view/compute-resource-view.component';
 import { ComputeResourceListComponent } from './compute-resource-list/compute-resource-list.component';
 import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-resource-dialog.component';
-import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -27,21 +27,21 @@ import { MatIconModule } from '@angular/material/icon';
     ComputeResourcePropertiesComponent,
     CreateComputeResourceDialogComponent,
   ],
-    imports: [
-        CommonModule,
-        MatTabsModule,
-        GenericsModule,
-        MatCardModule,
-        NavigationBreadcrumbModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        FormsModule,
-        ComputeResourcePropertyModule,
-        MatIconModule,
-    ],
+  imports: [
+    CommonModule,
+    MatTabsModule,
+    GenericsModule,
+    MatCardModule,
+    NavigationBreadcrumbModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    FormsModule,
+    ComputeResourcePropertyModule,
+    MatIconModule,
+  ],
   exports: [ComputeResourceViewComponent, ComputeResourceListComponent],
 })
 export class ComputeResourcesModule {}
