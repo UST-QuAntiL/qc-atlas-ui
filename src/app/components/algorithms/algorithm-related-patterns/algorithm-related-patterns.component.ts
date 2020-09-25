@@ -8,6 +8,7 @@ import { PatternRelationDto } from 'api-atlas/models';
 import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
 import { EntityModelPattern } from 'api-patternpedia/models/entity-model-pattern';
 import { EntityModelPatternLanguage } from 'api-patternpedia/models';
+import { forkJoin } from 'rxjs';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -190,18 +191,17 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const promises: Array<Promise<void>> = [];
+        const deletionTasks = [];
+
         for (const relation of event.elements) {
-          promises.push(
-            this.algorithmService
-              .deletePatternRelationOfAlgorithm({
-                algorithmId: this.algorithm.id,
-                patternRelationId: relation.id,
-              })
-              .toPromise()
+          deletionTasks.push(
+            this.algorithmService.deletePatternRelationOfAlgorithm({
+              algorithmId: this.algorithm.id,
+              patternRelationId: relation.id,
+            })
           );
         }
-        Promise.all(promises).then(() => {
+        forkJoin(deletionTasks).subscribe(() => {
           this.getPatternRelations({ algorithmId: this.algorithm.id });
           this.utilService.callSnackBar(
             'Successfully removed pattern relation(s)'
