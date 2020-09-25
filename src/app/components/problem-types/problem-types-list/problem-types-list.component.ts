@@ -6,7 +6,7 @@ import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
-import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type-dialog.component';
+import { AddProblemTypeDialogComponent } from '../dialogs/add problem type/add-problem-type-dialog.component';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
@@ -22,7 +22,7 @@ import { AddAlgorithmDialogComponent } from '../../algorithms/dialogs/add-algori
 export class ProblemTypesListComponent implements OnInit {
   problemTypes: any[] = [];
   tableColumns = ['Name', 'Parent'];
-  variableNames = ['name', 'parent'];
+  variableNames = ['name', 'parentProblemType'];
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
@@ -55,11 +55,24 @@ export class ProblemTypesListComponent implements OnInit {
     // Read all incoming data
     if (data._embedded) {
       this.problemTypes = data._embedded.problemTypes;
+      this.assignParentProblemTypes();
     } else {
       this.problemTypes = [];
     }
     this.pagingInfo.page = data.page;
     this.pagingInfo._links = data._links;
+  }
+
+  assignParentProblemTypes(): void {
+    for (const problemType of this.problemTypes) {
+      if (problemType.parentProblemType != null) {
+        for (const parentProblemType of this.problemTypes) {
+          if (problemType.parentProblemType === parentProblemType.id) {
+            problemType.parentProblemType = parentProblemType.name;
+          }
+        }
+      }
+    }
   }
 
   onElementClicked(problemType: any): void {
@@ -134,4 +147,6 @@ export class ProblemTypesListComponent implements OnInit {
     params.id = problemTypeId;
     return params;
   }
+
+  onEditElement($event: any) {
 }

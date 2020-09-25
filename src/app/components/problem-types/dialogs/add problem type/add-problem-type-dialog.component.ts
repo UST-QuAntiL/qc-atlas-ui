@@ -11,7 +11,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
-import { EntityModelProblemTypeDto } from 'generated/api-atlas/models';
+import { EntityModelProblemTypeDto } from 'api-atlas/models';
 
 @Component({
   selector: 'app-add-problem-type-dialog',

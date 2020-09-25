@@ -37,7 +37,7 @@ import { PublicationModule } from './components/publications/publication.module'
 import { ServicesModule } from './services/services.module';
 import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
 import { ProblemTypesViewComponent } from './components/problem-types/problem-types-view/problem-types-view.component';
-import { AddProblemTypeDialogComponent } from './components/problem-types/dialogs/add-problem-type-dialog.component';
+import { AddProblemTypeDialogComponent } from './components/problem-types/dialogs/add problem type/add-problem-type-dialog.component';
 import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
 import { ApplicationAreasViewComponent } from './components/application-areas/application-areas-view/application-areas-view.component';
 import { AddApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-application-area-dialog.component';
