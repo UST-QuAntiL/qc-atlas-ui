@@ -33,8 +33,7 @@
       </div>
     </div>
     <div class="mt-2">
-      <button class="step-button" mat-stroked-button matStepperNext [disabled]="!selectedPatternLanguage"
-              (click)="getPatterns(selectedPatternLanguage.id)">
+      <button class="step-button" mat-stroked-button matStepperNext [disabled]="!selectedPatternLanguage">
         <mat-icon>navigate_next</mat-icon>
       </button>
     </div>
@@ -71,11 +70,10 @@
     </div>
     <div class="mt-2">
       <button class="step-button" mat-stroked-button matStepperPrevious>
-        <mat-icon (click)="getPatternLanguages()">navigate_before</mat-icon>
+        <mat-icon>navigate_before</mat-icon>
       </button>
       <button class="step-button ml-1" mat-stroked-button matStepperNext
-              [disabled]="!selectedPatternLanguage || !selectedPattern"
-              (click)="getRelationTypes()">
+              [disabled]="!selectedPatternLanguage || !selectedPattern">
         <mat-icon>navigate_next</mat-icon>
       </button>
     </div>
