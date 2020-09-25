@@ -12,16 +12,20 @@ export class TextInputComponent implements OnInit {
   @Output() onChange: EventEmitter<string> = new EventEmitter<string>();
   @Input() name = '';
   @Input() value: string;
-  @Input() inputValue: string;
   @Input() multiline = false;
   @Input() maxLines = 1;
   @Input() isLink: boolean;
+
+  inputValue: string;
 
   saveChanges(): void {
     this.onSaveChanges.emit(this.inputValue);
   }
 
   inputChanged(): void {
+    if (!this.inputValue) {
+      this.inputValue = null;
+    }
     this.onChange.emit(this.inputValue);
   }
 
