@@ -66,19 +66,40 @@ export class ImplementationViewComponent implements OnInit {
     this.loadGeneral();
   }
 
-  saveImplementation() {
+  saveImplementation(
+    updatedImplementation: ImplementationDto,
+    updateFrontendImplementation: boolean
+  ) {
     this.algorithmService
       .updateImplementation({
         algoId: this.algo.id,
         implId: this.impl.id,
-        body: this.frontendImpl,
+        body: updatedImplementation,
       })
-      .subscribe((impl) => {
-        this.impl = impl;
-        this.frontendImpl = JSON.parse(
-          JSON.stringify(impl)
-        ) as ImplementationDto;
-      });
+      .subscribe(
+        (impl) => {
+          this.impl = impl;
+          if (updateFrontendImplementation) {
+            this.frontendImpl = JSON.parse(
+              JSON.stringify(impl)
+            ) as ImplementationDto;
+          }
+          // live refresh name
+          let subheading = this.algo.computationModel.toString().toLowerCase();
+          subheading =
+            subheading[0].toUpperCase() +
+            subheading.slice(1) +
+            ' Implementation';
+          this.links[1] = {
+            heading: this.impl.name,
+            subHeading: subheading,
+          };
+          this.utilService.callSnackBar('Successfully updated implementation');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   changeTab(tabNumber: number): void {
@@ -204,31 +225,7 @@ export class ImplementationViewComponent implements OnInit {
 
   updateImplementationField(event: { field; value }): void {
     this.impl[event.field] = event.value;
-    this.algorithmService
-      .updateImplementation({
-        algoId: this.algo.id,
-        implId: this.impl.id,
-        body: this.impl,
-      })
-      .subscribe(
-        (impl) => {
-          this.impl = impl;
-          // live refresh name
-          let subheading = this.algo.computationModel.toString().toLowerCase();
-          subheading =
-            subheading[0].toUpperCase() +
-            subheading.slice(1) +
-            ' Implementation';
-          this.links[1] = {
-            heading: this.impl.name,
-            subHeading: subheading,
-          };
-          this.utilService.callSnackBar('Successfully updated implementation');
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.saveImplementation(this.impl, false);
   }
 
   private loadGeneral(): void {

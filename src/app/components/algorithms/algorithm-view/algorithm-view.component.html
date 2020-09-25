@@ -2,7 +2,8 @@
   <div class="row p-2 m-0 align-items-center">
     <div class="col">
       <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-      <button *ngIf="!utilService.objectsEqual(frontendAlgorithm, algorithm)" mat-flat-button color="primary" (click)="saveAlgorithm()">
+      <button *ngIf="!utilService.objectsEqual(frontendAlgorithm, algorithm)" mat-flat-button color="primary"
+              (click)="saveAlgorithm(frontendAlgorithm, true)">
         Save
         <mat-icon>save</mat-icon>
       </button>

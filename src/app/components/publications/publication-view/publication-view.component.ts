@@ -45,17 +45,22 @@ export class PublicationViewComponent implements OnInit {
     });
   }
 
-  savePublication(): void {
+  savePublication(
+    updatedPublication: EntityModelPublicationDto,
+    updateFrontendPublication: boolean
+  ): void {
     this.publicationService
       .updatePublication({
         id: this.publication.id,
-        body: this.frontendPublication,
+        body: updatedPublication,
       })
       .subscribe((publication) => {
         this.publication = publication;
-        this.frontendPublication = JSON.parse(
-          JSON.stringify(publication)
-        ) as EntityModelPublicationDto;
+        if (updateFrontendPublication) {
+          this.frontendPublication = JSON.parse(
+            JSON.stringify(publication)
+          ) as EntityModelPublicationDto;
+        }
       });
   }
   addTag(): void {
@@ -72,16 +77,6 @@ export class PublicationViewComponent implements OnInit {
 
   updatePublicationField(event: { field; value }): void {
     this.publication[event.field] = event.value;
-    this.publicationService
-      .updatePublication({ id: this.publication.id, body: this.publication })
-      .subscribe(
-        (publication) => {
-          this.publication = publication;
-          this.utilService.callSnackBar('Successfully updated publication');
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.savePublication(this.publication, false);
   }
 }
