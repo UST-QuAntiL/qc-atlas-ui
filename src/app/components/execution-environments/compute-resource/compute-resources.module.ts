@@ -16,6 +16,7 @@ import { ComputeResourcePropertiesComponent } from './compute-resource-propertie
 import { ComputeResourceViewComponent } from './compute-resource-view/compute-resource-view.component';
 import { ComputeResourceListComponent } from './compute-resource-list/compute-resource-list.component';
 import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-resource-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -26,20 +27,21 @@ import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-r
     ComputeResourcePropertiesComponent,
     CreateComputeResourceDialogComponent,
   ],
-  imports: [
-    CommonModule,
-    MatTabsModule,
-    GenericsModule,
-    MatCardModule,
-    NavigationBreadcrumbModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    FormsModule,
-    ComputeResourcePropertyModule,
-  ],
+    imports: [
+        CommonModule,
+        MatTabsModule,
+        GenericsModule,
+        MatCardModule,
+        NavigationBreadcrumbModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        FormsModule,
+        ComputeResourcePropertyModule,
+        MatIconModule,
+    ],
   exports: [ComputeResourceViewComponent, ComputeResourceListComponent],
 })
 export class ComputeResourcesModule {}

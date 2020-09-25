@@ -1,11 +1,17 @@
 <div *ngIf="cloudService" class="m-2">
   <div class="header-container p-2">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+    <button *ngIf="!utilService.objectsEqual(frontendCloudService, cloudService)" mat-flat-button color="primary"
+            (click)="saveCloudService(frontendCloudService, true)">
+      Save
+      <mat-icon>save</mat-icon>
+    </button>
   </div>
 
   <mat-tab-group>
     <mat-tab label="General">
       <app-cloud-service-properties
+        [frontendCloudService]="frontendCloudService"
         [cloudService]="cloudService"
         (updateCloudServiceField)="updateCloudServiceField($event)"
       ></app-cloud-service-properties>

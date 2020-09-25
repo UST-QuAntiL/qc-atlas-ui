@@ -16,6 +16,7 @@ import { SoftwarePlatformImplListComponent } from './software-platform-impl-list
 import { SoftwarePlatformCloudServiceListComponent } from './software-platform-cloud-service-list/software-platform-cloud-service-list.component';
 import { SoftwarePlatformComputeResourceListComponent } from './software-platform-compute-resource-list/software-platform-compute-resource-list.component';
 import { CreateSoftwarePlatformDialogComponent } from './dialogs/create-software-platform-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -27,19 +28,20 @@ import { CreateSoftwarePlatformDialogComponent } from './dialogs/create-software
     SoftwarePlatformComputeResourceListComponent,
     CreateSoftwarePlatformDialogComponent,
   ],
-  imports: [
-    CommonModule,
-    MatTabsModule,
-    GenericsModule,
-    MatCardModule,
-    NavigationBreadcrumbModule,
-    MatDialogModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-  ],
+    imports: [
+        CommonModule,
+        MatTabsModule,
+        GenericsModule,
+        MatCardModule,
+        NavigationBreadcrumbModule,
+        MatDialogModule,
+        MatButtonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        MatIconModule,
+    ],
   exports: [SoftwarePlatformViewComponent, SoftwarePlatformListComponent],
 })
 export class SoftwarePlatformsModule {}

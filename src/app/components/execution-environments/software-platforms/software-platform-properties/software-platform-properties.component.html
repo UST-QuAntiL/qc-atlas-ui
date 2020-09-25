@@ -5,6 +5,7 @@
         <app-text-input
           name="Licence"
           [value]="softwarePlatform.licence"
+          (onChange)="onPropertyChanged($event, 'licence')"
           (onSaveChanges)="onChangesSaved($event, 'licence')"></app-text-input>
       </mat-card>
     </div>
@@ -16,6 +17,7 @@
         <app-text-input
           name="Version"
           [value]="softwarePlatform.version"
+          (onChange)="onPropertyChanged($event, 'version')"
           (onSaveChanges)="onChangesSaved($event, 'version')"></app-text-input>
       </mat-card>
     </div>
@@ -28,6 +30,7 @@
           name="URL"
           [value]="softwarePlatform.link"
           [isLink]=true
+          (onChange)="onPropertyChanged($event, 'link')"
           (onSaveChanges)="onChangesSaved($event, 'link')"></app-text-input>
       </mat-card>
     </div>

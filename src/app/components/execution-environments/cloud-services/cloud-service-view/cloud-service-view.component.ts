@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 import { FieldUpdate } from '../../../../util/FieldUpdate';
+import { UtilService } from '../../../../util/util.service';
 
 @Component({
   selector: 'app-cloud-service-view',
@@ -14,7 +15,7 @@ import { FieldUpdate } from '../../../../util/FieldUpdate';
 })
 export class CloudServiceViewComponent implements OnInit {
   cloudService: EntityModelCloudServiceDto;
-
+  frontendCloudService: EntityModelCloudServiceDto;
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
   private routeSub: Subscription;
@@ -23,7 +24,8 @@ export class CloudServiceViewComponent implements OnInit {
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private updateFieldService: UpdateFieldEventService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -31,6 +33,9 @@ export class CloudServiceViewComponent implements OnInit {
       this.executionEnvironmentsService.getCloudService({ id: csId }).subscribe(
         (cloudService: EntityModelCloudServiceDto) => {
           this.cloudService = cloudService;
+          this.frontendCloudService = JSON.parse(
+            JSON.stringify(cloudService)
+          ) as EntityModelCloudServiceDto;
           this.links[0] = {
             heading: this.cloudService.name,
             subHeading: '',
@@ -53,17 +58,29 @@ export class CloudServiceViewComponent implements OnInit {
     this.fieldUpdateSubscription.unsubscribe();
   }
 
-  updateCloudServiceField(fieldUpdate: FieldUpdate): void {
-    this.cloudService[fieldUpdate.field] = fieldUpdate.value;
+  saveCloudService(
+    updatedCloudService: EntityModelCloudServiceDto,
+    updateFrontendCloudService: boolean
+  ): void {
     this.executionEnvironmentsService
       .updateCloudService({ id: this.cloudService.id, body: this.cloudService })
       .subscribe(
         (cloudSvc) => {
           this.cloudService = cloudSvc;
+          if (updateFrontendCloudService) {
+            this.frontendCloudService = JSON.parse(
+              JSON.stringify(cloudSvc)
+            ) as EntityModelCloudServiceDto;
+          }
         },
         (error) => {
           console.log(error);
         }
       );
+  }
+
+  updateCloudServiceField(fieldUpdate: FieldUpdate): void {
+    this.cloudService[fieldUpdate.field] = fieldUpdate.value;
+    this.saveCloudService(this.cloudService, false);
   }
 }

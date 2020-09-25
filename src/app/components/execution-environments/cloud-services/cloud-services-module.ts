@@ -15,6 +15,7 @@ import { CloudServiceComputeResourceListComponent } from './cloud-service-comput
 import { CloudServicePropertiesComponent } from './cloud-service-properties/cloud-service-properties.component';
 import { CloudServiceSoftwarePlatformListComponent } from './cloud-service-software-platform-list/cloud-service-software-platform-list.component';
 import { CreateCloudServiceDialogComponent } from './dialogs/create-cloud-service-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -25,19 +26,20 @@ import { CreateCloudServiceDialogComponent } from './dialogs/create-cloud-servic
     CloudServiceSoftwarePlatformListComponent,
     CreateCloudServiceDialogComponent,
   ],
-  imports: [
-    CommonModule,
-    MatTabsModule,
-    GenericsModule,
-    MatCardModule,
-    NavigationBreadcrumbModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatInputModule,
-    FormsModule,
-  ],
+    imports: [
+        CommonModule,
+        MatTabsModule,
+        GenericsModule,
+        MatCardModule,
+        NavigationBreadcrumbModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatInputModule,
+        FormsModule,
+        MatIconModule,
+    ],
   exports: [CloudServiceViewComponent, CloudServiceListComponent],
 })
 export class CloudServicesModule {}

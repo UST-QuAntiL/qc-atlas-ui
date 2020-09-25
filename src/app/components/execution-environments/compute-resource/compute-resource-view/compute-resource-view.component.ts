@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { FieldUpdate } from '../../../../util/FieldUpdate';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
+import { UtilService } from '../../../../util/util.service';
 
 @Component({
   selector: 'app-compute-resource-view',
@@ -14,6 +15,7 @@ import { UpdateFieldEventService } from '../../../../services/update-field-event
 })
 export class ComputeResourceViewComponent implements OnInit {
   computeResource: EntityModelComputeResourceDto;
+  frontendComputeResource: EntityModelComputeResourceDto;
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
@@ -23,7 +25,8 @@ export class ComputeResourceViewComponent implements OnInit {
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private updateFieldService: UpdateFieldEventService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +36,9 @@ export class ComputeResourceViewComponent implements OnInit {
         .subscribe(
           (computeResource: EntityModelComputeResourceDto) => {
             this.computeResource = computeResource;
+            this.frontendComputeResource = JSON.parse(
+              JSON.stringify(computeResource)
+            ) as EntityModelComputeResourceDto;
             this.links[0] = {
               heading: this.computeResource.name,
               subHeading: '',
@@ -55,8 +61,10 @@ export class ComputeResourceViewComponent implements OnInit {
     this.fieldUpdateSubscription.unsubscribe();
   }
 
-  updateComputeResourceField(fieldUpdate: FieldUpdate): void {
-    this.computeResource[fieldUpdate.field] = fieldUpdate.value;
+  saveComputeResource(
+    updatedComputeResource: EntityModelComputeResourceDto,
+    updateFrontendComputeResource: boolean
+  ): void {
     this.executionEnvironmentsService
       .updateComputeResource({
         id: this.computeResource.id,
@@ -65,10 +73,20 @@ export class ComputeResourceViewComponent implements OnInit {
       .subscribe(
         (computeRes) => {
           this.computeResource = computeRes;
+          if (updateFrontendComputeResource) {
+            this.frontendComputeResource = JSON.parse(
+              JSON.stringify(computeRes)
+            ) as EntityModelComputeResourceDto;
+          }
         },
         (error) => {
           console.log(error);
         }
       );
+  }
+
+  updateComputeResourceField(fieldUpdate: FieldUpdate): void {
+    this.computeResource[fieldUpdate.field] = fieldUpdate.value;
+    this.saveComputeResource(this.computeResource, false);
   }
 }

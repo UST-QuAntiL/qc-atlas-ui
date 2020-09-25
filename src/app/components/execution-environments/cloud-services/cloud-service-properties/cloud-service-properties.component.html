@@ -7,6 +7,7 @@
           [multiline]="true"
           [maxLines]="5"
           [value]="cloudService.description"
+          (onChange)="onPropertyChanged($event,   'description')"
           (onSaveChanges)="onChangesSaved($event, 'description')"
         ></app-text-input>
       </mat-card>
@@ -17,6 +18,7 @@
         <app-text-input
           name="Provider"
           [value]="cloudService.provider"
+          (onChange)="onPropertyChanged($event, 'provider')"
           (onSaveChanges)="onChangesSaved($event, 'provider')"
         ></app-text-input>
       </mat-card>
@@ -29,7 +31,8 @@
         <app-text-input
           name="URL"
           [isLink]="true"
-          [(ngModel)]="cloudService.url"
+          [value]="cloudService.url"
+          (onChange)="onPropertyChanged($event, 'url')"
           (onSaveChanges)="onChangesSaved($event, 'url')"
         ></app-text-input>
       </mat-card>
@@ -39,7 +42,8 @@
       <mat-card class="m-2">
         <app-text-input
           name="Cost Model"
-          [(ngModel)]="cloudService.costModel"
+          [value]="cloudService.costModel"
+          (onChange)="onPropertyChanged($event, 'costModel')"
           (onSaveChanges)="onChangesSaved($event, 'costModel')"
         ></app-text-input>
       </mat-card>

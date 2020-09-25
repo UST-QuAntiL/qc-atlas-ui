@@ -10,6 +10,7 @@ import { UpdateFieldEventService } from '../../../../services/update-field-event
 export class CloudServicePropertiesComponent implements OnInit {
   @Input()
   public cloudService: CloudServiceDto;
+  @Input() frontendCloudService: CloudServiceDto;
   @Output() updateCloudServiceField: EventEmitter<{
     field;
     value;
@@ -24,5 +25,8 @@ export class CloudServicePropertiesComponent implements OnInit {
       field,
       value,
     });
+  }
+  onPropertyChanged(value: any, field: string): void {
+    this.frontendCloudService[field] = value;
   }
 }
