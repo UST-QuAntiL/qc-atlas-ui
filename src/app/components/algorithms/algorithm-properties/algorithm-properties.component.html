@@ -144,7 +144,8 @@
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2" *ngIf="algorithm.computationModel === 'QUANTUM'">
         <app-checkbox-input name="NISQ ready"
-                            [(ngModel)]="algorithm.nisqReady"
+                            [value]="algorithm.nisqReady"
+                            (onChange)="onPropertyChanged($event, 'nisqReady')"
                             (onSaveChanges)="onChangesSaved($event, 'nisqReady')">
         </app-checkbox-input>
       </mat-card>
