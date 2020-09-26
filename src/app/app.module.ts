@@ -19,6 +19,7 @@ import { ApiModule as PatternAltasAPIModule } from 'api-patternpedia/api.module'
 import { ApiModule as NisqApiModule } from 'api-nisq/api.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -93,6 +94,7 @@ import { AddApplicationAreaDialogComponent } from './components/application-area
     MatCardModule,
     MatAutocompleteModule,
     MatSelectModule,
+    MatInputModule,
   ],
   bootstrap: [AppComponent],
   exports: [],

@@ -148,5 +148,5 @@ export class ProblemTypesListComponent implements OnInit {
     return params;
   }
 
-  onEditElement($event: any) {
+  onEditElement($event: any) {}
 }
