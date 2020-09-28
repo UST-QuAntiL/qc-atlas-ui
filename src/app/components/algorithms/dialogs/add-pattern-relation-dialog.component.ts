@@ -111,8 +111,12 @@ export class AddPatternRelationDialogComponent implements OnInit {
         this.patternLanguages = languages._embedded.patternLanguageModels;
         this.filteredPatternLanguages = this.patternLanguages;
         this.arePatternLanguagesLoaded = true;
+        // If pattern langauge is selected move it to front of list
         if (this.selectedPatternLanguage) {
-          this.patternLanguageSearch = this.selectedPatternLanguage.name;
+          this.reorderArray(
+            this.filteredPatternLanguages,
+            this.selectedPatternLanguage
+          );
         }
         this.onLanguageSearch();
       });
@@ -126,11 +130,18 @@ export class AddPatternRelationDialogComponent implements OnInit {
         this.patterns = patterns._embedded.patternModels;
         this.filteredPatterns = this.patterns;
         this.arePatternsLoaded = true;
+        // If pattern is selected move it to front of list
         if (this.selectedPattern) {
-          this.patternSearch = this.selectedPattern.name;
+          this.reorderArray(this.filteredPatterns, this.selectedPattern);
         }
         this.onPatternSearch();
       });
+  }
+
+  reorderArray(array: any[], element: any) {
+    array.sort((x, y) =>
+      x.id === element.id ? -1 : y.id === element.id ? 1 : 0
+    );
   }
 
   getRelationTypes(): void {
@@ -174,6 +185,8 @@ export class AddPatternRelationDialogComponent implements OnInit {
     } else {
       this.selectedPatternLanguage = undefined;
     }
+    // Unselect pattern after language was changed/unselected
+    this.selectedPattern = undefined;
   }
 
   onLanguageSearch(): void {
