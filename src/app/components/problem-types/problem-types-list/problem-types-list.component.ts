@@ -5,6 +5,7 @@ import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
+import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type/add-problem-type-dialog.component';
 import {
@@ -42,7 +43,7 @@ export class ProblemTypesListComponent implements OnInit {
 
   getProblemTypes(params: any): void {
     this.problemTypeService.getProblemTypes(params).subscribe((data) => {
-      this.prepareProblemTypeData(JSON.parse(JSON.stringify(data)));
+      this.prepareProblemTypeData(data);
     });
   }
 
@@ -74,10 +75,6 @@ export class ProblemTypesListComponent implements OnInit {
         }
       }
     }
-  }
-
-  onElementClicked(problemType: any): void {
-    this.router.navigate(['problem-types', problemType.id]);
   }
 
   onAddElement(): void {
@@ -119,28 +116,28 @@ export class ProblemTypesListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const promises: Array<Promise<void>> = [];
+          const deletionTasks = [];
           for (const problemType of event.elements) {
-            promises.push(
-              this.problemTypeService
-                .deleteProblemType({
-                  problemTypeId: problemType.id,
-                })
-                .toPromise()
+            deletionTasks.push(
+              this.problemTypeService.deleteProblemType({
+                problemTypeId: problemType.id,
+              })
             );
           }
-          Promise.all(promises)
-            .then(() => {
+          forkJoin(deletionTasks).subscribe(
+            () => {
               this.getProblemTypes(event.queryParams);
               this.utilService.callSnackBar(
                 'Successfully deleted problem type(s)'
               );
-            })
-            .catch(() => {
+            },
+            () => {
+              this.getProblemTypes(event.queryParams);
               this.utilService.callSnackBar(
                 'Delete rejected! Problem type is used in other places.'
               );
-            });
+            }
+          );
         }
       });
   }

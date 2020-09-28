@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
+import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddApplicationAreaDialogComponent } from '../dialogs/add-application-area/add-application-area-dialog.component';
 import {
@@ -41,7 +42,7 @@ export class ApplicationAreasListComponent implements OnInit {
     this.applicationAreasService
       .getApplicationAreas(params)
       .subscribe((data) => {
-        this.prepareApplicationAreaData(JSON.parse(JSON.stringify(data)));
+        this.prepareApplicationAreaData(data);
       });
   }
 
@@ -60,11 +61,6 @@ export class ApplicationAreasListComponent implements OnInit {
     }
     this.pagingInfo.page = data.page;
     this.pagingInfo._links = data._links;
-  }
-
-  onElementClicked(applicationArea: any): void {
-    console.log(applicationArea);
-    this.router.navigate(['application-areas', applicationArea.id]);
   }
 
   onAddElement(): void {
@@ -108,9 +104,9 @@ export class ApplicationAreasListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const promises: Array<Promise<void>> = [];
+          const deletionTasks = [];
           for (const applicationArea of event.elements) {
-            promises.push(
+            deletionTasks.push(
               this.applicationAreasService
                 .deleteApplicationArea({
                   applicationAreaId: applicationArea.id,
@@ -118,18 +114,20 @@ export class ApplicationAreasListComponent implements OnInit {
                 .toPromise()
             );
           }
-          Promise.all(promises)
-            .then(() => {
+          forkJoin(deletionTasks).subscribe(
+            () => {
               this.getApplicationAreas(event.queryParams);
               this.utilService.callSnackBar(
                 'Successfully deleted application area(s)'
               );
-            })
-            .catch(() => {
+            },
+            () => {
+              this.getApplicationAreas(event.queryParams);
               this.utilService.callSnackBar(
                 'Delete rejected! Application area is used in other places.'
               );
-            });
+            }
+          );
         }
       });
   }
