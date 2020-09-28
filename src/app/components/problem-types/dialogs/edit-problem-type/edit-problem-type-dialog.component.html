@@ -1,0 +1,46 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="problemTypeFormGroup">
+    <mat-form-field class="input-field disabled">
+      <mat-label>Current name</mat-label>
+      <label>
+        <input formControlName="oldProblemTypeName" matInput>
+      </label>
+    </mat-form-field>
+    <mat-form-field class="input-field">
+      <mat-label>New name</mat-label>
+      <input formControlName="problemTypeName" matInput required/>
+    </mat-form-field>
+    <mat-form-field class="input-field disabled">
+      <mat-label>Current parent problem type</mat-label>
+      <label>
+        <input formControlName="oldParentProblemTypeName" matInput>
+      </label>
+    </mat-form-field>
+    <mat-form-field class="input-field"
+                    appearance="fill"
+                    *ngIf="existingProblemTypes">
+      <mat-label>Parent problem type</mat-label>
+      <mat-select
+        formControlName="parentProblemType"
+        [compareWith]="compareFn"
+        required>
+        <mat-option *ngIf="data.parentProblemType"
+                    [value]="'Remove parent'"
+                    (click)="onRemoveParentProblemType()">
+          Remove current parent problem type
+        </mat-option>
+        <mat-option *ngFor="let type of existingProblemTypes"
+                    [value]="type"
+                    (click)="onParentTypeSelect(type)">
+          {{type.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok
+  </button>
+</div>

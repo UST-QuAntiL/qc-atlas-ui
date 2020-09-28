@@ -13,6 +13,7 @@ import {
 } from '../../generics/dialogs/confirm-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { AddAlgorithmDialogComponent } from '../../algorithms/dialogs/add-algorithm-dialog.component';
+import { EditProblemTypeDialogComponent } from '../dialogs/edit-problem-type/edit-problem-type-dialog.component';
 
 @Component({
   selector: 'app-problem-types-list',
@@ -22,7 +23,7 @@ import { AddAlgorithmDialogComponent } from '../../algorithms/dialogs/add-algori
 export class ProblemTypesListComponent implements OnInit {
   problemTypes: any[] = [];
   tableColumns = ['Name', 'Parent'];
-  variableNames = ['name', 'parentProblemType'];
+  variableNames = ['name', 'parentProblemTypeName'];
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
@@ -55,7 +56,7 @@ export class ProblemTypesListComponent implements OnInit {
     // Read all incoming data
     if (data._embedded) {
       this.problemTypes = data._embedded.problemTypes;
-      this.assignParentProblemTypes();
+      this.assignParentProblemTypeNames();
     } else {
       this.problemTypes = [];
     }
@@ -63,12 +64,12 @@ export class ProblemTypesListComponent implements OnInit {
     this.pagingInfo._links = data._links;
   }
 
-  assignParentProblemTypes(): void {
+  assignParentProblemTypeNames(): void {
     for (const problemType of this.problemTypes) {
       if (problemType.parentProblemType != null) {
         for (const parentProblemType of this.problemTypes) {
           if (problemType.parentProblemType === parentProblemType.id) {
-            problemType.parentProblemType = parentProblemType.name;
+            problemType.parentProblemTypeName = parentProblemType.name;
           }
         }
       }
@@ -76,7 +77,6 @@ export class ProblemTypesListComponent implements OnInit {
   }
 
   onElementClicked(problemType: any): void {
-    console.log(problemType);
     this.router.navigate(['problem-types', problemType.id]);
   }
 
@@ -92,17 +92,14 @@ export class ProblemTypesListComponent implements OnInit {
           id: dialogResult.id,
           name: dialogResult.name,
         };
-        if (
-          dialogResult.parentProblemType != null &&
-          dialogResult.parentProblemType.id != null
-        ) {
+        if (dialogResult.parentProblemType) {
           problemTypeDto.parentProblemType = dialogResult.parentProblemType.id;
         }
 
         params.body = problemTypeDto;
         this.problemTypeService.createProblemType(params).subscribe((data) => {
+          this.getProblemTypes({});
           this.utilService.callSnackBar('Successfully added problem type');
-          this.router.navigate(['problem-types', data.id]);
         });
       }
     });
@@ -132,12 +129,18 @@ export class ProblemTypesListComponent implements OnInit {
                 .toPromise()
             );
           }
-          Promise.all(promises).then(() => {
-            this.getProblemTypes(event.queryParams);
-            this.utilService.callSnackBar(
-              'Successfully deleted problem type(s)'
-            );
-          });
+          Promise.all(promises)
+            .then(() => {
+              this.getProblemTypes(event.queryParams);
+              this.utilService.callSnackBar(
+                'Successfully deleted problem type(s)'
+              );
+            })
+            .catch(() => {
+              this.utilService.callSnackBar(
+                'Delete rejected! Problem type is used in other places.'
+              );
+            });
         }
       });
   }
@@ -148,5 +151,60 @@ export class ProblemTypesListComponent implements OnInit {
     return params;
   }
 
-  onEditElement($event: any) {}
+  onEditElement(event: any): void {
+    let parentProblemTypeDto: EntityModelProblemTypeDto;
+    for (const problemType of this.problemTypes) {
+      if (problemType.id === event.parentProblemType) {
+        parentProblemTypeDto = problemType;
+      }
+    }
+    const dialogRef = this.dialog.open(EditProblemTypeDialogComponent, {
+      data: {
+        title: 'Edit problem type',
+        name: event.name,
+        parentProblemType: parentProblemTypeDto,
+      },
+      autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        if (
+          dialogResult.newName !== event.name ||
+          !dialogResult.newParentProblemType ||
+          (dialogResult.newParentProblemType &&
+            dialogResult.newParentProblemType.id !==
+              (event.parentProblemType as string))
+        ) {
+          const newProblemTypeDto: EntityModelProblemTypeDto = {
+            id: event.id,
+            name: dialogResult.newName,
+          };
+          if (dialogResult.newParentProblemType) {
+            newProblemTypeDto.parentProblemType =
+              dialogResult.newParentProblemType.id;
+          }
+
+          if (newProblemTypeDto.id !== newProblemTypeDto.parentProblemType) {
+            const params: any = {
+              problemTypeId: newProblemTypeDto.id,
+              body: newProblemTypeDto,
+            };
+            this.problemTypeService
+              .updateProblemType(params)
+              .subscribe((data) => {
+                this.getProblemTypes(event.queryParams);
+                this.utilService.callSnackBar(
+                  'Successfully edited problem type'
+                );
+              });
+          } else {
+            this.utilService.callSnackBar(
+              'Edit aborted! Parent problem type must differ from problem type.'
+            );
+          }
+        }
+      }
+    });
+  }
 }
