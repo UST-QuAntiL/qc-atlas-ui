@@ -25,13 +25,13 @@
       <app-algorithm-properties
         [frontendAlgorithm]="frontendAlgorithm"
         [algorithm]="algorithm"
+        [linkedProblemTypes]="problemTypes"
         [linkedApplicationAreas]="applicationAreas"
-        [problemTypes]="problemTypes"
         (updateAlgorithmField)="updateAlgorithmField($event)"
         (addApplicationArea)="addApplicationArea($event)"
         (removeApplicationArea)="removeApplicationArea($event)"
-        (addProblemType)="addProblemType($event)"
-        (removeProblemType)="removeProblemType($event)"
+        (onAddProblemType)="addProblemType($event)"
+        (onRemoveProblemType)="removeProblemTypeFromAlgorithm($event)"
       ></app-algorithm-properties>
     </mat-tab>
     <mat-tab label="Implementations">
@@ -54,8 +54,11 @@
         [algorithm]="algorithm"
       ></app-algorithm-publications-list>
     </mat-tab>
-    <mat-tab label="NISQ Analyzer">
-      <app-algorithm-nisq-analyzer></app-algorithm-nisq-analyzer>
+    <mat-tab [hidden]="isNisqUsed" label="NISQ Analyzer">
+      <app-algorithm-nisq-analyzer
+        *ngIf="this.algorithm"
+        [algo]="this.algorithm"
+      ></app-algorithm-nisq-analyzer>
     </mat-tab>
     <mat-tab label="Discussion">
       <h1>Discussion WIP</h1>

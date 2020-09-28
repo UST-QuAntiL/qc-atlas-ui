@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { Link } from './link';
 export type EntityModelSoftwarePlatformDto = {
-  id?: string;
+  id: string;
   name: string;
   link?: string;
   licence?: string;

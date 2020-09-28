@@ -1,9 +1,9 @@
-<div *ngIf="impl" class="m-2">
+<div *ngIf="implementation && algorithm" class="m-2">
   <div class="row p-2 m-0 align-items-center">
     <div class="col">
       <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-      <button *ngIf="!guard.objectsEqual(frontendImpl, impl)" mat-flat-button color="primary"
-              (click)="saveImplementation(frontendImpl, true)">
+      <button *ngIf="!guard.objectsEqual(frontendImplementation, implementation)" mat-flat-button color="primary"
+              (click)="saveImplementation(frontendImplementation, true)">
         Save
         <mat-icon>save</mat-icon>
       </button>
@@ -14,7 +14,8 @@
           [allowRemoving]="true"
           [tags]="tags"
           (onRemove)="removeTag($event)"
-          (onAdd)="addTag($event)">
+          (onAdd)="addTag($event)"
+        >
         </app-tags-component>
       </div>
     </div>
@@ -23,35 +24,33 @@
   <mat-tab-group (selectedIndexChange)="changeTab($event)">
     <mat-tab label="General">
       <app-implementation-properties
-        [frontendImplementation]="frontendImpl"
+        [frontendImplementation]="frontendImplementation"
         [computeResourceProperties]="computeResourceProperties"
-        [implementation]="impl"
+        [implementation]="implementation"
         (updateImplementationField)="updateImplementationField($event)"
         (deleteComputeResourceProperty)="deleteComputeResourceProperty($event)"
         (addComputeResourceProperty)="addComputeResourceProperty($event)"
-        (updateComputeResourceProperty)="updateComputeResourceProperty($event)">
+        (updateComputeResourceProperty)="updateComputeResourceProperty($event)"
+      >
       </app-implementation-properties>
     </mat-tab>
     <mat-tab label="Publications">
       <div>
-        <app-implementation-publications-list [implementation]=impl>
+        <app-implementation-publications-list [implementation]="implementation">
         </app-implementation-publications-list>
       </div>
     </mat-tab>
     <mat-tab label="Software Platforms">
       <app-implementation-softwareplatform-list
-        [implementation]="impl"
-        [algorithm]="algo"
+        [implementation]="implementation"
       ></app-implementation-softwareplatform-list>
     </mat-tab>
-    <mat-tab label="Selection Criteria">
+    <mat-tab [hidden]="isNisqUsed" label="Selection Criteria">
       <div class="tab-body p-4">
         <app-impl-selection-criteria
-          [params]="this.placeholderInputParams"
-          [depthRule]="placeholderPrologRule"
-          [widthRule]="placeholderPrologRule"
-          [selectionRule]="placeholderPrologRule">
-        </app-impl-selection-criteria>
+          [algo]="algorithm"
+          [impl]="implementation"
+        ></app-impl-selection-criteria>
       </div>
     </mat-tab>
     <mat-tab label="Discussion">
@@ -61,6 +60,9 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-<div *ngIf="impl === undefined">
-  Loading..
+<div
+  *ngIf="!implementation || !algorithm"
+  class="d-flex align-content-center justify-content-center"
+>
+  <mat-spinner></mat-spinner>
 </div>

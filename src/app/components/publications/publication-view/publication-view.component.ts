@@ -26,7 +26,7 @@ export class PublicationViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ publicationId }) => {
-      this.publicationService.getPublication({ id: publicationId }).subscribe(
+      this.publicationService.getPublication({ publicationId }).subscribe(
         (publication: EntityModelPublicationDto) => {
           this.publication = publication;
           this.frontendPublication = JSON.parse(
@@ -50,7 +50,7 @@ export class PublicationViewComponent implements OnInit {
   ): void {
     this.publicationService
       .updatePublication({
-        id: this.publication.id,
+        publicationId: this.publication.id,
         body: updatedPublication,
       })
       .subscribe((publication) => {

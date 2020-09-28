@@ -32,7 +32,7 @@ export class ComputeResourceViewComponent implements OnInit {
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ crId }) => {
       this.executionEnvironmentsService
-        .getComputeResource({ id: crId })
+        .getComputeResource({ computeResourceId: crId })
         .subscribe(
           (computeResource: EntityModelComputeResourceDto) => {
             this.computeResource = computeResource;
@@ -67,7 +67,7 @@ export class ComputeResourceViewComponent implements OnInit {
   ): void {
     this.executionEnvironmentsService
       .updateComputeResource({
-        id: this.computeResource.id,
+        computeResourceId: this.computeResource.id,
         body: this.computeResource,
       })
       .subscribe(

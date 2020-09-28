@@ -18,13 +18,10 @@ import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import {
-  FileNode,
+  TreeNode,
   ProblemTypeTreeComponent,
 } from '../problem-type-tree/problem-type-tree.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type-dialog.component';
-import { RemoveProblemTypeDialogComponent } from '../dialogs/remove-problem-type-dialog.component';
-import { UtilService } from '../../../util/util.service';
 import {
   quantumComputationModelOptions,
   sketchOptions,
@@ -43,12 +40,12 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   @Output() removeApplicationArea: EventEmitter<
     EntityModelApplicationAreaDto
   > = new EventEmitter<EntityModelApplicationAreaDto>();
-  @Output() addProblemType: EventEmitter<
+  @Output() onAddProblemType: EventEmitter<
     EntityModelProblemTypeDto
   > = new EventEmitter<EntityModelProblemTypeDto>();
-  @Output() removeProblemType: EventEmitter<
-    EntityModelProblemTypeDto[]
-  > = new EventEmitter<EntityModelProblemTypeDto[]>();
+  @Output() onRemoveProblemType: EventEmitter<
+    EntityModelProblemTypeDto
+  > = new EventEmitter<EntityModelProblemTypeDto>();
   @Output() updateAlgorithmField: EventEmitter<{
     field;
     value;
@@ -56,11 +53,19 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   @Input() algorithm: EntityModelAlgorithmDto;
   @Input() frontendAlgorithm: EntityModelAlgorithmDto;
+  @Input() linkedProblemTypes: EntityModelProblemTypeDto[];
   @Input() linkedApplicationAreas: EntityModelApplicationAreaDto[];
-  @Input() problemTypes: EntityModelProblemTypeDto[];
 
   @ViewChild('problemTypeTree')
   problemTypeTreeComponent: ProblemTypeTreeComponent;
+  problemTypeTreeData: TreeNode[] = [];
+
+  problemTypeLinkObject: LinkObject = {
+    title: 'Link problem type with ',
+    subtitle: 'Search problem type by name',
+    displayVariable: 'name',
+    data: [],
+  };
 
   availableSketchOptions: Option[] = sketchOptions;
   availableQuantumComputationModelOptions: Option[] = quantumComputationModelOptions;
@@ -74,30 +79,42 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     data: [],
   };
 
-  problemTypeTreeData: FileNode[] = [];
+  sketchOptions: Option[] = [
+    { value: 'PSEUDOCODE', label: 'Pseudocode' },
+    { value: 'CIRCUIT', label: 'Circuit' },
+    { value: 'ISING_MODEL', label: 'Ising model' },
+  ];
+  quantumComputationModelOptions: Option[] = [
+    { value: 'GATE_BASED', label: 'Gate based' },
+    { value: 'MEASUREMENT_BASED', label: 'Measurement based' },
+    { value: 'QUANTUM_ANNEALING', label: 'Quantum Annealing' },
+  ];
 
   constructor(
     private algorithmService: AlgorithmService,
     private applicationAreaService: ApplicationAreasService,
-    private problemTypeService: ProblemTypeService,
-    private utilService: UtilService
+    private problemTypeService: ProblemTypeService
   ) {}
 
   ngOnInit(): void {
+    this.problemTypeLinkObject.title += this.algorithm.name;
     this.applicationAreaLinkObject.title += this.algorithm.name;
     this.fetchComputeResourceProperties();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.hasOwnProperty('problemTypes') && this.problemTypes != null) {
+    if (
+      changes.hasOwnProperty('linkedProblemTypes') &&
+      this.linkedProblemTypes != null
+    ) {
       this.problemTypeTreeData = [];
       this.createInitTreeData();
     }
   }
 
   createInitTreeData(): void {
-    this.problemTypes.forEach((problemType) => {
-      const node: FileNode = {
+    this.linkedProblemTypes.forEach((problemType) => {
+      const node: TreeNode = {
         problemType,
         parents: [],
         hasParents: problemType.parentProblemType != null,
@@ -110,12 +127,12 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   addParentTreeToProblemType(problemType: EntityModelProblemTypeDto): void {
     this.problemTypeService
-      .getProblemTypeParentList({ id: problemType.id })
+      .getProblemTypeParentList({ problemTypeId: problemType.id })
       .subscribe(
         (parents) => {
           if (parents._embedded) {
             const parentProblemTypes = parents._embedded.problemTypes;
-            let parentNodes: FileNode[] = [];
+            let parentNodes: TreeNode[] = [];
             if (parentProblemTypes.length > 1) {
               parentNodes = this.buildProblemTypeParentTree(parentProblemTypes);
             }
@@ -141,10 +158,14 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       );
   }
 
-  buildProblemTypeParentTree(parents: EntityModelProblemTypeDto[]): FileNode[] {
+  getParentsForNode(problemType: EntityModelProblemTypeDto): void {
+    this.addParentTreeToProblemType(problemType);
+  }
+
+  buildProblemTypeParentTree(parents: EntityModelProblemTypeDto[]): TreeNode[] {
     parents.shift();
     const type = parents.pop();
-    let parent: FileNode[] = [
+    let parent: TreeNode[] = [
       {
         problemType: type,
         parents: [],
@@ -163,6 +184,35 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       ];
     });
     return parent;
+  }
+
+  searchUnlinkedProblemTypes(search: string): void {
+    // Search for unlinked problem types if search-text is not empty
+    if (search) {
+      this.problemTypeService.getProblemTypes({ search }).subscribe((data) => {
+        this.updateLinkableProblemTypes(data._embedded);
+      });
+    } else {
+      this.problemTypeLinkObject.data = [];
+    }
+  }
+
+  updateLinkableProblemTypes(problemTypesData): void {
+    // Clear list of linkable problem types
+    this.problemTypeLinkObject.data = [];
+    // If linkable algorithms found
+    if (problemTypesData) {
+      // Search algorithms and filter only those that are not already linked
+      for (const problemType of problemTypesData.problemTypes) {
+        if (
+          !this.linkedProblemTypes.some(
+            (probType) => probType.id === problemType.id
+          )
+        ) {
+          this.problemTypeLinkObject.data.push(problemType);
+        }
+      }
+    }
   }
 
   onChangesSaved(value: any, field: string): void {
@@ -214,58 +264,12 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     this.removeApplicationArea.emit(applicationArea);
   }
 
-  getParentsForNode(problemType: EntityModelProblemTypeDto): void {
-    this.addParentTreeToProblemType(problemType);
-  }
-
-  addProblemTypeEvent(): void {
-    this.utilService
-      .createDialog(AddProblemTypeDialogComponent, {
-        title: 'Add new problem type',
-        usedProblemTypes: this.problemTypes,
-      })
-      .afterClosed()
-      .subscribe((dialogResult) => {
-        if (dialogResult) {
-          const problemTypeDto: EntityModelProblemTypeDto = {
-            name: dialogResult.name,
-          };
-          if (
-            dialogResult.parentProblemType != null &&
-            dialogResult.parentProblemType.id != null
-          ) {
-            problemTypeDto.parentProblemType =
-              dialogResult.parentProblemType.id;
-          }
-
-          this.addProblemType.emit(problemTypeDto);
-        }
-      });
-  }
-
-  removeProblemTypeEvent(): void {
-    this.utilService
-      .createDialog(RemoveProblemTypeDialogComponent, {
-        title: 'Remove problem types',
-        existingProblemTypes: this.problemTypes,
-        selectedProblemTypes: [],
-      })
-      .afterClosed()
-      .subscribe((dialogResult) => {
-        if (dialogResult) {
-          this.removeProblemType.emit(dialogResult.selectedProblemTypes);
-        }
-      });
-  }
-
   addComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
-    console.log('add compute resource property');
-    console.log(property);
     this.algorithmService
-      .addComputingResource({
-        algoId: this.algorithm.id,
+      .createComputeResourcePropertyForAlgorithm({
+        algorithmId: this.algorithm.id,
         body: property,
       })
       .subscribe((e) => {
@@ -277,9 +281,9 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
-      .updateComputingResource({
-        algoId: this.algorithm.id,
-        resourceId: property.id,
+      .updateComputeResourcePropertyOfAlgorithm({
+        algorithmId: this.algorithm.id,
+        computeResourcePropertyId: property.id,
         body: property,
       })
       .subscribe((e) => {
@@ -291,9 +295,9 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.algorithmService
-      .deleteComputingResource({
-        algoId: this.algorithm.id,
-        resourceId: property.id,
+      .deleteComputeResourcePropertyOfAlgorithm({
+        algorithmId: this.algorithm.id,
+        computeResourcePropertyId: property.id,
       })
       .subscribe((e) => {
         this.computeResourceProperties = this.computeResourceProperties.filter(
@@ -306,8 +310,8 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   fetchComputeResourceProperties(): void {
     this.algorithmService
-      .getComputingResourcesByAlgorithm({
-        algoId: this.algorithm.id,
+      .getComputeResourcePropertiesOfAlgorithm({
+        algorithmId: this.algorithm.id,
         size: -1,
       })
       .subscribe((e) => {

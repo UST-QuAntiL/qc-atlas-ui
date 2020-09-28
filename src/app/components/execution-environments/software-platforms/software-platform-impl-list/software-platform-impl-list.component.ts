@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import {
   DeleteParams,
   LinkObject,
@@ -35,6 +36,7 @@ export class SoftwarePlatformImplListComponent implements OnInit {
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private algorithmService: AlgorithmService,
+    private implementationService: ImplementationsService,
     private utilService: UtilService,
     private router: Router
   ) {}
@@ -42,12 +44,14 @@ export class SoftwarePlatformImplListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.softwarePlatform.name;
     this.getImplementations();
-    this.getLinkedImplementations({ id: this.softwarePlatform.id });
+    this.getLinkedImplementations({
+      softwarePlatformId: this.softwarePlatform.id,
+    });
   }
 
   getImplementations(): void {
-    this.algorithmService
-      .getAllImplementations({ page: -1 })
+    this.implementationService
+      .getImplementations({ page: -1 })
       .subscribe((implementations) => {
         if (implementations._embedded) {
           this.implementations = implementations._embedded.implementations;
@@ -57,9 +61,15 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       });
   }
 
-  getLinkedImplementations(params: any): void {
+  getLinkedImplementations(params: {
+    softwarePlatformId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
-      .getImplementationsForSoftwarePlatform(params)
+      .getImplementationsOfSoftwarePlatform(params)
       .subscribe((implementations) => {
         if (implementations._embedded) {
           this.linkedImplementations =
@@ -86,46 +96,53 @@ export class SoftwarePlatformImplListComponent implements OnInit {
   linkImplementation(implementation: ImplementationDto): void {
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addImplementationReferenceToSoftwarePlatform({
-        id: this.softwarePlatform.id,
-        implId: implementation.id,
+      .linkSoftwarePlatformAndImplementation({
+        softwarePlatformId: this.softwarePlatform.id,
+        body: implementation,
       })
-      .subscribe((data) => {
-        this.getLinkedImplementations({ id: this.softwarePlatform.id });
+      .subscribe(() => {
+        this.getLinkedImplementations({
+          softwarePlatformId: this.softwarePlatform.id,
+        });
         this.utilService.callSnackBar('Successfully linked implementation');
       });
   }
 
-  async unlinkImplementations(event: DeleteParams): Promise<void> {
+  unlinkImplementations(event: DeleteParams): void {
+    const promises: Array<Promise<void>> = [];
     for (const implementation of event.elements) {
-      await this.executionEnvironmentsService
-        .deleteImplementationReferenceFromSoftwarePlatform({
-          id: this.softwarePlatform.id,
-          implId: implementation.id,
-        })
-        .toPromise();
-      this.getLinkedImplementations({ id: this.softwarePlatform.id });
-      this.utilService.callSnackBar('Successfully unlinked implementation');
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkSoftwarePlatformAndImplementation({
+            softwarePlatformId: this.softwarePlatform.id,
+            implementationId: implementation.id,
+          })
+          .toPromise()
+      );
     }
+    Promise.all(promises).then(() => {
+      this.getLinkedImplementations({
+        softwarePlatformId: this.softwarePlatform.id,
+      });
+      this.utilService.callSnackBar('Successfully unlinked implementation');
+    });
   }
 
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedImplementations({ id: this.softwarePlatform.id });
+    this.getLinkedImplementations({
+      softwarePlatformId: this.softwarePlatform.id,
+    });
   }
 
   onElementClicked(implementation: ImplementationDto): void {
-    this.algorithmService
-      .getImplementedAlgorithm({ id: implementation.id })
-      .subscribe((algo) => {
-        this.router.navigate([
-          'algorithms',
-          algo.id,
-          'implementations',
-          implementation.id,
-        ]);
-      });
+    this.router.navigate([
+      'algorithms',
+      implementation.implementedAlgorithmId,
+      'implementations',
+      implementation.id,
+    ]);
   }
 
   onToggleLink(): void {

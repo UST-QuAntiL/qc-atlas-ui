@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NisqAnalyzerComponent } from './nisq-analyzer.component';
+import { NisqAnalyzerService } from './nisq-analyzer.service';
 
 @NgModule({
   declarations: [NisqAnalyzerComponent],
@@ -25,5 +26,6 @@ import { NisqAnalyzerComponent } from './nisq-analyzer.component';
     MatProgressSpinnerModule,
   ],
   exports: [NisqAnalyzerComponent],
+  providers: [NisqAnalyzerService],
 })
 export class NisqAnalyzerModule {}

@@ -1,4 +1,14 @@
-<mat-horizontal-stepper [linear]="true" #stepper="matHorizontalStepper">
+<div
+  *ngIf="!inputFormGroup"
+  class="d-flex align-content-center justify-content-center"
+>
+  <mat-spinner></mat-spinner>
+</div>
+<mat-horizontal-stepper
+  *ngIf="inputFormGroup"
+  [linear]="true"
+  #stepper="matHorizontalStepper"
+>
   <mat-step [editable]="false" [stepControl]="inputFormGroup" label="Input">
     <h3>Required input data for the NISQ Analyzer</h3>
     <form [formGroup]="inputFormGroup">
@@ -7,13 +17,13 @@
           <div class="row">
             <div class="col-xl-6 col-lg-9 col-md-12">
               <mat-form-field class="w-100">
-                <mat-label>{{ param.label }}</mat-label>
+                <mat-label>{{ param.name }}</mat-label>
                 <input
                   matInput
-                  pattern="[0-9]+"
-                  [placeholder]="param.placeholder"
+                  [pattern]="patternForParam(param)"
+                  [placeholder]="param.description"
                   [formControlName]="param.name"
-                  [required]="!!param.required"/>
+                />
               </mat-form-field>
             </div>
           </div>
@@ -23,29 +33,32 @@
       <div class="row">
         <div class="col-xl-6 col-lg-9 col-md-12">
           <mat-form-field class="w-100">
-            <mat-select formControlName="cloudService" placeholder="Cloud service" required>
+            <mat-select
+              formControlName="cloudService"
+              (selectionChange)="onCloudServiceChanged($event.value)"
+            >
               <mat-option *ngFor="let cs of cloudServices" [value]="cs.name">
-                {{ cs.label }}
+                {{ cs.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" [hidden]="true">
         <div class="col-xl-6 col-lg-9 col-md-12">
           <mat-form-field class="w-100">
             <mat-label>Number of shots (for later execution)</mat-label>
-            <input matInput pattern="[0-9]+" required formControlName="shotCount"/>
+            <input matInput pattern="[0-9]+" formControlName="shotCount" />
           </mat-form-field>
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" *ngIf="!inputFormGroup.controls.qiskitToken.disabled">
         <div class="col-xl-6 col-lg-9 col-md-12">
           <mat-form-field class="w-100">
             <mat-label>Your Qiskit token</mat-label>
-            <input matInput required formControlName="qiskitToken"/>
+            <input matInput required formControlName="qiskitToken" />
           </mat-form-field>
         </div>
       </div>
@@ -55,7 +68,8 @@
           mat-raised-button
           type="submit"
           [disabled]="inputFormGroup.invalid"
-          (click)="submit() && stepper.next()">
+          (click)="submit() && stepper.next()"
+        >
           Analyze!
         </button>
       </div>
@@ -63,110 +77,165 @@
   </mat-step>
 
   <mat-step [editable]="false" label="Analyzer Results">
-    <div class="p-2 overflow-auto" *ngFor="let result of analyzerResults">
-      <h4>{{ result.implementationName }}</h4>
-      <table mat-table [dataSource]="result.backendExecutionParams" multiTemplateDataRows>
-        <ng-container matColumnDef="backendName">
-          <th class="backend-column" mat-header-cell *matHeaderCellDef>Backend Name</th>
-          <td class="backend-column" mat-cell *matCellDef="let element">{{ element.backendName }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="width">
-          <th class="value-column" mat-header-cell *matHeaderCellDef>Width</th>
-          <td class="value-column" mat-cell *matCellDef="let element">{{ element.width }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="depth">
-          <th class="value-column" mat-header-cell *matHeaderCellDef>Depth</th>
-          <td class="value-column" mat-cell *matCellDef="let element">{{ element.depth }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="execution">
-          <th class="action-column" mat-header-cell *matHeaderCellDef></th>
-          <td class="action-column" mat-cell *matCellDef="let element">
-            <button
-              mat-raised-button
-              type="submit"
-              (click)="execute(element); stepper.next()">
-              Execute
-            </button>
-          </td>
-        </ng-container>
-
-        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-        <ng-container matColumnDef="expandedDetail">
-          <td
-            mat-cell
-            *matCellDef="let element"
-            [attr.colspan]="columnsToDisplay.length">
-            <div
-              class="element-detail"
-              [@detailExpand]="
-                element == expandedElement ? 'expanded' : 'collapsed'">
-              Max depth: {{ element.maxDepth }} Qbits:
-              {{ element.qbits }} Provider: {{ element.backendProviderName }}
-            </div>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-        <tr
-          mat-row
-          *matRowDef="let element; columns: columnsToDisplay"
-          class="element-row"
-          [class.example-expanded-row]="expandedElement === element"
-          (click)="
-            expandedElement = expandedElement === element ? null : element">
-        </tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: ['expandedDetail']"
-          class="detail-row">
-        </tr>
-      </table>
+    <div
+      *ngIf="!analyzerResults"
+      class="d-flex align-content-center justify-content-center"
+    >
+      <mat-spinner></mat-spinner>
     </div>
+    <ng-container *ngIf="analyzerResults">
+      <div
+        class="p-2 overflow-auto"
+        *ngFor="let result of groupResultsByImplementation(analyzerResults)"
+      >
+        <h4>{{ result.implementation.name }}</h4>
+        <table mat-table [dataSource]="result.results" multiTemplateDataRows>
+          <ng-container matColumnDef="backendName">
+            <th class="backend-column" mat-header-cell *matHeaderCellDef>
+              Backend Name
+            </th>
+            <td class="backend-column" mat-cell *matCellDef="let element">
+              {{ element.qpu.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="width">
+            <th class="value-column" mat-header-cell *matHeaderCellDef>
+              Width
+            </th>
+            <td class="value-column" mat-cell *matCellDef="let element">
+              {{ element.analysedWidth }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="depth">
+            <th class="value-column" mat-header-cell *matHeaderCellDef>
+              Depth
+            </th>
+            <td class="value-column" mat-cell *matCellDef="let element">
+              {{ element.analysedDepth }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="execution">
+            <th class="action-column" mat-header-cell *matHeaderCellDef></th>
+            <td class="action-column" mat-cell *matCellDef="let element">
+              <button
+                class="btn"
+                type="button"
+                (click)="execute(element); stepper.next()"
+              >
+                Execute
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+          <ng-container matColumnDef="expandedDetail">
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [attr.colspan]="analyzeColumns.length"
+            >
+              <div
+                class="element-detail"
+                [@detailExpand]="
+                  element == expandedElement ? 'expanded' : 'collapsed'
+                "
+              >
+                Max depth: {{ element.maxDepth }} Qbits:
+                {{ element.qbits }} Provider: {{ element.backendProviderName }}
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="analyzeColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let element; columns: analyzeColumns"
+            class="element-row"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="
+              expandedElement = expandedElement === element ? null : element
+            "
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['expandedDetail']"
+            class="detail-row"
+          ></tr>
+        </table>
+      </div>
+    </ng-container>
   </mat-step>
 
   <mat-step [editable]="false" label="Execution Results">
-    <div *ngIf="!results" class="d-flex align-content-center justify-content-center">
+    <div
+      *ngIf="!results"
+      class="d-flex align-content-center justify-content-center"
+    >
       <mat-spinner></mat-spinner>
     </div>
     <div *ngIf="results">
       <h3>Execution results</h3>
       <div class="p-2">
         <h6>Input</h6>
-        <div *ngFor="let resParam of nisqExecutionParams.params | keyvalue">
+        <div
+          *ngFor="
+            let resParam of filterInputParams(results.inputParameters)
+              | keyvalue
+          "
+        >
           <span>{{ resParam.key }}:</span>
           <span>{{ resParam.value }}</span>
         </div>
       </div>
       <div class="p-2 overflow-auto">
-        <h5>Implementation: {{ results.chosenImplementation }}</h5>
-        <table mat-table [dataSource]="[selectedExecutionParams]" multiTemplateDataRows>
+        <h5>Implementation: {{ executedAnalyseResult.implementation.name }}</h5>
+        <table
+          mat-table
+          [dataSource]="[executedAnalyseResult]"
+          multiTemplateDataRows
+        >
           <ng-container matColumnDef="backendName">
-            <th class="backend-column" mat-header-cell *matHeaderCellDef>Backend Name</th>
+            <th class="backend-column" mat-header-cell *matHeaderCellDef>
+              Backend Name
+            </th>
             <td class="backend-column" mat-cell *matCellDef="let element">
-              {{ element.backendName }}
+              {{ element.qpu.name }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="width">
-            <th class="value-column" mat-header-cell *matHeaderCellDef>Width</th>
-            <td class="value-column" mat-cell *matCellDef="let element">{{ element.width }}</td>
+            <th class="value-column" mat-header-cell *matHeaderCellDef>
+              Width
+            </th>
+            <td class="value-column" mat-cell *matCellDef="let element">
+              {{ element.analysedWidth }}
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="depth">
-            <th class="value-column" mat-header-cell *matHeaderCellDef>Depth</th>
-            <td class="value-column" mat-cell *matCellDef="let element">{{ element.depth }}</td>
+            <th class="value-column" mat-header-cell *matHeaderCellDef>
+              Depth
+            </th>
+            <td class="value-column" mat-cell *matCellDef="let element">
+              {{ element.analysedDepth }}
+            </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="resultBackendColumns"></tr>
-          <tr mat-row *matRowDef="let element; columns: resultBackendColumns" class="element-row"></tr>
+          <tr
+            mat-row
+            *matRowDef="let element; columns: resultBackendColumns"
+            class="element-row"
+          ></tr>
         </table>
       </div>
       <div class="p-2">
         <h5>Outcome</h5>
-        <code>{{ results.outcome }}</code>
+        <div>Status: {{ results.status }}</div>
+        <code>{{ beautifyResult(results.result) }}</code>
       </div>
     </div>
   </mat-step>

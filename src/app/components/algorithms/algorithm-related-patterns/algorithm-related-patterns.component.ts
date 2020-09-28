@@ -8,6 +8,7 @@ import { PatternRelationDto } from 'api-atlas/models';
 import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
 import { EntityModelPattern } from 'api-patternpedia/models/entity-model-pattern';
 import { EntityModelPatternLanguage } from 'api-patternpedia/models';
+import { forkJoin } from 'rxjs';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -39,36 +40,50 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getPatternRelations(params): void {
-    this.algorithmService.getPatternRelations(params).subscribe((relations) => {
-      if (relations._embedded) {
-        this.patternRelations = relations._embedded.patternRelations;
-        this.generateTableObjects();
-      } else {
-        this.patternRelations = [];
-        this.tableObjects = [];
-      }
-    });
+  getPatternRelations(params: {
+    algorithmId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
+    this.algorithmService
+      .getPatternRelationsOfAlgorithm(params)
+      .subscribe((relations) => {
+        if (relations._embedded) {
+          this.patternRelations = relations._embedded.patternRelations;
+          this.generateTableObjects();
+        } else {
+          this.patternRelations = [];
+          this.tableObjects = [];
+        }
+      });
   }
 
-  createPatternRelation(body: PatternRelationDto): void {
+  createPatternRelation(patternRelationDto: PatternRelationDto): void {
     this.algorithmService
-      .createPatternRelationByAlgorithm({ algoId: this.algorithm.id, body })
-      .subscribe((data) => {
-        this.getPatternRelations({ algoId: this.algorithm.id });
+      .createPatternRelationForAlgorithm({
+        algorithmId: this.algorithm.id,
+        body: patternRelationDto,
+      })
+      .subscribe(() => {
+        this.getPatternRelations({ algorithmId: this.algorithm.id });
         this.utilService.callSnackBar('Successfully created pattern relation');
       });
   }
 
-  updatePatternRelation(relationId: string, body: PatternRelationDto): void {
+  updatePatternRelation(
+    relationId: string,
+    patternRelationDto: PatternRelationDto
+  ): void {
     this.algorithmService
-      .updatePatternRelations({
-        algoId: this.algorithm.id,
-        relationId,
-        body,
+      .updatePatternRelationOfAlgorithm({
+        algorithmId: this.algorithm.id,
+        patternRelationId: relationId,
+        body: patternRelationDto,
       })
-      .subscribe((data) => {
-        this.getPatternRelations({ algoId: this.algorithm.id });
+      .subscribe(() => {
+        this.getPatternRelations({ algorithmId: this.algorithm.id });
         this.utilService.callSnackBar('Successfully updated pattern relation');
       });
   }
@@ -116,50 +131,51 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   }
 
   onUpdateClicked(event: any): void {
-    const dialogRef = this.utilService.createDialog(
-      AddPatternRelationDialogComponent,
-      {
-        title: 'Edit pattern relation',
-        algoId: this.algorithm.id,
-        pattern: event.pattern,
-        patternObject: event.patternObject,
-        description: event.description,
-        patternRelationType: event.patternTypeObject,
-      },
-      '1000px'
-    );
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        if (!dialogResult.patternRelationType.id) {
-          this.patternRelationTypeService
-            .createPatternRelationType({
-              body: dialogResult.patternRelationType,
-            })
-            .subscribe((createdType) => {
-              this.updatePatternRelation(
-                event.id,
-                this.generatePatternRelationDto(
-                  createdType,
-                  dialogResult.description,
-                  dialogResult.pattern,
-                  event.id
-                )
-              );
-            });
-        } else {
-          this.updatePatternRelation(
-            event.id,
-            this.generatePatternRelationDto(
-              dialogResult.patternRelationType,
-              dialogResult.description,
-              dialogResult.pattern,
-              event.id
-            )
-          );
+    this.utilService
+      .createDialog(
+        AddPatternRelationDialogComponent,
+        {
+          title: 'Edit pattern relation',
+          algoId: this.algorithm.id,
+          pattern: event.pattern,
+          patternObject: event.patternObject,
+          description: event.description,
+          patternRelationType: event.patternTypeObject,
+        },
+        '1000px'
+      )
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          if (!dialogResult.patternRelationType.id) {
+            this.patternRelationTypeService
+              .createPatternRelationType({
+                body: dialogResult.patternRelationType,
+              })
+              .subscribe((createdType) => {
+                this.updatePatternRelation(
+                  event.id,
+                  this.generatePatternRelationDto(
+                    createdType,
+                    dialogResult.description,
+                    dialogResult.pattern,
+                    event.id
+                  )
+                );
+              });
+          } else {
+            this.updatePatternRelation(
+              event.id,
+              this.generatePatternRelationDto(
+                dialogResult.patternRelationType,
+                dialogResult.description,
+                dialogResult.pattern,
+                event.id
+              )
+            );
+          }
         }
-      }
-    });
+      });
   }
 
   onDeleteElements(event): void {
@@ -175,36 +191,46 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
+        const deletionTasks = [];
+
         for (const relation of event.elements) {
-          this.algorithmService
-            .deletePatternRelationByAlgorithm({
-              algoId: this.algorithm.id,
-              relationId: relation.id,
+          deletionTasks.push(
+            this.algorithmService.deletePatternRelationOfAlgorithm({
+              algorithmId: this.algorithm.id,
+              patternRelationId: relation.id,
             })
-            .subscribe((data) => {
-              this.getPatternRelations({ algoId: this.algorithm.id });
-              this.utilService.callSnackBar(
-                'Successfully removed pattern relation'
-              );
-            });
+          );
         }
+        forkJoin(deletionTasks).subscribe(() => {
+          this.getPatternRelations({ algorithmId: this.algorithm.id });
+          this.utilService.callSnackBar(
+            'Successfully removed pattern relation(s)'
+          );
+        });
       }
     });
   }
 
   onDatalistConfigChanged(event): void {
-    this.getPatternRelations({ algoId: this.algorithm.id });
+    this.getPatternRelations({ algorithmId: this.algorithm.id });
   }
 
   onElementClicked(event): void {
-    const encodedUri = encodeURI(
+    const encodedUri =
       Env.PATTERN_ATLAS_UI_URL +
-        '/pattern-languages/' +
-        encodeURIComponent(event.languageObject.uri) +
-        '/' +
-        encodeURIComponent(event.pattern)
-    );
+      '/pattern-languages/' +
+      this.fixedEncodeURIComponent(event.languageObject.uri) +
+      '/' +
+      this.fixedEncodeURIComponent(event.pattern);
+    console.log(encodedUri);
     window.open(encodedUri, '_blank');
+  }
+
+  fixedEncodeURIComponent(str): string {
+    return encodeURIComponent(str).replace(
+      /[!'()*]/g,
+      (c) => '%' + c.charCodeAt(0).toString(16)
+    );
   }
 
   onUrlClicked(urlData: UrlData): void {
@@ -255,7 +281,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   ): PatternRelationDto {
     return {
       id,
-      algorithm: this.algorithm,
+      algorithmId: this.algorithm.id,
       pattern,
       patternRelationType,
       description,

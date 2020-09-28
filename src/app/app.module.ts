@@ -14,7 +14,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiModule as AtlasAPIModule } from 'api-atlas/api.module';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MatCardModule } from '@angular/material/card';
 import { ApiModule as PatternAltasAPIModule } from 'api-patternpedia/api.module';
+import { ApiModule as NisqApiModule } from 'api-nisq/api.module';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,6 +34,8 @@ import { ExecutionEnvironmentsModule } from './components/execution-environments
 import { PublicationModule } from './components/publications/publication.module';
 import { ServicesModule } from './services/services.module';
 import { ChangePageGuard } from './services/deactivation-guard';
+import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
+import { ProblemTypesViewComponent } from './components/problem-types/problem-types-view/problem-types-view.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +46,8 @@ import { ChangePageGuard } from './services/deactivation-guard';
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
     NavigationComponent,
+    ProblemTypesListComponent,
+    ProblemTypesViewComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -54,6 +60,7 @@ import { ChangePageGuard } from './services/deactivation-guard';
     PatternAltasAPIModule.forRoot({
       rootUrl: environment.PATTERN_ATLAS_API_URL,
     }),
+    NisqApiModule.forRoot({ rootUrl: environment.NISQ_API_URL }),
     AppRoutingModule,
     // material modules
     MatSidenavModule,
@@ -74,6 +81,7 @@ import { ChangePageGuard } from './services/deactivation-guard';
     ComputeResourcePropertyModule,
     ExecutionEnvironmentsModule,
     ServicesModule,
+    MatCardModule,
   ],
   bootstrap: [AppComponent],
   exports: [],

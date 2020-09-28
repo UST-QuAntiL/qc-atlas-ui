@@ -12,10 +12,11 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
 import { EntityModelProblemTypeDto } from 'generated/api-atlas/models/entity-model-problem-type-dto';
+import { LinkObject } from '../../generics/data-list/data-list.component';
 
-export class FileNode {
+export class TreeNode {
   problemType: EntityModelProblemTypeDto;
-  parents?: FileNode[];
+  parents?: TreeNode[];
   hasParents: boolean;
   isLowestLevelNode: boolean;
 }
@@ -26,22 +27,34 @@ export class FileNode {
   styleUrls: ['./problem-type-tree.component.scss'],
 })
 export class ProblemTypeTreeComponent implements OnInit, OnChanges {
-  @Output() onAddElement: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onRemoveElement: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onAddElement: EventEmitter<
+    EntityModelProblemTypeDto
+  > = new EventEmitter<EntityModelProblemTypeDto>();
+  @Output() onRemoveElement: EventEmitter<
+    EntityModelProblemTypeDto
+  > = new EventEmitter<EntityModelProblemTypeDto>();
   @Output() onExpandParents: EventEmitter<
     EntityModelProblemTypeDto
   > = new EventEmitter<EntityModelProblemTypeDto>();
+  @Output() onSearchTextChanged: EventEmitter<string> = new EventEmitter<
+    string
+  >();
 
-  @Input() name = '';
-  @Input() treeData: FileNode[];
+  @Input() title = '';
+  @Input() treeData: TreeNode[];
+  @Input() linkObject: LinkObject;
+  @Input() allowDelete = false;
+  @Input() deleteIcon = 'delete';
 
-  nestedTreeControl: NestedTreeControl<FileNode> = new NestedTreeControl<
-    FileNode
+  inputValue = '';
+
+  nestedTreeControl: NestedTreeControl<TreeNode> = new NestedTreeControl<
+    TreeNode
   >((node) => node.parents);
   nestedDataSource: MatTreeNestedDataSource<
-    FileNode
-  > = new MatTreeNestedDataSource<FileNode>();
-  dataChange: BehaviorSubject<FileNode[]> = new BehaviorSubject<FileNode[]>([]);
+    TreeNode
+  > = new MatTreeNestedDataSource<TreeNode>();
+  dataChange: BehaviorSubject<TreeNode[]> = new BehaviorSubject<TreeNode[]>([]);
 
   constructor() {}
 
@@ -59,15 +72,7 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
     return this.treeData == null || this.treeData.length < 1;
   }
 
-  addElement(): void {
-    this.onAddElement.emit();
-  }
-
-  removeElement(): void {
-    this.onRemoveElement.emit();
-  }
-
-  expandNode(node: FileNode): void {
+  expandNode(node: TreeNode): void {
     if (
       node.isLowestLevelNode &&
       this.nestedTreeControl.isExpanded(node) &&
@@ -77,6 +82,10 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
     }
   }
 
-  hasNestedChild = (_: number, nodeData: FileNode): boolean =>
+  hasNestedChild = (_: number, nodeData: TreeNode): boolean =>
     nodeData.hasParents;
+
+  onSingleDelete(element: TreeNode) {
+    this.onRemoveElement.emit(element.problemType);
+  }
 }

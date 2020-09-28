@@ -33,8 +33,25 @@ export class ProblemTypeService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProblemTypes$Response(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
@@ -47,8 +64,10 @@ export class ProblemTypeService extends BaseService {
       'get'
     );
     if (params) {
+      rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -75,8 +94,25 @@ export class ProblemTypeService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProblemTypes(params?: {
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
     page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
     size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
     page?: PageMetadata;
@@ -114,7 +150,7 @@ export class ProblemTypeService extends BaseService {
     body: ProblemTypeDto;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       name: string;
       parentProblemType?: string;
       _links?: Array<Link>;
@@ -139,7 +175,7 @@ export class ProblemTypeService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             parentProblemType?: string;
             _links?: Array<Link>;
@@ -159,7 +195,7 @@ export class ProblemTypeService extends BaseService {
   createProblemType(params: {
     body: ProblemTypeDto;
   }): Observable<{
-    id?: string;
+    id: string;
     name: string;
     parentProblemType?: string;
     _links?: Array<Link>;
@@ -168,14 +204,14 @@ export class ProblemTypeService extends BaseService {
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             parentProblemType?: string;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             name: string;
             parentProblemType?: string;
             _links?: Array<Link>;
@@ -185,21 +221,23 @@ export class ProblemTypeService extends BaseService {
   }
 
   /**
-   * Path part for operation getProblemTypeById
+   * Path part for operation getProblemType
    */
-  static readonly GetProblemTypeByIdPath = '/v1/problem-types/{id}';
+  static readonly GetProblemTypePath = '/v1/problem-types/{problemTypeId}';
 
   /**
+   * Retrieve a specific problem type
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getProblemTypeById()` instead.
+   * To access only the response body, use `getProblemType()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getProblemTypeById$Response(params: {
-    id: string;
+  getProblemType$Response(params: {
+    problemTypeId: string;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       name: string;
       parentProblemType?: string;
       _links?: Array<Link>;
@@ -207,11 +245,11 @@ export class ProblemTypeService extends BaseService {
   > {
     const rb = new RequestBuilder(
       this.rootUrl,
-      ProblemTypeService.GetProblemTypeByIdPath,
+      ProblemTypeService.GetProblemTypePath,
       'get'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path('problemTypeId', params.problemTypeId, {});
     }
     return this.http
       .request(
@@ -224,7 +262,7 @@ export class ProblemTypeService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             parentProblemType?: string;
             _links?: Array<Link>;
@@ -234,31 +272,33 @@ export class ProblemTypeService extends BaseService {
   }
 
   /**
+   * Retrieve a specific problem type
+   *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getProblemTypeById$Response()` instead.
+   * To access the full response (for headers, for example), `getProblemType$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getProblemTypeById(params: {
-    id: string;
+  getProblemType(params: {
+    problemTypeId: string;
   }): Observable<{
-    id?: string;
+    id: string;
     name: string;
     parentProblemType?: string;
     _links?: Array<Link>;
   }> {
-    return this.getProblemTypeById$Response(params).pipe(
+    return this.getProblemType$Response(params).pipe(
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             parentProblemType?: string;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             name: string;
             parentProblemType?: string;
             _links?: Array<Link>;
@@ -270,7 +310,7 @@ export class ProblemTypeService extends BaseService {
   /**
    * Path part for operation updateProblemType
    */
-  static readonly UpdateProblemTypePath = '/v1/problem-types/{id}';
+  static readonly UpdateProblemTypePath = '/v1/problem-types/{problemTypeId}';
 
   /**
    * Custom ID will be ignored.
@@ -281,11 +321,11 @@ export class ProblemTypeService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateProblemType$Response(params: {
-    id: string;
+    problemTypeId: string;
     body: ProblemTypeDto;
   }): Observable<
     StrictHttpResponse<{
-      id?: string;
+      id: string;
       name: string;
       parentProblemType?: string;
       _links?: Array<Link>;
@@ -297,7 +337,7 @@ export class ProblemTypeService extends BaseService {
       'put'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path('problemTypeId', params.problemTypeId, {});
 
       rb.body(params.body, 'application/json');
     }
@@ -312,7 +352,7 @@ export class ProblemTypeService extends BaseService {
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
           return r as StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             parentProblemType?: string;
             _links?: Array<Link>;
@@ -330,10 +370,10 @@ export class ProblemTypeService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   updateProblemType(params: {
-    id: string;
+    problemTypeId: string;
     body: ProblemTypeDto;
   }): Observable<{
-    id?: string;
+    id: string;
     name: string;
     parentProblemType?: string;
     _links?: Array<Link>;
@@ -342,14 +382,14 @@ export class ProblemTypeService extends BaseService {
       map(
         (
           r: StrictHttpResponse<{
-            id?: string;
+            id: string;
             name: string;
             parentProblemType?: string;
             _links?: Array<Link>;
           }>
         ) =>
           r.body as {
-            id?: string;
+            id: string;
             name: string;
             parentProblemType?: string;
             _links?: Array<Link>;
@@ -361,7 +401,7 @@ export class ProblemTypeService extends BaseService {
   /**
    * Path part for operation deleteProblemType
    */
-  static readonly DeleteProblemTypePath = '/v1/problem-types/{id}';
+  static readonly DeleteProblemTypePath = '/v1/problem-types/{problemTypeId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -370,7 +410,7 @@ export class ProblemTypeService extends BaseService {
    * This method doesn't expect any request body.
    */
   deleteProblemType$Response(params: {
-    id: string;
+    problemTypeId: string;
   }): Observable<StrictHttpResponse<void>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -378,7 +418,7 @@ export class ProblemTypeService extends BaseService {
       'delete'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path('problemTypeId', params.problemTypeId, {});
     }
     return this.http
       .request(
@@ -403,7 +443,7 @@ export class ProblemTypeService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteProblemType(params: { id: string }): Observable<void> {
+  deleteProblemType(params: { problemTypeId: string }): Observable<void> {
     return this.deleteProblemType$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -413,7 +453,7 @@ export class ProblemTypeService extends BaseService {
    * Path part for operation getProblemTypeParentList
    */
   static readonly GetProblemTypeParentListPath =
-    '/v1/problem-types/{id}/problem-type-parent-tree';
+    '/v1/problem-types/{problemTypeId}/problem-type-parents';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -422,7 +462,27 @@ export class ProblemTypeService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProblemTypeParentList$Response(params: {
-    id: string;
+    problemTypeId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<
     StrictHttpResponse<{
       _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
@@ -434,7 +494,11 @@ export class ProblemTypeService extends BaseService {
       'get'
     );
     if (params) {
-      rb.path('id', params.id, {});
+      rb.path('problemTypeId', params.problemTypeId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
     }
     return this.http
       .request(
@@ -460,7 +524,27 @@ export class ProblemTypeService extends BaseService {
    * This method doesn't expect any request body.
    */
   getProblemTypeParentList(params: {
-    id: string;
+    problemTypeId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
   }): Observable<{
     _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
   }> {

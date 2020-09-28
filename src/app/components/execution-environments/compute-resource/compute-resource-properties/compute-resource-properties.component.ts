@@ -39,14 +39,12 @@ export class ComputeResourcePropertiesComponent implements OnInit {
   addComputeResourceProperty(
     property: EntityModelComputeResourcePropertyDto
   ): void {
-    console.log('add compute resource property');
-    console.log(property);
     this.executionEnvironmentService
-      .addComputingResourcePropertyToComputeResource({
-        id: this.computeResource.id,
+      .createComputeResourcePropertyForComputeResource({
+        computeResourceId: this.computeResource.id,
         body: property,
       })
-      .subscribe((e) => {
+      .subscribe(() => {
         this.fetchComputeResourceProperties();
       });
   }
@@ -55,12 +53,12 @@ export class ComputeResourcePropertiesComponent implements OnInit {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.executionEnvironmentService
-      .updateComputingResourceResourcePropertyOfComputeResource({
-        crid: this.computeResource.id,
-        resourceId: property.id,
+      .updateComputeResourcePropertyOfComputeResource({
+        computeResourceId: this.computeResource.id,
+        computeResourcePropertyId: property.id,
         body: property,
       })
-      .subscribe((e) => {
+      .subscribe(() => {
         this.fetchComputeResourceProperties();
       });
   }
@@ -69,11 +67,11 @@ export class ComputeResourcePropertiesComponent implements OnInit {
     property: EntityModelComputeResourcePropertyDto
   ): void {
     this.executionEnvironmentService
-      .deleteComputingResourcePropertyFromComputeResource({
-        crid: this.computeResource.id,
-        resourceId: property.id,
+      .deleteComputeResourcePropertyOfComputeResource({
+        computeResourceId: this.computeResource.id,
+        computeResourcePropertyId: property.id,
       })
-      .subscribe((e) => {
+      .subscribe(() => {
         this.computeResourceProperties = this.computeResourceProperties.filter(
           (elem: EntityModelComputeResourcePropertyDto) =>
             elem.id !== property.id
@@ -84,8 +82,8 @@ export class ComputeResourcePropertiesComponent implements OnInit {
 
   fetchComputeResourceProperties(): void {
     this.executionEnvironmentService
-      .getComputingResourcePropertiesForComputeResource({
-        id: this.computeResource.id,
+      .getComputeResourcePropertiesOfComputeResource({
+        computeResourceId: this.computeResource.id,
         size: -1,
       })
       .subscribe((e) => {

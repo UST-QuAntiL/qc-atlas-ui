@@ -1,9 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
-import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
-import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import {
@@ -42,7 +40,7 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.cloudService.name;
     this.getSoftwarePlatforms();
-    this.getLinkedSoftwarePlatforms({ id: this.cloudService.id });
+    this.getLinkedSoftwarePlatforms({ cloudServiceId: this.cloudService.id });
   }
 
   getSoftwarePlatforms(): void {
@@ -58,9 +56,15 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       });
   }
 
-  getLinkedSoftwarePlatforms(params: any): void {
+  getLinkedSoftwarePlatforms(params: {
+    cloudServiceId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
-      .getSoftwarePlatformsForCloudService(params)
+      .getSoftwarePlatformsOfCloudService(params)
       .subscribe((softwarePlatforms) => {
         if (softwarePlatforms._embedded) {
           this.linkedSoftwarePlatforms =
@@ -87,33 +91,40 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
   linkSoftwarePlatform(softwarePlatform: SoftwarePlatformDto): void {
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addCloudServiceReferenceToSoftwarePlatform({
-        id: softwarePlatform.id,
-        csId: this.cloudService.id,
+      .linkSoftwarePlatformAndCloudService({
+        softwarePlatformId: softwarePlatform.id,
+        body: this.cloudService,
       })
-      .subscribe((data) => {
-        this.getLinkedSoftwarePlatforms({ id: this.cloudService.id });
+      .subscribe(() => {
+        this.getLinkedSoftwarePlatforms({
+          cloudServiceId: this.cloudService.id,
+        });
         this.utilService.callSnackBar('Successfully linked software platform');
       });
   }
 
-  async unlinkSoftwarePlatforms(event: DeleteParams): Promise<void> {
+  unlinkSoftwarePlatforms(event: DeleteParams): void {
+    const promises: Array<Promise<void>> = [];
     for (const softwarePlatform of event.elements) {
-      await this.executionEnvironmentsService
-        .deleteCloudServiceReferenceFromSoftwarePlatform({
-          id: softwarePlatform.id,
-          csId: this.cloudService.id,
-        })
-        .toPromise();
-      this.getLinkedSoftwarePlatforms({ id: this.cloudService.id });
-      this.utilService.callSnackBar('Successfully unlinked software platform');
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkSoftwarePlatformAndCloudService({
+            softwarePlatformId: softwarePlatform.id,
+            cloudServiceId: this.cloudService.id,
+          })
+          .toPromise()
+      );
     }
+    Promise.all(promises).then(() => {
+      this.getLinkedSoftwarePlatforms({ cloudServiceId: this.cloudService.id });
+      this.utilService.callSnackBar('Successfully unlinked software platform');
+    });
   }
 
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedSoftwarePlatforms({ id: this.cloudService.id });
+    this.getLinkedSoftwarePlatforms({ cloudServiceId: this.cloudService.id });
   }
 
   onElementClicked(softwarePlatform: SoftwarePlatformDto): void {

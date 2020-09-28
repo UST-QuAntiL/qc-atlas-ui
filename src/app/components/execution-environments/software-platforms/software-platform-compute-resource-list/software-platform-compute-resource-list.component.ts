@@ -40,7 +40,9 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
   ngOnInit(): void {
     this.linkObject.title += this.softwarePlatform.name;
     this.getComputeResources();
-    this.getLinkedComputeResources({ id: this.softwarePlatform.id });
+    this.getLinkedComputeResources({
+      softwarePlatformId: this.softwarePlatform.id,
+    });
   }
 
   getComputeResources(): void {
@@ -55,9 +57,15 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
       });
   }
 
-  getLinkedComputeResources(params: any): void {
+  getLinkedComputeResources(params: {
+    softwarePlatformId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.executionEnvironmentsService
-      .getComputeResourcesForSoftwarePlatform(params)
+      .getComputeResourcesOfSoftwarePlatform(params)
       .subscribe((computeResource) => {
         if (computeResource._embedded) {
           this.linkedComputeResources =
@@ -84,33 +92,44 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
   linkComputeResource(computeResource: ComputeResourceDto): void {
     this.linkObject.data = [];
     this.executionEnvironmentsService
-      .addComputeResourceReferenceToSoftwarePlatform({
-        id: this.softwarePlatform.id,
-        crId: computeResource.id,
+      .linkSoftwarePlatformAndComputeResource({
+        softwarePlatformId: this.softwarePlatform.id,
+        body: computeResource,
       })
-      .subscribe((data) => {
-        this.getLinkedComputeResources({ id: this.softwarePlatform.id });
+      .subscribe(() => {
+        this.getLinkedComputeResources({
+          softwarePlatformId: this.softwarePlatform.id,
+        });
         this.utilService.callSnackBar('Successfully linked compute resource');
       });
   }
 
-  async unlinkComputeResources(event: DeleteParams): Promise<void> {
+  unlinkComputeResources(event: DeleteParams): void {
+    const promises: Array<Promise<void>> = [];
     for (const computeResource of event.elements) {
-      await this.executionEnvironmentsService
-        .deleteComputeResourceReferenceFromSoftwarePlatform({
-          id: this.softwarePlatform.id,
-          crId: computeResource.id,
-        })
-        .toPromise();
-      this.getLinkedComputeResources({ id: this.softwarePlatform.id });
-      this.utilService.callSnackBar('Successfully unlinked compute resource');
+      promises.push(
+        this.executionEnvironmentsService
+          .unlinkSoftwarePlatformAndComputeResource({
+            softwarePlatformId: this.softwarePlatform.id,
+            computeResourceId: computeResource.id,
+          })
+          .toPromise()
+      );
     }
+    Promise.all(promises).then(() => {
+      this.getLinkedComputeResources({
+        softwarePlatformId: this.softwarePlatform.id,
+      });
+      this.utilService.callSnackBar('Successfully unlinked compute resource');
+    });
   }
 
   onAddElement(): void {}
 
   onDatalistConfigChanged(): void {
-    this.getLinkedComputeResources({ id: this.softwarePlatform.id });
+    this.getLinkedComputeResources({
+      softwarePlatformId: this.softwarePlatform.id,
+    });
   }
 
   onElementClicked(computeResource: ComputeResourceDto): void {

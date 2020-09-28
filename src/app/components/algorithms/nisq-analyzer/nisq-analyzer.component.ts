@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   animate,
@@ -7,133 +8,19 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { interval } from 'rxjs';
+import { exhaustMap, first } from 'rxjs/operators';
 
-interface BackendExecutionParams {
-  backendName: string;
-  backendProviderName: string;
-  maxDepth: number;
-  depth: number;
-  qbits: number;
-  width: number;
-  maxWidth: number;
-}
-
-interface NISQResult {
-  implementationName: string;
-  backendExecutionParams: BackendExecutionParams[];
-}
-
-export interface ImplementationParameter {
-  name: string;
-  label: string;
-  placeholder?: string;
-  required?: boolean;
-  // TODO change value type
-  value: number;
-}
-
-export interface CloudServiceOption {
-  name: string;
-  label: string;
-}
-
-export interface NisqExecutionParameters {
-  params: { [key: string]: string };
-  cloudService: string;
-  shotCount: number;
-  qiskitToken: string;
-}
-
-export interface NisqAnalyzeResults {
-  params: { [key: string]: string };
-  chosenImplementation: string;
-  backendExecutionParams: BackendExecutionParams[];
-  outcome: string;
-}
-
-// TODO: ID instead of name?
-const DUMMY_PARAMS: ImplementationParameter[] = [
-  {
-    name: 'N',
-    label: 'N - Integer, N > 0, Number to be factored',
-    placeholder: 'e.g. 15',
-    value: 15,
-  },
-  {
-    name: 'L',
-    label: 'L - Length of binary L',
-    placeholder: 'e.g. 4',
-    value: 4,
-  },
-];
-
-// TODO: ID instead of name?
-const DUMMY_CLOUD_SERVICES: CloudServiceOption[] = [
-  {
-    name: 'IBMQ',
-    label: 'IBMQ',
-  },
-];
-
-const DUMMY_ANALYZE_RESULTS: NISQResult[] = [
-  {
-    implementationName: 'shor-general-qiskit',
-    backendExecutionParams: [
-      {
-        backendName: 'ibmq_16_melbourne',
-        backendProviderName: 'IBMQ',
-        maxDepth: 232,
-        depth: 123,
-        qbits: 15,
-        width: 11,
-        maxWidth: 200,
-      },
-    ],
-  },
-  {
-    implementationName: 'shor-15-qiskit',
-    backendExecutionParams: [
-      {
-        backendName: 'ibmq_16_melbourne',
-        backendProviderName: 'IBMQ',
-        maxDepth: 232,
-        depth: 5,
-        qbits: 15,
-        width: 5,
-        maxWidth: 200,
-      },
-      {
-        backendName: 'ibmq_ourense',
-        backendProviderName: 'IBMQ',
-        maxDepth: 232,
-        depth: 11,
-        qbits: 15,
-        width: 19,
-        maxWidth: 200,
-      },
-    ],
-  },
-];
-
-const DUMMY_RESULTS: NisqAnalyzeResults = {
-  params: {
-    N: '15',
-    L: '4',
-  },
-  chosenImplementation: 'ibmq_16_melbourne',
-  backendExecutionParams: [
-    {
-      backendName: 'ibmq_16_melbourne',
-      backendProviderName: 'IBMQ',
-      maxDepth: 232,
-      depth: 123,
-      qbits: 15,
-      width: 11,
-      maxWidth: 200,
-    },
-  ],
-  outcome: 'success: true\nstatus: SuccessfulCompletion,\ntime_taken: 3ms',
-};
+import { ExecutionEnvironmentsService } from 'api-atlas/services';
+import { AlgorithmDto, CloudServiceDto } from 'api-atlas/models';
+import {
+  ParameterDto,
+  AnalysisResultDto,
+  ExecutionRequestDto,
+  ExecutionResultDto,
+  ImplementationDto as NISQImplementationDto,
+} from 'api-nisq/models';
+import { NisqAnalyzerService } from './nisq-analyzer.service';
 
 @Component({
   selector: 'app-algorithm-nisq-analyzer',
@@ -151,61 +38,166 @@ const DUMMY_RESULTS: NisqAnalyzeResults = {
   ],
 })
 export class NisqAnalyzerComponent implements OnInit {
-  @Input() params = DUMMY_PARAMS;
-  @Input() cloudServices = DUMMY_CLOUD_SERVICES;
+  @Input() algo: AlgorithmDto;
 
+  // 1) Selection
+  params: ParameterDto[];
+  cloudServices: CloudServiceDto[];
   inputFormGroup: FormGroup;
 
-  columnsToDisplay = ['backendName', 'width', 'depth', 'execution'];
-  expandedElement: BackendExecutionParams | null;
+  // 2) Analyze phase
+  analyzeParams: {};
+  analyzerResults: AnalysisResultDto[] = [];
 
-  analyzerResults: NISQResult[] = DUMMY_ANALYZE_RESULTS;
+  // 3) Execution
+  executedAnalyseResult: AnalysisResultDto;
+  results?: ExecutionResultDto = undefined;
 
+  // Misc UI state
+  analyzeColumns = ['backendName', 'width', 'depth', 'execution'];
   resultBackendColumns = ['backendName', 'width', 'depth'];
-  results?: NisqAnalyzeResults = undefined;
+  expandedElement: ExecutionRequestDto | null;
 
-  selectedExecutionParams: BackendExecutionParams;
-  nisqExecutionParams: NisqExecutionParameters;
-
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private executionEnvironmentsService: ExecutionEnvironmentsService,
+    private nisqAnalyzerService: NisqAnalyzerService,
+    private formBuilder: FormBuilder,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
-    this.inputFormGroup = this.formBuilder.group({
-      params: this.formBuilder.array(
-        this.params.map((param) =>
-          this.formBuilder.group({
-            [param.name]: [''],
-          })
-        )
-      ),
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      cloudService: ['', Validators.required],
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      shotCount: ['', Validators.required],
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      qiskitToken: ['', Validators.required],
+    this.executionEnvironmentsService
+      .getCloudServices()
+      .subscribe(
+        (value) => (this.cloudServices = value._embedded.cloudServices ?? [])
+      );
+    this.nisqAnalyzerService.getParams(this.algo.id).subscribe((params) => {
+      this.params = this.nisqAnalyzerService.collapseParams(
+        params.filter((p) => p.name !== 'token')
+      );
+      this.inputFormGroup = this.formBuilder.group({
+        params: this.formBuilder.array(
+          this.params.map((param) =>
+            this.formBuilder.group({
+              [param.name]: [''],
+            })
+          )
+        ),
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        cloudService: ['', Validators.required],
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        shotCount: [''],
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        qiskitToken: ['', Validators.required],
+      });
+      this.onCloudServiceChanged('');
     });
   }
 
   submit(): boolean {
     const value = this.inputFormGroup.value;
-    this.nisqExecutionParams = {
-      ...value,
-      // array of objects to one object
-      params: Object.assign.apply(undefined, [{}, ...value.params]),
-    } as NisqExecutionParameters;
+    // Merge a list of parameter objects into a single parameter object.
+    this.analyzeParams = Object.assign.apply(undefined, [
+      {
+        token: value.qiskitToken,
+      },
+      ...value.params,
+    ]);
+    this.analyzerResults = undefined;
+    this.nisqAnalyzerService
+      .analyze({
+        algorithmId: this.algo.id,
+        parameters: this.analyzeParams,
+      })
+      .subscribe((results) => (this.analyzerResults = results));
     return true;
   }
 
-  execute(selectedExecutionParams: BackendExecutionParams): void {
+  execute(analysisResult: AnalysisResultDto): void {
     this.results = undefined;
-    setTimeout(() => {
-      this.results = DUMMY_RESULTS;
-    }, 3000);
-    this.selectedExecutionParams = selectedExecutionParams;
+    this.executedAnalyseResult = analysisResult;
+    const request = {
+      parameters: this.analyzeParams,
+      qpuId: analysisResult.qpu.id,
+      analysedDepth: analysisResult.analysedDepth,
+      analysedWidth: analysisResult.analysedWidth,
+    };
+    this.nisqAnalyzerService
+      .execute(analysisResult.implementation.id, request)
+      .subscribe((results) => {
+        if (results.status === 'FAILED' || results.status === 'FINISHED') {
+          this.results = results;
+        } else {
+          interval(1000)
+            .pipe(
+              exhaustMap(() =>
+                this.http.get<ExecutionResultDto>(results._links['self'].href)
+              ),
+              first(
+                (value) =>
+                  value.status === 'FAILED' || value.status === 'FINISHED'
+              )
+            )
+            .subscribe((finalResult) => (this.results = finalResult));
+        }
+      });
   }
 
-  getInputParameter(name: string): ImplementationParameter {
-    return this.params.find((p) => p.name === name);
+  groupResultsByImplementation(
+    analysisResults: AnalysisResultDto[]
+  ): GroupedResults[] {
+    const results: GroupedResults[] = [];
+
+    for (const analysisResult of analysisResults) {
+      const group = results.find(
+        (res) => res.implementation.id === analysisResult.implementation.id
+      );
+      if (group) {
+        group.results.push(analysisResult);
+      } else {
+        results.push({
+          implementation: analysisResult.implementation,
+          results: [analysisResult],
+        });
+      }
+    }
+    return results;
   }
+
+  filterInputParams(inputParameters: any): {} {
+    // Remove token from input parameters, as it is handled separately.
+    inputParameters = Object.assign({}, inputParameters);
+    delete inputParameters.token;
+    return inputParameters;
+  }
+
+  beautifyResult(result: string): string {
+    // TODO: once we have JSON, prettify
+    return result;
+  }
+
+  patternForParam(param: ParameterDto): string {
+    switch (param.type) {
+      case 'Integer':
+        return '[0-9]+';
+      // https://stackoverflow.com/questions/12643009/regular-expression-for-floating-point-numbers
+      case 'Float':
+        return '[+-]?([0-9]*[.])?[0-9]+';
+      default:
+        return undefined;
+    }
+  }
+
+  onCloudServiceChanged(value: string): void {
+    if (value === 'IBMQ') {
+      this.inputFormGroup.controls.qiskitToken.enable();
+    } else {
+      this.inputFormGroup.controls.qiskitToken.disable();
+    }
+  }
+}
+
+export interface GroupedResults {
+  implementation: NISQImplementationDto;
+  results: AnalysisResultDto[];
 }
