@@ -3,9 +3,8 @@ import { PublicationService } from 'api-atlas/services/publication.service';
 import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
-import { UtilService } from '../../../util/util.service';
+import { ChangePageGuard } from '../../../services/deactivation-guard';
 
 @Component({
   selector: 'app-publication-view',
@@ -22,7 +21,7 @@ export class PublicationViewComponent implements OnInit {
   constructor(
     private publicationService: PublicationService,
     private route: ActivatedRoute,
-    public utilService: UtilService
+    public guard: ChangePageGuard
   ) {}
 
   ngOnInit(): void {

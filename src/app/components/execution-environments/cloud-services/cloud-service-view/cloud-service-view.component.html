@@ -1,7 +1,7 @@
 <div *ngIf="cloudService" class="m-2">
   <div class="header-container p-2">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-    <button *ngIf="!utilService.objectsEqual(frontendCloudService, cloudService)" mat-flat-button color="primary"
+    <button *ngIf="!guard.objectsEqual(frontendCloudService, cloudService)" mat-flat-button color="primary"
             (click)="saveCloudService(frontendCloudService, true)">
       Save
       <mat-icon>save</mat-icon>

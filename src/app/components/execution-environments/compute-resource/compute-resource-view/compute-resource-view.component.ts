@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { FieldUpdate } from '../../../../util/FieldUpdate';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
-import { UtilService } from '../../../../util/util.service';
+import { ChangePageGuard } from '../../../../services/deactivation-guard';
 
 @Component({
   selector: 'app-compute-resource-view',
@@ -26,7 +26,7 @@ export class ComputeResourceViewComponent implements OnInit {
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private updateFieldService: UpdateFieldEventService,
     private route: ActivatedRoute,
-    public utilService: UtilService
+    public guard: ChangePageGuard
   ) {}
 
   ngOnInit(): void {

@@ -31,6 +31,7 @@ import { ComputeResourcePropertyModule } from './components/compute-resource-pro
 import { ExecutionEnvironmentsModule } from './components/execution-environments/execution-environments.module';
 import { PublicationModule } from './components/publications/publication.module';
 import { ServicesModule } from './services/services.module';
+import { ChangePageGuard } from './services/deactivation-guard';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,6 @@ import { ServicesModule } from './services/services.module';
   ],
   bootstrap: [AppComponent],
   exports: [],
-  providers: [UtilService],
+  providers: [UtilService, ChangePageGuard],
 })
 export class AppModule {}

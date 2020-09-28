@@ -1,7 +1,7 @@
 <div *ngIf="computeResource" class="m-2">
   <div class="header-container p-2">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-    <button *ngIf="!utilService.objectsEqual(frontendComputeResource, computeResource)" mat-flat-button color="primary"
+    <button *ngIf="!guard.objectsEqual(frontendComputeResource, computeResource)" mat-flat-button color="primary"
             (click)="saveComputeResource(frontendComputeResource, true)">
       Save
       <mat-icon>save</mat-icon>

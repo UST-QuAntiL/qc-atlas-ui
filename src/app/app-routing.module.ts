@@ -13,13 +13,19 @@ import { PublicationViewComponent } from './components/publications/publication-
 import { SoftwarePlatformListComponent } from './components/execution-environments/software-platforms/software-platform-list/software-platform-list.component';
 import { CloudServiceListComponent } from './components/execution-environments/cloud-services/cloud-service-list/cloud-service-list.component';
 import { ComputeResourceListComponent } from './components/execution-environments/compute-resource/compute-resource-list/compute-resource-list.component';
+import { ChangePageGuard } from './services/deactivation-guard';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
-  { path: 'algorithms/:algoId', component: AlgorithmViewComponent },
+  {
+    path: 'algorithms/:algoId',
+    component: AlgorithmViewComponent,
+    canDeactivate: [ChangePageGuard],
+  },
   {
     path: 'algorithms/:algoId/implementations/:implId',
     component: ImplementationViewComponent,
+    canDeactivate: [ChangePageGuard],
   },
   {
     path: 'execution-environments',
@@ -37,6 +43,7 @@ const routes: Routes = [
   {
     path: 'execution-environments/software-platforms/:spId',
     component: SoftwarePlatformViewComponent,
+    canDeactivate: [ChangePageGuard],
   },
   {
     path: 'execution-environments/cloud-services',
@@ -45,6 +52,7 @@ const routes: Routes = [
   {
     path: 'execution-environments/cloud-services/:csId',
     component: CloudServiceViewComponent,
+    canDeactivate: [ChangePageGuard],
   },
   {
     path: 'execution-environments/compute-resources',
@@ -53,9 +61,14 @@ const routes: Routes = [
   {
     path: 'execution-environments/compute-resources/:crId',
     component: ComputeResourceViewComponent,
+    canDeactivate: [ChangePageGuard],
   },
   { path: 'publications', component: PublicationListComponent },
-  { path: 'publications/:publicationId', component: PublicationViewComponent },
+  {
+    path: 'publications/:publicationId',
+    component: PublicationViewComponent,
+    canDeactivate: [ChangePageGuard],
+  },
   {
     path: '',
     redirectTo: '/algorithms',
@@ -67,5 +80,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
+  providers: [ChangePageGuard],
 })
 export class AppRoutingModule {}

@@ -6,7 +6,7 @@ import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-envir
 import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 import { FieldUpdate } from '../../../../util/FieldUpdate';
-import { UtilService } from '../../../../util/util.service';
+import { ChangePageGuard } from '../../../../services/deactivation-guard';
 
 @Component({
   selector: 'app-software-platform-view',
@@ -26,7 +26,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private updateFieldService: UpdateFieldEventService,
     private route: ActivatedRoute,
-    public utilService: UtilService
+    public guard: ChangePageGuard
   ) {}
 
   ngOnInit(): void {

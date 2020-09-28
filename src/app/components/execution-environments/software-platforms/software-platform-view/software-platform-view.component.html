@@ -1,7 +1,7 @@
 <div *ngIf="softwarePlatform" class="m-2">
   <div class="header-container p-2">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-    <button *ngIf="!utilService.objectsEqual(frontendSoftwarePlatform, softwarePlatform)" mat-flat-button color="primary"
+    <button *ngIf="!guard.objectsEqual(frontendSoftwarePlatform, softwarePlatform)" mat-flat-button color="primary"
             (click)="savePlatform(frontendSoftwarePlatform, true)">
       Save
       <mat-icon>save</mat-icon>

@@ -2,7 +2,7 @@
   <div class="row p-2">
     <div class="col-12">
       <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-      <button *ngIf="!utilService.objectsEqual(frontendPublication, publication)" mat-flat-button color="primary"
+      <button *ngIf="!guard.objectsEqual(frontendPublication, publication)" mat-flat-button color="primary"
               (click)="savePublication(frontendPublication, true)">
         Save
         <mat-icon>save</mat-icon>
