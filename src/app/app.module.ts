@@ -40,8 +40,8 @@ import { ProblemTypesListComponent } from './components/problem-types/problem-ty
 import { AddProblemTypeDialogComponent } from './components/problem-types/dialogs/add-problem-type/add-problem-type-dialog.component';
 import { EditProblemTypeDialogComponent } from './components/problem-types/dialogs/edit-problem-type/edit-problem-type-dialog.component';
 import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
-import { ApplicationAreasViewComponent } from './components/application-areas/application-areas-view/application-areas-view.component';
-import { AddApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-application-area-dialog.component';
+import { AddApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-application-area/add-application-area-dialog.component';
+import { EditApplicationAreaDialogComponent } from './components/application-areas/dialogs/edit-application-area/edit-application-area-dialog.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,6 @@ import { AddApplicationAreaDialogComponent } from './components/application-area
     AppComponent,
     PageNotFoundComponent,
     ApplicationAreasListComponent,
-    ApplicationAreasViewComponent,
     ProblemTypesListComponent,
     // dialogs
     JsonImportDialogComponent,
@@ -58,6 +57,7 @@ import { AddApplicationAreaDialogComponent } from './components/application-area
     AddProblemTypeDialogComponent,
     EditProblemTypeDialogComponent,
     AddApplicationAreaDialogComponent,
+    EditApplicationAreaDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

@@ -10,7 +10,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
+import { ApplicationAreasService } from 'generated/api-atlas/services/application-areas.service';
 import { EntityModelApplicationAreaDto } from 'generated/api-atlas/models';
 
 @Component({

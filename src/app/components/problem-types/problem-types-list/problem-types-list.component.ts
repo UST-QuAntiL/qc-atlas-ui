@@ -145,12 +145,6 @@ export class ProblemTypesListComponent implements OnInit {
       });
   }
 
-  generateDeleteParams(problemTypeId: string): any {
-    const params: any = {};
-    params.id = problemTypeId;
-    return params;
-  }
-
   onEditElement(event: any): void {
     let parentProblemTypeDto: EntityModelProblemTypeDto;
     for (const problemType of this.problemTypes) {

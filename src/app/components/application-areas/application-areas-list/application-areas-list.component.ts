@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
-import { AddApplicationAreaDialogComponent } from '../dialogs/add-application-area-dialog.component';
+import { AddApplicationAreaDialogComponent } from '../dialogs/add-application-area/add-application-area-dialog.component';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
 import { UtilService } from '../../../util/util.service';
+import { EditApplicationAreaDialogComponent } from '../dialogs/edit-application-area/edit-application-area-dialog.component';
 
 @Component({
   selector: 'app-application-areas-list',
@@ -83,10 +84,10 @@ export class ApplicationAreasListComponent implements OnInit {
         this.applicationAreasService
           .createApplicationArea(params)
           .subscribe((data) => {
+            this.getApplicationAreas({});
             this.utilService.callSnackBar(
               'Successfully added application area'
             );
-            this.router.navigate(['application-areas', data.id]);
           });
       }
     });
@@ -117,19 +118,52 @@ export class ApplicationAreasListComponent implements OnInit {
                 .toPromise()
             );
           }
-          Promise.all(promises).then(() => {
-            this.getApplicationAreas(event.queryParams);
-            this.utilService.callSnackBar(
-              'Successfully deleted application area(s)'
-            );
-          });
+          Promise.all(promises)
+            .then(() => {
+              this.getApplicationAreas(event.queryParams);
+              this.utilService.callSnackBar(
+                'Successfully deleted application area(s)'
+              );
+            })
+            .catch(() => {
+              this.utilService.callSnackBar(
+                'Delete rejected! Application area is used in other places.'
+              );
+            });
         }
       });
   }
 
-  generateDeleteParams(applicationAreaId: string): any {
-    const params: any = {};
-    params.id = applicationAreaId;
-    return params;
+  onEditElement(event: any): void {
+    const dialogRef = this.dialog.open(EditApplicationAreaDialogComponent, {
+      data: {
+        title: 'Edit application area',
+        name: event.name,
+      },
+      autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        if (dialogResult.newName !== event.name) {
+          const newApplicationAreaDto: EntityModelApplicationAreaDto = {
+            id: event.id,
+            name: dialogResult.newName,
+          };
+          const params: any = {
+            applicationAreaId: newApplicationAreaDto.id,
+            body: newApplicationAreaDto,
+          };
+          this.applicationAreasService
+            .updateApplicationArea(params)
+            .subscribe((data) => {
+              this.getApplicationAreas(event.queryParams);
+              this.utilService.callSnackBar(
+                'Successfully edited application area'
+              );
+            });
+        }
+      }
+    });
   }
 }
