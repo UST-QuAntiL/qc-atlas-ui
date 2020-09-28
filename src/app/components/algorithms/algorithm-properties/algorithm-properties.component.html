@@ -52,8 +52,8 @@
                              [displayVariable]="'name'"
                              [useToAddLinks]="true"
                              [linkObject]=applicationAreaLinkObject
-                             (onAddElement)="addApplicationAreaEvent($event)"
-                             (onRemoveElement)="removeApplicationAreaEvent($event)"
+                             (onLinkElement)="addApplicationAreaEvent($event)"
+                             (onUnlinkElement)="removeApplicationAreaEvent($event)"
                              (onSearchTextChanged)="searchUnlinkedApplicationAreas($event)"></app-chip-collection>
       </mat-card>
     </div>

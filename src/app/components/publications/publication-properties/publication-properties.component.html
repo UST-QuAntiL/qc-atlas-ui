@@ -26,8 +26,8 @@
         <app-chip-collection [title]="'Authors'"
                              [elements]="publication.authors"
                              [allowEmpty]=false
-                             (onAddElement)="addAuthorEvent($event)"
-                             (onRemoveElement)="removeAuthorEvent($event)">
+                             (onElementsChanged) ="onPropertyChanged($event, 'authors')"
+                             (onSaveChanges)="onChangesSaved($event, 'authors')">
         </app-chip-collection>
       </mat-card>
     </div>

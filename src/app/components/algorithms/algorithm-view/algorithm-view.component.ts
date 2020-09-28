@@ -155,16 +155,14 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         body: applicationArea,
       })
       .subscribe((areas) => {
-        if (areas._embedded) {
-          this.applicationAreas = areas._embedded.applicationAreas;
-          this.utilService.callSnackBar(
-            'Successfully linked application area "' +
-              applicationArea.name +
-              '" to algorithm "' +
-              this.algorithm.name +
-              '"'
-          );
-        }
+        this.utilService.callSnackBar(
+          'Successfully linked application area "' +
+            applicationArea.name +
+            '" to algorithm "' +
+            this.algorithm.name +
+            '"'
+        );
+        this.getApplicationAreasForAlgorithm(this.algorithm.id);
       });
   }
 
