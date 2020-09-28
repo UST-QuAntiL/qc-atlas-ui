@@ -30,7 +30,7 @@ export class TextInputComponent implements OnInit {
   }
 
   openLink(): void {
-    window.open(this.value, '_blank');
+    window.open(this.inputValue, '_blank');
   }
 
   ngOnInit() {

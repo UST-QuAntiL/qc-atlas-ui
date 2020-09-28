@@ -1,5 +1,5 @@
 <div *ngIf="publication" class="m-2">
-  <div class="row p-2">
+  <div class="row p-2 m-0">
     <div class="col-12">
       <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
       <button *ngIf="!guard.objectsEqual(frontendPublication, publication)" mat-flat-button color="primary"
