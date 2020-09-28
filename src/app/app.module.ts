@@ -37,7 +37,7 @@ import { ExecutionEnvironmentsModule } from './components/execution-environments
 import { PublicationModule } from './components/publications/publication.module';
 import { ServicesModule } from './services/services.module';
 import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
-import { AddProblemTypeDialogComponent } from './components/problem-types/dialogs/add problem type/add-problem-type-dialog.component';
+import { AddProblemTypeDialogComponent } from './components/problem-types/dialogs/add-problem-type/add-problem-type-dialog.component';
 import { EditProblemTypeDialogComponent } from './components/problem-types/dialogs/edit-problem-type/edit-problem-type-dialog.component';
 import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
 import { ApplicationAreasViewComponent } from './components/application-areas/application-areas-view/application-areas-view.component';

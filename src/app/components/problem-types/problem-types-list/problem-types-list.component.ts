@@ -6,7 +6,7 @@ import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
-import { AddProblemTypeDialogComponent } from '../dialogs/add problem type/add-problem-type-dialog.component';
+import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type/add-problem-type-dialog.component';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
