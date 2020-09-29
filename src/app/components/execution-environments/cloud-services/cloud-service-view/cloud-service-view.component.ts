@@ -67,7 +67,7 @@ export class CloudServiceViewComponent implements OnInit {
     this.executionEnvironmentsService
       .updateCloudService({
         cloudServiceId: this.cloudService.id,
-        body: this.cloudService,
+        body: updatedCloudService,
       })
       .subscribe(
         (cloudSvc) => {

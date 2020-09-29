@@ -68,7 +68,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
     this.executionEnvironmentsService
       .updateSoftwarePlatform({
         softwarePlatformId: this.softwarePlatform.id,
-        body: this.softwarePlatform,
+        body: updatedPlatform,
       })
       .subscribe(
         (sp) => {

@@ -68,7 +68,7 @@ export class ComputeResourceViewComponent implements OnInit {
     this.executionEnvironmentsService
       .updateComputeResource({
         computeResourceId: this.computeResource.id,
-        body: this.computeResource,
+        body: updatedComputeResource,
       })
       .subscribe(
         (computeRes) => {
