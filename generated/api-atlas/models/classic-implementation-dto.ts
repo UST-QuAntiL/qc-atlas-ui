@@ -12,5 +12,8 @@ export type ClassicImplementationDto = {
   assumptions?: string;
   parameter?: string;
   dependencies?: string;
+  version?: string;
+  license?: string;
+  problemStatement?: string;
   algorithm?: ClassicAlgorithmDto;
 };

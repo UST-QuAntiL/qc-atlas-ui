@@ -24,6 +24,7 @@ import { EntityModelImplementationDto } from '../models/entity-model-implementat
 import { EntityModelPatternRelationDto } from '../models/entity-model-pattern-relation-dto';
 import { EntityModelProblemTypeDto } from '../models/entity-model-problem-type-dto';
 import { EntityModelPublicationDto } from '../models/entity-model-publication-dto';
+import { EntityModelSketchDto } from '../models/entity-model-sketch-dto';
 import { EntityModelSoftwarePlatformDto } from '../models/entity-model-software-platform-dto';
 import { EntityModelTagDto } from '../models/entity-model-tag-dto';
 import { ImplementationDto } from '../models/implementation-dto';
@@ -35,6 +36,7 @@ import { ProblemTypeDto } from '../models/problem-type-dto';
 import { PublicationDto } from '../models/publication-dto';
 import { QuantumAlgorithmDto } from '../models/quantum-algorithm-dto';
 import { QuantumImplementationDto } from '../models/quantum-implementation-dto';
+import { SketchDto } from '../models/sketch-dto';
 import { SoftwarePlatformDto } from '../models/software-platform-dto';
 import { TagDto } from '../models/tag-dto';
 
@@ -4771,6 +4773,467 @@ export class AlgorithmService extends BaseService {
   }): Observable<void> {
     return this.unlinkAlgorithmAndPublication$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getSketches
+   */
+  static readonly GetSketchesPath = '/v1/algorithms/{algorithmId}/sketches';
+
+  /**
+   * Retrieve all sketches for a specific algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSketches()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketches$Response(params: {
+    algorithmId: string;
+  }): Observable<StrictHttpResponse<Array<EntityModelSketchDto>>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetSketchesPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<Array<EntityModelSketchDto>>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve all sketches for a specific algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getSketches$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketches(params: {
+    algorithmId: string;
+  }): Observable<Array<EntityModelSketchDto>> {
+    return this.getSketches$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<Array<EntityModelSketchDto>>) =>
+          r.body as Array<EntityModelSketchDto>
+      )
+    );
+  }
+
+  /**
+   * Path part for operation uploadSketch
+   */
+  static readonly UploadSketchPath = '/v1/algorithms/{algorithmId}/sketches';
+
+  /**
+   * Add a Sketch to the algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadSketch()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  uploadSketch$Response(params: {
+    algorithmId: string;
+    description: string;
+    baseURL: string;
+    body?: { file?: Blob };
+  }): Observable<
+    StrictHttpResponse<{
+      id?: string;
+      imageURL?: string;
+      description?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UploadSketchPath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('description', params.description, {});
+      rb.query('baseURL', params.baseURL, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            imageURL?: string;
+            description?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Add a Sketch to the algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `uploadSketch$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  uploadSketch(params: {
+    algorithmId: string;
+    description: string;
+    baseURL: string;
+    body?: { file?: Blob };
+  }): Observable<{
+    id?: string;
+    imageURL?: string;
+    description?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.uploadSketch$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            imageURL?: string;
+            description?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id?: string;
+            imageURL?: string;
+            description?: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getSketch
+   */
+  static readonly GetSketchPath =
+    '/v1/algorithms/{algorithmId}/sketches/{sketchId}';
+
+  /**
+   * Retrieve a specific Sketch and its basic properties.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSketch()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketch$Response(params: {
+    algorithmId: string;
+    sketchId: string;
+  }): Observable<
+    StrictHttpResponse<{
+      id?: string;
+      imageURL?: string;
+      description?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetSketchPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('sketchId', params.sketchId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            imageURL?: string;
+            description?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve a specific Sketch and its basic properties.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getSketch$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketch(params: {
+    algorithmId: string;
+    sketchId: string;
+  }): Observable<{
+    id?: string;
+    imageURL?: string;
+    description?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.getSketch$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            imageURL?: string;
+            description?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id?: string;
+            imageURL?: string;
+            description?: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation updateSketch
+   */
+  static readonly UpdateSketchPath =
+    '/v1/algorithms/{algorithmId}/sketches/{sketchId}';
+
+  /**
+   * Update the properties of a sketch.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateSketch()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateSketch$Response(params: {
+    algorithmId: string;
+    sketchId: string;
+    body: SketchDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id?: string;
+      imageURL?: string;
+      description?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UpdateSketchPath,
+      'put'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('sketchId', params.sketchId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            imageURL?: string;
+            description?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Update the properties of a sketch.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateSketch$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateSketch(params: {
+    algorithmId: string;
+    sketchId: string;
+    body: SketchDto;
+  }): Observable<{
+    id?: string;
+    imageURL?: string;
+    description?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.updateSketch$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            imageURL?: string;
+            description?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id?: string;
+            imageURL?: string;
+            description?: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deleteSketch
+   */
+  static readonly DeleteSketchPath =
+    '/v1/algorithms/{algorithmId}/sketches/{sketchId}';
+
+  /**
+   * Delete a sketch of the algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteSketch()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteSketch$Response(params: {
+    algorithmId: string;
+    sketchId: string;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.DeleteSketchPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('sketchId', params.sketchId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete a sketch of the algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteSketch$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteSketch(params: {
+    algorithmId: string;
+    sketchId: string;
+  }): Observable<void> {
+    return this.deleteSketch$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getSketchImage
+   */
+  static readonly GetSketchImagePath =
+    '/v1/algorithms/{algorithmId}/sketches/{sketchId}/image';
+
+  /**
+   * Retrieve aa image from a specific Sketch.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSketchImage()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketchImage$Response(params: {
+    algorithmId: string;
+    sketchId: string;
+  }): Observable<StrictHttpResponse<Array<string>>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetSketchImagePath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('sketchId', params.sketchId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: 'image/jpeg',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<Array<string>>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve aa image from a specific Sketch.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getSketchImage$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketchImage(params: {
+    algorithmId: string;
+    sketchId: string;
+  }): Observable<Array<string>> {
+    return this.getSketchImage$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<string>>) => r.body as Array<string>)
     );
   }
 

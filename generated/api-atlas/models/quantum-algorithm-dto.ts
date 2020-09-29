@@ -1,15 +1,17 @@
 /* tslint:disable */
-import { Sketch } from './sketch';
+import { SketchDto } from './sketch-dto';
 export type QuantumAlgorithmDto = {
   id: string;
-  name: string;
+  creationDate?: string;
+  lastModifiedAt?: string;
+  name?: string;
   acronym?: string;
   intent?: string;
   problem?: string;
   inputFormat?: string;
   algoParameter?: string;
   outputFormat?: string;
-  sketches?: Array<Sketch>;
+  sketches?: Array<SketchDto>;
   solution?: string;
   assumptions?: string;
   computationModel: 'QUANTUM';

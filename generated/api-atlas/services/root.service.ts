@@ -19,7 +19,7 @@ export class RootService extends BaseService {
   /**
    * Path part for operation root
    */
-  static readonly RootPath = '/v1/';
+  static readonly RootPath = '/';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

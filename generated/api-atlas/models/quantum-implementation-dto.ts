@@ -11,4 +11,7 @@ export type QuantumImplementationDto = {
   assumptions?: string;
   parameter?: string;
   dependencies?: string;
+  version?: string;
+  license?: string;
+  problemStatement?: string;
 };
