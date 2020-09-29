@@ -100,7 +100,7 @@ export class SoftwarePlatformImplListComponent implements OnInit {
 
   openLinkImplementationDialog() {
     this.implementationService.getImplementations().subscribe((data) => {
-      this.updateImplementationData(JSON.parse(JSON.stringify(data)));
+      this.updateImplementationData(data);
       const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
         width: '800px',
         data: {
@@ -118,9 +118,7 @@ export class SoftwarePlatformImplListComponent implements OnInit {
           this.implementationService
             .getImplementations(search)
             .subscribe((updatedData) => {
-              this.updateImplementationData(
-                JSON.parse(JSON.stringify(updatedData))
-              );
+              this.updateImplementationData(updatedData);
               dialogRef.componentInstance.data.linkObject = this.linkObject;
             });
         }

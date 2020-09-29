@@ -82,7 +82,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
 
   openLinkAlgorithmDialog() {
     this.algorithmService.getAlgorithms().subscribe((data) => {
-      this.updateAlgorithmData(JSON.parse(JSON.stringify(data)));
+      this.updateAlgorithmData(data);
       const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
         width: '800px',
         data: {
@@ -100,7 +100,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
           this.algorithmService
             .getAlgorithms(search)
             .subscribe((updatedData) => {
-              this.updateAlgorithmData(JSON.parse(JSON.stringify(updatedData)));
+              this.updateAlgorithmData(updatedData);
               dialogRef.componentInstance.data.linkObject = this.linkObject;
             });
         }

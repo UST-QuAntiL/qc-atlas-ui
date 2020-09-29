@@ -95,7 +95,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
     this.executionEnvironmentsService
       .getComputeResources()
       .subscribe((data) => {
-        this.updateComputeResourcesData(JSON.parse(JSON.stringify(data)));
+        this.updateComputeResourcesData(data);
         const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
           width: '800px',
           data: {
@@ -113,9 +113,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
             this.executionEnvironmentsService
               .getComputeResources(search)
               .subscribe((updatedData) => {
-                this.updateComputeResourcesData(
-                  JSON.parse(JSON.stringify(updatedData))
-                );
+                this.updateComputeResourcesData(updatedData);
                 dialogRef.componentInstance.data.linkObject = this.linkObject;
               });
           }

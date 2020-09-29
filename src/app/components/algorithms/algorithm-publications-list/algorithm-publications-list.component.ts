@@ -126,7 +126,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
 
   openLinkPublicationDialog() {
     this.publicationService.getPublications().subscribe((data) => {
-      this.updatePublicationData(JSON.parse(JSON.stringify(data)));
+      this.updatePublicationData(data);
       const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
         width: '800px',
         data: {
@@ -144,9 +144,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
           this.publicationService
             .getPublications(search)
             .subscribe((updatedData) => {
-              this.updatePublicationData(
-                JSON.parse(JSON.stringify(updatedData))
-              );
+              this.updatePublicationData(updatedData);
               dialogRef.componentInstance.data.linkObject = this.linkObject;
             });
         }

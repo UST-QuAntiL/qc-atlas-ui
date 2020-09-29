@@ -98,7 +98,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
     this.executionEnvironmentsService
       .getSoftwarePlatforms()
       .subscribe((data) => {
-        this.updateSoftwarePlatformData(JSON.parse(JSON.stringify(data)));
+        this.updateSoftwarePlatformData(data);
         const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
           width: '800px',
           data: {
@@ -116,9 +116,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
             this.executionEnvironmentsService
               .getSoftwarePlatforms(search)
               .subscribe((updatedData) => {
-                this.updateSoftwarePlatformData(
-                  JSON.parse(JSON.stringify(updatedData))
-                );
+                this.updateSoftwarePlatformData(updatedData);
                 dialogRef.componentInstance.data.linkObject = this.linkObject;
               });
           }
