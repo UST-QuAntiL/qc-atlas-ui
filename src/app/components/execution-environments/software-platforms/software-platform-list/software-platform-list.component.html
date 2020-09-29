@@ -12,6 +12,7 @@
                [paginatorConfig]=paginatorConfig
                [emptyTableMessage]="'No software platforms found'"
                (elementClicked)="onSoftwarePlatformClicked($event)"
+               (urlClicked)="onUrlClicked($event)"
                (addElement)="onCreateSoftwarePlatform()"
                (submitSelectedElements)="onDeleteSoftwarePlatforms($event)"
                (datalistConfigChanged)="getSoftwarePlatforms($event)"

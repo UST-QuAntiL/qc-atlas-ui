@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import {
   DeleteParams,
   QueryParams,
+  UrlData,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { CreateSoftwarePlatformDialogComponent } from '../dialogs/create-software-platform-dialog.component';
@@ -70,6 +71,11 @@ export class SoftwarePlatformListComponent implements OnInit {
       'software-platforms',
       softwarePlatform.id,
     ]);
+  }
+
+  onUrlClicked(urlData: UrlData): void {
+    // No check needed since software platforms have only one url-field called 'link'
+    window.open(urlData.element['link'], '_blank');
   }
 
   onCreateSoftwarePlatform(): void {
