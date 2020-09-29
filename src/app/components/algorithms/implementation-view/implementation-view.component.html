@@ -2,11 +2,6 @@
   <div class="row p-2 m-0 align-items-center">
     <div class="col">
       <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-      <button *ngIf="!guard.objectsEqual(frontendImplementation, implementation)" mat-flat-button color="primary"
-              (click)="saveImplementation(frontendImplementation, true)">
-        Save
-        <mat-icon>save</mat-icon>
-      </button>
     </div>
     <div class="col">
       <div class="float-right mx-2">
@@ -20,7 +15,6 @@
       </div>
     </div>
   </div>
-
   <mat-tab-group (selectedIndexChange)="changeTab($event)">
     <mat-tab label="General">
       <app-implementation-properties
@@ -33,6 +27,11 @@
         (updateComputeResourceProperty)="updateComputeResourceProperty($event)"
       >
       </app-implementation-properties>
+      <button *ngIf="!guard.objectsEqual(frontendImplementation, implementation)" mat-flat-button color="primary"
+              (click)="saveImplementation(frontendImplementation, true)">
+        Save
+        <mat-icon>save</mat-icon>
+      </button>
     </mat-tab>
     <mat-tab label="Publications">
       <div>

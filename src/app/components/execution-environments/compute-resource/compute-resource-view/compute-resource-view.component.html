@@ -1,19 +1,18 @@
 <div *ngIf="computeResource" class="m-2">
   <div class="header-container p-2">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-    <button *ngIf="!guard.objectsEqual(frontendComputeResource, computeResource)" mat-flat-button color="primary"
-            (click)="saveComputeResource(frontendComputeResource, true)">
-      Save
-      <mat-icon>save</mat-icon>
-    </button>
   </div>
-
   <mat-tab-group>
     <mat-tab label="General">
       <app-compute-resource-properties
         [frontendComputeResource]="frontendComputeResource"
         [computeResource]="computeResource"
       ></app-compute-resource-properties>
+      <button *ngIf="!guard.objectsEqual(frontendComputeResource, computeResource)" mat-flat-button color="primary"
+              (click)="saveComputeResource(frontendComputeResource, true)">
+        Save
+        <mat-icon>save</mat-icon>
+      </button>
     </mat-tab>
     <mat-tab label="Software Platforms">
       <app-compute-resource-software-platform-list
