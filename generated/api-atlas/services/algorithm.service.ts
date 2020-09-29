@@ -24,6 +24,7 @@ import { EntityModelImplementationDto } from '../models/entity-model-implementat
 import { EntityModelPatternRelationDto } from '../models/entity-model-pattern-relation-dto';
 import { EntityModelProblemTypeDto } from '../models/entity-model-problem-type-dto';
 import { EntityModelPublicationDto } from '../models/entity-model-publication-dto';
+import { EntityModelSketchDto } from '../models/entity-model-sketch-dto';
 import { EntityModelSoftwarePlatformDto } from '../models/entity-model-software-platform-dto';
 import { EntityModelTagDto } from '../models/entity-model-tag-dto';
 import { ImplementationDto } from '../models/implementation-dto';
@@ -35,6 +36,7 @@ import { ProblemTypeDto } from '../models/problem-type-dto';
 import { PublicationDto } from '../models/publication-dto';
 import { QuantumAlgorithmDto } from '../models/quantum-algorithm-dto';
 import { QuantumImplementationDto } from '../models/quantum-implementation-dto';
+import { SketchDto } from '../models/sketch-dto';
 import { SoftwarePlatformDto } from '../models/software-platform-dto';
 import { TagDto } from '../models/tag-dto';
 
@@ -42,7 +44,10 @@ import { TagDto } from '../models/tag-dto';
   providedIn: 'root',
 })
 export class AlgorithmService extends BaseService {
-  constructor(config: ApiConfiguration, http: HttpClient) {
+  constructor(
+    config: ApiConfiguration,
+    http: HttpClient
+  ) {
     super(config, http);
   }
 
@@ -60,6 +65,7 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAlgorithms$Response(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -79,39 +85,27 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetAlgorithmsPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmsPath, 'get');
     if (params) {
+
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -123,6 +117,7 @@ export class AlgorithmService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAlgorithms(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -142,23 +137,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> }, 'page'?: PageMetadata }> {
+
     return this.getAlgorithms$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> }, 'page'?: PageMetadata })
     );
   }
 
@@ -176,38 +159,24 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createAlgorithm$Response(params: {
-    body: AlgorithmDto;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-    >
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.CreateAlgorithmPath,
-      'post'
-    );
+      body: AlgorithmDto
+  }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.CreateAlgorithmPath, 'post');
     if (params) {
+
+
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)>;
+      })
+    );
   }
 
   /**
@@ -219,25 +188,11 @@ export class AlgorithmService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createAlgorithm(params: {
-    body: AlgorithmDto;
-  }): Observable<
-    { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-  > {
+      body: AlgorithmDto
+  }): Observable<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)> {
+
     return this.createAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicAlgorithmDto
-            | QuantumAlgorithmDto
-          )
-      )
+      map((r: StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)>) => r.body as { '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto))
     );
   }
 
@@ -256,37 +211,24 @@ export class AlgorithmService extends BaseService {
    */
   getAlgorithm$Response(params: {
     algorithmId: string;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-    >
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)>;
+      })
+    );
   }
 
   /**
@@ -299,24 +241,11 @@ export class AlgorithmService extends BaseService {
    */
   getAlgorithm(params: {
     algorithmId: string;
-  }): Observable<
-    { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-  > {
+
+  }): Observable<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)> {
+
     return this.getAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicAlgorithmDto
-            | QuantumAlgorithmDto
-          )
-      )
+      map((r: StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)>) => r.body as { '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto))
     );
   }
 
@@ -335,40 +264,25 @@ export class AlgorithmService extends BaseService {
    */
   updateAlgorithm$Response(params: {
     algorithmId: string;
-    body: AlgorithmDto;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-    >
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UpdateAlgorithmPath,
-      'put'
-    );
+      body: AlgorithmDto
+  }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UpdateAlgorithmPath, 'put');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)>;
+      })
+    );
   }
 
   /**
@@ -381,25 +295,11 @@ export class AlgorithmService extends BaseService {
    */
   updateAlgorithm(params: {
     algorithmId: string;
-    body: AlgorithmDto;
-  }): Observable<
-    { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-  > {
+      body: AlgorithmDto
+  }): Observable<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)> {
+
     return this.updateAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicAlgorithmDto
-            | QuantumAlgorithmDto
-          )
-      )
+      map((r: StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)>) => r.body as { '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto))
     );
   }
 
@@ -418,30 +318,24 @@ export class AlgorithmService extends BaseService {
    */
   deleteAlgorithm$Response(params: {
     algorithmId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.DeleteAlgorithmPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.DeleteAlgorithmPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -452,7 +346,11 @@ export class AlgorithmService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteAlgorithm(params: { algorithmId: string }): Observable<void> {
+  deleteAlgorithm(params: {
+    algorithmId: string;
+
+  }): Observable<void> {
+
     return this.deleteAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -461,8 +359,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getAlgorithmRelationsOfAlgorithm
    */
-  static readonly GetAlgorithmRelationsOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/algorithm-relations';
+  static readonly GetAlgorithmRelationsOfAlgorithmPath = '/v1/algorithms/{algorithmId}/algorithm-relations';
 
   /**
    * Retrieve all relations for an algorithm.
@@ -494,44 +391,28 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
-      };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetAlgorithmRelationsOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'algorithmRelations'?: Array<EntityModelAlgorithmRelationDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmRelationsOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'algorithmRelations'?: Array<EntityModelAlgorithmRelationDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -564,35 +445,18 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { algorithmRelations?: Array<EntityModelAlgorithmRelationDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'algorithmRelations'?: Array<EntityModelAlgorithmRelationDto> }, 'page'?: PageMetadata }> {
+
     return this.getAlgorithmRelationsOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'algorithmRelations'?: Array<EntityModelAlgorithmRelationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'algorithmRelations'?: Array<EntityModelAlgorithmRelationDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation createAlgorithmRelation
    */
-  static readonly CreateAlgorithmRelationPath =
-    '/v1/algorithms/{algorithmId}/algorithm-relations';
+  static readonly CreateAlgorithmRelationPath = '/v1/algorithms/{algorithmId}/algorithm-relations';
 
   /**
    * Custom ID will be ignored.
@@ -604,47 +468,25 @@ export class AlgorithmService extends BaseService {
    */
   createAlgorithmRelation$Response(params: {
     algorithmId: string;
-    body: AlgorithmRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      sourceAlgorithmId: string;
-      targetAlgorithmId: string;
-      description?: string;
-      algoRelationType: AlgorithmRelationTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.CreateAlgorithmRelationPath,
-      'post'
-    );
+      body: AlgorithmRelationDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.CreateAlgorithmRelationPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -657,44 +499,18 @@ export class AlgorithmService extends BaseService {
    */
   createAlgorithmRelation(params: {
     algorithmId: string;
-    body: AlgorithmRelationDto;
-  }): Observable<{
-    id: string;
-    sourceAlgorithmId: string;
-    targetAlgorithmId: string;
-    description?: string;
-    algoRelationType: AlgorithmRelationTypeDto;
-    _links?: Array<Link>;
-  }> {
+      body: AlgorithmRelationDto
+  }): Observable<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }> {
+
     return this.createAlgorithmRelation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation getAlgorithmRelation
    */
-  static readonly GetAlgorithmRelationPath =
-    '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
+  static readonly GetAlgorithmRelationPath = '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -705,45 +521,25 @@ export class AlgorithmService extends BaseService {
   getAlgorithmRelation$Response(params: {
     algorithmId: string;
     algorithmRelationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      sourceAlgorithmId: string;
-      targetAlgorithmId: string;
-      description?: string;
-      algoRelationType: AlgorithmRelationTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetAlgorithmRelationPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmRelationPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('algorithmRelationId', params.algorithmRelationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -755,43 +551,18 @@ export class AlgorithmService extends BaseService {
   getAlgorithmRelation(params: {
     algorithmId: string;
     algorithmRelationId: string;
-  }): Observable<{
-    id: string;
-    sourceAlgorithmId: string;
-    targetAlgorithmId: string;
-    description?: string;
-    algoRelationType: AlgorithmRelationTypeDto;
-    _links?: Array<Link>;
-  }> {
+
+  }): Observable<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }> {
+
     return this.getAlgorithmRelation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation updateAlgorithmRelation
    */
-  static readonly UpdateAlgorithmRelationPath =
-    '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
+  static readonly UpdateAlgorithmRelationPath = '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
    * Custom ID will be ignored.
@@ -804,48 +575,26 @@ export class AlgorithmService extends BaseService {
   updateAlgorithmRelation$Response(params: {
     algorithmId: string;
     algorithmRelationId: string;
-    body: AlgorithmRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      sourceAlgorithmId: string;
-      targetAlgorithmId: string;
-      description?: string;
-      algoRelationType: AlgorithmRelationTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UpdateAlgorithmRelationPath,
-      'put'
-    );
+      body: AlgorithmRelationDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UpdateAlgorithmRelationPath, 'put');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('algorithmRelationId', params.algorithmRelationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -859,44 +608,18 @@ export class AlgorithmService extends BaseService {
   updateAlgorithmRelation(params: {
     algorithmId: string;
     algorithmRelationId: string;
-    body: AlgorithmRelationDto;
-  }): Observable<{
-    id: string;
-    sourceAlgorithmId: string;
-    targetAlgorithmId: string;
-    description?: string;
-    algoRelationType: AlgorithmRelationTypeDto;
-    _links?: Array<Link>;
-  }> {
+      body: AlgorithmRelationDto
+  }): Observable<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }> {
+
     return this.updateAlgorithmRelation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'sourceAlgorithmId': string, 'targetAlgorithmId': string, 'description'?: string, 'algoRelationType': AlgorithmRelationTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation deleteAlgorithmRelation
    */
-  static readonly DeleteAlgorithmRelationPath =
-    '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
+  static readonly DeleteAlgorithmRelationPath = '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -907,31 +630,25 @@ export class AlgorithmService extends BaseService {
   deleteAlgorithmRelation$Response(params: {
     algorithmId: string;
     algorithmRelationId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.DeleteAlgorithmRelationPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.DeleteAlgorithmRelationPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('algorithmRelationId', params.algorithmRelationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -943,7 +660,9 @@ export class AlgorithmService extends BaseService {
   deleteAlgorithmRelation(params: {
     algorithmId: string;
     algorithmRelationId: string;
+
   }): Observable<void> {
+
     return this.deleteAlgorithmRelation$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -952,8 +671,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getApplicationAreasOfAlgorithm
    */
-  static readonly GetApplicationAreasOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/application-areas';
+  static readonly GetApplicationAreasOfAlgorithmPath = '/v1/algorithms/{algorithmId}/application-areas';
 
   /**
    * Get the application areas for an algorithm.
@@ -985,42 +703,28 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetApplicationAreasOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'applicationAreas'?: Array<EntityModelApplicationAreaDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetApplicationAreasOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'applicationAreas'?: Array<EntityModelApplicationAreaDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -1053,35 +757,18 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'applicationAreas'?: Array<EntityModelApplicationAreaDto> }, 'page'?: PageMetadata }> {
+
     return this.getApplicationAreasOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'applicationAreas'?: Array<EntityModelApplicationAreaDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'applicationAreas'?: Array<EntityModelApplicationAreaDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation linkAlgorithmAndApplicationArea
    */
-  static readonly LinkAlgorithmAndApplicationAreaPath =
-    '/v1/algorithms/{algorithmId}/application-areas';
+  static readonly LinkAlgorithmAndApplicationAreaPath = '/v1/algorithms/{algorithmId}/application-areas';
 
   /**
    * Add a reference to an existing application area (that was previously created via a POST on /application-areas). For application area only ID is required, other attributes will not change. If the applicationArea doesn't exist yet, a 404 error is thrown.
@@ -1093,33 +780,25 @@ export class AlgorithmService extends BaseService {
    */
   linkAlgorithmAndApplicationArea$Response(params: {
     algorithmId: string;
-    body: ApplicationAreaDto;
+      body: ApplicationAreaDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.LinkAlgorithmAndApplicationAreaPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.LinkAlgorithmAndApplicationAreaPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -1132,8 +811,9 @@ export class AlgorithmService extends BaseService {
    */
   linkAlgorithmAndApplicationArea(params: {
     algorithmId: string;
-    body: ApplicationAreaDto;
+      body: ApplicationAreaDto
   }): Observable<void> {
+
     return this.linkAlgorithmAndApplicationArea$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -1142,8 +822,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getApplicationAreaOfAlgorithm
    */
-  static readonly GetApplicationAreaOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
+  static readonly GetApplicationAreaOfAlgorithmPath = '/v1/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
 
   /**
    * Get a specific application area of an algorithm
@@ -1156,35 +835,25 @@ export class AlgorithmService extends BaseService {
   getApplicationAreaOfAlgorithm$Response(params: {
     algorithmId: string;
     applicationAreaId: string;
-  }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetApplicationAreaOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetApplicationAreaOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('applicationAreaId', params.applicationAreaId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -1198,25 +867,18 @@ export class AlgorithmService extends BaseService {
   getApplicationAreaOfAlgorithm(params: {
     algorithmId: string;
     applicationAreaId: string;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+
+  }): Observable<{ 'id': string, 'name': string, '_links'?: Array<Link> }> {
+
     return this.getApplicationAreaOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation unlinkAlgorithmAndApplicationArea
    */
-  static readonly UnlinkAlgorithmAndApplicationAreaPath =
-    '/v1/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
+  static readonly UnlinkAlgorithmAndApplicationAreaPath = '/v1/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
 
   /**
    * Delete a reference to an application area of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/problem-types/{problemTypeId}).
@@ -1229,31 +891,25 @@ export class AlgorithmService extends BaseService {
   unlinkAlgorithmAndApplicationArea$Response(params: {
     algorithmId: string;
     applicationAreaId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UnlinkAlgorithmAndApplicationAreaPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UnlinkAlgorithmAndApplicationAreaPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('applicationAreaId', params.applicationAreaId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -1267,7 +923,9 @@ export class AlgorithmService extends BaseService {
   unlinkAlgorithmAndApplicationArea(params: {
     algorithmId: string;
     applicationAreaId: string;
+
   }): Observable<void> {
+
     return this.unlinkAlgorithmAndApplicationArea$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -1276,8 +934,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getComputeResourcePropertiesOfAlgorithm
    */
-  static readonly GetComputeResourcePropertiesOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/compute-resource-properties';
+  static readonly GetComputeResourcePropertiesOfAlgorithmPath = '/v1/algorithms/{algorithmId}/compute-resource-properties';
 
   /**
    * Retrieve the required compute resource properties of an algorithm
@@ -1309,48 +966,28 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        computeResourceProperties?: Array<
-          EntityModelComputeResourcePropertyDto
-        >;
-      };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetComputeResourcePropertiesOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetComputeResourcePropertiesOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -1383,41 +1020,18 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: {
-      computeResourceProperties?: Array<EntityModelComputeResourcePropertyDto>;
-    };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }> {
+
     return this.getComputeResourcePropertiesOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation createComputeResourcePropertyForAlgorithm
    */
-  static readonly CreateComputeResourcePropertyForAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/compute-resource-properties';
+  static readonly CreateComputeResourcePropertyForAlgorithmPath = '/v1/algorithms/{algorithmId}/compute-resource-properties';
 
   /**
    * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
@@ -1429,43 +1043,25 @@ export class AlgorithmService extends BaseService {
    */
   createComputeResourcePropertyForAlgorithm$Response(params: {
     algorithmId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.CreateComputeResourcePropertyForAlgorithmPath,
-      'post'
-    );
+      body: ComputeResourcePropertyDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.CreateComputeResourcePropertyForAlgorithmPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -1478,38 +1074,18 @@ export class AlgorithmService extends BaseService {
    */
   createComputeResourcePropertyForAlgorithm(params: {
     algorithmId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
+      body: ComputeResourcePropertyDto
+  }): Observable<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }> {
+
     return this.createComputeResourcePropertyForAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation getComputeResourcePropertyOfAlgorithm
    */
-  static readonly GetComputeResourcePropertyOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
+  static readonly GetComputeResourcePropertyOfAlgorithmPath = '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Retrieve a specific compute resource property of an algorithm
@@ -1522,45 +1098,25 @@ export class AlgorithmService extends BaseService {
   getComputeResourcePropertyOfAlgorithm$Response(params: {
     algorithmId: string;
     computeResourcePropertyId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetComputeResourcePropertyOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetComputeResourcePropertyOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
-      rb.path(
-        'computeResourcePropertyId',
-        params.computeResourcePropertyId,
-        {}
-      );
+      rb.path('computeResourcePropertyId', params.computeResourcePropertyId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -1574,37 +1130,18 @@ export class AlgorithmService extends BaseService {
   getComputeResourcePropertyOfAlgorithm(params: {
     algorithmId: string;
     computeResourcePropertyId: string;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
+
+  }): Observable<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }> {
+
     return this.getComputeResourcePropertyOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation updateComputeResourcePropertyOfAlgorithm
    */
-  static readonly UpdateComputeResourcePropertyOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
+  static readonly UpdateComputeResourcePropertyOfAlgorithmPath = '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Update a Compute resource property of an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
@@ -1617,48 +1154,26 @@ export class AlgorithmService extends BaseService {
   updateComputeResourcePropertyOfAlgorithm$Response(params: {
     algorithmId: string;
     computeResourcePropertyId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UpdateComputeResourcePropertyOfAlgorithmPath,
-      'put'
-    );
+      body: ComputeResourcePropertyDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UpdateComputeResourcePropertyOfAlgorithmPath, 'put');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
-      rb.path(
-        'computeResourcePropertyId',
-        params.computeResourcePropertyId,
-        {}
-      );
+      rb.path('computeResourcePropertyId', params.computeResourcePropertyId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -1672,38 +1187,18 @@ export class AlgorithmService extends BaseService {
   updateComputeResourcePropertyOfAlgorithm(params: {
     algorithmId: string;
     computeResourcePropertyId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
+      body: ComputeResourcePropertyDto
+  }): Observable<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }> {
+
     return this.updateComputeResourcePropertyOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation deleteComputeResourcePropertyOfAlgorithm
    */
-  static readonly DeleteComputeResourcePropertyOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
+  static readonly DeleteComputeResourcePropertyOfAlgorithmPath = '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Delete a Compute resource property of an algorithm
@@ -1716,35 +1211,25 @@ export class AlgorithmService extends BaseService {
   deleteComputeResourcePropertyOfAlgorithm$Response(params: {
     algorithmId: string;
     computeResourcePropertyId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.DeleteComputeResourcePropertyOfAlgorithmPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.DeleteComputeResourcePropertyOfAlgorithmPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
-      rb.path(
-        'computeResourcePropertyId',
-        params.computeResourcePropertyId,
-        {}
-      );
+      rb.path('computeResourcePropertyId', params.computeResourcePropertyId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -1758,7 +1243,9 @@ export class AlgorithmService extends BaseService {
   deleteComputeResourcePropertyOfAlgorithm(params: {
     algorithmId: string;
     computeResourcePropertyId: string;
+
   }): Observable<void> {
+
     return this.deleteComputeResourcePropertyOfAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -1767,8 +1254,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getImplementationsOfAlgorithm
    */
-  static readonly GetImplementationsOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/implementations';
+  static readonly GetImplementationsOfAlgorithmPath = '/v1/algorithms/{algorithmId}/implementations';
 
   /**
    * Retrieve all implementations for an algorithm
@@ -1780,38 +1266,24 @@ export class AlgorithmService extends BaseService {
    */
   getImplementationsOfAlgorithm$Response(params: {
     algorithmId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetImplementationsOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetImplementationsOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -1824,35 +1296,18 @@ export class AlgorithmService extends BaseService {
    */
   getImplementationsOfAlgorithm(params: {
     algorithmId: string;
-  }): Observable<{
-    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }> {
+
     return this.getImplementationsOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation createImplementation
    */
-  static readonly CreateImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations';
+  static readonly CreateImplementationPath = '/v1/algorithms/{algorithmId}/implementations';
 
   /**
    * Create a new implementation for the algorithm.
@@ -1864,43 +1319,25 @@ export class AlgorithmService extends BaseService {
    */
   createImplementation$Response(params: {
     algorithmId: string;
-    body: ImplementationDto;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.CreateImplementationPath,
-      'post'
-    );
+      body: ImplementationDto
+  }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.CreateImplementationPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>;
+      })
+    );
   }
 
   /**
@@ -1913,36 +1350,18 @@ export class AlgorithmService extends BaseService {
    */
   createImplementation(params: {
     algorithmId: string;
-    body: ImplementationDto;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+      body: ImplementationDto
+  }): Observable<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)> {
+
     return this.createImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
-      )
+      map((r: StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>) => r.body as { '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto))
     );
   }
 
   /**
    * Path part for operation getImplementation
    */
-  static readonly GetImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
+  static readonly GetImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
    * Retrieve a specific implementation of the algorithm.
@@ -1955,41 +1374,25 @@ export class AlgorithmService extends BaseService {
   getImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetImplementationPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetImplementationPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>;
+      })
+    );
   }
 
   /**
@@ -2003,35 +1406,18 @@ export class AlgorithmService extends BaseService {
   getImplementation(params: {
     algorithmId: string;
     implementationId: string;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+
+  }): Observable<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)> {
+
     return this.getImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
-      )
+      map((r: StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>) => r.body as { '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto))
     );
   }
 
   /**
    * Path part for operation updateImplementation
    */
-  static readonly UpdateImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
+  static readonly UpdateImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
    * Custom ID will be ignored.
@@ -2044,44 +1430,26 @@ export class AlgorithmService extends BaseService {
   updateImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
-    body: ImplementationDto;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UpdateImplementationPath,
-      'put'
-    );
+      body: ImplementationDto
+  }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UpdateImplementationPath, 'put');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>;
+      })
+    );
   }
 
   /**
@@ -2095,36 +1463,18 @@ export class AlgorithmService extends BaseService {
   updateImplementation(params: {
     algorithmId: string;
     implementationId: string;
-    body: ImplementationDto;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+      body: ImplementationDto
+  }): Observable<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)> {
+
     return this.updateImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
-      )
+      map((r: StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>) => r.body as { '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto))
     );
   }
 
   /**
    * Path part for operation deleteImplementation
    */
-  static readonly DeleteImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
+  static readonly DeleteImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -2135,31 +1485,25 @@ export class AlgorithmService extends BaseService {
   deleteImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.DeleteImplementationPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.DeleteImplementationPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -2171,7 +1515,9 @@ export class AlgorithmService extends BaseService {
   deleteImplementation(params: {
     algorithmId: string;
     implementationId: string;
+
   }): Observable<void> {
+
     return this.deleteImplementation$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -2180,8 +1526,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getComputeResourcePropertiesOfImplementation
    */
-  static readonly GetComputeResourcePropertiesOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
+  static readonly GetComputeResourcePropertiesOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
 
   /**
    * Retrieve the required computing resources of an implementation
@@ -2214,49 +1559,29 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        computeResourceProperties?: Array<
-          EntityModelComputeResourcePropertyDto
-        >;
-      };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetComputeResourcePropertiesOfImplementationPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetComputeResourcePropertiesOfImplementationPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -2290,43 +1615,18 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: {
-      computeResourceProperties?: Array<EntityModelComputeResourcePropertyDto>;
-    };
-    page?: PageMetadata;
-  }> {
-    return this.getComputeResourcePropertiesOfImplementation$Response(
-      params
-    ).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }
-      )
+
+  }): Observable<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }> {
+
+    return this.getComputeResourcePropertiesOfImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation createComputeResourcePropertyForImplementation
    */
-  static readonly CreateComputeResourcePropertyForImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
+  static readonly CreateComputeResourcePropertyForImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
 
   /**
    * Add a computing resource (e.g. a certain number of qubits) that is required by an implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
@@ -2339,44 +1639,26 @@ export class AlgorithmService extends BaseService {
   createComputeResourcePropertyForImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.CreateComputeResourcePropertyForImplementationPath,
-      'post'
-    );
+      body: ComputeResourcePropertyDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.CreateComputeResourcePropertyForImplementationPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -2390,40 +1672,18 @@ export class AlgorithmService extends BaseService {
   createComputeResourcePropertyForImplementation(params: {
     algorithmId: string;
     implementationId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
-    return this.createComputeResourcePropertyForImplementation$Response(
-      params
-    ).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+      body: ComputeResourcePropertyDto
+  }): Observable<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }> {
+
+    return this.createComputeResourcePropertyForImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation getComputeResourcePropertyOfImplementation
    */
-  static readonly GetComputeResourcePropertyOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
+  static readonly GetComputeResourcePropertyOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Retrieve a specific compute resource property of an implementation
@@ -2437,46 +1697,26 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetComputeResourcePropertyOfImplementationPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetComputeResourcePropertyOfImplementationPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
-      rb.path(
-        'computeResourcePropertyId',
-        params.computeResourcePropertyId,
-        {}
-      );
+      rb.path('computeResourcePropertyId', params.computeResourcePropertyId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -2491,39 +1731,18 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
-    return this.getComputeResourcePropertyOfImplementation$Response(
-      params
-    ).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+
+  }): Observable<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }> {
+
+    return this.getComputeResourcePropertyOfImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation updateComputeResourcePropertyOfImplementation
    */
-  static readonly UpdateComputeResourcePropertyOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
+  static readonly UpdateComputeResourcePropertyOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Update a Compute resource property of an implementation. For compute resource property type only ID is required, other compute resource property type attributes will not change.
@@ -2537,49 +1756,27 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UpdateComputeResourcePropertyOfImplementationPath,
-      'put'
-    );
+      body: ComputeResourcePropertyDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UpdateComputeResourcePropertyOfImplementationPath, 'put');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
-      rb.path(
-        'computeResourcePropertyId',
-        params.computeResourcePropertyId,
-        {}
-      );
+      rb.path('computeResourcePropertyId', params.computeResourcePropertyId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -2594,40 +1791,18 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
-    return this.updateComputeResourcePropertyOfImplementation$Response(
-      params
-    ).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+      body: ComputeResourcePropertyDto
+  }): Observable<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }> {
+
+    return this.updateComputeResourcePropertyOfImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation deleteComputeResourcePropertyOfImplementation
    */
-  static readonly DeleteComputeResourcePropertyOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
+  static readonly DeleteComputeResourcePropertyOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Delete a Compute resource property of an implementation
@@ -2641,36 +1816,26 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.DeleteComputeResourcePropertyOfImplementationPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.DeleteComputeResourcePropertyOfImplementationPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
-      rb.path(
-        'computeResourcePropertyId',
-        params.computeResourcePropertyId,
-        {}
-      );
+      rb.path('computeResourcePropertyId', params.computeResourcePropertyId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -2685,17 +1850,18 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
+
   }): Observable<void> {
-    return this.deleteComputeResourcePropertyOfImplementation$Response(
-      params
-    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
+
+    return this.deleteComputeResourcePropertyOfImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
    * Path part for operation getPublicationsOfImplementation
    */
-  static readonly GetPublicationsOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications';
+  static readonly GetPublicationsOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications';
 
   /**
    * Get referenced publications for an implementation
@@ -2728,41 +1894,29 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { publications?: Array<EntityModelPublicationDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetPublicationsOfImplementationPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetPublicationsOfImplementationPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -2796,31 +1950,18 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { publications?: Array<EntityModelPublicationDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }> {
+
     return this.getPublicationsOfImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation linkImplementationAndPublication
    */
-  static readonly LinkImplementationAndPublicationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications';
+  static readonly LinkImplementationAndPublicationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications';
 
   /**
    * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
@@ -2833,34 +1974,26 @@ export class AlgorithmService extends BaseService {
   linkImplementationAndPublication$Response(params: {
     algorithmId: string;
     implementationId: string;
-    body: PublicationDto;
+      body: PublicationDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.LinkImplementationAndPublicationPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.LinkImplementationAndPublicationPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -2874,8 +2007,9 @@ export class AlgorithmService extends BaseService {
   linkImplementationAndPublication(params: {
     algorithmId: string;
     implementationId: string;
-    body: PublicationDto;
+      body: PublicationDto
   }): Observable<void> {
+
     return this.linkImplementationAndPublication$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -2884,8 +2018,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getPublicationOfImplementation
    */
-  static readonly GetPublicationOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
+  static readonly GetPublicationOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
 
   /**
    * Retrieve a publication of an implementation
@@ -2899,46 +2032,26 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     publicationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      title: string;
-      doi?: string;
-      url?: string;
-      authors: Array<string>;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetPublicationOfImplementationPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetPublicationOfImplementationPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
       rb.path('publicationId', params.publicationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -2953,43 +2066,18 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     publicationId: string;
-  }): Observable<{
-    id: string;
-    title: string;
-    doi?: string;
-    url?: string;
-    authors: Array<string>;
-    _links?: Array<Link>;
-  }> {
+
+  }): Observable<{ 'id': string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }> {
+
     return this.getPublicationOfImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation unlinkImplementationAndPublication
    */
-  static readonly UnlinkImplementationAndPublicationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
+  static readonly UnlinkImplementationAndPublicationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
 
   /**
    * Delete a reference to a publication of the implementation.
@@ -3003,32 +2091,26 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     publicationId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UnlinkImplementationAndPublicationPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UnlinkImplementationAndPublicationPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
       rb.path('publicationId', params.publicationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -3043,7 +2125,9 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     publicationId: string;
+
   }): Observable<void> {
+
     return this.unlinkImplementationAndPublication$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -3052,8 +2136,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getSoftwarePlatformsOfImplementation
    */
-  static readonly GetSoftwarePlatformsOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
+  static readonly GetSoftwarePlatformsOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
 
   /**
    * Get referenced software platform for an implementation
@@ -3086,41 +2169,29 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetSoftwarePlatformsOfImplementationPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> } }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetSoftwarePlatformsOfImplementationPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> } }>;
+      })
+    );
   }
 
   /**
@@ -3154,32 +2225,18 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> } }> {
+
     return this.getSoftwarePlatformsOfImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> } }>) => r.body as { '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> } })
     );
   }
 
   /**
    * Path part for operation linkImplementationAndSoftwarePlatform
    */
-  static readonly LinkImplementationAndSoftwarePlatformPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
+  static readonly LinkImplementationAndSoftwarePlatformPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
 
   /**
    * Add a reference to an existing software platform(that was previously created via a POST on /software-platforms/).Custom ID will be ignored. For software platform only ID is required,other software platform attributes will not change.If the software platform doesn't exist yet, a 404 error is thrown.
@@ -3192,34 +2249,26 @@ export class AlgorithmService extends BaseService {
   linkImplementationAndSoftwarePlatform$Response(params: {
     algorithmId: string;
     implementationId: string;
-    body: SoftwarePlatformDto;
+      body: SoftwarePlatformDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.LinkImplementationAndSoftwarePlatformPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.LinkImplementationAndSoftwarePlatformPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -3233,8 +2282,9 @@ export class AlgorithmService extends BaseService {
   linkImplementationAndSoftwarePlatform(params: {
     algorithmId: string;
     implementationId: string;
-    body: SoftwarePlatformDto;
+      body: SoftwarePlatformDto
   }): Observable<void> {
+
     return this.linkImplementationAndSoftwarePlatform$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -3243,8 +2293,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getSoftwarePlatformOfImplementation
    */
-  static readonly GetSoftwarePlatformOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
+  static readonly GetSoftwarePlatformOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
 
   /**
    * Retrieve a specific software platform and its basic properties.
@@ -3258,46 +2307,26 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     softwarePlatformId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      link?: string;
-      licence?: string;
-      version?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetSoftwarePlatformOfImplementationPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetSoftwarePlatformOfImplementationPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -3312,43 +2341,18 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     softwarePlatformId: string;
-  }): Observable<{
-    id: string;
-    name: string;
-    link?: string;
-    licence?: string;
-    version?: string;
-    _links?: Array<Link>;
-  }> {
+
+  }): Observable<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }> {
+
     return this.getSoftwarePlatformOfImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation unlinkImplementationAndSoftwarePlatform
    */
-  static readonly UnlinkImplementationAndSoftwarePlatformPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
+  static readonly UnlinkImplementationAndSoftwarePlatformPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
 
   /**
    * Delete a reference to a software platform of the implementation
@@ -3362,32 +2366,26 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     softwarePlatformId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UnlinkImplementationAndSoftwarePlatformPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UnlinkImplementationAndSoftwarePlatformPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -3402,7 +2400,9 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     softwarePlatformId: string;
+
   }): Observable<void> {
+
     return this.unlinkImplementationAndSoftwarePlatform$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -3411,8 +2411,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getTagsOfImplementation
    */
-  static readonly GetTagsOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
+  static readonly GetTagsOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -3423,33 +2422,25 @@ export class AlgorithmService extends BaseService {
   getTagsOfImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
-  }): Observable<
-    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetTagsOfImplementationPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> } }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetTagsOfImplementationPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> } }>;
+      })
+    );
   }
 
   /**
@@ -3461,23 +2452,18 @@ export class AlgorithmService extends BaseService {
   getTagsOfImplementation(params: {
     algorithmId: string;
     implementationId: string;
-  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+
+  }): Observable<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> } }> {
+
     return this.getTagsOfImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-          }>
-        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> } }>) => r.body as { '_embedded'?: { 'tags'?: Array<EntityModelTagDto> } })
     );
   }
 
   /**
    * Path part for operation addTagToImplementation
    */
-  static readonly AddTagToImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
+  static readonly AddTagToImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -3488,34 +2474,26 @@ export class AlgorithmService extends BaseService {
   addTagToImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
-    body: TagDto;
+      body: TagDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.AddTagToImplementationPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.AddTagToImplementationPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -3527,8 +2505,9 @@ export class AlgorithmService extends BaseService {
   addTagToImplementation(params: {
     algorithmId: string;
     implementationId: string;
-    body: TagDto;
+      body: TagDto
   }): Observable<void> {
+
     return this.addTagToImplementation$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -3537,8 +2516,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation removeTagFromImplementation
    */
-  static readonly RemoveTagFromImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
+  static readonly RemoveTagFromImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -3549,34 +2527,26 @@ export class AlgorithmService extends BaseService {
   removeTagFromImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
-    body: TagDto;
+      body: TagDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.RemoveTagFromImplementationPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.RemoveTagFromImplementationPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('implementationId', params.implementationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -3588,8 +2558,9 @@ export class AlgorithmService extends BaseService {
   removeTagFromImplementation(params: {
     algorithmId: string;
     implementationId: string;
-    body: TagDto;
+      body: TagDto
   }): Observable<void> {
+
     return this.removeTagFromImplementation$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -3598,8 +2569,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getPatternRelationsOfAlgorithm
    */
-  static readonly GetPatternRelationsOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/pattern-relations';
+  static readonly GetPatternRelationsOfAlgorithmPath = '/v1/algorithms/{algorithmId}/pattern-relations';
 
   /**
    * Retrieve pattern relations for an algorithms.
@@ -3631,42 +2601,28 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetPatternRelationsOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'patternRelations'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetPatternRelationsOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'patternRelations'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -3699,35 +2655,18 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'patternRelations'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }> {
+
     return this.getPatternRelationsOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'patternRelations'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'patternRelations'?: Array<EntityModelPatternRelationDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation createPatternRelationForAlgorithm
    */
-  static readonly CreatePatternRelationForAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/pattern-relations';
+  static readonly CreatePatternRelationForAlgorithmPath = '/v1/algorithms/{algorithmId}/pattern-relations';
 
   /**
    * Add a pattern relation from an algorithm to a given pattern.Custom ID will be ignored. For pattern relation type only ID is required,other pattern relation type attributes will not change.
@@ -3739,47 +2678,25 @@ export class AlgorithmService extends BaseService {
    */
   createPatternRelationForAlgorithm$Response(params: {
     algorithmId: string;
-    body: PatternRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      algorithmId: string;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.CreatePatternRelationForAlgorithmPath,
-      'post'
-    );
+      body: PatternRelationDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.CreatePatternRelationForAlgorithmPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -3792,44 +2709,18 @@ export class AlgorithmService extends BaseService {
    */
   createPatternRelationForAlgorithm(params: {
     algorithmId: string;
-    body: PatternRelationDto;
-  }): Observable<{
-    id: string;
-    algorithmId: string;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+      body: PatternRelationDto
+  }): Observable<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }> {
+
     return this.createPatternRelationForAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation getPatternRelationOfAlgorithm
    */
-  static readonly GetPatternRelationOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
+  static readonly GetPatternRelationOfAlgorithmPath = '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
 
   /**
    * Retrieve a specific pattern relation
@@ -3842,45 +2733,25 @@ export class AlgorithmService extends BaseService {
   getPatternRelationOfAlgorithm$Response(params: {
     algorithmId: string;
     patternRelationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      algorithmId: string;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetPatternRelationOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetPatternRelationOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('patternRelationId', params.patternRelationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -3894,43 +2765,18 @@ export class AlgorithmService extends BaseService {
   getPatternRelationOfAlgorithm(params: {
     algorithmId: string;
     patternRelationId: string;
-  }): Observable<{
-    id: string;
-    algorithmId: string;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+
+  }): Observable<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }> {
+
     return this.getPatternRelationOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation updatePatternRelationOfAlgorithm
    */
-  static readonly UpdatePatternRelationOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
+  static readonly UpdatePatternRelationOfAlgorithmPath = '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
 
   /**
    * Update a reference to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
@@ -3943,48 +2789,26 @@ export class AlgorithmService extends BaseService {
   updatePatternRelationOfAlgorithm$Response(params: {
     algorithmId: string;
     patternRelationId: string;
-    body: PatternRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      algorithmId: string;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UpdatePatternRelationOfAlgorithmPath,
-      'put'
-    );
+      body: PatternRelationDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UpdatePatternRelationOfAlgorithmPath, 'put');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('patternRelationId', params.patternRelationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -3998,44 +2822,18 @@ export class AlgorithmService extends BaseService {
   updatePatternRelationOfAlgorithm(params: {
     algorithmId: string;
     patternRelationId: string;
-    body: PatternRelationDto;
-  }): Observable<{
-    id: string;
-    algorithmId: string;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+      body: PatternRelationDto
+  }): Observable<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }> {
+
     return this.updatePatternRelationOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'algorithmId': string, 'pattern': string, 'patternRelationType': PatternRelationTypeDto, 'description'?: string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation deletePatternRelationOfAlgorithm
    */
-  static readonly DeletePatternRelationOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
+  static readonly DeletePatternRelationOfAlgorithmPath = '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
 
   /**
    * Delete a pattern relation of an specific algorithm
@@ -4048,31 +2846,25 @@ export class AlgorithmService extends BaseService {
   deletePatternRelationOfAlgorithm$Response(params: {
     algorithmId: string;
     patternRelationId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.DeletePatternRelationOfAlgorithmPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.DeletePatternRelationOfAlgorithmPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('patternRelationId', params.patternRelationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -4086,7 +2878,9 @@ export class AlgorithmService extends BaseService {
   deletePatternRelationOfAlgorithm(params: {
     algorithmId: string;
     patternRelationId: string;
+
   }): Observable<void> {
+
     return this.deletePatternRelationOfAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -4095,8 +2889,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getProblemTypesOfAlgorithm
    */
-  static readonly GetProblemTypesOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/problem-types';
+  static readonly GetProblemTypesOfAlgorithmPath = '/v1/algorithms/{algorithmId}/problem-types';
 
   /**
    * Get the problem types for an algorithm.
@@ -4128,40 +2921,28 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetProblemTypesOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'problemTypes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetProblemTypesOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'problemTypes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -4194,31 +2975,18 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'problemTypes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }> {
+
     return this.getProblemTypesOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'problemTypes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'problemTypes'?: Array<EntityModelProblemTypeDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation linkAlgorithmAndProblemType
    */
-  static readonly LinkAlgorithmAndProblemTypePath =
-    '/v1/algorithms/{algorithmId}/problem-types';
+  static readonly LinkAlgorithmAndProblemTypePath = '/v1/algorithms/{algorithmId}/problem-types';
 
   /**
    * Add a reference to an existing ProblemType (that was previously created via a POST on /problem-types). For problem type only ID is required, other problem type attributes will not change. If the ProblemType doesn't exist yet, a 404 error is thrown.
@@ -4230,33 +2998,25 @@ export class AlgorithmService extends BaseService {
    */
   linkAlgorithmAndProblemType$Response(params: {
     algorithmId: string;
-    body: ProblemTypeDto;
+      body: ProblemTypeDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.LinkAlgorithmAndProblemTypePath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.LinkAlgorithmAndProblemTypePath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -4269,8 +3029,9 @@ export class AlgorithmService extends BaseService {
    */
   linkAlgorithmAndProblemType(params: {
     algorithmId: string;
-    body: ProblemTypeDto;
+      body: ProblemTypeDto
   }): Observable<void> {
+
     return this.linkAlgorithmAndProblemType$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -4279,8 +3040,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getProblemTypeOfAlgorithm
    */
-  static readonly GetProblemTypeOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
+  static readonly GetProblemTypeOfAlgorithmPath = '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
 
   /**
    * Retrieve a specific problem type of an algorithm
@@ -4293,41 +3053,25 @@ export class AlgorithmService extends BaseService {
   getProblemTypeOfAlgorithm$Response(params: {
     algorithmId: string;
     problemTypeId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      parentProblemType?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetProblemTypeOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetProblemTypeOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('problemTypeId', params.problemTypeId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -4341,37 +3085,18 @@ export class AlgorithmService extends BaseService {
   getProblemTypeOfAlgorithm(params: {
     algorithmId: string;
     problemTypeId: string;
-  }): Observable<{
-    id: string;
-    name: string;
-    parentProblemType?: string;
-    _links?: Array<Link>;
-  }> {
+
+  }): Observable<{ 'id': string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }> {
+
     return this.getProblemTypeOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'parentProblemType'?: string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation unlinkAlgorithmAndProblemType
    */
-  static readonly UnlinkAlgorithmAndProblemTypePath =
-    '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
+  static readonly UnlinkAlgorithmAndProblemTypePath = '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
 
   /**
    * Delete a reference to a problem types of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/problem-types/{problemTypeId}).
@@ -4384,31 +3109,25 @@ export class AlgorithmService extends BaseService {
   unlinkAlgorithmAndProblemType$Response(params: {
     algorithmId: string;
     problemTypeId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UnlinkAlgorithmAndProblemTypePath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UnlinkAlgorithmAndProblemTypePath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('problemTypeId', params.problemTypeId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -4422,7 +3141,9 @@ export class AlgorithmService extends BaseService {
   unlinkAlgorithmAndProblemType(params: {
     algorithmId: string;
     problemTypeId: string;
+
   }): Observable<void> {
+
     return this.unlinkAlgorithmAndProblemType$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -4431,8 +3152,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getPublicationsOfAlgorithm
    */
-  static readonly GetPublicationsOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/publications';
+  static readonly GetPublicationsOfAlgorithmPath = '/v1/algorithms/{algorithmId}/publications';
 
   /**
    * Get referenced publications for an algorithm.
@@ -4464,40 +3184,28 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { publications?: Array<EntityModelPublicationDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetPublicationsOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetPublicationsOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -4530,31 +3238,18 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { publications?: Array<EntityModelPublicationDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }> {
+
     return this.getPublicationsOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'publications'?: Array<EntityModelPublicationDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation linkAlgorithmAndPublication
    */
-  static readonly LinkAlgorithmAndPublicationPath =
-    '/v1/algorithms/{algorithmId}/publications';
+  static readonly LinkAlgorithmAndPublicationPath = '/v1/algorithms/{algorithmId}/publications';
 
   /**
    * Add a reference to an existing publication (that was previously created via a POST on /publications). For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is returned.
@@ -4566,33 +3261,25 @@ export class AlgorithmService extends BaseService {
    */
   linkAlgorithmAndPublication$Response(params: {
     algorithmId: string;
-    body: PublicationDto;
+      body: PublicationDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.LinkAlgorithmAndPublicationPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.LinkAlgorithmAndPublicationPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -4605,8 +3292,9 @@ export class AlgorithmService extends BaseService {
    */
   linkAlgorithmAndPublication(params: {
     algorithmId: string;
-    body: PublicationDto;
+      body: PublicationDto
   }): Observable<void> {
+
     return this.linkAlgorithmAndPublication$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -4615,8 +3303,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getPublicationOfAlgorithm
    */
-  static readonly GetPublicationOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/publications/{publicationId}';
+  static readonly GetPublicationOfAlgorithmPath = '/v1/algorithms/{algorithmId}/publications/{publicationId}';
 
   /**
    * Retrieve a publication of an algorithm
@@ -4629,45 +3316,25 @@ export class AlgorithmService extends BaseService {
   getPublicationOfAlgorithm$Response(params: {
     algorithmId: string;
     publicationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      title: string;
-      doi?: string;
-      url?: string;
-      authors: Array<string>;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetPublicationOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetPublicationOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('publicationId', params.publicationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -4681,43 +3348,18 @@ export class AlgorithmService extends BaseService {
   getPublicationOfAlgorithm(params: {
     algorithmId: string;
     publicationId: string;
-  }): Observable<{
-    id: string;
-    title: string;
-    doi?: string;
-    url?: string;
-    authors: Array<string>;
-    _links?: Array<Link>;
-  }> {
+
+  }): Observable<{ 'id': string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }> {
+
     return this.getPublicationOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'title': string, 'doi'?: string, 'url'?: string, 'authors': Array<string>, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation unlinkAlgorithmAndPublication
    */
-  static readonly UnlinkAlgorithmAndPublicationPath =
-    '/v1/algorithms/{algorithmId}/publications/{publicationId}';
+  static readonly UnlinkAlgorithmAndPublicationPath = '/v1/algorithms/{algorithmId}/publications/{publicationId}';
 
   /**
    * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications/{publicationId}).
@@ -4730,31 +3372,25 @@ export class AlgorithmService extends BaseService {
   unlinkAlgorithmAndPublication$Response(params: {
     algorithmId: string;
     publicationId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.UnlinkAlgorithmAndPublicationPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UnlinkAlgorithmAndPublicationPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('publicationId', params.publicationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -4768,9 +3404,349 @@ export class AlgorithmService extends BaseService {
   unlinkAlgorithmAndPublication(params: {
     algorithmId: string;
     publicationId: string;
+
   }): Observable<void> {
+
     return this.unlinkAlgorithmAndPublication$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getSketches
+   */
+  static readonly GetSketchesPath = '/v1/algorithms/{algorithmId}/sketches';
+
+  /**
+   * Retrieve all sketches for a specific algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSketches()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketches$Response(params: {
+    algorithmId: string;
+
+  }): Observable<StrictHttpResponse<Array<EntityModelSketchDto>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetSketchesPath, 'get');
+    if (params) {
+
+      rb.path('algorithmId', params.algorithmId, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<EntityModelSketchDto>>;
+      })
+    );
+  }
+
+  /**
+   * Retrieve all sketches for a specific algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getSketches$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketches(params: {
+    algorithmId: string;
+
+  }): Observable<Array<EntityModelSketchDto>> {
+
+    return this.getSketches$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<EntityModelSketchDto>>) => r.body as Array<EntityModelSketchDto>)
+    );
+  }
+
+  /**
+   * Path part for operation uploadSketch
+   */
+  static readonly UploadSketchPath = '/v1/algorithms/{algorithmId}/sketches';
+
+  /**
+   * Add a Sketch to the algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadSketch()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  uploadSketch$Response(params: {
+    algorithmId: string;
+    description: string;
+    baseURL: string;
+      body?: { 'file'?: Blob }
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UploadSketchPath, 'post');
+    if (params) {
+
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('description', params.description, {});
+      rb.query('baseURL', params.baseURL, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }>;
+      })
+    );
+  }
+
+  /**
+   * Add a Sketch to the algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `uploadSketch$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  uploadSketch(params: {
+    algorithmId: string;
+    description: string;
+    baseURL: string;
+      body?: { 'file'?: Blob }
+  }): Observable<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }> {
+
+    return this.uploadSketch$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> })
+    );
+  }
+
+  /**
+   * Path part for operation getSketch
+   */
+  static readonly GetSketchPath = '/v1/algorithms/{algorithmId}/sketches/{sketchId}';
+
+  /**
+   * Retrieve a specific Sketch and its basic properties.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSketch()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketch$Response(params: {
+    algorithmId: string;
+    sketchId: string;
+
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetSketchPath, 'get');
+    if (params) {
+
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('sketchId', params.sketchId, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }>;
+      })
+    );
+  }
+
+  /**
+   * Retrieve a specific Sketch and its basic properties.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getSketch$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketch(params: {
+    algorithmId: string;
+    sketchId: string;
+
+  }): Observable<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }> {
+
+    return this.getSketch$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> })
+    );
+  }
+
+  /**
+   * Path part for operation updateSketch
+   */
+  static readonly UpdateSketchPath = '/v1/algorithms/{algorithmId}/sketches/{sketchId}';
+
+  /**
+   * Update the properties of a sketch.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateSketch()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateSketch$Response(params: {
+    algorithmId: string;
+    sketchId: string;
+      body: SketchDto
+  }): Observable<StrictHttpResponse<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.UpdateSketchPath, 'put');
+    if (params) {
+
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('sketchId', params.sketchId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }>;
+      })
+    );
+  }
+
+  /**
+   * Update the properties of a sketch.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateSketch$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateSketch(params: {
+    algorithmId: string;
+    sketchId: string;
+      body: SketchDto
+  }): Observable<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }> {
+
+    return this.updateSketch$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> }>) => r.body as { 'id'?: string, 'imageURL'?: string, 'description'?: string, '_links'?: Array<Link> })
+    );
+  }
+
+  /**
+   * Path part for operation deleteSketch
+   */
+  static readonly DeleteSketchPath = '/v1/algorithms/{algorithmId}/sketches/{sketchId}';
+
+  /**
+   * Delete a sketch of the algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteSketch()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteSketch$Response(params: {
+    algorithmId: string;
+    sketchId: string;
+
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.DeleteSketchPath, 'delete');
+    if (params) {
+
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('sketchId', params.sketchId, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * Delete a sketch of the algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteSketch$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteSketch(params: {
+    algorithmId: string;
+    sketchId: string;
+
+  }): Observable<void> {
+
+    return this.deleteSketch$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getSketchImage
+   */
+  static readonly GetSketchImagePath = '/v1/algorithms/{algorithmId}/sketches/{sketchId}/image';
+
+  /**
+   * Retrieve aa image from a specific Sketch.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSketchImage()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketchImage$Response(params: {
+    algorithmId: string;
+    sketchId: string;
+
+  }): Observable<StrictHttpResponse<Array<string>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetSketchImagePath, 'get');
+    if (params) {
+
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('sketchId', params.sketchId, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'blob',
+      accept: 'image/jpeg'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<string>>;
+      })
+    );
+  }
+
+  /**
+   * Retrieve aa image from a specific Sketch.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getSketchImage$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSketchImage(params: {
+    algorithmId: string;
+    sketchId: string;
+
+  }): Observable<Array<string>> {
+
+    return this.getSketchImage$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<string>>) => r.body as Array<string>)
     );
   }
 
@@ -4789,32 +3765,24 @@ export class AlgorithmService extends BaseService {
    */
   getTagsOfAlgorithm$Response(params: {
     algorithmId: string;
-  }): Observable<
-    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.GetTagsOfAlgorithmPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> } }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetTagsOfAlgorithmPath, 'get');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> } }>;
+      })
+    );
   }
 
   /**
@@ -4827,15 +3795,11 @@ export class AlgorithmService extends BaseService {
    */
   getTagsOfAlgorithm(params: {
     algorithmId: string;
-  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+
+  }): Observable<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> } }> {
+
     return this.getTagsOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-          }>
-        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> } }>) => r.body as { '_embedded'?: { 'tags'?: Array<EntityModelTagDto> } })
     );
   }
 
@@ -4854,33 +3818,25 @@ export class AlgorithmService extends BaseService {
    */
   addTagToAlgorithm$Response(params: {
     algorithmId: string;
-    body: TagDto;
+      body: TagDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.AddTagToAlgorithmPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.AddTagToAlgorithmPath, 'post');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -4893,8 +3849,9 @@ export class AlgorithmService extends BaseService {
    */
   addTagToAlgorithm(params: {
     algorithmId: string;
-    body: TagDto;
+      body: TagDto
   }): Observable<void> {
+
     return this.addTagToAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -4903,8 +3860,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation removeTagFromAlgorithm
    */
-  static readonly RemoveTagFromAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/tags';
+  static readonly RemoveTagFromAlgorithmPath = '/v1/algorithms/{algorithmId}/tags';
 
   /**
    * Remove a tag from an algorithm.
@@ -4916,33 +3872,25 @@ export class AlgorithmService extends BaseService {
    */
   removeTagFromAlgorithm$Response(params: {
     algorithmId: string;
-    body: TagDto;
+      body: TagDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AlgorithmService.RemoveTagFromAlgorithmPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.RemoveTagFromAlgorithmPath, 'delete');
     if (params) {
+
       rb.path('algorithmId', params.algorithmId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -4955,10 +3903,12 @@ export class AlgorithmService extends BaseService {
    */
   removeTagFromAlgorithm(params: {
     algorithmId: string;
-    body: TagDto;
+      body: TagDto
   }): Observable<void> {
+
     return this.removeTagFromAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
+
 }

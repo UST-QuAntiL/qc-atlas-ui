@@ -15,7 +15,10 @@ import { IssueComment } from '../models/issue-comment';
   providedIn: 'root',
 })
 export class IssueControllerService extends BaseService {
-  constructor(config: ApiConfiguration, http: HttpClient) {
+  constructor(
+    config: ApiConfiguration,
+    http: HttpClient
+  ) {
     super(config, http);
   }
 
@@ -32,29 +35,24 @@ export class IssueControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllIssues$Response(params?: {}): Observable<
-    StrictHttpResponse<Array<Issue>>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      IssueControllerService.GetAllIssuesPath,
-      'get'
-    );
+  getAllIssues$Response(params?: {
+
+  }): Observable<StrictHttpResponse<Array<Issue>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, IssueControllerService.GetAllIssuesPath, 'get');
     if (params) {
+
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Array<Issue>>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<Issue>>;
+      })
+    );
   }
 
   /**
@@ -65,7 +63,10 @@ export class IssueControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllIssues(params?: {}): Observable<Array<Issue>> {
+  getAllIssues(params?: {
+
+  }): Observable<Array<Issue>> {
+
     return this.getAllIssues$Response(params).pipe(
       map((r: StrictHttpResponse<Array<Issue>>) => r.body as Array<Issue>)
     );
@@ -85,29 +86,24 @@ export class IssueControllerService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createIssue$Response(params: {
-    body: Issue;
+      body: Issue
   }): Observable<StrictHttpResponse<Issue>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      IssueControllerService.CreateIssuePath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, IssueControllerService.CreateIssuePath, 'post');
     if (params) {
+
+
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Issue>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Issue>;
+      })
+    );
   }
 
   /**
@@ -118,7 +114,10 @@ export class IssueControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createIssue(params: { body: Issue }): Observable<Issue> {
+  createIssue(params: {
+      body: Issue
+  }): Observable<Issue> {
+
     return this.createIssue$Response(params).pipe(
       map((r: StrictHttpResponse<Issue>) => r.body as Issue)
     );
@@ -139,28 +138,24 @@ export class IssueControllerService extends BaseService {
    */
   getIssueByUri$Response(params: {
     issueUri: string;
+
   }): Observable<StrictHttpResponse<Issue>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      IssueControllerService.GetIssueByUriPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, IssueControllerService.GetIssueByUriPath, 'get');
     if (params) {
+
       rb.path('issueUri', params.issueUri, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Issue>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Issue>;
+      })
+    );
   }
 
   /**
@@ -171,7 +166,11 @@ export class IssueControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getIssueByUri(params: { issueUri: string }): Observable<Issue> {
+  getIssueByUri(params: {
+    issueUri: string;
+
+  }): Observable<Issue> {
+
     return this.getIssueByUri$Response(params).pipe(
       map((r: StrictHttpResponse<Issue>) => r.body as Issue)
     );
@@ -180,8 +179,7 @@ export class IssueControllerService extends BaseService {
   /**
    * Path part for operation updateIssueCommentRating
    */
-  static readonly UpdateIssueCommentRatingPath =
-    '/issues/comments/{issueCommentId}/users/{userId}/rating/{rating}';
+  static readonly UpdateIssueCommentRatingPath = '/issues/comments/{issueCommentId}/users/{userId}/rating/{rating}';
 
   /**
    * Update an issue comment rating
@@ -195,30 +193,26 @@ export class IssueControllerService extends BaseService {
     issueCommentId: string;
     userId: string;
     rating: string;
+
   }): Observable<StrictHttpResponse<Issue>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      IssueControllerService.UpdateIssueCommentRatingPath,
-      'put'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, IssueControllerService.UpdateIssueCommentRatingPath, 'put');
     if (params) {
+
       rb.path('issueCommentId', params.issueCommentId, {});
       rb.path('userId', params.userId, {});
       rb.path('rating', params.rating, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Issue>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Issue>;
+      })
+    );
   }
 
   /**
@@ -233,7 +227,9 @@ export class IssueControllerService extends BaseService {
     issueCommentId: string;
     userId: string;
     rating: string;
+
   }): Observable<Issue> {
+
     return this.updateIssueCommentRating$Response(params).pipe(
       map((r: StrictHttpResponse<Issue>) => r.body as Issue)
     );
@@ -254,28 +250,24 @@ export class IssueControllerService extends BaseService {
    */
   getIssueById$Response(params: {
     issueId: string;
+
   }): Observable<StrictHttpResponse<Issue>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      IssueControllerService.GetIssueByIdPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, IssueControllerService.GetIssueByIdPath, 'get');
     if (params) {
+
       rb.path('issueId', params.issueId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Issue>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Issue>;
+      })
+    );
   }
 
   /**
@@ -286,7 +278,11 @@ export class IssueControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getIssueById(params: { issueId: string }): Observable<Issue> {
+  getIssueById(params: {
+    issueId: string;
+
+  }): Observable<Issue> {
+
     return this.getIssueById$Response(params).pipe(
       map((r: StrictHttpResponse<Issue>) => r.body as Issue)
     );
@@ -307,31 +303,25 @@ export class IssueControllerService extends BaseService {
    */
   updateIssue$Response(params: {
     issueId: string;
-    body: Issue;
+      body: Issue
   }): Observable<StrictHttpResponse<Issue>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      IssueControllerService.UpdateIssuePath,
-      'put'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, IssueControllerService.UpdateIssuePath, 'put');
     if (params) {
+
       rb.path('issueId', params.issueId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Issue>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Issue>;
+      })
+    );
   }
 
   /**
@@ -342,7 +332,11 @@ export class IssueControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateIssue(params: { issueId: string; body: Issue }): Observable<Issue> {
+  updateIssue(params: {
+    issueId: string;
+      body: Issue
+  }): Observable<Issue> {
+
     return this.updateIssue$Response(params).pipe(
       map((r: StrictHttpResponse<Issue>) => r.body as Issue)
     );
@@ -363,28 +357,24 @@ export class IssueControllerService extends BaseService {
    */
   deleteIssue$Response(params: {
     issueId: string;
+
   }): Observable<StrictHttpResponse<{}>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      IssueControllerService.DeleteIssuePath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, IssueControllerService.DeleteIssuePath, 'delete');
     if (params) {
+
       rb.path('issueId', params.issueId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{}>;
+      })
+    );
   }
 
   /**
@@ -395,7 +385,11 @@ export class IssueControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteIssue(params: { issueId: string }): Observable<{}> {
+  deleteIssue(params: {
+    issueId: string;
+
+  }): Observable<{}> {
+
     return this.deleteIssue$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -404,8 +398,7 @@ export class IssueControllerService extends BaseService {
   /**
    * Path part for operation createIssueComment
    */
-  static readonly CreateIssueCommentPath =
-    '/issues/{issueId}/comments/{userId}';
+  static readonly CreateIssueCommentPath = '/issues/{issueId}/comments/{userId}';
 
   /**
    * Create an issue comment
@@ -418,32 +411,26 @@ export class IssueControllerService extends BaseService {
   createIssueComment$Response(params: {
     issueId: string;
     userId: string;
-    body: IssueComment;
+      body: IssueComment
   }): Observable<StrictHttpResponse<Issue>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      IssueControllerService.CreateIssueCommentPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, IssueControllerService.CreateIssueCommentPath, 'post');
     if (params) {
+
       rb.path('issueId', params.issueId, {});
       rb.path('userId', params.userId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Issue>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Issue>;
+      })
+    );
   }
 
   /**
@@ -457,8 +444,9 @@ export class IssueControllerService extends BaseService {
   createIssueComment(params: {
     issueId: string;
     userId: string;
-    body: IssueComment;
+      body: IssueComment
   }): Observable<Issue> {
+
     return this.createIssueComment$Response(params).pipe(
       map((r: StrictHttpResponse<Issue>) => r.body as Issue)
     );
@@ -467,8 +455,7 @@ export class IssueControllerService extends BaseService {
   /**
    * Path part for operation updateIssueRating
    */
-  static readonly UpdateIssueRatingPath =
-    '/issues/{issueId}/users/{userId}/rating/{rating}';
+  static readonly UpdateIssueRatingPath = '/issues/{issueId}/users/{userId}/rating/{rating}';
 
   /**
    * Update an issue rating
@@ -482,30 +469,26 @@ export class IssueControllerService extends BaseService {
     issueId: string;
     userId: string;
     rating: string;
+
   }): Observable<StrictHttpResponse<Issue>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      IssueControllerService.UpdateIssueRatingPath,
-      'put'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, IssueControllerService.UpdateIssueRatingPath, 'put');
     if (params) {
+
       rb.path('issueId', params.issueId, {});
       rb.path('userId', params.userId, {});
       rb.path('rating', params.rating, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Issue>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Issue>;
+      })
+    );
   }
 
   /**
@@ -520,9 +503,12 @@ export class IssueControllerService extends BaseService {
     issueId: string;
     userId: string;
     rating: string;
+
   }): Observable<Issue> {
+
     return this.updateIssueRating$Response(params).pipe(
       map((r: StrictHttpResponse<Issue>) => r.body as Issue)
     );
   }
+
 }

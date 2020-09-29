@@ -28,6 +28,31 @@
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input
+          name="License"
+          (onChange)="onPropertyChanged($event,'license')"
+          (onSaveChanges)="onChangesSaved($event,'license')"
+          [value]="implementation.license"
+          [multiline]="true"
+        ></app-text-input>
+      </mat-card>
+    </div>
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input
+          name="Version"
+          (onChange)="onPropertyChanged($event,'version')"
+          (onSaveChanges)="onChangesSaved($event,'version')"
+          [value]="implementation.version"
+          [multiline]="true"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input
           name="Dependencies"
           (onChange)="onPropertyChanged($event,'dependencies')"
           (onSaveChanges)="onChangesSaved($event,'dependencies')"

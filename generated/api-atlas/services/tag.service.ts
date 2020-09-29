@@ -19,7 +19,10 @@ import { TagDto } from '../models/tag-dto';
   providedIn: 'root',
 })
 export class TagService extends BaseService {
-  constructor(config: ApiConfiguration, http: HttpClient) {
+  constructor(
+    config: ApiConfiguration,
+    http: HttpClient
+  ) {
     super(config, http);
   }
 
@@ -37,6 +40,7 @@ export class TagService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTags$Response(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -56,35 +60,27 @@ export class TagService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { tags?: Array<EntityModelTagDto> };
-      page?: PageMetadata;
-    }>
-  > {
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> }, 'page'?: PageMetadata }>> {
+
     const rb = new RequestBuilder(this.rootUrl, TagService.GetTagsPath, 'get');
     if (params) {
+
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -96,6 +92,7 @@ export class TagService extends BaseService {
    * This method doesn't expect any request body.
    */
   getTags(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -115,23 +112,11 @@ export class TagService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { tags?: Array<EntityModelTagDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> }, 'page'?: PageMetadata }> {
+
     return this.getTags$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'tags'?: Array<EntityModelTagDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'tags'?: Array<EntityModelTagDto> }, 'page'?: PageMetadata })
     );
   }
 
@@ -149,39 +134,24 @@ export class TagService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createTag$Response(params: {
-    body: TagDto;
-  }): Observable<
-    StrictHttpResponse<{
-      category?: string;
-      value: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      TagService.CreateTagPath,
-      'post'
-    );
+      body: TagDto
+  }): Observable<StrictHttpResponse<{ 'category'?: string, 'value': string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TagService.CreateTagPath, 'post');
     if (params) {
+
+
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            category?: string;
-            value: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'category'?: string, 'value': string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -193,19 +163,11 @@ export class TagService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createTag(params: {
-    body: TagDto;
-  }): Observable<{ category?: string; value: string; _links?: Array<Link> }> {
+      body: TagDto
+  }): Observable<{ 'category'?: string, 'value': string, '_links'?: Array<Link> }> {
+
     return this.createTag$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            category?: string;
-            value: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as { category?: string; value: string; _links?: Array<Link> }
-      )
+      map((r: StrictHttpResponse<{ 'category'?: string, 'value': string, '_links'?: Array<Link> }>) => r.body as { 'category'?: string, 'value': string, '_links'?: Array<Link> })
     );
   }
 
@@ -224,34 +186,24 @@ export class TagService extends BaseService {
    */
   getTag$Response(params: {
     value: string;
-  }): Observable<
-    StrictHttpResponse<{
-      category?: string;
-      value: string;
-      _links?: Array<Link>;
-    }>
-  > {
+
+  }): Observable<StrictHttpResponse<{ 'category'?: string, 'value': string, '_links'?: Array<Link> }>> {
+
     const rb = new RequestBuilder(this.rootUrl, TagService.GetTagPath, 'get');
     if (params) {
+
       rb.path('value', params.value, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            category?: string;
-            value: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'category'?: string, 'value': string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -264,18 +216,11 @@ export class TagService extends BaseService {
    */
   getTag(params: {
     value: string;
-  }): Observable<{ category?: string; value: string; _links?: Array<Link> }> {
+
+  }): Observable<{ 'category'?: string, 'value': string, '_links'?: Array<Link> }> {
+
     return this.getTag$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            category?: string;
-            value: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as { category?: string; value: string; _links?: Array<Link> }
-      )
+      map((r: StrictHttpResponse<{ 'category'?: string, 'value': string, '_links'?: Array<Link> }>) => r.body as { 'category'?: string, 'value': string, '_links'?: Array<Link> })
     );
   }
 
@@ -294,34 +239,24 @@ export class TagService extends BaseService {
    */
   getAlgorithmsOfTag$Response(params: {
     value: string;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      TagService.GetAlgorithmsOfTagPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> } }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TagService.GetAlgorithmsOfTagPath, 'get');
     if (params) {
+
       rb.path('value', params.value, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> } }>;
+      })
+    );
   }
 
   /**
@@ -334,28 +269,18 @@ export class TagService extends BaseService {
    */
   getAlgorithmsOfTag(params: {
     value: string;
-  }): Observable<{
-    _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> } }> {
+
     return this.getAlgorithmsOfTag$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> } }>) => r.body as { '_embedded'?: { 'algorithms'?: Array<EntityModelAlgorithmDto> } })
     );
   }
 
   /**
    * Path part for operation getImplementationsOfTag
    */
-  static readonly GetImplementationsOfTagPath =
-    '/v1/tags/{value}/implementations';
+  static readonly GetImplementationsOfTagPath = '/v1/tags/{value}/implementations';
 
   /**
    * Retrieve all implementations under a specific tag
@@ -367,36 +292,24 @@ export class TagService extends BaseService {
    */
   getImplementationsOfTag$Response(params: {
     value: string;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      TagService.GetImplementationsOfTagPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> } }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TagService.GetImplementationsOfTagPath, 'get');
     if (params) {
+
       rb.path('value', params.value, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> } }>;
+      })
+    );
   }
 
   /**
@@ -409,24 +322,12 @@ export class TagService extends BaseService {
    */
   getImplementationsOfTag(params: {
     value: string;
-  }): Observable<{
-    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> } }> {
+
     return this.getImplementationsOfTag$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> } }>) => r.body as { '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> } })
     );
   }
+
 }

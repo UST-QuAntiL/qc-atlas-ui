@@ -28,7 +28,10 @@ import { SoftwarePlatformDto } from '../models/software-platform-dto';
   providedIn: 'root',
 })
 export class ExecutionEnvironmentsService extends BaseService {
-  constructor(config: ApiConfiguration, http: HttpClient) {
+  constructor(
+    config: ApiConfiguration,
+    http: HttpClient
+  ) {
     super(config, http);
   }
 
@@ -46,6 +49,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getCloudServices$Response(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -65,39 +69,27 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetCloudServicesPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetCloudServicesPath, 'get');
     if (params) {
+
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -109,6 +101,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getCloudServices(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -128,23 +121,11 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> }, 'page'?: PageMetadata }> {
+
     return this.getCloudServices$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> }, 'page'?: PageMetadata })
     );
   }
 
@@ -162,47 +143,24 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createCloudService$Response(params: {
-    body: CloudServiceDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      provider?: string;
-      url?: string;
-      description?: string;
-      costModel?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.CreateCloudServicePath,
-      'post'
-    );
+      body: CloudServiceDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.CreateCloudServicePath, 'post');
     if (params) {
+
+
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            provider?: string;
-            url?: string;
-            description?: string;
-            costModel?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -214,39 +172,11 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createCloudService(params: {
-    body: CloudServiceDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    provider?: string;
-    url?: string;
-    description?: string;
-    costModel?: string;
-    _links?: Array<Link>;
-  }> {
+      body: CloudServiceDto
+  }): Observable<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }> {
+
     return this.createCloudService$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            provider?: string;
-            url?: string;
-            description?: string;
-            costModel?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            provider?: string;
-            url?: string;
-            description?: string;
-            costModel?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> })
     );
   }
 
@@ -265,46 +195,24 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   getCloudService$Response(params: {
     cloudServiceId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      provider?: string;
-      url?: string;
-      description?: string;
-      costModel?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetCloudServicePath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetCloudServicePath, 'get');
     if (params) {
+
       rb.path('cloudServiceId', params.cloudServiceId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            provider?: string;
-            url?: string;
-            description?: string;
-            costModel?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -317,46 +225,18 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   getCloudService(params: {
     cloudServiceId: string;
-  }): Observable<{
-    id: string;
-    name: string;
-    provider?: string;
-    url?: string;
-    description?: string;
-    costModel?: string;
-    _links?: Array<Link>;
-  }> {
+
+  }): Observable<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }> {
+
     return this.getCloudService$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            provider?: string;
-            url?: string;
-            description?: string;
-            costModel?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            provider?: string;
-            url?: string;
-            description?: string;
-            costModel?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation updateCloudService
    */
-  static readonly UpdateCloudServicePath =
-    '/v1/cloud-services/{cloudServiceId}';
+  static readonly UpdateCloudServicePath = '/v1/cloud-services/{cloudServiceId}';
 
   /**
    * Update the basic properties of a cloud service (e.g. name). References to sub-objects (e.g. a compute resource) are not updated via this operation - use the corresponding sub-route for updating them (e.g. /cloud-services/{id}/compute-resources). Custom ID will be ignored.
@@ -368,49 +248,25 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   updateCloudService$Response(params: {
     cloudServiceId: string;
-    body: CloudServiceDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      provider?: string;
-      url?: string;
-      description?: string;
-      costModel?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.UpdateCloudServicePath,
-      'put'
-    );
+      body: CloudServiceDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.UpdateCloudServicePath, 'put');
     if (params) {
+
       rb.path('cloudServiceId', params.cloudServiceId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            provider?: string;
-            url?: string;
-            description?: string;
-            costModel?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -423,47 +279,18 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   updateCloudService(params: {
     cloudServiceId: string;
-    body: CloudServiceDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    provider?: string;
-    url?: string;
-    description?: string;
-    costModel?: string;
-    _links?: Array<Link>;
-  }> {
+      body: CloudServiceDto
+  }): Observable<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }> {
+
     return this.updateCloudService$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            provider?: string;
-            url?: string;
-            description?: string;
-            costModel?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            provider?: string;
-            url?: string;
-            description?: string;
-            costModel?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'provider'?: string, 'url'?: string, 'description'?: string, 'costModel'?: string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation deleteCloudService
    */
-  static readonly DeleteCloudServicePath =
-    '/v1/cloud-services/{cloudServiceId}';
+  static readonly DeleteCloudServicePath = '/v1/cloud-services/{cloudServiceId}';
 
   /**
    * Delete a cloud service. This also removes all references to other entities (e.g. compute resource)
@@ -475,30 +302,24 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   deleteCloudService$Response(params: {
     cloudServiceId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.DeleteCloudServicePath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.DeleteCloudServicePath, 'delete');
     if (params) {
+
       rb.path('cloudServiceId', params.cloudServiceId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -509,7 +330,11 @@ export class ExecutionEnvironmentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteCloudService(params: { cloudServiceId: string }): Observable<void> {
+  deleteCloudService(params: {
+    cloudServiceId: string;
+
+  }): Observable<void> {
+
     return this.deleteCloudService$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -518,8 +343,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getComputeResourcesOfCloudService
    */
-  static readonly GetComputeResourcesOfCloudServicePath =
-    '/v1/cloud-services/{cloudServiceId}/compute-resources';
+  static readonly GetComputeResourcesOfCloudServicePath = '/v1/cloud-services/{cloudServiceId}/compute-resources';
 
   /**
    * Get referenced compute resources for a software platform.
@@ -551,42 +375,28 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { computeResources?: Array<EntityModelComputeResourceDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetComputeResourcesOfCloudServicePath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetComputeResourcesOfCloudServicePath, 'get');
     if (params) {
+
       rb.path('cloudServiceId', params.cloudServiceId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              computeResources?: Array<EntityModelComputeResourceDto>;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -619,35 +429,18 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { computeResources?: Array<EntityModelComputeResourceDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }> {
+
     return this.getComputeResourcesOfCloudService$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              computeResources?: Array<EntityModelComputeResourceDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              computeResources?: Array<EntityModelComputeResourceDto>;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation linkCloudServiceAndComputeResource
    */
-  static readonly LinkCloudServiceAndComputeResourcePath =
-    '/v1/cloud-services/{cloudServiceId}/compute-resources';
+  static readonly LinkCloudServiceAndComputeResourcePath = '/v1/cloud-services/{cloudServiceId}/compute-resources';
 
   /**
    * Add a reference to an existing compute resource (that was previously created via a POST on /compute-resources/). Custom ID will be ignored. For the compute resource only the ID is required, other compute resource attributes will not change. If the compute resource doesn't exist yet, a 404 error is thrown.
@@ -659,33 +452,25 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   linkCloudServiceAndComputeResource$Response(params: {
     cloudServiceId: string;
-    body: ComputeResourceDto;
+      body: ComputeResourceDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.LinkCloudServiceAndComputeResourcePath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.LinkCloudServiceAndComputeResourcePath, 'post');
     if (params) {
+
       rb.path('cloudServiceId', params.cloudServiceId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -698,8 +483,9 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   linkCloudServiceAndComputeResource(params: {
     cloudServiceId: string;
-    body: ComputeResourceDto;
+      body: ComputeResourceDto
   }): Observable<void> {
+
     return this.linkCloudServiceAndComputeResource$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -708,8 +494,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation unlinkCloudServiceAndComputeResource
    */
-  static readonly UnlinkCloudServiceAndComputeResourcePath =
-    '/v1/cloud-services/{cloudServiceId}/compute-resources/{computeResourceId}';
+  static readonly UnlinkCloudServiceAndComputeResourcePath = '/v1/cloud-services/{cloudServiceId}/compute-resources/{computeResourceId}';
 
   /**
    * Get a specific referenced compute resource of a cloud service.
@@ -722,31 +507,25 @@ export class ExecutionEnvironmentsService extends BaseService {
   unlinkCloudServiceAndComputeResource$Response(params: {
     cloudServiceId: string;
     computeResourceId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.UnlinkCloudServiceAndComputeResourcePath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.UnlinkCloudServiceAndComputeResourcePath, 'delete');
     if (params) {
+
       rb.path('cloudServiceId', params.cloudServiceId, {});
       rb.path('computeResourceId', params.computeResourceId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -760,7 +539,9 @@ export class ExecutionEnvironmentsService extends BaseService {
   unlinkCloudServiceAndComputeResource(params: {
     cloudServiceId: string;
     computeResourceId: string;
+
   }): Observable<void> {
+
     return this.unlinkCloudServiceAndComputeResource$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -769,8 +550,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getSoftwarePlatformsOfCloudService
    */
-  static readonly GetSoftwarePlatformsOfCloudServicePath =
-    '/v1/cloud-services/{cloudServiceId}/software-platforms';
+  static readonly GetSoftwarePlatformsOfCloudServicePath = '/v1/cloud-services/{cloudServiceId}/software-platforms';
 
   /**
    * Get referenced software platforms for a cloud service
@@ -802,42 +582,28 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetSoftwarePlatformsOfCloudServicePath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetSoftwarePlatformsOfCloudServicePath, 'get');
     if (params) {
+
       rb.path('cloudServiceId', params.cloudServiceId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -870,27 +636,11 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> }, 'page'?: PageMetadata }> {
+
     return this.getSoftwarePlatformsOfCloudService$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> }, 'page'?: PageMetadata })
     );
   }
 
@@ -908,6 +658,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getComputeResources$Response(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -927,41 +678,27 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { computeResources?: Array<EntityModelComputeResourceDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetComputeResourcesPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetComputeResourcesPath, 'get');
     if (params) {
+
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              computeResources?: Array<EntityModelComputeResourceDto>;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -973,6 +710,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getComputeResources(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -992,27 +730,11 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { computeResources?: Array<EntityModelComputeResourceDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }> {
+
     return this.getComputeResources$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              computeResources?: Array<EntityModelComputeResourceDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              computeResources?: Array<EntityModelComputeResourceDto>;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata })
     );
   }
 
@@ -1030,51 +752,24 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createComputeResource$Response(params: {
-    body: ComputeResourceDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      vendor?: string;
-      technology?: string;
-      quantumComputationModel?:
-        | 'GATE_BASED'
-        | 'MEASUREMENT_BASED'
-        | 'QUANTUM_ANNEALING';
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.CreateComputeResourcePath,
-      'post'
-    );
+      body: ComputeResourceDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.CreateComputeResourcePath, 'post');
     if (params) {
+
+
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -1086,53 +781,18 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createComputeResource(params: {
-    body: ComputeResourceDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    vendor?: string;
-    technology?: string;
-    quantumComputationModel?:
-      | 'GATE_BASED'
-      | 'MEASUREMENT_BASED'
-      | 'QUANTUM_ANNEALING';
-    _links?: Array<Link>;
-  }> {
+      body: ComputeResourceDto
+  }): Observable<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }> {
+
     return this.createComputeResource$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation getComputeResource
    */
-  static readonly GetComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}';
+  static readonly GetComputeResourcePath = '/v1/compute-resources/{computeResourceId}';
 
   /**
    * Retrieve a specific compute resource and its basic properties.
@@ -1144,50 +804,24 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   getComputeResource$Response(params: {
     computeResourceId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      vendor?: string;
-      technology?: string;
-      quantumComputationModel?:
-        | 'GATE_BASED'
-        | 'MEASUREMENT_BASED'
-        | 'QUANTUM_ANNEALING';
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetComputeResourcePath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetComputeResourcePath, 'get');
     if (params) {
+
       rb.path('computeResourceId', params.computeResourceId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -1200,52 +834,18 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   getComputeResource(params: {
     computeResourceId: string;
-  }): Observable<{
-    id: string;
-    name: string;
-    vendor?: string;
-    technology?: string;
-    quantumComputationModel?:
-      | 'GATE_BASED'
-      | 'MEASUREMENT_BASED'
-      | 'QUANTUM_ANNEALING';
-    _links?: Array<Link>;
-  }> {
+
+  }): Observable<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }> {
+
     return this.getComputeResource$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation updateComputeResource
    */
-  static readonly UpdateComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}';
+  static readonly UpdateComputeResourcePath = '/v1/compute-resources/{computeResourceId}';
 
   /**
    * Update the basic properties of a compute resource (e.g. name). References to sub-objects (e.g. a compute resource property) are not updated via this operation - use the corresponding sub-route for updating them (e.g. /compute-resources/{id}/compute-resource-properties). Custom ID will be ignored.
@@ -1257,53 +857,25 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   updateComputeResource$Response(params: {
     computeResourceId: string;
-    body: ComputeResourceDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      vendor?: string;
-      technology?: string;
-      quantumComputationModel?:
-        | 'GATE_BASED'
-        | 'MEASUREMENT_BASED'
-        | 'QUANTUM_ANNEALING';
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.UpdateComputeResourcePath,
-      'put'
-    );
+      body: ComputeResourceDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.UpdateComputeResourcePath, 'put');
     if (params) {
+
       rb.path('computeResourceId', params.computeResourceId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -1316,53 +888,18 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   updateComputeResource(params: {
     computeResourceId: string;
-    body: ComputeResourceDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    vendor?: string;
-    technology?: string;
-    quantumComputationModel?:
-      | 'GATE_BASED'
-      | 'MEASUREMENT_BASED'
-      | 'QUANTUM_ANNEALING';
-    _links?: Array<Link>;
-  }> {
+      body: ComputeResourceDto
+  }): Observable<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }> {
+
     return this.updateComputeResource$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation deleteComputeResource
    */
-  static readonly DeleteComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}';
+  static readonly DeleteComputeResourcePath = '/v1/compute-resources/{computeResourceId}';
 
   /**
    * Delete a compute resource. This also removes all references to other entities (e.g. software platform)
@@ -1374,30 +911,24 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   deleteComputeResource$Response(params: {
     computeResourceId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.DeleteComputeResourcePath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.DeleteComputeResourcePath, 'delete');
     if (params) {
+
       rb.path('computeResourceId', params.computeResourceId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -1410,7 +941,9 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   deleteComputeResource(params: {
     computeResourceId: string;
+
   }): Observable<void> {
+
     return this.deleteComputeResource$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -1419,8 +952,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getCloudServicesOfComputeResource
    */
-  static readonly GetCloudServicesOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/cloud-services';
+  static readonly GetCloudServicesOfComputeResourcePath = '/v1/compute-resources/{computeResourceId}/cloud-services';
 
   /**
    * Get referenced cloud services for a compute resource
@@ -1452,38 +984,28 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetCloudServicesOfComputeResourcePath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> } }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetCloudServicesOfComputeResourcePath, 'get');
     if (params) {
+
       rb.path('computeResourceId', params.computeResourceId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> } }>;
+      })
+    );
   }
 
   /**
@@ -1516,28 +1038,18 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> } }> {
+
     return this.getCloudServicesOfComputeResource$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> } }>) => r.body as { '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> } })
     );
   }
 
   /**
    * Path part for operation getComputeResourcePropertiesOfComputeResource
    */
-  static readonly GetComputeResourcePropertiesOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/compute-resource-properties';
+  static readonly GetComputeResourcePropertiesOfComputeResourcePath = '/v1/compute-resources/{computeResourceId}/compute-resource-properties';
 
   /**
    * Get referenced compute resource properties for a compute resource.
@@ -1569,48 +1081,28 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        computeResourceProperties?: Array<
-          EntityModelComputeResourcePropertyDto
-        >;
-      };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetComputeResourcePropertiesOfComputeResourcePath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetComputeResourcePropertiesOfComputeResourcePath, 'get');
     if (params) {
+
       rb.path('computeResourceId', params.computeResourceId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -1643,43 +1135,18 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: {
-      computeResourceProperties?: Array<EntityModelComputeResourcePropertyDto>;
-    };
-    page?: PageMetadata;
-  }> {
-    return this.getComputeResourcePropertiesOfComputeResource$Response(
-      params
-    ).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }
-      )
+
+  }): Observable<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }> {
+
+    return this.getComputeResourcePropertiesOfComputeResource$Response(params).pipe(
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'computeResourceProperties'?: Array<EntityModelComputeResourcePropertyDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation createComputeResourcePropertyForComputeResource
    */
-  static readonly CreateComputeResourcePropertyForComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/compute-resource-properties';
+  static readonly CreateComputeResourcePropertyForComputeResourcePath = '/v1/compute-resources/{computeResourceId}/compute-resource-properties';
 
   /**
    * Define the basic properties of a compute resource property and add a reference to the defined compute resource property. Custom ID will be ignored.
@@ -1691,53 +1158,25 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   createComputeResourcePropertyForComputeResource$Response(params: {
     computeResourceId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      vendor?: string;
-      technology?: string;
-      quantumComputationModel?:
-        | 'GATE_BASED'
-        | 'MEASUREMENT_BASED'
-        | 'QUANTUM_ANNEALING';
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.CreateComputeResourcePropertyForComputeResourcePath,
-      'post'
-    );
+      body: ComputeResourcePropertyDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.CreateComputeResourcePropertyForComputeResourcePath, 'post');
     if (params) {
+
       rb.path('computeResourceId', params.computeResourceId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -1750,55 +1189,18 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   createComputeResourcePropertyForComputeResource(params: {
     computeResourceId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    vendor?: string;
-    technology?: string;
-    quantumComputationModel?:
-      | 'GATE_BASED'
-      | 'MEASUREMENT_BASED'
-      | 'QUANTUM_ANNEALING';
-    _links?: Array<Link>;
-  }> {
-    return this.createComputeResourcePropertyForComputeResource$Response(
-      params
-    ).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            vendor?: string;
-            technology?: string;
-            quantumComputationModel?:
-              | 'GATE_BASED'
-              | 'MEASUREMENT_BASED'
-              | 'QUANTUM_ANNEALING';
-            _links?: Array<Link>;
-          }
-      )
+      body: ComputeResourcePropertyDto
+  }): Observable<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }> {
+
+    return this.createComputeResourcePropertyForComputeResource$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'vendor'?: string, 'technology'?: string, 'quantumComputationModel'?: 'GATE_BASED' | 'MEASUREMENT_BASED' | 'QUANTUM_ANNEALING', '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation getComputeResourcePropertyOfComputeResource
    */
-  static readonly GetComputeResourcePropertyOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
+  static readonly GetComputeResourcePropertyOfComputeResourcePath = '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Retrieve a specific compute resource property of an compute resource
@@ -1811,45 +1213,25 @@ export class ExecutionEnvironmentsService extends BaseService {
   getComputeResourcePropertyOfComputeResource$Response(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetComputeResourcePropertyOfComputeResourcePath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetComputeResourcePropertyOfComputeResourcePath, 'get');
     if (params) {
+
       rb.path('computeResourceId', params.computeResourceId, {});
-      rb.path(
-        'computeResourcePropertyId',
-        params.computeResourcePropertyId,
-        {}
-      );
+      rb.path('computeResourcePropertyId', params.computeResourcePropertyId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -1863,39 +1245,18 @@ export class ExecutionEnvironmentsService extends BaseService {
   getComputeResourcePropertyOfComputeResource(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
-    return this.getComputeResourcePropertyOfComputeResource$Response(
-      params
-    ).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+
+  }): Observable<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }> {
+
+    return this.getComputeResourcePropertyOfComputeResource$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation updateComputeResourcePropertyOfComputeResource
    */
-  static readonly UpdateComputeResourcePropertyOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
+  static readonly UpdateComputeResourcePropertyOfComputeResourcePath = '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Update a Compute resource property of an compute resource. For compute resource property type only ID is required, other compute resource property type attributes will not change.
@@ -1908,48 +1269,26 @@ export class ExecutionEnvironmentsService extends BaseService {
   updateComputeResourcePropertyOfComputeResource$Response(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.UpdateComputeResourcePropertyOfComputeResourcePath,
-      'put'
-    );
+      body: ComputeResourcePropertyDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.UpdateComputeResourcePropertyOfComputeResourcePath, 'put');
     if (params) {
+
       rb.path('computeResourceId', params.computeResourceId, {});
-      rb.path(
-        'computeResourcePropertyId',
-        params.computeResourcePropertyId,
-        {}
-      );
+      rb.path('computeResourcePropertyId', params.computeResourcePropertyId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -1963,40 +1302,18 @@ export class ExecutionEnvironmentsService extends BaseService {
   updateComputeResourcePropertyOfComputeResource(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
-    body: ComputeResourcePropertyDto;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
-    return this.updateComputeResourcePropertyOfComputeResource$Response(
-      params
-    ).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
-      )
+      body: ComputeResourcePropertyDto
+  }): Observable<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }> {
+
+    return this.updateComputeResourcePropertyOfComputeResource$Response(params).pipe(
+      map((r: StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation deleteComputeResourcePropertyOfComputeResource
    */
-  static readonly DeleteComputeResourcePropertyOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
+  static readonly DeleteComputeResourcePropertyOfComputeResourcePath = '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Delete a Compute resource property of an compute resource
@@ -2009,35 +1326,25 @@ export class ExecutionEnvironmentsService extends BaseService {
   deleteComputeResourcePropertyOfComputeResource$Response(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.DeleteComputeResourcePropertyOfComputeResourcePath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.DeleteComputeResourcePropertyOfComputeResourcePath, 'delete');
     if (params) {
+
       rb.path('computeResourceId', params.computeResourceId, {});
-      rb.path(
-        'computeResourcePropertyId',
-        params.computeResourcePropertyId,
-        {}
-      );
+      rb.path('computeResourcePropertyId', params.computeResourcePropertyId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -2051,17 +1358,18 @@ export class ExecutionEnvironmentsService extends BaseService {
   deleteComputeResourcePropertyOfComputeResource(params: {
     computeResourceId: string;
     computeResourcePropertyId: string;
+
   }): Observable<void> {
-    return this.deleteComputeResourcePropertyOfComputeResource$Response(
-      params
-    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
+
+    return this.deleteComputeResourcePropertyOfComputeResource$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
   }
 
   /**
    * Path part for operation getSoftwarePlatformsOfComputeResource
    */
-  static readonly GetSoftwarePlatformsOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/software-platforms';
+  static readonly GetSoftwarePlatformsOfComputeResourcePath = '/v1/compute-resources/{computeResourceId}/software-platforms';
 
   /**
    * Get referenced software platform for a compute resource
@@ -2093,40 +1401,28 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetSoftwarePlatformsOfComputeResourcePath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> } }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetSoftwarePlatformsOfComputeResourcePath, 'get');
     if (params) {
+
       rb.path('computeResourceId', params.computeResourceId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> } }>;
+      })
+    );
   }
 
   /**
@@ -2159,24 +1455,11 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> } }> {
+
     return this.getSoftwarePlatformsOfComputeResource$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> } }>) => r.body as { '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> } })
     );
   }
 
@@ -2194,6 +1477,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getSoftwarePlatforms$Response(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -2213,41 +1497,27 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetSoftwarePlatformsPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetSoftwarePlatformsPath, 'get');
     if (params) {
+
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -2259,6 +1529,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getSoftwarePlatforms(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -2278,27 +1549,11 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> }, 'page'?: PageMetadata }> {
+
     return this.getSoftwarePlatforms$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'softwarePlatforms'?: Array<EntityModelSoftwarePlatformDto> }, 'page'?: PageMetadata })
     );
   }
 
@@ -2316,45 +1571,24 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createSoftwarePlatform$Response(params: {
-    body: SoftwarePlatformDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      link?: string;
-      licence?: string;
-      version?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.CreateSoftwarePlatformPath,
-      'post'
-    );
+      body: SoftwarePlatformDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.CreateSoftwarePlatformPath, 'post');
     if (params) {
+
+
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -2366,44 +1600,18 @@ export class ExecutionEnvironmentsService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createSoftwarePlatform(params: {
-    body: SoftwarePlatformDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    link?: string;
-    licence?: string;
-    version?: string;
-    _links?: Array<Link>;
-  }> {
+      body: SoftwarePlatformDto
+  }): Observable<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }> {
+
     return this.createSoftwarePlatform$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation getSoftwarePlatform
    */
-  static readonly GetSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}';
+  static readonly GetSoftwarePlatformPath = '/v1/software-platforms/{softwarePlatformId}';
 
   /**
    * Retrieve a specific software platform and its basic properties.
@@ -2415,44 +1623,24 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   getSoftwarePlatform$Response(params: {
     softwarePlatformId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      link?: string;
-      licence?: string;
-      version?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetSoftwarePlatformPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetSoftwarePlatformPath, 'get');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -2465,43 +1653,18 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   getSoftwarePlatform(params: {
     softwarePlatformId: string;
-  }): Observable<{
-    id: string;
-    name: string;
-    link?: string;
-    licence?: string;
-    version?: string;
-    _links?: Array<Link>;
-  }> {
+
+  }): Observable<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }> {
+
     return this.getSoftwarePlatform$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation updateSoftwarePlatform
    */
-  static readonly UpdateSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}';
+  static readonly UpdateSoftwarePlatformPath = '/v1/software-platforms/{softwarePlatformId}';
 
   /**
    * Update the basic properties of a software platform (e.g. name). References to sub-objects (e.g. a compute resource) are not updated via this operation - use the corresponding sub-route for updating them (e.g. /software-platforms/{id}/compute-resources). Custom ID will be ignored.
@@ -2513,47 +1676,25 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   updateSoftwarePlatform$Response(params: {
     softwarePlatformId: string;
-    body: SoftwarePlatformDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      link?: string;
-      licence?: string;
-      version?: string;
-      _links?: Array<Link>;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.UpdateSoftwarePlatformPath,
-      'put'
-    );
+      body: SoftwarePlatformDto
+  }): Observable<StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.UpdateSoftwarePlatformPath, 'put');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>;
+      })
+    );
   }
 
   /**
@@ -2566,44 +1707,18 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   updateSoftwarePlatform(params: {
     softwarePlatformId: string;
-    body: SoftwarePlatformDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    link?: string;
-    licence?: string;
-    version?: string;
-    _links?: Array<Link>;
-  }> {
+      body: SoftwarePlatformDto
+  }): Observable<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }> {
+
     return this.updateSoftwarePlatform$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<{ 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'name': string, 'link'?: string, 'licence'?: string, 'version'?: string, '_links'?: Array<Link> })
     );
   }
 
   /**
    * Path part for operation deleteSoftwarePlatform
    */
-  static readonly DeleteSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}';
+  static readonly DeleteSoftwarePlatformPath = '/v1/software-platforms/{softwarePlatformId}';
 
   /**
    * Delete a software platform. This also removes all references to other entities (e.g. compute resource)
@@ -2615,30 +1730,24 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   deleteSoftwarePlatform$Response(params: {
     softwarePlatformId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.DeleteSoftwarePlatformPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.DeleteSoftwarePlatformPath, 'delete');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -2651,7 +1760,9 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   deleteSoftwarePlatform(params: {
     softwarePlatformId: string;
+
   }): Observable<void> {
+
     return this.deleteSoftwarePlatform$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -2660,8 +1771,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getCloudServicesOfSoftwarePlatform
    */
-  static readonly GetCloudServicesOfSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}/cloud-services';
+  static readonly GetCloudServicesOfSoftwarePlatformPath = '/v1/software-platforms/{softwarePlatformId}/cloud-services';
 
   /**
    * Get referenced cloud services for a software platform.
@@ -2693,40 +1803,28 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetCloudServicesOfSoftwarePlatformPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetCloudServicesOfSoftwarePlatformPath, 'get');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -2759,31 +1857,18 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> }, 'page'?: PageMetadata }> {
+
     return this.getCloudServicesOfSoftwarePlatform$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { cloudServices?: Array<EntityModelCloudServiceDto> };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'cloudServices'?: Array<EntityModelCloudServiceDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation linkSoftwarePlatformAndCloudService
    */
-  static readonly LinkSoftwarePlatformAndCloudServicePath =
-    '/v1/software-platforms/{softwarePlatformId}/cloud-services';
+  static readonly LinkSoftwarePlatformAndCloudServicePath = '/v1/software-platforms/{softwarePlatformId}/cloud-services';
 
   /**
    * Add a reference to an existing cloud service (that was previously created via a POST on /cloud-services/). Custom ID will be ignored. For the cloud service only the ID is required, other cloud service attributes will not change. If the cloud service doesn't exist yet, a 404 error is thrown.
@@ -2795,33 +1880,25 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   linkSoftwarePlatformAndCloudService$Response(params: {
     softwarePlatformId: string;
-    body: CloudServiceDto;
+      body: CloudServiceDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.LinkSoftwarePlatformAndCloudServicePath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.LinkSoftwarePlatformAndCloudServicePath, 'post');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -2834,8 +1911,9 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   linkSoftwarePlatformAndCloudService(params: {
     softwarePlatformId: string;
-    body: CloudServiceDto;
+      body: CloudServiceDto
   }): Observable<void> {
+
     return this.linkSoftwarePlatformAndCloudService$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -2844,8 +1922,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation unlinkSoftwarePlatformAndCloudService
    */
-  static readonly UnlinkSoftwarePlatformAndCloudServicePath =
-    '/v1/software-platforms/{softwarePlatformId}/cloud-services/{cloudServiceId}';
+  static readonly UnlinkSoftwarePlatformAndCloudServicePath = '/v1/software-platforms/{softwarePlatformId}/cloud-services/{cloudServiceId}';
 
   /**
    * Delete a reference to an cloud service of the software platform.
@@ -2858,31 +1935,25 @@ export class ExecutionEnvironmentsService extends BaseService {
   unlinkSoftwarePlatformAndCloudService$Response(params: {
     softwarePlatformId: string;
     cloudServiceId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.UnlinkSoftwarePlatformAndCloudServicePath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.UnlinkSoftwarePlatformAndCloudServicePath, 'delete');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
       rb.path('cloudServiceId', params.cloudServiceId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -2896,7 +1967,9 @@ export class ExecutionEnvironmentsService extends BaseService {
   unlinkSoftwarePlatformAndCloudService(params: {
     softwarePlatformId: string;
     cloudServiceId: string;
+
   }): Observable<void> {
+
     return this.unlinkSoftwarePlatformAndCloudService$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -2905,8 +1978,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getComputeResourcesOfSoftwarePlatform
    */
-  static readonly GetComputeResourcesOfSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}/compute-resources';
+  static readonly GetComputeResourcesOfSoftwarePlatformPath = '/v1/software-platforms/{softwarePlatformId}/compute-resources';
 
   /**
    * Get referenced compute resources for a software platform.
@@ -2938,42 +2010,28 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { computeResources?: Array<EntityModelComputeResourceDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetComputeResourcesOfSoftwarePlatformPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetComputeResourcesOfSoftwarePlatformPath, 'get');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              computeResources?: Array<EntityModelComputeResourceDto>;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -3006,35 +2064,18 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { computeResources?: Array<EntityModelComputeResourceDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }> {
+
     return this.getComputeResourcesOfSoftwarePlatform$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              computeResources?: Array<EntityModelComputeResourceDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              computeResources?: Array<EntityModelComputeResourceDto>;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'computeResources'?: Array<EntityModelComputeResourceDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation linkSoftwarePlatformAndComputeResource
    */
-  static readonly LinkSoftwarePlatformAndComputeResourcePath =
-    '/v1/software-platforms/{softwarePlatformId}/compute-resources';
+  static readonly LinkSoftwarePlatformAndComputeResourcePath = '/v1/software-platforms/{softwarePlatformId}/compute-resources';
 
   /**
    * Add a reference to an existing compute resource(that was previously created via a POST on /compute-resources/). Custom ID will be ignored. For the compute resource only the ID is required, other compute resource attributes will not change. If the compute resource doesn't exist yet, a 404 error is thrown.
@@ -3046,33 +2087,25 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   linkSoftwarePlatformAndComputeResource$Response(params: {
     softwarePlatformId: string;
-    body: ComputeResourceDto;
+      body: ComputeResourceDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.LinkSoftwarePlatformAndComputeResourcePath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.LinkSoftwarePlatformAndComputeResourcePath, 'post');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -3085,8 +2118,9 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   linkSoftwarePlatformAndComputeResource(params: {
     softwarePlatformId: string;
-    body: ComputeResourceDto;
+      body: ComputeResourceDto
   }): Observable<void> {
+
     return this.linkSoftwarePlatformAndComputeResource$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -3095,8 +2129,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation unlinkSoftwarePlatformAndComputeResource
    */
-  static readonly UnlinkSoftwarePlatformAndComputeResourcePath =
-    '/v1/software-platforms/{softwarePlatformId}/compute-resources/{computeResourceId}';
+  static readonly UnlinkSoftwarePlatformAndComputeResourcePath = '/v1/software-platforms/{softwarePlatformId}/compute-resources/{computeResourceId}';
 
   /**
    * Delete a reference to an compute resource of the software platform.
@@ -3109,31 +2142,25 @@ export class ExecutionEnvironmentsService extends BaseService {
   unlinkSoftwarePlatformAndComputeResource$Response(params: {
     softwarePlatformId: string;
     computeResourceId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.UnlinkSoftwarePlatformAndComputeResourcePath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.UnlinkSoftwarePlatformAndComputeResourcePath, 'delete');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
       rb.path('computeResourceId', params.computeResourceId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -3147,7 +2174,9 @@ export class ExecutionEnvironmentsService extends BaseService {
   unlinkSoftwarePlatformAndComputeResource(params: {
     softwarePlatformId: string;
     computeResourceId: string;
+
   }): Observable<void> {
+
     return this.unlinkSoftwarePlatformAndComputeResource$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -3156,8 +2185,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getImplementationsOfSoftwarePlatform
    */
-  static readonly GetImplementationsOfSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}/implementations';
+  static readonly GetImplementationsOfSoftwarePlatformPath = '/v1/software-platforms/{softwarePlatformId}/implementations';
 
   /**
    * Get a specific implementations for a software platform.
@@ -3189,42 +2217,28 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
-      page?: PageMetadata;
-    }>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetImplementationsOfSoftwarePlatformPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetImplementationsOfSoftwarePlatformPath, 'get');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>;
+      })
+    );
   }
 
   /**
@@ -3257,35 +2271,18 @@ export class ExecutionEnvironmentsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
-    page?: PageMetadata;
-  }> {
+
+  }): Observable<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }> {
+
     return this.getImplementationsOfSoftwarePlatform$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }
-      )
+      map((r: StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata })
     );
   }
 
   /**
    * Path part for operation linkSoftwarePlatformAndImplementation
    */
-  static readonly LinkSoftwarePlatformAndImplementationPath =
-    '/v1/software-platforms/{softwarePlatformId}/implementations';
+  static readonly LinkSoftwarePlatformAndImplementationPath = '/v1/software-platforms/{softwarePlatformId}/implementations';
 
   /**
    * Add a reference to an existing software platform(that was previously created via a POST on /software-platforms/).Custom ID will be ignored. For software platform only ID is required,other software platform attributes will not change.If the software platform doesn't exist yet, a 404 error is thrown.
@@ -3297,33 +2294,25 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   linkSoftwarePlatformAndImplementation$Response(params: {
     softwarePlatformId: string;
-    body: ImplementationDto;
+      body: ImplementationDto
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.LinkSoftwarePlatformAndImplementationPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.LinkSoftwarePlatformAndImplementationPath, 'post');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -3336,8 +2325,9 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   linkSoftwarePlatformAndImplementation(params: {
     softwarePlatformId: string;
-    body: ImplementationDto;
+      body: ImplementationDto
   }): Observable<void> {
+
     return this.linkSoftwarePlatformAndImplementation$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -3346,8 +2336,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getImplementationOfSoftwarePlatform
    */
-  static readonly GetImplementationOfSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}/implementations/{implementationId}';
+  static readonly GetImplementationOfSoftwarePlatformPath = '/v1/software-platforms/{softwarePlatformId}/implementations/{implementationId}';
 
   /**
    * Retrieve a specific implementation of the algorithm.
@@ -3360,41 +2349,25 @@ export class ExecutionEnvironmentsService extends BaseService {
   getImplementationOfSoftwarePlatform$Response(params: {
     softwarePlatformId: string;
     implementationId: string;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.GetImplementationOfSoftwarePlatformPath,
-      'get'
-    );
+
+  }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.GetImplementationOfSoftwarePlatformPath, 'get');
     if (params) {
+
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
       rb.path('implementationId', params.implementationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>;
+      })
+    );
   }
 
   /**
@@ -3408,35 +2381,18 @@ export class ExecutionEnvironmentsService extends BaseService {
   getImplementationOfSoftwarePlatform(params: {
     softwarePlatformId: string;
     implementationId: string;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+
+  }): Observable<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)> {
+
     return this.getImplementationOfSoftwarePlatform$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
-      )
+      map((r: StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>) => r.body as { '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto))
     );
   }
 
   /**
    * Path part for operation unlinkSoftwarePlatformAndImplementation
    */
-  static readonly UnlinkSoftwarePlatformAndImplementationPath =
-    '/v1/software-platforms/{softwarePlatformId}/implementations/{implementationId}';
+  static readonly UnlinkSoftwarePlatformAndImplementationPath = '/v1/software-platforms/{softwarePlatformId}/implementations/{implementationId}';
 
   /**
    * Delete a reference to a software platform of the implementation
@@ -3449,31 +2405,25 @@ export class ExecutionEnvironmentsService extends BaseService {
   unlinkSoftwarePlatformAndImplementation$Response(params: {
     implementationId: string;
     softwarePlatformId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ExecutionEnvironmentsService.UnlinkSoftwarePlatformAndImplementationPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.UnlinkSoftwarePlatformAndImplementationPath, 'delete');
     if (params) {
+
       rb.path('implementationId', params.implementationId, {});
       rb.path('softwarePlatformId', params.softwarePlatformId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -3487,9 +2437,12 @@ export class ExecutionEnvironmentsService extends BaseService {
   unlinkSoftwarePlatformAndImplementation(params: {
     implementationId: string;
     softwarePlatformId: string;
+
   }): Observable<void> {
+
     return this.unlinkSoftwarePlatformAndImplementation$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
+
 }

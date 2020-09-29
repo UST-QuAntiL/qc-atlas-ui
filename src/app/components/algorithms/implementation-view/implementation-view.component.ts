@@ -6,7 +6,11 @@ import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
-import { EntityModelAlgorithmDto, TagDto } from 'api-atlas/models';
+import {
+  EntityModelAlgorithmDto,
+  EntityModelImplementationDto,
+  TagDto,
+} from 'api-atlas/models';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import { QueryParams } from '../../generics/data-list/data-list.component';
@@ -253,7 +257,7 @@ export class ImplementationViewComponent implements OnInit {
           this.implementation = impl;
           this.frontendImplementation = JSON.parse(
             JSON.stringify(impl)
-          ) as EntityModelAlgorithmDto;
+          ) as EntityModelImplementationDto;
           this.links[1].heading = this.implementation.name;
           this.fetchComputeResourceProperties();
           this.getTagsForImplementation(algoId, implId);

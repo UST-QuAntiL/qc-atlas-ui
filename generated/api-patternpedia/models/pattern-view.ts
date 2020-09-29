@@ -1,7 +1,2 @@
 /* tslint:disable */
-export type PatternView = {
-  id?: string;
-  uri?: string;
-  name?: string;
-  graph?: {};
-};
+export type PatternView = { 'id'?: string, 'uri'?: string, 'name'?: string, 'graph'?: {} };
