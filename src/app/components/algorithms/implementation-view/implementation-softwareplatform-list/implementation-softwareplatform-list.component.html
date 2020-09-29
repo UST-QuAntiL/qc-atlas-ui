@@ -1,19 +1,7 @@
-<mat-card *ngIf="isLinkingEnabled" class="m-2">
-  <div class="mx-3 my-2">
-    <app-link-input
-      [linkObject]="linkObject"
-      [isDisableable]=true
-      (searchTextChanged)="searchUnlinkedPlatforms($event)"
-      (linkElement)="linkPlatform($event)"
-      (disable)="onToggleLink()">>
-    </app-link-input>
-  </div>
-</mat-card>
-
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
     <app-table
-      [data]=linkedPlatforms
+      [data]=linkObject.linkedData
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
@@ -24,8 +12,8 @@
       [paginatorConfig]=paginatorConfig
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged($event)"
-      (submitDeleteElements)="unlinkPlatforms($event)"
-      (addElement)="onToggleLink()"
+      (submitDeleteElements)="unlinkSoftwarePlatforms($event)"
+      (addElement)="openLinkSoftwarePlatformDialog()"
       (pageChange)="onPageChanged($event)">
     </app-table>
   </div>
