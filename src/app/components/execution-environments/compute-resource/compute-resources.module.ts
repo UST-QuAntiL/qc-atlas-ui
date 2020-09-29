@@ -7,6 +7,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
@@ -15,6 +16,7 @@ import { ComputeResourceCloudServiceListComponent } from './compute-resource-clo
 import { ComputeResourcePropertiesComponent } from './compute-resource-properties/compute-resource-properties.component';
 import { ComputeResourceViewComponent } from './compute-resource-view/compute-resource-view.component';
 import { ComputeResourceListComponent } from './compute-resource-list/compute-resource-list.component';
+import { ComputeResourceSelectionCriteriaComponent } from './compute-resource-selection-criteria/compute-resource-selection-criteria.component';
 import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-resource-dialog.component';
 
 @NgModule({
@@ -24,6 +26,7 @@ import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-r
     ComputeResourceSoftwarePlatformListComponent,
     ComputeResourceCloudServiceListComponent,
     ComputeResourcePropertiesComponent,
+    ComputeResourceSelectionCriteriaComponent,
     CreateComputeResourceDialogComponent,
   ],
   imports: [
@@ -39,6 +42,7 @@ import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-r
     MatButtonModule,
     FormsModule,
     ComputeResourcePropertyModule,
+    MatProgressSpinnerModule,
   ],
   exports: [ComputeResourceViewComponent, ComputeResourceListComponent],
 })

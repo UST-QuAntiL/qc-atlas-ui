@@ -1,7 +1,8 @@
 @import "theme";
 
 .table-select {
-  min-width: 50px;
+  //min-width: 50px;
+  width: 100px;
 }
 
 .table-data {
@@ -26,6 +27,10 @@
 
 .add-button:hover {
   background-color: green !important;
+}
+
+.link-button:hover {
+  background-color: blue !important;
 }
 
 .config-button:hover {
@@ -130,6 +135,17 @@ mat-grid-list {
 
 .delete-small:hover {
   color: red;
+}
+
+.link-small {
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  outline: none !important;
+}
+
+.link-small:hover {
+  color: blue;
 }
 
 .update-small {

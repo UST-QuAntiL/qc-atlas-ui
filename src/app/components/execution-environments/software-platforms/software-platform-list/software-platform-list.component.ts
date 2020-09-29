@@ -4,7 +4,7 @@ import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import {
-  DeleteParams,
+  SelectParams,
   QueryParams,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
@@ -102,7 +102,7 @@ export class SoftwarePlatformListComponent implements OnInit {
       });
   }
 
-  onDeleteSoftwarePlatforms(deleteParams: DeleteParams): void {
+  onDeleteSoftwarePlatforms(deleteParams: SelectParams): void {
     this.utilService
       .createDialog(ConfirmDialogComponent, {
         title: 'Confirm Deletion',

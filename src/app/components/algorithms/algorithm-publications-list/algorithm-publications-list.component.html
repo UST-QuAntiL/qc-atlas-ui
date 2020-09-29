@@ -1,28 +1,17 @@
-<mat-card *ngIf="isLinkingEnabled" class="m-2">
-  <div class="mx-3 my-2">
-    <app-link-input
-      [linkObject]="linkObject"
-      [isDisableable]=true
-      (searchTextChanged)="searchUnlinkedPublications($event)"
-      (linkElement)="linkPublication($event)"
-      (disable)="onToggleLink()">
-    </app-link-input>
-  </div>
-</mat-card>
-
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
     <app-table
-      [data]=linkedPublications
+      [data]=linkObject.linkedData
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
-      [allowSelection]=true
-      [emptyTableMessage]="'No linked algorithms found'"
+      [allowDelete]="true"
+      [allowSort]=true
+      [emptyTableMessage]="'No linked publications found'"
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged($event)"
-      (submitSelectedElements)="unlinkPublications($event)"
-      (addElement)="onToggleLink()">
+      (submitDeleteElements)="unlinkPublications($event)"
+      (addElement)="openLinkPublicationDialog()">
     </app-table>
   </div>
 </mat-card>

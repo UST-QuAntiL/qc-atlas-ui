@@ -1,0 +1,21 @@
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table [data]=applicationAreas
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [allowAdd]=true
+               [allowDelete]=true
+               [allowSearch]=true
+               [allowSort]=true
+               [allowEdit]=true
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
+               [emptyTableMessage]="'No application areas types found'"
+               (addElement)="onAddElement()"
+               (submitDeleteElements)="onDeleteElements($event)"
+               (updateClicked)="onEditElement($event)"
+               (datalistConfigChanged)="getApplicationAreas($event)"
+               (pageChange)="getApplicationAreasHateoas($event)">
+    </app-table>
+  </div>
+</mat-card>
