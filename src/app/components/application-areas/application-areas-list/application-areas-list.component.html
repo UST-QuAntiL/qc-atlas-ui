@@ -4,7 +4,7 @@
                [variableNames]=variableNames
                [dataColumns]=tableColumns
                [allowAdd]=true
-               [allowSelection]=true
+               [allowDelete]=true
                [allowSearch]=true
                [allowSort]=true
                [allowEdit]=true
@@ -12,7 +12,7 @@
                [paginatorConfig]=paginatorConfig
                [emptyTableMessage]="'No application areas types found'"
                (addElement)="onAddElement()"
-               (submitSelectedElements)="onDeleteElements($event)"
+               (submitDeleteElements)="onDeleteElements($event)"
                (updateClicked)="onEditElement($event)"
                (datalistConfigChanged)="getApplicationAreas($event)"
                (pageChange)="getApplicationAreasHateoas($event)">

@@ -61,7 +61,6 @@ import { EditApplicationAreaDialogComponent } from './components/application-are
     EditApplicationAreaDialogComponent,
     LinkItemListDialogComponent,
     ProblemTypesListComponent,
-    ProblemTypesViewComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
