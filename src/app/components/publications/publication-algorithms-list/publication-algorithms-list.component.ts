@@ -5,8 +5,15 @@ import { PublicationService } from 'api-atlas/services/publication.service';
 import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 import { Router } from '@angular/router';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
-import { LinkObject } from '../../generics/data-list/data-list.component';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  LinkObject,
+  QueryParams,
+} from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
+import { LinkItemListDialogComponent } from '../../generics/dialogs/link-item-list-dialog.component';
+import { GenericDataService } from '../../../util/generic-data.service';
 @Component({
   selector: 'app-publication-algorithms-list',
   templateUrl: './publication-algorithms-list.component.html',
@@ -22,15 +29,22 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     subtitle: 'Search algorithm by name',
     displayVariable: 'name',
     data: [],
+    linkedData: [],
   };
   tableAddAllowed = true;
-  isLinkingEnabled = false;
+  pagingInfo: any = {};
+  paginatorConfig: any = {
+    amountChoices: [10, 25, 50],
+    selectedAmount: 10,
+  };
 
   constructor(
     private algorithmService: AlgorithmService,
     private publicationService: PublicationService,
+    private genericDataService: GenericDataService,
     private router: Router,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -48,37 +62,75 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     this.publicationService
       .getAlgorithmsOfPublication(params)
       .subscribe((algorithms) => {
+        this.linkObject.linkedData = [];
         if (algorithms._embedded) {
-          this.linkedAlgorithms = algorithms._embedded.algorithms;
-        } else {
-          this.linkedAlgorithms = [];
+          this.linkObject.linkedData = algorithms._embedded.algorithms;
         }
       });
   }
 
-  searchUnlinkedAlgorithms(search: string): void {
-    // Search for unlinked algorithms if search-text is not empty
-    if (search) {
-      this.algorithmService.getAlgorithms({ search }).subscribe((data) => {
-        this.updateLinkableAlgorithms(data._embedded);
-      });
-    } else {
-      this.linkObject.data = [];
-    }
-  }
-
-  updateLinkableAlgorithms(algorithmData): void {
-    // Clear list of linkable algorithms
+  updateAlgorithmData(data): void {
+    // clear link object data
     this.linkObject.data = [];
-    // If linkable algorithms found
-    if (algorithmData) {
-      // Search algorithms and filter only those that are not already linked
-      for (const algorithm of algorithmData.algorithms) {
-        if (!this.linkedAlgorithms.some((alg) => alg.id === algorithm.id)) {
-          this.linkObject.data.push(algorithm);
-        }
-      }
+    // If algorithms found
+    if (data._embedded) {
+      this.linkObject.data = data._embedded.algorithms;
     }
+    this.pagingInfo.page = data.page;
+    this.pagingInfo._links = data._links;
+  }
+
+  openLinkAlgorithmDialog() {
+    this.algorithmService.getAlgorithms().subscribe((data) => {
+      this.updateAlgorithmData(data);
+      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
+        width: '800px',
+        data: {
+          title: 'Link existing algorithm',
+          linkObject: this.linkObject,
+          tableColumns: ['Name', 'Acronym', 'Type'],
+          variableNames: ['name', 'acronym', 'computationModel'],
+          pagingInfo: this.pagingInfo,
+          paginatorConfig: this.paginatorConfig,
+          noButtonText: 'Cancel',
+        },
+      });
+      const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+        (search: QueryParams) => {
+          this.algorithmService
+            .getAlgorithms(search)
+            .subscribe((updatedData) => {
+              this.updateAlgorithmData(updatedData);
+              dialogRef.componentInstance.data.linkObject = this.linkObject;
+            });
+        }
+      );
+      const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
+        (page: string) => {
+          this.genericDataService.getData(page).subscribe((pageData) => {
+            this.updateAlgorithmData(pageData);
+            dialogRef.componentInstance.data.linkObject = this.linkObject;
+          });
+        }
+      );
+      const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
+        (element: AlgorithmDto) => {
+          this.routeToAlgorithm(element);
+          dialogRef.close();
+        }
+      );
+
+      dialogRef.afterClosed().subscribe((dialogResult) => {
+        searchTextSub.unsubscribe();
+        pagingSub.unsubscribe();
+        elementClickedSub.unsubscribe();
+        if (dialogResult) {
+          for (const algorithm of dialogResult.selectedItems) {
+            this.linkAlgorithm(algorithm);
+          }
+        }
+      });
+    });
   }
 
   linkAlgorithm(algorithm: AlgorithmDto): void {
@@ -115,16 +167,15 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     });
   }
 
-  onElementClicked(algorithm: any): void {
+  onElementClicked(algorithm: AlgorithmDto): void {
+    this.routeToAlgorithm(algorithm);
+  }
+
+  routeToAlgorithm(algorithm: AlgorithmDto): void {
     this.router.navigate(['algorithms', algorithm.id]);
   }
 
   onDatalistConfigChanged(event): void {
     this.getLinkedAlgorithms({ publicationId: this.publication.id });
-  }
-
-  onToggleLink(): void {
-    this.isLinkingEnabled = !this.isLinkingEnabled;
-    this.tableAddAllowed = !this.tableAddAllowed;
   }
 }

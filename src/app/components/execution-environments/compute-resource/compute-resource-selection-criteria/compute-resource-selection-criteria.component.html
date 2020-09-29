@@ -1,0 +1,36 @@
+<h2 class="m-4">Required information for the NISQ Analyzer</h2>
+<div *ngIf="!qpu" class="d-flex align-content-center justify-content-center">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="qpu">
+  <mat-card class="m-4">
+    <div class="row">
+      <div class="col-12">
+        <app-text-input
+          name="Qubit Count"
+          pattern="[0-9]+"
+          [(ngModel)]="qpu.numberOfQubits"
+          (onSaveChanges)="saveQpu()"
+        ></app-text-input>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <app-text-input
+          name="T1 (in nanoseconds)"
+          pattern="[0-9]+"
+          [(ngModel)]="qpu.t1"
+          (onSaveChanges)="saveQpu()"
+        ></app-text-input>
+      </div>
+      <div class="col-lg-6 col-md-12">
+        <app-text-input
+          name="Max Gate Time (in nanoseconds)"
+          pattern="[0-9]+"
+          [(ngModel)]="qpu.maxGateTime"
+          (onSaveChanges)="saveQpu()"
+        ></app-text-input>
+      </div>
+    </div>
+  </mat-card>
+</div>

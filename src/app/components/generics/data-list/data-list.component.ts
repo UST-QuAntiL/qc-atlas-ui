@@ -8,16 +8,17 @@ import { SelectionModel } from '@angular/cdk/collections';
 })
 export class DataListComponent implements OnInit {
   @Input() data: any[];
+  @Input() disabledData: any[];
   @Input() variableNames: string[];
   @Input() dataColumns: string[];
   @Input() externalLinkVariables: string[];
   @Input() allowAdd: boolean;
   @Input() allowEdit: boolean;
   @Input() addIcon = 'playlist_add';
-  @Input() allowSelection: boolean;
-  @Input() submitSelectionIcon = 'delete';
-  @Input() allowSearch: boolean;
-  @Input() allowSort: boolean;
+  @Input() allowDelete = false;
+  @Input() allowLink = false;
+  @Input() allowSearch = false;
+  @Input() allowSort = false;
   @Input() pagination: any;
   @Input() paginatorConfig: any;
   @Input() emptyTableMessage = 'No elements found';
@@ -26,13 +27,15 @@ export class DataListComponent implements OnInit {
   @Output() urlClicked = new EventEmitter<UrlData>();
   @Output() updateClicked = new EventEmitter<any>();
   @Output() addElement = new EventEmitter<void>();
-  @Output() submitSelectedElements = new EventEmitter<DeleteParams>(); // changed
+  @Output() submitDeleteElements = new EventEmitter<SelectParams>();
+  @Output() submitLinkElements = new EventEmitter<SelectParams>();
   @Output() pageChange = new EventEmitter<string>();
   @Output() datalistConfigChanged = new EventEmitter<QueryParams>();
   selection = new SelectionModel<any>(true, []);
   searchText = '';
   sortDirection = '';
   sortActiveElement = '';
+  disabledDataEntries: Set<any> = new Set<any>();
 
   constructor() {}
 
@@ -40,18 +43,14 @@ export class DataListComponent implements OnInit {
     if (this.pagination) {
       this.generateInitialPaginator();
     }
-
     this.datalistConfigChanged.emit(this.generateGetParameter());
+    this.initializeDataEntryDisabled();
   }
 
   isAllSelected(): boolean {
-    return this.data.length === this.selection.selected.length;
-  }
-
-  isLink(variableName): boolean {
     return (
-      this.externalLinkVariables &&
-      this.externalLinkVariables.includes(variableName)
+      this.data.length ===
+      this.selection.selected.length + this.disabledDataEntries.size
     );
   }
 
@@ -59,12 +58,21 @@ export class DataListComponent implements OnInit {
   masterToggle(): void {
     const isAllSelected = this.isAllSelected();
     this.data.forEach((element) => {
-      this.changeSelection(element, !isAllSelected);
+      if (!this.dataEntryIsDisabled(element)) {
+        this.changeSelection(element, !isAllSelected);
+      }
     });
   }
 
   rowToggle(row: any): void {
     this.changeSelection(row, !this.selection.isSelected(row));
+  }
+
+  isLink(variableName): boolean {
+    return (
+      this.externalLinkVariables &&
+      this.externalLinkVariables.includes(variableName)
+    );
   }
 
   changePage(link: string): void {
@@ -91,17 +99,29 @@ export class DataListComponent implements OnInit {
     this.urlClicked.emit(urlData);
   }
 
-  // changed
-  onSelectionSubmitted(): void {
-    this.submitSelectedElements.emit(this.generateDeleteParameter());
+  onDeleteSubmitted(): void {
+    this.submitDeleteElements.emit(this.generateSelectParameter());
+    this.selection.clear();
+  }
+
+  onLinkSubmitted() {
+    this.submitLinkElements.emit(this.generateSelectParameter());
     this.selection.clear();
   }
 
   onSingleDelete(element): void {
     const deleteElement: any[] = [element];
-    const deleteParams = this.generateDeleteParameter();
+    const deleteParams = this.generateSelectParameter();
     deleteParams.elements = deleteElement;
-    this.submitSelectedElements.emit(deleteParams);
+    this.submitDeleteElements.emit(deleteParams);
+    this.selection.clear();
+  }
+
+  onSingleLink(element): void {
+    const linkElement: any[] = [element];
+    const linkParams = this.generateSelectParameter();
+    linkParams.elements = linkElement;
+    this.submitLinkElements.emit(linkParams);
     this.selection.clear();
   }
 
@@ -127,13 +147,29 @@ export class DataListComponent implements OnInit {
     this.selection.clear();
   }
 
+  initializeDataEntryDisabled(): void {
+    for (const dataEntry of this.data) {
+      if (this.disabledData.length > 0) {
+        for (const linkedObject of this.disabledData) {
+          if (dataEntry.id === linkedObject.id) {
+            this.disabledDataEntries.add(dataEntry.id);
+          }
+        }
+      }
+    }
+  }
+
+  dataEntryIsDisabled(dataEntry: any): boolean {
+    return this.disabledDataEntries.has(dataEntry.id);
+  }
+
   private changeSelection(row: any, select: boolean): void {
     if (select !== this.selection.isSelected(row)) {
       this.selection.toggle(row);
     }
   }
 
-  private generateDeleteParameter(): DeleteParams {
+  private generateSelectParameter(): SelectParams {
     return {
       elements: this.selection.selected,
       queryParams: this.generateGetParameter(),
@@ -181,7 +217,7 @@ export interface QueryParams {
   search?: string;
 }
 
-export interface DeleteParams {
+export interface SelectParams {
   elements: any;
   queryParams: QueryParams;
 }
@@ -191,6 +227,7 @@ export interface LinkObject {
   subtitle: string;
   displayVariable: string;
   data: any[];
+  linkedData?: any[];
 }
 
 export interface UrlData {

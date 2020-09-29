@@ -5,7 +5,7 @@
                [dataColumns]=tableColumns
                [externalLinkVariables]=externalLinkVariables
                [allowAdd]=true
-               [allowSelection]=true
+               [allowDelete]="true"
                [allowSearch]=true
                [allowSort]=true
                [pagination]=pagingInfo
@@ -13,7 +13,7 @@
                [emptyTableMessage]="'No software platforms found'"
                (elementClicked)="onSoftwarePlatformClicked($event)"
                (addElement)="onCreateSoftwarePlatform()"
-               (submitSelectedElements)="onDeleteSoftwarePlatforms($event)"
+               (submitDeleteElements)="onDeleteSoftwarePlatforms($event)"
                (datalistConfigChanged)="getSoftwarePlatforms($event)"
                (pageChange)="getSoftwarePlatformsHateoas($event)">
     </app-table>
