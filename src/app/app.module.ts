@@ -17,6 +17,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { MatCardModule } from '@angular/material/card';
 import { ApiModule as PatternAltasAPIModule } from 'api-patternpedia/api.module';
 import { ApiModule as NisqApiModule } from 'api-nisq/api.module';
+// import { ApiModule as LatexRendererAPIModule} from 'api-latex-renderer/api.module';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -60,6 +61,7 @@ import { ProblemTypesViewComponent } from './components/problem-types/problem-ty
       rootUrl: environment.PATTERN_ATLAS_API_URL,
     }),
     NisqApiModule.forRoot({ rootUrl: environment.NISQ_API_URL }),
+    // LatexRendererAPIModule.forRoot({ rootUrl: environment.LATEX_RENDERER_API_URL }),
     AppRoutingModule,
     // material modules
     MatSidenavModule,
