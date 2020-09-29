@@ -33,3 +33,30 @@ $qc-atlas-ui-warn: mat-palette($mat-red);
 $qc-atlas-ui-theme: mat-light-theme($qc-atlas-ui-primary, $qc-atlas-ui-accent, $qc-atlas-ui-warn);
 
 @include angular-material-theme($qc-atlas-ui-theme);
+
+.master-save-button {
+  position: fixed;
+  top: 50%;
+  right: 15px;
+  text-align:center;
+  float:left;
+  background: linear-gradient(to right, white 50%, mat-color($qc-atlas-ui-primary) 50%);
+  background-size: 200% 100%;
+  background-position: left bottom;
+  margin-left:10px;
+  transition:all 1s ease;
+}
+
+.master-save-button:hover {
+  background-position:right bottom;
+  color: white;
+}
+
+.master-save-icon {
+  color: mat-color($qc-atlas-ui-primary);
+  transition:all 1s ease;
+}
+
+.master-save-button:hover .master-save-icon {
+  color: white;
+}

@@ -9,10 +9,9 @@
         [cloudService]="cloudService"
         (updateCloudServiceField)="updateCloudServiceField($event)"
       ></app-cloud-service-properties>
-      <button class="mr-4 float-right" *ngIf="!guard.objectsEqual(frontendCloudService, cloudService)" mat-flat-button color="primary"
+      <button class="master-save-button" *ngIf="!guard.objectsEqual(frontendCloudService, cloudService)" mat-fab
               (click)="saveCloudService(frontendCloudService, true)">
-        Save
-        <mat-icon>save</mat-icon>
+        <mat-icon class="master-save-icon">save</mat-icon>
       </button>
     </mat-tab>
     <mat-tab label="Software Platforms">

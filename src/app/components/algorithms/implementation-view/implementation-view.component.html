@@ -27,10 +27,9 @@
         (updateComputeResourceProperty)="updateComputeResourceProperty($event)"
       >
       </app-implementation-properties>
-      <button class="mr-4 float-right" *ngIf="!guard.objectsEqual(frontendImplementation, implementation)" mat-flat-button color="primary"
+      <button class="master-save-button" *ngIf="!guard.objectsEqual(frontendImplementation, implementation)" mat-fab
               (click)="saveImplementation(frontendImplementation, true)">
-        Save
-        <mat-icon>save</mat-icon>
+        <mat-icon class="master-save-icon">save</mat-icon>
       </button>
     </mat-tab>
     <mat-tab label="Publications">

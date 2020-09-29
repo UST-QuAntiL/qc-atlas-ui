@@ -10,23 +10,3 @@
   justify-content: space-between;
   align-items: center;
 }
-
-.save-button {
-  color: mat-color($qc-atlas-ui-primary);
-  position: fixed;
-  top: 50%;
-  right: 15px;
-  text-align:center;
-  float:left;
-  /* Old browsers */
-  background: linear-gradient(to right, white 50%, mat-color($qc-atlas-ui-primary) 50%);
-  background-size: 200% 100%;
-  background-position:left bottom;
-  margin-left:10px;
-  transition:all 1s ease;
-}
-
-.save-button:hover {
-  background-position:right bottom;
-}
-
