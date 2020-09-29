@@ -1,3 +1,5 @@
+@import "theme";
+
 .clickable-chip {
   cursor: pointer;
 }
@@ -7,4 +9,16 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.save-button {
+  position: fixed;
+  top: 50%;
+  right: 15px;
+  transition: transform 2s;
+}
+
+.save-button:hover {
+  color: mat-color($qc-atlas-ui-primary);
+  background-color: white;
 }

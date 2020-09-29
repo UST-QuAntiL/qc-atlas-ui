@@ -28,11 +28,10 @@
         (onAddProblemType)="addProblemType($event)"
         (onRemoveProblemType)="removeProblemTypeFromAlgorithm($event)"
       ></app-algorithm-properties>
-      <button class="mr-4 float-right" *ngIf="!guard.objectsEqual(frontendAlgorithm, algorithm)" mat-flat-button color="primary"
-              (click)="saveAlgorithm(frontendAlgorithm, true)">
-        Save
-        <mat-icon>save</mat-icon>
-      </button>
+        <button class="save-button" *ngIf="!guard.objectsEqual(frontendAlgorithm, algorithm)" mat-fab color="primary"
+                (click)="saveAlgorithm(frontendAlgorithm, true)">
+          <mat-icon>save</mat-icon>
+        </button>
     </mat-tab>
     <mat-tab label="Implementations">
       <app-algorithm-implementations-list
