@@ -1,28 +1,16 @@
-<mat-card *ngIf="isLinkingEnabled" class="m-2">
-  <div class="mx-3 my-2">
-    <app-link-input
-      [linkObject]="linkObject"
-      [isDisableable]=true
-      (searchTextChanged)="searchUnlinkedImplementations($event)"
-      (linkElement)="linkImplementation($event)"
-      (disable)="onToggleLink()">
-    </app-link-input>
-  </div>
-</mat-card>
-
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
     <app-table
-      [data]=linkedImplementations
+      [data]=linkObject.linkedData
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
-      [allowSelection]=true
+      [allowDelete]="true"
       [emptyTableMessage]="'No linked implementations found'"
       (elementClicked)="onElementClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged()"
-      (submitSelectedElements)="unlinkImplementations($event)"
-      (addElement)="onToggleLink()">
+      (submitDeleteElements)="unlinkImplementations($event)"
+      (addElement)="openLinkImplementationDialog()">
     </app-table>
   </div>
 </mat-card>

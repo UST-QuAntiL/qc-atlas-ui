@@ -28,6 +28,10 @@
   background-color: green !important;
 }
 
+.link-button:hover {
+  background-color: blue !important;
+}
+
 .config-button:hover {
   background-color: mat-color($qc-atlas-ui-primary) !important;
 }
@@ -130,6 +134,17 @@ mat-grid-list {
 
 .delete-small:hover {
   color: red;
+}
+
+.link-small {
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  outline: none !important;
+}
+
+.link-small:hover {
+  color: blue;
 }
 
 .update-small {

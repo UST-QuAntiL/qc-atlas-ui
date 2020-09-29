@@ -2,13 +2,16 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
-import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
+import { MatDialog } from '@angular/material/dialog';
 import {
-  DeleteParams,
+  SelectParams,
   LinkObject,
+  QueryParams,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
+import { GenericDataService } from '../../../../util/generic-data.service';
+import { LinkItemListDialogComponent } from '../../../generics/dialogs/link-item-list-dialog.component';
 
 @Component({
   selector: 'app-software-platform-cloud-service-list',
@@ -17,8 +20,6 @@ import { UtilService } from '../../../../util/util.service';
 })
 export class SoftwarePlatformCloudServiceListComponent implements OnInit {
   @Input() softwarePlatform: EntityModelSoftwarePlatformDto;
-  cloudServices: EntityModelCloudServiceDto[];
-  linkedCloudServices: EntityModelCloudServiceDto[] = [];
 
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
   variableNames = ['name', 'provider', 'description', 'costModel', 'URL'];
@@ -27,14 +28,21 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
     subtitle: 'Search cloud services by name',
     displayVariable: 'name',
     data: [],
+    linkedData: [],
   };
   tableAddAllowed = true;
-  isLinkingEnabled = false;
+  pagingInfo: any = {};
+  paginatorConfig: any = {
+    amountChoices: [10, 25, 50],
+    selectedAmount: 10,
+  };
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
+    private genericDataService: GenericDataService,
+    private router: Router,
     private utilService: UtilService,
-    private router: Router
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -49,12 +57,22 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
     this.executionEnvironmentsService
       .getCloudServices({ page: -1 })
       .subscribe((cloudServices) => {
+        this.linkObject.data = [];
         if (cloudServices._embedded) {
-          this.cloudServices = cloudServices._embedded.cloudServices;
-        } else {
-          this.cloudServices = [];
+          this.linkObject.data = cloudServices._embedded.cloudServices;
         }
       });
+  }
+
+  updateCloudServicesData(data): void {
+    // clear link object data
+    this.linkObject.data = [];
+    // If cloud services found
+    if (data._embedded) {
+      this.linkObject.data = data._embedded.cloudServices;
+    }
+    this.pagingInfo.page = data.page;
+    this.pagingInfo._links = data._links;
   }
 
   getLinkedCloudServices(params: {
@@ -67,25 +85,64 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
     this.executionEnvironmentsService
       .getCloudServicesOfSoftwarePlatform(params)
       .subscribe((cloudServices) => {
+        this.linkObject.linkedData = [];
         if (cloudServices._embedded) {
-          this.linkedCloudServices = cloudServices._embedded.cloudServices;
-        } else {
-          this.linkedCloudServices = [];
+          this.linkObject.linkedData = cloudServices._embedded.cloudServices;
         }
       });
   }
 
-  searchUnlinkedCloudServices(search: string): void {
-    if (search) {
-      search = search.toLocaleLowerCase();
-      this.linkObject.data = this.cloudServices.filter(
-        (cloudService: EntityModelCloudServiceDto) =>
-          cloudService.name.toLocaleLowerCase().startsWith(search) &&
-          !this.linkedCloudServices.includes(cloudService)
+  openLinkCloudServiceDialog() {
+    this.executionEnvironmentsService.getCloudServices().subscribe((data) => {
+      this.updateCloudServicesData(data);
+      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
+        width: '800px',
+        data: {
+          title: 'Link existing cloud services',
+          linkObject: this.linkObject,
+          tableColumns: ['Name', 'Provider', 'Description'],
+          variableNames: ['name', 'provider', 'description'],
+          pagingInfo: this.pagingInfo,
+          paginatorConfig: this.paginatorConfig,
+          noButtonText: 'Cancel',
+        },
+      });
+      const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+        (search: QueryParams) => {
+          this.executionEnvironmentsService
+            .getCloudServices(search)
+            .subscribe((updatedData) => {
+              this.updateCloudServicesData(updatedData);
+              dialogRef.componentInstance.data.linkObject = this.linkObject;
+            });
+        }
       );
-    } else {
-      this.linkObject.data = [];
-    }
+      const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
+        (page: string) => {
+          this.genericDataService.getData(page).subscribe((pageData) => {
+            this.updateCloudServicesData(pageData);
+            dialogRef.componentInstance.data.linkObject = this.linkObject;
+          });
+        }
+      );
+      const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
+        (element: CloudServiceDto) => {
+          this.routeToCloudService(element);
+          dialogRef.close();
+        }
+      );
+
+      dialogRef.afterClosed().subscribe((dialogResult) => {
+        searchTextSub.unsubscribe();
+        pagingSub.unsubscribe();
+        elementClickedSub.unsubscribe();
+        if (dialogResult) {
+          for (const cloudService of dialogResult.selectedItems) {
+            this.linkCloudService(cloudService);
+          }
+        }
+      });
+    });
   }
 
   linkCloudService(cloudService: CloudServiceDto): void {
@@ -103,7 +160,7 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       });
   }
 
-  unlinkCloudServices(event: DeleteParams): void {
+  unlinkCloudServices(event: SelectParams): void {
     const promises: Array<Promise<void>> = [];
     for (const cloudService of event.elements) {
       promises.push(
@@ -123,8 +180,6 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
     });
   }
 
-  onAddElement(): void {}
-
   onDatalistConfigChanged(): void {
     this.getLinkedCloudServices({
       softwarePlatformId: this.softwarePlatform.id,
@@ -132,15 +187,14 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
   }
 
   onElementClicked(cloudService: CloudServiceDto): void {
+    this.routeToCloudService(cloudService);
+  }
+
+  private routeToCloudService(cloudService: CloudServiceDto) {
     this.router.navigate([
       'execution-environments',
       'cloud-services',
       cloudService.id,
     ]);
-  }
-
-  onToggleLink(): void {
-    this.isLinkingEnabled = !this.isLinkingEnabled;
-    this.tableAddAllowed = !this.tableAddAllowed;
   }
 }

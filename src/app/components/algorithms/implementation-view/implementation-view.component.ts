@@ -9,7 +9,10 @@ import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-m
 import { TagDto } from 'api-atlas/models';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import { QueryParams } from '../../generics/data-list/data-list.component';
+import {
+  SelectParams,
+  QueryParams,
+} from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { environment } from '../../../../environments/environment';

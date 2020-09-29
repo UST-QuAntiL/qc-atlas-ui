@@ -4,7 +4,7 @@ import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-envir
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import {
-  DeleteParams,
+  SelectParams,
   QueryParams,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
@@ -101,7 +101,7 @@ export class ComputeResourceListComponent implements OnInit {
       });
   }
 
-  onDeleteComputeResources(deleteParams: DeleteParams): void {
+  onDeleteComputeResources(deleteParams: SelectParams): void {
     this.utilService
       .createDialog(ConfirmDialogComponent, {
         title: 'Confirm Deletion',

@@ -4,9 +4,9 @@
                [variableNames]=variableNames
                [dataColumns]=tableColumns
                [allowAdd]=true
-               [allowSelection]=true
+               [allowDelete]="true"
                (addElement)="onAddImplementation()"
-               (submitSelectedElements)="onDeleteImplementation($event)"
+               (submitDeleteElements)="onDeleteImplementation($event)"
                (elementClicked)="onImplementationClicked($event)">
     </app-table>
   </div>
