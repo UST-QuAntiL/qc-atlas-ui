@@ -10,7 +10,7 @@
         [frontendPublication]="frontendPublication"
         [publication]="publication"
         (updatePublicationField)="updatePublicationField($event)"></app-publication-properties>
-      <button *ngIf="!guard.objectsEqual(frontendPublication, publication)" mat-flat-button color="primary"
+      <button class="mr-4 float-right" *ngIf="!guard.objectsEqual(frontendPublication, publication)" mat-flat-button color="primary"
               (click)="savePublication(frontendPublication, true)">
         Save
         <mat-icon>save</mat-icon>

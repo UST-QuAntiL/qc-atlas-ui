@@ -8,7 +8,7 @@
         [frontendSoftwarePlatform]="frontendSoftwarePlatform"
         [softwarePlatform]="softwarePlatform"
       ></app-software-platform-properties>
-      <button *ngIf="!guard.objectsEqual(frontendSoftwarePlatform, softwarePlatform)" mat-flat-button color="primary"
+      <button class="mr-4 float-right" *ngIf="!guard.objectsEqual(frontendSoftwarePlatform, softwarePlatform)" mat-flat-button color="primary"
               (click)="savePlatform(frontendSoftwarePlatform, true)">
         Save
         <mat-icon>save</mat-icon>

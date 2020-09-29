@@ -8,7 +8,7 @@
         [frontendComputeResource]="frontendComputeResource"
         [computeResource]="computeResource"
       ></app-compute-resource-properties>
-      <button *ngIf="!guard.objectsEqual(frontendComputeResource, computeResource)" mat-flat-button color="primary"
+      <button class="mr-4 float-right" *ngIf="!guard.objectsEqual(frontendComputeResource, computeResource)" mat-flat-button color="primary"
               (click)="saveComputeResource(frontendComputeResource, true)">
         Save
         <mat-icon>save</mat-icon>

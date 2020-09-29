@@ -28,7 +28,7 @@
         (onAddProblemType)="addProblemType($event)"
         (onRemoveProblemType)="removeProblemTypeFromAlgorithm($event)"
       ></app-algorithm-properties>
-      <button *ngIf="!guard.objectsEqual(frontendAlgorithm, algorithm)" mat-flat-button color="primary"
+      <button class="mr-4 float-right" *ngIf="!guard.objectsEqual(frontendAlgorithm, algorithm)" mat-flat-button color="primary"
               (click)="saveAlgorithm(frontendAlgorithm, true)">
         Save
         <mat-icon>save</mat-icon>
