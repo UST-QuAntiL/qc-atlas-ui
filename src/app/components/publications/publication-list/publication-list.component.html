@@ -5,7 +5,7 @@
                [dataColumns]=tableColumns
                [externalLinkVariables]=externalLinkVariables
                [allowAdd]=true
-               [allowSelection]=true
+               [allowDelete]="true"
                [allowSearch]=true
                [allowSort]=true
                [pagination]=pagingInfo
@@ -14,7 +14,7 @@
                (elementClicked)="onElementClicked($event)"
                (urlClicked)="onUrlClicked($event)"
                (addElement)="onAddElement()"
-               (submitSelectedElements)="onDeleteElements($event)"
+               (submitDeleteElements)="onDeleteElements($event)"
                (datalistConfigChanged)="getPublications($event)"
                (pageChange)="getPublicationsHateoas($event)">
     </app-table>

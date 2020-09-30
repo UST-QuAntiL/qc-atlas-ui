@@ -4,14 +4,14 @@
                [variableNames]=variableNames
                [dataColumns]=tableColumns
                [allowAdd]=true
-               [allowSelection]=true
+               [allowDelete]="true"
                [allowSearch]=true
                [allowSort]=true
                [pagination]=pagingInfo
                [paginatorConfig]=paginatorConfig
                (elementClicked)="onElementClicked($event)"
                (addElement)="onAddElement()"
-               (submitSelectedElements)="onDeleteElements($event)"
+               (submitDeleteElements)="onDeleteElements($event)"
                (datalistConfigChanged)="onDatalistConfigChanged($event)"
                (pageChange)="onPageChanged($event)">
     </app-table>

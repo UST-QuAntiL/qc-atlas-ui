@@ -1,13 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
 import { PublicationDto } from 'api-atlas/models/publication-dto';
-import { LinkObject } from '../../generics/data-list/data-list.component';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  LinkObject,
+  QueryParams,
+} from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
-import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
+import { LinkItemListDialogComponent } from '../../generics/dialogs/link-item-list-dialog.component';
+import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-publications-list',
@@ -16,9 +20,7 @@ import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.co
 })
 export class AlgorithmPublicationsListComponent implements OnInit {
   @Input() algorithm: EntityModelAlgorithmDto;
-  @Input() linkedPublications: EntityModelPublicationDto[] = [];
 
-  publications: EntityModelPublicationDto[];
   variableNames: string[] = ['title', 'authors', 'doi'];
   tableColumns: string[] = ['Title', 'Authors', 'DOI'];
   linkObject: LinkObject = {
@@ -26,15 +28,22 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     subtitle: 'Search publications by title',
     displayVariable: 'title',
     data: [],
+    linkedData: [],
   };
   tableAddAllowed = true;
-  isLinkingEnabled = false;
+  pagingInfo: any = {};
+  paginatorConfig: any = {
+    amountChoices: [10, 25, 50],
+    selectedAmount: 10,
+  };
 
   constructor(
     private algorithmService: AlgorithmService,
     private publicationService: PublicationService,
+    private genericDataService: GenericDataService,
     private router: Router,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -52,23 +61,22 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.algorithmService
       .getPublicationsOfAlgorithm(params)
       .subscribe((publications) => {
+        this.linkObject.linkedData = [];
         if (publications._embedded) {
-          this.linkedPublications = publications._embedded.publications;
-        } else {
-          this.linkedPublications = [];
+          this.linkObject.linkedData = publications._embedded.publications;
         }
       });
   }
 
-  searchUnlinkedPublications(search: string): void {
-    // Search for unlinked algorithms if search-text is not empty
-    if (search) {
-      this.publicationService.getPublications({ search }).subscribe((data) => {
-        this.updateLinkablePublications(data._embedded);
-      });
-    } else {
-      this.linkObject.data = [];
+  updatePublicationData(data): void {
+    // clear link object data
+    this.linkObject.data = [];
+    // If publications found
+    if (data._embedded) {
+      this.linkObject.data = data._embedded.publications;
     }
+    this.pagingInfo.page = data.page;
+    this.pagingInfo._links = data._links;
   }
 
   linkPublication(publication: PublicationDto): void {
@@ -104,34 +112,68 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     });
   }
 
-  onAddElement(): void {}
-
   onDatalistConfigChanged(event): void {
     this.getLinkedPublications({ algorithmId: this.algorithm.id });
   }
 
   onElementClicked(publication: PublicationDto): void {
+    this.routeToPublication(publication);
+  }
+
+  routeToPublication(publication: PublicationDto): void {
     this.router.navigate(['publications', publication.id]);
   }
 
-  updateLinkablePublications(publicationData): void {
-    // Clear list of linkable algorithms
-    this.linkObject.data = [];
-    // If linkable algorithms found
-    if (publicationData) {
-      // Search algorithms and filter only those that are not already linked
-      for (const publication of publicationData.publications) {
-        if (
-          !this.linkedPublications.some((publ) => publ.id === publication.id)
-        ) {
-          this.linkObject.data.push(publication);
+  openLinkPublicationDialog() {
+    this.publicationService.getPublications().subscribe((data) => {
+      this.updatePublicationData(data);
+      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
+        width: '800px',
+        data: {
+          title: 'Link existing publication',
+          linkObject: this.linkObject,
+          tableColumns: ['Name', 'Authors'],
+          variableNames: ['title', 'authors'],
+          pagingInfo: this.pagingInfo,
+          paginatorConfig: this.paginatorConfig,
+          noButtonText: 'Cancel',
+        },
+      });
+      const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+        (search: QueryParams) => {
+          this.publicationService
+            .getPublications(search)
+            .subscribe((updatedData) => {
+              this.updatePublicationData(updatedData);
+              dialogRef.componentInstance.data.linkObject = this.linkObject;
+            });
         }
-      }
-    }
-  }
+      );
+      const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
+        (page: string) => {
+          this.genericDataService.getData(page).subscribe((pageData) => {
+            this.updatePublicationData(pageData);
+            dialogRef.componentInstance.data.linkObject = this.linkObject;
+          });
+        }
+      );
+      const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
+        (element: PublicationDto) => {
+          this.routeToPublication(element);
+          dialogRef.close();
+        }
+      );
 
-  onToggleLink(): void {
-    this.isLinkingEnabled = !this.isLinkingEnabled;
-    this.tableAddAllowed = !this.tableAddAllowed;
+      dialogRef.afterClosed().subscribe((dialogResult) => {
+        searchTextSub.unsubscribe();
+        pagingSub.unsubscribe();
+        elementClickedSub.unsubscribe();
+        if (dialogResult) {
+          for (const publication of dialogResult.selectedItems) {
+            this.linkPublication(publication);
+          }
+        }
+      });
+    });
   }
 }

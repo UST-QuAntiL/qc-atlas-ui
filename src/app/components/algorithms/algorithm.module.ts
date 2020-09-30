@@ -19,7 +19,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
-import { AddProblemTypeDialogComponent } from '../problem-types/dialogs/add-problem-type-dialog.component';
 import { NisqAnalyzerModule } from './nisq-analyzer/nisq-analyzer.module';
 import { AlgorithmListComponent } from './algorithm-list/algorithm-list.component';
 import { AlgorithmViewComponent } from './algorithm-view/algorithm-view.component';
@@ -45,7 +44,6 @@ import { ImplementationPropertiesComponent } from './implementation-properties/i
     AlgorithmPublicationsListComponent,
     ProblemTypeTreeComponent,
     AddAlgorithmDialogComponent,
-    AddProblemTypeDialogComponent,
     CreateImplementationDialogComponent,
     AlgorithmRelatedPatternsComponent,
     AddPatternRelationDialogComponent,
@@ -85,7 +83,6 @@ import { ImplementationPropertiesComponent } from './implementation-properties/i
     AlgorithmPublicationsListComponent,
     ProblemTypeTreeComponent,
     AddAlgorithmDialogComponent,
-    AddProblemTypeDialogComponent,
     CreateImplementationDialogComponent,
     AddPatternRelationDialogComponent,
     AddAlgorithmRelationDialogComponent,

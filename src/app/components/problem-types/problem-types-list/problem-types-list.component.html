@@ -4,15 +4,16 @@
                [variableNames]=variableNames
                [dataColumns]=tableColumns
                [allowAdd]=true
-               [allowSelection]=true
+               [allowDelete]=true
                [allowSearch]=true
                [allowSort]=true
+               [allowEdit]=true
                [pagination]=pagingInfo
                [paginatorConfig]=paginatorConfig
                [emptyTableMessage]="'No problem types found'"
-               (elementClicked)="onElementClicked($event)"
                (addElement)="onAddElement()"
                (submitSelectedElements)="onDeleteElements($event)"
+               (updateClicked)="onEditElement($event)"
                (datalistConfigChanged)="getProblemTypes($event)"
                (pageChange)="getProblemTypesHateoas($event)">
     </app-table>
