@@ -8,12 +8,6 @@ import {
 import { ImplementationService as NISQImplementationService } from 'api-nisq/services/implementation.service';
 import { parsePrologRule, PrologRule } from '../../../util/MinimalPrologParser';
 
-export interface ParameterPrologRules {
-  selectionRule: PrologRule;
-  widthRule: PrologRule;
-  depthRule: PrologRule;
-}
-
 @Component({
   selector: 'app-impl-selection-criteria',
   templateUrl: './impl-selection-criteria.component.html',
@@ -25,7 +19,9 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
 
   nisqImpl: NisqImplementationDto;
 
-  paramPrologRules: ParameterPrologRules;
+  paramPrologRules: {
+    selectionRule: PrologRule;
+  };
 
   selection = new SelectionModel<number>(true);
 
@@ -53,8 +49,6 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
     }
     this.paramPrologRules = {
       selectionRule: parsePrologRule(this.nisqImpl.selectionRule),
-      widthRule: parsePrologRule(this.nisqImpl.widthRule),
-      depthRule: parsePrologRule(this.nisqImpl.depthRule),
     };
   }
 
