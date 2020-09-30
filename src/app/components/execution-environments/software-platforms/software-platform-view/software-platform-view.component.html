@@ -2,12 +2,16 @@
   <div class="header-container p-2">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
   </div>
-
   <mat-tab-group>
     <mat-tab label="General">
       <app-software-platform-properties
+        [frontendSoftwarePlatform]="frontendSoftwarePlatform"
         [softwarePlatform]="softwarePlatform"
       ></app-software-platform-properties>
+      <button class="master-save-button" *ngIf="!guard.objectsEqual(frontendSoftwarePlatform, softwarePlatform)" mat-fab
+              (click)="savePlatform(frontendSoftwarePlatform, true)">
+        <mat-icon class="master-save-icon">save</mat-icon>
+      </button>
     </mat-tab>
     <mat-tab label="Implementations">
       <app-software-platform-impl-list

@@ -17,7 +17,10 @@ import { CollectionModelEntityModelCandidateModel } from '../models/collection-m
   providedIn: 'root',
 })
 export class CandidateControllerService extends BaseService {
-  constructor(config: ApiConfiguration, http: HttpClient) {
+  constructor(
+    config: ApiConfiguration,
+    http: HttpClient
+  ) {
     super(config, http);
   }
 
@@ -34,31 +37,24 @@ export class CandidateControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllCandiates$Response(params?: {}): Observable<
-    StrictHttpResponse<CollectionModelEntityModelCandidateModel>
-  > {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      CandidateControllerService.GetAllCandiatesPath,
-      'get'
-    );
+  getAllCandiates$Response(params?: {
+
+  }): Observable<StrictHttpResponse<CollectionModelEntityModelCandidateModel>> {
+
+    const rb = new RequestBuilder(this.rootUrl, CandidateControllerService.GetAllCandiatesPath, 'get');
     if (params) {
+
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            CollectionModelEntityModelCandidateModel
-          >;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<CollectionModelEntityModelCandidateModel>;
+      })
+    );
   }
 
   /**
@@ -69,14 +65,12 @@ export class CandidateControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllCandiates(params?: {}): Observable<
-    CollectionModelEntityModelCandidateModel
-  > {
+  getAllCandiates(params?: {
+
+  }): Observable<CollectionModelEntityModelCandidateModel> {
+
     return this.getAllCandiates$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<CollectionModelEntityModelCandidateModel>) =>
-          r.body as CollectionModelEntityModelCandidateModel
-      )
+      map((r: StrictHttpResponse<CollectionModelEntityModelCandidateModel>) => r.body as CollectionModelEntityModelCandidateModel)
     );
   }
 
@@ -94,29 +88,24 @@ export class CandidateControllerService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createCandidate$Response(params: {
-    body: CandidateModel;
+      body: CandidateModel
   }): Observable<StrictHttpResponse<Candidate>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      CandidateControllerService.CreateCandidatePath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, CandidateControllerService.CreateCandidatePath, 'post');
     if (params) {
+
+
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Candidate>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Candidate>;
+      })
+    );
   }
 
   /**
@@ -127,7 +116,10 @@ export class CandidateControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createCandidate(params: { body: CandidateModel }): Observable<Candidate> {
+  createCandidate(params: {
+      body: CandidateModel
+  }): Observable<Candidate> {
+
     return this.createCandidate$Response(params).pipe(
       map((r: StrictHttpResponse<Candidate>) => r.body as Candidate)
     );
@@ -148,28 +140,24 @@ export class CandidateControllerService extends BaseService {
    */
   getCandidateByUri$Response(params: {
     candidateUri: string;
+
   }): Observable<StrictHttpResponse<Candidate>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      CandidateControllerService.GetCandidateByUriPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, CandidateControllerService.GetCandidateByUriPath, 'get');
     if (params) {
+
       rb.path('candidateUri', params.candidateUri, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Candidate>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Candidate>;
+      })
+    );
   }
 
   /**
@@ -180,7 +168,11 @@ export class CandidateControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getCandidateByUri(params: { candidateUri: string }): Observable<Candidate> {
+  getCandidateByUri(params: {
+    candidateUri: string;
+
+  }): Observable<Candidate> {
+
     return this.getCandidateByUri$Response(params).pipe(
       map((r: StrictHttpResponse<Candidate>) => r.body as Candidate)
     );
@@ -189,8 +181,7 @@ export class CandidateControllerService extends BaseService {
   /**
    * Path part for operation updateCandidateCommentRating
    */
-  static readonly UpdateCandidateCommentRatingPath =
-    '/candidates/comments/{candidateCommentId}/users/{userId}/rating/{rating}';
+  static readonly UpdateCandidateCommentRatingPath = '/candidates/comments/{candidateCommentId}/users/{userId}/rating/{rating}';
 
   /**
    * Update rating of a candidate comment
@@ -204,30 +195,26 @@ export class CandidateControllerService extends BaseService {
     candidateCommentId: string;
     userId: string;
     rating: string;
+
   }): Observable<StrictHttpResponse<Candidate>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      CandidateControllerService.UpdateCandidateCommentRatingPath,
-      'put'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, CandidateControllerService.UpdateCandidateCommentRatingPath, 'put');
     if (params) {
+
       rb.path('candidateCommentId', params.candidateCommentId, {});
       rb.path('userId', params.userId, {});
       rb.path('rating', params.rating, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Candidate>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Candidate>;
+      })
+    );
   }
 
   /**
@@ -242,7 +229,9 @@ export class CandidateControllerService extends BaseService {
     candidateCommentId: string;
     userId: string;
     rating: string;
+
   }): Observable<Candidate> {
+
     return this.updateCandidateCommentRating$Response(params).pipe(
       map((r: StrictHttpResponse<Candidate>) => r.body as Candidate)
     );
@@ -263,28 +252,24 @@ export class CandidateControllerService extends BaseService {
    */
   getCandidateById$Response(params: {
     candidateId: string;
+
   }): Observable<StrictHttpResponse<Candidate>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      CandidateControllerService.GetCandidateByIdPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, CandidateControllerService.GetCandidateByIdPath, 'get');
     if (params) {
+
       rb.path('candidateId', params.candidateId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Candidate>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Candidate>;
+      })
+    );
   }
 
   /**
@@ -295,7 +280,11 @@ export class CandidateControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getCandidateById(params: { candidateId: string }): Observable<Candidate> {
+  getCandidateById(params: {
+    candidateId: string;
+
+  }): Observable<Candidate> {
+
     return this.getCandidateById$Response(params).pipe(
       map((r: StrictHttpResponse<Candidate>) => r.body as Candidate)
     );
@@ -316,31 +305,25 @@ export class CandidateControllerService extends BaseService {
    */
   updateCandidate$Response(params: {
     candidateId: string;
-    body: Candidate;
+      body: Candidate
   }): Observable<StrictHttpResponse<Candidate>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      CandidateControllerService.UpdateCandidatePath,
-      'put'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, CandidateControllerService.UpdateCandidatePath, 'put');
     if (params) {
+
       rb.path('candidateId', params.candidateId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Candidate>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Candidate>;
+      })
+    );
   }
 
   /**
@@ -353,8 +336,9 @@ export class CandidateControllerService extends BaseService {
    */
   updateCandidate(params: {
     candidateId: string;
-    body: Candidate;
+      body: Candidate
   }): Observable<Candidate> {
+
     return this.updateCandidate$Response(params).pipe(
       map((r: StrictHttpResponse<Candidate>) => r.body as Candidate)
     );
@@ -375,28 +359,24 @@ export class CandidateControllerService extends BaseService {
    */
   deleteCandidateById$Response(params: {
     candidateId: string;
+
   }): Observable<StrictHttpResponse<{}>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      CandidateControllerService.DeleteCandidateByIdPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, CandidateControllerService.DeleteCandidateByIdPath, 'delete');
     if (params) {
+
       rb.path('candidateId', params.candidateId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{}>;
+      })
+    );
   }
 
   /**
@@ -407,7 +387,11 @@ export class CandidateControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteCandidateById(params: { candidateId: string }): Observable<{}> {
+  deleteCandidateById(params: {
+    candidateId: string;
+
+  }): Observable<{}> {
+
     return this.deleteCandidateById$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -416,8 +400,7 @@ export class CandidateControllerService extends BaseService {
   /**
    * Path part for operation createCandidateComment
    */
-  static readonly CreateCandidateCommentPath =
-    '/candidates/{candidateId}/comments/{userId}';
+  static readonly CreateCandidateCommentPath = '/candidates/{candidateId}/comments/{userId}';
 
   /**
    * Create a candidate comment
@@ -430,32 +413,26 @@ export class CandidateControllerService extends BaseService {
   createCandidateComment$Response(params: {
     candidateId: string;
     userId: string;
-    body: CandidateComment;
+      body: CandidateComment
   }): Observable<StrictHttpResponse<Candidate>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      CandidateControllerService.CreateCandidateCommentPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, CandidateControllerService.CreateCandidateCommentPath, 'post');
     if (params) {
+
       rb.path('candidateId', params.candidateId, {});
       rb.path('userId', params.userId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Candidate>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Candidate>;
+      })
+    );
   }
 
   /**
@@ -469,8 +446,9 @@ export class CandidateControllerService extends BaseService {
   createCandidateComment(params: {
     candidateId: string;
     userId: string;
-    body: CandidateComment;
+      body: CandidateComment
   }): Observable<Candidate> {
+
     return this.createCandidateComment$Response(params).pipe(
       map((r: StrictHttpResponse<Candidate>) => r.body as Candidate)
     );
@@ -479,8 +457,7 @@ export class CandidateControllerService extends BaseService {
   /**
    * Path part for operation updateCandidateRating
    */
-  static readonly UpdateCandidateRatingPath =
-    '/candidates/{candidateId}/users/{userId}/rating/{rating}';
+  static readonly UpdateCandidateRatingPath = '/candidates/{candidateId}/users/{userId}/rating/{rating}';
 
   /**
    * Update rating of a candidate
@@ -494,30 +471,26 @@ export class CandidateControllerService extends BaseService {
     candidateId: string;
     userId: string;
     rating: string;
+
   }): Observable<StrictHttpResponse<Candidate>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      CandidateControllerService.UpdateCandidateRatingPath,
-      'put'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, CandidateControllerService.UpdateCandidateRatingPath, 'put');
     if (params) {
+
       rb.path('candidateId', params.candidateId, {});
       rb.path('userId', params.userId, {});
       rb.path('rating', params.rating, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Candidate>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Candidate>;
+      })
+    );
   }
 
   /**
@@ -532,9 +505,12 @@ export class CandidateControllerService extends BaseService {
     candidateId: string;
     userId: string;
     rating: string;
+
   }): Observable<Candidate> {
+
     return this.updateCandidateRating$Response(params).pipe(
       map((r: StrictHttpResponse<Candidate>) => r.body as Candidate)
     );
   }
+
 }

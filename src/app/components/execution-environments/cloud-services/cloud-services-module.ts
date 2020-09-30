@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { CloudServiceViewComponent } from './cloud-service-view/cloud-service-view.component';
@@ -37,6 +38,7 @@ import { CreateCloudServiceDialogComponent } from './dialogs/create-cloud-servic
     MatButtonModule,
     MatInputModule,
     FormsModule,
+    MatIconModule,
   ],
   exports: [CloudServiceViewComponent, CloudServiceListComponent],
 })

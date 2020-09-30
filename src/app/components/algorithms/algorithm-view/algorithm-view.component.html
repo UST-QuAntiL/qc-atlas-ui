@@ -18,6 +18,7 @@
   <mat-tab-group>
     <mat-tab label="General">
       <app-algorithm-properties
+        [frontendAlgorithm]="frontendAlgorithm"
         [algorithm]="algorithm"
         [linkedProblemTypes]="problemTypes"
         [linkedApplicationAreas]="applicationAreas"
@@ -27,6 +28,10 @@
         (onAddProblemType)="addProblemType($event)"
         (onRemoveProblemType)="removeProblemTypeFromAlgorithm($event)"
       ></app-algorithm-properties>
+      <button class="master-save-button" *ngIf="!guard.objectsEqual(frontendAlgorithm, algorithm)" mat-fab
+              (click)="saveAlgorithm(frontendAlgorithm, true)">
+        <mat-icon class="master-save-icon">save</mat-icon>
+      </button>
     </mat-tab>
     <mat-tab label="Implementations">
       <app-algorithm-implementations-list

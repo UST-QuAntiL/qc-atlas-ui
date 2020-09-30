@@ -22,7 +22,6 @@ import {
   ProblemTypeTreeComponent,
 } from '../problem-type-tree/problem-type-tree.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import { UtilService } from '../../../util/util.service';
 import {
   quantumComputationModelOptions,
   sketchOptions,
@@ -53,6 +52,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   }> = new EventEmitter<{ field; value }>();
 
   @Input() algorithm: EntityModelAlgorithmDto;
+  @Input() frontendAlgorithm: EntityModelAlgorithmDto;
   @Input() linkedProblemTypes: EntityModelProblemTypeDto[];
   @Input() linkedApplicationAreas: EntityModelApplicationAreaDto[];
 
@@ -93,8 +93,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   constructor(
     private algorithmService: AlgorithmService,
     private applicationAreaService: ApplicationAreasService,
-    private problemTypeService: ProblemTypeService,
-    private utilService: UtilService
+    private problemTypeService: ProblemTypeService
   ) {}
 
   ngOnInit(): void {
@@ -218,6 +217,10 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
 
   onChangesSaved(value: any, field: string): void {
     this.updateAlgorithmField.emit({ field, value });
+  }
+
+  onPropertyChanged(value: any, field: string): void {
+    this.frontendAlgorithm[field] = value;
   }
 
   addApplicationAreaEvent(

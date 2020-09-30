@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import * as deepEqual from 'fast-deep-equal';
 import { MissingEntityDialogComponent } from '../components/dialogs/missing-entity-dialog.component';
 
 @Injectable({
@@ -47,5 +48,9 @@ export class UtilService {
     if (id === selectedEntity.id) {
       return this.isSelectedColor;
     }
+  }
+
+  public objectsEqual(source: any, target: any): boolean {
+    return deepEqual(source, target);
   }
 }

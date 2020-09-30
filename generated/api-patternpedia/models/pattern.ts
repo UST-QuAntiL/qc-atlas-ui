@@ -1,8 +1,2 @@
 /* tslint:disable */
-export type Pattern = {
-  id?: string;
-  uri?: string;
-  name?: string;
-  iconUrl?: string;
-  content: {};
-};
+export type Pattern = { 'id'?: string, 'uri'?: string, 'name'?: string, 'iconUrl'?: string, 'content': {} };

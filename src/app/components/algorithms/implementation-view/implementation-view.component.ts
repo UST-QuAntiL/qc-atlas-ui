@@ -6,7 +6,11 @@ import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
-import { TagDto } from 'api-atlas/models';
+import {
+  EntityModelAlgorithmDto,
+  EntityModelImplementationDto,
+  TagDto,
+} from 'api-atlas/models';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import {
@@ -15,6 +19,7 @@ import {
 } from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
+import { ChangePageGuard } from '../../../services/deactivation-guard';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -23,6 +28,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class ImplementationViewComponent implements OnInit {
   implementation: ImplementationDto;
+  frontendImplementation: ImplementationDto;
   algorithm: AlgorithmDto;
   softwarePlatformOptions: Option[];
   tags: TagDto[] = [];
@@ -49,11 +55,50 @@ export class ImplementationViewComponent implements OnInit {
     private publicationService: PublicationService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private utilService: UtilService
+    private utilService: UtilService,
+    public guard: ChangePageGuard
   ) {}
 
   ngOnInit(): void {
     this.loadGeneral();
+  }
+
+  saveImplementation(
+    updatedImplementation: ImplementationDto,
+    updateFrontendImplementation: boolean
+  ) {
+    this.algorithmService
+      .updateImplementation({
+        algorithmId: this.algorithm.id,
+        implementationId: this.implementation.id,
+        body: updatedImplementation,
+      })
+      .subscribe(
+        (impl) => {
+          this.implementation = impl;
+          if (updateFrontendImplementation) {
+            this.frontendImplementation = JSON.parse(
+              JSON.stringify(impl)
+            ) as ImplementationDto;
+          }
+          // live refresh name
+          let subheading = this.algorithm.computationModel
+            .toString()
+            .toLowerCase();
+          subheading =
+            subheading[0].toUpperCase() +
+            subheading.slice(1) +
+            ' Implementation';
+          this.links[1] = {
+            heading: this.implementation.name,
+            subHeading: subheading,
+          };
+          this.utilService.callSnackBar('Successfully updated implementation');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   changeTab(tabNumber: number): void {
@@ -179,33 +224,7 @@ export class ImplementationViewComponent implements OnInit {
 
   updateImplementationField(event: { field; value }): void {
     this.implementation[event.field] = event.value;
-    this.algorithmService
-      .updateImplementation({
-        algorithmId: this.implementation.implementedAlgorithmId,
-        implementationId: this.implementation.id,
-        body: this.implementation,
-      })
-      .subscribe(
-        (impl) => {
-          this.implementation = impl;
-          // live refresh name
-          let subheading = this.algorithm.computationModel
-            .toString()
-            .toLowerCase();
-          subheading =
-            subheading[0].toUpperCase() +
-            subheading.slice(1) +
-            ' Implementation';
-          this.links[1] = {
-            heading: this.implementation.name,
-            subHeading: subheading,
-          };
-          this.utilService.callSnackBar('Successfully updated implementation');
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.saveImplementation(this.implementation, false);
   }
 
   private loadGeneral(): void {
@@ -239,6 +258,9 @@ export class ImplementationViewComponent implements OnInit {
         .getImplementation({ algorithmId: algoId, implementationId: implId })
         .subscribe((impl) => {
           this.implementation = impl;
+          this.frontendImplementation = JSON.parse(
+            JSON.stringify(impl)
+          ) as EntityModelImplementationDto;
           this.links[1].heading = this.implementation.name;
           this.fetchComputeResourceProperties();
           this.getTagsForImplementation(algoId, implId);

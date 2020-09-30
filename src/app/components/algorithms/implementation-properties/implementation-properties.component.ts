@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
+import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 
 @Component({
   selector: 'app-implementation-properties',
@@ -9,6 +10,7 @@ import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-m
 })
 export class ImplementationPropertiesComponent implements OnInit {
   @Input() implementation: ImplementationDto;
+  @Input() frontendImplementation: ImplementationDto;
   @Input()
   computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
   @Output() addComputeResourceProperty: EventEmitter<
@@ -30,6 +32,10 @@ export class ImplementationPropertiesComponent implements OnInit {
 
   onChangesSaved(value: any, field: string): void {
     this.updateImplementationField.emit({ field, value });
+  }
+
+  onPropertyChanged(value: any, field: string): void {
+    this.frontendImplementation[field] = value;
   }
 
   onAddComputeResourceProperty(

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractValueAccessor, DoProvider } from './abstract-value-accessor';
 
 export interface Option {
@@ -12,27 +12,30 @@ export interface Option {
   styleUrls: ['./select-input.component.scss'],
   providers: [DoProvider(SelectInputComponent)],
 })
-export class SelectInputComponent extends AbstractValueAccessor {
+export class SelectInputComponent implements OnInit {
   @Output() onSaveChanges: EventEmitter<string> = new EventEmitter<string>();
-
+  @Output() onChange: EventEmitter<string> = new EventEmitter<string>();
   @Input() name = '';
+  @Input() value: string;
   @Input() choices: Option[] = [];
   @Input() includeEmpty = false;
   @Input() editable = true;
 
-  isBeingEdited = false;
+  inputValue: string;
 
-  toggleEdit(): void {
-    if (!this.editable) {
-      return;
-    }
-    if (this.isBeingEdited) {
-      this.onSaveChanges.emit(this.value);
-    }
-    this.isBeingEdited = !this.isBeingEdited;
+  saveChanges(): void {
+    this.onSaveChanges.emit(this.inputValue);
   }
 
   get selectedValue() {
     return this.choices.find((opt) => opt.value === this.value)?.label || 'n/a';
+  }
+
+  inputChanged(): void {
+    this.onChange.emit(this.inputValue);
+  }
+
+  ngOnInit(): void {
+    this.inputValue = this.value;
   }
 }

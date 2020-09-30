@@ -36,6 +36,7 @@ import { ComputeResourcePropertyModule } from './components/compute-resource-pro
 import { ExecutionEnvironmentsModule } from './components/execution-environments/execution-environments.module';
 import { PublicationModule } from './components/publications/publication.module';
 import { ServicesModule } from './services/services.module';
+import { ChangePageGuard } from './services/deactivation-guard';
 import { LinkItemListDialogComponent } from './components/generics/dialogs/link-item-list-dialog.component';
 import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
 import { AddProblemTypeDialogComponent } from './components/problem-types/dialogs/add-problem-type/add-problem-type-dialog.component';
@@ -101,6 +102,6 @@ import { EditApplicationAreaDialogComponent } from './components/application-are
   ],
   bootstrap: [AppComponent],
   exports: [],
-  providers: [UtilService],
+  providers: [UtilService, ChangePageGuard],
 })
 export class AppModule {}

@@ -1,2 +1,2 @@
 /* tslint:disable */
-export type UndirectedEdge = { id?: string; description?: {}; type?: string };
+export type UndirectedEdge = { 'id'?: string, 'description'?: {}, 'type'?: string };

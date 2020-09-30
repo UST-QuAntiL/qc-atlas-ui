@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LinkObject } from '../data-list/data-list.component';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-chip-collection',
@@ -7,8 +8,10 @@ import { LinkObject } from '../data-list/data-list.component';
   styleUrls: ['./chip-collection.component.scss'],
 })
 export class ChipCollectionComponent implements OnInit {
-  @Output() onRemoveElement: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onAddElement: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onUnlinkElement: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onLinkElement: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onElementsChanged: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onSaveChanges: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSearchTextChanged: EventEmitter<string> = new EventEmitter<
     string
   >();
@@ -20,19 +23,40 @@ export class ChipCollectionComponent implements OnInit {
   @Input() linkObject: LinkObject;
 
   inputValue = '';
+  inputElements: any[] = [];
 
-  constructor() {}
+  constructor(public utilService: UtilService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.inputElements = this.elements
+      ? JSON.parse(JSON.stringify(this.elements))
+      : [];
+  }
 
   addElement(): void {
     if (this.inputValue.trim() !== '') {
-      this.onAddElement.emit(this.inputValue);
+      if (this.useToAddLinks) {
+        this.onLinkElement.emit(this.inputValue);
+      } else {
+        this.inputElements.push(this.inputValue);
+        this.onElementsChanged.emit(this.inputElements);
+      }
     }
     this.inputValue = '';
   }
 
   removeElement(element: any): void {
-    this.onRemoveElement.emit(element);
+    if (this.useToAddLinks) {
+      this.onUnlinkElement.emit(element);
+    } else {
+      this.inputElements = this.inputElements.filter(
+        (author) => author !== element
+      );
+      this.onElementsChanged.emit(this.inputElements);
+    }
+  }
+
+  saveChanges(): void {
+    this.onSaveChanges.emit(this.inputElements);
   }
 }

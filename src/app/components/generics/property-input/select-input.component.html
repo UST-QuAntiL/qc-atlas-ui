@@ -1,19 +1,19 @@
 <mat-form-field>
   <mat-label class="input-label">{{ name }}</mat-label>
-  <mat-select *ngIf="isBeingEdited" [(ngModel)]="value">
+  <mat-select [(ngModel)]="inputValue" (ngModelChange)="inputChanged()">
     <mat-option *ngIf="includeEmpty" value="">&#8208; none &#8208;</mat-option>
     <mat-option *ngFor="let opt of choices" [value]="opt.value">{{
       opt.label
     }}</mat-option>
   </mat-select>
-  <input matInput disabled *ngIf="!isBeingEdited" [value]="selectedValue" />
+
   <button
+    *ngIf="inputValue !== value"
     mat-button
     matSuffix
     mat-icon-button
     aria-label="Clear"
-    (click)="toggleEdit()"
-  >
-    <mat-icon>{{ isBeingEdited ? 'save' : 'edit' }}</mat-icon>
+    (click)="saveChanges(); $event.stopPropagation()">
+    <mat-icon>save</mat-icon>
   </button>
 </mat-form-field>

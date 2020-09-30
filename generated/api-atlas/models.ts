@@ -21,6 +21,7 @@ export { EntityModelPatternRelationDto } from './models/entity-model-pattern-rel
 export { EntityModelPatternRelationTypeDto } from './models/entity-model-pattern-relation-type-dto';
 export { EntityModelProblemTypeDto } from './models/entity-model-problem-type-dto';
 export { EntityModelPublicationDto } from './models/entity-model-publication-dto';
+export { EntityModelSketchDto } from './models/entity-model-sketch-dto';
 export { EntityModelSoftwarePlatformDto } from './models/entity-model-software-platform-dto';
 export { EntityModelTagDto } from './models/entity-model-tag-dto';
 export { ImplementationDto } from './models/implementation-dto';
@@ -32,6 +33,6 @@ export { ProblemTypeDto } from './models/problem-type-dto';
 export { PublicationDto } from './models/publication-dto';
 export { QuantumAlgorithmDto } from './models/quantum-algorithm-dto';
 export { QuantumImplementationDto } from './models/quantum-implementation-dto';
-export { Sketch } from './models/sketch';
+export { SketchDto } from './models/sketch-dto';
 export { SoftwarePlatformDto } from './models/software-platform-dto';
 export { TagDto } from './models/tag-dto';

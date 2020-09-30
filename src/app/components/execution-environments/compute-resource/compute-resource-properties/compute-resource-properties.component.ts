@@ -11,8 +11,8 @@ import { UpdateFieldEventService } from '../../../../services/update-field-event
   styleUrls: ['./compute-resource-properties.component.scss'],
 })
 export class ComputeResourcePropertiesComponent implements OnInit {
-  @Input()
-  public computeResource: ComputeResourceDto;
+  @Input() computeResource: ComputeResourceDto;
+  @Input() frontendComputeResource: ComputeResourceDto;
 
   computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
 
@@ -26,7 +26,9 @@ export class ComputeResourcePropertiesComponent implements OnInit {
   ngOnInit(): void {
     this.fetchComputeResourceProperties();
   }
-
+  onPropertyChanged(value: any, field: string): void {
+    this.frontendComputeResource[field] = value;
+  }
   onChangesSaved(value: any, field: string): void {
     this.updateFieldService.updateComputeResourceFieldChannel.emit({
       field,

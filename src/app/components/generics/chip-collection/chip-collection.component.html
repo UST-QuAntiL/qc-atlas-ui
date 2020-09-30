@@ -11,17 +11,31 @@
                 aria-label="Clear">
           <mat-icon>add</mat-icon>
         </button>
+        <button *ngIf="!useToAddLinks && !utilService.objectsEqual(inputElements, elements)"
+                mat-button
+                matSuffix
+                mat-icon-button
+                aria-label="Clear"
+                (click)="saveChanges()">
+          <mat-icon>save</mat-icon>
+        </button>
       </mat-form-field>
-      <label class="mr-4">{{title}}</label>
       <app-link-input *ngIf="useToAddLinks"
                       [linkObject]="linkObject"
                       [isDisableable]=false
                       (searchTextChanged)="onSearchTextChanged.emit($event)"
-                      (linkElement)="onAddElement.emit($event)">
+                      (linkElement)="onLinkElement.emit($event)">
       </app-link-input>
     </div>
   </div>
-  <mat-chip-list>
+  <mat-chip-list *ngIf="!useToAddLinks">
+    <mat-chip *ngFor="let element of inputElements" [removable]="allowEmpty || (!allowEmpty && inputElements.length > 1)" (removed)="removeElement(element)">
+      {{ displayVariable ? element[displayVariable] : element }}
+      <mat-icon *ngIf="allowEmpty || (!allowEmpty && inputElements.length > 1)" matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+  <!-- Check if this duplicate code can be avoided -->
+  <mat-chip-list *ngIf="useToAddLinks">
     <mat-chip *ngFor="let element of elements" [removable]="allowEmpty || (!allowEmpty && elements.length > 1)" (removed)="removeElement(element)">
       {{ displayVariable ? element[displayVariable] : element }}
       <mat-icon *ngIf="allowEmpty || (!allowEmpty && elements.length > 1)" matChipRemove>cancel</mat-icon>

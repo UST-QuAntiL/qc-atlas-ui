@@ -2,13 +2,17 @@
   <div class="header-container p-2">
     <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
   </div>
-
   <mat-tab-group>
     <mat-tab label="General">
       <app-cloud-service-properties
+        [frontendCloudService]="frontendCloudService"
         [cloudService]="cloudService"
         (updateCloudServiceField)="updateCloudServiceField($event)"
       ></app-cloud-service-properties>
+      <button class="master-save-button" *ngIf="!guard.objectsEqual(frontendCloudService, cloudService)" mat-fab
+              (click)="saveCloudService(frontendCloudService, true)">
+        <mat-icon class="master-save-icon">save</mat-icon>
+      </button>
     </mat-tab>
     <mat-tab label="Software Platforms">
       <app-cloud-service-software-platform-list

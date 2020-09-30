@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
@@ -42,6 +43,7 @@ import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-r
     MatButtonModule,
     FormsModule,
     ComputeResourcePropertyModule,
+    MatIconModule,
     MatProgressSpinnerModule,
   ],
   exports: [ComputeResourceViewComponent, ComputeResourceListComponent],

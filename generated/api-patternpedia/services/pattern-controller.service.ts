@@ -17,15 +17,17 @@ import { Pattern } from '../models/pattern';
   providedIn: 'root',
 })
 export class PatternControllerService extends BaseService {
-  constructor(config: ApiConfiguration, http: HttpClient) {
+  constructor(
+    config: ApiConfiguration,
+    http: HttpClient
+  ) {
     super(config, http);
   }
 
   /**
    * Path part for operation getPatternsOfPatternLanguage
    */
-  static readonly GetPatternsOfPatternLanguagePath =
-    '/patternLanguages/{patternLanguageId}/patterns';
+  static readonly GetPatternsOfPatternLanguagePath = '/patternLanguages/{patternLanguageId}/patterns';
 
   /**
    * Retrieve patterns by pattern language id
@@ -37,30 +39,24 @@ export class PatternControllerService extends BaseService {
    */
   getPatternsOfPatternLanguage$Response(params: {
     patternLanguageId: string;
+
   }): Observable<StrictHttpResponse<CollectionModelEntityModelPatternModel>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.GetPatternsOfPatternLanguagePath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.GetPatternsOfPatternLanguagePath, 'get');
     if (params) {
+
       rb.path('patternLanguageId', params.patternLanguageId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            CollectionModelEntityModelPatternModel
-          >;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<CollectionModelEntityModelPatternModel>;
+      })
+    );
   }
 
   /**
@@ -73,20 +69,18 @@ export class PatternControllerService extends BaseService {
    */
   getPatternsOfPatternLanguage(params: {
     patternLanguageId: string;
+
   }): Observable<CollectionModelEntityModelPatternModel> {
+
     return this.getPatternsOfPatternLanguage$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<CollectionModelEntityModelPatternModel>) =>
-          r.body as CollectionModelEntityModelPatternModel
-      )
+      map((r: StrictHttpResponse<CollectionModelEntityModelPatternModel>) => r.body as CollectionModelEntityModelPatternModel)
     );
   }
 
   /**
    * Path part for operation addPatternToPatternLanguage
    */
-  static readonly AddPatternToPatternLanguagePath =
-    '/patternLanguages/{patternLanguageId}/patterns';
+  static readonly AddPatternToPatternLanguagePath = '/patternLanguages/{patternLanguageId}/patterns';
 
   /**
    * Delete pattern from pattern view
@@ -98,31 +92,25 @@ export class PatternControllerService extends BaseService {
    */
   addPatternToPatternLanguage$Response(params: {
     patternLanguageId: string;
-    body: Pattern;
+      body: Pattern
   }): Observable<StrictHttpResponse<{}>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.AddPatternToPatternLanguagePath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.AddPatternToPatternLanguagePath, 'post');
     if (params) {
+
       rb.path('patternLanguageId', params.patternLanguageId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{}>;
+      })
+    );
   }
 
   /**
@@ -135,8 +123,9 @@ export class PatternControllerService extends BaseService {
    */
   addPatternToPatternLanguage(params: {
     patternLanguageId: string;
-    body: Pattern;
+      body: Pattern
   }): Observable<{}> {
+
     return this.addPatternToPatternLanguage$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -145,8 +134,7 @@ export class PatternControllerService extends BaseService {
   /**
    * Path part for operation getPatternOfPatternLanguageById
    */
-  static readonly GetPatternOfPatternLanguageByIdPath =
-    '/patternLanguages/{patternLanguageId}/patterns/{patternId}';
+  static readonly GetPatternOfPatternLanguageByIdPath = '/patternLanguages/{patternLanguageId}/patterns/{patternId}';
 
   /**
    * Retrieve single pattern by pattern language id
@@ -159,29 +147,25 @@ export class PatternControllerService extends BaseService {
   getPatternOfPatternLanguageById$Response(params: {
     patternLanguageId: string;
     patternId: string;
+
   }): Observable<StrictHttpResponse<EntityModelPattern>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.GetPatternOfPatternLanguageByIdPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.GetPatternOfPatternLanguageByIdPath, 'get');
     if (params) {
+
       rb.path('patternLanguageId', params.patternLanguageId, {});
       rb.path('patternId', params.patternId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<EntityModelPattern>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<EntityModelPattern>;
+      })
+    );
   }
 
   /**
@@ -195,20 +179,18 @@ export class PatternControllerService extends BaseService {
   getPatternOfPatternLanguageById(params: {
     patternLanguageId: string;
     patternId: string;
+
   }): Observable<EntityModelPattern> {
+
     return this.getPatternOfPatternLanguageById$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<EntityModelPattern>) =>
-          r.body as EntityModelPattern
-      )
+      map((r: StrictHttpResponse<EntityModelPattern>) => r.body as EntityModelPattern)
     );
   }
 
   /**
    * Path part for operation updatePatternByPatternLanguageId
    */
-  static readonly UpdatePatternByPatternLanguageIdPath =
-    '/patternLanguages/{patternLanguageId}/patterns/{patternId}';
+  static readonly UpdatePatternByPatternLanguageIdPath = '/patternLanguages/{patternLanguageId}/patterns/{patternId}';
 
   /**
    * Update pattern by pattern language id
@@ -221,32 +203,26 @@ export class PatternControllerService extends BaseService {
   updatePatternByPatternLanguageId$Response(params: {
     patternLanguageId: string;
     patternId: string;
-    body: Pattern;
+      body: Pattern
   }): Observable<StrictHttpResponse<EntityModelPattern>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.UpdatePatternByPatternLanguageIdPath,
-      'put'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.UpdatePatternByPatternLanguageIdPath, 'put');
     if (params) {
+
       rb.path('patternLanguageId', params.patternLanguageId, {});
       rb.path('patternId', params.patternId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<EntityModelPattern>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<EntityModelPattern>;
+      })
+    );
   }
 
   /**
@@ -260,21 +236,18 @@ export class PatternControllerService extends BaseService {
   updatePatternByPatternLanguageId(params: {
     patternLanguageId: string;
     patternId: string;
-    body: Pattern;
+      body: Pattern
   }): Observable<EntityModelPattern> {
+
     return this.updatePatternByPatternLanguageId$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<EntityModelPattern>) =>
-          r.body as EntityModelPattern
-      )
+      map((r: StrictHttpResponse<EntityModelPattern>) => r.body as EntityModelPattern)
     );
   }
 
   /**
    * Path part for operation deletePatternOfPatternLanguage
    */
-  static readonly DeletePatternOfPatternLanguagePath =
-    '/patternLanguages/{patternLanguageId}/patterns/{patternId}';
+  static readonly DeletePatternOfPatternLanguagePath = '/patternLanguages/{patternLanguageId}/patterns/{patternId}';
 
   /**
    * Delete pattern of pattern language
@@ -287,29 +260,25 @@ export class PatternControllerService extends BaseService {
   deletePatternOfPatternLanguage$Response(params: {
     patternLanguageId: string;
     patternId: string;
+
   }): Observable<StrictHttpResponse<{}>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.DeletePatternOfPatternLanguagePath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.DeletePatternOfPatternLanguagePath, 'delete');
     if (params) {
+
       rb.path('patternLanguageId', params.patternLanguageId, {});
       rb.path('patternId', params.patternId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{}>;
+      })
+    );
   }
 
   /**
@@ -323,7 +292,9 @@ export class PatternControllerService extends BaseService {
   deletePatternOfPatternLanguage(params: {
     patternLanguageId: string;
     patternId: string;
+
   }): Observable<{}> {
+
     return this.deletePatternOfPatternLanguage$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -332,8 +303,7 @@ export class PatternControllerService extends BaseService {
   /**
    * Path part for operation getPatternContent
    */
-  static readonly GetPatternContentPath =
-    '/patternLanguages/{patternLanguageId}/patterns/{patternId}/content';
+  static readonly GetPatternContentPath = '/patternLanguages/{patternLanguageId}/patterns/{patternId}/content';
 
   /**
    * Get content of pattern
@@ -346,29 +316,25 @@ export class PatternControllerService extends BaseService {
   getPatternContent$Response(params: {
     patternLanguageId: string;
     patternId: string;
+
   }): Observable<StrictHttpResponse<EntityModelObject>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.GetPatternContentPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.GetPatternContentPath, 'get');
     if (params) {
+
       rb.path('patternLanguageId', params.patternLanguageId, {});
       rb.path('patternId', params.patternId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<EntityModelObject>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<EntityModelObject>;
+      })
+    );
   }
 
   /**
@@ -382,20 +348,18 @@ export class PatternControllerService extends BaseService {
   getPatternContent(params: {
     patternLanguageId: string;
     patternId: string;
+
   }): Observable<EntityModelObject> {
+
     return this.getPatternContent$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<EntityModelObject>) =>
-          r.body as EntityModelObject
-      )
+      map((r: StrictHttpResponse<EntityModelObject>) => r.body as EntityModelObject)
     );
   }
 
   /**
    * Path part for operation getPatternsOfPatternView
    */
-  static readonly GetPatternsOfPatternViewPath =
-    '/patternViews/{patternViewId}/patterns';
+  static readonly GetPatternsOfPatternViewPath = '/patternViews/{patternViewId}/patterns';
 
   /**
    * Retrieve patterns by pattern view id
@@ -407,30 +371,24 @@ export class PatternControllerService extends BaseService {
    */
   getPatternsOfPatternView$Response(params: {
     patternViewId: string;
+
   }): Observable<StrictHttpResponse<CollectionModelEntityModelPatternModel>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.GetPatternsOfPatternViewPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.GetPatternsOfPatternViewPath, 'get');
     if (params) {
+
       rb.path('patternViewId', params.patternViewId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            CollectionModelEntityModelPatternModel
-          >;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<CollectionModelEntityModelPatternModel>;
+      })
+    );
   }
 
   /**
@@ -443,20 +401,18 @@ export class PatternControllerService extends BaseService {
    */
   getPatternsOfPatternView(params: {
     patternViewId: string;
+
   }): Observable<CollectionModelEntityModelPatternModel> {
+
     return this.getPatternsOfPatternView$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<CollectionModelEntityModelPatternModel>) =>
-          r.body as CollectionModelEntityModelPatternModel
-      )
+      map((r: StrictHttpResponse<CollectionModelEntityModelPatternModel>) => r.body as CollectionModelEntityModelPatternModel)
     );
   }
 
   /**
    * Path part for operation addPatternToPatternView
    */
-  static readonly AddPatternToPatternViewPath =
-    '/patternViews/{patternViewId}/patterns';
+  static readonly AddPatternToPatternViewPath = '/patternViews/{patternViewId}/patterns';
 
   /**
    * add pattern to pattern view
@@ -468,31 +424,25 @@ export class PatternControllerService extends BaseService {
    */
   addPatternToPatternView$Response(params: {
     patternViewId: string;
-    body: Pattern;
+      body: Pattern
   }): Observable<StrictHttpResponse<{}>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.AddPatternToPatternViewPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.AddPatternToPatternViewPath, 'post');
     if (params) {
+
       rb.path('patternViewId', params.patternViewId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{}>;
+      })
+    );
   }
 
   /**
@@ -505,8 +455,9 @@ export class PatternControllerService extends BaseService {
    */
   addPatternToPatternView(params: {
     patternViewId: string;
-    body: Pattern;
+      body: Pattern
   }): Observable<{}> {
+
     return this.addPatternToPatternView$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -515,8 +466,7 @@ export class PatternControllerService extends BaseService {
   /**
    * Path part for operation getPatternOfPatternViewById
    */
-  static readonly GetPatternOfPatternViewByIdPath =
-    '/patternViews/{patternViewId}/patterns/{patternId}';
+  static readonly GetPatternOfPatternViewByIdPath = '/patternViews/{patternViewId}/patterns/{patternId}';
 
   /**
    * Retrieve single pattern by pattern view id
@@ -529,29 +479,25 @@ export class PatternControllerService extends BaseService {
   getPatternOfPatternViewById$Response(params: {
     patternViewId: string;
     patternId: string;
+
   }): Observable<StrictHttpResponse<EntityModelPattern>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.GetPatternOfPatternViewByIdPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.GetPatternOfPatternViewByIdPath, 'get');
     if (params) {
+
       rb.path('patternViewId', params.patternViewId, {});
       rb.path('patternId', params.patternId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<EntityModelPattern>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<EntityModelPattern>;
+      })
+    );
   }
 
   /**
@@ -565,20 +511,18 @@ export class PatternControllerService extends BaseService {
   getPatternOfPatternViewById(params: {
     patternViewId: string;
     patternId: string;
+
   }): Observable<EntityModelPattern> {
+
     return this.getPatternOfPatternViewById$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<EntityModelPattern>) =>
-          r.body as EntityModelPattern
-      )
+      map((r: StrictHttpResponse<EntityModelPattern>) => r.body as EntityModelPattern)
     );
   }
 
   /**
    * Path part for operation removePatternFromView
    */
-  static readonly RemovePatternFromViewPath =
-    '/patternViews/{patternViewId}/patterns/{patternId}';
+  static readonly RemovePatternFromViewPath = '/patternViews/{patternViewId}/patterns/{patternId}';
 
   /**
    * Delete pattern from pattern view
@@ -591,29 +535,25 @@ export class PatternControllerService extends BaseService {
   removePatternFromView$Response(params: {
     patternViewId: string;
     patternId: string;
+
   }): Observable<StrictHttpResponse<{}>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.RemovePatternFromViewPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.RemovePatternFromViewPath, 'delete');
     if (params) {
+
       rb.path('patternViewId', params.patternViewId, {});
       rb.path('patternId', params.patternId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{}>;
+      })
+    );
   }
 
   /**
@@ -627,7 +567,9 @@ export class PatternControllerService extends BaseService {
   removePatternFromView(params: {
     patternViewId: string;
     patternId: string;
+
   }): Observable<{}> {
+
     return this.removePatternFromView$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -648,28 +590,24 @@ export class PatternControllerService extends BaseService {
    */
   getPatternByUri$Response(params: {
     encodedUri: string;
+
   }): Observable<StrictHttpResponse<EntityModelPattern>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternControllerService.GetPatternByUriPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternControllerService.GetPatternByUriPath, 'get');
     if (params) {
+
       rb.query('encodedUri', params.encodedUri, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<EntityModelPattern>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<EntityModelPattern>;
+      })
+    );
   }
 
   /**
@@ -682,12 +620,12 @@ export class PatternControllerService extends BaseService {
    */
   getPatternByUri(params: {
     encodedUri: string;
+
   }): Observable<EntityModelPattern> {
+
     return this.getPatternByUri$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<EntityModelPattern>) =>
-          r.body as EntityModelPattern
-      )
+      map((r: StrictHttpResponse<EntityModelPattern>) => r.body as EntityModelPattern)
     );
   }
+
 }

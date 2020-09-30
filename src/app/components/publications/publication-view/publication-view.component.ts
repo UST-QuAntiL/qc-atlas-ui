@@ -4,7 +4,7 @@ import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publica
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
-import { UtilService } from '../../../util/util.service';
+import { ChangePageGuard } from '../../../services/deactivation-guard';
 
 @Component({
   selector: 'app-publication-view',
@@ -14,13 +14,14 @@ import { UtilService } from '../../../util/util.service';
 export class PublicationViewComponent implements OnInit {
   testTags: string[] = ['test tag', 'quantum', 'publication'];
   publication: EntityModelPublicationDto;
+  frontendPublication: EntityModelPublicationDto;
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
   private routeSub: Subscription;
 
   constructor(
     private publicationService: PublicationService,
     private route: ActivatedRoute,
-    private utilService: UtilService
+    public guard: ChangePageGuard
   ) {}
 
   ngOnInit(): void {
@@ -28,6 +29,9 @@ export class PublicationViewComponent implements OnInit {
       this.publicationService.getPublication({ publicationId }).subscribe(
         (publication: EntityModelPublicationDto) => {
           this.publication = publication;
+          this.frontendPublication = JSON.parse(
+            JSON.stringify(publication)
+          ) as EntityModelPublicationDto;
           this.links[0] = {
             heading: this.publication.title,
             subHeading: '',
@@ -40,6 +44,24 @@ export class PublicationViewComponent implements OnInit {
     });
   }
 
+  savePublication(
+    updatedPublication: EntityModelPublicationDto,
+    updateFrontendPublication: boolean
+  ): void {
+    this.publicationService
+      .updatePublication({
+        publicationId: this.publication.id,
+        body: updatedPublication,
+      })
+      .subscribe((publication) => {
+        this.publication = publication;
+        if (updateFrontendPublication) {
+          this.frontendPublication = JSON.parse(
+            JSON.stringify(publication)
+          ) as EntityModelPublicationDto;
+        }
+      });
+  }
   addTag(): void {
     console.log('add tag');
     // TODO: create tag dialog
@@ -54,19 +76,6 @@ export class PublicationViewComponent implements OnInit {
 
   updatePublicationField(event: { field; value }): void {
     this.publication[event.field] = event.value;
-    this.publicationService
-      .updatePublication({
-        publicationId: this.publication.id,
-        body: this.publication,
-      })
-      .subscribe(
-        (publication) => {
-          this.publication = publication;
-          this.utilService.callSnackBar('Successfully updated publication');
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.savePublication(this.publication, false);
   }
 }
