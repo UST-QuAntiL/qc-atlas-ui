@@ -52,11 +52,7 @@ export class ChangePageGuard
         dialogData
       );
       dialogRef.afterClosed().subscribe((dialogResult) => {
-        if (dialogResult) {
-          leavePage.next(true);
-        } else {
-          leavePage.next(false);
-        }
+        dialogResult ? leavePage.next(true) : leavePage.next(false);
       });
       return leavePage.asObservable();
     }
