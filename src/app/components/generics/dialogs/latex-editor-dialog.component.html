@@ -1,0 +1,8 @@
+<div>{{data.title}}</div>
+<div>
+  <label>
+    <textarea [(ngModel)]="latexRenderText"></textarea>
+  </label>
+  <mat-label [(ngModel)]="latexPackages"></mat-label>
+  <button (click)="onGenerateLatex()">Generate</button>
+</div>

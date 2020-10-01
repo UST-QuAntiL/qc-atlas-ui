@@ -34,6 +34,7 @@ import { PrologInputComponent } from './property-input/prolog-input.component';
 import { PrologValidator } from './prolog.validator';
 import { TagsComponent } from './tags/tags.component';
 import { TagsDialogComponent } from './tags/dialog/tags-dialog.component';
+import { LatexEditorDialogComponent } from './dialogs/latex-editor-dialog.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { TagsDialogComponent } from './tags/dialog/tags-dialog.component';
     PrologValidator,
     TagsComponent,
     TagsDialogComponent,
+    LatexEditorDialogComponent,
   ],
   imports: [
     ReactiveFormsModule,

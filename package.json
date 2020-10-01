@@ -12,7 +12,7 @@
     "gen-atlas": "ng-openapi-gen --input http://localhost:8080/atlas/v3/api-docs -o generated/api-atlas",
     "gen-patternpedia": "ng-openapi-gen --input http://localhost:8082/patternpedia/v3/api-docs -o generated/api-patternpedia",
     "gen-nisq": "ng-openapi-gen --input http://localhost:8081/nisq-analyzer/v3/api-docs -o generated/api-nisq",
-    "gen-latex": "ng-openapi-gen --input http://localhost:8083/latex-renderer/v3/api-docs -o generated/api-latex",
+    "gen-latex": "ng-openapi-gen --input http://localhost:8083/v3/api-docs -o generated/api-latex",
     "postgen": "prettier generated/ --write",
     "e2e": "ng e2e"
   },

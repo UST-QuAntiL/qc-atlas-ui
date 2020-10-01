@@ -2,6 +2,13 @@
   <div class="row">
     <div class="col-xl-4 col-lg-12">
       <mat-card class="m-2">
+        <button (click)="openLatexEditor()">LaTeX Editor</button>
+      </mat-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
         <app-text-input name="Acronym"
                         [value]="algorithm.acronym"
                         (onChange)="onPropertyChanged($event, 'acronym')"

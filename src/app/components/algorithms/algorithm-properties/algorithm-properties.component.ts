@@ -27,6 +27,8 @@ import {
   sketchOptions,
 } from '../../../util/options';
 import { LinkObject } from '../../generics/data-list/data-list.component';
+import { UtilService } from '../../../util/util.service';
+import { LatexEditorDialogComponent } from '../../generics/dialogs/latex-editor-dialog.component';
 
 @Component({
   selector: 'app-algorithm-properties',
@@ -93,7 +95,8 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   constructor(
     private algorithmService: AlgorithmService,
     private applicationAreaService: ApplicationAreasService,
-    private problemTypeService: ProblemTypeService
+    private problemTypeService: ProblemTypeService,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -320,5 +323,23 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
             e._embedded.computeResourceProperties;
         }
       });
+  }
+
+  openLatexEditor() {
+    const doalogRef = this.utilService.createDialog(
+      LatexEditorDialogComponent,
+      {
+        title: 'LaTeX Render Editor',
+        inputText:
+          // eslint-disable-next-line max-len
+          '\\begin{quantikz}\n\t\\lstick{$\\ket{0}$} & \\gate{H} & \\ctrl{1} & \\gate{H} & \\ctrl{1} & \\swap{2} & \\ctrl{1} & \\qw \\\\ \n \t \\lstick{$\\ket{0}$} & \\gate{D} & \\targ{} & \\octrl{-1} & \\control{} & \\qw & \\octrl{1} & \\qw \\\\ \n \t &&&&& \\targX{} & \\gate{F} & \\qw \n \\end{quantikz}',
+        latexPackages: ['\\usepackage{tikz}', '\\usetikzlibrary{quantikz}'],
+        output: 'png',
+      }
+    );
+
+    doalogRef.afterClosed().subscribe((dialogResult) => {
+      console.log(dialogResult);
+    });
   }
 }

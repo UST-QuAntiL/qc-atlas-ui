@@ -19,144 +19,6 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation home1
-   */
-  static readonly Home1Path = '/';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `home1()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home1$Response(params?: {}): Observable<StrictHttpResponse<string>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      RenderLatexControllerService.Home1Path,
-      'get'
-    );
-    if (params) {
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'blob',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<string>;
-        })
-      );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `home1$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home1(params?: {}): Observable<string> {
-    return this.home1$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
-    );
-  }
-
-  /**
-   * Path part for operation home
-   */
-  static readonly HomePath = '/';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `home()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home$Response(params?: {}): Observable<StrictHttpResponse<string>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      RenderLatexControllerService.HomePath,
-      'put'
-    );
-    if (params) {
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'blob',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<string>;
-        })
-      );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `home$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home(params?: {}): Observable<string> {
-    return this.home$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
-    );
-  }
-
-  /**
-   * Path part for operation home5
-   */
-  static readonly Home5Path = '/';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `home5()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home5$Response(params?: {}): Observable<StrictHttpResponse<string>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      RenderLatexControllerService.Home5Path,
-      'post'
-    );
-    if (params) {
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'blob',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<string>;
-        })
-      );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `home5$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home5(params?: {}): Observable<string> {
-    return this.home5$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
-    );
-  }
-
-  /**
    * Path part for operation home3
    */
   static readonly Home3Path = '/';
@@ -171,7 +33,7 @@ export class RenderLatexControllerService extends BaseService {
     const rb = new RequestBuilder(
       this.rootUrl,
       RenderLatexControllerService.Home3Path,
-      'delete'
+      'get'
     );
     if (params) {
     }
@@ -217,7 +79,7 @@ export class RenderLatexControllerService extends BaseService {
     const rb = new RequestBuilder(
       this.rootUrl,
       RenderLatexControllerService.Home6Path,
-      'options'
+      'put'
     );
     if (params) {
     }
@@ -249,6 +111,52 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation home1
+   */
+  static readonly Home1Path = '/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `home1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home1$Response(params?: {}): Observable<StrictHttpResponse<string>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      RenderLatexControllerService.Home1Path,
+      'post'
+    );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<string>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `home1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home1(params?: {}): Observable<string> {
+    return this.home1$Response(params).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
    * Path part for operation home2
    */
   static readonly Home2Path = '/';
@@ -263,7 +171,7 @@ export class RenderLatexControllerService extends BaseService {
     const rb = new RequestBuilder(
       this.rootUrl,
       RenderLatexControllerService.Home2Path,
-      'head'
+      'delete'
     );
     if (params) {
     }
@@ -309,7 +217,7 @@ export class RenderLatexControllerService extends BaseService {
     const rb = new RequestBuilder(
       this.rootUrl,
       RenderLatexControllerService.Home4Path,
-      'patch'
+      'options'
     );
     if (params) {
     }
@@ -336,6 +244,98 @@ export class RenderLatexControllerService extends BaseService {
    */
   home4(params?: {}): Observable<string> {
     return this.home4$Response(params).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
+   * Path part for operation home
+   */
+  static readonly HomePath = '/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `home()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home$Response(params?: {}): Observable<StrictHttpResponse<string>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      RenderLatexControllerService.HomePath,
+      'head'
+    );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<string>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `home$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home(params?: {}): Observable<string> {
+    return this.home$Response(params).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
+   * Path part for operation home5
+   */
+  static readonly Home5Path = '/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `home5()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home5$Response(params?: {}): Observable<StrictHttpResponse<string>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      RenderLatexControllerService.Home5Path,
+      'patch'
+    );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<string>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `home5$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home5(params?: {}): Observable<string> {
+    return this.home5$Response(params).pipe(
       map((r: StrictHttpResponse<string>) => r.body as string)
     );
   }
