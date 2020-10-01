@@ -148,8 +148,13 @@ export class DataListComponent implements OnInit {
   }
 
   initializeDataEntryDisabled(): void {
-    for (const dataEntry of this.data) {
-      if (this.disabledData.length > 0) {
+    if (
+      this.data &&
+      this.data.length > 0 &&
+      this.disabledData &&
+      this.disabledData.length > 0
+    ) {
+      for (const dataEntry of this.data) {
         for (const linkedObject of this.disabledData) {
           if (dataEntry.id === linkedObject.id) {
             this.disabledDataEntries.add(dataEntry.id);
