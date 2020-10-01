@@ -332,8 +332,8 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         title: 'LaTeX Render Editor',
         inputText:
           // eslint-disable-next-line max-len
-          '\\begin{quantikz}\n\t\\lstick{$\\ket{0}$} & \\gate{H} & \\ctrl{1} & \\gate{H} & \\ctrl{1} & \\swap{2} & \\ctrl{1} & \\qw \\\\ \n \t \\lstick{$\\ket{0}$} & \\gate{D} & \\targ{} & \\octrl{-1} & \\control{} & \\qw & \\octrl{1} & \\qw \\\\ \n \t &&&&& \\targX{} & \\gate{F} & \\qw \n \\end{quantikz}',
-        latexPackages: ['\\usepackage{tikz}', '\\usetikzlibrary{quantikz}'],
+          '\\maketitle\n\\section{Test section}\nHello World!',
+        latexPackages: ['\\title{Test doc}', '\\author{Ich}'],
         output: 'png',
       }
     );
