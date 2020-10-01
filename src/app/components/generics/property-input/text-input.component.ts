@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { AbstractValueAccessor, DoProvider } from './abstract-value-accessor';
 
 @Component({
@@ -7,24 +7,33 @@ import { AbstractValueAccessor, DoProvider } from './abstract-value-accessor';
   styleUrls: ['./text-input.component.scss'],
   providers: [DoProvider(TextInputComponent)],
 })
-export class TextInputComponent extends AbstractValueAccessor {
+export class TextInputComponent implements OnInit {
   @Output() onSaveChanges: EventEmitter<string> = new EventEmitter<string>();
-
+  @Output() onChange: EventEmitter<string> = new EventEmitter<string>();
   @Input() name = '';
+  @Input() value: string;
   @Input() multiline = false;
   @Input() maxLines = 1;
   @Input() isLink: boolean;
 
-  isBeingEdited = false;
+  inputValue: string;
 
-  toggleEdit(): void {
-    if (this.isBeingEdited) {
-      this.onSaveChanges.emit(this._value);
+  saveChanges(): void {
+    this.onSaveChanges.emit(this.inputValue);
+  }
+
+  inputChanged(): void {
+    if (!this.inputValue) {
+      this.inputValue = null;
     }
-    this.isBeingEdited = !this.isBeingEdited;
+    this.onChange.emit(this.inputValue);
   }
 
   openLink(): void {
-    window.open(this.value, '_blank');
+    window.open(this.inputValue, '_blank');
+  }
+
+  ngOnInit() {
+    this.inputValue = this.value;
   }
 }

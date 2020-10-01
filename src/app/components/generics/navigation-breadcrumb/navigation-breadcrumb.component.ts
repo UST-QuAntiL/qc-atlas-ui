@@ -12,10 +12,12 @@ export interface BreadcrumbLink {
   styleUrls: ['./navigation-breadcrumb.component.scss'],
 })
 export class NavigationBreadcrumbComponent implements OnInit {
+  @Output() onSaveChanges: EventEmitter<any> = new EventEmitter<any>();
   @Output() onClickLink: EventEmitter<BreadcrumbLink> = new EventEmitter<
     BreadcrumbLink
   >();
   @Input() links: BreadcrumbLink[] = [];
+  isBeingEdited = false;
 
   constructor() {}
 
@@ -23,5 +25,12 @@ export class NavigationBreadcrumbComponent implements OnInit {
 
   clickLink(link: BreadcrumbLink): void {
     this.onClickLink.emit(link);
+  }
+
+  toggleEdit(): void {
+    if (this.isBeingEdited) {
+      this.onSaveChanges.emit();
+    }
+    this.isBeingEdited = !this.isBeingEdited;
   }
 }

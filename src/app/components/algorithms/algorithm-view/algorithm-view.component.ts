@@ -12,6 +12,7 @@ import { TagDto } from 'api-atlas/models/tag-dto';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
+import { ChangePageGuard } from '../../../services/deactivation-guard';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -23,6 +24,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   isNisqUsed = environment.nisqAnalyzer;
 
   algorithm: EntityModelAlgorithmDto;
+  frontendAlgorithm: EntityModelAlgorithmDto;
   applicationAreas: EntityModelApplicationAreaDto[];
   problemTypes: EntityModelProblemTypeDto[];
   tags: TagDto[] = [];
@@ -35,8 +37,9 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     private algorithmService: AlgorithmService,
     private applicationAreasService: ApplicationAreasService,
     private problemTypeService: ProblemTypeService,
+    private route: ActivatedRoute,
     private utilService: UtilService,
-    private route: ActivatedRoute
+    public guard: ChangePageGuard
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +47,9 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       this.algorithmService.getAlgorithm({ algorithmId: algoId }).subscribe(
         (algo: EntityModelAlgorithmDto) => {
           this.algorithm = algo;
+          this.frontendAlgorithm = JSON.parse(
+            JSON.stringify(algo)
+          ) as EntityModelAlgorithmDto;
           let subheading = this.algorithm.computationModel
             .toString()
             .toLowerCase();
@@ -65,6 +71,35 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routeSub.unsubscribe();
+  }
+
+  saveAlgorithm(
+    updatedAlgorithm: EntityModelAlgorithmDto,
+    updateFrontendAlgorithm: boolean
+  ): void {
+    this.algorithmService
+      .updateAlgorithm({
+        algorithmId: this.algorithm.id,
+        body: updatedAlgorithm,
+      })
+      .subscribe(
+        (algo) => {
+          this.algorithm = algo;
+          if (updateFrontendAlgorithm) {
+            this.frontendAlgorithm = JSON.parse(
+              JSON.stringify(algo)
+            ) as EntityModelAlgorithmDto;
+          }
+          this.links[0] = {
+            heading: this.createBreadcrumbHeader(this.algorithm),
+            subHeading: this.algorithm.computationModel + ' Algorithm',
+          };
+          this.utilService.callSnackBar('Successfully updated algorithm');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   getApplicationAreasForAlgorithm(algoId: string): void {
@@ -122,21 +157,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
 
   updateAlgorithmField(event: { field; value }): void {
     this.algorithm[event.field] = event.value;
-    this.algorithmService
-      .updateAlgorithm({ algorithmId: this.algorithm.id, body: this.algorithm })
-      .subscribe(
-        (algo) => {
-          this.algorithm = algo;
-          this.links[0] = {
-            heading: this.createBreadcrumbHeader(this.algorithm),
-            subHeading: this.algorithm.computationModel + ' Algorithm',
-          };
-          this.utilService.callSnackBar('Successfully updated algorithm');
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.saveAlgorithm(this.algorithm, false);
   }
 
   addApplicationArea(applicationArea: EntityModelApplicationAreaDto): void {
@@ -145,8 +166,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         algorithmId: this.algorithm.id,
         body: applicationArea,
       })
-      .subscribe(() => {
-        this.getApplicationAreasForAlgorithm(this.algorithm.id);
+      .subscribe((areas) => {
         this.utilService.callSnackBar(
           'Successfully linked application area "' +
             applicationArea.name +
@@ -154,6 +174,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
             this.algorithm.name +
             '"'
         );
+        this.getApplicationAreasForAlgorithm(this.algorithm.id);
       });
   }
 

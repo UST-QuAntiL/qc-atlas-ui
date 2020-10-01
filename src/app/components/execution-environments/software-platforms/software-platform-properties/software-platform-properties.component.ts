@@ -9,7 +9,7 @@ import { UpdateFieldEventService } from '../../../../services/update-field-event
 })
 export class SoftwarePlatformPropertiesComponent implements OnInit {
   @Input() softwarePlatform: EntityModelSoftwarePlatformDto;
-
+  @Input() frontendSoftwarePlatform: EntityModelSoftwarePlatformDto;
   @Output() updateSoftwarePlatformField: EventEmitter<{
     field;
     value;
@@ -24,5 +24,9 @@ export class SoftwarePlatformPropertiesComponent implements OnInit {
       field,
       value,
     });
+  }
+
+  onPropertyChanged(value: any, field: string): void {
+    this.frontendSoftwarePlatform[field] = value;
   }
 }

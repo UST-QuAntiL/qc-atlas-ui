@@ -8,11 +8,15 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class RootService extends BaseService {
-  constructor(config: ApiConfiguration, http: HttpClient) {
+  constructor(
+    config: ApiConfiguration,
+    http: HttpClient
+  ) {
     super(config, http);
   }
 
@@ -27,23 +31,24 @@ export class RootService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  root$Response(params?: {}): Observable<StrictHttpResponse<{}>> {
+  root$Response(params?: {
+
+  }): Observable<StrictHttpResponse<{  }>> {
+
     const rb = new RequestBuilder(this.rootUrl, RootService.RootPath, 'get');
     if (params) {
+
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{}>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{  }>;
+      })
+    );
   }
 
   /**
@@ -52,9 +57,13 @@ export class RootService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  root(params?: {}): Observable<{}> {
+  root(params?: {
+
+  }): Observable<{  }> {
+
     return this.root$Response(params).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body as {})
+      map((r: StrictHttpResponse<{  }>) => r.body as {  })
     );
   }
+
 }

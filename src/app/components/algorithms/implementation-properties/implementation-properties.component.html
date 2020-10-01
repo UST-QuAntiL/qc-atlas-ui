@@ -4,8 +4,9 @@
       <mat-card class="m-2">
         <app-text-input
           name="Description"
+          (onChange)="onPropertyChanged($event,'description')"
           (onSaveChanges)="onChangesSaved($event,'description')"
-          [(ngModel)]="implementation.description"
+          [value]="implementation.description"
           [multiline]="true"
         ></app-text-input>
       </mat-card>
@@ -14,8 +15,34 @@
       <mat-card class="m-2">
         <app-text-input
           name="Contributors"
+          (onChange)="onPropertyChanged($event,'contributors')"
           (onSaveChanges)="onChangesSaved($event,'contributors')"
-          [(ngModel)]="implementation.contributors"
+          [value]="implementation.contributors"
+          [multiline]="true"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input
+          name="License"
+          (onChange)="onPropertyChanged($event,'license')"
+          (onSaveChanges)="onChangesSaved($event,'license')"
+          [value]="implementation.license"
+          [multiline]="true"
+        ></app-text-input>
+      </mat-card>
+    </div>
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input
+          name="Version"
+          (onChange)="onPropertyChanged($event,'version')"
+          (onSaveChanges)="onChangesSaved($event,'version')"
+          [value]="implementation.version"
           [multiline]="true"
         ></app-text-input>
       </mat-card>
@@ -27,8 +54,9 @@
       <mat-card class="m-2">
         <app-text-input
           name="Dependencies"
+          (onChange)="onPropertyChanged($event,'dependencies')"
           (onSaveChanges)="onChangesSaved($event,'dependencies')"
-          [(ngModel)]="implementation.dependencies"
+          [value]="implementation.dependencies"
         ></app-text-input>
       </mat-card>
     </div>
@@ -49,8 +77,9 @@
       <mat-card class="m-2">
         <app-text-input
           name="Input Format"
+          (onChange)="onPropertyChanged($event,'inputFormat')"
           (onSaveChanges)="onChangesSaved($event,'inputFormat')"
-          [(ngModel)]="implementation.inputFormat"
+          [value]="implementation.inputFormat"
         ></app-text-input>
       </mat-card>
     </div>
@@ -58,8 +87,9 @@
       <mat-card class="m-2">
         <app-text-input
           name="Parameter"
+          (onChange)="onPropertyChanged($event,'parameter')"
           (onSaveChanges)="onChangesSaved($event,'parameter')"
-          [(ngModel)]="implementation.parameter"
+          [value]="implementation.parameter"
         ></app-text-input>
       </mat-card>
     </div>
@@ -67,8 +97,9 @@
       <mat-card class="m-2">
         <app-text-input
           name="Output Format"
+          (onChange)="onPropertyChanged($event,'outputFormat')"
           (onSaveChanges)="onChangesSaved($event,'outputFormat')"
-          [(ngModel)]="implementation.outputFormat"
+          [value]="implementation.outputFormat"
         ></app-text-input>
       </mat-card>
     </div>

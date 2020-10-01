@@ -3,7 +3,8 @@
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input name="DOI"
-                        [(ngModel)]="publication.doi"
+                        [value]="publication.doi"
+                        (onChange)="onPropertyChanged($event, 'doi')"
                         (onSaveChanges)="onChangesSaved($event, 'doi')"></app-text-input>
       </mat-card>
     </div>
@@ -11,8 +12,9 @@
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input name="URL"
-                        [(ngModel)]="publication.url"
+                        [value]="publication.url"
                         [isLink]=true
+                        (onChange)="onPropertyChanged($event, 'url')"
                         (onSaveChanges)="onChangesSaved($event, 'url')"></app-text-input>
       </mat-card>
     </div>
@@ -24,8 +26,8 @@
         <app-chip-collection [title]="'Authors'"
                              [elements]="publication.authors"
                              [allowEmpty]=false
-                             (onAddElement)="addAuthorEvent($event)"
-                             (onRemoveElement)="removeAuthorEvent($event)">
+                             (onElementsChanged) ="onPropertyChanged($event, 'authors')"
+                             (onSaveChanges)="onChangesSaved($event, 'authors')">
         </app-chip-collection>
       </mat-card>
     </div>

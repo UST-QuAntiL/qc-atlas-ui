@@ -1,26 +1,28 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractValueAccessor, DoProvider } from './abstract-value-accessor';
 
 @Component({
   selector: 'app-checkbox-input',
   templateUrl: './checkbox-input.component.html',
   styleUrls: ['./checkbox-input.component.scss'],
-  providers: [DoProvider(CheckboxInputComponent)],
 })
-export class CheckboxInputComponent extends AbstractValueAccessor
-  implements OnInit {
+export class CheckboxInputComponent implements OnInit {
   @Output() onSaveChanges: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() onChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Input() name = '';
+  @Input() value: boolean;
 
-  isBeingEdited = false;
+  inputValue: boolean;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.inputValue = this.value;
+  }
 
-  toggleEdit(): void {
-    if (this.isBeingEdited) {
-      this.onSaveChanges.emit(this.value);
-    }
-    this.isBeingEdited = !this.isBeingEdited;
+  toggleValue(): void {
+    this.onChange.emit(this.inputValue);
+  }
+
+  saveChanges(): void {
+    this.onSaveChanges.emit(this.inputValue);
   }
 }

@@ -4,7 +4,8 @@
       <mat-card class="m-2">
         <app-text-input
           name="Licence"
-          [(ngModel)]="softwarePlatform.licence"
+          [value]="softwarePlatform.licence"
+          (onChange)="onPropertyChanged($event, 'licence')"
           (onSaveChanges)="onChangesSaved($event, 'licence')"></app-text-input>
       </mat-card>
     </div>
@@ -15,7 +16,8 @@
       <mat-card class="m-2">
         <app-text-input
           name="Version"
-          [(ngModel)]="softwarePlatform.version"
+          [value]="softwarePlatform.version"
+          (onChange)="onPropertyChanged($event, 'version')"
           (onSaveChanges)="onChangesSaved($event, 'version')"></app-text-input>
       </mat-card>
     </div>
@@ -26,8 +28,9 @@
       <mat-card class="m-2">
         <app-text-input
           name="URL"
-          [(ngModel)]="softwarePlatform.link"
+          [value]="softwarePlatform.link"
           [isLink]=true
+          (onChange)="onPropertyChanged($event, 'link')"
           (onSaveChanges)="onChangesSaved($event, 'link')"></app-text-input>
       </mat-card>
     </div>

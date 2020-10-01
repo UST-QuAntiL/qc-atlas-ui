@@ -6,6 +6,7 @@ import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-envir
 import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 import { FieldUpdate } from '../../../../util/FieldUpdate';
+import { ChangePageGuard } from '../../../../services/deactivation-guard';
 
 @Component({
   selector: 'app-software-platform-view',
@@ -14,6 +15,7 @@ import { FieldUpdate } from '../../../../util/FieldUpdate';
 })
 export class SoftwarePlatformViewComponent implements OnInit {
   softwarePlatform: EntityModelSoftwarePlatformDto;
+  frontendSoftwarePlatform: EntityModelSoftwarePlatformDto;
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
@@ -23,7 +25,8 @@ export class SoftwarePlatformViewComponent implements OnInit {
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private updateFieldService: UpdateFieldEventService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public guard: ChangePageGuard
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +36,9 @@ export class SoftwarePlatformViewComponent implements OnInit {
         .subscribe(
           (softwarePlatform: EntityModelSoftwarePlatformDto) => {
             this.softwarePlatform = softwarePlatform;
+            this.frontendSoftwarePlatform = JSON.parse(
+              JSON.stringify(softwarePlatform)
+            ) as EntityModelSoftwarePlatformDto;
             this.links[0] = {
               heading: this.softwarePlatform.name,
               subHeading: '',
@@ -55,20 +61,32 @@ export class SoftwarePlatformViewComponent implements OnInit {
     this.fieldUpdateSubscription.unsubscribe();
   }
 
-  updateSoftwarePlatformField(fieldUpdate: FieldUpdate): void {
-    this.softwarePlatform[fieldUpdate.field] = fieldUpdate.value;
+  savePlatform(
+    updatedPlatform: EntityModelSoftwarePlatformDto,
+    updateFrontendPlatform: boolean
+  ): void {
     this.executionEnvironmentsService
       .updateSoftwarePlatform({
         softwarePlatformId: this.softwarePlatform.id,
-        body: this.softwarePlatform,
+        body: updatedPlatform,
       })
       .subscribe(
         (sp) => {
           this.softwarePlatform = sp;
+          if (updateFrontendPlatform) {
+            this.frontendSoftwarePlatform = JSON.parse(
+              JSON.stringify(sp)
+            ) as EntityModelSoftwarePlatformDto;
+          }
         },
         (error) => {
           console.log(error);
         }
       );
+  }
+
+  updateSoftwarePlatformField(fieldUpdate: FieldUpdate): void {
+    this.softwarePlatform[fieldUpdate.field] = fieldUpdate.value;
+    this.savePlatform(this.softwarePlatform, false);
   }
 }
