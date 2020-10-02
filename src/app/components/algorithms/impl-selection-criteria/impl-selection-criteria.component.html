@@ -11,18 +11,20 @@
       <div class="col-lg-6 col-md-12">
         <app-text-input
           name="File Location"
-          [(ngModel)]="nisqImpl.fileLocation"
+          [value]="nisqImpl.fileLocation"
+          (onChange)="nisqImpl.fileLocation = $event"
           (onSaveChanges)="saveImplementation()"
         ></app-text-input>
       </div>
       <div class="col-lg-6 col-md-12">
         <app-select-input
           name="SDK"
-          [(ngModel)]="nisqImpl.sdk"
+          [value]="nisqImpl.sdk"
           [choices]="[
             { value: 'Qiskit', label: 'Qiskit' },
             { value: 'Forrest', label: 'Forrest' }
           ]"
+          (onChange)="nisqImpl.sdk = $event"
           (onSaveChanges)="saveImplementation()"
         ></app-select-input>
       </div>
@@ -69,38 +71,37 @@
             <div class="col">
               <app-text-input
                 name="Name of the Parameter"
-                [ngModel]="param.name"
-                (onSaveChanges)="saveParameter(param, $event)"
+                [value]="param.name"
+                (onChange)="param.name = $event"
               >
               </app-text-input>
             </div>
             <div class="col">
               <app-text-input
                 name="Description"
-                prolog
-                [(ngModel)]="param.description"
-                (onSaveChanges)="saveParameter(param)"
+                [value]="param.description"
+                (onChange)="param.description = $event"
               >
               </app-text-input>
             </div>
             <div class="col">
               <app-select-input
                 name="Datatype"
-                [(ngModel)]="param.type"
+                [value]="param.type"
                 [choices]="[
                   { value: 'Integer', label: 'Integer' },
                   { value: 'Float', label: 'Float' },
                   { value: 'String', label: 'String' }
                 ]"
-                (onSaveChanges)="saveParameter(param)"
+                (onChange)="param.type = $event"
               >
               </app-select-input>
             </div>
             <div class="col">
               <app-text-input
                 name="Restriction"
-                [(ngModel)]="param.restriction"
-                (onSaveChanges)="saveParameter(param)"
+                [value]="param.restriction"
+                (onChange)="param.restriction = $event"
               >
               </app-text-input>
             </div>
@@ -124,3 +125,12 @@
     </div>
   </mat-card>
 </div>
+
+<button
+  class="master-save-button"
+  *ngIf="!guard.objectsEqual(nisqImpl, oldNisqImpl)"
+  mat-fab
+  (click)="saveImplementation()"
+>
+  <mat-icon class="master-save-icon">save</mat-icon>
+</button>
