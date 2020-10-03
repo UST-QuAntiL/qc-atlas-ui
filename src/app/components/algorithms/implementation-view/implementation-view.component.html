@@ -27,8 +27,12 @@
         (updateComputeResourceProperty)="updateComputeResourceProperty($event)"
       >
       </app-implementation-properties>
-      <button class="master-save-button" *ngIf="!guard.objectsEqual(frontendImplementation, implementation)" mat-fab
-              (click)="saveImplementation(frontendImplementation, true)">
+      <button
+        class="master-save-button"
+        *ngIf="!guard.objectsEqual(frontendImplementation, implementation)"
+        mat-fab
+        (click)="saveImplementation(frontendImplementation, true)"
+      >
         <mat-icon class="master-save-icon">save</mat-icon>
       </button>
     </mat-tab>
@@ -48,6 +52,7 @@
         <app-impl-selection-criteria
           [algo]="algorithm"
           [impl]="implementation"
+          [guard]="guard"
         ></app-impl-selection-criteria>
       </div>
     </mat-tab>
