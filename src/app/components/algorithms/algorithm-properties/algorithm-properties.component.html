@@ -2,6 +2,15 @@
   <div class="row">
     <div class="col-xl-4 col-lg-12">
       <mat-card class="m-2">
+        <app-text-input name="Name"
+                        [value]="algorithm.name"
+                        (onChange)="onPropertyChanged($event, 'name')"
+                        (onSaveChanges)="onChangesSaved($event, 'name')"
+        ></app-text-input>
+      </mat-card>
+    </div>
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
         <app-text-input name="Acronym"
                         [value]="algorithm.acronym"
                         (onChange)="onPropertyChanged($event, 'acronym')"
@@ -18,46 +27,6 @@
                         (onChange)="onPropertyChanged($event, 'intent')"
                         (onSaveChanges)="onChangesSaved($event, 'intent')"
         ></app-text-input>
-      </mat-card>
-    </div>
-    <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
-        <app-text-input name="Problem"
-                        [value]="algorithm.problem"
-                        [multiline]="true"
-                        [maxLines]="5"
-                        (onChange)="onPropertyChanged($event, 'problem')"
-                        (onSaveChanges)="onChangesSaved($event, 'problem')"
-                        ></app-text-input>
-      </mat-card>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
-        <app-problem-type-tree #problemTypeTree
-                               [title]='"Problem types"'
-                               [treeData]="problemTypeTreeData"
-                               [linkObject]="problemTypeLinkObject"
-                               [allowDelete]="true"
-                               (onAddElement)="onAddProblemType.emit($event)"
-                               (onRemoveElement)="onRemoveProblemType.emit($event)"
-                               (onExpandParents)="getParentsForNode($event)"
-                               (onSearchTextChanged)="searchUnlinkedProblemTypes($event)"></app-problem-type-tree>
-      </mat-card>
-    </div>
-
-    <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
-        <app-chip-collection [title]="'Application areas'"
-                             [elements]="linkedApplicationAreas"
-                             [displayVariable]="'name'"
-                             [useToAddLinks]="true"
-                             [linkObject]=applicationAreaLinkObject
-                             (onLinkElement)="addApplicationAreaEvent($event)"
-                             (onUnlinkElement)="removeApplicationAreaEvent($event)"
-                             (onSearchTextChanged)="searchUnlinkedApplicationAreas($event)"></app-chip-collection>
       </mat-card>
     </div>
   </div>
@@ -96,22 +65,8 @@
       </mat-card>
     </div>
   </div>
-
   <div class="row">
-    <div class="col-12">
-      <mat-card class="m-2">
-        <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
-                                            (updateProperty)="updateComputeResourceProperty($event)"
-                                            (deleteProperty)="deleteComputeResourceProperty($event)"
-                                            [title]="'Required compute resource properties'"
-                                            [resourceProperties]="computeResourceProperties">
-        </app-compute-resource-property-list>
-      </mat-card>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-lg-6 col-sm-12">
+    <div class="col-xl-4 col-lg-12">
       <mat-card class="m-2">
         <app-text-input name="Solution"
                         [value]="algorithm.solution"
@@ -122,7 +77,7 @@
       </mat-card>
     </div>
 
-    <div class="col-lg-6 col-sm-12">
+    <div class="col-xl-4 col-lg-12">
       <mat-card class="m-2">
         <app-text-input name="Assumptions"
                         [value]="algorithm.assumptions"
@@ -130,6 +85,60 @@
                         [maxLines]="5"
                         (onChange)="onPropertyChanged($event, 'assumptions')"
                         (onSaveChanges)="onChangesSaved($event, 'assumptions')"></app-text-input>
+      </mat-card>
+    </div>
+
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
+        <app-text-input name="Problem"
+                        [value]="algorithm.problem"
+                        [multiline]="true"
+                        [maxLines]="5"
+                        (onChange)="onPropertyChanged($event, 'problem')"
+                        (onSaveChanges)="onChangesSaved($event, 'problem')"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-problem-type-tree #problemTypeTree
+                               [title]='"Problem types"'
+                               [treeData]="problemTypeTreeData"
+                               [linkObject]="problemTypeLinkObject"
+                               [allowDelete]="true"
+                               (onAddElement)="onAddProblemType.emit($event)"
+                               (onRemoveElement)="onRemoveProblemType.emit($event)"
+                               (onExpandParents)="getParentsForNode($event)"
+                               (onSearchTextChanged)="searchUnlinkedProblemTypes($event)"></app-problem-type-tree>
+      </mat-card>
+    </div>
+
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-chip-collection [title]="'Application areas'"
+                             [elements]="linkedApplicationAreas"
+                             [displayVariable]="'name'"
+                             [useToAddLinks]="true"
+                             [linkObject]=applicationAreaLinkObject
+                             (onLinkElement)="addApplicationAreaEvent($event)"
+                             (onUnlinkElement)="removeApplicationAreaEvent($event)"
+                             (onSearchTextChanged)="searchUnlinkedApplicationAreas($event)"></app-chip-collection>
+      </mat-card>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
+                                            (updateProperty)="updateComputeResourceProperty($event)"
+                                            (deleteProperty)="deleteComputeResourceProperty($event)"
+                                            [title]="'Required compute resource properties'"
+                                            [resourceProperties]="computeResourceProperties">
+        </app-compute-resource-property-list>
       </mat-card>
     </div>
   </div>
@@ -168,14 +177,14 @@
       </mat-card>
     </div>
 
-   <!-- <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
-        <app-select-input name="Sketch type"
-                          [value]="algorithm.sketches"
-                          [includeEmpty]="true"
-                          [choices]="availableSketchOptions"
-                          (onSaveChanges)="onChangesSaved($event, 'sketch')"></app-select-input>
-      </mat-card>
-    </div>-->
+    <!-- <div class="col-lg-6 col-sm-12">
+       <mat-card class="m-2">
+         <app-select-input name="Sketch type"
+                           [value]="algorithm.sketches"
+                           [includeEmpty]="true"
+                           [choices]="availableSketchOptions"
+                           (onSaveChanges)="onChangesSaved($event, 'sketch')"></app-select-input>
+       </mat-card>
+     </div>-->
   </div>
 </div>
