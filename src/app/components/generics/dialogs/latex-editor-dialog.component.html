@@ -7,4 +7,5 @@
     <textarea [(ngModel)]="latexPackages"></textarea>
   </label>
   <button (click)="onGenerateLatex()">Generate</button>
+  <button (click)="dialogRef.close(generatedOutput)">Close</button>
 </div>

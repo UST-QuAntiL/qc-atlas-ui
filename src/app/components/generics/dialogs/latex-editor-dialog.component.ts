@@ -15,6 +15,7 @@ import { LatexContent } from 'api-latex/models';
 export class LatexEditorDialogComponent implements OnInit {
   latexRenderText = '';
   latexPackages: string[] = [];
+  generatedOutput: string[] = [];
   constructor(
     public dialogRef: MatDialogRef<LatexEditorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -33,17 +34,16 @@ export class LatexEditorDialogComponent implements OnInit {
     const latexBody: LatexContent = {
       content: this.latexRenderText,
       latexPackages: this.latexPackages,
-      output: this.data.output ? this.data.output : 'png',
+      output: this.data.output ? this.data.output : 'pdf',
     };
-    let generatedOutput: string[] = [];
     console.log(latexBody);
-    this.latexRendererService.renderLatexAsPng({ body: latexBody }).subscribe(
+    this.latexRendererService.renderLatexAsPdf({ body: latexBody }).subscribe(
       (response) => {
         if (response) {
-          console.log(response);
-          generatedOutput = response;
+          this.generatedOutput = response;
+          this.dialogRef.close(this.generatedOutput);
         } else {
-          generatedOutput = ['No response received'];
+          this.generatedOutput = ['No response received'];
         }
       },
       (e) => {
@@ -51,7 +51,6 @@ export class LatexEditorDialogComponent implements OnInit {
         console.log(e);
       }
     );
-    this.dialogRef.close(generatedOutput);
   }
 }
 

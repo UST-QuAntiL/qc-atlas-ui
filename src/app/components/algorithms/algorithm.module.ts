@@ -13,9 +13,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTreeModule } from '@angular/material/tree';
-import { CardsModule } from 'angular-bootstrap-md';
+import { ButtonsModule, CardsModule, WavesModule } from 'angular-bootstrap-md';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
@@ -73,6 +74,9 @@ import { ImplementationPropertiesComponent } from './implementation-properties/i
     NisqAnalyzerModule,
     MatStepperModule,
     MatProgressSpinnerModule,
+    PdfViewerModule,
+    ButtonsModule,
+    WavesModule,
   ],
   exports: [
     AlgorithmListComponent,
