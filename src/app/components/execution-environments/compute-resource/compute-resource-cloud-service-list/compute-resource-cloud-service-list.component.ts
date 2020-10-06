@@ -8,6 +8,7 @@ import {
   SelectParams,
   LinkObject,
   QueryParams,
+  UrlData,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { LinkItemListDialogComponent } from '../../../generics/dialogs/link-item-list-dialog.component';
@@ -22,7 +23,8 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
   @Input() computeResource: EntityModelComputeResourceDto;
 
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
-  variableNames = ['name', 'provider', 'description', 'costModel', 'URL'];
+  variableNames = ['name', 'provider', 'description', 'costModel', 'url'];
+  externalLinkVariables = ['url'];
   linkObject: LinkObject = {
     title: 'Link cloud service with ',
     subtitle: 'Search cloud services by name',
@@ -184,6 +186,11 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
 
   onElementClicked(cloudService: CloudServiceDto): void {
     this.routeToCloudService(cloudService);
+  }
+
+  onUrlClicked(urlData: UrlData): void {
+    // No check needed since publications have only one url-field called 'url'
+    window.open(urlData.element['url'], '_blank');
   }
 
   private routeToCloudService(cloudService: CloudServiceDto) {

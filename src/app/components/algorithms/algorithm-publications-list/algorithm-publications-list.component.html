@@ -4,11 +4,13 @@
       [data]=linkObject.linkedData
       [variableNames]=variableNames
       [dataColumns]=tableColumns
+      [externalLinkVariables]=externalLinkVariables
       [allowAdd]=tableAddAllowed
       [allowDelete]="true"
       [allowSort]=true
       [emptyTableMessage]="'No linked publications found'"
       (elementClicked)="onElementClicked($event)"
+      (urlClicked)="onUrlClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged($event)"
       (submitDeleteElements)="unlinkPublications($event)"
       (addElement)="openLinkPublicationDialog()">

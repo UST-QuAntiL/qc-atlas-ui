@@ -9,6 +9,7 @@ import {
   SelectParams,
   LinkObject,
   QueryParams,
+  UrlData,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { GenericDataService } from '../../../../util/generic-data.service';
@@ -24,6 +25,7 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
 
   tableColumns = ['Name', 'Version', 'Licence', 'Link'];
   variableNames = ['name', 'version', 'licence', 'link'];
+  externalLinkVariables = ['link'];
   linkObject: LinkObject = {
     title: 'Link software platform with ',
     subtitle: 'Search software platform by name',
@@ -186,6 +188,11 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
 
   onElementClicked(softwarePlatform: SoftwarePlatformDto): void {
     this.routeToSoftwarePlatform(softwarePlatform);
+  }
+
+  onUrlClicked(urlData: UrlData): void {
+    // No check needed since publications have only one url-field called 'link'
+    window.open(urlData.element['link'], '_blank');
   }
 
   routeToSoftwarePlatform(softwarePlatform: SoftwarePlatformDto): void {

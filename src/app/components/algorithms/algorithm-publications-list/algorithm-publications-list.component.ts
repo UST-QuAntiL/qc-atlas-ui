@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {
   LinkObject,
   QueryParams,
+  UrlData,
 } from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
 import { LinkItemListDialogComponent } from '../../generics/dialogs/link-item-list-dialog.component';
@@ -21,8 +22,9 @@ import { GenericDataService } from '../../../util/generic-data.service';
 export class AlgorithmPublicationsListComponent implements OnInit {
   @Input() algorithm: EntityModelAlgorithmDto;
 
-  variableNames: string[] = ['title', 'authors', 'doi'];
-  tableColumns: string[] = ['Title', 'Authors', 'DOI'];
+  variableNames: string[] = ['title', 'authors', 'doi', 'url'];
+  tableColumns: string[] = ['Title', 'Authors', 'DOI', 'URL'];
+  externalLinkVariables = ['url'];
   linkObject: LinkObject = {
     title: 'Link publication with ',
     subtitle: 'Search publications by title',
@@ -118,6 +120,11 @@ export class AlgorithmPublicationsListComponent implements OnInit {
 
   onElementClicked(publication: PublicationDto): void {
     this.routeToPublication(publication);
+  }
+
+  onUrlClicked(urlData: UrlData): void {
+    // No check needed since publications have only one url-field called 'url'
+    window.open(urlData.element['url'], '_blank');
   }
 
   routeToPublication(publication: PublicationDto): void {
