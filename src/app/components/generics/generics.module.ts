@@ -21,6 +21,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AppRoutingModule } from '../../app-routing.module';
 import { GenericDataService } from '../../util/generic-data.service';
 import { TextInputComponent } from './property-input/text-input.component';
@@ -75,6 +76,7 @@ import { LatexEditorDialogComponent } from './dialogs/latex-editor-dialog.compon
     MatListModule,
     MatCardModule,
     MatTooltipModule,
+    PdfViewerModule,
   ],
   exports: [
     TextInputComponent,
