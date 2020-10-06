@@ -324,22 +324,4 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         }
       });
   }
-
-  openLatexEditor() {
-    const doalogRef = this.utilService.createDialog(
-      LatexEditorDialogComponent,
-      {
-        title: 'LaTeX Render Editor',
-        inputText:
-          // eslint-disable-next-line max-len
-          '\\maketitle\n\\section{Test section}\nHello World!',
-        latexPackages: ['\\title{Test doc}', '\\author{Ich}'],
-        output: 'png',
-      }
-    );
-
-    doalogRef.afterClosed().subscribe((dialogResult) => {
-      console.log(dialogResult);
-    });
-  }
 }

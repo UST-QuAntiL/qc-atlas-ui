@@ -36,7 +36,6 @@ export class LatexEditorDialogComponent implements OnInit {
       latexPackages: this.latexPackages,
       output: this.data.output ? this.data.output : 'pdf',
     };
-    console.log(latexBody);
     this.latexRendererService.renderLatexAsPdf({ body: latexBody }).subscribe(
       (response) => {
         if (response) {

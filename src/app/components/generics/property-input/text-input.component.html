@@ -16,10 +16,11 @@
       [matAutosizeMaxRows]="maxLines"
       [matAutosizeMinRows]="2"
       [matTextareaAutosize]="true"
+      [disabled]="opensLatexEditor"
       matInput
     ></textarea>
     <button
-      *ngIf="inputValue !== value"
+      *ngIf="(!opensLatexEditor && (inputValue !== value)) || (opensLatexEditor && (latexValue !== value))"
       mat-button
       matSuffix
       mat-icon-button
@@ -38,5 +39,19 @@
       (click)="openLink()">
       <mat-icon>open_in_browser</mat-icon>
     </button>
+    <button
+      *ngIf="opensLatexEditor"
+      matTooltip="Open LaTeX editor"
+      matTooltipPosition="above"
+      mat-button
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="openLatexEditor()">
+      <mat-icon>text_fields</mat-icon>
+    </button>
   </mat-form-field>
+</div>
+<div>
+  <pdf-viewer *ngIf="urlToRenderedPdfBlob" [src]="urlToRenderedPdfBlob" [render-text]="true" style="display: block"></pdf-viewer>
 </div>
