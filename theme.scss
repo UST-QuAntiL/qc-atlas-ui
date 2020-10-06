@@ -35,7 +35,7 @@ $qc-atlas-ui-theme: mat-light-theme($qc-atlas-ui-primary, $qc-atlas-ui-accent, $
 @include angular-material-theme($qc-atlas-ui-theme);
 
 .master-save-button {
-  position: fixed;
+  position: fixed !important;
   top: 50%;
   right: 15px;
   text-align:center;

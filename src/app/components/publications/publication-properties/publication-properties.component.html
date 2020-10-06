@@ -1,6 +1,14 @@
 <div class="p-4">
   <div class="row">
-    <div class="col-lg-6 col-sm-12">
+    <div class="col-lg-4 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input name="Title"
+                        [value]="publication.title"
+                        (onChange)="onPropertyChanged($event, 'title')"
+                        (onSaveChanges)="onChangesSaved($event, 'title')"></app-text-input>
+      </mat-card>
+    </div>
+    <div class="col-lg-4 col-sm-12">
       <mat-card class="m-2">
         <app-text-input name="DOI"
                         [value]="publication.doi"
@@ -9,7 +17,7 @@
       </mat-card>
     </div>
 
-    <div class="col-lg-6 col-sm-12">
+    <div class="col-lg-4 col-sm-12">
       <mat-card class="m-2">
         <app-text-input name="URL"
                         [value]="publication.url"

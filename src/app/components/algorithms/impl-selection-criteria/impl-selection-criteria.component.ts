@@ -1,18 +1,13 @@
+import { cloneDeep, isEqual } from 'lodash';
+import { forkJoin } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AlgorithmDto, ImplementationDto } from 'api-atlas/models';
-import {
-  ImplementationDto as NisqImplementationDto,
-  ParameterDto,
-} from 'api-nisq/models';
+import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models';
 import { ImplementationService as NISQImplementationService } from 'api-nisq/services/implementation.service';
+import { ChangePageGuard } from '../../../services/deactivation-guard';
 import { parsePrologRule, PrologRule } from '../../../util/MinimalPrologParser';
-
-export interface ParameterPrologRules {
-  selectionRule: PrologRule;
-  widthRule: PrologRule;
-  depthRule: PrologRule;
-}
 
 @Component({
   selector: 'app-impl-selection-criteria',
@@ -22,10 +17,14 @@ export interface ParameterPrologRules {
 export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
   @Input() algo: AlgorithmDto;
   @Input() impl: ImplementationDto;
+  @Input() guard: ChangePageGuard;
 
+  oldNisqImpl: NisqImplementationDto;
   nisqImpl: NisqImplementationDto;
 
-  paramPrologRules: ParameterPrologRules;
+  paramPrologRules: {
+    selectionRule: PrologRule;
+  };
 
   selection = new SelectionModel<number>(true);
 
@@ -40,6 +39,7 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
         );
         if (foundImpl) {
           this.nisqImpl = foundImpl;
+          this.oldNisqImpl = cloneDeep(foundImpl);
           this.selection.clear();
         } else {
           this.createNisqImplementation();
@@ -53,8 +53,6 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
     }
     this.paramPrologRules = {
       selectionRule: parsePrologRule(this.nisqImpl.selectionRule),
-      widthRule: parsePrologRule(this.nisqImpl.widthRule),
-      depthRule: parsePrologRule(this.nisqImpl.depthRule),
     };
   }
 
@@ -66,56 +64,74 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
   }
 
   deleteMany(): void {
-    this.nisqImplementationService
-      .deleteInputParameters({
-        implId: this.nisqImpl.id,
-        body: this.selection.selected.map(
-          (index) => this.nisqImpl.inputParameters.parameters[index].name
-        ),
-      })
-      .subscribe(() => undefined);
     this.nisqImpl.inputParameters.parameters = this.nisqImpl.inputParameters.parameters.filter(
       (_, index) => !this.selection.isSelected(index)
     );
     this.selection.clear();
   }
 
-  async saveParameter(param: ParameterDto, newName?: string): Promise<void> {
-    // Do nothing if there's no name yet
-    if (!param.name && !newName) {
-      return;
-    }
-    // Very stupid delete & re-create method
-    if (param.name) {
-      try {
-        await this.nisqImplementationService
-          .deleteInputParameters({
-            implId: this.nisqImpl.id,
-            body: [param.name],
-          })
-          .toPromise();
-      } catch (e) {
-        // We don't care
-      }
-    }
-    if (newName) {
-      param.name = newName;
-    }
-    this.nisqImplementationService
-      .addInputParameter({
-        implId: this.nisqImpl.id,
-        body: param,
-      })
-      .subscribe(() => {});
-  }
-
   saveImplementation(): void {
-    this.nisqImplementationService
-      .updateImplementation({
+    // Get lists of all params that need to be deleted, created or both
+    const updatedParams = this.nisqImpl.inputParameters.parameters.filter(
+      (param) => {
+        const prevParam = this.oldNisqImpl.inputParameters.parameters.find(
+          (p) => p.name === param.name
+        );
+        return prevParam && !isEqual(param, prevParam);
+      }
+    );
+    const removedParams = this.oldNisqImpl.inputParameters.parameters
+      .filter(
+        (param) =>
+          !this.nisqImpl.inputParameters.parameters.find(
+            (prevParam) => prevParam.name === param.name
+          )
+      )
+      .concat(updatedParams);
+    const addedParams = this.nisqImpl.inputParameters.parameters
+      .filter(
+        (param) =>
+          !this.oldNisqImpl.inputParameters.parameters.find(
+            (prevParam) => prevParam.name === param.name
+          )
+      )
+      .concat(updatedParams);
+
+    console.log(
+      `Updated params ${updatedParams.length} - del ${removedParams.length} add ${addedParams.length}`
+    );
+
+    // Build chained observables. Deleting needs to come first so re-creating them later will succeed.
+    const allRemovedParams$ = this.nisqImplementationService.deleteInputParameters(
+      {
         implId: this.nisqImpl.id,
-        body: this.nisqImpl,
-      })
-      .subscribe(() => {});
+        body: removedParams.map((param) => param.name),
+      }
+    );
+    const allAddedParams$ = allRemovedParams$.pipe(
+      switchMap(() =>
+        forkJoin(
+          addedParams.map((param) =>
+            this.nisqImplementationService.addInputParameter({
+              implId: this.nisqImpl.id,
+              body: param,
+            })
+          )
+        )
+      )
+    );
+    const updatedImpl$ = allAddedParams$.pipe(
+      switchMap(() =>
+        this.nisqImplementationService.updateImplementation({
+          implId: this.nisqImpl.id,
+          body: this.nisqImpl,
+        })
+      )
+    );
+    updatedImpl$.subscribe((impl) => {
+      this.nisqImpl = impl;
+      this.oldNisqImpl = cloneDeep(impl);
+    });
   }
 
   private createNisqImplementation(): void {

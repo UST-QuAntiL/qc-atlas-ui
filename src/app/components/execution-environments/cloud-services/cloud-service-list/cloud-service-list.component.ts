@@ -21,13 +21,13 @@ export class CloudServiceListComponent implements OnInit {
   @Input() cloudServices: EntityModelCloudServiceDto[];
 
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
-  variableNames = ['name', 'provider', 'description', 'costModel', 'URL'];
+  variableNames = ['name', 'provider', 'description', 'costModel', 'url'];
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
-  externalLinkVariables = ['link'];
+  externalLinkVariables = ['url'];
 
   constructor(
     private utilService: UtilService,
@@ -105,7 +105,7 @@ export class CloudServiceListComponent implements OnInit {
         message:
           'Are you sure you want to delete the following cloud service(s): ',
         data: deleteParams.elements,
-        variableName: 'title',
+        variableName: 'name',
         yesButtonText: 'yes',
         noButtonText: 'no',
       })

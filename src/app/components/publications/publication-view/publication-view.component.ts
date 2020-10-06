@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-publication-view',
@@ -21,6 +22,7 @@ export class PublicationViewComponent implements OnInit {
   constructor(
     private publicationService: PublicationService,
     private route: ActivatedRoute,
+    private utilService: UtilService,
     public guard: ChangePageGuard
   ) {}
 
@@ -60,6 +62,12 @@ export class PublicationViewComponent implements OnInit {
             JSON.stringify(publication)
           ) as EntityModelPublicationDto;
         }
+        // live refresh title
+        this.links[0] = {
+          heading: this.publication.title,
+          subHeading: '',
+        };
+        this.utilService.callSnackBar('Successfully updated publication');
       });
   }
   addTag(): void {

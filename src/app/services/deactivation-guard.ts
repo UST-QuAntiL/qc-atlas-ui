@@ -31,7 +31,6 @@ export class ChangePageGuard
   canDeactivate(
     component:
       | AlgorithmViewComponent
-      | AlgorithmViewComponent
       | ImplementationViewComponent
       | PublicationViewComponent
       | CloudServiceViewComponent
