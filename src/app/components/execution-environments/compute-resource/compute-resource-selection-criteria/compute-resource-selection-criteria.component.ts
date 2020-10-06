@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit } from '@angular/core';
 import { forkJoin, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -6,6 +7,7 @@ import { ComputeResourceDto, SoftwarePlatformDto } from 'api-atlas/models';
 import { ExecutionEnvironmentsService } from 'api-atlas/services';
 import { CreateQpuRequestDto, QpuDto, SdkDto } from 'api-nisq/models';
 import { QpuService, SdksService } from 'api-nisq/services';
+import { ChangePageGuard } from '../../../../services/deactivation-guard';
 
 const selectUsedSdks = (
   softwarePlatforms: SoftwarePlatformDto[],
@@ -22,12 +24,14 @@ export class ComputeResourceSelectionCriteriaComponent implements OnInit {
   @Input()
   public computeResource: ComputeResourceDto;
 
+  oldQpu?: QpuDto;
   qpu?: QpuDto;
 
   constructor(
+    public readonly guard: ChangePageGuard,
     private readonly nisqQpuService: QpuService,
     private readonly sdkService: SdksService,
-    private executionEnvironmentsService: ExecutionEnvironmentsService
+    private readonly executionEnvironmentsService: ExecutionEnvironmentsService
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +41,7 @@ export class ComputeResourceSelectionCriteriaComponent implements OnInit {
       );
       if (found) {
         this.qpu = found;
+        this.oldQpu = cloneDeep(found);
       } else {
         this.createNewQpu();
       }
@@ -51,7 +56,10 @@ export class ComputeResourceSelectionCriteriaComponent implements OnInit {
       };
       this.nisqQpuService
         .updateQpu({ qpuId: this.qpu.id, body })
-        .subscribe(() => {});
+        .subscribe((newQpu) => {
+          this.qpu = newQpu;
+          this.oldQpu = cloneDeep(newQpu);
+        });
     });
   }
 
