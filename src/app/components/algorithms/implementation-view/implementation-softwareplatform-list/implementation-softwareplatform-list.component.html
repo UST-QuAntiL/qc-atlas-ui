@@ -4,6 +4,7 @@
       [data]=linkObject.linkedData
       [variableNames]=variableNames
       [dataColumns]=tableColumns
+      [externalLinkVariables]=externalLinkVariables
       [allowAdd]=tableAddAllowed
       [allowDelete]="true"
       [allowSort]=true
@@ -11,6 +12,7 @@
       [pagination]=pagingInfo
       [paginatorConfig]=paginatorConfig
       (elementClicked)="onElementClicked($event)"
+      (urlClicked)="onUrlClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged($event)"
       (submitDeleteElements)="unlinkSoftwarePlatforms($event)"
       (addElement)="openLinkSoftwarePlatformDialog()"

@@ -3,11 +3,13 @@
     <app-table
       [data]=linkObject.linkedData
       [variableNames]=variableNames
+      [externalLinkVariables]=externalLinkVariables
       [dataColumns]=tableColumns
       [allowAdd]=tableAddAllowed
       [allowDelete]="true"
       [emptyTableMessage]="'No linked software platforms found'"
       (elementClicked)="onElementClicked($event)"
+      (urlClicked)="onUrlClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged()"
       (submitDeleteElements)="unlinkSoftwarePlatforms($event)"
       (addElement)="openLinkSoftwarePlatformDialog()">
