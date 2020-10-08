@@ -1,0 +1,141 @@
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+    <table
+      mat-table
+      [dataSource]="analyzerResults$ | async"
+      matSort
+      multiTemplateDataRows
+      (matSortChange)="changeSort($event.active, $event.direction)"
+    >
+      <ng-container matColumnDef="inputParameters">
+        <th class="backend-column" mat-header-cell *matHeaderCellDef>
+          Input
+        </th>
+        <td class="backend-column" mat-cell *matCellDef="let element">
+          {{ formatParameters(element) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="implementation.name">
+        <th
+          class="backend-column"
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >
+          Implementation
+        </th>
+        <td class="backend-column" mat-cell *matCellDef="let element">
+          {{ element.implementation.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="qpu.name">
+        <th
+          class="backend-column"
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >
+          QPU
+        </th>
+        <td class="backend-column" mat-cell *matCellDef="let element">
+          {{ element.qpu.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="analysedWidth">
+        <th
+          class="value-column"
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >
+          Width
+        </th>
+        <td class="value-column" mat-cell *matCellDef="let element">
+          {{ element.analysedWidth }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="analysedDepth">
+        <th
+          class="value-column"
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >
+          Depth
+        </th>
+        <td class="value-column" mat-cell *matCellDef="let element">
+          {{ element.analysedDepth }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="time">
+        <th
+          class="value-column"
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+        >
+          Time
+        </th>
+        <td class="value-column" mat-cell *matCellDef="let element">
+          {{ element.time }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="execution">
+        <th class="action-column" mat-header-cell *matHeaderCellDef>
+          Execution Result(s)
+        </th>
+        <td class="action-column" mat-cell *matCellDef="let element">
+          <button
+            mat-raised-button
+            *ngIf="hasExecutionResult(element)"
+            type="button"
+            (click)="showExecutionResult(element)"
+          >
+            Show result
+          </button>
+          <span *ngIf="!hasExecutionResult(element)">No results yet</span>
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [attr.colspan]="analyzeColumns.length"
+        >
+          <div
+            class="element-detail"
+            [@detailExpand]="
+              element == expandedElement ? 'expanded' : 'collapsed'
+            "
+          >
+            <ng-container *ngIf="expandedElementExecResult">
+              <div>Status: {{ expandedElementExecResult.status }}</div>
+              <div>Result:</div>
+              <code>{{ expandedElementExecResult.result || 'n/a' }}</code>
+            </ng-container>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="analyzeColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let element; columns: analyzeColumns"
+        class="element-row"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: ['expandedDetail']"
+        class="detail-row"
+      ></tr>
+    </table>
+  </div>
+</mat-card>

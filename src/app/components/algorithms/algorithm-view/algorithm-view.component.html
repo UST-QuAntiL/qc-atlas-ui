@@ -9,7 +9,8 @@
           [allowRemoving]="true"
           [tags]="tags"
           (onRemove)="removeTag($event)"
-          (onAdd)="addTag($event)">
+          (onAdd)="addTag($event)"
+        >
         </app-tags-component>
       </div>
     </div>
@@ -58,6 +59,11 @@
         *ngIf="this.algorithm"
         [algo]="this.algorithm"
       ></app-algorithm-nisq-analyzer>
+    </mat-tab>
+    <mat-tab [hidden]="isNisqUsed" label="NISQ Results">
+      <app-algorithm-nisq-analyzer-results
+        [algo]="this.algorithm"
+      ></app-algorithm-nisq-analyzer-results>
     </mat-tab>
     <mat-tab label="Discussion">
       <h1>Discussion WIP</h1>

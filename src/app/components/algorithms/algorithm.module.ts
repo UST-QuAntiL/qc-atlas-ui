@@ -33,6 +33,8 @@ import { AlgorithmRelatedPatternsComponent } from './algorithm-related-patterns/
 import { AddPatternRelationDialogComponent } from './dialogs/add-pattern-relation-dialog.component';
 import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-relation-dialog.component';
 import { ImplementationPropertiesComponent } from './implementation-properties/implementation-properties.component';
+import { NisqAnalyzerResultsComponent } from './nisq-analyzer-results/nisq-analyzer-results.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,7 @@ import { ImplementationPropertiesComponent } from './implementation-properties/i
     AddPatternRelationDialogComponent,
     AddAlgorithmRelationDialogComponent,
     ImplementationPropertiesComponent,
+    NisqAnalyzerResultsComponent,
   ],
   imports: [
     MatTabsModule,
@@ -73,6 +76,7 @@ import { ImplementationPropertiesComponent } from './implementation-properties/i
     NisqAnalyzerModule,
     MatStepperModule,
     MatProgressSpinnerModule,
+    MatTableModule,
   ],
   exports: [
     AlgorithmListComponent,
