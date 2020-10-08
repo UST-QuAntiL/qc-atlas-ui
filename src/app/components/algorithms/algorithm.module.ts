@@ -15,6 +15,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTreeModule } from '@angular/material/tree';
 import { CardsModule } from 'angular-bootstrap-md';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
@@ -34,7 +35,6 @@ import { AddPatternRelationDialogComponent } from './dialogs/add-pattern-relatio
 import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-relation-dialog.component';
 import { ImplementationPropertiesComponent } from './implementation-properties/implementation-properties.component';
 import { NisqAnalyzerResultsComponent } from './nisq-analyzer-results/nisq-analyzer-results.component';
-import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
