@@ -5,7 +5,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { RenderLatexControllerService } from 'api-latex/services/render-latex-controller.service';
-import { LatexContent } from 'api-latex/models';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-latex-editor-dialog',
@@ -16,11 +16,13 @@ export class LatexEditorDialogComponent implements OnInit {
   latexRenderText = '';
   latexPackages: string[] = [];
   generatedOutput: string[] = [];
+  urlToRenderedPdfBlob = '';
   constructor(
     public dialogRef: MatDialogRef<LatexEditorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
-    private latexRendererService: RenderLatexControllerService
+    private latexRendererService: RenderLatexControllerService,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -31,25 +33,15 @@ export class LatexEditorDialogComponent implements OnInit {
   }
 
   onGenerateLatex(): void {
-    const latexBody: LatexContent = {
-      content: this.latexRenderText,
-      latexPackages: this.latexPackages,
-      output: this.data.output ? this.data.output : 'pdf',
-    };
-    this.latexRendererService.renderLatexAsPdf({ body: latexBody }).subscribe(
-      (response) => {
-        if (response) {
-          this.generatedOutput = response;
-          this.dialogRef.close(this.generatedOutput);
-        } else {
-          this.generatedOutput = ['No response received'];
-        }
-      },
-      (e) => {
-        console.log('error');
-        console.log(e);
-      }
-    );
+    this.utilService
+      .renderLatexContentAndReturnUrlToPdfBlob(
+        this.latexRenderText,
+        this.latexPackages,
+        this.data.output
+      )
+      .subscribe((response) => {
+        this.urlToRenderedPdfBlob = response;
+      });
   }
 }
 
