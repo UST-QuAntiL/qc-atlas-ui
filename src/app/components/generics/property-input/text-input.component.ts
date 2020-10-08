@@ -17,6 +17,7 @@ export class TextInputComponent implements OnInit {
   @Input() multiline = false;
   @Input() maxLines = 1;
   @Input() isLink: boolean;
+  @Input() pattern?: string;
   @Input() opensLatexEditor: boolean;
 
   inputValue: string;

@@ -8,7 +8,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { GenericDataService } from '../../../../util/generic-data.service';
 import { UtilService } from '../../../../util/util.service';
 import { LinkItemListDialogComponent } from '../../../generics/dialogs/link-item-list-dialog.component';
-import { QueryParams } from '../../../generics/data-list/data-list.component';
+import {
+  QueryParams,
+  UrlData,
+} from '../../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-implementation-publications-list',
@@ -20,6 +23,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
 
   tableColumns = ['Title', 'URL', 'DOI', 'Authors'];
   variableNames = ['title', 'url', 'doi', 'authors'];
+  externalLinkVariables = ['url'];
   linkObject: any = {
     title: 'Link publication with ',
     subtitle: 'Search publication by title',
@@ -112,6 +116,11 @@ export class ImplementationPublicationsListComponent implements OnInit {
 
   onElementClicked(publication: any): void {
     this.routeToPublication(publication);
+  }
+
+  onUrlClicked(urlData: UrlData): void {
+    // No check needed since publications have only one url-field called 'url'
+    window.open(urlData.element['url'], '_blank');
   }
 
   routeToPublication(publication: PublicationDto): void {

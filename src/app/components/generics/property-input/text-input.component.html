@@ -5,6 +5,7 @@
       *ngIf="!multiline"
       type="text"
       [(ngModel)]="inputValue"
+      [pattern]="pattern"
       (ngModelChange)="inputChanged()"
       matInput
       (keydown.enter)="saveChanges()"
@@ -12,6 +13,7 @@
     <textarea
       *ngIf="multiline"
       [(ngModel)]="inputValue"
+      [pattern]="pattern"
       (ngModelChange)="inputChanged()"
       [matAutosizeMaxRows]="maxLines"
       [matAutosizeMinRows]="2"
@@ -25,7 +27,8 @@
       matSuffix
       mat-icon-button
       aria-label="Clear"
-      (click)="saveChanges()">
+      (click)="saveChanges()"
+    >
       <mat-icon>save</mat-icon>
     </button>
     <button
@@ -36,7 +39,8 @@
       matSuffix
       mat-icon-button
       aria-label="Clear"
-      (click)="openLink()">
+      (click)="openLink()"
+    >
       <mat-icon>open_in_browser</mat-icon>
     </button>
     <button

@@ -10,6 +10,7 @@ import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import {
   LinkObject,
   QueryParams,
+  UrlData,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { GenericDataService } from '../../../../util/generic-data.service';
@@ -26,6 +27,7 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
   publications: EntityModelSoftwarePlatformDto[];
   variableNames: string[] = ['name', 'link', 'license', 'version'];
   tableColumns: string[] = ['Name', 'Link', 'License', 'Version'];
+  externalLinkVariables = ['link'];
   linkObject: LinkObject = {
     title: 'Link software platform with ',
     subtitle: 'Search software platform by name',
@@ -197,6 +199,11 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
 
   onElementClicked(platform: any): void {
     this.routeToSoftwarePlatform(platform);
+  }
+
+  onUrlClicked(urlData: UrlData): void {
+    // No check needed since publications have only one url-field called 'link'
+    window.open(urlData.element['link'], '_blank');
   }
 
   routeToSoftwarePlatform(softwarePlatform: SoftwarePlatformDto): void {

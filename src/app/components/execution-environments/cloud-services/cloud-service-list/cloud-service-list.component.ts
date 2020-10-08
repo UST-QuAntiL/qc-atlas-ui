@@ -7,6 +7,7 @@ import { UtilService } from '../../../../util/util.service';
 import {
   SelectParams,
   QueryParams,
+  UrlData,
 } from '../../../generics/data-list/data-list.component';
 import { CreateCloudServiceDialogComponent } from '../dialogs/create-cloud-service-dialog.component';
 import { GenericDataService } from '../../../../util/generic-data.service';
@@ -68,6 +69,11 @@ export class CloudServiceListComponent implements OnInit {
       'cloud-services',
       cloudService.id,
     ]);
+  }
+
+  onUrlClicked(urlData: UrlData): void {
+    // No check needed since publications have only one url-field called 'url'
+    window.open(urlData.element['url'], '_blank');
   }
 
   onCreateCloudService(): void {

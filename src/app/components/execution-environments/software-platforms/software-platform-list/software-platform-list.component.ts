@@ -115,7 +115,7 @@ export class SoftwarePlatformListComponent implements OnInit {
         message:
           'Are you sure you want to delete the following software platform(s): ',
         data: deleteParams.elements,
-        variableName: 'title',
+        variableName: 'name',
         yesButtonText: 'yes',
         noButtonText: 'no',
       })

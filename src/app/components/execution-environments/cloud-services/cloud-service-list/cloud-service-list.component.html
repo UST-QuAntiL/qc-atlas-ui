@@ -12,6 +12,7 @@
                [paginatorConfig]=paginatorConfig
                [emptyTableMessage]="'No cloud services found'"
                (elementClicked)="onCloudServiceClicked($event)"
+               (urlClicked)="onUrlClicked($event)"
                (addElement)="onCreateCloudService()"
                (submitDeleteElements)="onDeleteCloudServices($event)"
                (datalistConfigChanged)="getCloudServices($event)"

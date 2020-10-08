@@ -108,7 +108,7 @@ export class ComputeResourceListComponent implements OnInit {
         message:
           'Are you sure you want to delete the following compute resource(s): ',
         data: deleteParams.elements,
-        variableName: 'title',
+        variableName: 'name',
         yesButtonText: 'yes',
         noButtonText: 'no',
       })
