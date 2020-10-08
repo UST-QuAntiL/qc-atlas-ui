@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as deepEqual from 'fast-deep-equal';
+import { LatexContent } from 'api-latex/models/latex-content';
+import { RenderLatexControllerService } from 'api-latex/services/render-latex-controller.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { MissingEntityDialogComponent } from '../components/dialogs/missing-entity-dialog.component';
 
 @Injectable({
@@ -10,7 +14,11 @@ import { MissingEntityDialogComponent } from '../components/dialogs/missing-enti
 export class UtilService {
   isSelectedColor = 'primary';
 
-  constructor(private snackBar: MatSnackBar, public dialog: MatDialog) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog,
+    private latexRendererService: RenderLatexControllerService
+  ) {}
 
   public callSnackBar(text: string): void {
     this.snackBar.open(text, 'Ok', {
@@ -52,5 +60,72 @@ export class UtilService {
 
   public objectsEqual(source: any, target: any): boolean {
     return deepEqual(source, target);
+  }
+
+  public getBlobFromDataUri(dataURI: string): Blob {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    const byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to an ArrayBuffer
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    // write the ArrayBuffer to a blob
+    return new Blob([ab], { type: mimeString });
+  }
+
+  public getDataUriFromBlob(blob: Blob): string {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(blob);
+    let dataUri: string;
+    fileReader.onload = () => {
+      dataUri = fileReader.result.toString();
+    };
+    return dataUri;
+  }
+
+  public renderLatexContentAndReturnUrlToPdfBlob(
+    latexContent: string,
+    additionalPackages: string[] = [],
+    output = 'pdf'
+  ): Observable<string> {
+    const packages = [
+      '\\usepackage{amsmath}',
+      '\\usepackage{tikz}',
+      '\\usetikzlibrary{quantikz}',
+    ];
+    if (additionalPackages) {
+      for (const additionalPackage of additionalPackages) {
+        packages.push(additionalPackage);
+      }
+    }
+    const latexBody: LatexContent = {
+      content: latexContent,
+      latexPackages: packages,
+      output,
+    };
+    return this.latexRendererService.renderLatexAsPdf({ body: latexBody }).pipe(
+      map((response: string[]) => {
+        if (response) {
+          const latexBlob = this.createBlobFromRenderedResult(response);
+          return URL.createObjectURL(latexBlob);
+        }
+      })
+    );
+  }
+
+  public formatLatexContent(latexContent: string) {}
+
+  private createBlobFromRenderedResult(renderedData: any): Blob {
+    return new Blob([renderedData], {
+      type: 'application/pdf',
+    });
   }
 }
