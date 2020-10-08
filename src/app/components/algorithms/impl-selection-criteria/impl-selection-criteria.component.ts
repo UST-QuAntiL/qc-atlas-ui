@@ -120,17 +120,18 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
         )
       )
     );
-    const updatedImpl$ = allAddedParams$.pipe(
-      switchMap(() =>
-        this.nisqImplementationService.updateImplementation({
-          implId: this.nisqImpl.id,
-          body: this.nisqImpl,
-        })
-      )
-    );
-    updatedImpl$.subscribe((impl) => {
-      this.nisqImpl = impl;
-      this.oldNisqImpl = cloneDeep(impl);
+    allAddedParams$.subscribe({
+      complete: () => {
+        this.nisqImplementationService
+          .updateImplementation({
+            implId: this.nisqImpl.id,
+            body: this.nisqImpl,
+          })
+          .subscribe((impl) => {
+            this.nisqImpl = impl;
+            this.oldNisqImpl = cloneDeep(impl);
+          });
+      },
     });
   }
 
@@ -147,6 +148,7 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
       .createImplementation({ body })
       .subscribe((newImpl) => {
         this.nisqImpl = newImpl;
+        this.oldNisqImpl = cloneDeep(newImpl);
         this.selection.clear();
       });
   }
