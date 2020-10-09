@@ -6,6 +6,7 @@
       type="text"
       [(ngModel)]="inputValue"
       [pattern]="pattern"
+      [disabled]="isLatexInput"
       (ngModelChange)="inputChanged()"
       matInput
       (keydown.enter)="saveChanges()"
