@@ -1,33 +1,26 @@
 <h1 mat-dialog-title id="title" >{{data.title}}</h1>
-<div class="row">
-  <div class="-align-left">
-    <div>LaTeX packages</div>
-    <mat-card class="text-container">
-      <label>
-        <textarea class="packages-container" [(ngModel)]="latexPackages" matInput></textarea>
-      </label>
-    </mat-card>
-    <div>LaTeX content</div>
-    <mat-card class="text-container">
-      <label>
-        <textarea class="latex-container" [(ngModel)]="latexRenderText" matInput></textarea>
-      </label>
-    </mat-card>
-  </div>
-  <div class="-align-right">
-    <div>Rendering result</div>
-    <mat-card class="text-container -align-right" *ngIf="urlToRenderedPdfBlob !== ''">
-        <label>
-          <pdf-viewer *ngIf="urlToRenderedPdfBlob" [src]="urlToRenderedPdfBlob" [render-text]="true" style="display: block"></pdf-viewer>
-        </label>
-    </mat-card>
-    <mat-card>
-      <div class="align-bottom">
-        <button floating type="button" mdbBtn class="waves-effect" mdbWavesEffect (click)="onGenerateLatex()">Generate</button>
-      </div>
-      <div class="align-bottom">
-        <button floating type="button" mdbBtn class="waves-effect" mdbWavesEffect (click)="dialogRef.close(latexRenderText)">Close</button>
-      </div>
-    </mat-card>
-  </div>
-</div>
+<mat-card class="card-container">
+  <div>Default LaTeX packages:</div>
+  <mat-label style="font-weight: bold">{{data.latexPackages}}</mat-label>
+  <div style="margin-top: 15px">Additional LaTeX packages:</div>
+  <label>
+    <textarea class="text-container packages-container" [(ngModel)]="latexPackages" matInput></textarea>
+  </label>
+</mat-card>
+<mat-card class="card-container">
+  <div>LaTeX content</div>
+  <label>
+    <textarea class="text-container latex-container" [(ngModel)]="inputText" matInput></textarea>
+  </label>
+</mat-card>
+<mat-card class="card-container">
+  <div>Rendering result</div>
+  <label>
+    <pdf-viewer *ngIf="urlToRenderedPdfBlob" [src]="urlToRenderedPdfBlob" [render-text]="true" style="display: block"></pdf-viewer>
+  </label>
+</mat-card>
+<mat-card class="card-container">
+  <button color="red" outline="true" type="button" mdbBtn class="control-button cancel-button" (click)="dialogRef.close()">Cancel</button>
+  <button color="green" style="float: right" outline="true" type="button" mdbBtn class="control-button submit-button" (click)="dialogRef.close(inputText)">Submit</button>
+  <button color="darkorange" style="float: right" outline="true" type="button" mdbBtn class="control-button preview-button" (click)="onGenerateLatex()">Preview</button>
+</mat-card>

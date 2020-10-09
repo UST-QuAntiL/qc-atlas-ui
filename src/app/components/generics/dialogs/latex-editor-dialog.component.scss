@@ -1,6 +1,14 @@
-.text-container {
-  width: 300px;
+.card-container {
+  margin: 10px;
+  width: auto;
   border: lightgray;
+}
+
+.text-container {
+  width: 450px;
+  border-style: solid;
+  border-width: thin;
+  margin: 10px;
 }
 
 .packages-container {
@@ -9,4 +17,25 @@
 
 .latex-container {
   height: 300px;
+}
+
+.control-button {
+  vertical-align: bottom;
+  margin: 10px;
+}
+
+.control-button:hover {
+  color: white !important;
+}
+
+.preview-button:hover {
+  background-color: darkorange !important;
+}
+
+.submit-button:hover {
+  background-color: green !important;
+}
+
+.cancel-button:hover {
+  background-color: red !important;
 }
