@@ -22,7 +22,8 @@ export class TextInputComponent implements OnInit {
   @Input() opensLatexEditor: boolean;
 
   inputValue: string;
-  latexValue: string;
+  latexText: string;
+  renderOutput = 'pdf';
   urlToRenderedPdfBlob: string;
 
   constructor(
@@ -32,7 +33,7 @@ export class TextInputComponent implements OnInit {
 
   saveChanges(): void {
     if (this.opensLatexEditor) {
-      this.onSaveChanges.emit(this.latexValue);
+      this.onSaveChanges.emit(this.latexText);
     } else {
       this.onSaveChanges.emit(this.inputValue);
     }
@@ -40,7 +41,7 @@ export class TextInputComponent implements OnInit {
 
   inputChanged(): void {
     if (this.opensLatexEditor) {
-      this.onChange.emit(this.latexValue);
+      this.onChange.emit(this.latexText);
     } else {
       if (!this.inputValue) {
         this.inputValue = null;
@@ -55,9 +56,12 @@ export class TextInputComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.opensLatexEditor) {
-      this.latexValue = this.value;
+      this.latexText = this.value;
       if (this.value) {
-        this.renderLatexContent(this.latexValue);
+        this.renderLatexContent(
+          this.latexText,
+          this.utilService.getDefaultLatexPackages()
+        );
       }
     } else {
       this.inputValue = this.value;
@@ -65,34 +69,33 @@ export class TextInputComponent implements OnInit {
   }
 
   openLatexEditor(): void {
-    const doalogRef = this.utilService.createDialog(
+    const packages = this.utilService.getDefaultLatexPackages();
+    const dialogRef = this.utilService.createDialog(
       LatexEditorDialogComponent,
       {
         title: 'LaTeX Render Editor',
-        inputText:
-          //   'Example equation: $\\sqrt{16}=2^{2}$',
-          // latexPackages: ['\\usepackage{amsmath}'],
-          // eslint-disable-next-line max-len
-          'content":"\\begin{quantikz}\n\t\\lstick{$\\ket{0}$} & \\gate{H} & \\ctrl{1} & \\gate{H} & \\ctrl{1} & \\swap{2} & \\ctrl{1} & \\qw \\\\ \n \t \\lstick{$\\ket{0}$} & \\gate{D} & \\targ{} & \\octrl{-1} & \\control{} & \\qw & \\octrl{1} & \\qw \\\\ \n \t &&&&& \\targX{} & \\gate{F} & \\qw \n \\end{quantikz}',
-        latexPackages: ['\\usepackage{tikz}', '\\usetikzlibrary{quantikz}'],
-        output: 'pdf',
+        inputText: this.latexText,
+        latexPackages: packages,
       },
-      undefined
+      'auto'
     );
 
-    doalogRef.afterClosed().subscribe((dialogResult) => {
-      console.log(dialogResult);
-      if (dialogResult !== this.latexValue) {
-        this.latexValue = dialogResult;
-        this.renderLatexContent(this.latexValue);
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult && dialogResult.latexText !== this.latexText) {
+        this.latexText = dialogResult.latexText;
+        this.renderLatexContent(this.latexText, dialogResult.latexPackages);
         this.inputChanged();
       }
     });
   }
 
-  private renderLatexContent(latexValue: string): any {
+  private renderLatexContent(latexValue: string, latexPackages: string[]): any {
     return this.utilService
-      .renderLatexContentAndReturnUrlToPdfBlob(latexValue)
+      .renderLatexContentAndReturnUrlToPdfBlob(
+        latexValue,
+        latexPackages,
+        this.renderOutput
+      )
       .subscribe((blobUrl) => {
         this.urlToRenderedPdfBlob = blobUrl;
       });

@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -13,10 +13,10 @@ import { UtilService } from '../../../util/util.service';
   styleUrls: ['./latex-editor-dialog.component.scss'],
 })
 export class LatexEditorDialogComponent implements OnInit {
-  latexRenderText = '';
-  latexPackages: string[] = [];
-  generatedOutput: string[] = [];
-  urlToRenderedPdfBlob = '';
+  inputText = '';
+  latexPackages = '';
+  urlToRenderedPdfBlob: string;
+
   constructor(
     public dialogRef: MatDialogRef<LatexEditorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -26,17 +26,34 @@ export class LatexEditorDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.latexRenderText = this.data.inputText ? this.data.inputText : '';
-    this.data.latexPackages.forEach((latexPackage) =>
-      this.latexPackages.push(latexPackage)
-    );
+    this.inputText = this.data.inputText ? this.data.inputText : '';
+  }
+
+  onSubmit(): void {
+    this.dialogRef.close({
+      latexText: this.formatInputString(this.inputText),
+      latexPackages: this.formatPackages(this.latexPackages),
+    });
+  }
+
+  formatInputString(input: string): string {
+    let latexRenderText = '';
+    latexRenderText = input.split('\\n').join('\n');
+    latexRenderText = latexRenderText.split('\\t').join('\t');
+    latexRenderText = latexRenderText.split('\\r').join('\r');
+    return latexRenderText;
+  }
+
+  formatPackages(packages: string): string[] {
+    return packages.split(',').join('\n').split('\n');
   }
 
   onGenerateLatex(): void {
+    this.urlToRenderedPdfBlob = null;
     this.utilService
       .renderLatexContentAndReturnUrlToPdfBlob(
-        this.latexRenderText,
-        this.latexPackages,
+        this.formatInputString(this.inputText),
+        this.formatPackages(this.latexPackages),
         this.data.output
       )
       .subscribe((response) => {

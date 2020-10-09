@@ -91,19 +91,47 @@ export class UtilService {
     return dataUri;
   }
 
+  unpackTextAndPackages(
+    packedData: string
+  ): { latexContent: string; latexPackages: string[] } {
+    const splitData = packedData.split('\\use');
+    const content = splitData[0];
+    let packages: string[];
+    for (let i = 1; i < splitData.length; i++) {
+      packages.push('\\use' + splitData[i]);
+    }
+    return { latexContent: content, latexPackages: packages };
+  }
+
+  public packTextAndPackages(text: string, packages: string[]): string {
+    return text.concat(packages.join(''));
+  }
+
+  public renderPackedDataAndReturnUrlToPdfBlob(
+    packedData: string,
+    output = 'pdf'
+  ): Observable<string> {
+    const data = this.unpackTextAndPackages(packedData);
+    return this.renderLatexContentAndReturnUrlToPdfBlob(
+      data.latexContent,
+      data.latexPackages,
+      output
+    );
+  }
+
   public renderLatexContentAndReturnUrlToPdfBlob(
     latexContent: string,
     additionalPackages: string[] = [],
     output = 'pdf'
   ): Observable<string> {
-    const packages = [
-      '\\usepackage{amsmath}',
-      '\\usepackage{tikz}',
-      '\\usetikzlibrary{quantikz}',
-    ];
+    console.log(latexContent);
+    console.log(additionalPackages);
+    const packages = this.getDefaultLatexPackages();
     if (additionalPackages) {
       for (const additionalPackage of additionalPackages) {
-        packages.push(additionalPackage);
+        if (!packages.includes(additionalPackage)) {
+          packages.push(additionalPackage);
+        }
       }
     }
     const latexBody: LatexContent = {
@@ -119,6 +147,10 @@ export class UtilService {
         }
       })
     );
+  }
+
+  public getDefaultLatexPackages(): string[] {
+    return ['\\usepackage{tikz}', '\\usetikzlibrary{quantikz}'];
   }
 
   public formatLatexContent(latexContent: string) {}
