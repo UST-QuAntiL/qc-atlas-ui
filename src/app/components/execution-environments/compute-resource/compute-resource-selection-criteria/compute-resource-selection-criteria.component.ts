@@ -71,6 +71,7 @@ export class ComputeResourceSelectionCriteriaComponent implements OnInit {
       };
       this.nisqQpuService.createQpu({ body }).subscribe((newQpu) => {
         this.qpu = newQpu;
+        this.oldQpu = cloneDeep(newQpu);
       });
     });
   }
