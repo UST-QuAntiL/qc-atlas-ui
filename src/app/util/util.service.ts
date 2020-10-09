@@ -6,6 +6,7 @@ import { LatexContent } from 'api-latex/models/latex-content';
 import { RenderLatexControllerService } from 'api-latex/services/render-latex-controller.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { newArray } from '@angular/compiler/src/util';
 import { MissingEntityDialogComponent } from '../components/dialogs/missing-entity-dialog.component';
 
 @Injectable({
@@ -62,33 +63,40 @@ export class UtilService {
     return deepEqual(source, target);
   }
 
-  public getBlobFromDataUri(dataURI: string): Blob {
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-    const byteString = atob(dataURI.split(',')[1]);
+  // This Block works and could be used to persist the already rendered Blob element as a Data URI in the backend!
+  // At the moment, the LaTeX source code is persisted in the backend
 
-    // separate out the mime component
-    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  // public getBlobFromDataUri(dataURI: string): Blob {
+  //   // convert base64 to raw binary data held in a string
+  //   // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+  //   const byteString = atob(dataURI.split(',')[1]);
+  //
+  //   // separate out the mime component
+  //   const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  //
+  //   // write the bytes of the string to an ArrayBuffer
+  //   const ab = new ArrayBuffer(byteString.length);
+  //   const ia = new Uint8Array(ab);
+  //   for (let i = 0; i < byteString.length; i++) {
+  //     ia[i] = byteString.charCodeAt(i);
+  //   }
+  //
+  //   // write the ArrayBuffer to a blob
+  //   return new Blob([ab], { type: mimeString });
+  // }
+  //
+  // public getDataUriFromBlob(blob: Blob): string {
+  //   const fileReader = new FileReader();
+  //   fileReader.readAsDataURL(blob);
+  //   let dataUri: string;
+  //   fileReader.onload = () => {
+  //     dataUri = fileReader.result.toString();
+  //   };
+  //   return dataUri;
+  // }
 
-    // write the bytes of the string to an ArrayBuffer
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-
-    // write the ArrayBuffer to a blob
-    return new Blob([ab], { type: mimeString });
-  }
-
-  public getDataUriFromBlob(blob: Blob): string {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(blob);
-    let dataUri: string;
-    fileReader.onload = () => {
-      dataUri = fileReader.result.toString();
-    };
-    return dataUri;
+  public packTextAndPackages(text: string, packages: string[]): string {
+    return text.concat(packages.join(''));
   }
 
   unpackTextAndPackages(
@@ -96,15 +104,11 @@ export class UtilService {
   ): { latexContent: string; latexPackages: string[] } {
     const splitData = packedData.split('\\use');
     const content = splitData[0];
-    let packages: string[];
+    const packages: string[] = [];
     for (let i = 1; i < splitData.length; i++) {
       packages.push('\\use' + splitData[i]);
     }
     return { latexContent: content, latexPackages: packages };
-  }
-
-  public packTextAndPackages(text: string, packages: string[]): string {
-    return text.concat(packages.join(''));
   }
 
   public renderPackedDataAndReturnUrlToPdfBlob(
@@ -124,8 +128,6 @@ export class UtilService {
     additionalPackages: string[] = [],
     output = 'pdf'
   ): Observable<string> {
-    console.log(latexContent);
-    console.log(additionalPackages);
     const packages = this.getDefaultLatexPackages();
     if (additionalPackages) {
       for (const additionalPackage of additionalPackages) {

@@ -22,7 +22,7 @@ export class TextInputComponent implements OnInit {
   @Input() opensLatexEditor: boolean;
 
   inputValue: string;
-  latexText: string;
+  packedLatexValue: string;
   renderOutput = 'pdf';
   urlToRenderedPdfBlob: string;
 
@@ -33,7 +33,7 @@ export class TextInputComponent implements OnInit {
 
   saveChanges(): void {
     if (this.opensLatexEditor) {
-      this.onSaveChanges.emit(this.latexText);
+      this.onSaveChanges.emit(this.packedLatexValue);
     } else {
       this.onSaveChanges.emit(this.inputValue);
     }
@@ -41,7 +41,7 @@ export class TextInputComponent implements OnInit {
 
   inputChanged(): void {
     if (this.opensLatexEditor) {
-      this.onChange.emit(this.latexText);
+      this.onChange.emit(this.packedLatexValue);
     } else {
       if (!this.inputValue) {
         this.inputValue = null;
@@ -56,12 +56,9 @@ export class TextInputComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.opensLatexEditor) {
-      this.latexText = this.value;
+      this.packedLatexValue = this.value;
       if (this.value) {
-        this.renderLatexContent(
-          this.latexText,
-          this.utilService.getDefaultLatexPackages()
-        );
+        this.renderLatexContent(this.packedLatexValue);
       }
     } else {
       this.inputValue = this.value;
@@ -69,33 +66,27 @@ export class TextInputComponent implements OnInit {
   }
 
   openLatexEditor(): void {
-    const packages = this.utilService.getDefaultLatexPackages();
     const dialogRef = this.utilService.createDialog(
       LatexEditorDialogComponent,
       {
         title: 'LaTeX Render Editor',
-        inputText: this.latexText,
-        latexPackages: packages,
+        packedLatexValue: this.packedLatexValue,
       },
       'auto'
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult && dialogResult.latexText !== this.latexText) {
-        this.latexText = dialogResult.latexText;
-        this.renderLatexContent(this.latexText, dialogResult.latexPackages);
+      if (dialogResult && dialogResult !== this.packedLatexValue) {
+        this.packedLatexValue = dialogResult;
+        this.renderLatexContent(this.packedLatexValue);
         this.inputChanged();
       }
     });
   }
 
-  private renderLatexContent(latexValue: string, latexPackages: string[]): any {
+  private renderLatexContent(latexValue: string): any {
     return this.utilService
-      .renderLatexContentAndReturnUrlToPdfBlob(
-        latexValue,
-        latexPackages,
-        this.renderOutput
-      )
+      .renderPackedDataAndReturnUrlToPdfBlob(latexValue, this.renderOutput)
       .subscribe((blobUrl) => {
         this.urlToRenderedPdfBlob = blobUrl;
       });

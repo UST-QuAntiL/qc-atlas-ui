@@ -15,6 +15,7 @@ import { UtilService } from '../../../util/util.service';
 export class LatexEditorDialogComponent implements OnInit {
   inputText = '';
   latexPackages = '';
+  defaultLatexPackages = [];
   urlToRenderedPdfBlob: string;
 
   constructor(
@@ -26,14 +27,21 @@ export class LatexEditorDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.inputText = this.data.inputText ? this.data.inputText : '';
+    this.defaultLatexPackages = this.utilService.getDefaultLatexPackages();
+    const inputData = this.utilService.unpackTextAndPackages(
+      this.data.packedLatexValue
+    );
+    this.inputText = inputData.latexContent;
+    this.latexPackages = inputData.latexPackages.join('\n');
   }
 
   onSubmit(): void {
-    this.dialogRef.close({
-      latexText: this.formatInputString(this.inputText),
-      latexPackages: this.formatPackages(this.latexPackages),
-    });
+    this.dialogRef.close(
+      this.utilService.packTextAndPackages(
+        this.formatInputString(this.inputText),
+        this.formatPackages(this.latexPackages)
+      )
+    );
   }
 
   formatInputString(input: string): string {
@@ -53,8 +61,7 @@ export class LatexEditorDialogComponent implements OnInit {
     this.utilService
       .renderLatexContentAndReturnUrlToPdfBlob(
         this.formatInputString(this.inputText),
-        this.formatPackages(this.latexPackages),
-        this.data.output
+        this.formatPackages(this.latexPackages)
       )
       .subscribe((response) => {
         this.urlToRenderedPdfBlob = response;
@@ -64,7 +71,5 @@ export class LatexEditorDialogComponent implements OnInit {
 
 export interface DialogData {
   title: string;
-  inputText?: string;
-  latexPackages?: string[];
-  output?: string;
+  packedLatexValue?: string;
 }
