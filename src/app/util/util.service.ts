@@ -95,7 +95,7 @@ export class UtilService {
   //   return dataUri;
   // }
 
-  public packTextAndPackages(text: string, packages: string[]): string {
+  public packTextAndPackages(text = '', packages: string[]): string {
     return text.concat(packages.join(''));
   }
 
