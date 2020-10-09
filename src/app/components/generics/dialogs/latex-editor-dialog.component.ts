@@ -28,11 +28,13 @@ export class LatexEditorDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.defaultLatexPackages = this.utilService.getDefaultLatexPackages();
-    const inputData = this.utilService.unpackTextAndPackages(
-      this.data.packedLatexValue
-    );
-    this.inputText = inputData.latexContent;
-    this.latexPackages = inputData.latexPackages.join('\n');
+    if (this.data.packedLatexValue) {
+      const inputData = this.utilService.unpackTextAndPackages(
+        this.data.packedLatexValue
+      );
+      this.inputText = inputData.latexContent;
+      this.latexPackages = inputData.latexPackages.join('\n');
+    }
   }
 
   onSubmit(): void {
@@ -57,7 +59,7 @@ export class LatexEditorDialogComponent implements OnInit {
   }
 
   onGenerateLatex(): void {
-    this.urlToRenderedPdfBlob = null;
+    this.urlToRenderedPdfBlob = undefined;
     this.utilService
       .renderLatexContentAndReturnUrlToPdfBlob(
         this.formatInputString(this.inputText),
