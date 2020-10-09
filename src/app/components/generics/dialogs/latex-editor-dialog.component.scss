@@ -1,14 +1,22 @@
+@import "theme";
+
+.dialog-container {
+  background: rgba(mat-color($qc-atlas-ui-accent), 0.20);
+  margin: 0;
+}
+
 .card-container {
   margin: 10px;
   width: auto;
   border: lightgray;
+  color: rgba(0, 0, 0, 0.54);
 }
 
 .text-container {
   width: 450px;
   border-style: solid;
   border-width: thin;
-  margin: 10px;
+  margin: 5px;
 }
 
 .packages-container {
@@ -21,7 +29,7 @@
 
 .control-button {
   vertical-align: bottom;
-  margin: 10px;
+  margin: 5px;
 }
 
 .control-button:hover {
