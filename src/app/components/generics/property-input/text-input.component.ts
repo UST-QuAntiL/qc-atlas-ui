@@ -19,7 +19,7 @@ export class TextInputComponent implements OnInit {
   @Input() maxLines = 1;
   @Input() isLink: boolean;
   @Input() pattern?: string;
-  @Input() opensLatexEditor: boolean;
+  @Input() isLaTeXInput: boolean;
 
   inputValue: string;
   packedLatexValue: string;
@@ -32,7 +32,7 @@ export class TextInputComponent implements OnInit {
   ) {}
 
   saveChanges(): void {
-    if (this.opensLatexEditor) {
+    if (this.isLaTeXInput) {
       this.onSaveChanges.emit(this.packedLatexValue);
     } else {
       this.onSaveChanges.emit(this.inputValue);
@@ -40,7 +40,7 @@ export class TextInputComponent implements OnInit {
   }
 
   inputChanged(): void {
-    if (this.opensLatexEditor) {
+    if (this.isLaTeXInput) {
       this.onChange.emit(this.packedLatexValue);
     } else {
       if (!this.inputValue) {
@@ -55,7 +55,7 @@ export class TextInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.opensLatexEditor) {
+    if (this.isLaTeXInput) {
       this.packedLatexValue = this.value;
       if (this.value) {
         this.renderLatexContent(this.packedLatexValue);
