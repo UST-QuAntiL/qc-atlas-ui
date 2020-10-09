@@ -27,8 +27,6 @@ import {
   sketchOptions,
 } from '../../../util/options';
 import { LinkObject } from '../../generics/data-list/data-list.component';
-import { UtilService } from '../../../util/util.service';
-import { LatexEditorDialogComponent } from '../../generics/dialogs/latex-editor-dialog.component';
 
 @Component({
   selector: 'app-algorithm-properties',
@@ -95,8 +93,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   constructor(
     private algorithmService: AlgorithmService,
     private applicationAreaService: ApplicationAreasService,
-    private problemTypeService: ProblemTypeService,
-    private utilService: UtilService
+    private problemTypeService: ProblemTypeService
   ) {}
 
   ngOnInit(): void {
