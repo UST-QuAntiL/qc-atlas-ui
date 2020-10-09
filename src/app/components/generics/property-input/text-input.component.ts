@@ -76,7 +76,10 @@ export class TextInputComponent implements OnInit {
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult && dialogResult !== this.packedLatexValue) {
+      if (
+        dialogResult !== undefined &&
+        dialogResult !== this.packedLatexValue
+      ) {
         this.packedLatexValue = dialogResult;
         this.renderLatexContent(this.packedLatexValue);
         this.inputChanged();
@@ -84,8 +87,8 @@ export class TextInputComponent implements OnInit {
     });
   }
 
-  private renderLatexContent(latexValue: string): any {
-    return this.utilService
+  private renderLatexContent(latexValue: string): void {
+    this.utilService
       .renderPackedDataAndReturnUrlToPdfBlob(latexValue, this.renderOutput)
       .subscribe((blobUrl) => {
         this.urlToRenderedPdfBlob = blobUrl;
