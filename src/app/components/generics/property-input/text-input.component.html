@@ -18,11 +18,11 @@
       [matAutosizeMaxRows]="maxLines"
       [matAutosizeMinRows]="2"
       [matTextareaAutosize]="true"
-      [disabled]="isLaTeXInput"
+      [disabled]="isLatexInput"
       matInput
     ></textarea>
     <button
-      *ngIf="(!isLaTeXInput && (inputValue !== value)) || (isLaTeXInput && (packedLatexValue !== value))"
+      *ngIf="(!isLatexInput && (inputValue !== value)) || (isLatexInput && (packedLatexValue !== value))"
       mat-button
       matSuffix
       mat-icon-button
@@ -44,7 +44,7 @@
       <mat-icon>open_in_browser</mat-icon>
     </button>
     <button
-      *ngIf="isLaTeXInput"
+      *ngIf="isLatexInput"
       matTooltip="Open LaTeX editor"
       matTooltipPosition="above"
       mat-button
