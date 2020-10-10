@@ -80,7 +80,12 @@ export class ApplicationAreasListComponent implements OnInit {
         this.applicationAreasService
           .createApplicationArea(params)
           .subscribe((data) => {
-            this.getApplicationAreas({});
+            this.getApplicationAreasHateoas(
+              this.utilService.getLastPageAfterCreation(
+                this.pagingInfo._links.self.href,
+                this.pagingInfo
+              )
+            );
             this.utilService.callSnackBar(
               'Successfully added application area'
             );
@@ -105,6 +110,7 @@ export class ApplicationAreasListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          let successfulDeletions = 0;
           for (const applicationArea of event.elements) {
             deletionTasks.push(
               this.applicationAreasService
@@ -115,17 +121,24 @@ export class ApplicationAreasListComponent implements OnInit {
             );
           }
           forkJoin(deletionTasks).subscribe(
-            () => {
-              this.getApplicationAreas(event.queryParams);
-              this.utilService.callSnackBar(
-                'Successfully deleted application area(s)'
-              );
+            (successfulTasks) => {
+              successfulDeletions = successfulTasks.length;
             },
             () => {
-              this.getApplicationAreas(event.queryParams);
               this.utilService.callSnackBar(
                 'Delete rejected! Application area is used in other places.'
               );
+            },
+            () => {
+              if (this.applicationAreas.length === successfulDeletions) {
+                this.getApplicationAreasHateoas(
+                  this.pagingInfo._links.prev.href
+                );
+              } else {
+                this.getApplicationAreasHateoas(
+                  this.pagingInfo._links.self.href
+                );
+              }
             }
           );
         }
@@ -155,7 +168,7 @@ export class ApplicationAreasListComponent implements OnInit {
           this.applicationAreasService
             .updateApplicationArea(params)
             .subscribe((data) => {
-              this.getApplicationAreas(event.queryParams);
+              this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
               this.utilService.callSnackBar(
                 'Successfully edited application area'
               );

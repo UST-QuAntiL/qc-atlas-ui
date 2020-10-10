@@ -95,7 +95,12 @@ export class ProblemTypesListComponent implements OnInit {
 
         params.body = problemTypeDto;
         this.problemTypeService.createProblemType(params).subscribe((data) => {
-          this.getProblemTypes({});
+          this.getProblemTypesHateoas(
+            this.utilService.getLastPageAfterCreation(
+              this.pagingInfo._links.self.href,
+              this.pagingInfo
+            )
+          );
           this.utilService.callSnackBar('Successfully added problem type');
         });
       }
@@ -117,6 +122,7 @@ export class ProblemTypesListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          let successfulDeletions = 0;
           for (const problemType of event.elements) {
             deletionTasks.push(
               this.problemTypeService.deleteProblemType({
@@ -124,18 +130,22 @@ export class ProblemTypesListComponent implements OnInit {
               })
             );
           }
+          console.log(deletionTasks.length);
           forkJoin(deletionTasks).subscribe(
-            () => {
-              this.getProblemTypes(event.queryParams);
-              this.utilService.callSnackBar(
-                'Successfully deleted problem type(s)'
-              );
+            (successfulTasks) => {
+              successfulDeletions = successfulTasks.length;
             },
             () => {
-              this.getProblemTypes(event.queryParams);
               this.utilService.callSnackBar(
                 'Delete rejected! Problem type is used in other places.'
               );
+            },
+            () => {
+              if (this.problemTypes.length === successfulDeletions) {
+                this.getProblemTypesHateoas(this.pagingInfo._links.prev.href);
+              } else {
+                this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
+              }
             }
           );
         }
@@ -184,7 +194,7 @@ export class ProblemTypesListComponent implements OnInit {
             this.problemTypeService
               .updateProblemType(params)
               .subscribe((data) => {
-                this.getProblemTypes(event.queryParams);
+                this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
                 this.utilService.callSnackBar(
                   'Successfully edited problem type'
                 );

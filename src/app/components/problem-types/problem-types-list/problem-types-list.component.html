@@ -12,7 +12,7 @@
                [paginatorConfig]=paginatorConfig
                [emptyTableMessage]="'No problem types found'"
                (addElement)="onAddElement()"
-               (submitSelectedElements)="onDeleteElements($event)"
+               (submitDeleteElements)="onDeleteElements($event)"
                (updateClicked)="onEditElement($event)"
                (datalistConfigChanged)="getProblemTypes($event)"
                (pageChange)="getProblemTypesHateoas($event)">

@@ -53,4 +53,27 @@ export class UtilService {
   public objectsEqual(source: any, target: any): boolean {
     return deepEqual(source, target);
   }
+
+  /**
+   * This method returns the url to the last page of a table after the creation of the new object.
+   *
+   * @param currentUrl
+   * @param pagingInfo
+   * @return correctUrl
+   */
+  public getLastPageAfterCreation(currentUrl: string, pagingInfo: any): string {
+    const url = new URL(currentUrl);
+    let correctPage;
+
+    // If current last page is not full, then it stays the last page
+    if (pagingInfo.page.totalElements % pagingInfo.page.size !== 0) {
+      correctPage = pagingInfo.page.totalPages - 1;
+    } else {
+      correctPage = pagingInfo.page.totalPages;
+    }
+
+    // Adjust URL with correct page parameter
+    url.searchParams.set('page', correctPage.toString());
+    return url.toString();
+  }
 }
