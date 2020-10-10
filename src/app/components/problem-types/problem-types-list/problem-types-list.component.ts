@@ -130,7 +130,6 @@ export class ProblemTypesListComponent implements OnInit {
               })
             );
           }
-          console.log(deletionTasks.length);
           forkJoin(deletionTasks).subscribe(
             (successfulTasks) => {
               successfulDeletions = successfulTasks.length;
