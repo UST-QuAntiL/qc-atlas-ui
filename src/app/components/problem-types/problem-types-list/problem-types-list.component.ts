@@ -164,6 +164,7 @@ export class ProblemTypesListComponent implements OnInit {
     const dialogRef = this.dialog.open(EditProblemTypeDialogComponent, {
       data: {
         title: 'Edit problem type',
+        id: event.id,
         name: event.name,
         parentProblemType: parentProblemTypeDto,
       },
@@ -172,41 +173,22 @@ export class ProblemTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        if (
-          dialogResult.newName !== event.name ||
-          !dialogResult.newParentProblemType ||
-          (dialogResult.newParentProblemType &&
-            dialogResult.newParentProblemType.id !==
-              (event.parentProblemType as string))
-        ) {
-          const newProblemTypeDto: EntityModelProblemTypeDto = {
-            id: event.id,
-            name: dialogResult.newName,
-          };
-          if (dialogResult.newParentProblemType) {
-            newProblemTypeDto.parentProblemType =
-              dialogResult.newParentProblemType.id;
-          }
+        const updatedProblemType: EntityModelProblemTypeDto = {
+          id: dialogResult.id,
+          name: dialogResult.name,
+          parentProblemType: dialogResult.parentProblemType
+            ? dialogResult.parentProblemType.id
+            : null,
+        };
 
-          if (newProblemTypeDto.id !== newProblemTypeDto.parentProblemType) {
-            const params: any = {
-              problemTypeId: newProblemTypeDto.id,
-              body: newProblemTypeDto,
-            };
-            this.problemTypeService
-              .updateProblemType(params)
-              .subscribe((data) => {
-                this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
-                this.utilService.callSnackBar(
-                  'Successfully edited problem type'
-                );
-              });
-          } else {
-            this.utilService.callSnackBar(
-              'Edit aborted! Parent problem type must differ from problem type.'
-            );
-          }
-        }
+        const params: any = {
+          problemTypeId: updatedProblemType.id,
+          body: updatedProblemType,
+        };
+        this.problemTypeService.updateProblemType(params).subscribe((data) => {
+          this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
+          this.utilService.callSnackBar('Successfully edited problem type');
+        });
       }
     });
   }
