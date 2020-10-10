@@ -140,7 +140,10 @@ export class ProblemTypesListComponent implements OnInit {
               );
             },
             () => {
-              if (this.problemTypes.length === successfulDeletions) {
+              if (
+                this.problemTypes.length === successfulDeletions &&
+                this.pagingInfo.page.number !== 0
+              ) {
                 this.getProblemTypesHateoas(this.pagingInfo._links.prev.href);
               } else {
                 this.getProblemTypesHateoas(this.pagingInfo._links.self.href);

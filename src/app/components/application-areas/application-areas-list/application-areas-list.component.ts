@@ -130,7 +130,10 @@ export class ApplicationAreasListComponent implements OnInit {
               );
             },
             () => {
-              if (this.applicationAreas.length === successfulDeletions) {
+              if (
+                this.applicationAreas.length === successfulDeletions &&
+                this.pagingInfo.page.number !== 0
+              ) {
                 this.getApplicationAreasHateoas(
                   this.pagingInfo._links.prev.href
                 );
