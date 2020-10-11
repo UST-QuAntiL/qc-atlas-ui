@@ -4,6 +4,7 @@ import { EntityModelPatternRelationTypeDto } from 'api-atlas/models/entity-model
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { UtilService } from '../../../util/util.service';
+// eslint-disable-next-line max-len
 import { AddOrEditPatternRelationTypeDialogComponent } from '../dialogs/add-or-edit-pattern-relation-type-dialog/add-or-edit-pattern-relation-type-dialog.component';
 import {
   ConfirmDialogComponent,
