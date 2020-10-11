@@ -97,7 +97,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
     const dialogData: ConfirmDialogData = {
       title: 'Confirm Deletion',
       message:
-        'Are you sure you want to delete the following algorithm relation(s):',
+        'Are you sure you want to delete the following algorithm relation type(s):',
       data: event.elements,
       variableName: 'name',
       yesButtonText: 'yes',
