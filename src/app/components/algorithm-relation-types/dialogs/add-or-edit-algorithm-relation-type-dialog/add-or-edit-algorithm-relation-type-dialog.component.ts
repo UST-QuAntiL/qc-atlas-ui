@@ -5,9 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
 
 @Component({
   selector: 'app-add-or-edit-algorithm-relation-type-dialog',
@@ -16,10 +14,8 @@ import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relat
 })
 export class AddOrEditAlgorithmRelationTypeDialogComponent implements OnInit {
   algorithmRelationTypeFormGroup: FormGroup;
-  existingAlgorithmRelationTypes: EntityModelApplicationAreaDto[];
 
   constructor(
-    private algorithmRelationTypeService: AlgorithmRelationTypeService,
     public dialogRef: MatDialogRef<
       AddOrEditAlgorithmRelationTypeDialogComponent
     >,
@@ -42,17 +38,6 @@ export class AddOrEditAlgorithmRelationTypeDialogComponent implements OnInit {
         Validators.maxLength(255),
       ]),
     });
-
-    this.algorithmRelationTypeService
-      .getAlgorithmRelationTypes()
-      .subscribe((types) => {
-        if (types._embedded) {
-          this.existingAlgorithmRelationTypes =
-            types._embedded.algoRelationTypes;
-        } else {
-          this.existingAlgorithmRelationTypes = [];
-        }
-      });
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.name = this.algorithmRelationTypeName.value;

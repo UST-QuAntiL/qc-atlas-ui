@@ -47,6 +47,9 @@ import { AddOrEditApplicationAreaDialogComponent } from './components/applicatio
 import { AddOrEditAlgorithmRelationTypeDialogComponent } from './components/algorithm-relation-types/dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
 // eslint-disable-next-line max-len
 import { AlgorithmRelationTypesListComponent } from './components/algorithm-relation-types/algorithm-relation-types-list/algorithm-relation-types-list.component';
+import { PatternRelationTypesListComponent } from './components/pattern-relation-types/pattern-relation-types-list/pattern-relation-types-list.component';
+// eslint-disable-next-line max-len
+import { AddOrEditPatternRelationTypeDialogComponent } from './components/pattern-relation-types/dialogs/add-or-edit-pattern-relation-type-dialog/add-or-edit-pattern-relation-type-dialog.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +67,8 @@ import { AlgorithmRelationTypesListComponent } from './components/algorithm-rela
     ProblemTypesListComponent,
     AlgorithmRelationTypesListComponent,
     ApplicationAreasListComponent,
+    PatternRelationTypesListComponent,
+    AddOrEditPatternRelationTypeDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

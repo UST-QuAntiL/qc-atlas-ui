@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
-import { EntityModelAlgorithmRelationTypeDto } from 'api-atlas/models/entity-model-algorithm-relation-type-dto';
+import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
+import { EntityModelPatternRelationTypeDto } from 'api-atlas/models/entity-model-pattern-relation-type-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { UtilService } from '../../../util/util.service';
+import { AddOrEditPatternRelationTypeDialogComponent } from '../dialogs/add-or-edit-pattern-relation-type-dialog/add-or-edit-pattern-relation-type-dialog.component';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
-// eslint-disable-next-line max-len
-import { AddOrEditAlgorithmRelationTypeDialogComponent } from '../dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
 
 @Component({
-  selector: 'app-algorithm-relation-types',
-  templateUrl: './algorithm-relation-types-list.component.html',
-  styleUrls: ['./algorithm-relation-types-list.component.scss'],
+  selector: 'app-pattern-relation-types-list',
+  templateUrl: './pattern-relation-types-list.component.html',
+  styleUrls: ['./pattern-relation-types-list.component.scss'],
 })
-export class AlgorithmRelationTypesListComponent implements OnInit {
-  algorithmRelationTypes: any[] = [];
+export class PatternRelationTypesListComponent implements OnInit {
+  patternRelationTypes: any[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
   pagingInfo: any = {};
@@ -27,33 +26,33 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
   };
 
   constructor(
-    private algorithmRelationTypeService: AlgorithmRelationTypeService,
+    private patternRelationTypeService: PatternRelationTypeService,
     private genericDataService: GenericDataService,
     private utilService: UtilService
   ) {}
 
   ngOnInit(): void {}
 
-  getAlgorithmRelationTypes(params: any): void {
-    this.algorithmRelationTypeService
-      .getAlgorithmRelationTypes(params)
+  getPatternRelationTypes(params: any): void {
+    this.patternRelationTypeService
+      .getPatternRelationTypes(params)
       .subscribe((data) => {
-        this.prepareAlgorithmRelationTypeData(data);
+        this.preparePatternRelationTypeData(data);
       });
   }
 
-  getAlgorithmRelationTypesHateoas(url: string): void {
+  getPatternRelationTypesHateoas(url: string): void {
     this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareAlgorithmRelationTypeData(data);
+      this.preparePatternRelationTypeData(data);
     });
   }
 
-  prepareAlgorithmRelationTypeData(data): void {
+  preparePatternRelationTypeData(data): void {
     // Read all incoming data
     if (data._embedded) {
-      this.algorithmRelationTypes = data._embedded.algoRelationTypes;
+      this.patternRelationTypes = data._embedded.patternRelationTypes;
     } else {
-      this.algorithmRelationTypes = [];
+      this.patternRelationTypes = [];
     }
     this.pagingInfo.page = data.page;
     this.pagingInfo._links = data._links;
@@ -62,31 +61,31 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
   onAddElement(): void {
     const params: any = {};
     const dialogRef = this.utilService.createDialog(
-      AddOrEditAlgorithmRelationTypeDialogComponent,
+      AddOrEditPatternRelationTypeDialogComponent,
       {
-        title: 'Create new algorithm relation type',
+        title: 'Create new pattern relation type',
       }
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const algorithmRelationType: EntityModelAlgorithmRelationTypeDto = {
+        const algorithmRelationType: EntityModelPatternRelationTypeDto = {
           id: undefined,
           name: dialogResult.name,
         };
 
         params.body = algorithmRelationType;
-        this.algorithmRelationTypeService
-          .createAlgorithmRelationType(params)
+        this.patternRelationTypeService
+          .createPatternRelationType(params)
           .subscribe((data) => {
-            this.getAlgorithmRelationTypesHateoas(
+            this.getPatternRelationTypesHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
                 this.pagingInfo
               )
             );
             this.utilService.callSnackBar(
-              'Successfully added algorithm relation type'
+              'Successfully added pattern relation type'
             );
           });
       }
@@ -97,7 +96,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
     const dialogData: ConfirmDialogData = {
       title: 'Confirm Deletion',
       message:
-        'Are you sure you want to delete the following algorithm relation(s):',
+        'Are you sure you want to delete the following pattern relation(s):',
       data: event.elements,
       variableName: 'name',
       yesButtonText: 'yes',
@@ -110,11 +109,11 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
         if (dialogResult) {
           const deletionTasks = [];
           let successfulDeletions = 0;
-          for (const algorithmRelationType of event.elements) {
+          for (const patternRelationType of event.elements) {
             deletionTasks.push(
-              this.algorithmRelationTypeService
-                .deleteAlgorithmRelationType({
-                  algorithmRelationTypeId: algorithmRelationType.id,
+              this.patternRelationTypeService
+                .deletePatternRelationType({
+                  patternRelationTypeId: patternRelationType.id,
                 })
                 .toPromise()
                 .then(() => successfulDeletions++)
@@ -124,15 +123,15 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
-                this.algorithmRelationTypes.length,
+                this.patternRelationTypes.length,
                 this.pagingInfo
               )
             ) {
-              this.getAlgorithmRelationTypesHateoas(
+              this.getPatternRelationTypesHateoas(
                 this.pagingInfo._links.prev.href
               );
             } else {
-              this.getAlgorithmRelationTypesHateoas(
+              this.getPatternRelationTypesHateoas(
                 this.pagingInfo._links.self.href
               );
             }
@@ -141,7 +140,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
                 successfulDeletions +
                 '/' +
                 dialogResult.data.length +
-                ' algorithm relation types.'
+                ' pattern relation types.'
             );
           });
         }
@@ -150,9 +149,9 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
 
   onEditElement(event: any): void {
     const dialogRef = this.utilService.createDialog(
-      AddOrEditAlgorithmRelationTypeDialogComponent,
+      AddOrEditPatternRelationTypeDialogComponent,
       {
-        title: 'Edit algorithm relation type',
+        title: 'Edit pattern relation type',
         id: event.id,
         name: event.name,
       }
@@ -160,23 +159,23 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const updatedAlgorithmRelationType: EntityModelAlgorithmRelationTypeDto = {
+        const updatedPatternRelationType: EntityModelPatternRelationTypeDto = {
           id: dialogResult.id,
           name: dialogResult.name,
         };
 
         const params: any = {
-          algorithmRelationTypeId: updatedAlgorithmRelationType.id,
-          body: updatedAlgorithmRelationType,
+          patternRelationTypeId: updatedPatternRelationType.id,
+          body: updatedPatternRelationType,
         };
-        this.algorithmRelationTypeService
-          .updateAlgorithmRelationType(params)
+        this.patternRelationTypeService
+          .updatePatternRelationType(params)
           .subscribe((data) => {
-            this.getAlgorithmRelationTypesHateoas(
+            this.getPatternRelationTypesHateoas(
               this.pagingInfo._links.self.href
             );
             this.utilService.callSnackBar(
-              'Successfully edited algorithm relation type'
+              'Successfully edited pattern relation type'
             );
           });
       }
