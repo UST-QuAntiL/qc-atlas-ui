@@ -122,31 +122,31 @@ export class ProblemTypesListComponent implements OnInit {
           let successfulDeletions = 0;
           for (const problemType of event.elements) {
             deletionTasks.push(
-              this.problemTypeService.deleteProblemType({
-                problemTypeId: problemType.id,
-              })
+              this.problemTypeService
+                .deleteProblemType({
+                  problemTypeId: problemType.id,
+                })
+                .toPromise()
+                .then(() => successfulDeletions++)
             );
           }
-          forkJoin(deletionTasks).subscribe(
-            (successfulTasks) => {
-              successfulDeletions = successfulTasks.length;
-            },
-            () => {
-              this.utilService.callSnackBar(
-                'Delete rejected! Problem type is used in other places.'
-              );
-            },
-            () => {
-              if (
-                this.problemTypes.length === successfulDeletions &&
-                this.pagingInfo.page.number !== 0
-              ) {
-                this.getProblemTypesHateoas(this.pagingInfo._links.prev.href);
-              } else {
-                this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
-              }
+          forkJoin(deletionTasks).subscribe(() => {
+            if (
+              this.problemTypes.length === successfulDeletions &&
+              this.pagingInfo.page.number !== 0
+            ) {
+              this.getProblemTypesHateoas(this.pagingInfo._links.prev.href);
+            } else {
+              this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
             }
-          );
+            this.utilService.callSnackBar(
+              'Successfully deleted ' +
+                successfulDeletions +
+                '/' +
+                dialogResult.data.length +
+                ' problem types.'
+            );
+          });
         }
       });
   }

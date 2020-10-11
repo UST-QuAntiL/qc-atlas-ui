@@ -118,32 +118,26 @@ export class ApplicationAreasListComponent implements OnInit {
                   applicationAreaId: applicationArea.id,
                 })
                 .toPromise()
+                .then(() => successfulDeletions++)
             );
           }
-          forkJoin(deletionTasks).subscribe(
-            (successfulTasks) => {
-              successfulDeletions = successfulTasks.length;
-            },
-            () => {
+          forkJoin(deletionTasks).subscribe(() => {
+            if (
+              this.applicationAreas.length === successfulDeletions &&
+              this.pagingInfo.page.number !== 0
+            ) {
+              this.getApplicationAreasHateoas(this.pagingInfo._links.prev.href);
+            } else {
+              this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
               this.utilService.callSnackBar(
-                'Delete rejected! Application area is used in other places.'
+                'Successfully deleted ' +
+                  successfulDeletions +
+                  '/' +
+                  dialogResult.data.length +
+                  ' application areas.'
               );
-            },
-            () => {
-              if (
-                this.applicationAreas.length === successfulDeletions &&
-                this.pagingInfo.page.number !== 0
-              ) {
-                this.getApplicationAreasHateoas(
-                  this.pagingInfo._links.prev.href
-                );
-              } else {
-                this.getApplicationAreasHateoas(
-                  this.pagingInfo._links.self.href
-                );
-              }
             }
-          );
+          });
         }
       });
   }
