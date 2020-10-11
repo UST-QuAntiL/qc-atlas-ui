@@ -132,14 +132,14 @@ export class ApplicationAreasListComponent implements OnInit {
               this.getApplicationAreasHateoas(this.pagingInfo._links.prev.href);
             } else {
               this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
-              this.utilService.callSnackBar(
-                'Successfully deleted ' +
-                  successfulDeletions +
-                  '/' +
-                  dialogResult.data.length +
-                  ' application areas.'
-              );
             }
+            this.utilService.callSnackBar(
+              'Successfully deleted ' +
+                successfulDeletions +
+                '/' +
+                dialogResult.data.length +
+                ' application areas.'
+            );
           });
         }
       });
