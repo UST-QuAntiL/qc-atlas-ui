@@ -43,22 +43,27 @@ import { AddOrEditProblemTypeDialogComponent } from './components/problem-types/
 import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
 // eslint-disable-next-line max-len
 import { AddOrEditApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
+// eslint-disable-next-line max-len
+import { AddOrEditAlgorithmRelationTypeDialogComponent } from './components/algorithm-relation-types/dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
+// eslint-disable-next-line max-len
+import { AlgorithmRelationTypesListComponent } from './components/algorithm-relation-types/algorithm-relation-types-list/algorithm-relation-types-list.component';
 
 @NgModule({
   declarations: [
     // components
     AppComponent,
     PageNotFoundComponent,
-    ApplicationAreasListComponent,
-    ProblemTypesListComponent,
     // dialogs
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
     NavigationComponent,
     AddOrEditProblemTypeDialogComponent,
     AddOrEditApplicationAreaDialogComponent,
+    AddOrEditAlgorithmRelationTypeDialogComponent,
     LinkItemListDialogComponent,
     ProblemTypesListComponent,
+    AlgorithmRelationTypesListComponent,
+    ApplicationAreasListComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

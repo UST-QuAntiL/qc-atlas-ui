@@ -16,6 +16,7 @@ import { ComputeResourceListComponent } from './components/execution-environment
 import { ChangePageGuard } from './services/deactivation-guard';
 import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
 import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
+import { AlgorithmRelationTypesListComponent } from './components/algorithm-relation-types/algorithm-relation-types-list/algorithm-relation-types-list.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -73,6 +74,10 @@ const routes: Routes = [
   },
   { path: 'problem-types', component: ProblemTypesListComponent },
   { path: 'application-areas', component: ApplicationAreasListComponent },
+  {
+    path: 'algorithm-relation-types',
+    component: AlgorithmRelationTypesListComponent,
+  },
   {
     path: '',
     redirectTo: '/algorithms',
