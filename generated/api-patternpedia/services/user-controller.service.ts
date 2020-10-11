@@ -14,10 +14,7 @@ import { UserEntity } from '../models/user-entity';
   providedIn: 'root',
 })
 export class UserControllerService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -34,24 +31,29 @@ export class UserControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllUsers$Response(params?: {
-
-  }): Observable<StrictHttpResponse<Array<UserEntity>>> {
-
-    const rb = new RequestBuilder(this.rootUrl, UserControllerService.GetAllUsersPath, 'get');
-    if (params) {
-
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<UserEntity>>;
-      })
+  getAllUsers$Response(params?: {}): Observable<
+    StrictHttpResponse<Array<UserEntity>>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      UserControllerService.GetAllUsersPath,
+      'get'
     );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<Array<UserEntity>>;
+        })
+      );
   }
 
   /**
@@ -62,12 +64,12 @@ export class UserControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllUsers(params?: {
-
-  }): Observable<Array<UserEntity>> {
-
+  getAllUsers(params?: {}): Observable<Array<UserEntity>> {
     return this.getAllUsers$Response(params).pipe(
-      map((r: StrictHttpResponse<Array<UserEntity>>) => r.body as Array<UserEntity>)
+      map(
+        (r: StrictHttpResponse<Array<UserEntity>>) =>
+          r.body as Array<UserEntity>
+      )
     );
   }
 
@@ -85,24 +87,29 @@ export class UserControllerService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createUser$Response(params: {
-      body: UserEntity
+    body: UserEntity;
   }): Observable<StrictHttpResponse<UserEntity>> {
-
-    const rb = new RequestBuilder(this.rootUrl, UserControllerService.CreateUserPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      UserControllerService.CreateUserPath,
+      'post'
+    );
     if (params) {
-
-
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<UserEntity>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<UserEntity>;
+        })
+      );
   }
 
   /**
@@ -113,10 +120,7 @@ export class UserControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createUser(params: {
-      body: UserEntity
-  }): Observable<UserEntity> {
-
+  createUser(params: { body: UserEntity }): Observable<UserEntity> {
     return this.createUser$Response(params).pipe(
       map((r: StrictHttpResponse<UserEntity>) => r.body as UserEntity)
     );
@@ -135,24 +139,28 @@ export class UserControllerService extends BaseService {
    */
   getUserById$Response(params: {
     userId: string;
-
   }): Observable<StrictHttpResponse<UserEntity>> {
-
-    const rb = new RequestBuilder(this.rootUrl, UserControllerService.GetUserByIdPath, 'get');
-    if (params) {
-
-      rb.path('userId', params.userId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<UserEntity>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      UserControllerService.GetUserByIdPath,
+      'get'
     );
+    if (params) {
+      rb.path('userId', params.userId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<UserEntity>;
+        })
+      );
   }
 
   /**
@@ -161,11 +169,7 @@ export class UserControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getUserById(params: {
-    userId: string;
-
-  }): Observable<UserEntity> {
-
+  getUserById(params: { userId: string }): Observable<UserEntity> {
     return this.getUserById$Response(params).pipe(
       map((r: StrictHttpResponse<UserEntity>) => r.body as UserEntity)
     );
@@ -186,25 +190,31 @@ export class UserControllerService extends BaseService {
    */
   updateUser$Response(params: {
     userId: string;
-      body: UserEntity
+    body: UserEntity;
   }): Observable<StrictHttpResponse<UserEntity>> {
-
-    const rb = new RequestBuilder(this.rootUrl, UserControllerService.UpdateUserPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      UserControllerService.UpdateUserPath,
+      'put'
+    );
     if (params) {
-
       rb.path('userId', params.userId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<UserEntity>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<UserEntity>;
+        })
+      );
   }
 
   /**
@@ -217,9 +227,8 @@ export class UserControllerService extends BaseService {
    */
   updateUser(params: {
     userId: string;
-      body: UserEntity
+    body: UserEntity;
   }): Observable<UserEntity> {
-
     return this.updateUser$Response(params).pipe(
       map((r: StrictHttpResponse<UserEntity>) => r.body as UserEntity)
     );
@@ -240,24 +249,30 @@ export class UserControllerService extends BaseService {
    */
   deleteUser$Response(params: {
     userId: string;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, UserControllerService.DeleteUserPath, 'delete');
-    if (params) {
-
-      rb.path('userId', params.userId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      UserControllerService.DeleteUserPath,
+      'delete'
     );
+    if (params) {
+      rb.path('userId', params.userId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -268,14 +283,9 @@ export class UserControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteUser(params: {
-    userId: string;
-
-  }): Observable<void> {
-
+  deleteUser(params: { userId: string }): Observable<void> {
     return this.deleteUser$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
-
 }

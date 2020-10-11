@@ -25,17 +25,15 @@ import { UpdateUndirectedEdgeRequest } from '../models/update-undirected-edge-re
   providedIn: 'root',
 })
 export class PatternRelationDescriptorControllerService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
   /**
    * Path part for operation getDirectedEdgesOfPatternLanguage
    */
-  static readonly GetDirectedEdgesOfPatternLanguagePath = '/patternLanguages/{patternLanguageId}/directedEdges';
+  static readonly GetDirectedEdgesOfPatternLanguagePath =
+    '/patternLanguages/{patternLanguageId}/directedEdges';
 
   /**
    * Get directed edges of pattern language
@@ -47,24 +45,32 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   getDirectedEdgesOfPatternLanguage$Response(params: {
     patternLanguageId: string;
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelDirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.GetDirectedEdgesOfPatternLanguagePath, 'get');
-    if (params) {
-
-      rb.path('patternLanguageId', params.patternLanguageId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelDirectedEdgeModel>;
-      })
+  }): Observable<
+    StrictHttpResponse<CollectionModelEntityModelDirectedEdgeModel>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.GetDirectedEdgesOfPatternLanguagePath,
+      'get'
     );
+    if (params) {
+      rb.path('patternLanguageId', params.patternLanguageId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelDirectedEdgeModel
+          >;
+        })
+      );
   }
 
   /**
@@ -77,18 +83,20 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   getDirectedEdgesOfPatternLanguage(params: {
     patternLanguageId: string;
-
   }): Observable<CollectionModelEntityModelDirectedEdgeModel> {
-
     return this.getDirectedEdgesOfPatternLanguage$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelDirectedEdgeModel>) => r.body as CollectionModelEntityModelDirectedEdgeModel)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelDirectedEdgeModel>) =>
+          r.body as CollectionModelEntityModelDirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation addDirectedEdgeToPatternLanguage
    */
-  static readonly AddDirectedEdgeToPatternLanguagePath = '/patternLanguages/{patternLanguageId}/directedEdges';
+  static readonly AddDirectedEdgeToPatternLanguagePath =
+    '/patternLanguages/{patternLanguageId}/directedEdges';
 
   /**
    * Adds directed edge to pattern language
@@ -100,25 +108,31 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   addDirectedEdgeToPatternLanguage$Response(params: {
     patternLanguageId: string;
-      body: CreateDirectedEdgeRequest
+    body: CreateDirectedEdgeRequest;
   }): Observable<StrictHttpResponse<DirectedEdge>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.AddDirectedEdgeToPatternLanguagePath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.AddDirectedEdgeToPatternLanguagePath,
+      'post'
+    );
     if (params) {
-
       rb.path('patternLanguageId', params.patternLanguageId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<DirectedEdge>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<DirectedEdge>;
+        })
+      );
   }
 
   /**
@@ -131,9 +145,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   addDirectedEdgeToPatternLanguage(params: {
     patternLanguageId: string;
-      body: CreateDirectedEdgeRequest
+    body: CreateDirectedEdgeRequest;
   }): Observable<DirectedEdge> {
-
     return this.addDirectedEdgeToPatternLanguage$Response(params).pipe(
       map((r: StrictHttpResponse<DirectedEdge>) => r.body as DirectedEdge)
     );
@@ -142,7 +155,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   /**
    * Path part for operation getDirectedEdgeOfPatternLanguageById
    */
-  static readonly GetDirectedEdgeOfPatternLanguageByIdPath = '/patternLanguages/{patternLanguageId}/directedEdges/{directedEdgeId}';
+  static readonly GetDirectedEdgeOfPatternLanguageByIdPath =
+    '/patternLanguages/{patternLanguageId}/directedEdges/{directedEdgeId}';
 
   /**
    * Get directed edge of pattern language
@@ -155,25 +169,29 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   getDirectedEdgeOfPatternLanguageById$Response(params: {
     patternLanguageId: string;
     directedEdgeId: string;
-
   }): Observable<StrictHttpResponse<EntityModelDirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.GetDirectedEdgeOfPatternLanguageByIdPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.GetDirectedEdgeOfPatternLanguageByIdPath,
+      'get'
+    );
     if (params) {
-
       rb.path('patternLanguageId', params.patternLanguageId, {});
       rb.path('directedEdgeId', params.directedEdgeId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelDirectedEdgeModel>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelDirectedEdgeModel>;
+        })
+      );
   }
 
   /**
@@ -187,18 +205,20 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   getDirectedEdgeOfPatternLanguageById(params: {
     patternLanguageId: string;
     directedEdgeId: string;
-
   }): Observable<EntityModelDirectedEdgeModel> {
-
     return this.getDirectedEdgeOfPatternLanguageById$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelDirectedEdgeModel>) => r.body as EntityModelDirectedEdgeModel)
+      map(
+        (r: StrictHttpResponse<EntityModelDirectedEdgeModel>) =>
+          r.body as EntityModelDirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation updateDirectedEdgeOfPatternLanguage
    */
-  static readonly UpdateDirectedEdgeOfPatternLanguagePath = '/patternLanguages/{patternLanguageId}/directedEdges/{directedEdgeId}';
+  static readonly UpdateDirectedEdgeOfPatternLanguagePath =
+    '/patternLanguages/{patternLanguageId}/directedEdges/{directedEdgeId}';
 
   /**
    * Update directed edge of pattern language
@@ -211,26 +231,32 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   updateDirectedEdgeOfPatternLanguage$Response(params: {
     patternLanguageId: string;
     directedEdgeId: string;
-      body: DirectedEdge
+    body: DirectedEdge;
   }): Observable<StrictHttpResponse<EntityModelDirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.UpdateDirectedEdgeOfPatternLanguagePath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.UpdateDirectedEdgeOfPatternLanguagePath,
+      'put'
+    );
     if (params) {
-
       rb.path('patternLanguageId', params.patternLanguageId, {});
       rb.path('directedEdgeId', params.directedEdgeId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelDirectedEdgeModel>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelDirectedEdgeModel>;
+        })
+      );
   }
 
   /**
@@ -244,18 +270,21 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   updateDirectedEdgeOfPatternLanguage(params: {
     patternLanguageId: string;
     directedEdgeId: string;
-      body: DirectedEdge
+    body: DirectedEdge;
   }): Observable<EntityModelDirectedEdgeModel> {
-
     return this.updateDirectedEdgeOfPatternLanguage$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelDirectedEdgeModel>) => r.body as EntityModelDirectedEdgeModel)
+      map(
+        (r: StrictHttpResponse<EntityModelDirectedEdgeModel>) =>
+          r.body as EntityModelDirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation removeDirectedEdgeFromPatternLanguage
    */
-  static readonly RemoveDirectedEdgeFromPatternLanguagePath = '/patternLanguages/{patternLanguageId}/directedEdges/{directedEdgeId}';
+  static readonly RemoveDirectedEdgeFromPatternLanguagePath =
+    '/patternLanguages/{patternLanguageId}/directedEdges/{directedEdgeId}';
 
   /**
    * Remove directed edge of pattern language
@@ -268,25 +297,29 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   removeDirectedEdgeFromPatternLanguage$Response(params: {
     patternLanguageId: string;
     directedEdgeId: string;
-
   }): Observable<StrictHttpResponse<{}>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.RemoveDirectedEdgeFromPatternLanguagePath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.RemoveDirectedEdgeFromPatternLanguagePath,
+      'delete'
+    );
     if (params) {
-
       rb.path('patternLanguageId', params.patternLanguageId, {});
       rb.path('directedEdgeId', params.directedEdgeId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{}>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{}>;
+        })
+      );
   }
 
   /**
@@ -300,9 +333,7 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   removeDirectedEdgeFromPatternLanguage(params: {
     patternLanguageId: string;
     directedEdgeId: string;
-
   }): Observable<{}> {
-
     return this.removeDirectedEdgeFromPatternLanguage$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -311,7 +342,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   /**
    * Path part for operation getUndirectedEdgesOfPatternLanguage
    */
-  static readonly GetUndirectedEdgesOfPatternLanguagePath = '/patternLanguages/{patternLanguageId}/undirectedEdges';
+  static readonly GetUndirectedEdgesOfPatternLanguagePath =
+    '/patternLanguages/{patternLanguageId}/undirectedEdges';
 
   /**
    * Get undirected edge of pattern language
@@ -323,24 +355,32 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   getUndirectedEdgesOfPatternLanguage$Response(params: {
     patternLanguageId: string;
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelUndirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.GetUndirectedEdgesOfPatternLanguagePath, 'get');
-    if (params) {
-
-      rb.path('patternLanguageId', params.patternLanguageId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelUndirectedEdgeModel>;
-      })
+  }): Observable<
+    StrictHttpResponse<CollectionModelEntityModelUndirectedEdgeModel>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.GetUndirectedEdgesOfPatternLanguagePath,
+      'get'
     );
+    if (params) {
+      rb.path('patternLanguageId', params.patternLanguageId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelUndirectedEdgeModel
+          >;
+        })
+      );
   }
 
   /**
@@ -353,18 +393,21 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   getUndirectedEdgesOfPatternLanguage(params: {
     patternLanguageId: string;
-
   }): Observable<CollectionModelEntityModelUndirectedEdgeModel> {
-
     return this.getUndirectedEdgesOfPatternLanguage$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelUndirectedEdgeModel>) => r.body as CollectionModelEntityModelUndirectedEdgeModel)
+      map(
+        (
+          r: StrictHttpResponse<CollectionModelEntityModelUndirectedEdgeModel>
+        ) => r.body as CollectionModelEntityModelUndirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation addUndirectedEdgeToPatternLanguage
    */
-  static readonly AddUndirectedEdgeToPatternLanguagePath = '/patternLanguages/{patternLanguageId}/undirectedEdges';
+  static readonly AddUndirectedEdgeToPatternLanguagePath =
+    '/patternLanguages/{patternLanguageId}/undirectedEdges';
 
   /**
    * Add undirected edge to pattern language
@@ -376,25 +419,31 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   addUndirectedEdgeToPatternLanguage$Response(params: {
     patternLanguageId: string;
-      body: CreateUndirectedEdgeRequest
+    body: CreateUndirectedEdgeRequest;
   }): Observable<StrictHttpResponse<UndirectedEdge>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.AddUndirectedEdgeToPatternLanguagePath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.AddUndirectedEdgeToPatternLanguagePath,
+      'post'
+    );
     if (params) {
-
       rb.path('patternLanguageId', params.patternLanguageId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<UndirectedEdge>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<UndirectedEdge>;
+        })
+      );
   }
 
   /**
@@ -407,9 +456,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   addUndirectedEdgeToPatternLanguage(params: {
     patternLanguageId: string;
-      body: CreateUndirectedEdgeRequest
+    body: CreateUndirectedEdgeRequest;
   }): Observable<UndirectedEdge> {
-
     return this.addUndirectedEdgeToPatternLanguage$Response(params).pipe(
       map((r: StrictHttpResponse<UndirectedEdge>) => r.body as UndirectedEdge)
     );
@@ -418,7 +466,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   /**
    * Path part for operation getUndirectedEdgeOfPatternLanguageById
    */
-  static readonly GetUndirectedEdgeOfPatternLanguageByIdPath = '/patternLanguages/{patternLanguageId}/undirectedEdges/{undirectedEdgeId}';
+  static readonly GetUndirectedEdgeOfPatternLanguageByIdPath =
+    '/patternLanguages/{patternLanguageId}/undirectedEdges/{undirectedEdgeId}';
 
   /**
    * Get undirected edge of pattern language by id
@@ -431,25 +480,29 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   getUndirectedEdgeOfPatternLanguageById$Response(params: {
     patternLanguageId: string;
     undirectedEdgeId: string;
-
   }): Observable<StrictHttpResponse<EntityModelUndirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.GetUndirectedEdgeOfPatternLanguageByIdPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.GetUndirectedEdgeOfPatternLanguageByIdPath,
+      'get'
+    );
     if (params) {
-
       rb.path('patternLanguageId', params.patternLanguageId, {});
       rb.path('undirectedEdgeId', params.undirectedEdgeId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelUndirectedEdgeModel>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelUndirectedEdgeModel>;
+        })
+      );
   }
 
   /**
@@ -463,18 +516,20 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   getUndirectedEdgeOfPatternLanguageById(params: {
     patternLanguageId: string;
     undirectedEdgeId: string;
-
   }): Observable<EntityModelUndirectedEdgeModel> {
-
     return this.getUndirectedEdgeOfPatternLanguageById$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelUndirectedEdgeModel>) => r.body as EntityModelUndirectedEdgeModel)
+      map(
+        (r: StrictHttpResponse<EntityModelUndirectedEdgeModel>) =>
+          r.body as EntityModelUndirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation updateUndirectedEdgeOfPatternLanguageById
    */
-  static readonly UpdateUndirectedEdgeOfPatternLanguageByIdPath = '/patternLanguages/{patternLanguageId}/undirectedEdges/{undirectedEdgeId}';
+  static readonly UpdateUndirectedEdgeOfPatternLanguageByIdPath =
+    '/patternLanguages/{patternLanguageId}/undirectedEdges/{undirectedEdgeId}';
 
   /**
    * Get undirected edge of pattern language by id
@@ -487,26 +542,32 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   updateUndirectedEdgeOfPatternLanguageById$Response(params: {
     patternLanguageId: string;
     undirectedEdgeId: string;
-      body: UndirectedEdge
+    body: UndirectedEdge;
   }): Observable<StrictHttpResponse<EntityModelUndirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.UpdateUndirectedEdgeOfPatternLanguageByIdPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.UpdateUndirectedEdgeOfPatternLanguageByIdPath,
+      'put'
+    );
     if (params) {
-
       rb.path('patternLanguageId', params.patternLanguageId, {});
       rb.path('undirectedEdgeId', params.undirectedEdgeId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelUndirectedEdgeModel>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelUndirectedEdgeModel>;
+        })
+      );
   }
 
   /**
@@ -520,18 +581,21 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   updateUndirectedEdgeOfPatternLanguageById(params: {
     patternLanguageId: string;
     undirectedEdgeId: string;
-      body: UndirectedEdge
+    body: UndirectedEdge;
   }): Observable<EntityModelUndirectedEdgeModel> {
-
     return this.updateUndirectedEdgeOfPatternLanguageById$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelUndirectedEdgeModel>) => r.body as EntityModelUndirectedEdgeModel)
+      map(
+        (r: StrictHttpResponse<EntityModelUndirectedEdgeModel>) =>
+          r.body as EntityModelUndirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation removeUndirectedEdgeFromPatternLanguage
    */
-  static readonly RemoveUndirectedEdgeFromPatternLanguagePath = '/patternLanguages/{patternLanguageId}/undirectedEdges/{undirectedEdgeId}';
+  static readonly RemoveUndirectedEdgeFromPatternLanguagePath =
+    '/patternLanguages/{patternLanguageId}/undirectedEdges/{undirectedEdgeId}';
 
   /**
    * Remove undirected edge of pattern language by id
@@ -544,25 +608,29 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   removeUndirectedEdgeFromPatternLanguage$Response(params: {
     patternLanguageId: string;
     undirectedEdgeId: string;
-
   }): Observable<StrictHttpResponse<{}>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.RemoveUndirectedEdgeFromPatternLanguagePath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.RemoveUndirectedEdgeFromPatternLanguagePath,
+      'delete'
+    );
     if (params) {
-
       rb.path('patternLanguageId', params.patternLanguageId, {});
       rb.path('undirectedEdgeId', params.undirectedEdgeId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{}>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{}>;
+        })
+      );
   }
 
   /**
@@ -576,9 +644,7 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   removeUndirectedEdgeFromPatternLanguage(params: {
     patternLanguageId: string;
     undirectedEdgeId: string;
-
   }): Observable<{}> {
-
     return this.removeUndirectedEdgeFromPatternLanguage$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -587,7 +653,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   /**
    * Path part for operation getDirectedEdgesOfView
    */
-  static readonly GetDirectedEdgesOfViewPath = '/patternViews/{patternViewId}/directedEdges';
+  static readonly GetDirectedEdgesOfViewPath =
+    '/patternViews/{patternViewId}/directedEdges';
 
   /**
    * Retrieve directed edges of view
@@ -599,24 +666,32 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   getDirectedEdgesOfView$Response(params: {
     patternViewId: string;
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelDirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.GetDirectedEdgesOfViewPath, 'get');
-    if (params) {
-
-      rb.path('patternViewId', params.patternViewId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelDirectedEdgeModel>;
-      })
+  }): Observable<
+    StrictHttpResponse<CollectionModelEntityModelDirectedEdgeModel>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.GetDirectedEdgesOfViewPath,
+      'get'
     );
+    if (params) {
+      rb.path('patternViewId', params.patternViewId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelDirectedEdgeModel
+          >;
+        })
+      );
   }
 
   /**
@@ -629,18 +704,20 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   getDirectedEdgesOfView(params: {
     patternViewId: string;
-
   }): Observable<CollectionModelEntityModelDirectedEdgeModel> {
-
     return this.getDirectedEdgesOfView$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelDirectedEdgeModel>) => r.body as CollectionModelEntityModelDirectedEdgeModel)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelDirectedEdgeModel>) =>
+          r.body as CollectionModelEntityModelDirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation addDirectedEdgeToView
    */
-  static readonly AddDirectedEdgeToViewPath = '/patternViews/{patternViewId}/directedEdges';
+  static readonly AddDirectedEdgeToViewPath =
+    '/patternViews/{patternViewId}/directedEdges';
 
   /**
    * Adds directed edge to view
@@ -652,25 +729,31 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   addDirectedEdgeToView$Response(params: {
     patternViewId: string;
-      body: AddDirectedEdgeToViewRequest
+    body: AddDirectedEdgeToViewRequest;
   }): Observable<StrictHttpResponse<{}>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.AddDirectedEdgeToViewPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.AddDirectedEdgeToViewPath,
+      'post'
+    );
     if (params) {
-
       rb.path('patternViewId', params.patternViewId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{}>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{}>;
+        })
+      );
   }
 
   /**
@@ -683,9 +766,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   addDirectedEdgeToView(params: {
     patternViewId: string;
-      body: AddDirectedEdgeToViewRequest
+    body: AddDirectedEdgeToViewRequest;
   }): Observable<{}> {
-
     return this.addDirectedEdgeToView$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -694,7 +776,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   /**
    * Path part for operation getDirectedEdgeOfPatternViewById
    */
-  static readonly GetDirectedEdgeOfPatternViewByIdPath = '/patternViews/{patternViewId}/directedEdges/{directedEdgeId}';
+  static readonly GetDirectedEdgeOfPatternViewByIdPath =
+    '/patternViews/{patternViewId}/directedEdges/{directedEdgeId}';
 
   /**
    * Retrieve directed edge of pattern view by id
@@ -707,25 +790,29 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   getDirectedEdgeOfPatternViewById$Response(params: {
     patternViewId: string;
     directedEdgeId: string;
-
   }): Observable<StrictHttpResponse<EntityModelDirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.GetDirectedEdgeOfPatternViewByIdPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.GetDirectedEdgeOfPatternViewByIdPath,
+      'get'
+    );
     if (params) {
-
       rb.path('patternViewId', params.patternViewId, {});
       rb.path('directedEdgeId', params.directedEdgeId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelDirectedEdgeModel>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelDirectedEdgeModel>;
+        })
+      );
   }
 
   /**
@@ -739,18 +826,20 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   getDirectedEdgeOfPatternViewById(params: {
     patternViewId: string;
     directedEdgeId: string;
-
   }): Observable<EntityModelDirectedEdgeModel> {
-
     return this.getDirectedEdgeOfPatternViewById$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelDirectedEdgeModel>) => r.body as EntityModelDirectedEdgeModel)
+      map(
+        (r: StrictHttpResponse<EntityModelDirectedEdgeModel>) =>
+          r.body as EntityModelDirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation updateDirectedEdgeOfPatternViewById
    */
-  static readonly UpdateDirectedEdgeOfPatternViewByIdPath = '/patternViews/{patternViewId}/directedEdges/{directedEdgeId}';
+  static readonly UpdateDirectedEdgeOfPatternViewByIdPath =
+    '/patternViews/{patternViewId}/directedEdges/{directedEdgeId}';
 
   /**
    * Update directed edge of pattern view by id
@@ -763,26 +852,32 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   updateDirectedEdgeOfPatternViewById$Response(params: {
     patternViewId: string;
     directedEdgeId: string;
-      body: UpdateDirectedEdgeRequest
+    body: UpdateDirectedEdgeRequest;
   }): Observable<StrictHttpResponse<EntityModelDirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.UpdateDirectedEdgeOfPatternViewByIdPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.UpdateDirectedEdgeOfPatternViewByIdPath,
+      'put'
+    );
     if (params) {
-
       rb.path('patternViewId', params.patternViewId, {});
       rb.path('directedEdgeId', params.directedEdgeId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelDirectedEdgeModel>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelDirectedEdgeModel>;
+        })
+      );
   }
 
   /**
@@ -796,18 +891,21 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   updateDirectedEdgeOfPatternViewById(params: {
     patternViewId: string;
     directedEdgeId: string;
-      body: UpdateDirectedEdgeRequest
+    body: UpdateDirectedEdgeRequest;
   }): Observable<EntityModelDirectedEdgeModel> {
-
     return this.updateDirectedEdgeOfPatternViewById$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelDirectedEdgeModel>) => r.body as EntityModelDirectedEdgeModel)
+      map(
+        (r: StrictHttpResponse<EntityModelDirectedEdgeModel>) =>
+          r.body as EntityModelDirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation removeDirectedEdgeFromPatternView
    */
-  static readonly RemoveDirectedEdgeFromPatternViewPath = '/patternViews/{patternViewId}/directedEdges/{directedEdgeId}';
+  static readonly RemoveDirectedEdgeFromPatternViewPath =
+    '/patternViews/{patternViewId}/directedEdges/{directedEdgeId}';
 
   /**
    * Remove directed edge of pattern view by id
@@ -820,25 +918,29 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   removeDirectedEdgeFromPatternView$Response(params: {
     patternViewId: string;
     directedEdgeId: string;
-
   }): Observable<StrictHttpResponse<{}>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.RemoveDirectedEdgeFromPatternViewPath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.RemoveDirectedEdgeFromPatternViewPath,
+      'delete'
+    );
     if (params) {
-
       rb.path('patternViewId', params.patternViewId, {});
       rb.path('directedEdgeId', params.directedEdgeId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{}>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{}>;
+        })
+      );
   }
 
   /**
@@ -852,9 +954,7 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   removeDirectedEdgeFromPatternView(params: {
     patternViewId: string;
     directedEdgeId: string;
-
   }): Observable<{}> {
-
     return this.removeDirectedEdgeFromPatternView$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -863,7 +963,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   /**
    * Path part for operation getUndirectedEdgesOfView
    */
-  static readonly GetUndirectedEdgesOfViewPath = '/patternViews/{patternViewId}/undirectedEdges';
+  static readonly GetUndirectedEdgesOfViewPath =
+    '/patternViews/{patternViewId}/undirectedEdges';
 
   /**
    * Retrieve undirected edges of pattern view
@@ -875,24 +976,32 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   getUndirectedEdgesOfView$Response(params: {
     patternViewId: string;
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelUndirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.GetUndirectedEdgesOfViewPath, 'get');
-    if (params) {
-
-      rb.path('patternViewId', params.patternViewId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelUndirectedEdgeModel>;
-      })
+  }): Observable<
+    StrictHttpResponse<CollectionModelEntityModelUndirectedEdgeModel>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.GetUndirectedEdgesOfViewPath,
+      'get'
     );
+    if (params) {
+      rb.path('patternViewId', params.patternViewId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelUndirectedEdgeModel
+          >;
+        })
+      );
   }
 
   /**
@@ -905,18 +1014,21 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   getUndirectedEdgesOfView(params: {
     patternViewId: string;
-
   }): Observable<CollectionModelEntityModelUndirectedEdgeModel> {
-
     return this.getUndirectedEdgesOfView$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelUndirectedEdgeModel>) => r.body as CollectionModelEntityModelUndirectedEdgeModel)
+      map(
+        (
+          r: StrictHttpResponse<CollectionModelEntityModelUndirectedEdgeModel>
+        ) => r.body as CollectionModelEntityModelUndirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation addUndirectedEdgeToView
    */
-  static readonly AddUndirectedEdgeToViewPath = '/patternViews/{patternViewId}/undirectedEdges';
+  static readonly AddUndirectedEdgeToViewPath =
+    '/patternViews/{patternViewId}/undirectedEdges';
 
   /**
    * Add undirected edge to pattern view
@@ -928,25 +1040,31 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   addUndirectedEdgeToView$Response(params: {
     patternViewId: string;
-      body: AddUndirectedEdgeToViewRequest
+    body: AddUndirectedEdgeToViewRequest;
   }): Observable<StrictHttpResponse<{}>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.AddUndirectedEdgeToViewPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.AddUndirectedEdgeToViewPath,
+      'post'
+    );
     if (params) {
-
       rb.path('patternViewId', params.patternViewId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{}>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{}>;
+        })
+      );
   }
 
   /**
@@ -959,9 +1077,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
    */
   addUndirectedEdgeToView(params: {
     patternViewId: string;
-      body: AddUndirectedEdgeToViewRequest
+    body: AddUndirectedEdgeToViewRequest;
   }): Observable<{}> {
-
     return this.addUndirectedEdgeToView$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
@@ -970,7 +1087,8 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   /**
    * Path part for operation getUndirectedEdgeOfPatternViewById
    */
-  static readonly GetUndirectedEdgeOfPatternViewByIdPath = '/patternViews/{patternViewId}/undirectedEdges/{undirectedEdgeId}';
+  static readonly GetUndirectedEdgeOfPatternViewByIdPath =
+    '/patternViews/{patternViewId}/undirectedEdges/{undirectedEdgeId}';
 
   /**
    * Retrieve undirected edge of pattern view by id
@@ -983,25 +1101,29 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   getUndirectedEdgeOfPatternViewById$Response(params: {
     patternViewId: string;
     undirectedEdgeId: string;
-
   }): Observable<StrictHttpResponse<EntityModelUndirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.GetUndirectedEdgeOfPatternViewByIdPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.GetUndirectedEdgeOfPatternViewByIdPath,
+      'get'
+    );
     if (params) {
-
       rb.path('patternViewId', params.patternViewId, {});
       rb.path('undirectedEdgeId', params.undirectedEdgeId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelUndirectedEdgeModel>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelUndirectedEdgeModel>;
+        })
+      );
   }
 
   /**
@@ -1015,18 +1137,20 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   getUndirectedEdgeOfPatternViewById(params: {
     patternViewId: string;
     undirectedEdgeId: string;
-
   }): Observable<EntityModelUndirectedEdgeModel> {
-
     return this.getUndirectedEdgeOfPatternViewById$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelUndirectedEdgeModel>) => r.body as EntityModelUndirectedEdgeModel)
+      map(
+        (r: StrictHttpResponse<EntityModelUndirectedEdgeModel>) =>
+          r.body as EntityModelUndirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation updateUndirectedEdgeOfPatternView
    */
-  static readonly UpdateUndirectedEdgeOfPatternViewPath = '/patternViews/{patternViewId}/undirectedEdges/{undirectedEdgeId}';
+  static readonly UpdateUndirectedEdgeOfPatternViewPath =
+    '/patternViews/{patternViewId}/undirectedEdges/{undirectedEdgeId}';
 
   /**
    * Update undirected edge of pattern view by id
@@ -1039,26 +1163,32 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   updateUndirectedEdgeOfPatternView$Response(params: {
     patternViewId: string;
     undirectedEdgeId: string;
-      body: UpdateUndirectedEdgeRequest
+    body: UpdateUndirectedEdgeRequest;
   }): Observable<StrictHttpResponse<EntityModelUndirectedEdgeModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.UpdateUndirectedEdgeOfPatternViewPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.UpdateUndirectedEdgeOfPatternViewPath,
+      'put'
+    );
     if (params) {
-
       rb.path('patternViewId', params.patternViewId, {});
       rb.path('undirectedEdgeId', params.undirectedEdgeId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelUndirectedEdgeModel>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelUndirectedEdgeModel>;
+        })
+      );
   }
 
   /**
@@ -1072,18 +1202,21 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   updateUndirectedEdgeOfPatternView(params: {
     patternViewId: string;
     undirectedEdgeId: string;
-      body: UpdateUndirectedEdgeRequest
+    body: UpdateUndirectedEdgeRequest;
   }): Observable<EntityModelUndirectedEdgeModel> {
-
     return this.updateUndirectedEdgeOfPatternView$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelUndirectedEdgeModel>) => r.body as EntityModelUndirectedEdgeModel)
+      map(
+        (r: StrictHttpResponse<EntityModelUndirectedEdgeModel>) =>
+          r.body as EntityModelUndirectedEdgeModel
+      )
     );
   }
 
   /**
    * Path part for operation removeUndirectedEdgeFromPatternView
    */
-  static readonly RemoveUndirectedEdgeFromPatternViewPath = '/patternViews/{patternViewId}/undirectedEdges/{undirectedEdgeId}';
+  static readonly RemoveUndirectedEdgeFromPatternViewPath =
+    '/patternViews/{patternViewId}/undirectedEdges/{undirectedEdgeId}';
 
   /**
    * Remove undirected edge of pattern view by id
@@ -1096,25 +1229,29 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   removeUndirectedEdgeFromPatternView$Response(params: {
     patternViewId: string;
     undirectedEdgeId: string;
-
   }): Observable<StrictHttpResponse<{}>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PatternRelationDescriptorControllerService.RemoveUndirectedEdgeFromPatternViewPath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternRelationDescriptorControllerService.RemoveUndirectedEdgeFromPatternViewPath,
+      'delete'
+    );
     if (params) {
-
       rb.path('patternViewId', params.patternViewId, {});
       rb.path('undirectedEdgeId', params.undirectedEdgeId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{}>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{}>;
+        })
+      );
   }
 
   /**
@@ -1128,12 +1265,9 @@ export class PatternRelationDescriptorControllerService extends BaseService {
   removeUndirectedEdgeFromPatternView(params: {
     patternViewId: string;
     undirectedEdgeId: string;
-
   }): Observable<{}> {
-
     return this.removeUndirectedEdgeFromPatternView$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
   }
-
 }
