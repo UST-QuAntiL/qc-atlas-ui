@@ -131,7 +131,6 @@ export class ProblemTypesListComponent implements OnInit {
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
-            console.log(this.pagingInfo.page);
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
