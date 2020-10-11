@@ -50,6 +50,8 @@ import { AlgorithmRelationTypesListComponent } from './components/algorithm-rela
 import { PatternRelationTypesListComponent } from './components/pattern-relation-types/pattern-relation-types-list/pattern-relation-types-list.component';
 // eslint-disable-next-line max-len
 import { AddOrEditPatternRelationTypeDialogComponent } from './components/pattern-relation-types/dialogs/add-or-edit-pattern-relation-type-dialog/add-or-edit-pattern-relation-type-dialog.component';
+// eslint-disable-next-line max-len
+import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +71,7 @@ import { AddOrEditPatternRelationTypeDialogComponent } from './components/patter
     ApplicationAreasListComponent,
     PatternRelationTypesListComponent,
     AddOrEditPatternRelationTypeDialogComponent,
+    ComputeResourcePropertyTypesListComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

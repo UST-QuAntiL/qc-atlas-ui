@@ -1,0 +1,21 @@
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table [data]=computeResourcePropertyTypes
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [allowAdd]=true
+               [allowDelete]=true
+               [allowSearch]=true
+               [allowSort]=true
+               [allowEdit]=true
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
+               [emptyTableMessage]="'No compute resource property types found'"
+               (addElement)="onAddElement()"
+               (submitDeleteElements)="onDeleteElements($event)"
+               (updateClicked)="onEditElement($event)"
+               (datalistConfigChanged)="getComputeResourcePropertyTypes($event)"
+               (pageChange)="getComputeResourcePropertyTypesHateoas($event)">
+    </app-table>
+  </div>
+</mat-card>
