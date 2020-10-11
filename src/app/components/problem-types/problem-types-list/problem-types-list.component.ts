@@ -3,18 +3,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
-import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
-import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
-import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type/add-problem-type-dialog.component';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
 import { UtilService } from '../../../util/util.service';
-import { AddAlgorithmDialogComponent } from '../../algorithms/dialogs/add-algorithm-dialog.component';
-import { EditProblemTypeDialogComponent } from '../dialogs/edit-problem-type/edit-problem-type-dialog.component';
+import { AddOrEditProblemTypeDialogComponent } from '../dialogs/add-or-edit-problem-type/add-or-edit-problem-type-dialog.component';
 
 @Component({
   selector: 'app-problem-types-list',
@@ -79,14 +75,14 @@ export class ProblemTypesListComponent implements OnInit {
 
   onAddElement(): void {
     const params: any = {};
-    const dialogRef = this.dialog.open(AddProblemTypeDialogComponent, {
-      data: { title: 'Add new problem type' },
+    const dialogRef = this.dialog.open(AddOrEditProblemTypeDialogComponent, {
+      data: { title: 'Create new problem type' },
     });
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
         const problemTypeDto: EntityModelProblemTypeDto = {
-          id: dialogResult.id,
+          id: undefined,
           name: dialogResult.name,
         };
         if (dialogResult.parentProblemType) {
@@ -161,7 +157,7 @@ export class ProblemTypesListComponent implements OnInit {
         parentProblemTypeDto = problemType;
       }
     }
-    const dialogRef = this.dialog.open(EditProblemTypeDialogComponent, {
+    const dialogRef = this.dialog.open(AddOrEditProblemTypeDialogComponent, {
       data: {
         title: 'Edit problem type',
         id: event.id,

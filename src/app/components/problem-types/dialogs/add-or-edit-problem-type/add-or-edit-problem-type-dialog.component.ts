@@ -11,16 +11,16 @@ import { EntityModelProblemTypeDto } from 'api-atlas/models';
 
 @Component({
   selector: 'app-edit-problem-type-dialog',
-  templateUrl: './edit-problem-type-dialog.component.html',
-  styleUrls: ['./edit-problem-type-dialog.component.scss'],
+  templateUrl: './add-or-edit-problem-type-dialog.component.html',
+  styleUrls: ['./add-or-edit-problem-type-dialog.component.scss'],
 })
-export class EditProblemTypeDialogComponent implements OnInit {
+export class AddOrEditProblemTypeDialogComponent implements OnInit {
   problemTypeFormGroup: FormGroup;
   existingProblemTypes: EntityModelProblemTypeDto[] = [];
 
   constructor(
     private problemTypeService: ProblemTypeService,
-    public dialogRef: MatDialogRef<EditProblemTypeDialogComponent>,
+    public dialogRef: MatDialogRef<AddOrEditProblemTypeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
 
