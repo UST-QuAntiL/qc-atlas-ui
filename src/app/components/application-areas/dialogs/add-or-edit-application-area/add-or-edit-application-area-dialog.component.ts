@@ -11,16 +11,16 @@ import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-app
 
 @Component({
   selector: 'app-edit-application-area-dialog',
-  templateUrl: './edit-application-area-dialog.component.html',
-  styleUrls: ['./edit-application-area-dialog.component.scss'],
+  templateUrl: './add-or-edit-application-area-dialog.component.html',
+  styleUrls: ['./add-or-edit-application-area-dialog.component.scss'],
 })
-export class EditApplicationAreaDialogComponent implements OnInit {
+export class AddOrEditApplicationAreaDialogComponent implements OnInit {
   applicationAreaFormGroup: FormGroup;
   existingApplicationAreas: EntityModelApplicationAreaDto[];
 
   constructor(
     private applicationAreaService: ApplicationAreasService,
-    public dialogRef: MatDialogRef<EditApplicationAreaDialogComponent>,
+    public dialogRef: MatDialogRef<AddOrEditApplicationAreaDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
 
@@ -34,8 +34,7 @@ export class EditApplicationAreaDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.applicationAreaFormGroup = new FormGroup({
-      oldApplicationAreaName: new FormControl(this.data.name),
-      applicationAreaName: new FormControl(this.data.newName, [
+      applicationAreaName: new FormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
@@ -51,7 +50,7 @@ export class EditApplicationAreaDialogComponent implements OnInit {
     });
 
     this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.newName = this.applicationAreaName.value;
+      this.data.name = this.applicationAreaName.value;
     });
   }
 
@@ -63,5 +62,4 @@ export class EditApplicationAreaDialogComponent implements OnInit {
 export interface DialogData {
   title: string;
   name: string;
-  newName?: string;
 }

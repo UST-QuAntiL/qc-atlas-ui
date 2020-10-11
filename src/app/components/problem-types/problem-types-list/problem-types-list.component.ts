@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
@@ -30,7 +29,6 @@ export class ProblemTypesListComponent implements OnInit {
   constructor(
     private problemTypeService: ProblemTypeService,
     private genericDataService: GenericDataService,
-    private dialog: MatDialog,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -75,9 +73,12 @@ export class ProblemTypesListComponent implements OnInit {
 
   onAddElement(): void {
     const params: any = {};
-    const dialogRef = this.dialog.open(AddOrEditProblemTypeDialogComponent, {
-      data: { title: 'Create new problem type' },
-    });
+    const dialogRef = this.utilService.createDialog(
+      AddOrEditProblemTypeDialogComponent,
+      {
+        title: 'Create new problem type',
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
@@ -157,15 +158,15 @@ export class ProblemTypesListComponent implements OnInit {
         parentProblemTypeDto = problemType;
       }
     }
-    const dialogRef = this.dialog.open(AddOrEditProblemTypeDialogComponent, {
-      data: {
+    const dialogRef = this.utilService.createDialog(
+      AddOrEditProblemTypeDialogComponent,
+      {
         title: 'Edit problem type',
         id: event.id,
         name: event.name,
         parentProblemType: parentProblemTypeDto,
-      },
-      autoFocus: false,
-    });
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {

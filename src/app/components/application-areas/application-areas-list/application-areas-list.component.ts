@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
-import { AddApplicationAreaDialogComponent } from '../dialogs/add-application-area/add-application-area-dialog.component';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
 import { UtilService } from '../../../util/util.service';
-import { EditApplicationAreaDialogComponent } from '../dialogs/edit-application-area/edit-application-area-dialog.component';
+import { AddOrEditApplicationAreaDialogComponent } from '../dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
 
 @Component({
   selector: 'app-application-areas-list',
@@ -31,7 +29,6 @@ export class ApplicationAreasListComponent implements OnInit {
   constructor(
     private applicationAreasService: ApplicationAreasService,
     private genericDataService: GenericDataService,
-    private dialog: MatDialog,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -65,9 +62,12 @@ export class ApplicationAreasListComponent implements OnInit {
 
   onAddElement(): void {
     const params: any = {};
-    const dialogRef = this.dialog.open(AddApplicationAreaDialogComponent, {
-      data: { title: 'Add new application area' },
-    });
+    const dialogRef = this.utilService.createDialog(
+      AddOrEditApplicationAreaDialogComponent,
+      {
+        title: 'Create application area',
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
@@ -149,34 +149,32 @@ export class ApplicationAreasListComponent implements OnInit {
   }
 
   onEditElement(event: any): void {
-    const dialogRef = this.dialog.open(EditApplicationAreaDialogComponent, {
-      data: {
+    const dialogRef = this.utilService.createDialog(
+      AddOrEditApplicationAreaDialogComponent,
+      {
         title: 'Edit application area',
         name: event.name,
-      },
-      autoFocus: false,
-    });
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        if (dialogResult.newName !== event.name) {
-          const newApplicationAreaDto: EntityModelApplicationAreaDto = {
-            id: event.id,
-            name: dialogResult.newName,
-          };
-          const params: any = {
-            applicationAreaId: newApplicationAreaDto.id,
-            body: newApplicationAreaDto,
-          };
-          this.applicationAreasService
-            .updateApplicationArea(params)
-            .subscribe((data) => {
-              this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
-              this.utilService.callSnackBar(
-                'Successfully edited application area'
-              );
-            });
-        }
+        const newApplicationAreaDto: EntityModelApplicationAreaDto = {
+          id: event.id,
+          name: dialogResult.name,
+        };
+        const params: any = {
+          applicationAreaId: newApplicationAreaDto.id,
+          body: newApplicationAreaDto,
+        };
+        this.applicationAreasService
+          .updateApplicationArea(params)
+          .subscribe((data) => {
+            this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
+            this.utilService.callSnackBar(
+              'Successfully edited application area'
+            );
+          });
       }
     });
   }
