@@ -6,6 +6,7 @@ import {
 } from '@angular/material/dialog';
 import { RenderLatexControllerService } from 'api-latex/services/render-latex-controller.service';
 import { UtilService } from '../../../util/util.service';
+import { LatexRendererServiceConstants } from '../../../util/latex-renderer-service-constants';
 
 @Component({
   selector: 'app-latex-editor-dialog',
@@ -23,13 +24,14 @@ export class LatexEditorDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
     private latexRendererService: RenderLatexControllerService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private latexRendererServiceConstants: LatexRendererServiceConstants
   ) {}
 
   ngOnInit(): void {
-    this.defaultLatexPackages = this.utilService.getDefaultLatexPackages();
+    this.defaultLatexPackages = this.latexRendererServiceConstants.getDefaultLatexPackages();
     if (this.data.packedLatexValue) {
-      const inputData = this.utilService.unpackTextAndPackages(
+      const inputData = this.latexRendererServiceConstants.unpackTextAndPackages(
         this.data.packedLatexValue
       );
       this.inputText = inputData.latexContent;
@@ -39,9 +41,9 @@ export class LatexEditorDialogComponent implements OnInit {
 
   onSubmit(): void {
     this.dialogRef.close(
-      this.utilService.packTextAndPackages(
+      this.latexRendererServiceConstants.packTextAndPackages(
         this.inputText,
-        this.utilService
+        this.latexRendererServiceConstants
           .formatLatexPackagesToArray(this.latexPackages)
           .join('\n')
       )

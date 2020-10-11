@@ -7,6 +7,7 @@ import { RenderLatexControllerService } from 'api-latex/services/render-latex-co
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MissingEntityDialogComponent } from '../components/dialogs/missing-entity-dialog.component';
+import { LatexRendererServiceConstants } from './latex-renderer-service-constants';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,8 @@ export class UtilService {
   constructor(
     private snackBar: MatSnackBar,
     public dialog: MatDialog,
-    private latexRendererService: RenderLatexControllerService
+    private latexRendererService: RenderLatexControllerService,
+    private latexRendererServiceConstants: LatexRendererServiceConstants
   ) {}
 
   public callSnackBar(text: string): void {
@@ -62,59 +64,13 @@ export class UtilService {
     return deepEqual(source, target);
   }
 
-  // This Block works and could be used to persist the already rendered Blob element as a Data URI in the backend!
-  // At the moment, the LaTeX source code is persisted in the backend
-
-  // public getBlobFromDataUri(dataURI: string): Blob {
-  //   // convert base64 to raw binary data held in a string
-  //   // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-  //   const byteString = atob(dataURI.split(',')[1]);
-  //
-  //   // separate out the mime component
-  //   const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-  //
-  //   // write the bytes of the string to an ArrayBuffer
-  //   const ab = new ArrayBuffer(byteString.length);
-  //   const ia = new Uint8Array(ab);
-  //   for (let i = 0; i < byteString.length; i++) {
-  //     ia[i] = byteString.charCodeAt(i);
-  //   }
-  //
-  //   // write the ArrayBuffer to a blob
-  //   return new Blob([ab], { type: mimeString });
-  // }
-  //
-  // public getDataUriFromBlob(blob: Blob): string {
-  //   const fileReader = new FileReader();
-  //   fileReader.readAsDataURL(blob);
-  //   let dataUri: string;
-  //   fileReader.onload = () => {
-  //     dataUri = fileReader.result.toString();
-  //   };
-  //   return dataUri;
-  // }
-
-  public packTextAndPackages(text = '', packages: string): string {
-    return text.concat(packages);
-  }
-
-  unpackTextAndPackages(
-    packedData: string
-  ): { latexContent: string; latexPackages: string } {
-    const splitData = packedData.split('\\use');
-    const content = splitData[0];
-    const packages: string[] = [];
-    for (let i = 1; i < splitData.length; i++) {
-      packages.push('\\use' + splitData[i]);
-    }
-    return { latexContent: content, latexPackages: packages.join('') };
-  }
-
   public renderPackedDataAndReturnUrlToPdfBlob(
     packedData: string,
     output: string
   ): Observable<string> {
-    const data = this.unpackTextAndPackages(packedData);
+    const data = this.latexRendererServiceConstants.unpackTextAndPackages(
+      packedData
+    );
     return this.renderLatexContentAndReturnUrlToPdfBlob(
       data.latexContent,
       data.latexPackages,
@@ -127,9 +83,9 @@ export class UtilService {
     additionalPackages: string,
     outputType: string
   ): Observable<string> {
-    const packages = this.getDefaultLatexPackages();
+    const packages = this.latexRendererServiceConstants.getDefaultLatexPackages();
     if (additionalPackages) {
-      for (const additionalPackage of this.formatLatexPackagesToArray(
+      for (const additionalPackage of this.latexRendererServiceConstants.formatLatexPackagesToArray(
         additionalPackages
       )) {
         if (!packages.includes(additionalPackage)) {
@@ -138,42 +94,21 @@ export class UtilService {
       }
     }
     const latexBody: LatexContent = {
-      content: this.formatLatexContent(latexContent),
+      content: this.latexRendererServiceConstants.formatLatexContent(
+        latexContent
+      ),
       latexPackages: packages,
       output: outputType,
     };
     return this.latexRendererService.renderLatexAsPdf({ body: latexBody }).pipe(
       map((response: string[]) => {
         if (response) {
-          const latexBlob = this.createBlobFromRenderedResult(response);
+          const latexBlob = this.latexRendererServiceConstants.createBlobFromRenderedResult(
+            response
+          );
           return URL.createObjectURL(latexBlob);
         }
       })
     );
-  }
-
-  public getDefaultLatexPackages(): string[] {
-    return ['\\usepackage{tikz}', '\\usetikzlibrary{quantikz}'];
-  }
-
-  public formatLatexPackagesToArray(packages: string): string[] {
-    const removeBlanks = packages.split(' ');
-    const removeCommas = removeBlanks.join(',').split(',');
-    const removeNewLines = removeCommas.join('\n').split('\n');
-    return removeNewLines.filter((el) => el !== '');
-  }
-
-  private formatLatexContent(latexContent: string): string {
-    let latexRenderText = '';
-    latexRenderText = latexContent.split('\\n').join('\n');
-    latexRenderText = latexRenderText.split('\\t').join('\t');
-    latexRenderText = latexRenderText.split('\\r').join('\r');
-    return latexRenderText;
-  }
-
-  private createBlobFromRenderedResult(renderedData: any): Blob {
-    return new Blob([renderedData], {
-      type: renderedData.type,
-    });
   }
 }

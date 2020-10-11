@@ -24,6 +24,7 @@
                         [value]="algorithm.intent"
                         [multiline]="true"
                         [maxLines]="5"
+                        [isLatexInput]="true"
                         (onChange)="onPropertyChanged($event, 'intent')"
                         (onSaveChanges)="onChangesSaved($event, 'intent')"
         ></app-text-input>
