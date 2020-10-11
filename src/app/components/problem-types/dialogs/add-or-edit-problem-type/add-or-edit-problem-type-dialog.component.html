@@ -3,18 +3,16 @@
   <form [formGroup]="problemTypeFormGroup">
     <mat-form-field class="input-field">
       <mat-label>Name</mat-label>
-      <input formControlName="problemTypeName" matInput required/>
+      <label>
+        <input formControlName="problemTypeName" matInput required/>
+      </label>
     </mat-form-field>
-    <mat-form-field class="input-field"
-                    appearance="fill"
-                    *ngIf="existingProblemTypes">
+    <mat-form-field class="input-field" *ngIf="existingProblemTypes">
       <mat-label>Parent problem type</mat-label>
       <mat-select
         formControlName="parentProblemType"
         [compareWith]="compareFn">
-        <mat-option *ngFor="let type of existingProblemTypes"
-                    [value]="type"
-                    (click)="onParentTypeSelect(type)">
+        <mat-option *ngFor="let type of existingProblemTypes" [value]="type">
           {{type.name}}
         </mat-option>
       </mat-select>

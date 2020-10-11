@@ -11,17 +11,16 @@ import { EntityModelProblemTypeDto } from 'api-atlas/models';
 
 @Component({
   selector: 'app-edit-problem-type-dialog',
-  templateUrl: './edit-problem-type-dialog.component.html',
-  styleUrls: ['./edit-problem-type-dialog.component.scss'],
+  templateUrl: './add-or-edit-problem-type-dialog.component.html',
+  styleUrls: ['./add-or-edit-problem-type-dialog.component.scss'],
 })
-export class EditProblemTypeDialogComponent implements OnInit {
+export class AddOrEditProblemTypeDialogComponent implements OnInit {
   problemTypeFormGroup: FormGroup;
-  existingProblemTypes: EntityModelProblemTypeDto[];
-  selectedParentProblemType: EntityModelProblemTypeDto;
+  existingProblemTypes: EntityModelProblemTypeDto[] = [];
 
   constructor(
     private problemTypeService: ProblemTypeService,
-    public dialogRef: MatDialogRef<EditProblemTypeDialogComponent>,
+    public dialogRef: MatDialogRef<AddOrEditProblemTypeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
 
@@ -39,47 +38,42 @@ export class EditProblemTypeDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.problemTypeFormGroup = new FormGroup({
-      oldProblemTypeName: new FormControl(this.data.name),
-      problemTypeName: new FormControl(this.data.newName, [
+      problemTypeName: new FormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
       ]),
-      oldParentProblemTypeName: new FormControl(
-        this.data.parentProblemType
-          ? this.data.parentProblemType.name
-          : 'No parent assigned yet'
-      ),
-      parentProblemType: new FormControl(
-        this.data.newParentProblemType,
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required
-      ),
+      parentProblemType: new FormControl(this.data.parentProblemType),
     });
 
     this.problemTypeService.getProblemTypes().subscribe((types) => {
       if (types._embedded) {
-        this.existingProblemTypes = types._embedded.problemTypes;
+        for (const problemType of types._embedded.problemTypes) {
+          // Don't allow to type to become it's own parent
+          if (problemType.id !== this.data.id) {
+            this.existingProblemTypes.push(problemType);
+          }
+        }
       } else {
         this.existingProblemTypes = [];
       }
+      this.existingProblemTypes.unshift(this.generateEmptyProblemType());
     });
 
+    if (!this.data.parentProblemType) {
+      this.parentProblemType.setValue(this.generateEmptyProblemType());
+    }
+
     this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.newName = this.problemTypeName.value;
-      this.data.newParentProblemType = this.selectedParentProblemType;
+      this.data.name = this.problemTypeName.value;
+      this.data.parentProblemType = this.parentProblemType.value.id
+        ? this.parentProblemType.value
+        : undefined;
     });
   }
 
   isRequiredDataMissing(): boolean {
-    return (
-      this.problemTypeName.errors?.required ||
-      this.parentProblemType.errors?.required
-    );
-  }
-
-  onParentTypeSelect(type: EntityModelProblemTypeDto): void {
-    this.selectedParentProblemType = type;
+    return this.problemTypeName.errors?.required;
   }
 
   compareFn(
@@ -89,15 +83,14 @@ export class EditProblemTypeDialogComponent implements OnInit {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 
-  onRemoveParentProblemType(): void {
-    this.selectedParentProblemType = null;
+  generateEmptyProblemType(): EntityModelProblemTypeDto {
+    return { id: undefined, name: '--NONE--' };
   }
 }
 
 export interface DialogData {
   title: string;
+  id: string;
   name: string;
-  newName?: string;
   parentProblemType?: EntityModelProblemTypeDto;
-  newParentProblemType?: EntityModelProblemTypeDto;
 }

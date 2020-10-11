@@ -1,20 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
-import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
-import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
-import { AddProblemTypeDialogComponent } from '../dialogs/add-problem-type/add-problem-type-dialog.component';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
 import { UtilService } from '../../../util/util.service';
-import { AddAlgorithmDialogComponent } from '../../algorithms/dialogs/add-algorithm-dialog.component';
-import { EditProblemTypeDialogComponent } from '../dialogs/edit-problem-type/edit-problem-type-dialog.component';
+import { AddOrEditProblemTypeDialogComponent } from '../dialogs/add-or-edit-problem-type/add-or-edit-problem-type-dialog.component';
 
 @Component({
   selector: 'app-problem-types-list',
@@ -34,7 +29,6 @@ export class ProblemTypesListComponent implements OnInit {
   constructor(
     private problemTypeService: ProblemTypeService,
     private genericDataService: GenericDataService,
-    private dialog: MatDialog,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -79,14 +73,17 @@ export class ProblemTypesListComponent implements OnInit {
 
   onAddElement(): void {
     const params: any = {};
-    const dialogRef = this.dialog.open(AddProblemTypeDialogComponent, {
-      data: { title: 'Add new problem type' },
-    });
+    const dialogRef = this.utilService.createDialog(
+      AddOrEditProblemTypeDialogComponent,
+      {
+        title: 'Create new problem type',
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
         const problemTypeDto: EntityModelProblemTypeDto = {
-          id: dialogResult.id,
+          id: undefined,
           name: dialogResult.name,
         };
         if (dialogResult.parentProblemType) {
@@ -95,7 +92,12 @@ export class ProblemTypesListComponent implements OnInit {
 
         params.body = problemTypeDto;
         this.problemTypeService.createProblemType(params).subscribe((data) => {
-          this.getProblemTypes({});
+          this.getProblemTypesHateoas(
+            this.utilService.getLastPageAfterCreation(
+              this.pagingInfo._links.self.href,
+              this.pagingInfo
+            )
+          );
           this.utilService.callSnackBar('Successfully added problem type');
         });
       }
@@ -117,27 +119,38 @@ export class ProblemTypesListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          let successfulDeletions = 0;
           for (const problemType of event.elements) {
             deletionTasks.push(
-              this.problemTypeService.deleteProblemType({
-                problemTypeId: problemType.id,
-              })
+              this.problemTypeService
+                .deleteProblemType({
+                  problemTypeId: problemType.id,
+                })
+                .toPromise()
+                .then(() => successfulDeletions++)
             );
           }
-          forkJoin(deletionTasks).subscribe(
-            () => {
-              this.getProblemTypes(event.queryParams);
-              this.utilService.callSnackBar(
-                'Successfully deleted problem type(s)'
-              );
-            },
-            () => {
-              this.getProblemTypes(event.queryParams);
-              this.utilService.callSnackBar(
-                'Delete rejected! Problem type is used in other places.'
-              );
+          forkJoin(deletionTasks).subscribe(() => {
+            console.log(this.pagingInfo.page);
+            if (
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                this.problemTypes.length,
+                this.pagingInfo
+              )
+            ) {
+              this.getProblemTypesHateoas(this.pagingInfo._links.prev.href);
+            } else {
+              this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
             }
-          );
+            this.utilService.callSnackBar(
+              'Successfully deleted ' +
+                successfulDeletions +
+                '/' +
+                dialogResult.data.length +
+                ' problem types.'
+            );
+          });
         }
       });
   }
@@ -149,52 +162,34 @@ export class ProblemTypesListComponent implements OnInit {
         parentProblemTypeDto = problemType;
       }
     }
-    const dialogRef = this.dialog.open(EditProblemTypeDialogComponent, {
-      data: {
+    const dialogRef = this.utilService.createDialog(
+      AddOrEditProblemTypeDialogComponent,
+      {
         title: 'Edit problem type',
+        id: event.id,
         name: event.name,
         parentProblemType: parentProblemTypeDto,
-      },
-      autoFocus: false,
-    });
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        if (
-          dialogResult.newName !== event.name ||
-          !dialogResult.newParentProblemType ||
-          (dialogResult.newParentProblemType &&
-            dialogResult.newParentProblemType.id !==
-              (event.parentProblemType as string))
-        ) {
-          const newProblemTypeDto: EntityModelProblemTypeDto = {
-            id: event.id,
-            name: dialogResult.newName,
-          };
-          if (dialogResult.newParentProblemType) {
-            newProblemTypeDto.parentProblemType =
-              dialogResult.newParentProblemType.id;
-          }
+        const updatedProblemType: EntityModelProblemTypeDto = {
+          id: dialogResult.id,
+          name: dialogResult.name,
+          parentProblemType: dialogResult.parentProblemType
+            ? dialogResult.parentProblemType.id
+            : null,
+        };
 
-          if (newProblemTypeDto.id !== newProblemTypeDto.parentProblemType) {
-            const params: any = {
-              problemTypeId: newProblemTypeDto.id,
-              body: newProblemTypeDto,
-            };
-            this.problemTypeService
-              .updateProblemType(params)
-              .subscribe((data) => {
-                this.getProblemTypes(event.queryParams);
-                this.utilService.callSnackBar(
-                  'Successfully edited problem type'
-                );
-              });
-          } else {
-            this.utilService.callSnackBar(
-              'Edit aborted! Parent problem type must differ from problem type.'
-            );
-          }
-        }
+        const params: any = {
+          problemTypeId: updatedProblemType.id,
+          body: updatedProblemType,
+        };
+        this.problemTypeService.updateProblemType(params).subscribe((data) => {
+          this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
+          this.utilService.callSnackBar('Successfully edited problem type');
+        });
       }
     });
   }

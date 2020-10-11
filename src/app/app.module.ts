@@ -39,11 +39,10 @@ import { ServicesModule } from './services/services.module';
 import { ChangePageGuard } from './services/deactivation-guard';
 import { LinkItemListDialogComponent } from './components/generics/dialogs/link-item-list-dialog.component';
 import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
-import { AddProblemTypeDialogComponent } from './components/problem-types/dialogs/add-problem-type/add-problem-type-dialog.component';
-import { EditProblemTypeDialogComponent } from './components/problem-types/dialogs/edit-problem-type/edit-problem-type-dialog.component';
+import { AddOrEditProblemTypeDialogComponent } from './components/problem-types/dialogs/add-or-edit-problem-type/add-or-edit-problem-type-dialog.component';
 import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
-import { AddApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-application-area/add-application-area-dialog.component';
-import { EditApplicationAreaDialogComponent } from './components/application-areas/dialogs/edit-application-area/edit-application-area-dialog.component';
+// eslint-disable-next-line max-len
+import { AddOrEditApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
 
 @NgModule({
   declarations: [
@@ -56,10 +55,8 @@ import { EditApplicationAreaDialogComponent } from './components/application-are
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
     NavigationComponent,
-    AddProblemTypeDialogComponent,
-    EditProblemTypeDialogComponent,
-    AddApplicationAreaDialogComponent,
-    EditApplicationAreaDialogComponent,
+    AddOrEditProblemTypeDialogComponent,
+    AddOrEditApplicationAreaDialogComponent,
     LinkItemListDialogComponent,
     ProblemTypesListComponent,
   ],
