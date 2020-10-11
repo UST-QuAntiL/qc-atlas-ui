@@ -6,7 +6,6 @@ import { LatexContent } from 'api-latex/models/latex-content';
 import { RenderLatexControllerService } from 'api-latex/services/render-latex-controller.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { newArray } from '@angular/compiler/src/util';
 import { MissingEntityDialogComponent } from '../components/dialogs/missing-entity-dialog.component';
 
 @Injectable({
@@ -95,25 +94,25 @@ export class UtilService {
   //   return dataUri;
   // }
 
-  public packTextAndPackages(text = '', packages: string[]): string {
-    return text.concat(packages.join(''));
+  public packTextAndPackages(text = '', packages: string): string {
+    return text.concat(packages);
   }
 
   unpackTextAndPackages(
     packedData: string
-  ): { latexContent: string; latexPackages: string[] } {
+  ): { latexContent: string; latexPackages: string } {
     const splitData = packedData.split('\\use');
     const content = splitData[0];
     const packages: string[] = [];
     for (let i = 1; i < splitData.length; i++) {
       packages.push('\\use' + splitData[i]);
     }
-    return { latexContent: content, latexPackages: packages };
+    return { latexContent: content, latexPackages: packages.join('') };
   }
 
   public renderPackedDataAndReturnUrlToPdfBlob(
     packedData: string,
-    output = 'pdf'
+    output: string
   ): Observable<string> {
     const data = this.unpackTextAndPackages(packedData);
     return this.renderLatexContentAndReturnUrlToPdfBlob(
@@ -125,21 +124,23 @@ export class UtilService {
 
   public renderLatexContentAndReturnUrlToPdfBlob(
     latexContent: string,
-    additionalPackages: string[] = [],
-    output = 'pdf'
+    additionalPackages: string,
+    outputType: string
   ): Observable<string> {
     const packages = this.getDefaultLatexPackages();
     if (additionalPackages) {
-      for (const additionalPackage of additionalPackages) {
+      for (const additionalPackage of this.formatLatexPackagesToArray(
+        additionalPackages
+      )) {
         if (!packages.includes(additionalPackage)) {
           packages.push(additionalPackage);
         }
       }
     }
     const latexBody: LatexContent = {
-      content: latexContent,
+      content: this.formatLatexContent(latexContent),
       latexPackages: packages,
-      output,
+      output: outputType,
     };
     return this.latexRendererService.renderLatexAsPdf({ body: latexBody }).pipe(
       map((response: string[]) => {
@@ -155,11 +156,24 @@ export class UtilService {
     return ['\\usepackage{tikz}', '\\usetikzlibrary{quantikz}'];
   }
 
-  public formatLatexContent(latexContent: string) {}
+  public formatLatexPackagesToArray(packages: string): string[] {
+    const removeBlanks = packages.split(' ');
+    const removeCommas = removeBlanks.join(',').split(',');
+    const removeNewLines = removeCommas.join('\n').split('\n');
+    return removeNewLines.filter((el) => el !== '');
+  }
+
+  private formatLatexContent(latexContent: string): string {
+    let latexRenderText = '';
+    latexRenderText = latexContent.split('\\n').join('\n');
+    latexRenderText = latexRenderText.split('\\t').join('\t');
+    latexRenderText = latexRenderText.split('\\r').join('\r');
+    return latexRenderText;
+  }
 
   private createBlobFromRenderedResult(renderedData: any): Blob {
     return new Blob([renderedData], {
-      type: 'application/pdf',
+      type: renderedData.type,
     });
   }
 }

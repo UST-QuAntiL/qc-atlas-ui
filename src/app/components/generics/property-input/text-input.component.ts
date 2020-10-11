@@ -71,6 +71,7 @@ export class TextInputComponent implements OnInit {
       {
         title: 'LaTeX Render Editor',
         packedLatexValue: this.packedLatexValue,
+        outputFormat: this.renderOutput,
       },
       'auto'
     );

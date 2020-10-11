@@ -33,37 +33,28 @@ export class LatexEditorDialogComponent implements OnInit {
         this.data.packedLatexValue
       );
       this.inputText = inputData.latexContent;
-      this.latexPackages = inputData.latexPackages.join('\n');
+      this.latexPackages = inputData.latexPackages;
     }
   }
 
   onSubmit(): void {
     this.dialogRef.close(
       this.utilService.packTextAndPackages(
-        this.formatInputString(this.inputText),
-        this.formatPackages(this.latexPackages)
+        this.inputText,
+        this.utilService
+          .formatLatexPackagesToArray(this.latexPackages)
+          .join('\n')
       )
     );
-  }
-
-  formatInputString(input: string): string {
-    let latexRenderText = '';
-    latexRenderText = input.split('\\n').join('\n');
-    latexRenderText = latexRenderText.split('\\t').join('\t');
-    latexRenderText = latexRenderText.split('\\r').join('\r');
-    return latexRenderText;
-  }
-
-  formatPackages(packages: string): string[] {
-    return packages.split(',').join('\n').split('\n');
   }
 
   onGenerateLatex(): void {
     this.urlToRenderedPdfBlob = undefined;
     this.utilService
       .renderLatexContentAndReturnUrlToPdfBlob(
-        this.formatInputString(this.inputText),
-        this.formatPackages(this.latexPackages)
+        this.inputText,
+        this.latexPackages,
+        this.data.outputFormat
       )
       .subscribe((response) => {
         this.urlToRenderedPdfBlob = response;
@@ -74,4 +65,5 @@ export class LatexEditorDialogComponent implements OnInit {
 export interface DialogData {
   title: string;
   packedLatexValue?: string;
+  outputFormat?: string;
 }
