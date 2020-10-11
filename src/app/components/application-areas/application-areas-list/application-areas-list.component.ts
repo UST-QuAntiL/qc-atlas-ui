@@ -123,8 +123,11 @@ export class ApplicationAreasListComponent implements OnInit {
           }
           forkJoin(deletionTasks).subscribe(() => {
             if (
-              this.applicationAreas.length === successfulDeletions &&
-              this.pagingInfo.page.number !== 0
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                this.applicationAreas.length,
+                this.pagingInfo
+              )
             ) {
               this.getApplicationAreasHateoas(this.pagingInfo._links.prev.href);
             } else {

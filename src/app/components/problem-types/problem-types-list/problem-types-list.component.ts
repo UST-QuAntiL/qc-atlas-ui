@@ -131,9 +131,13 @@ export class ProblemTypesListComponent implements OnInit {
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
+            console.log(this.pagingInfo.page);
             if (
-              this.problemTypes.length === successfulDeletions &&
-              this.pagingInfo.page.number !== 0
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                this.problemTypes.length,
+                this.pagingInfo
+              )
             ) {
               this.getProblemTypesHateoas(this.pagingInfo._links.prev.href);
             } else {

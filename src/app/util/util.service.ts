@@ -76,4 +76,24 @@ export class UtilService {
     url.searchParams.set('page', correctPage.toString());
     return url.toString();
   }
+
+  /**
+   * This method checks if the current page is the last one and if it will become empty after the deletion of elements.
+   *
+   * @param elementsDeleted
+   * @param currentAmountOfElements
+   * @param pagingInfo
+   * @return isEmpty
+   */
+  public isLastPageEmptyAfterDeletion(
+    elementsDeleted: number,
+    currentAmountOfElements: number,
+    pagingInfo: any
+  ): boolean {
+    return (
+      currentAmountOfElements === elementsDeleted &&
+      pagingInfo.page.number !== 0 &&
+      pagingInfo.page.number === pagingInfo.page.totalPages - 1
+    );
+  }
 }
