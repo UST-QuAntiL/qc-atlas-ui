@@ -63,16 +63,16 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     this.algoRelationTypeService
       .getAlgorithmRelationTypes()
       .subscribe((relationTypes) => {
-        if (relationTypes._embedded) {
-          this.algoRelationTypes = relationTypes._embedded.algoRelationTypes;
-          this.stateGroups.push({
-            optionName: 'Existing Algorithm-Relations',
-            algoRelationTypes: this.algoRelationTypes,
-          });
-          // Set filtered Types if update-dialog
-          if (this.isUpdateDialog) {
-            this.filterTypes(this.relationType.value.name);
-          }
+        this.algoRelationTypes = relationTypes._embedded
+          ? relationTypes._embedded.algoRelationTypes
+          : [];
+        this.stateGroups.push({
+          optionName: 'Existing Algorithm-Relations',
+          algoRelationTypes: this.algoRelationTypes,
+        });
+        // Set filtered Types if update-dialog
+        if (this.isUpdateDialog) {
+          this.filterTypes(this.relationType.value.name);
         }
       });
 

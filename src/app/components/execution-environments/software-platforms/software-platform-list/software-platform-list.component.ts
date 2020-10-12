@@ -3,6 +3,7 @@ import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-so
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import {
   SelectParams,
   QueryParams,
@@ -122,20 +123,41 @@ export class SoftwarePlatformListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const promises: Array<Promise<void>> = [];
+          const deletionTasks = [];
+          let successfulDeletions = 0;
           for (const softwarePlatform of deleteParams.elements) {
-            promises.push(
+            deletionTasks.push(
               this.executionEnvironmentsService
                 .deleteSoftwarePlatform({
                   softwarePlatformId: softwarePlatform.id,
                 })
                 .toPromise()
+                .then(() => successfulDeletions++)
             );
           }
-          Promise.all(promises).then(() => {
-            this.getSoftwarePlatforms(deleteParams.queryParams);
+          forkJoin(deletionTasks).subscribe(() => {
+            console.log(this.pagingInfo.page);
+            if (
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                this.softwarePlatforms.length,
+                this.pagingInfo
+              )
+            ) {
+              this.getSoftwarePlatformsHateoas(
+                this.pagingInfo._links.prev.href
+              );
+            } else {
+              this.getSoftwarePlatformsHateoas(
+                this.pagingInfo._links.self.href
+              );
+            }
             this.utilService.callSnackBar(
-              'Successfully deleted software platform(s)'
+              'Successfully deleted ' +
+                successfulDeletions +
+                '/' +
+                dialogResult.data.length +
+                ' software platforms.'
             );
           });
         }
