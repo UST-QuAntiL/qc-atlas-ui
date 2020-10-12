@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
-import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
+import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
+import { EntityModelAlgorithmRelationTypeDto } from 'api-atlas/models/entity-model-algorithm-relation-type-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
+import { UtilService } from '../../../util/util.service';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
-import { UtilService } from '../../../util/util.service';
-import { AddOrEditApplicationAreaDialogComponent } from '../dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
+// eslint-disable-next-line max-len
+import { AddOrEditAlgorithmRelationTypeDialogComponent } from '../dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
 
 @Component({
-  selector: 'app-application-areas-list',
-  templateUrl: './application-areas-list.component.html',
-  styleUrls: ['./application-areas-list.component.scss'],
+  selector: 'app-algorithm-relation-types',
+  templateUrl: './algorithm-relation-types-list.component.html',
+  styleUrls: ['./algorithm-relation-types-list.component.scss'],
 })
-export class ApplicationAreasListComponent implements OnInit {
-  applicationAreas: any[] = [];
+export class AlgorithmRelationTypesListComponent implements OnInit {
+  algorithmRelationTypes: any[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
   pagingInfo: any = {};
@@ -27,34 +27,33 @@ export class ApplicationAreasListComponent implements OnInit {
   };
 
   constructor(
-    private applicationAreasService: ApplicationAreasService,
+    private algorithmRelationTypeService: AlgorithmRelationTypeService,
     private genericDataService: GenericDataService,
-    private router: Router,
     private utilService: UtilService
   ) {}
 
   ngOnInit(): void {}
 
-  getApplicationAreas(params: any): void {
-    this.applicationAreasService
-      .getApplicationAreas(params)
+  getAlgorithmRelationTypes(params: any): void {
+    this.algorithmRelationTypeService
+      .getAlgorithmRelationTypes(params)
       .subscribe((data) => {
-        this.prepareApplicationAreaData(data);
+        this.prepareAlgorithmRelationTypeData(data);
       });
   }
 
-  getApplicationAreasHateoas(url: string): void {
+  getAlgorithmRelationTypesHateoas(url: string): void {
     this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareApplicationAreaData(data);
+      this.prepareAlgorithmRelationTypeData(data);
     });
   }
 
-  prepareApplicationAreaData(data): void {
+  prepareAlgorithmRelationTypeData(data): void {
     // Read all incoming data
     if (data._embedded) {
-      this.applicationAreas = data._embedded.applicationAreas;
+      this.algorithmRelationTypes = data._embedded.algoRelationTypes;
     } else {
-      this.applicationAreas = [];
+      this.algorithmRelationTypes = [];
     }
     this.pagingInfo.page = data.page;
     this.pagingInfo._links = data._links;
@@ -63,31 +62,31 @@ export class ApplicationAreasListComponent implements OnInit {
   onAddElement(): void {
     const params: any = {};
     const dialogRef = this.utilService.createDialog(
-      AddOrEditApplicationAreaDialogComponent,
+      AddOrEditAlgorithmRelationTypeDialogComponent,
       {
-        title: 'Create application area',
+        title: 'Create new algorithm relation type',
       }
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const applicationAreaDtoDto: EntityModelApplicationAreaDto = {
-          id: dialogResult.id,
+        const algorithmRelationType: EntityModelAlgorithmRelationTypeDto = {
+          id: undefined,
           name: dialogResult.name,
         };
 
-        params.body = applicationAreaDtoDto;
-        this.applicationAreasService
-          .createApplicationArea(params)
+        params.body = algorithmRelationType;
+        this.algorithmRelationTypeService
+          .createAlgorithmRelationType(params)
           .subscribe((data) => {
-            this.getApplicationAreasHateoas(
+            this.getAlgorithmRelationTypesHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
                 this.pagingInfo
               )
             );
             this.utilService.callSnackBar(
-              'Successfully added application area'
+              'Successfully added algorithm relation type'
             );
           });
       }
@@ -98,7 +97,7 @@ export class ApplicationAreasListComponent implements OnInit {
     const dialogData: ConfirmDialogData = {
       title: 'Confirm Deletion',
       message:
-        'Are you sure you want to delete the following application area(s):',
+        'Are you sure you want to delete the following algorithm relation type(s):',
       data: event.elements,
       variableName: 'name',
       yesButtonText: 'yes',
@@ -112,11 +111,11 @@ export class ApplicationAreasListComponent implements OnInit {
           const deletionTasks = [];
           const snackbarMessages = [];
           let successfulDeletions = 0;
-          for (const applicationArea of event.elements) {
+          for (const algorithmRelationType of event.elements) {
             deletionTasks.push(
-              this.applicationAreasService
-                .deleteApplicationArea({
-                  applicationAreaId: applicationArea.id,
+              this.algorithmRelationTypeService
+                .deleteAlgorithmRelationType({
+                  algorithmRelationTypeId: algorithmRelationType.id,
                 })
                 .toPromise()
                 .then(() => successfulDeletions++)
@@ -129,19 +128,23 @@ export class ApplicationAreasListComponent implements OnInit {
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
-                this.applicationAreas.length,
+                this.algorithmRelationTypes.length,
                 this.pagingInfo
               )
             ) {
-              this.getApplicationAreasHateoas(this.pagingInfo._links.prev.href);
+              this.getAlgorithmRelationTypesHateoas(
+                this.pagingInfo._links.prev.href
+              );
             } else {
-              this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
+              this.getAlgorithmRelationTypesHateoas(
+                this.pagingInfo._links.self.href
+              );
             }
             snackbarMessages.push(
               this.utilService.generateFinalDeletionMessage(
                 successfulDeletions,
                 dialogResult.data.length,
-                'application areas'
+                'algorithm relation types'
               )
             );
             this.utilService.callSnackBarSequence(snackbarMessages);
@@ -152,29 +155,33 @@ export class ApplicationAreasListComponent implements OnInit {
 
   onEditElement(event: any): void {
     const dialogRef = this.utilService.createDialog(
-      AddOrEditApplicationAreaDialogComponent,
+      AddOrEditAlgorithmRelationTypeDialogComponent,
       {
-        title: 'Edit application area',
+        title: 'Edit algorithm relation type',
+        id: event.id,
         name: event.name,
       }
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const newApplicationAreaDto: EntityModelApplicationAreaDto = {
-          id: event.id,
+        const updatedAlgorithmRelationType: EntityModelAlgorithmRelationTypeDto = {
+          id: dialogResult.id,
           name: dialogResult.name,
         };
+
         const params: any = {
-          applicationAreaId: newApplicationAreaDto.id,
-          body: newApplicationAreaDto,
+          algorithmRelationTypeId: updatedAlgorithmRelationType.id,
+          body: updatedAlgorithmRelationType,
         };
-        this.applicationAreasService
-          .updateApplicationArea(params)
+        this.algorithmRelationTypeService
+          .updateAlgorithmRelationType(params)
           .subscribe((data) => {
-            this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
+            this.getAlgorithmRelationTypesHateoas(
+              this.pagingInfo._links.self.href
+            );
             this.utilService.callSnackBar(
-              'Successfully edited application area'
+              'Successfully edited algorithm relation type'
             );
           });
       }

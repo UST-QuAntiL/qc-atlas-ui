@@ -117,6 +117,7 @@ export class ComputeResourceListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          const snackbarMessages = [];
           let successfulDeletions = 0;
           for (const computeResource of deleteParams.elements) {
             deletionTasks.push(
@@ -126,10 +127,12 @@ export class ComputeResourceListComponent implements OnInit {
                 })
                 .toPromise()
                 .then(() => successfulDeletions++)
+                .catch((errorResponse) =>
+                  snackbarMessages.push(JSON.parse(errorResponse.error).message)
+                )
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
-            console.log(this.pagingInfo.page);
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
@@ -141,13 +144,14 @@ export class ComputeResourceListComponent implements OnInit {
             } else {
               this.getComputeResourcesHateoas(this.pagingInfo._links.self.href);
             }
-            this.utilService.callSnackBar(
-              'Successfully deleted ' +
-                successfulDeletions +
-                '/' +
-                dialogResult.data.length +
-                ' compute resources.'
+            snackbarMessages.push(
+              this.utilService.generateFinalDeletionMessage(
+                successfulDeletions,
+                dialogResult.data.length,
+                'compute resources'
+              )
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });

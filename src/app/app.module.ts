@@ -43,22 +43,38 @@ import { AddOrEditProblemTypeDialogComponent } from './components/problem-types/
 import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
 // eslint-disable-next-line max-len
 import { AddOrEditApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
+// eslint-disable-next-line max-len
+import { AddOrEditAlgorithmRelationTypeDialogComponent } from './components/algorithm-relation-types/dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
+// eslint-disable-next-line max-len
+import { AlgorithmRelationTypesListComponent } from './components/algorithm-relation-types/algorithm-relation-types-list/algorithm-relation-types-list.component';
+import { PatternRelationTypesListComponent } from './components/pattern-relation-types/pattern-relation-types-list/pattern-relation-types-list.component';
+// eslint-disable-next-line max-len
+import { AddOrEditPatternRelationTypeDialogComponent } from './components/pattern-relation-types/dialogs/add-or-edit-pattern-relation-type-dialog/add-or-edit-pattern-relation-type-dialog.component';
+// eslint-disable-next-line max-len
+import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
+// eslint-disable-next-line max-len
+import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './components/compute-resource-property-types/dialogs/add-or-edit-compute-resource-property-type-dialog/add-or-edit-compute-resource-property-type-dialog.component';
 
 @NgModule({
   declarations: [
     // components
     AppComponent,
     PageNotFoundComponent,
-    ApplicationAreasListComponent,
-    ProblemTypesListComponent,
     // dialogs
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
     NavigationComponent,
     AddOrEditProblemTypeDialogComponent,
     AddOrEditApplicationAreaDialogComponent,
+    AddOrEditAlgorithmRelationTypeDialogComponent,
     LinkItemListDialogComponent,
     ProblemTypesListComponent,
+    AlgorithmRelationTypesListComponent,
+    ApplicationAreasListComponent,
+    PatternRelationTypesListComponent,
+    AddOrEditPatternRelationTypeDialogComponent,
+    ComputeResourcePropertyTypesListComponent,
+    AddOrEditComputeResourcePropertyTypeDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

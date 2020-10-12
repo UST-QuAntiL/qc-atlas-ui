@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
-import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
+import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
+import { EntityModelPatternRelationTypeDto } from 'api-atlas/models/entity-model-pattern-relation-type-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
+import { UtilService } from '../../../util/util.service';
+// eslint-disable-next-line max-len
+import { AddOrEditPatternRelationTypeDialogComponent } from '../dialogs/add-or-edit-pattern-relation-type-dialog/add-or-edit-pattern-relation-type-dialog.component';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
-import { UtilService } from '../../../util/util.service';
-import { AddOrEditApplicationAreaDialogComponent } from '../dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
 
 @Component({
-  selector: 'app-application-areas-list',
-  templateUrl: './application-areas-list.component.html',
-  styleUrls: ['./application-areas-list.component.scss'],
+  selector: 'app-pattern-relation-types-list',
+  templateUrl: './pattern-relation-types-list.component.html',
+  styleUrls: ['./pattern-relation-types-list.component.scss'],
 })
-export class ApplicationAreasListComponent implements OnInit {
-  applicationAreas: any[] = [];
+export class PatternRelationTypesListComponent implements OnInit {
+  patternRelationTypes: any[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
   pagingInfo: any = {};
@@ -27,34 +27,33 @@ export class ApplicationAreasListComponent implements OnInit {
   };
 
   constructor(
-    private applicationAreasService: ApplicationAreasService,
+    private patternRelationTypeService: PatternRelationTypeService,
     private genericDataService: GenericDataService,
-    private router: Router,
     private utilService: UtilService
   ) {}
 
   ngOnInit(): void {}
 
-  getApplicationAreas(params: any): void {
-    this.applicationAreasService
-      .getApplicationAreas(params)
+  getPatternRelationTypes(params: any): void {
+    this.patternRelationTypeService
+      .getPatternRelationTypes(params)
       .subscribe((data) => {
-        this.prepareApplicationAreaData(data);
+        this.preparePatternRelationTypeData(data);
       });
   }
 
-  getApplicationAreasHateoas(url: string): void {
+  getPatternRelationTypesHateoas(url: string): void {
     this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareApplicationAreaData(data);
+      this.preparePatternRelationTypeData(data);
     });
   }
 
-  prepareApplicationAreaData(data): void {
+  preparePatternRelationTypeData(data): void {
     // Read all incoming data
     if (data._embedded) {
-      this.applicationAreas = data._embedded.applicationAreas;
+      this.patternRelationTypes = data._embedded.patternRelationTypes;
     } else {
-      this.applicationAreas = [];
+      this.patternRelationTypes = [];
     }
     this.pagingInfo.page = data.page;
     this.pagingInfo._links = data._links;
@@ -63,31 +62,31 @@ export class ApplicationAreasListComponent implements OnInit {
   onAddElement(): void {
     const params: any = {};
     const dialogRef = this.utilService.createDialog(
-      AddOrEditApplicationAreaDialogComponent,
+      AddOrEditPatternRelationTypeDialogComponent,
       {
-        title: 'Create application area',
+        title: 'Create new pattern relation type',
       }
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const applicationAreaDtoDto: EntityModelApplicationAreaDto = {
-          id: dialogResult.id,
+        const algorithmRelationType: EntityModelPatternRelationTypeDto = {
+          id: undefined,
           name: dialogResult.name,
         };
 
-        params.body = applicationAreaDtoDto;
-        this.applicationAreasService
-          .createApplicationArea(params)
+        params.body = algorithmRelationType;
+        this.patternRelationTypeService
+          .createPatternRelationType(params)
           .subscribe((data) => {
-            this.getApplicationAreasHateoas(
+            this.getPatternRelationTypesHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
                 this.pagingInfo
               )
             );
             this.utilService.callSnackBar(
-              'Successfully added application area'
+              'Successfully added pattern relation type'
             );
           });
       }
@@ -98,7 +97,7 @@ export class ApplicationAreasListComponent implements OnInit {
     const dialogData: ConfirmDialogData = {
       title: 'Confirm Deletion',
       message:
-        'Are you sure you want to delete the following application area(s):',
+        'Are you sure you want to delete the following pattern relation(s):',
       data: event.elements,
       variableName: 'name',
       yesButtonText: 'yes',
@@ -112,11 +111,11 @@ export class ApplicationAreasListComponent implements OnInit {
           const deletionTasks = [];
           const snackbarMessages = [];
           let successfulDeletions = 0;
-          for (const applicationArea of event.elements) {
+          for (const patternRelationType of event.elements) {
             deletionTasks.push(
-              this.applicationAreasService
-                .deleteApplicationArea({
-                  applicationAreaId: applicationArea.id,
+              this.patternRelationTypeService
+                .deletePatternRelationType({
+                  patternRelationTypeId: patternRelationType.id,
                 })
                 .toPromise()
                 .then(() => successfulDeletions++)
@@ -129,19 +128,23 @@ export class ApplicationAreasListComponent implements OnInit {
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
-                this.applicationAreas.length,
+                this.patternRelationTypes.length,
                 this.pagingInfo
               )
             ) {
-              this.getApplicationAreasHateoas(this.pagingInfo._links.prev.href);
+              this.getPatternRelationTypesHateoas(
+                this.pagingInfo._links.prev.href
+              );
             } else {
-              this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
+              this.getPatternRelationTypesHateoas(
+                this.pagingInfo._links.self.href
+              );
             }
             snackbarMessages.push(
               this.utilService.generateFinalDeletionMessage(
                 successfulDeletions,
                 dialogResult.data.length,
-                'application areas'
+                'pattern relation types'
               )
             );
             this.utilService.callSnackBarSequence(snackbarMessages);
@@ -152,29 +155,33 @@ export class ApplicationAreasListComponent implements OnInit {
 
   onEditElement(event: any): void {
     const dialogRef = this.utilService.createDialog(
-      AddOrEditApplicationAreaDialogComponent,
+      AddOrEditPatternRelationTypeDialogComponent,
       {
-        title: 'Edit application area',
+        title: 'Edit pattern relation type',
+        id: event.id,
         name: event.name,
       }
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const newApplicationAreaDto: EntityModelApplicationAreaDto = {
-          id: event.id,
+        const updatedPatternRelationType: EntityModelPatternRelationTypeDto = {
+          id: dialogResult.id,
           name: dialogResult.name,
         };
+
         const params: any = {
-          applicationAreaId: newApplicationAreaDto.id,
-          body: newApplicationAreaDto,
+          patternRelationTypeId: updatedPatternRelationType.id,
+          body: updatedPatternRelationType,
         };
-        this.applicationAreasService
-          .updateApplicationArea(params)
+        this.patternRelationTypeService
+          .updatePatternRelationType(params)
           .subscribe((data) => {
-            this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
+            this.getPatternRelationTypesHateoas(
+              this.pagingInfo._links.self.href
+            );
             this.utilService.callSnackBar(
-              'Successfully edited application area'
+              'Successfully edited pattern relation type'
             );
           });
       }

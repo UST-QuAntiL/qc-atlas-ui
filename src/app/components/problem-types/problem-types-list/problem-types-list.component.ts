@@ -119,6 +119,7 @@ export class ProblemTypesListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          const snackbarMessages = [];
           let successfulDeletions = 0;
           for (const problemType of event.elements) {
             deletionTasks.push(
@@ -128,10 +129,12 @@ export class ProblemTypesListComponent implements OnInit {
                 })
                 .toPromise()
                 .then(() => successfulDeletions++)
+                .catch((errorResponse) =>
+                  snackbarMessages.push(JSON.parse(errorResponse.error).message)
+                )
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
-            console.log(this.pagingInfo.page);
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
@@ -143,13 +146,14 @@ export class ProblemTypesListComponent implements OnInit {
             } else {
               this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
             }
-            this.utilService.callSnackBar(
-              'Successfully deleted ' +
-                successfulDeletions +
-                '/' +
-                dialogResult.data.length +
-                ' problem types.'
+            snackbarMessages.push(
+              this.utilService.generateFinalDeletionMessage(
+                successfulDeletions,
+                dialogResult.data.length,
+                'problem types'
+              )
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });
