@@ -60,11 +60,7 @@ export class AddOrEditComputeResourcePropertyTypeDialogComponent
         Validators.required,
       ]),
       computeResourcePropertyTypeDescription: new FormControl(
-        this.data.description,
-        [
-          // eslint-disable-next-line @typescript-eslint/unbound-method
-          Validators.required,
-        ]
+        this.data.description
       ),
     });
 
@@ -78,7 +74,6 @@ export class AddOrEditComputeResourcePropertyTypeDialogComponent
   isRequiredDataMissing(): boolean {
     return (
       this.computeResourcePropertyTypeName.errors?.required ||
-      this.computeResourcePropertyTypeDescription.errors?.required ||
       this.computeResourcePropertyTypeDataType.errors?.required
     );
   }
