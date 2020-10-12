@@ -112,6 +112,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          const snackbarMessages = [];
           let successfulDeletions = 0;
           for (const computeResourcePropertyType of event.elements) {
             deletionTasks.push(
@@ -121,6 +122,9 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
                 })
                 .toPromise()
                 .then(() => successfulDeletions++)
+                .catch((errorResponse) =>
+                  snackbarMessages.push(JSON.parse(errorResponse.error).message)
+                )
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
@@ -139,13 +143,14 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
                 this.pagingInfo._links.self.href
               );
             }
-            this.utilService.callSnackBar(
-              'Successfully deleted ' +
-                successfulDeletions +
-                '/' +
-                dialogResult.data.length +
-                ' compute resource property types.'
+            snackbarMessages.push(
+              this.utilService.generateFinalDeletionMessage(
+                successfulDeletions,
+                dialogResult.data.length,
+                'compute resource property types'
+              )
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });

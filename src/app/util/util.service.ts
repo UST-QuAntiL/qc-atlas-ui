@@ -9,12 +9,25 @@ import { MissingEntityDialogComponent } from '../components/dialogs/missing-enti
 })
 export class UtilService {
   isSelectedColor = 'primary';
+  timeOut = 3000;
 
   constructor(private snackBar: MatSnackBar, public dialog: MatDialog) {}
 
   public callSnackBar(text: string): void {
-    this.snackBar.open(text, 'Ok', {
-      duration: 2000,
+    this.snackBar.open(text, 'OK', {
+      duration: this.timeOut,
+    });
+  }
+
+  public callSnackBarSequence(messages: string[]): void {
+    messages.forEach((message, index) => {
+      setTimeout(() => {
+        this.snackBar.open(message, 'OK', {
+          duration: this.timeOut,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center',
+        });
+      }, index * (this.timeOut + 500)); // 500 => timeout between two messages
     });
   }
 
@@ -94,6 +107,30 @@ export class UtilService {
       currentAmountOfElements === elementsDeleted &&
       pagingInfo.page.number !== 0 &&
       pagingInfo.page.number === pagingInfo.page.totalPages - 1
+    );
+  }
+
+  /**
+   * This method returns the final snackbar message after the deletion of elements.
+   *
+   * @param successfulDeletions
+   * @param expectedDeletions
+   * @param objectType
+   * @return deletionMessage
+   */
+  public generateFinalDeletionMessage(
+    successfulDeletions: number,
+    expectedDeletions: number,
+    objectType: string
+  ): string {
+    return (
+      'Successfully deleted ' +
+      successfulDeletions +
+      '/' +
+      expectedDeletions +
+      ' ' +
+      objectType +
+      '.'
     );
   }
 }

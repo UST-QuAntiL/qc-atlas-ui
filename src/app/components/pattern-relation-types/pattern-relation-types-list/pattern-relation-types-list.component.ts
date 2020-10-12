@@ -109,6 +109,7 @@ export class PatternRelationTypesListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          const snackbarMessages = [];
           let successfulDeletions = 0;
           for (const patternRelationType of event.elements) {
             deletionTasks.push(
@@ -118,6 +119,9 @@ export class PatternRelationTypesListComponent implements OnInit {
                 })
                 .toPromise()
                 .then(() => successfulDeletions++)
+                .catch((errorResponse) =>
+                  snackbarMessages.push(JSON.parse(errorResponse.error).message)
+                )
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
@@ -136,13 +140,14 @@ export class PatternRelationTypesListComponent implements OnInit {
                 this.pagingInfo._links.self.href
               );
             }
-            this.utilService.callSnackBar(
-              'Successfully deleted ' +
-                successfulDeletions +
-                '/' +
-                dialogResult.data.length +
-                ' pattern relation types.'
+            snackbarMessages.push(
+              this.utilService.generateFinalDeletionMessage(
+                successfulDeletions,
+                dialogResult.data.length,
+                'pattern relation types'
+              )
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });
