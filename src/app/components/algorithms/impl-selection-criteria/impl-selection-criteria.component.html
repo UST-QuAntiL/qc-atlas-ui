@@ -20,10 +20,7 @@
         <app-select-input
           name="SDK"
           [value]="nisqImpl.sdk"
-          [choices]="[
-            { value: 'Qiskit', label: 'Qiskit' },
-            { value: 'Forrest', label: 'Forrest' }
-          ]"
+          [choices]="sdks$ | async"
           (onChange)="nisqImpl.sdk = $event"
           (onSaveChanges)="saveImplementation()"
         ></app-select-input>
