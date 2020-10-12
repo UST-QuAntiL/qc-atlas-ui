@@ -5,7 +5,7 @@ import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
 import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { MatDialog } from '@angular/material/dialog';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import {
   LinkObject,
   QueryParams,
@@ -70,6 +70,10 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.getAllLinkedPublications();
   }
 
+  getAllPublications(search?: QueryParams): Observable<any> {
+    return this.publicationService.getPublications(search).pipe((data) => data);
+  }
+
   getAllLinkedPublications(): void {
     this.linkObject.linkedData = [];
     this.algorithmService
@@ -81,7 +85,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       });
   }
 
-  getLinkedPublications(params?: any): void {
+  getPagedLinkedPublications(params: any): void {
     this.algorithmService
       .getPublicationsOfAlgorithm({
         algorithmId: this.algorithm.id,
@@ -91,11 +95,11 @@ export class AlgorithmPublicationsListComponent implements OnInit {
         search: params.sort,
       })
       .subscribe((data) => {
-        this.updateLinkedPublicationData(data);
+        this.updateDisplayedData(data);
       });
   }
 
-  updateLinkedPublicationData(data): void {
+  updateDisplayedData(data): void {
     // clear link object data
     this.displayedData = [];
     // If publications found
@@ -106,7 +110,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.pagingInfo._links = data._links;
   }
 
-  updatePublicationData(data): void {
+  updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If publications found
@@ -118,26 +122,24 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   }
 
   openLinkPublicationDialog() {
-    this.publicationService.getPublications().subscribe((data) => {
-      this.updatePublicationData(data);
+    this.getAllPublications().subscribe((data) => {
+      this.updateLinkDialogData(data);
       const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
         width: '800px',
         data: this.dialogData,
       });
       const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
         (search: QueryParams) => {
-          this.publicationService
-            .getPublications(search)
-            .subscribe((updatedData) => {
-              this.updatePublicationData(updatedData);
-              dialogRef.componentInstance.data.linkObject = this.linkObject;
-            });
+          this.getAllPublications(search).subscribe((updatedData) => {
+            this.updateLinkDialogData(updatedData);
+            dialogRef.componentInstance.data.linkObject = this.linkObject;
+          });
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
         (page: string) => {
-          this.genericDataService.getData(page).subscribe((pageData) => {
-            this.updatePublicationData(pageData);
+          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+            this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
         }
@@ -177,7 +179,11 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       );
     }
     forkJoin(linkTasks).subscribe(() => {
-      this.getLinkedPublicationsHateoas(this.pagingInfo._links.self.href);
+      this.getHateaosDataFromGenericService(
+        this.pagingInfo._links.self.href
+      ).subscribe((data) => {
+        this.updateDisplayedData(data);
+      });
       this.getAllLinkedPublications();
       const snackbarText =
         successfulLinks > 1
@@ -202,17 +208,16 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
-      if (
-        this.utilService.isLastPageEmptyAfterDeletion(
-          successfulDeletions,
-          this.linkObject.linkedData.length,
-          this.pagingInfo
-        )
-      ) {
-        this.getLinkedPublicationsHateoas(this.pagingInfo._links.prev.href);
-      } else {
-        this.getLinkedPublicationsHateoas(this.pagingInfo._links.self.href);
-      }
+      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
+        successfulDeletions,
+        this.displayedData.length,
+        this.pagingInfo
+      )
+        ? this.pagingInfo._links.prev.href
+        : this.pagingInfo._links.self.href;
+      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
+        this.updateDisplayedData(data);
+      });
       this.getAllLinkedPublications();
       const snackbarText =
         successfulDeletions > 1
@@ -223,7 +228,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   }
 
   onDatalistConfigChanged(event): void {
-    this.getLinkedPublications(event);
+    this.getPagedLinkedPublications(event);
   }
 
   onElementClicked(publication: PublicationDto): void {
@@ -239,13 +244,13 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.router.navigate(['publications', publication.id]);
   }
 
-  getLinkedPublicationsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.updateLinkedPublicationData(data);
-    });
+  getHateaosDataFromGenericService(url: string): Observable<any> {
+    return this.genericDataService.getData(url).pipe((data) => data);
   }
 
   onPageChanged(event): void {
-    this.getLinkedPublicationsHateoas(event);
+    this.getHateaosDataFromGenericService(event).subscribe((data) => {
+      this.updateDisplayedData(data);
+    });
   }
 }
