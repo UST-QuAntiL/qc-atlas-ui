@@ -3,6 +3,7 @@ import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-com
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
+import { forkJoin } from 'rxjs';
 import {
   SelectParams,
   QueryParams,
@@ -115,20 +116,37 @@ export class ComputeResourceListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const promises: Array<Promise<void>> = [];
+          const deletionTasks = [];
+          let successfulDeletions = 0;
           for (const computeResource of deleteParams.elements) {
-            promises.push(
+            deletionTasks.push(
               this.executionEnvironmentsService
                 .deleteComputeResource({
                   computeResourceId: computeResource.id,
                 })
                 .toPromise()
+                .then(() => successfulDeletions++)
             );
           }
-          Promise.all(promises).then(() => {
-            this.getComputeResources(deleteParams.queryParams);
+          forkJoin(deletionTasks).subscribe(() => {
+            console.log(this.pagingInfo.page);
+            if (
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                this.computeResources.length,
+                this.pagingInfo
+              )
+            ) {
+              this.getComputeResourcesHateoas(this.pagingInfo._links.prev.href);
+            } else {
+              this.getComputeResourcesHateoas(this.pagingInfo._links.self.href);
+            }
             this.utilService.callSnackBar(
-              'Successfully deleted compute resource(s)'
+              'Successfully deleted ' +
+                successfulDeletions +
+                '/' +
+                dialogResult.data.length +
+                ' compute resources.'
             );
           });
         }
