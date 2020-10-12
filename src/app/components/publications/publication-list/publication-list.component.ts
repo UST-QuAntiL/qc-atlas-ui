@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
+import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
 import {
@@ -107,18 +108,35 @@ export class PublicationListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const promises: Array<Promise<void>> = [];
+          const deletionTasks = [];
+          let successfulDeletions = 0;
           for (const publication of event.elements) {
-            promises.push(
+            deletionTasks.push(
               this.publicationService
                 .deletePublication({ publicationId: publication.id })
                 .toPromise()
+                .then(() => successfulDeletions++)
             );
           }
-          Promise.all(promises).then(() => {
-            this.getPublications(event.queryParams);
+          forkJoin(deletionTasks).subscribe(() => {
+            console.log(this.pagingInfo.page);
+            if (
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                this.publications.length,
+                this.pagingInfo
+              )
+            ) {
+              this.getPublicationsHateoas(this.pagingInfo._links.prev.href);
+            } else {
+              this.getPublicationsHateoas(this.pagingInfo._links.self.href);
+            }
             this.utilService.callSnackBar(
-              'Successfully removed publication(s)'
+              'Successfully deleted ' +
+                successfulDeletions +
+                '/' +
+                dialogResult.data.length +
+                ' publications.'
             );
           });
         }

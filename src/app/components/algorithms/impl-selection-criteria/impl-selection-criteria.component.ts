@@ -1,13 +1,17 @@
 import { cloneDeep, isEqual } from 'lodash';
-import { forkJoin } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AlgorithmDto, ImplementationDto } from 'api-atlas/models';
 import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models';
-import { ImplementationService as NISQImplementationService } from 'api-nisq/services/implementation.service';
+import {
+  ImplementationService as NISQImplementationService,
+  SdksService,
+} from 'api-nisq/services';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
 import { parsePrologRule, PrologRule } from '../../../util/MinimalPrologParser';
+import { Option } from '../../generics/property-input/select-input.component';
 
 @Component({
   selector: 'app-impl-selection-criteria',
@@ -27,10 +31,21 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
   };
 
   selection = new SelectionModel<number>(true);
+  sdks$: Observable<Option[]>;
 
-  constructor(private nisqImplementationService: NISQImplementationService) {}
+  constructor(
+    private nisqImplementationService: NISQImplementationService,
+    private readonly sdkService: SdksService
+  ) {}
 
   ngOnInit(): void {
+    this.sdks$ = this.sdkService
+      .getSdks()
+      .pipe(
+        map((dto) =>
+          dto.sdkDtos.map((sdk) => ({ label: sdk.name, value: sdk.name }))
+        )
+      );
     this.nisqImplementationService
       .getImplementations({ algoId: this.algo.id })
       .subscribe((impls) => {

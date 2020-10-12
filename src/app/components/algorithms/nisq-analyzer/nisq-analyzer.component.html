@@ -83,7 +83,13 @@
     >
       <mat-spinner></mat-spinner>
     </div>
-    <ng-container *ngIf="analyzerResults">
+    <div
+      *ngIf="analyzerResults && analyzerResults.length === 0"
+      class="d-flex align-content-center justify-content-center py-5"
+    >
+      No suitable implementation and/or QPU found!
+    </div>
+    <ng-container *ngIf="analyzerResults && analyzerResults.length !== 0">
       <div
         class="p-2 overflow-auto"
         *ngFor="let result of groupResultsByImplementation(analyzerResults)"
@@ -182,8 +188,9 @@
         <h6>Input</h6>
         <div
           *ngFor="
-            let resParam of filterInputParams(results.inputParameters)
-              | keyvalue
+            let resParam of filterInputParams(
+              executedAnalyseResult.inputParameters
+            ) | keyvalue
           "
         >
           <span>{{ resParam.key }}:</span>
@@ -202,7 +209,7 @@
               Backend Name
             </th>
             <td class="backend-column" mat-cell *matCellDef="let element">
-              {{ element.qpu.name }}
+              {{ executedAnalyseResult.qpu.name }}
             </td>
           </ng-container>
 
@@ -211,7 +218,7 @@
               Width
             </th>
             <td class="value-column" mat-cell *matCellDef="let element">
-              {{ element.analysedWidth }}
+              {{ executedAnalyseResult.analysedWidth }}
             </td>
           </ng-container>
 
@@ -220,7 +227,7 @@
               Depth
             </th>
             <td class="value-column" mat-cell *matCellDef="let element">
-              {{ element.analysedDepth }}
+              {{ executedAnalyseResult.analysedDepth }}
             </td>
           </ng-container>
 

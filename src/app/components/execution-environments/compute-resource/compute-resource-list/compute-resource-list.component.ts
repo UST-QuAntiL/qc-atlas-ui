@@ -148,7 +148,7 @@ export class ComputeResourceListComponent implements OnInit {
               this.utilService.generateFinalDeletionMessage(
                 successfulDeletions,
                 dialogResult.data.length,
-                'compute resource property types'
+                'compute resources'
               )
             );
             this.utilService.callSnackBarSequence(snackbarMessages);
