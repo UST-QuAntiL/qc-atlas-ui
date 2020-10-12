@@ -1,11 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
@@ -18,16 +11,6 @@ import { HttpClient } from '@angular/common/http';
   selector: 'app-algorithm-nisq-analyzer-results',
   templateUrl: './nisq-analyzer-results.component.html',
   styleUrls: ['./nisq-analyzer-results.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
-    ]),
-  ],
 })
 export class NisqAnalyzerResultsComponent implements OnInit {
   @Input() algo: AlgorithmDto;
@@ -92,6 +75,11 @@ export class NisqAnalyzerResultsComponent implements OnInit {
   }
 
   showExecutionResult(analysisResult: AnalysisResultDto): void {
+    if (Object.is(this.expandedElement, analysisResult)) {
+      this.expandedElement = undefined;
+      this.expandedElementExecResult = undefined;
+      return;
+    }
     const key = Object.keys(analysisResult._links).find((k) =>
       k.startsWith('execute-')
     );

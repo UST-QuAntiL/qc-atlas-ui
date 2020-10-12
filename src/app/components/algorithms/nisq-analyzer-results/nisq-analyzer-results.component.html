@@ -110,12 +110,7 @@
           *matCellDef="let element"
           [attr.colspan]="analyzeColumns.length"
         >
-          <div
-            class="element-detail"
-            [@detailExpand]="
-              element == expandedElement ? 'expanded' : 'collapsed'
-            "
-          >
+          <div class="element-detail" *ngIf="element == expandedElement">
             <ng-container *ngIf="expandedElementExecResult">
               <div>Status: {{ expandedElementExecResult.status }}</div>
               <div>Result:</div>
