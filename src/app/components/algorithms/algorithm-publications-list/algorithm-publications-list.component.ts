@@ -83,17 +83,13 @@ export class AlgorithmPublicationsListComponent implements OnInit {
 
   getLinkedPublications(params?: any): void {
     this.algorithmService
-      .getPublicationsOfAlgorithm(
-        params
-          ? {
-              algorithmId: this.algorithm.id,
-              page: params.page,
-              size: params.size,
-              sort: params.sort,
-              search: params.sort,
-            }
-          : { algorithmId: this.algorithm.id }
-      )
+      .getPublicationsOfAlgorithm({
+        algorithmId: this.algorithm.id,
+        page: params.page,
+        size: params.size,
+        sort: params.sort,
+        search: params.sort,
+      })
       .subscribe((data) => {
         this.updateLinkedPublicationData(data);
       });
@@ -158,28 +154,37 @@ export class AlgorithmPublicationsListComponent implements OnInit {
         pagingSub.unsubscribe();
         elementClickedSub.unsubscribe();
         if (dialogResult) {
-          for (const publication of dialogResult.selectedItems) {
-            this.linkPublication(publication);
-          }
+          this.linkPublications(dialogResult.selectedItems);
         }
       });
     });
   }
 
-  linkPublication(publication: PublicationDto): void {
+  linkPublications(publications: PublicationDto[]): void {
     // Empty unlinked publications
     this.linkObject.data = [];
-    // Link publication
-    this.algorithmService
-      .linkAlgorithmAndPublication({
-        algorithmId: this.algorithm.id,
-        body: publication,
-      })
-      .subscribe(() => {
-        this.getLinkedPublicationsHateoas(this.pagingInfo._links.self.href);
-        this.getAllLinkedPublications();
-        this.utilService.callSnackBar('Successfully linked Publication');
-      });
+    const linkTasks = [];
+    let successfulLinks = 0;
+    for (const publication of publications) {
+      linkTasks.push(
+        this.algorithmService
+          .linkAlgorithmAndPublication({
+            algorithmId: this.algorithm.id,
+            body: publication,
+          })
+          .toPromise()
+          .then(() => successfulLinks++)
+      );
+    }
+    forkJoin(linkTasks).subscribe(() => {
+      this.getLinkedPublicationsHateoas(this.pagingInfo._links.self.href);
+      this.getAllLinkedPublications();
+      const snackbarText =
+        successfulLinks > 1
+          ? 'Successfully linked ' + successfulLinks + ' publications'
+          : 'Publication sucessfully linked';
+      this.utilService.callSnackBar(snackbarText);
+    });
   }
 
   unlinkPublications(event): void {
@@ -209,7 +214,11 @@ export class AlgorithmPublicationsListComponent implements OnInit {
         this.getLinkedPublicationsHateoas(this.pagingInfo._links.self.href);
       }
       this.getAllLinkedPublications();
-      this.utilService.callSnackBar('Successfully unlinked Publication');
+      const snackbarText =
+        successfulDeletions > 1
+          ? 'Successfully unlinked ' + successfulDeletions + ' publications'
+          : 'Publication sucessfully unlinked';
+      this.utilService.callSnackBar(snackbarText);
     });
   }
 
