@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { ImplementationService, RootService } from 'api-nisq/services';
+import { AnalysisResultService, RootService } from 'api-nisq/services';
 import {
   AnalysisResultDto,
-  ExecutionRequestDto,
   ParameterDto,
   SelectionRequestDto,
 } from 'api-nisq/models';
@@ -19,7 +18,7 @@ export class NisqAnalyzerService {
     'https://api.quantum-computing.ibm.com/api/Backends/<backendName>/queue/status?';
   constructor(
     private algorithmService: AlgorithmService,
-    private nisqImplementationService: ImplementationService,
+    private analysisResultService: AnalysisResultService,
     private rootService: RootService,
     private http: HttpClient
   ) {}
@@ -36,10 +35,9 @@ export class NisqAnalyzerService {
       .pipe(map((list) => list.analysisResultList));
   }
 
-  execute(implId: string, body: ExecutionRequestDto) {
-    return this.nisqImplementationService.executeImplementation({
-      implId,
-      body,
+  execute(resId: string) {
+    return this.analysisResultService.executeAnalysisResult({
+      resId,
     });
   }
 
