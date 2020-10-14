@@ -277,7 +277,11 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
   }
 
   routeToSoftwarePlatform(softwarePlatform: SoftwarePlatformDto): void {
-    this.router.navigate(['software-platforms', softwarePlatform.id]);
+    this.router.navigate([
+      'execution-environments',
+      'software-platforms',
+      softwarePlatform.id,
+    ]);
   }
 
   getHateaosDataFromGenericService(url: string): Observable<any> {
