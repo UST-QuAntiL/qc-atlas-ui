@@ -180,7 +180,10 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     }
     forkJoin(linkTasks).subscribe(() => {
       this.getHateaosDataFromGenericService(
-        this.pagingInfo._links.self.href
+        this.utilService.getLastPageAfterCreation(
+          this.pagingInfo._links.self.href,
+          this.pagingInfo
+        )
       ).subscribe((data) => {
         this.updateDisplayedData(data);
       });
