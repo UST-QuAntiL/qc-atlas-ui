@@ -124,18 +124,19 @@ export class UtilService {
    * @param successfulDeletions
    * @param expectedDeletions
    * @param objectType
+   * @param performedOperation
    * @return deletionMessage
    */
   public generateFinalDeletionMessage(
     successfulDeletions: number,
     expectedDeletions: number,
     objectType: string,
-    deleteType?: string
+    performedOperation?: string
   ): string {
-    deleteType = deleteType ? deleteType : 'deleted';
+    performedOperation = performedOperation ? performedOperation : 'deleted';
     return (
       'Successfully ' +
-      deleteType +
+      performedOperation +
       ' ' +
       successfulDeletions +
       '/' +
