@@ -78,6 +78,10 @@ export class UtilService {
     const url = new URL(currentUrl);
     let correctPage;
 
+    if (url.searchParams.get('sort') || url.searchParams.get('search')) {
+      return currentUrl;
+    }
+
     // If current last page is not full, then it stays the last page
     if (pagingInfo.page.totalElements % pagingInfo.page.size !== 0) {
       correctPage = pagingInfo.page.totalPages - 1;
