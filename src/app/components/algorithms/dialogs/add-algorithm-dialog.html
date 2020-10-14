@@ -13,7 +13,7 @@
         <mat-option [value]="'HYBRID'">Hybrid</mat-option>
       </mat-select>
     </mat-form-field>
-    <ng-container *ngIf="computationModel.value === 'QUANTUM'">
+    <ng-container *ngIf="computationModel.value !== 'CLASSIC'">
       <mat-form-field class="input-field">
         <mat-label>Quantum Computation model</mat-label>
         <mat-select formControlName="quantumComputationModel" required>

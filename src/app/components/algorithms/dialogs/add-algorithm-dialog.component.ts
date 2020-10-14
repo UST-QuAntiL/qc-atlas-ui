@@ -58,10 +58,14 @@ export class AddAlgorithmDialogComponent implements OnInit {
       ),
     });
 
+    // Set default computation models
+    this.computationModel.setValue('CLASSIC');
+    this.quantumComputationModel.setValue('GATE_BASED');
+
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.name = this.name.value;
       this.data.computationModel = this.computationModel.value;
-      if (this.computationModel.value === 'QUANTUM') {
+      if (this.computationModel.value !== 'CLASSIC') {
         this.data.quantumComputationModel = this.quantumComputationModel.value;
       }
     });
@@ -71,7 +75,7 @@ export class AddAlgorithmDialogComponent implements OnInit {
     return (
       this.name.errors?.required ||
       this.computationModel.errors?.required ||
-      (this.computationModel.value === 'QUANTUM' &&
+      (this.computationModel.value !== 'CLASSIC' &&
         this.quantumComputationModel.errors?.required)
     );
   }
