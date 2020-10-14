@@ -55,8 +55,7 @@ export class LatexEditorDialogComponent implements OnInit {
     this.utilService
       .renderLatexContentAndReturnUrlToPdfBlob(
         this.inputText,
-        this.latexPackages,
-        this.data.outputFormat
+        this.latexPackages
       )
       .subscribe((response) => {
         this.urlToRenderedPdfBlob = response;
@@ -67,5 +66,4 @@ export class LatexEditorDialogComponent implements OnInit {
 export interface DialogData {
   title: string;
   packedLatexValue?: string;
-  outputFormat?: string;
 }

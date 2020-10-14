@@ -1,27 +1,29 @@
 <div>
   <mat-form-field>
     <mat-label class="input-label">{{ name }}</mat-label>
-    <input
-      *ngIf="!multiline"
-      type="text"
-      [(ngModel)]="inputValue"
-      [pattern]="pattern"
-      [disabled]="isLatexInput"
-      (ngModelChange)="inputChanged()"
-      matInput
-      (keydown.enter)="saveChanges()"
-    />
-    <textarea
-      *ngIf="multiline"
-      [(ngModel)]="inputValue"
-      [pattern]="pattern"
-      (ngModelChange)="inputChanged()"
-      [matAutosizeMaxRows]="maxLines"
-      [matAutosizeMinRows]="2"
-      [matTextareaAutosize]="true"
-      [disabled]="isLatexInput"
-      matInput
-    ></textarea>
+    <label (click)="isLatexInput ? openLatexEditor() : null">
+      <input
+        *ngIf="!multiline"
+        type="text"
+        [(ngModel)]="inputValue"
+        [pattern]="pattern"
+        (ngModelChange)="inputChanged()"
+        matInput
+        (keydown.enter)="saveChanges()"
+      />
+      <textarea
+        *ngIf="multiline"
+        [(ngModel)]="inputValue"
+        [pattern]="pattern"
+        (ngModelChange)="inputChanged()"
+        (click)="isLatexInput ? openLatexEditor() : null"
+        [disabled]="isLatexInput"
+        [matAutosizeMaxRows]="maxLines"
+        [matAutosizeMinRows]="2"
+        [matTextareaAutosize]="true"
+        matInput
+      ></textarea>
+    </label>
     <button
       *ngIf="(!isLatexInput && (inputValue !== value)) || (isLatexInput && (packedLatexValue !== value))"
       mat-button
@@ -45,15 +47,16 @@
       <mat-icon>open_in_browser</mat-icon>
     </button>
     <button
-      *ngIf="isLatexInput"
-      matTooltip="Open LaTeX editor"
+      *ngIf="multiline"
+      matTooltip="Toggle LaTeX input"
       matTooltipPosition="above"
       mat-button
       matSuffix
       mat-icon-button
       aria-label="Clear"
-      (click)="openLatexEditor()">
-      <mat-icon>text_fields</mat-icon>
+      (click)="toggleLatexFlag()">
+      <mat-icon *ngIf="isLatexInput">text_fields</mat-icon>
+      <mat-icon *ngIf="!isLatexInput">text_format</mat-icon>
     </button>
   </mat-form-field>
 </div>

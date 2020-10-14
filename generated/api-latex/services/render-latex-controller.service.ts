@@ -19,144 +19,6 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation home3
-   */
-  static readonly Home3Path = '/';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `home3()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home3$Response(params?: {}): Observable<StrictHttpResponse<string>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      RenderLatexControllerService.Home3Path,
-      'get'
-    );
-    if (params) {
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'blob',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<string>;
-        })
-      );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `home3$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home3(params?: {}): Observable<string> {
-    return this.home3$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
-    );
-  }
-
-  /**
-   * Path part for operation home6
-   */
-  static readonly Home6Path = '/';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `home6()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home6$Response(params?: {}): Observable<StrictHttpResponse<string>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      RenderLatexControllerService.Home6Path,
-      'put'
-    );
-    if (params) {
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'blob',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<string>;
-        })
-      );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `home6$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home6(params?: {}): Observable<string> {
-    return this.home6$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
-    );
-  }
-
-  /**
-   * Path part for operation home1
-   */
-  static readonly Home1Path = '/';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `home1()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home1$Response(params?: {}): Observable<StrictHttpResponse<string>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      RenderLatexControllerService.Home1Path,
-      'post'
-    );
-    if (params) {
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'blob',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<string>;
-        })
-      );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `home1$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  home1(params?: {}): Observable<string> {
-    return this.home1$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
-    );
-  }
-
-  /**
    * Path part for operation home2
    */
   static readonly Home2Path = '/';
@@ -171,7 +33,7 @@ export class RenderLatexControllerService extends BaseService {
     const rb = new RequestBuilder(
       this.rootUrl,
       RenderLatexControllerService.Home2Path,
-      'delete'
+      'get'
     );
     if (params) {
     }
@@ -217,7 +79,7 @@ export class RenderLatexControllerService extends BaseService {
     const rb = new RequestBuilder(
       this.rootUrl,
       RenderLatexControllerService.Home4Path,
-      'options'
+      'put'
     );
     if (params) {
     }
@@ -249,6 +111,98 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation home3
+   */
+  static readonly Home3Path = '/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `home3()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home3$Response(params?: {}): Observable<StrictHttpResponse<string>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      RenderLatexControllerService.Home3Path,
+      'post'
+    );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<string>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `home3$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home3(params?: {}): Observable<string> {
+    return this.home3$Response(params).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
+   * Path part for operation home6
+   */
+  static readonly Home6Path = '/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `home6()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home6$Response(params?: {}): Observable<StrictHttpResponse<string>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      RenderLatexControllerService.Home6Path,
+      'delete'
+    );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<string>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `home6$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home6(params?: {}): Observable<string> {
+    return this.home6$Response(params).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
    * Path part for operation home
    */
   static readonly HomePath = '/';
@@ -263,7 +217,7 @@ export class RenderLatexControllerService extends BaseService {
     const rb = new RequestBuilder(
       this.rootUrl,
       RenderLatexControllerService.HomePath,
-      'head'
+      'options'
     );
     if (params) {
     }
@@ -290,6 +244,52 @@ export class RenderLatexControllerService extends BaseService {
    */
   home(params?: {}): Observable<string> {
     return this.home$Response(params).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
+   * Path part for operation home1
+   */
+  static readonly Home1Path = '/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `home1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home1$Response(params?: {}): Observable<StrictHttpResponse<string>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      RenderLatexControllerService.Home1Path,
+      'head'
+    );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<string>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `home1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  home1(params?: {}): Observable<string> {
+    return this.home1$Response(params).pipe(
       map((r: StrictHttpResponse<string>) => r.body as string)
     );
   }
@@ -346,6 +346,8 @@ export class RenderLatexControllerService extends BaseService {
   static readonly RenderLatexPath = '/renderLatex';
 
   /**
+   * Render latex source code as format given in the request body
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `renderLatex()` instead.
    *
@@ -378,6 +380,8 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
+   * Render latex source code as format given in the request body
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `renderLatex$Response()` instead.
    *
@@ -395,6 +399,8 @@ export class RenderLatexControllerService extends BaseService {
   static readonly RenderLatexAsFullPdfPath = '/renderLatexAsFullPdf';
 
   /**
+   * Render latex source code as full pdf
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `renderLatexAsFullPdf()` instead.
    *
@@ -427,6 +433,8 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
+   * Render latex source code as full pdf
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `renderLatexAsFullPdf$Response()` instead.
    *
@@ -446,6 +454,8 @@ export class RenderLatexControllerService extends BaseService {
   static readonly RenderLatexAsPdfPath = '/renderLatexAsPdf';
 
   /**
+   * Render latex source code as pdf
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `renderLatexAsPdf()` instead.
    *
@@ -478,6 +488,8 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
+   * Render latex source code as pdf
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `renderLatexAsPdf$Response()` instead.
    *
@@ -495,6 +507,8 @@ export class RenderLatexControllerService extends BaseService {
   static readonly RenderLatexAsPngPath = '/renderLatexAsPng';
 
   /**
+   * Render latex source code as png
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `renderLatexAsPng()` instead.
    *
@@ -527,6 +541,8 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
+   * Render latex source code as png
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `renderLatexAsPng$Response()` instead.
    *
@@ -544,6 +560,8 @@ export class RenderLatexControllerService extends BaseService {
   static readonly RenderLatexAsSvgPath = '/renderLatexAsSvg';
 
   /**
+   * Render latex source code as svg
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `renderLatexAsSvg()` instead.
    *
@@ -576,6 +594,8 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
+   * Render latex source code as svg
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `renderLatexAsSvg$Response()` instead.
    *
@@ -593,6 +613,8 @@ export class RenderLatexControllerService extends BaseService {
   static readonly RenderLatexAsSvgzPath = '/renderLatexAsSvgz';
 
   /**
+   * Render latex source code as zipped svg
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `renderLatexAsSvgz()` instead.
    *
@@ -625,6 +647,8 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
+   * Render latex source code as zipped svg
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `renderLatexAsSvgz$Response()` instead.
    *
@@ -642,6 +666,8 @@ export class RenderLatexControllerService extends BaseService {
   static readonly RenderQasmAsPdfPath = '/renderQasmAsPdf';
 
   /**
+   * Render qasm source code as pdf
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `renderQasmAsPdf()` instead.
    *
@@ -674,6 +700,8 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
+   * Render qasm source code as pdf
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `renderQasmAsPdf$Response()` instead.
    *
@@ -691,6 +719,8 @@ export class RenderLatexControllerService extends BaseService {
   static readonly RenderQasmAsSvgPath = '/renderQasmAsSvg';
 
   /**
+   * Render qasm source code as svg
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `renderQasmAsSvg()` instead.
    *
@@ -723,6 +753,8 @@ export class RenderLatexControllerService extends BaseService {
   }
 
   /**
+   * Render qasm source code as svg
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `renderQasmAsSvg$Response()` instead.
    *

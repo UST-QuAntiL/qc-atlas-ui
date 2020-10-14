@@ -64,24 +64,36 @@ export class UtilService {
     return deepEqual(source, target);
   }
 
+  public isLatexText(packedData: string): boolean {
+    return packedData
+      ? packedData.includes(
+          this.latexRendererServiceConstants.latexFormatIndicator
+        )
+      : false;
+  }
+
+  public getUnpackedLatexText(packedData: string): string {
+    const data = this.latexRendererServiceConstants.unpackTextAndPackages(
+      packedData
+    );
+    return data.latexContent;
+  }
+
   public renderPackedDataAndReturnUrlToPdfBlob(
-    packedData: string,
-    output: string
+    packedData: string
   ): Observable<string> {
     const data = this.latexRendererServiceConstants.unpackTextAndPackages(
       packedData
     );
     return this.renderLatexContentAndReturnUrlToPdfBlob(
       data.latexContent,
-      data.latexPackages,
-      output
+      data.latexPackages
     );
   }
 
   public renderLatexContentAndReturnUrlToPdfBlob(
     latexContent: string,
-    additionalPackages: string,
-    outputType: string
+    additionalPackages: string
   ): Observable<string> {
     const packages = this.latexRendererServiceConstants.getDefaultLatexPackages();
     if (additionalPackages) {
@@ -98,9 +110,9 @@ export class UtilService {
         latexContent
       ),
       latexPackages: packages,
-      output: outputType,
+      output: this.latexRendererServiceConstants.getDefaultRenderOutput(),
     };
-    return this.latexRendererService.renderLatexAsPdf({ body: latexBody }).pipe(
+    return this.latexRendererService.renderLatex({ body: latexBody }).pipe(
       map((response: string[]) => {
         if (response) {
           const latexBlob = this.latexRendererServiceConstants.createBlobFromRenderedResult(

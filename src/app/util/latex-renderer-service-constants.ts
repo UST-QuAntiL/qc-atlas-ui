@@ -4,22 +4,27 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class LatexRendererServiceConstants {
+  latexFormatIndicator = '*LaTeX-packets*';
   public getDefaultLatexPackages(): string[] {
     return ['\\usepackage{tikz}', '\\usetikzlibrary{quantikz}'];
   }
 
+  public getDefaultRenderOutput(): string {
+    return 'svg';
+  }
+
   public packTextAndPackages(text = '', packages: string): string {
-    return text.concat(packages);
+    return text.concat(this.latexFormatIndicator.concat(packages));
   }
 
   unpackTextAndPackages(
-    packedData: string
+    packedData = ''
   ): { latexContent: string; latexPackages: string } {
-    const splitData = packedData.split('\\use');
+    const splitData = packedData.split(this.latexFormatIndicator);
     const content = splitData[0];
     const packages: string[] = [];
     for (let i = 1; i < splitData.length; i++) {
-      packages.push('\\use' + splitData[i]);
+      packages.push(splitData[i]);
     }
     return { latexContent: content, latexPackages: packages.join('') };
   }

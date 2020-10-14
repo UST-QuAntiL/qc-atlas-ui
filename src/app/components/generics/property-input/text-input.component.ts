@@ -19,11 +19,11 @@ export class TextInputComponent implements OnInit {
   @Input() maxLines = 1;
   @Input() isLink: boolean;
   @Input() pattern?: string;
-  @Input() isLatexInput: boolean;
+  @Input() isLatexInput = false;
 
   inputValue: string;
   packedLatexValue: string;
-  renderOutput = 'pdf';
+  renderOutput: string;
   urlToRenderedPdfBlob: string;
 
   constructor(
@@ -55,13 +55,30 @@ export class TextInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLatexInput = this.utilService.isLatexText(this.value);
     if (this.isLatexInput) {
       this.packedLatexValue = this.value;
-      if (this.value) {
-        this.renderLatexContent(this.packedLatexValue);
-      }
+      this.renderLatexContent(this.packedLatexValue);
     } else {
       this.inputValue = this.value;
+    }
+  }
+
+  toggleLatexFlag(): void {
+    this.isLatexInput = !this.isLatexInput;
+    if (this.isLatexInput) {
+      this.packedLatexValue = this.inputValue;
+      this.inputValue = null;
+      this.openLatexEditor();
+      this.renderLatexContent(this.packedLatexValue);
+    } else {
+      this.inputValue = this.utilService.getUnpackedLatexText(
+        this.packedLatexValue
+      );
+      this.urlToRenderedPdfBlob = null;
+      if (this.inputValue !== this.value) {
+        this.inputChanged();
+      }
     }
   }
 
@@ -71,7 +88,6 @@ export class TextInputComponent implements OnInit {
       {
         title: 'LaTeX Render Editor',
         packedLatexValue: this.packedLatexValue,
-        outputFormat: this.renderOutput,
       },
       'auto'
     );
@@ -82,15 +98,15 @@ export class TextInputComponent implements OnInit {
         dialogResult !== this.packedLatexValue
       ) {
         this.packedLatexValue = dialogResult;
-        this.renderLatexContent(this.packedLatexValue);
         this.inputChanged();
+        this.renderLatexContent(this.packedLatexValue);
       }
     });
   }
 
   private renderLatexContent(latexValue: string): void {
     this.utilService
-      .renderPackedDataAndReturnUrlToPdfBlob(latexValue, this.renderOutput)
+      .renderPackedDataAndReturnUrlToPdfBlob(latexValue)
       .subscribe((blobUrl) => {
         this.urlToRenderedPdfBlob = blobUrl;
       });

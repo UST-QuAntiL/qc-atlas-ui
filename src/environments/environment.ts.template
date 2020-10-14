@@ -21,7 +21,7 @@ export const environment = {
     '${PATTERN_ATLAS_UI_PORT}',
   LATEX_RENDERER_API_URL:
     'http://' +
-    '${LATEX_RENDERER_API_URL}' +
+    '${LATEX_RENDERER_URL}' +
     ':' +
     '${LATEX_RENDERER_PORT}',
   };
