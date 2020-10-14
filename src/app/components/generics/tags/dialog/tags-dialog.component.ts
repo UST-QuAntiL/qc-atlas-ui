@@ -44,7 +44,6 @@ export class TagsDialogComponent {
   }
 
   onTagCategorySelected(category: string): void {
-    this.formGroup.patchValue({ value: '' });
     this.selectedCategory = category;
     if (this.resultTag) {
       this.resultTag.category = category;
