@@ -28,7 +28,7 @@ export class PublicationImplementationsListComponent implements OnInit {
   ];
   tableAddAllowed = true;
   linkObject: any = {
-    title: 'Link implementation with ',
+    title: 'Link publication with ',
     subtitle: 'Search implementation by name',
     displayVariable: 'name',
     data: [],
@@ -50,24 +50,28 @@ export class PublicationImplementationsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getLinkedImplementations();
+    this.getLinkedImplementations({ publicationId: this.publication.id });
   }
 
   onDatalistConfigChanged(event): void {
-    this.getLinkedImplementations();
+    this.getLinkedImplementations({ publicationId: this.publication.id });
   }
 
-  getLinkedImplementations(): void {
+  getLinkedImplementations(params: {
+    publicationId: string;
+    search?: string;
+    page?: number;
+    size?: number;
+    sort?: string[];
+  }): void {
     this.publicationService
-      .getImplementationsOfPublication({
-        publicationId: this.publication.id,
-      })
-      .subscribe((implementations) => {
-        console.log(implementations);
-        this.linkObject.linkedData = [];
-        if (implementations._embedded) {
-          this.linkObject.linkedData =
-            implementations._embedded.implementations;
+      .getImplementationsOfPublication(params)
+      .subscribe((data) => {
+        // Read all incoming data
+        if (data._embedded) {
+          this.linkedImplementations = data._embedded.implementations;
+        } else {
+          this.linkedImplementations = [];
         }
       });
   }
@@ -92,7 +96,7 @@ export class PublicationImplementationsListComponent implements OnInit {
         body: this.publication,
       })
       .subscribe(() => {
-        this.getLinkedImplementations();
+        this.getLinkedImplementations({ publicationId: this.publication.id });
         this.utilService.callSnackBar('Successfully linked Implementation');
       });
   }
@@ -107,6 +111,7 @@ export class PublicationImplementationsListComponent implements OnInit {
     this.pagingInfo.page = data.page;
     this.pagingInfo._links = data._links;
   }
+
   unlinkImplementations(event): void {
     const promises: Array<Promise<void>> = [];
     for (const implementation of event.elements) {
@@ -121,7 +126,7 @@ export class PublicationImplementationsListComponent implements OnInit {
       );
     }
     Promise.all(promises).then(() => {
-      this.getLinkedImplementations();
+      this.getLinkedImplementations({ publicationId: this.publication.id });
       this.utilService.callSnackBar('Successfully unlinked implementation(s)');
     });
   }
@@ -148,8 +153,6 @@ export class PublicationImplementationsListComponent implements OnInit {
             'assumptions',
             'link',
           ],
-          pagingInfo: this.pagingInfo,
-          paginatorConfig: this.paginatorConfig,
           noButtonText: 'Cancel',
         },
       });
