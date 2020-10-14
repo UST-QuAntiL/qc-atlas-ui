@@ -2,16 +2,19 @@ import { Component, Input, OnInit } from '@angular/core';
 import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
-import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { MatDialog } from '@angular/material/dialog';
+import { forkJoin, Observable } from 'rxjs';
+import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import {
-  SelectParams,
   LinkObject,
   QueryParams,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { GenericDataService } from '../../../../util/generic-data.service';
-import { LinkItemListDialogComponent } from '../../../generics/dialogs/link-item-list-dialog.component';
+import {
+  DialogData,
+  LinkItemListDialogComponent,
+} from '../../../generics/dialogs/link-item-list-dialog.component';
 
 @Component({
   selector: 'app-software-platform-compute-resource-list',
@@ -20,7 +23,7 @@ import { LinkItemListDialogComponent } from '../../../generics/dialogs/link-item
 })
 export class SoftwarePlatformComputeResourceListComponent implements OnInit {
   @Input() softwarePlatform: EntityModelSoftwarePlatformDto;
-
+  displayedData = [];
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
   linkObject: LinkObject = {
@@ -30,7 +33,18 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
     data: [],
     linkedData: [],
   };
-  tableAddAllowed = true;
+  dialogData: DialogData = {
+    title: 'Link existing compute resources',
+    linkObject: this.linkObject,
+    tableColumns: ['Name', 'Vendor', 'Technology'],
+    variableNames: ['name', 'vendor', 'technology'],
+    noButtonText: 'Cancel',
+    pagingInfo: {},
+    paginatorConfig: {
+      amountChoices: [10, 25, 50],
+      selectedAmount: 10,
+    },
+  };
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
@@ -38,155 +52,209 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
   };
 
   constructor(
-    private executionEnvironmentsService: ExecutionEnvironmentsService,
-    private genericDataService: GenericDataService,
+    private executionEnvironmentService: ExecutionEnvironmentsService,
     private router: Router,
+    private dialog: MatDialog,
     private utilService: UtilService,
-    private dialog: MatDialog
+    private genericDataService: GenericDataService
   ) {}
 
   ngOnInit(): void {
     this.linkObject.title += this.softwarePlatform.name;
-    this.getComputeResources();
-    this.getLinkedComputeResources({
-      softwarePlatformId: this.softwarePlatform.id,
-    });
+    this.getAllLinkedComputeResources();
   }
 
-  getComputeResources(): void {
-    this.executionEnvironmentsService
-      .getComputeResources({ page: -1 })
-      .subscribe((computeResources) => {
-        this.linkObject.data = [];
-        if (computeResources._embedded) {
-          this.linkObject.data = computeResources._embedded.computeResources;
+  getAllComputeResources(search?: QueryParams): Observable<any> {
+    return this.executionEnvironmentService
+      .getComputeResources(search)
+      .pipe((data) => data);
+  }
+
+  getAllLinkedComputeResources(): void {
+    this.linkObject.linkedData = [];
+    this.executionEnvironmentService
+      .getComputeResourcesOfSoftwarePlatform({
+        softwarePlatformId: this.softwarePlatform.id,
+      })
+      .subscribe((data) => {
+        if (data._embedded) {
+          this.linkObject.linkedData = data._embedded.computeResources;
         }
       });
   }
 
-  updateComputeResourcesData(data): void {
+  getPagedLinkedComputeResources(params: any): void {
+    this.executionEnvironmentService
+      .getComputeResourcesOfSoftwarePlatform({
+        softwarePlatformId: this.softwarePlatform.id,
+        page: params.page,
+        size: params.size,
+        sort: params.sort,
+        search: params.sort,
+      })
+      .subscribe((data) => {
+        this.updateDisplayedData(data);
+      });
+  }
+
+  updateDisplayedData(data): void {
+    // clear link object data
+    this.displayedData = [];
+    // If compute resources found
+    if (data._embedded) {
+      this.displayedData = data._embedded.computeResources;
+    }
+    this.pagingInfo.page = data.page;
+    this.pagingInfo._links = data._links;
+  }
+
+  updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If compute resources found
     if (data._embedded) {
       this.linkObject.data = data._embedded.computeResources;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
-  }
-
-  getLinkedComputeResources(params: {
-    softwarePlatformId: string;
-    search?: string;
-    page?: number;
-    size?: number;
-    sort?: string[];
-  }): void {
-    this.executionEnvironmentsService
-      .getComputeResourcesOfSoftwarePlatform(params)
-      .subscribe((computeResource) => {
-        this.linkObject.linkedData = [];
-        if (computeResource._embedded) {
-          this.linkObject.linkedData =
-            computeResource._embedded.computeResources;
-        }
-      });
+    this.dialogData.pagingInfo.page = data.page;
+    this.dialogData.pagingInfo._links = data._links;
   }
 
   openLinkComputeResourceDialog() {
-    this.executionEnvironmentsService
-      .getComputeResources()
-      .subscribe((data) => {
-        this.updateComputeResourcesData(data);
-        const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
-          width: '800px',
-          data: {
-            title: 'Link existing compute resources',
-            linkObject: this.linkObject,
-            tableColumns: ['Name', 'Vendor', 'Technology'],
-            variableNames: ['name', 'vendor', 'technology'],
-            pagingInfo: this.pagingInfo,
-            paginatorConfig: this.paginatorConfig,
-            noButtonText: 'Cancel',
-          },
-        });
-        const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
-          (search: QueryParams) => {
-            this.executionEnvironmentsService
-              .getComputeResources(search)
-              .subscribe((updatedData) => {
-                this.updateComputeResourcesData(updatedData);
-                dialogRef.componentInstance.data.linkObject = this.linkObject;
-              });
-          }
-        );
-        const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-          (page: string) => {
-            this.genericDataService.getData(page).subscribe((pageData) => {
-              this.updateComputeResourcesData(pageData);
-              dialogRef.componentInstance.data.linkObject = this.linkObject;
-            });
-          }
-        );
-        const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
-          (element: ComputeResourceDto) => {
-            this.routeToComputeResource(element);
-            dialogRef.close();
-          }
-        );
-
-        dialogRef.afterClosed().subscribe((dialogResult) => {
-          searchTextSub.unsubscribe();
-          pagingSub.unsubscribe();
-          elementClickedSub.unsubscribe();
-          if (dialogResult) {
-            for (const computeResource of dialogResult.selectedItems) {
-              this.linkComputeResource(computeResource);
-            }
-          }
-        });
+    this.getAllComputeResources().subscribe((data) => {
+      this.updateLinkDialogData(data);
+      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
+        width: '800px',
+        data: this.dialogData,
       });
+      const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+        (search: QueryParams) => {
+          this.getAllComputeResources(search).subscribe((updatedData) => {
+            this.updateLinkDialogData(updatedData);
+            dialogRef.componentInstance.data.linkObject = this.linkObject;
+          });
+        }
+      );
+      const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
+        (page: string) => {
+          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+            this.updateLinkDialogData(pageData);
+            dialogRef.componentInstance.data.linkObject = this.linkObject;
+          });
+        }
+      );
+      const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
+        (element: ComputeResourceDto) => {
+          this.routeToComputeResource(element);
+          dialogRef.close();
+        }
+      );
+
+      dialogRef.afterClosed().subscribe((dialogResult) => {
+        searchTextSub.unsubscribe();
+        pagingSub.unsubscribe();
+        elementClickedSub.unsubscribe();
+        if (dialogResult) {
+          this.linkComputeResources(dialogResult.selectedItems);
+        }
+      });
+    });
   }
 
-  linkComputeResource(computeResource: ComputeResourceDto): void {
+  linkComputeResources(computeResources: ComputeResourceDto[]): void {
+    // Empty unlinked compute resources
     this.linkObject.data = [];
-    this.executionEnvironmentsService
-      .linkSoftwarePlatformAndComputeResource({
-        softwarePlatformId: this.softwarePlatform.id,
-        body: computeResource,
-      })
-      .subscribe(() => {
-        this.getLinkedComputeResources({
-          softwarePlatformId: this.softwarePlatform.id,
-        });
-        this.utilService.callSnackBar('Successfully linked compute resource');
+    const linkTasks = [];
+    const snackbarMessages = [];
+    let successfulLinks = 0;
+    for (const computeResource of computeResources) {
+      linkTasks.push(
+        this.executionEnvironmentService
+          .linkSoftwarePlatformAndComputeResource({
+            softwarePlatformId: this.softwarePlatform.id,
+            body: computeResource,
+          })
+          .toPromise()
+          .then(() => {
+            successfulLinks++;
+            snackbarMessages.push(
+              'Successfully linked compute resources "' +
+                computeResource.name +
+                '"'
+            );
+          })
+      );
+    }
+    forkJoin(linkTasks).subscribe(() => {
+      this.getHateaosDataFromGenericService(
+        this.utilService.getLastPageAfterCreation(
+          this.pagingInfo._links.self.href,
+          this.pagingInfo,
+          successfulLinks
+        )
+      ).subscribe((data) => {
+        this.updateDisplayedData(data);
       });
+      this.getAllLinkedComputeResources();
+      snackbarMessages.push(
+        this.utilService.generateFinalDeletionMessage(
+          successfulLinks,
+          computeResources.length,
+          'compute resources',
+          'linked'
+        )
+      );
+      this.utilService.callSnackBarSequence(snackbarMessages);
+    });
   }
 
-  unlinkComputeResources(event: SelectParams): void {
-    const promises: Array<Promise<void>> = [];
+  unlinkComputeResources(event): void {
+    const deletionTasks = [];
+    const snackbarMessages = [];
+    let successfulDeletions = 0;
     for (const computeResource of event.elements) {
-      promises.push(
-        this.executionEnvironmentsService
+      deletionTasks.push(
+        this.executionEnvironmentService
           .unlinkSoftwarePlatformAndComputeResource({
             softwarePlatformId: this.softwarePlatform.id,
             computeResourceId: computeResource.id,
           })
           .toPromise()
+          .then(() => {
+            successfulDeletions++;
+            snackbarMessages.push(
+              'Successfully unlinked compute resource "' +
+                computeResource.name +
+                '"'
+            );
+          })
       );
     }
-    Promise.all(promises).then(() => {
-      this.getLinkedComputeResources({
-        softwarePlatformId: this.softwarePlatform.id,
+    forkJoin(deletionTasks).subscribe(() => {
+      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
+        successfulDeletions,
+        this.displayedData.length,
+        this.pagingInfo
+      )
+        ? this.pagingInfo._links.prev.href
+        : this.pagingInfo._links.self.href;
+      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
+        this.updateDisplayedData(data);
       });
-      this.utilService.callSnackBar('Successfully unlinked compute resource');
+      this.getAllLinkedComputeResources();
+      snackbarMessages.push(
+        this.utilService.generateFinalDeletionMessage(
+          successfulDeletions,
+          event.elements.length,
+          'compute resources',
+          'unlinked'
+        )
+      );
+      this.utilService.callSnackBarSequence(snackbarMessages);
     });
   }
 
-  onDatalistConfigChanged(): void {
-    this.getLinkedComputeResources({
-      softwarePlatformId: this.softwarePlatform.id,
-    });
+  onDatalistConfigChanged(event): void {
+    this.getPagedLinkedComputeResources(event);
   }
 
   onElementClicked(computeResource: ComputeResourceDto): void {
@@ -199,5 +267,15 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
       'compute-resources',
       computeResource.id,
     ]);
+  }
+
+  getHateaosDataFromGenericService(url: string): Observable<any> {
+    return this.genericDataService.getData(url).pipe((data) => data);
+  }
+
+  onPageChanged(event): void {
+    this.getHateaosDataFromGenericService(event).subscribe((data) => {
+      this.updateDisplayedData(data);
+    });
   }
 }

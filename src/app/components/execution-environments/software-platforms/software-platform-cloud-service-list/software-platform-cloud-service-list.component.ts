@@ -4,12 +4,8 @@ import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-envir
 import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { MatDialog } from '@angular/material/dialog';
-import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import { forkJoin, Observable } from 'rxjs';
-import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import {
-  SelectParams,
   LinkObject,
   QueryParams,
   UrlData,
@@ -59,8 +55,6 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
 
   constructor(
     private executionEnvironmentService: ExecutionEnvironmentsService,
-    private algorithmService: AlgorithmService,
-    private implementationService: ImplementationsService,
     private router: Router,
     private dialog: MatDialog,
     private utilService: UtilService,
@@ -152,7 +146,7 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       );
       const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
         (element: CloudServiceDto) => {
-          this.routeToImplementation(element);
+          this.routeToCloudService(element);
           dialogRef.close();
         }
       );
@@ -262,10 +256,10 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
   }
 
   onElementClicked(cloudService: CloudServiceDto): void {
-    this.routeToImplementation(cloudService);
+    this.routeToCloudService(cloudService);
   }
 
-  routeToImplementation(cloudService: CloudServiceDto): void {
+  routeToCloudService(cloudService: CloudServiceDto): void {
     this.router.navigate([
       'execution-environments',
       'cloud-services',
