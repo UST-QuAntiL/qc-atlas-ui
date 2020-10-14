@@ -30,6 +30,8 @@ export class ApplicationAreasService extends BaseService {
   static readonly GetApplicationAreasPath = '/v1/application-areas';
 
   /**
+   * Retrieve all application areas
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getApplicationAreas()` instead.
    *
@@ -80,6 +82,8 @@ export class ApplicationAreasService extends BaseService {
   }
 
   /**
+   * Retrieve all application areas
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getApplicationAreas$Response()` instead.
    *
@@ -120,7 +124,7 @@ export class ApplicationAreasService extends BaseService {
   static readonly CreateApplicationAreaPath = '/v1/application-areas';
 
   /**
-   * Custom ID will be ignored.
+   * Define the basic properties of an application area.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createApplicationArea()` instead.
@@ -149,7 +153,7 @@ export class ApplicationAreasService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Define the basic properties of an application area.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createApplicationArea$Response()` instead.
@@ -171,6 +175,8 @@ export class ApplicationAreasService extends BaseService {
   static readonly GetApplicationAreaPath = '/v1/application-areas/{applicationAreaId}';
 
   /**
+   * Retrieve a specific application area and its basic properties.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getApplicationArea()` instead.
    *
@@ -199,6 +205,8 @@ export class ApplicationAreasService extends BaseService {
   }
 
   /**
+   * Retrieve a specific application area and its basic properties.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getApplicationArea$Response()` instead.
    *
@@ -220,7 +228,7 @@ export class ApplicationAreasService extends BaseService {
   static readonly UpdateApplicationAreaPath = '/v1/application-areas/{applicationAreaId}';
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an application area (e.g. name).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateApplicationArea()` instead.
@@ -251,7 +259,7 @@ export class ApplicationAreasService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an application area (e.g. name).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateApplicationArea$Response()` instead.
@@ -274,6 +282,8 @@ export class ApplicationAreasService extends BaseService {
   static readonly DeleteApplicationAreaPath = '/v1/application-areas/{applicationAreaId}';
 
   /**
+   * Delete an application area. This removes the application area from all algorithms it is references in.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteApplicationArea()` instead.
    *
@@ -302,6 +312,8 @@ export class ApplicationAreasService extends BaseService {
   }
 
   /**
+   * Delete an application area. This removes the application area from all algorithms it is references in.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteApplicationArea$Response()` instead.
    *

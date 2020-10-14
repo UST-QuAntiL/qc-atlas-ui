@@ -30,6 +30,8 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   static readonly GetResourcePropertyTypesPath = '/v1/compute-resource-property-types';
 
   /**
+   * Retrieve all compute resource property types.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getResourcePropertyTypes()` instead.
    *
@@ -80,6 +82,8 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   }
 
   /**
+   * Retrieve all compute resource property types.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getResourcePropertyTypes$Response()` instead.
    *
@@ -120,7 +124,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   static readonly CreateComputingResourcePropertyTypePath = '/v1/compute-resource-property-types';
 
   /**
-   * Custom ID will not be accepted.
+   * Define the basic properties of an compute resource property type.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createComputingResourcePropertyType()` instead.
@@ -149,7 +153,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   }
 
   /**
-   * Custom ID will not be accepted.
+   * Define the basic properties of an compute resource property type.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createComputingResourcePropertyType$Response()` instead.
@@ -171,6 +175,8 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   static readonly GetComputingResourcePropertyTypePath = '/v1/compute-resource-property-types/{computeResourcePropertyTypeId}';
 
   /**
+   * Retrieve a specific compute resource property type and its basic properties.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getComputingResourcePropertyType()` instead.
    *
@@ -199,6 +205,8 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   }
 
   /**
+   * Retrieve a specific compute resource property type and its basic properties.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getComputingResourcePropertyType$Response()` instead.
    *
@@ -220,7 +228,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   static readonly UpdateComputingResourcePropertyTypePath = '/v1/compute-resource-property-types/{computeResourcePropertyTypeId}';
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an compute resource property type (e.g. name).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateComputingResourcePropertyType()` instead.
@@ -251,7 +259,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an compute resource property type (e.g. name).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateComputingResourcePropertyType$Response()` instead.
@@ -274,6 +282,8 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   static readonly DeleteComputingResourcePropertyTypePath = '/v1/compute-resource-property-types/{computeResourcePropertyTypeId}';
 
   /**
+   * Delete an compute resource property type.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteComputingResourcePropertyType()` instead.
    *
@@ -302,6 +312,8 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   }
 
   /**
+   * Delete an compute resource property type.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteComputingResourcePropertyType$Response()` instead.
    *
