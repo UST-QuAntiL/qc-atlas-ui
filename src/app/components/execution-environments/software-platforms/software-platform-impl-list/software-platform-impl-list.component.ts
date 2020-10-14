@@ -6,10 +6,8 @@ import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import { MatDialog } from '@angular/material/dialog';
-import { PublicationService } from 'api-atlas/services/publication.service';
 import { forkJoin, Observable } from 'rxjs';
 import {
-  SelectParams,
   LinkObject,
   QueryParams,
 } from '../../../generics/data-list/data-list.component';
@@ -172,13 +170,13 @@ export class SoftwarePlatformImplListComponent implements OnInit {
         pagingSub.unsubscribe();
         elementClickedSub.unsubscribe();
         if (dialogResult) {
-          this.linkAlgorithms(dialogResult.selectedItems);
+          this.linkImplementations(dialogResult.selectedItems);
         }
       });
     });
   }
 
-  linkAlgorithms(implementations: ImplementationDto[]): void {
+  linkImplementations(implementations: ImplementationDto[]): void {
     // Empty unlinked implementations
     this.linkObject.data = [];
     const linkTasks = [];
