@@ -27,7 +27,7 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
   linkObject: LinkObject = {
-    title: 'Link compute resource with ',
+    title: 'Link software platform with ',
     subtitle: 'Search compute resources by name',
     displayVariable: 'name',
     data: [],
