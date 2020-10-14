@@ -192,7 +192,7 @@ export class DataListComponent implements OnInit {
     }
 
     if (this.sortDirection && this.sortActiveElement) {
-      params.sort = [this.sortActiveElement, this.sortDirection];
+      params.sort = [this.sortActiveElement + ',' + this.sortDirection];
     }
 
     if (this.allowSearch && this.searchText) {
