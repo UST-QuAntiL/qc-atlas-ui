@@ -125,10 +125,14 @@ export class UtilService {
   public generateFinalDeletionMessage(
     successfulDeletions: number,
     expectedDeletions: number,
-    objectType: string
+    objectType: string,
+    deleteType?: string
   ): string {
+    deleteType = deleteType ? deleteType : 'deleted';
     return (
-      'Successfully deleted ' +
+      'Successfully ' +
+      deleteType +
+      ' ' +
       successfulDeletions +
       '/' +
       expectedDeletions +

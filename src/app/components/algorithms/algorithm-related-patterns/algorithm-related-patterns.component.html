@@ -8,9 +8,12 @@
                [allowEdit]=true
                [allowDelete]="true"
                [emptyTableMessage]="'No related patterns found'"
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
                (addElement)="onAddElement()"
                (submitDeleteElements)="onDeleteElements($event)"
                (datalistConfigChanged)="onDatalistConfigChanged($event)"
+               (pageChange)="getPatternRelationsHateoas($event)"
                (elementClicked)="onElementClicked($event)"
                (updateClicked)="onUpdateClicked($event)"
                (urlClicked)="onUrlClicked($event)">
