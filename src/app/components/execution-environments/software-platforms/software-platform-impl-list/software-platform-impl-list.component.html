@@ -1,16 +1,20 @@
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
     <app-table
-      [data]=linkObject.linkedData
+      [data]=displayedData
       [variableNames]=variableNames
       [dataColumns]=tableColumns
-      [allowAdd]=tableAddAllowed
-      [allowDelete]="true"
+      [allowAdd]=true
+      [allowDelete]=true
+      [allowSort]=true
       [emptyTableMessage]="'No linked implementations found'"
+      [pagination]=pagingInfo
+      [paginatorConfig]=paginatorConfig
       (elementClicked)="onElementClicked($event)"
-      (datalistConfigChanged)="onDatalistConfigChanged()"
+      (datalistConfigChanged)="onDatalistConfigChanged($event)"
       (submitDeleteElements)="unlinkImplementations($event)"
-      (addElement)="openLinkImplementationDialog()">
+      (addElement)="openLinkImplementationDialog()"
+      (pageChange)="onPageChanged($event)">
     </app-table>
   </div>
 </mat-card>
