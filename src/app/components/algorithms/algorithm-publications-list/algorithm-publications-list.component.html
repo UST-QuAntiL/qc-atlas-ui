@@ -1,19 +1,22 @@
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
     <app-table
-      [data]=linkObject.linkedData
+      [data]=displayedData
       [variableNames]=variableNames
       [dataColumns]=tableColumns
       [externalLinkVariables]=externalLinkVariables
       [allowAdd]=tableAddAllowed
-      [allowDelete]="true"
+      [allowDelete]=true
       [allowSort]=true
       [emptyTableMessage]="'No linked publications found'"
+      [pagination]=pagingInfo
+      [paginatorConfig]=paginatorConfig
       (elementClicked)="onElementClicked($event)"
       (urlClicked)="onUrlClicked($event)"
       (datalistConfigChanged)="onDatalistConfigChanged($event)"
       (submitDeleteElements)="unlinkPublications($event)"
-      (addElement)="openLinkPublicationDialog()">
+      (addElement)="openLinkPublicationDialog()"
+      (pageChange)="onPageChanged($event)">
     </app-table>
   </div>
 </mat-card>
