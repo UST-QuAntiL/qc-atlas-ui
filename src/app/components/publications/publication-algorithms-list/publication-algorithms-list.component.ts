@@ -27,7 +27,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
   linkObject: LinkObject = {
-    title: 'Link algorithm with ',
+    title: 'Link publication with ',
     subtitle: 'Search algorithm by name',
     displayVariable: 'name',
     data: [],
