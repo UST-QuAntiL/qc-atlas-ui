@@ -89,7 +89,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
         this.getPatternRelationsHateoas(
           this.utilService.getLastPageAfterCreation(
             this.pagingInfo._links.self.href,
-            this.pagingInfo
+            this.pagingInfo,
+            1
           )
         );
         this.utilService.callSnackBar('Successfully created pattern relation');

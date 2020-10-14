@@ -82,7 +82,8 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
             this.getAlgorithmRelationTypesHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
-                this.pagingInfo
+                this.pagingInfo,
+                1
               )
             );
             this.utilService.callSnackBar(

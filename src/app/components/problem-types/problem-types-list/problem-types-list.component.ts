@@ -95,7 +95,8 @@ export class ProblemTypesListComponent implements OnInit {
           this.getProblemTypesHateoas(
             this.utilService.getLastPageAfterCreation(
               this.pagingInfo._links.self.href,
-              this.pagingInfo
+              this.pagingInfo,
+              1
             )
           );
           this.utilService.callSnackBar('Successfully added problem type');

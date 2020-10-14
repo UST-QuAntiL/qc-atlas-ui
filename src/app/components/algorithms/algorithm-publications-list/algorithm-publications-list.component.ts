@@ -188,7 +188,8 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       this.getHateaosDataFromGenericService(
         this.utilService.getLastPageAfterCreation(
           this.pagingInfo._links.self.href,
-          this.pagingInfo
+          this.pagingInfo,
+          successfulLinks
         )
       ).subscribe((data) => {
         this.updateDisplayedData(data);
