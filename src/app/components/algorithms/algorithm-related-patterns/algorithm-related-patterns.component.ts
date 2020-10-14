@@ -215,12 +215,11 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const deletionTasks = [];
+        const unlinkTasks = [];
         const snackbarMessages = [];
         let successfulUnlinks = 0;
-
         for (const relation of event.elements) {
-          deletionTasks.push(
+          unlinkTasks.push(
             this.algorithmService
               .deletePatternRelationOfAlgorithm({
                 algorithmId: this.algorithm.id,
@@ -238,7 +237,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
               )
           );
         }
-        forkJoin(deletionTasks).subscribe(() => {
+        forkJoin(unlinkTasks).subscribe(() => {
           if (
             this.utilService.isLastPageEmptyAfterDeletion(
               successfulUnlinks,
