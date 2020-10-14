@@ -5,9 +5,13 @@
                [dataColumns]=tableColumns
                [allowAdd]=true
                [allowDelete]="true"
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
                [emptyTableMessage]="'No implementations for this algorithm found'"
                (addElement)="onAddImplementation()"
                (submitDeleteElements)="onDeleteImplementation($event)"
+               (pageChange)="getImplementationsHateoas($event)"
+               (datalistConfigChanged)="onDatalistConfigChanged($event)"
                (elementClicked)="onImplementationClicked($event)">
     </app-table>
   </div>
