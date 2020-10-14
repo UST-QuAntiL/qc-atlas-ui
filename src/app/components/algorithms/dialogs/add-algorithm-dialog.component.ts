@@ -30,6 +30,9 @@ export class AddAlgorithmDialogComponent implements OnInit {
   get computationModel(): AbstractControl | null {
     return this.algorithmForm.get('computationModel');
   }
+  get quantumComputationModel(): AbstractControl | null {
+    return this.algorithmForm.get('quantumComputationModel');
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -57,11 +60,20 @@ export class AddAlgorithmDialogComponent implements OnInit {
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.name = this.name.value;
+      this.data.computationModel = this.computationModel.value;
+      if (this.computationModel.value === 'QUANTUM') {
+        this.data.quantumComputationModel = this.quantumComputationModel.value;
+      }
     });
   }
 
   isRequiredDataMissing(): boolean {
-    return this.name.errors?.required && this.computationModel.errors?.required;
+    return (
+      this.name.errors?.required ||
+      this.computationModel.errors?.required ||
+      (this.computationModel.value === 'QUANTUM' &&
+        this.quantumComputationModel.errors?.required)
+    );
   }
 }
 
