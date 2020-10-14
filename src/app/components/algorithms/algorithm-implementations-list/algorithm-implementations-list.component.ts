@@ -111,7 +111,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
         if (dialogResult) {
           const deletionTasks = [];
           const snackbarMessages = [];
-          let successfulDeletes = 0;
+          let successfulDeletions = 0;
           for (const implementation of event.elements) {
             deletionTasks.push(
               this.algorithmService
@@ -121,7 +121,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
                 })
                 .toPromise()
                 .then(() => {
-                  successfulDeletes++;
+                  successfulDeletions++;
                   snackbarMessages.push(
                     'Successfully deleted implementation "' +
                       implementation.name +
@@ -133,7 +133,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
           forkJoin(deletionTasks).subscribe(() => {
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
-                successfulDeletes,
+                successfulDeletions,
                 event.elements.length,
                 this.pagingInfo
               )
@@ -144,7 +144,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
             }
             snackbarMessages.push(
               this.utilService.generateFinalDeletionMessage(
-                successfulDeletes,
+                successfulDeletions,
                 dialogResult.data.length,
                 'implementations'
               )
