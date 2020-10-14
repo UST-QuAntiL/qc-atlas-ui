@@ -4,14 +4,17 @@ import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-envir
 import { Router } from '@angular/router';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { MatDialog } from '@angular/material/dialog';
+import { forkJoin, Observable } from 'rxjs';
 import {
-  SelectParams,
   LinkObject,
   QueryParams,
   UrlData,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
-import { LinkItemListDialogComponent } from '../../../generics/dialogs/link-item-list-dialog.component';
+import {
+  DialogData,
+  LinkItemListDialogComponent,
+} from '../../../generics/dialogs/link-item-list-dialog.component';
 import { GenericDataService } from '../../../../util/generic-data.service';
 
 @Component({
@@ -21,18 +24,29 @@ import { GenericDataService } from '../../../../util/generic-data.service';
 })
 export class ComputeResourceCloudServiceListComponent implements OnInit {
   @Input() computeResource: EntityModelComputeResourceDto;
-
+  displayedData = [];
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
   variableNames = ['name', 'provider', 'description', 'costModel', 'url'];
   externalLinkVariables = ['url'];
   linkObject: LinkObject = {
-    title: 'Link cloud service with ',
+    title: 'Link compute resource with ',
     subtitle: 'Search cloud services by name',
     displayVariable: 'name',
     data: [],
     linkedData: [],
   };
-  tableAddAllowed = true;
+  dialogData: DialogData = {
+    title: 'Link existing cloud services',
+    linkObject: this.linkObject,
+    tableColumns: ['Name', 'Provider', 'Description'],
+    variableNames: ['name', 'provider', 'description'],
+    noButtonText: 'Cancel',
+    pagingInfo: {},
+    paginatorConfig: {
+      amountChoices: [10, 25, 50],
+      selectedAmount: 10,
+    },
+  };
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
@@ -40,87 +54,92 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
   };
 
   constructor(
-    private executionEnvironmentsService: ExecutionEnvironmentsService,
-    private genericDataService: GenericDataService,
+    private executionEnvironmentService: ExecutionEnvironmentsService,
     private router: Router,
+    private dialog: MatDialog,
     private utilService: UtilService,
-    private dialog: MatDialog
+    private genericDataService: GenericDataService
   ) {}
 
   ngOnInit(): void {
     this.linkObject.title += this.computeResource.name;
-    this.getCloudServices();
-    this.getLinkedCloudServices({ computeResourceId: this.computeResource.id });
+    this.getAllLinkedCloudServices();
   }
 
-  getCloudServices(): void {
-    this.executionEnvironmentsService
-      .getCloudServices({ page: -1 })
-      .subscribe((cloudServices) => {
-        this.linkObject.data = [];
-        if (cloudServices._embedded) {
-          this.linkObject.data = cloudServices._embedded.cloudServices;
+  getAllCloudServices(search?: QueryParams): Observable<any> {
+    return this.executionEnvironmentService
+      .getCloudServices(search)
+      .pipe((data) => data);
+  }
+
+  getAllLinkedCloudServices(): void {
+    this.linkObject.linkedData = [];
+    this.executionEnvironmentService
+      .getCloudServicesOfComputeResource({
+        computeResourceId: this.computeResource.id,
+      })
+      .subscribe((data) => {
+        if (data._embedded) {
+          this.linkObject.linkedData = data._embedded.cloudServices;
         }
       });
   }
 
-  updateCloudServicesData(data): void {
+  getPagedLinkedCloudServices(params: any): void {
+    this.executionEnvironmentService
+      .getCloudServicesOfComputeResource({
+        computeResourceId: this.computeResource.id,
+        page: params.page,
+        size: params.size,
+        sort: params.sort,
+        search: params.sort,
+      })
+      .subscribe((data) => {
+        this.updateDisplayedData(data);
+      });
+  }
+
+  updateDisplayedData(data): void {
+    // clear link object data
+    this.displayedData = [];
+    // If cloud services found
+    if (data._embedded) {
+      this.displayedData = data._embedded.cloudServices;
+    }
+    this.pagingInfo.page = data.page;
+    this.pagingInfo._links = data._links;
+  }
+
+  updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If cloud services found
     if (data._embedded) {
       this.linkObject.data = data._embedded.cloudServices;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
-  }
-
-  getLinkedCloudServices(params: {
-    computeResourceId: string;
-    search?: string;
-    page?: number;
-    size?: number;
-    sort?: string[];
-  }): void {
-    this.executionEnvironmentsService
-      .getCloudServicesOfComputeResource(params)
-      .subscribe((cloudServices) => {
-        this.linkObject.linkedData = [];
-        if (cloudServices._embedded) {
-          this.linkObject.linkedData = cloudServices._embedded.cloudServices;
-        }
-      });
+    this.dialogData.pagingInfo.page = data.page;
+    this.dialogData.pagingInfo._links = data._links;
   }
 
   openLinkCloudServiceDialog() {
-    this.executionEnvironmentsService.getCloudServices().subscribe((data) => {
-      this.updateCloudServicesData(data);
+    this.getAllCloudServices().subscribe((data) => {
+      this.updateLinkDialogData(data);
       const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
         width: '800px',
-        data: {
-          title: 'Link existing cloud services',
-          linkObject: this.linkObject,
-          tableColumns: ['Name', 'Provider', 'Description'],
-          variableNames: ['name', 'provider', 'description'],
-          pagingInfo: this.pagingInfo,
-          paginatorConfig: this.paginatorConfig,
-          noButtonText: 'Cancel',
-        },
+        data: this.dialogData,
       });
       const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
         (search: QueryParams) => {
-          this.executionEnvironmentsService
-            .getCloudServices(search)
-            .subscribe((updatedData) => {
-              this.updateCloudServicesData(updatedData);
-              dialogRef.componentInstance.data.linkObject = this.linkObject;
-            });
+          this.getAllCloudServices(search).subscribe((updatedData) => {
+            this.updateLinkDialogData(updatedData);
+            dialogRef.componentInstance.data.linkObject = this.linkObject;
+          });
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
         (page: string) => {
-          this.genericDataService.getData(page).subscribe((pageData) => {
-            this.updateCloudServicesData(pageData);
+          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+            this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
         }
@@ -137,67 +156,129 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
         pagingSub.unsubscribe();
         elementClickedSub.unsubscribe();
         if (dialogResult) {
-          for (const cloudService of dialogResult.selectedItems) {
-            this.linkCloudService(cloudService);
-          }
+          this.linkCloudServices(dialogResult.selectedItems);
         }
       });
     });
   }
 
-  linkCloudService(cloudService: CloudServiceDto): void {
+  linkCloudServices(cloudServices: CloudServiceDto[]): void {
+    // Empty unlinked cloud services
     this.linkObject.data = [];
-    this.executionEnvironmentsService
-      .linkCloudServiceAndComputeResource({
-        cloudServiceId: cloudService.id,
-        body: this.computeResource,
-      })
-      .subscribe(() => {
-        this.getLinkedCloudServices({
-          computeResourceId: this.computeResource.id,
-        });
-        this.utilService.callSnackBar('Successfully linked cloud service');
+    const linkTasks = [];
+    const snackbarMessages = [];
+    let successfulLinks = 0;
+    for (const cloudService of cloudServices) {
+      linkTasks.push(
+        this.executionEnvironmentService
+          .linkCloudServiceAndComputeResource({
+            cloudServiceId: cloudService.id,
+            body: this.computeResource,
+          })
+          .toPromise()
+          .then(() => {
+            successfulLinks++;
+            snackbarMessages.push(
+              'Successfully linked cloud service "' + cloudService.name + '"'
+            );
+          })
+      );
+    }
+    forkJoin(linkTasks).subscribe(() => {
+      this.getHateaosDataFromGenericService(
+        this.utilService.getLastPageAfterCreation(
+          this.pagingInfo._links.self.href,
+          this.pagingInfo,
+          successfulLinks
+        )
+      ).subscribe((data) => {
+        this.updateDisplayedData(data);
       });
+      this.getAllLinkedCloudServices();
+      snackbarMessages.push(
+        this.utilService.generateFinalDeletionMessage(
+          successfulLinks,
+          cloudServices.length,
+          'cloud services',
+          'linked'
+        )
+      );
+      this.utilService.callSnackBarSequence(snackbarMessages);
+    });
   }
 
-  unlinkCloudServices(event: SelectParams): void {
-    const outputPromises: Array<Promise<void>> = [];
+  unlinkCloudServices(event): void {
+    const deletionTasks = [];
+    const snackbarMessages = [];
+    let successfulDeletions = 0;
     for (const cloudService of event.elements) {
-      outputPromises.push(
-        this.executionEnvironmentsService
+      deletionTasks.push(
+        this.executionEnvironmentService
           .unlinkCloudServiceAndComputeResource({
             cloudServiceId: cloudService.id,
             computeResourceId: this.computeResource.id,
           })
           .toPromise()
+          .then(() => {
+            successfulDeletions++;
+            snackbarMessages.push(
+              'Successfully unlinked cloud service "' + cloudService.name + '"'
+            );
+          })
       );
     }
-    Promise.all(outputPromises).then(() => {
-      this.getLinkedCloudServices({
-        computeResourceId: this.computeResource.id,
+    forkJoin(deletionTasks).subscribe(() => {
+      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
+        successfulDeletions,
+        this.displayedData.length,
+        this.pagingInfo
+      )
+        ? this.pagingInfo._links.prev.href
+        : this.pagingInfo._links.self.href;
+      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
+        this.updateDisplayedData(data);
       });
-      this.utilService.callSnackBar('Successfully unlinked cloud services');
+      this.getAllLinkedCloudServices();
+      snackbarMessages.push(
+        this.utilService.generateFinalDeletionMessage(
+          successfulDeletions,
+          event.elements.length,
+          'cloud services',
+          'unlinked'
+        )
+      );
+      this.utilService.callSnackBarSequence(snackbarMessages);
     });
   }
 
-  onDatalistConfigChanged(): void {
-    this.getLinkedCloudServices({ computeResourceId: this.computeResource.id });
+  onDatalistConfigChanged(event): void {
+    this.getPagedLinkedCloudServices(event);
   }
 
   onElementClicked(cloudService: CloudServiceDto): void {
     this.routeToCloudService(cloudService);
   }
 
-  onUrlClicked(urlData: UrlData): void {
-    // No check needed since publications have only one url-field called 'url'
-    window.open(urlData.element['url'], '_blank');
-  }
-
-  private routeToCloudService(cloudService: CloudServiceDto) {
+  routeToCloudService(cloudService: CloudServiceDto): void {
     this.router.navigate([
       'execution-environments',
       'cloud-services',
       cloudService.id,
     ]);
+  }
+
+  getHateaosDataFromGenericService(url: string): Observable<any> {
+    return this.genericDataService.getData(url).pipe((data) => data);
+  }
+
+  onPageChanged(event): void {
+    this.getHateaosDataFromGenericService(event).subscribe((data) => {
+      this.updateDisplayedData(data);
+    });
+  }
+
+  onUrlClicked(urlData: UrlData) {
+    // No check needed since cloud services have only one url-field called 'url'
+    window.open(urlData.element['url'], '_blank');
   }
 }
