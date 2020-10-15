@@ -108,7 +108,7 @@ export class SoftwarePlatformListComponent implements OnInit {
                 this.utilService.callSnackBar(
                   'Successfully created software platform "' +
                     softwarePlatform.name +
-                    '"'
+                    '".'
                 );
               },
               () => {
@@ -185,6 +185,7 @@ export class SoftwarePlatformListComponent implements OnInit {
                 dialogResult.data.length +
                 ' software platforms.'
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });

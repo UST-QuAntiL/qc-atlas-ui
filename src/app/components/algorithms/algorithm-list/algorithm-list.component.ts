@@ -36,9 +36,16 @@ export class AlgorithmListComponent implements OnInit {
   ngOnInit(): void {}
 
   getAlgorithms(params: any): void {
-    this.algorithmService.getAlgorithms(params).subscribe((data) => {
-      this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
-    });
+    this.algorithmService.getAlgorithms(params).subscribe(
+      (data) => {
+        this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Algorithms could not be retrieved.'
+        );
+      }
+    );
   }
 
   getAlgorithmsHateoas(url: string): void {

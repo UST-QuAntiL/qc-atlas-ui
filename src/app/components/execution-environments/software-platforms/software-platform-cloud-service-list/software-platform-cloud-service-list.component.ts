@@ -186,7 +186,7 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
           .then(() => {
             successfulLinks++;
             snackbarMessages.push(
-              'Successfully linked cloud service "' + cloudService.name + '"'
+              'Successfully linked cloud service "' + cloudService.name + '".'
             );
           })
           .catch(() => {
@@ -234,7 +234,7 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
           .then(() => {
             successfulDeletions++;
             snackbarMessages.push(
-              'Successfully unlinked cloud service "' + cloudService.name + '"'
+              'Successfully unlinked cloud service "' + cloudService.name + '".'
             );
           })
           .catch(() => {

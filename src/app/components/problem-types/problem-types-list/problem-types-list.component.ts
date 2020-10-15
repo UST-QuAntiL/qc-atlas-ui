@@ -36,9 +36,16 @@ export class ProblemTypesListComponent implements OnInit {
   ngOnInit(): void {}
 
   getProblemTypes(params: any): void {
-    this.problemTypeService.getProblemTypes(params).subscribe((data) => {
-      this.prepareProblemTypeData(data);
-    });
+    this.problemTypeService.getProblemTypes(params).subscribe(
+      (data) => {
+        this.prepareProblemTypeData(data);
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Problem types could not be retrieved.'
+        );
+      }
+    );
   }
 
   getProblemTypesHateoas(url: string): void {

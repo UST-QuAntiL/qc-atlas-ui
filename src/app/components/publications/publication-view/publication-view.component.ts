@@ -70,7 +70,7 @@ export class PublicationViewComponent implements OnInit {
             heading: this.publication.title,
             subHeading: '',
           };
-          this.utilService.callSnackBar('Successfully updated publication');
+          this.utilService.callSnackBar('Successfully updated publication.');
         },
         (error) => {
           this.utilService.callSnackBar(

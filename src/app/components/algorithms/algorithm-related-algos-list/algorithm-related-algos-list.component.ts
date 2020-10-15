@@ -59,7 +59,9 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         this.prepareRelations(relations);
       },
       (error) => {
-        console.log(error);
+        this.utilService.callSnackBar(
+          'Error! Algorithm relations could not be retrieved.'
+        );
       }
     );
   }

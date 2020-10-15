@@ -223,7 +223,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
           .then(() => {
             successfulDeletions++;
             snackbarMessages.push(
-              'Successfully unlinked algorithm "' + algorithm.name + '"'
+              'Successfully unlinked algorithm "' + algorithm.name + '".'
             );
           })
           .catch(() => {

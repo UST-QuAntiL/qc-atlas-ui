@@ -192,7 +192,7 @@ export class PublicationImplementationsListComponent implements OnInit {
           .then(() => {
             successfulLinks++;
             snackbarMessages.push(
-              'Successfully linked implementation "' + implementation.name + '"'
+              'Successfully linked implementation "' + implementation.name + '".'
             );
           })
           .catch(() => {
@@ -245,7 +245,7 @@ export class PublicationImplementationsListComponent implements OnInit {
             snackbarMessages.push(
               'Successfully unlinked implementation "' +
                 implementation.name +
-                '"'
+                '".'
             );
           })
           .catch(() => {

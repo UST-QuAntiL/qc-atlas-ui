@@ -83,7 +83,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
             ) as EntityModelSoftwarePlatformDto;
           }
           this.utilService.callSnackBar(
-            'Successfully updated software platform'
+            'Successfully updated software platform.'
           );
         },
         (error) => {

@@ -42,7 +42,9 @@ export class AlgorithmImplementationsListComponent implements OnInit {
         this.prepareImplementationData(implementations);
       },
       (error) => {
-        console.log(error);
+        this.utilService.callSnackBar(
+          'Error! Implementation could not be retrieved.'
+        );
       }
     );
   }

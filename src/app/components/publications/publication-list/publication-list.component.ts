@@ -39,9 +39,16 @@ export class PublicationListComponent implements OnInit {
   ngOnInit(): void {}
 
   getPublications(params: QueryParams): void {
-    this.publicationService.getPublications(params).subscribe((data) => {
-      this.preparePublicationData(data);
-    });
+    this.publicationService.getPublications(params).subscribe(
+      (data) => {
+        this.preparePublicationData(data);
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Publications types could not be retrieved.'
+        );
+      }
+    );
   }
 
   getPublicationsHateoas(url: string): void {

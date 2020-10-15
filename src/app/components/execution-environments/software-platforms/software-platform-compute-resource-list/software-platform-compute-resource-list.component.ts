@@ -238,7 +238,7 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
             snackbarMessages.push(
               'Successfully unlinked compute resource "' +
                 computeResource.name +
-                '"'
+                '".'
             );
           })
           .catch(() => {
