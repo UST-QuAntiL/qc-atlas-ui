@@ -214,7 +214,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
               );
             }
             snackbarMessages.push(
-              this.utilService.generateFinishingSnackarMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulUnlinks,
                 dialogResult.data.length,
                 'algorithms',

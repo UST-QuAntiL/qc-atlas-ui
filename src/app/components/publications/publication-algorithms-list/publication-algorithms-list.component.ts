@@ -192,7 +192,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       });
       this.getAllLinkedAlgorithms();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           algorithms.length,
           'algorithms',
@@ -236,7 +236,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       });
       this.getAllLinkedAlgorithms();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'algorithms',

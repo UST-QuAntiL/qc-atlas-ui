@@ -85,10 +85,19 @@ export class AlgorithmListComponent implements OnInit {
 
         params.body = algorithmDto as AlgorithmDto;
 
-        this.algorithmService.createAlgorithm(params).subscribe((data) => {
-          this.utilService.callSnackBar('Successfully added algorithm');
-          this.router.navigate(['algorithms', data.id]);
-        });
+        this.algorithmService.createAlgorithm(params).subscribe(
+          (data) => {
+            this.utilService.callSnackBar(
+              'Algorithm was successfully created.'
+            );
+            this.router.navigate(['algorithms', data.id]);
+          },
+          () => {
+            this.utilService.callSnackBar(
+              'Error! Algorithm could not be created.'
+            );
+          }
+        );
       }
     });
   }
@@ -108,6 +117,7 @@ export class AlgorithmListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          const snackbarMessages = [];
           let successfulDeletions = 0;
           for (const algorithm of event.elements) {
             deletionTasks.push(
@@ -116,11 +126,20 @@ export class AlgorithmListComponent implements OnInit {
                   algorithmId: algorithm.id,
                 })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted algorithm "' + algorithm.name + '".'
+                  );
+                })
+                .catch(() => {
+                  snackbarMessages.push(
+                    'Could not delete algorithm "' + algorithm.name + '".'
+                  );
+                })
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
-            console.log(this.pagingInfo.page);
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
@@ -132,13 +151,14 @@ export class AlgorithmListComponent implements OnInit {
             } else {
               this.getAlgorithmsHateoas(this.pagingInfo._links.self.href);
             }
-            this.utilService.callSnackBar(
-              'Successfully deleted ' +
-                successfulDeletions +
-                '/' +
-                dialogResult.data.length +
-                ' algorithms.'
+            snackbarMessages.push(
+              this.utilService.generateFinishingSnackbarMessage(
+                successfulDeletions,
+                event.elements.length,
+                'algorithms'
+              )
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });

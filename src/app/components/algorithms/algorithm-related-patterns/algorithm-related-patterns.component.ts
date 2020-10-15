@@ -251,7 +251,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
             this.getPatternRelationsHateoas(this.pagingInfo._links.self.href);
           }
           snackbarMessages.push(
-            this.utilService.generateFinishingSnackarMessage(
+            this.utilService.generateFinishingSnackbarMessage(
               successfulUnlinks,
               dialogResult.data.length,
               'patterns',

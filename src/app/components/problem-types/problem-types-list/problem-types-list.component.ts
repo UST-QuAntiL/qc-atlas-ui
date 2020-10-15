@@ -148,7 +148,7 @@ export class ProblemTypesListComponent implements OnInit {
               this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
             }
             snackbarMessages.push(
-              this.utilService.generateFinishingSnackarMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'problem types'

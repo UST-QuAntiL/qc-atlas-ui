@@ -143,7 +143,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
               this.getImplementationsHateoas(this.pagingInfo._links.self.href);
             }
             snackbarMessages.push(
-              this.utilService.generateFinishingSnackarMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'implementations'

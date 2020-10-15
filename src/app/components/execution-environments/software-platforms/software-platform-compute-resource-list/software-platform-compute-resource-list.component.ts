@@ -196,7 +196,7 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
       });
       this.getAllLinkedComputeResources();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           computeResources.length,
           'compute resources',
@@ -242,7 +242,7 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
       });
       this.getAllLinkedComputeResources();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'compute resources',

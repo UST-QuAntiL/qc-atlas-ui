@@ -142,7 +142,7 @@ export class PatternRelationTypesListComponent implements OnInit {
               );
             }
             snackbarMessages.push(
-              this.utilService.generateFinishingSnackarMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'pattern relation types'

@@ -127,7 +127,7 @@ export class UtilService {
    * @param performedOperation
    * @return deletionMessage
    */
-  public generateFinishingSnackarMessage(
+  public generateFinishingSnackbarMessage(
     successfulDeletions: number,
     expectedDeletions: number,
     objectType: string,

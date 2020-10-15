@@ -142,7 +142,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
               );
             }
             snackbarMessages.push(
-              this.utilService.generateFinishingSnackarMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'algorithm relation types'

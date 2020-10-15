@@ -201,7 +201,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
       });
       this.getAllLinkedPublications();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           publications.length,
           'publications',
@@ -246,7 +246,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
       });
       this.getAllLinkedPublications();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'publications',

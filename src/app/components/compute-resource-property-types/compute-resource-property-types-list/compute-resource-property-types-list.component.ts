@@ -145,7 +145,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
               );
             }
             snackbarMessages.push(
-              this.utilService.generateFinishingSnackarMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'compute resource property types'

@@ -145,7 +145,7 @@ export class ComputeResourceListComponent implements OnInit {
               this.getComputeResourcesHateoas(this.pagingInfo._links.self.href);
             }
             snackbarMessages.push(
-              this.utilService.generateFinishingSnackarMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'compute resources'

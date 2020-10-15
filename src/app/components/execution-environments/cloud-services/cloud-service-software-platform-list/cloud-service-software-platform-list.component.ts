@@ -200,7 +200,7 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       });
       this.getAllLinkedSoftwarePlatforms();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           softwarePlatforms.length,
           'software platforms',
@@ -246,7 +246,7 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       });
       this.getAllLinkedSoftwarePlatforms();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'software platforms',
