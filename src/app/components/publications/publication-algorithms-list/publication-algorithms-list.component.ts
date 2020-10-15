@@ -178,6 +178,11 @@ export class PublicationAlgorithmsListComponent implements OnInit {
               'Successfully linked algorithm "' + algorithm.name + '"'
             );
           })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link algorithm "' + algorithm.name + '".'
+            );
+          })
       );
     }
     forkJoin(linkTasks).subscribe(() => {
@@ -219,6 +224,11 @@ export class PublicationAlgorithmsListComponent implements OnInit {
             successfulDeletions++;
             snackbarMessages.push(
               'Successfully unlinked algorithm "' + algorithm.name + '"'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink algorithm  "' + algorithm.name + '".'
             );
           })
       );
