@@ -88,11 +88,18 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       .getImplementationsOfSoftwarePlatform({
         softwarePlatformId: this.softwarePlatform.id,
       })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.implementations;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.implementations;
+          }
+        },
+        (error) => {
+          this.utilService.callSnackBar(
+            'Error! Linked implementations could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedImplementations(params: any): void {
@@ -194,6 +201,13 @@ export class SoftwarePlatformImplListComponent implements OnInit {
               'Successfully linked implementation "' + implementation.name + '"'
             );
           })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link compute resource "' +
+                implementation.name +
+                '".'
+            );
+          })
       );
     }
     forkJoin(linkTasks).subscribe(() => {
@@ -237,6 +251,13 @@ export class SoftwarePlatformImplListComponent implements OnInit {
               'Successfully unlinked implementation "' +
                 implementation.name +
                 '"'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink implementation "' +
+                implementation.name +
+                '".'
             );
           })
       );

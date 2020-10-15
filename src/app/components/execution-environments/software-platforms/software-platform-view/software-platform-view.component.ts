@@ -7,6 +7,7 @@ import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigati
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 import { FieldUpdate } from '../../../../util/FieldUpdate';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
+import { UtilService } from '../../../../util/util.service';
 
 @Component({
   selector: 'app-software-platform-view',
@@ -26,6 +27,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private updateFieldService: UpdateFieldEventService,
     private route: ActivatedRoute,
+    private utilService: UtilService,
     public guard: ChangePageGuard
   ) {}
 
@@ -45,7 +47,9 @@ export class SoftwarePlatformViewComponent implements OnInit {
             };
           },
           (error) => {
-            console.log(error);
+            this.utilService.callSnackBar(
+              'Error! Software platform could not be retrieved.'
+            );
           }
         );
     });
@@ -78,9 +82,14 @@ export class SoftwarePlatformViewComponent implements OnInit {
               JSON.stringify(sp)
             ) as EntityModelSoftwarePlatformDto;
           }
+          this.utilService.callSnackBar(
+            'Successfully updated software platform'
+          );
         },
         (error) => {
-          console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Software platform could not be updated.'
+          );
         }
       );
   }

@@ -41,11 +41,16 @@ export class SoftwarePlatformListComponent implements OnInit {
   ngOnInit(): void {}
 
   getSoftwarePlatforms(params: QueryParams): void {
-    this.executionEnvironmentsService
-      .getSoftwarePlatforms(params)
-      .subscribe((data) => {
+    this.executionEnvironmentsService.getSoftwarePlatforms(params).subscribe(
+      (data) => {
         this.prepareSoftwarePlatformData(data);
-      });
+      },
+      (error) => {
+        this.utilService.callSnackBar(
+          'Error! Software platforms could not be retrieved.'
+        );
+      }
+    );
   }
 
   getSoftwarePlatformsHateoas(url: string): void {
@@ -93,18 +98,25 @@ export class SoftwarePlatformListComponent implements OnInit {
           };
           this.executionEnvironmentsService
             .createSoftwarePlatform({ body: softwarePlatformDto })
-            .subscribe((softwarePlatform: EntityModelSoftwarePlatformDto) => {
-              this.router.navigate([
-                'execution-environments',
-                'software-platforms',
-                softwarePlatform.id,
-              ]);
-              this.utilService.callSnackBar(
-                'Successfully created software platform "' +
-                  softwarePlatform.name +
-                  '"'
-              );
-            });
+            .subscribe(
+              (softwarePlatform: EntityModelSoftwarePlatformDto) => {
+                this.router.navigate([
+                  'execution-environments',
+                  'software-platforms',
+                  softwarePlatform.id,
+                ]);
+                this.utilService.callSnackBar(
+                  'Successfully created software platform "' +
+                    softwarePlatform.name +
+                    '"'
+                );
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Software platform could not be created.'
+                );
+              }
+            );
         }
       });
   }
@@ -124,6 +136,7 @@ export class SoftwarePlatformListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          const snackbarMessages = [];
           let successfulDeletions = 0;
           for (const softwarePlatform of deleteParams.elements) {
             deletionTasks.push(
@@ -132,11 +145,24 @@ export class SoftwarePlatformListComponent implements OnInit {
                   softwarePlatformId: softwarePlatform.id,
                 })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted software platform "' +
+                      softwarePlatform.name +
+                      '".'
+                  );
+                })
+                .catch(() => {
+                  snackbarMessages.push(
+                    'Could not delete software platform "' +
+                      softwarePlatform.name +
+                      '".'
+                  );
+                })
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
-            console.log(this.pagingInfo.page);
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
