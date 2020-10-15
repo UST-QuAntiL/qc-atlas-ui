@@ -91,16 +91,23 @@ export class CloudServiceListComponent implements OnInit {
           };
           this.executionEnvironmentsService
             .createCloudService({ body: cloudServiceDto })
-            .subscribe((cloudService: EntityModelCloudServiceDto) => {
-              this.router.navigate([
-                'execution-environments',
-                'cloud-services',
-                cloudService.id,
-              ]);
-              this.utilService.callSnackBar(
-                'Successfully created cloud service "' + cloudService.name + '"'
-              );
-            });
+            .subscribe(
+              (cloudService: EntityModelCloudServiceDto) => {
+                this.router.navigate([
+                  'execution-environments',
+                  'cloud-services',
+                  cloudService.id,
+                ]);
+                this.utilService.callSnackBar(
+                  'Cloud service was successfully created.'
+                );
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Could not create cloud service.'
+                );
+              }
+            );
         }
       });
   }
@@ -120,17 +127,33 @@ export class CloudServiceListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          const snackbarMessages = [];
           let successfulDeletions = 0;
           for (const cloudService of deleteParams.elements) {
             deletionTasks.push(
               this.executionEnvironmentsService
                 .deleteCloudService({ cloudServiceId: cloudService.id })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(
+                  () => {
+                    successfulDeletions++;
+                    snackbarMessages.push(
+                      'Successfully deleted cloud service "' +
+                        cloudService.name +
+                        '".'
+                    );
+                  },
+                  () => {
+                    snackbarMessages.push(
+                      'Error! Could not delete cloud service "' +
+                        cloudService.name +
+                        '".'
+                    );
+                  }
+                )
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
-            console.log(this.pagingInfo.page);
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
@@ -142,12 +165,10 @@ export class CloudServiceListComponent implements OnInit {
             } else {
               this.getCloudServicesHateoas(this.pagingInfo._links.self.href);
             }
-            this.utilService.callSnackBar(
-              'Successfully deleted ' +
-                successfulDeletions +
-                '/' +
-                dialogResult.data.length +
-                ' cloud services.'
+            snackbarMessages.push(
+              successfulDeletions,
+              deleteParams.elements.length,
+              'cloud services'
             );
           });
         }

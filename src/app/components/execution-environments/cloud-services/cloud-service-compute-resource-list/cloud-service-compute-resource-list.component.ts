@@ -177,9 +177,16 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
           .then(() => {
             successfulLinks++;
             snackbarMessages.push(
-              'Successfully linked compute resources "' +
+              'Successfully linked compute resource "' +
                 computeResource.name +
-                '"'
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link compute resource "' +
+                computeResource.name +
+                '".'
             );
           })
       );
@@ -224,7 +231,14 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
             snackbarMessages.push(
               'Successfully unlinked compute resource "' +
                 computeResource.name +
-                '"'
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink compute resource "' +
+                computeResource.name +
+                '".'
             );
           })
       );
