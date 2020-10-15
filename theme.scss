@@ -45,6 +45,7 @@ $qc-atlas-ui-theme: mat-light-theme($qc-atlas-ui-primary, $qc-atlas-ui-accent, $
   background-position: left bottom;
   margin-left:10px;
   transition:all 1s ease;
+  outline: 0 !important;
 }
 
 .master-save-button:hover {
