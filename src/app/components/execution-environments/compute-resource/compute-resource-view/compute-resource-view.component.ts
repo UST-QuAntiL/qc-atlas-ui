@@ -7,6 +7,7 @@ import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigati
 import { FieldUpdate } from '../../../../util/FieldUpdate';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
+import { UtilService } from '../../../../util/util.service';
 
 @Component({
   selector: 'app-compute-resource-view',
@@ -26,6 +27,7 @@ export class ComputeResourceViewComponent implements OnInit {
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private updateFieldService: UpdateFieldEventService,
     private route: ActivatedRoute,
+    private utilService: UtilService,
     public guard: ChangePageGuard
   ) {}
 
@@ -78,9 +80,15 @@ export class ComputeResourceViewComponent implements OnInit {
               JSON.stringify(computeRes)
             ) as EntityModelComputeResourceDto;
           }
+          this.utilService.callSnackBar(
+            'Successfully updated compute resource.'
+          );
         },
         (error) => {
           console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not update compute resource.'
+          );
         }
       );
   }

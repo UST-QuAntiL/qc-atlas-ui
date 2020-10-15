@@ -183,7 +183,14 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
             snackbarMessages.push(
               'Successfully linked software platform "' +
                 softwarePlatform.name +
-                '"'
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link software platform "' +
+                softwarePlatform.name +
+                '".'
             );
           })
       );
@@ -228,7 +235,14 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
             snackbarMessages.push(
               'Successfully unlinked software platform "' +
                 softwarePlatform.name +
-                '"'
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink software platform "' +
+                softwarePlatform.name +
+                '".'
             );
           })
       );
