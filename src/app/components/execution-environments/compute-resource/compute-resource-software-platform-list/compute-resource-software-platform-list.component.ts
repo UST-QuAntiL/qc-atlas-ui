@@ -182,7 +182,14 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
             snackbarMessages.push(
               'Successfully linked software platform "' +
                 softwarePlatform.name +
-                '"'
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link software platform "' +
+                softwarePlatform.name +
+                '".'
             );
           })
       );
@@ -199,7 +206,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
       });
       this.getAllLinkedSoftwarePlatforms();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           softwarePlatforms.length,
           'software platforms',
@@ -230,6 +237,13 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
                 '"'
             );
           })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink software platform "' +
+                softwarePlatform.name +
+                '".'
+            );
+          })
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
@@ -245,7 +259,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
       });
       this.getAllLinkedSoftwarePlatforms();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'software platforms',

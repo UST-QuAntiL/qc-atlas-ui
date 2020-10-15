@@ -72,11 +72,18 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     this.linkObject.linkedData = [];
     this.publicationService
       .getAlgorithmsOfPublication({ publicationId: this.publication.id })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.algorithms;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.algorithms;
+          }
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked algorithms could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedAlgorithms(params: any): void {
@@ -178,6 +185,11 @@ export class PublicationAlgorithmsListComponent implements OnInit {
               'Successfully linked algorithm "' + algorithm.name + '"'
             );
           })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link algorithm "' + algorithm.name + '".'
+            );
+          })
       );
     }
     forkJoin(linkTasks).subscribe(() => {
@@ -192,7 +204,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       });
       this.getAllLinkedAlgorithms();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           algorithms.length,
           'algorithms',
@@ -218,7 +230,12 @@ export class PublicationAlgorithmsListComponent implements OnInit {
           .then(() => {
             successfulDeletions++;
             snackbarMessages.push(
-              'Successfully unlinked algorithm "' + algorithm.name + '"'
+              'Successfully unlinked algorithm "' + algorithm.name + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink algorithm  "' + algorithm.name + '".'
             );
           })
       );
@@ -236,7 +253,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       });
       this.getAllLinkedAlgorithms();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'algorithms',

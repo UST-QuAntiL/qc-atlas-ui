@@ -81,11 +81,18 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
         algorithmId: this.implementation.implementedAlgorithmId,
         implementationId: this.implementation.id,
       })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.softwarePlatforms;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.softwarePlatforms;
+          }
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked software platforms could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedSoftwarePlatforms(params: any): void {
@@ -188,7 +195,14 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
             snackbarMessages.push(
               'Successfully linked software platform "' +
                 softwarePlatform.name +
-                '"'
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link software platform "' +
+                softwarePlatform.name +
+                '".'
             );
           })
       );
@@ -205,7 +219,7 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
       });
       this.getAllLinkedSoftwarePlatforms();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           softwarePlatforms.length,
           'software platforms',
@@ -234,7 +248,14 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
             snackbarMessages.push(
               'Successfully unlinked software platform "' +
                 softwarePlatform.name +
-                '"'
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink software platform "' +
+                softwarePlatform.name +
+                '".'
             );
           })
       );
@@ -252,7 +273,7 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
       });
       this.getAllLinkedSoftwarePlatforms();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'software platforms',

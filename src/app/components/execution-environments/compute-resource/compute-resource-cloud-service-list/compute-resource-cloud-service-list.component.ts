@@ -179,7 +179,12 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
           .then(() => {
             successfulLinks++;
             snackbarMessages.push(
-              'Successfully linked cloud service "' + cloudService.name + '"'
+              'Successfully linked cloud service "' + cloudService.name + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link cloud service "' + cloudService.name + '".'
             );
           })
       );
@@ -196,7 +201,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
       });
       this.getAllLinkedCloudServices();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           cloudServices.length,
           'cloud services',
@@ -222,7 +227,14 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
           .then(() => {
             successfulDeletions++;
             snackbarMessages.push(
-              'Successfully unlinked cloud service "' + cloudService.name + '"'
+              'Successfully unlinked cloud service "' + cloudService.name + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink cloud service "' +
+                cloudService.name +
+                '".'
             );
           })
       );
@@ -240,7 +252,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
       });
       this.getAllLinkedCloudServices();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'cloud services',

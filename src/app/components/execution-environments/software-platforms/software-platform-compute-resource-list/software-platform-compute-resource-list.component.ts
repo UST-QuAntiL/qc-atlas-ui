@@ -74,11 +74,18 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
       .getComputeResourcesOfSoftwarePlatform({
         softwarePlatformId: this.softwarePlatform.id,
       })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.computeResources;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.computeResources;
+          }
+        },
+        (error) => {
+          this.utilService.callSnackBar(
+            'Error! Linked compute resources could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedComputeResources(params: any): void {
@@ -177,9 +184,16 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
           .then(() => {
             successfulLinks++;
             snackbarMessages.push(
-              'Successfully linked compute resources "' +
+              'Successfully linked compute resource "' +
                 computeResource.name +
                 '"'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link compute resource "' +
+                computeResource.name +
+                '".'
             );
           })
       );
@@ -196,7 +210,7 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
       });
       this.getAllLinkedComputeResources();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           computeResources.length,
           'compute resources',
@@ -224,7 +238,14 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
             snackbarMessages.push(
               'Successfully unlinked compute resource "' +
                 computeResource.name +
-                '"'
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink compute resource "' +
+                computeResource.name +
+                '".'
             );
           })
       );
@@ -242,7 +263,7 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
       });
       this.getAllLinkedComputeResources();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'compute resources',

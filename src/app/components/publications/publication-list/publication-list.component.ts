@@ -39,9 +39,16 @@ export class PublicationListComponent implements OnInit {
   ngOnInit(): void {}
 
   getPublications(params: QueryParams): void {
-    this.publicationService.getPublications(params).subscribe((data) => {
-      this.preparePublicationData(data);
-    });
+    this.publicationService.getPublications(params).subscribe(
+      (data) => {
+        this.preparePublicationData(data);
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Publications types could not be retrieved.'
+        );
+      }
+    );
   }
 
   getPublicationsHateoas(url: string): void {
@@ -76,22 +83,29 @@ export class PublicationListComponent implements OnInit {
         data: { title: 'Add new publication' },
       })
       .afterClosed()
-      .subscribe((dialogResult) => {
-        if (dialogResult) {
-          this.publicationService
-            .createPublication({
-              body: {
-                id: null,
-                title: dialogResult.publicationTitle,
-                authors: dialogResult.authors,
-              },
-            })
-            .subscribe((data) => {
-              this.router.navigate(['publications', data.id]);
-              this.utilService.callSnackBar('Successfully created publication');
-            });
+      .subscribe(
+        (dialogResult) => {
+          if (dialogResult) {
+            this.publicationService
+              .createPublication({
+                body: {
+                  id: null,
+                  title: dialogResult.publicationTitle,
+                  authors: dialogResult.authors,
+                },
+              })
+              .subscribe((data) => {
+                this.router.navigate(['publications', data.id]);
+                this.utilService.callSnackBar(
+                  'Successfully created publication'
+                );
+              });
+          }
+        },
+        (error) => {
+          this.utilService.callSnackBar('Could not create publication !');
         }
-      });
+      );
   }
 
   onDeleteElements(event: SelectParams): void {
@@ -109,17 +123,29 @@ export class PublicationListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          const snackbarMessages = [];
           let successfulDeletions = 0;
           for (const publication of event.elements) {
             deletionTasks.push(
               this.publicationService
                 .deletePublication({ publicationId: publication.id })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted publication "' +
+                      publication.title +
+                      '".'
+                  );
+                })
+                .catch(() => {
+                  snackbarMessages.push(
+                    'Could not delete algorithm "' + publication.title + '".'
+                  );
+                })
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
-            console.log(this.pagingInfo.page);
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
@@ -131,13 +157,14 @@ export class PublicationListComponent implements OnInit {
             } else {
               this.getPublicationsHateoas(this.pagingInfo._links.self.href);
             }
-            this.utilService.callSnackBar(
-              'Successfully deleted ' +
-                successfulDeletions +
-                '/' +
-                dialogResult.data.length +
-                ' publications.'
+            snackbarMessages.push(
+              this.utilService.generateFinishingSnackbarMessage(
+                successfulDeletions,
+                event.elements.length,
+                'publications'
+              )
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });

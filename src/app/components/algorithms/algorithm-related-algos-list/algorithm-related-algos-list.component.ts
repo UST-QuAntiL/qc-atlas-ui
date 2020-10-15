@@ -59,7 +59,9 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         this.prepareRelations(relations);
       },
       (error) => {
-        console.log(error);
+        this.utilService.callSnackBar(
+          'Error! Algorithm relations could not be retrieved.'
+        );
       }
     );
   }
@@ -88,18 +90,25 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         algorithmId: this.algorithm.id,
         body: algorithmRelationDto,
       })
-      .subscribe(() => {
-        this.getAlgorithmRelationsHateoas(
-          this.utilService.getLastPageAfterCreation(
-            this.pagingInfo._links.self.href,
-            this.pagingInfo,
-            1
-          )
-        );
-        this.utilService.callSnackBar(
-          'Successfully created algorithm relation'
-        );
-      });
+      .subscribe(
+        () => {
+          this.getAlgorithmRelationsHateoas(
+            this.utilService.getLastPageAfterCreation(
+              this.pagingInfo._links.self.href,
+              this.pagingInfo,
+              1
+            )
+          );
+          this.utilService.callSnackBar(
+            'Algorithm Relation was successfully created.'
+          );
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Algorithm Relation could not be created.'
+          );
+        }
+      );
   }
 
   updateAlgorithmRelation(
@@ -112,12 +121,19 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         algorithmRelationId: relationId,
         body: algorithmRelationDto,
       })
-      .subscribe(() => {
-        this.getAlgorithmRelationsHateoas(this.pagingInfo._links.self.href);
-        this.utilService.callSnackBar(
-          'Successfully updated algorithm relation'
-        );
-      });
+      .subscribe(
+        () => {
+          this.getAlgorithmRelationsHateoas(this.pagingInfo._links.self.href);
+          this.utilService.callSnackBar(
+            'Algorithm Relation was successfully updated.'
+          );
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Algorithm Relation could not be updated.'
+          );
+        }
+      );
   }
 
   onAddElement(): void {
@@ -192,7 +208,14 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
                   snackbarMessages.push(
                     'Successfully unlinked algorithm "' +
                       relation.targetAlgName +
-                      '"'
+                      '".'
+                  );
+                })
+                .catch(() => {
+                  snackbarMessages.push(
+                    'Error! Could not unlink algorithm "' +
+                      relation.targetAlgName +
+                      '".'
                   );
                 })
             );
@@ -214,7 +237,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
               );
             }
             snackbarMessages.push(
-              this.utilService.generateFinishingSnackarMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulUnlinks,
                 dialogResult.data.length,
                 'algorithms',

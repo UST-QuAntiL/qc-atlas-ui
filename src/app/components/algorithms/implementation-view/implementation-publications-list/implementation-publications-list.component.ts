@@ -79,11 +79,18 @@ export class ImplementationPublicationsListComponent implements OnInit {
         algorithmId: this.implementation.implementedAlgorithmId,
         implementationId: this.implementation.id,
       })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.publications;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.publications;
+          }
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked publications could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedPublications(params: any): void {
@@ -184,7 +191,12 @@ export class ImplementationPublicationsListComponent implements OnInit {
           .then(() => {
             successfulLinks++;
             snackbarMessages.push(
-              'Successfully linked publication "' + publication.title + '"'
+              'Successfully linked publication "' + publication.title + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link publication "' + publication.title + '".'
             );
           })
       );
@@ -201,7 +213,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
       });
       this.getAllLinkedPublications();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           publications.length,
           'publications',
@@ -228,7 +240,12 @@ export class ImplementationPublicationsListComponent implements OnInit {
           .then(() => {
             successfulDeletions++;
             snackbarMessages.push(
-              'Successfully unlinked publication "' + publication.title + '"'
+              'Successfully unlinked publication "' + publication.title + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink publication "' + publication.title + '".'
             );
           })
       );
@@ -246,7 +263,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
       });
       this.getAllLinkedPublications();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'publications',

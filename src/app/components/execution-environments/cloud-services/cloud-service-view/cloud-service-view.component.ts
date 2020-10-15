@@ -7,6 +7,7 @@ import { BreadcrumbLink } from '../../../generics/navigation-breadcrumb/navigati
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 import { FieldUpdate } from '../../../../util/FieldUpdate';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
+import { UtilService } from '../../../../util/util.service';
 
 @Component({
   selector: 'app-cloud-service-view',
@@ -25,6 +26,7 @@ export class CloudServiceViewComponent implements OnInit {
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private updateFieldService: UpdateFieldEventService,
     private route: ActivatedRoute,
+    private utilService: UtilService,
     public guard: ChangePageGuard
   ) {}
 
@@ -44,7 +46,9 @@ export class CloudServiceViewComponent implements OnInit {
             };
           },
           (error) => {
-            console.log(error);
+            this.utilService.callSnackBar(
+              'Error! Cloud services could not be retrieved.'
+            );
           }
         );
     });
@@ -77,9 +81,15 @@ export class CloudServiceViewComponent implements OnInit {
               JSON.stringify(cloudSvc)
             ) as EntityModelCloudServiceDto;
           }
+          this.utilService.callSnackBar(
+            'Cloud service was successfully updated.'
+          );
         },
         (error) => {
           console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not update cloud service.'
+          );
         }
       );
   }

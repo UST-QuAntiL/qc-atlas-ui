@@ -76,11 +76,18 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       .getCloudServicesOfSoftwarePlatform({
         softwarePlatformId: this.softwarePlatform.id,
       })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.cloudServices;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.cloudServices;
+          }
+        },
+        (error) => {
+          this.utilService.callSnackBar(
+            'Error! Linked cloud services could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedCloudServices(params: any): void {
@@ -179,7 +186,12 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
           .then(() => {
             successfulLinks++;
             snackbarMessages.push(
-              'Successfully linked cloud service "' + cloudService.name + '"'
+              'Successfully linked cloud service "' + cloudService.name + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link cloud service "' + cloudService.name + '".'
             );
           })
       );
@@ -196,7 +208,7 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       });
       this.getAllLinkedCloudServices();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           cloudServices.length,
           'cloud services',
@@ -222,7 +234,12 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
           .then(() => {
             successfulDeletions++;
             snackbarMessages.push(
-              'Successfully unlinked cloud service "' + cloudService.name + '"'
+              'Successfully unlinked cloud service "' + cloudService.name + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink publication "' + cloudService.name + '".'
             );
           })
       );
@@ -240,7 +257,7 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       });
       this.getAllLinkedCloudServices();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'cloud services',

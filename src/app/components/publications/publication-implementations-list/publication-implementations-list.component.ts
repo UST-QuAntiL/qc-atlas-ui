@@ -88,11 +88,18 @@ export class PublicationImplementationsListComponent implements OnInit {
     this.linkObject.linkedData = [];
     this.publicationService
       .getImplementationsOfPublication({ publicationId: this.publication.id })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.implementations;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.implementations;
+          }
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked implementations could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedImplementations(params: any): void {
@@ -192,7 +199,16 @@ export class PublicationImplementationsListComponent implements OnInit {
           .then(() => {
             successfulLinks++;
             snackbarMessages.push(
-              'Successfully linked implementation "' + implementation.name + '"'
+              'Successfully linked implementation "' +
+                implementation.name +
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link implementation "' +
+                implementation.name +
+                '".'
             );
           })
       );
@@ -209,7 +225,7 @@ export class PublicationImplementationsListComponent implements OnInit {
       });
       this.getAllLinkedImplementations();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
           implementations.length,
           'implementations',
@@ -238,7 +254,14 @@ export class PublicationImplementationsListComponent implements OnInit {
             snackbarMessages.push(
               'Successfully unlinked implementation "' +
                 implementation.name +
-                '"'
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink implementation "' +
+                implementation.name +
+                '".'
             );
           })
       );
@@ -256,7 +279,7 @@ export class PublicationImplementationsListComponent implements OnInit {
       });
       this.getAllLinkedImplementations();
       snackbarMessages.push(
-        this.utilService.generateFinishingSnackarMessage(
+        this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
           event.elements.length,
           'implementations',

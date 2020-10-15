@@ -40,7 +40,9 @@ export class PublicationViewComponent implements OnInit {
           };
         },
         (error) => {
-          console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Publications could not be retrieved.'
+          );
         }
       );
     });
@@ -55,20 +57,27 @@ export class PublicationViewComponent implements OnInit {
         publicationId: this.publication.id,
         body: updatedPublication,
       })
-      .subscribe((publication) => {
-        this.publication = publication;
-        if (updateFrontendPublication) {
-          this.frontendPublication = JSON.parse(
-            JSON.stringify(publication)
-          ) as EntityModelPublicationDto;
+      .subscribe(
+        (publication) => {
+          this.publication = publication;
+          if (updateFrontendPublication) {
+            this.frontendPublication = JSON.parse(
+              JSON.stringify(publication)
+            ) as EntityModelPublicationDto;
+          }
+          // live refresh title
+          this.links[0] = {
+            heading: this.publication.title,
+            subHeading: '',
+          };
+          this.utilService.callSnackBar('Successfully updated publication.');
+        },
+        (error) => {
+          this.utilService.callSnackBar(
+            'Error! Publication could not be updated.'
+          );
         }
-        // live refresh title
-        this.links[0] = {
-          heading: this.publication.title,
-          subHeading: '',
-        };
-        this.utilService.callSnackBar('Successfully updated publication');
-      });
+      );
   }
   addTag(): void {
     console.log('add tag');

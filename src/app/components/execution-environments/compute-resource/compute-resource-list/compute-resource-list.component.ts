@@ -86,18 +86,25 @@ export class ComputeResourceListComponent implements OnInit {
           };
           this.executionEnvironmentsService
             .createComputeResource({ body: computeResourceDto })
-            .subscribe((computeResource: EntityModelComputeResourceDto) => {
-              this.router.navigate([
-                'execution-environments',
-                'compute-resources',
-                computeResource.id,
-              ]);
-              this.utilService.callSnackBar(
-                'Successfully created compute resource "' +
-                  computeResource.name +
-                  '"'
-              );
-            });
+            .subscribe(
+              (computeResource: EntityModelComputeResourceDto) => {
+                this.router.navigate([
+                  'execution-environments',
+                  'compute-resources',
+                  computeResource.id,
+                ]);
+                this.utilService.callSnackBar(
+                  'Successfully created compute resource "' +
+                    computeResource.name +
+                    '".'
+                );
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Could not create compute resource.'
+                );
+              }
+            );
         }
       });
   }
@@ -126,7 +133,14 @@ export class ComputeResourceListComponent implements OnInit {
                   computeResourceId: computeResource.id,
                 })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted compute resource "' +
+                      computeResource.name +
+                      '".'
+                  );
+                })
                 .catch((errorResponse) =>
                   snackbarMessages.push(JSON.parse(errorResponse.error).message)
                 )
@@ -145,7 +159,7 @@ export class ComputeResourceListComponent implements OnInit {
               this.getComputeResourcesHateoas(this.pagingInfo._links.self.href);
             }
             snackbarMessages.push(
-              this.utilService.generateFinishingSnackarMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'compute resources'
