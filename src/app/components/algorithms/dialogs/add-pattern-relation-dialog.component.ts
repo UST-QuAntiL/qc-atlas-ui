@@ -108,7 +108,9 @@ export class AddPatternRelationDialogComponent implements OnInit {
     this.patternLanguageService
       .getAllPatternLanguageModels()
       .subscribe((languages) => {
-        this.patternLanguages = languages._embedded.patternLanguageModels;
+        this.patternLanguages = languages._embedded
+          ? languages._embedded.patternLanguageModels
+          : [];
         this.filteredPatternLanguages = this.patternLanguages;
         this.arePatternLanguagesLoaded = true;
         // If pattern langauge is selected move it to front of list
@@ -127,7 +129,9 @@ export class AddPatternRelationDialogComponent implements OnInit {
     this.patternService
       .getPatternsOfPatternLanguage({ patternLanguageId })
       .subscribe((patterns) => {
-        this.patterns = patterns._embedded.patternModels;
+        this.patterns = patterns._embedded
+          ? patterns._embedded.patternModels
+          : [];
         this.filteredPatterns = this.patterns;
         this.arePatternsLoaded = true;
         // If pattern is selected move it to front of list
