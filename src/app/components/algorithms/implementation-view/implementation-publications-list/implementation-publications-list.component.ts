@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
 import { PublicationDto } from 'api-atlas/models/publication-dto';
-import { MatDialog } from '@angular/material/dialog';
 import { forkJoin, Observable } from 'rxjs';
 import { GenericDataService } from '../../../../util/generic-data.service';
 import { UtilService } from '../../../../util/util.service';
@@ -61,8 +60,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
     private publicationService: PublicationService,
     private genericDataService: GenericDataService,
     private router: Router,
-    private utilService: UtilService,
-    private dialog: MatDialog
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -125,13 +123,15 @@ export class ImplementationPublicationsListComponent implements OnInit {
     this.dialogData.pagingInfo._links = data._links;
   }
 
-  openLinkPublicationDialog() {
+  openLinkPublicationDialog(): void {
     this.getAllPublications().subscribe((data) => {
       this.updateLinkDialogData(data);
-      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
-        width: '800px',
-        data: this.dialogData,
-      });
+      const dialogRef = this.utilService.createDialog(
+        LinkItemListDialogComponent,
+        this.dialogData,
+        1000,
+        700
+      );
       const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
         (search: QueryParams) => {
           this.getAllPublications(search).subscribe((updatedData) => {
