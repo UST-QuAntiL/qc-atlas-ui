@@ -116,13 +116,26 @@ export class PublicationListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          const snackbarMessages = [];
           let successfulDeletions = 0;
           for (const publication of event.elements) {
             deletionTasks.push(
               this.publicationService
                 .deletePublication({ publicationId: publication.id })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted publication "' +
+                      publication.title +
+                      '".'
+                  );
+                })
+                .catch(() => {
+                  snackbarMessages.push(
+                    'Could not delete algorithm "' + publication.title + '".'
+                  );
+                })
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
@@ -137,13 +150,14 @@ export class PublicationListComponent implements OnInit {
             } else {
               this.getPublicationsHateoas(this.pagingInfo._links.self.href);
             }
-            this.utilService.callSnackBar(
-              'Successfully deleted ' +
-                successfulDeletions +
-                '/' +
-                dialogResult.data.length +
-                ' publications.'
+            snackbarMessages.push(
+              this.utilService.generateFinishingSnackbarMessage(
+                successfulDeletions,
+                event.elements.length,
+                'publications'
+              )
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });

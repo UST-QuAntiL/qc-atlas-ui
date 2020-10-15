@@ -195,6 +195,11 @@ export class PublicationImplementationsListComponent implements OnInit {
               'Successfully linked implementation "' + implementation.name + '"'
             );
           })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link implementation "' + implementation.name + '".'
+            );
+          })
       );
     }
     forkJoin(linkTasks).subscribe(() => {
@@ -239,6 +244,11 @@ export class PublicationImplementationsListComponent implements OnInit {
               'Successfully unlinked implementation "' +
                 implementation.name +
                 '"'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink implementation "' + implementation.name + '".'
             );
           })
       );
