@@ -196,7 +196,7 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       });
       this.getAllLinkedCloudServices();
       snackbarMessages.push(
-        this.utilService.generateFinalDeletionMessage(
+        this.utilService.generateFinishingSnackarMessage(
           successfulLinks,
           cloudServices.length,
           'cloud services',
@@ -240,7 +240,7 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       });
       this.getAllLinkedCloudServices();
       snackbarMessages.push(
-        this.utilService.generateFinalDeletionMessage(
+        this.utilService.generateFinishingSnackarMessage(
           successfulDeletions,
           event.elements.length,
           'cloud services',

@@ -210,7 +210,7 @@ export class PublicationImplementationsListComponent implements OnInit {
       });
       this.getAllLinkedImplementations();
       snackbarMessages.push(
-        this.utilService.generateFinalDeletionMessage(
+        this.utilService.generateFinishingSnackarMessage(
           successfulLinks,
           implementations.length,
           'implementations',
@@ -257,7 +257,7 @@ export class PublicationImplementationsListComponent implements OnInit {
       });
       this.getAllLinkedImplementations();
       snackbarMessages.push(
-        this.utilService.generateFinalDeletionMessage(
+        this.utilService.generateFinishingSnackarMessage(
           successfulDeletions,
           event.elements.length,
           'implementations',

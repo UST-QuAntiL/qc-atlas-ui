@@ -199,7 +199,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
       });
       this.getAllLinkedSoftwarePlatforms();
       snackbarMessages.push(
-        this.utilService.generateFinalDeletionMessage(
+        this.utilService.generateFinishingSnackarMessage(
           successfulLinks,
           softwarePlatforms.length,
           'software platforms',
@@ -245,7 +245,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
       });
       this.getAllLinkedSoftwarePlatforms();
       snackbarMessages.push(
-        this.utilService.generateFinalDeletionMessage(
+        this.utilService.generateFinishingSnackarMessage(
           successfulDeletions,
           event.elements.length,
           'software platforms',

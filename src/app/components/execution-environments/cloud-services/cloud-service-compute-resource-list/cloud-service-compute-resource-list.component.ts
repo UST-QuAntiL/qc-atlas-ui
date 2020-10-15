@@ -196,7 +196,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
       });
       this.getAllLinkedComputeResources();
       snackbarMessages.push(
-        this.utilService.generateFinalDeletionMessage(
+        this.utilService.generateFinishingSnackarMessage(
           successfulLinks,
           computeResources.length,
           'compute resources',
@@ -242,7 +242,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
       });
       this.getAllLinkedComputeResources();
       snackbarMessages.push(
-        this.utilService.generateFinalDeletionMessage(
+        this.utilService.generateFinishingSnackarMessage(
           successfulDeletions,
           event.elements.length,
           'compute resources',
