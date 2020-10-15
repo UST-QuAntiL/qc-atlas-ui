@@ -72,11 +72,18 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     this.linkObject.linkedData = [];
     this.publicationService
       .getAlgorithmsOfPublication({ publicationId: this.publication.id })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.algorithms;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.algorithms;
+          }
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked algorithms could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedAlgorithms(params: any): void {

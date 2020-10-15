@@ -78,11 +78,18 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       .getSoftwarePlatformsOfCloudService({
         cloudServiceId: this.cloudService.id,
       })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.softwarePlatforms;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.softwarePlatforms;
+          }
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked software platforms could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedSoftwarePlatforms(params: any): void {

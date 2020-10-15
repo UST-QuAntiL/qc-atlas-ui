@@ -88,11 +88,18 @@ export class PublicationImplementationsListComponent implements OnInit {
     this.linkObject.linkedData = [];
     this.publicationService
       .getImplementationsOfPublication({ publicationId: this.publication.id })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.implementations;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.implementations;
+          }
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked implementations could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedImplementations(params: any): void {
