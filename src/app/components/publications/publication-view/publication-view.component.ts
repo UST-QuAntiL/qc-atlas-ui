@@ -41,7 +41,7 @@ export class PublicationViewComponent implements OnInit {
         },
         (error) => {
           this.utilService.callSnackBar(
-            'Error! Publication could not be retrieved.'
+            'Error! Publications could not be retrieved.'
           );
         }
       );
