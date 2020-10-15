@@ -6,17 +6,10 @@ import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
-import {
-  EntityModelAlgorithmDto,
-  EntityModelImplementationDto,
-  TagDto,
-} from 'api-atlas/models';
+import { EntityModelImplementationDto, TagDto } from 'api-atlas/models';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import {
-  SelectParams,
-  QueryParams,
-} from '../../generics/data-list/data-list.component';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
@@ -66,7 +59,7 @@ export class ImplementationViewComponent implements OnInit {
   saveImplementation(
     updatedImplementation: ImplementationDto,
     updateFrontendImplementation: boolean
-  ) {
+  ): void {
     this.algorithmService
       .updateImplementation({
         algorithmId: this.algorithm.id,
@@ -93,10 +86,15 @@ export class ImplementationViewComponent implements OnInit {
             heading: this.implementation.name,
             subHeading: subheading,
           };
-          this.utilService.callSnackBar('Successfully updated implementation');
+          this.utilService.callSnackBar(
+            'Implementation was successfully updated.'
+          );
         },
         (error) => {
           console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not update implementation.'
+          );
         }
       );
   }
@@ -133,10 +131,19 @@ export class ImplementationViewComponent implements OnInit {
         computeResourcePropertyId: property.id,
         body: property,
       })
-      .subscribe(() => {
-        this.fetchComputeResourceProperties();
-        this.utilService.callSnackBar('Successfully updated property');
-      });
+      .subscribe(
+        () => {
+          this.fetchComputeResourceProperties();
+          this.utilService.callSnackBar(
+            'Compute resource property was successfully updated.'
+          );
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not update compute resource property.'
+          );
+        }
+      );
   }
 
   addComputeResourceProperty(
@@ -148,10 +155,19 @@ export class ImplementationViewComponent implements OnInit {
         implementationId: this.implementation.id,
         body: property,
       })
-      .subscribe(() => {
-        this.fetchComputeResourceProperties();
-        this.utilService.callSnackBar('Successfully added property');
-      });
+      .subscribe(
+        () => {
+          this.fetchComputeResourceProperties();
+          this.utilService.callSnackBar(
+            'Compute resource property was successfully added.'
+          );
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not add compute resource property.'
+          );
+        }
+      );
   }
 
   deleteComputeResourceProperty(
@@ -175,14 +191,23 @@ export class ImplementationViewComponent implements OnInit {
               implementationId: this.implementation.id,
               computeResourcePropertyId: property.id,
             })
-            .subscribe(() => {
-              this.computeResourceProperties = this.computeResourceProperties.filter(
-                (elem: EntityModelComputeResourcePropertyDto) =>
-                  elem.id !== property.id
-              );
-              this.fetchComputeResourceProperties();
-              this.utilService.callSnackBar('Successfully deleted property');
-            });
+            .subscribe(
+              () => {
+                this.computeResourceProperties = this.computeResourceProperties.filter(
+                  (elem: EntityModelComputeResourcePropertyDto) =>
+                    elem.id !== property.id
+                );
+                this.fetchComputeResourceProperties();
+                this.utilService.callSnackBar(
+                  'Compute resource property was successfully deleted.'
+                );
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Could not delete compute resource property.'
+                );
+              }
+            );
         }
       });
   }
@@ -209,7 +234,13 @@ export class ImplementationViewComponent implements OnInit {
         implementationId: this.implementation.id,
         body: tag,
       })
-      .subscribe();
+      .toPromise()
+      .then(() => {
+        this.utilService.callSnackBar('Tag was successfully added.');
+      })
+      .catch(() => {
+        this.utilService.callSnackBar('Error! Could not add tag.');
+      });
   }
 
   removeTag(tag: TagDto): void {
@@ -219,7 +250,13 @@ export class ImplementationViewComponent implements OnInit {
         implementationId: this.implementation.id,
         body: tag,
       })
-      .subscribe();
+      .toPromise()
+      .then(() => {
+        this.utilService.callSnackBar('Tag was successfully removed.');
+      })
+      .catch(() => {
+        this.utilService.callSnackBar('Error! Could not remove tag.');
+      });
   }
 
   updateImplementationField(event: { field; value }): void {

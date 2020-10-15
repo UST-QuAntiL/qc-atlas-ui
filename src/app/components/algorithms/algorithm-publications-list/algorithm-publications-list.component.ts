@@ -179,7 +179,12 @@ export class AlgorithmPublicationsListComponent implements OnInit {
           .then(() => {
             successfulLinks++;
             snackbarMessages.push(
-              'Successfully linked publication "' + publication.title + '"'
+              'Successfully linked publication "' + publication.title + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link publication "' + publication.title + '".'
             );
           })
       );
@@ -222,7 +227,12 @@ export class AlgorithmPublicationsListComponent implements OnInit {
           .then(() => {
             successfulDeletions++;
             snackbarMessages.push(
-              'Successfully unlinked publication "' + publication.title + '"'
+              'Successfully unlinked publication "' + publication.title + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Could not unlink publication "' + publication.title + '".'
             );
           })
       );

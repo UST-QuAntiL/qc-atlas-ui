@@ -80,17 +80,24 @@ export class AlgorithmImplementationsListComponent implements OnInit {
               algorithmId: this.algorithm.id,
               body: implementationDto,
             })
-            .subscribe((data) => {
-              this.router.navigate([
-                'algorithms',
-                data.implementedAlgorithmId,
-                'implementations',
-                data.id,
-              ]);
-              this.utilService.callSnackBar(
-                'Successfully added implementation'
-              );
-            });
+            .subscribe(
+              (data) => {
+                this.router.navigate([
+                  'algorithms',
+                  data.implementedAlgorithmId,
+                  'implementations',
+                  data.id,
+                ]);
+                this.utilService.callSnackBar(
+                  'Implementation was successfully created.'
+                );
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Implementation could not be created.'
+                );
+              }
+            );
         }
       });
   }
@@ -125,7 +132,14 @@ export class AlgorithmImplementationsListComponent implements OnInit {
                   snackbarMessages.push(
                     'Successfully deleted implementation "' +
                       implementation.name +
-                      '"'
+                      '".'
+                  );
+                })
+                .catch(() => {
+                  snackbarMessages.push(
+                    'Could not delete implementation "' +
+                      implementation.name +
+                      '".'
                   );
                 })
             );
