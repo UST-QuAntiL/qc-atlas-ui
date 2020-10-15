@@ -46,7 +46,9 @@ export class CloudServiceViewComponent implements OnInit {
             };
           },
           (error) => {
-            console.log(error);
+            this.utilService.callSnackBar(
+              'Error! Cloud services could not be retrieved.'
+            );
           }
         );
     });

@@ -81,11 +81,18 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
         algorithmId: this.implementation.implementedAlgorithmId,
         implementationId: this.implementation.id,
       })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.softwarePlatforms;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.softwarePlatforms;
+          }
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked software platforms could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedSoftwarePlatforms(params: any): void {

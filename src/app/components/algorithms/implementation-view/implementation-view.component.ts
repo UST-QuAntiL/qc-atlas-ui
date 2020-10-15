@@ -280,9 +280,8 @@ export class ImplementationViewComponent implements OnInit {
       }
     );
     this.activatedRoute.params.subscribe(({ algoId, implId }) => {
-      this.algorithmService
-        .getAlgorithm({ algorithmId: algoId })
-        .subscribe((algo) => {
+      this.algorithmService.getAlgorithm({ algorithmId: algoId }).subscribe(
+        (algo) => {
           this.algorithm = algo;
           let subheading = this.algorithm.computationModel
             .toString()
@@ -294,19 +293,32 @@ export class ImplementationViewComponent implements OnInit {
             link: '/algorithms/' + algoId,
           };
           this.links[1].subHeading = subheading + ' Implementation';
-        });
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Algorithm could not be retrieved.'
+          );
+        }
+      );
 
       this.algorithmService
         .getImplementation({ algorithmId: algoId, implementationId: implId })
-        .subscribe((impl) => {
-          this.implementation = impl;
-          this.frontendImplementation = JSON.parse(
-            JSON.stringify(impl)
-          ) as EntityModelImplementationDto;
-          this.links[1].heading = this.implementation.name;
-          this.fetchComputeResourceProperties();
-          this.getTagsForImplementation(algoId, implId);
-        });
+        .subscribe(
+          (impl) => {
+            this.implementation = impl;
+            this.frontendImplementation = JSON.parse(
+              JSON.stringify(impl)
+            ) as EntityModelImplementationDto;
+            this.links[1].heading = this.implementation.name;
+            this.fetchComputeResourceProperties();
+            this.getTagsForImplementation(algoId, implId);
+          },
+          () => {
+            this.utilService.callSnackBar(
+              'Error! Implementation could not be retrieved.'
+            );
+          }
+        );
     });
   }
 
@@ -316,13 +328,18 @@ export class ImplementationViewComponent implements OnInit {
         algorithmId: algoId,
         implementationId: implId,
       })
-      .subscribe((next) => {
-        if (next._embedded?.tags) {
-          this.tags = next._embedded.tags.map((t) => ({
-            value: t.value,
-            category: t.category,
-          }));
+      .subscribe(
+        (next) => {
+          if (next._embedded?.tags) {
+            this.tags = next._embedded.tags.map((t) => ({
+              value: t.value,
+              category: t.category,
+            }));
+          }
+        },
+        () => {
+          this.utilService.callSnackBar('Error! Tags could not be retrieved.');
         }
-      });
+      );
   }
 }

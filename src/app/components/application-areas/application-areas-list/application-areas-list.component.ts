@@ -36,11 +36,16 @@ export class ApplicationAreasListComponent implements OnInit {
   ngOnInit(): void {}
 
   getApplicationAreas(params: any): void {
-    this.applicationAreasService
-      .getApplicationAreas(params)
-      .subscribe((data) => {
+    this.applicationAreasService.getApplicationAreas(params).subscribe(
+      (data) => {
         this.prepareApplicationAreaData(data);
-      });
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Application areas could not be retrieved.'
+        );
+      }
+    );
   }
 
   getApplicationAreasHateoas(url: string): void {

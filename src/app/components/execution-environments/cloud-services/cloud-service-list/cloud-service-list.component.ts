@@ -41,11 +41,16 @@ export class CloudServiceListComponent implements OnInit {
   ngOnInit(): void {}
 
   getCloudServices(params: QueryParams): void {
-    this.executionEnvironmentsService
-      .getCloudServices(params)
-      .subscribe((data) => {
+    this.executionEnvironmentsService.getCloudServices(params).subscribe(
+      (data) => {
         this.prepareCloudServiceData(data);
-      });
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Cloud services could not be retrieved.'
+        );
+      }
+    );
   }
 
   getCloudServicesHateoas(url: string): void {
