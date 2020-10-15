@@ -175,6 +175,7 @@ export class CloudServiceListComponent implements OnInit {
               deleteParams.elements.length,
               'cloud services'
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });
