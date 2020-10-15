@@ -76,22 +76,29 @@ export class PublicationListComponent implements OnInit {
         data: { title: 'Add new publication' },
       })
       .afterClosed()
-      .subscribe((dialogResult) => {
-        if (dialogResult) {
-          this.publicationService
-            .createPublication({
-              body: {
-                id: null,
-                title: dialogResult.publicationTitle,
-                authors: dialogResult.authors,
-              },
-            })
-            .subscribe((data) => {
-              this.router.navigate(['publications', data.id]);
-              this.utilService.callSnackBar('Successfully created publication');
-            });
+      .subscribe(
+        (dialogResult) => {
+          if (dialogResult) {
+            this.publicationService
+              .createPublication({
+                body: {
+                  id: null,
+                  title: dialogResult.publicationTitle,
+                  authors: dialogResult.authors,
+                },
+              })
+              .subscribe((data) => {
+                this.router.navigate(['publications', data.id]);
+                this.utilService.callSnackBar(
+                  'Successfully created publication'
+                );
+              });
+          }
+        },
+        (error) => {
+          this.utilService.callSnackBar('Could not create publication !');
         }
-      });
+      );
   }
 
   onDeleteElements(event: SelectParams): void {
@@ -119,7 +126,6 @@ export class PublicationListComponent implements OnInit {
             );
           }
           forkJoin(deletionTasks).subscribe(() => {
-            console.log(this.pagingInfo.page);
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
