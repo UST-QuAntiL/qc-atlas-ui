@@ -1,18 +1,22 @@
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
     <app-table
-      [data]=linkObject.linkedData
+      [data]=displayedData
       [variableNames]=variableNames
-      [externalLinkVariables]=externalLinkVariables
       [dataColumns]=tableColumns
-      [allowAdd]=tableAddAllowed
-      [allowDelete]="true"
+      [externalLinkVariables]=externalLinkVariables
+      [allowAdd]=true
+      [allowDelete]=true
+      [allowSort]=true
       [emptyTableMessage]="'No linked software platforms found'"
+      [pagination]=pagingInfo
+      [paginatorConfig]=paginatorConfig
       (elementClicked)="onElementClicked($event)"
       (urlClicked)="onUrlClicked($event)"
-      (datalistConfigChanged)="onDatalistConfigChanged()"
+      (datalistConfigChanged)="onDatalistConfigChanged($event)"
       (submitDeleteElements)="unlinkSoftwarePlatforms($event)"
-      (addElement)="openLinkSoftwarePlatformDialog()">
+      (addElement)="openLinkSoftwarePlatformDialog()"
+      (pageChange)="onPageChanged($event)">
     </app-table>
   </div>
 </mat-card>

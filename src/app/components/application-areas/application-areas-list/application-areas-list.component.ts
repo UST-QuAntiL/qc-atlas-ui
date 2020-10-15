@@ -83,7 +83,8 @@ export class ApplicationAreasListComponent implements OnInit {
             this.getApplicationAreasHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
-                this.pagingInfo
+                this.pagingInfo,
+                1
               )
             );
             this.utilService.callSnackBar(
@@ -138,7 +139,7 @@ export class ApplicationAreasListComponent implements OnInit {
               this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
             }
             snackbarMessages.push(
-              this.utilService.generateFinalDeletionMessage(
+              this.utilService.generateFinishingSnackarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'application areas'

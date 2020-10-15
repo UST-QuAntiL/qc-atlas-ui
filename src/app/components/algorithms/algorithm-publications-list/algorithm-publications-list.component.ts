@@ -166,6 +166,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     // Empty unlinked publications
     this.linkObject.data = [];
     const linkTasks = [];
+    const snackbarMessages = [];
     let successfulLinks = 0;
     for (const publication of publications) {
       linkTasks.push(
@@ -175,26 +176,40 @@ export class AlgorithmPublicationsListComponent implements OnInit {
             body: publication,
           })
           .toPromise()
-          .then(() => successfulLinks++)
+          .then(() => {
+            successfulLinks++;
+            snackbarMessages.push(
+              'Successfully linked publication "' + publication.title + '"'
+            );
+          })
       );
     }
     forkJoin(linkTasks).subscribe(() => {
       this.getHateaosDataFromGenericService(
-        this.pagingInfo._links.self.href
+        this.utilService.getLastPageAfterCreation(
+          this.pagingInfo._links.self.href,
+          this.pagingInfo,
+          successfulLinks
+        )
       ).subscribe((data) => {
         this.updateDisplayedData(data);
       });
       this.getAllLinkedPublications();
-      const snackbarText =
-        successfulLinks > 1
-          ? 'Successfully linked ' + successfulLinks + ' publications'
-          : 'Publication sucessfully linked';
-      this.utilService.callSnackBar(snackbarText);
+      snackbarMessages.push(
+        this.utilService.generateFinishingSnackarMessage(
+          successfulLinks,
+          publications.length,
+          'publications',
+          'linked'
+        )
+      );
+      this.utilService.callSnackBarSequence(snackbarMessages);
     });
   }
 
   unlinkPublications(event): void {
     const deletionTasks = [];
+    const snackbarMessages = [];
     let successfulDeletions = 0;
     for (const publication of event.elements) {
       deletionTasks.push(
@@ -204,7 +219,12 @@ export class AlgorithmPublicationsListComponent implements OnInit {
             publicationId: publication.id,
           })
           .toPromise()
-          .then(() => successfulDeletions++)
+          .then(() => {
+            successfulDeletions++;
+            snackbarMessages.push(
+              'Successfully unlinked publication "' + publication.title + '"'
+            );
+          })
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
@@ -219,11 +239,15 @@ export class AlgorithmPublicationsListComponent implements OnInit {
         this.updateDisplayedData(data);
       });
       this.getAllLinkedPublications();
-      const snackbarText =
-        successfulDeletions > 1
-          ? 'Successfully unlinked ' + successfulDeletions + ' publications'
-          : 'Publication sucessfully unlinked';
-      this.utilService.callSnackBar(snackbarText);
+      snackbarMessages.push(
+        this.utilService.generateFinishingSnackarMessage(
+          successfulDeletions,
+          event.elements.length,
+          'publications',
+          'unlinked'
+        )
+      );
+      this.utilService.callSnackBarSequence(snackbarMessages);
     });
   }
 

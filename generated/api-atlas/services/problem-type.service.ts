@@ -30,6 +30,8 @@ export class ProblemTypeService extends BaseService {
   static readonly GetProblemTypesPath = '/v1/problem-types';
 
   /**
+   * Retrieve all problem types.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getProblemTypes()` instead.
    *
@@ -80,6 +82,8 @@ export class ProblemTypeService extends BaseService {
   }
 
   /**
+   * Retrieve all problem types.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getProblemTypes$Response()` instead.
    *
@@ -120,7 +124,7 @@ export class ProblemTypeService extends BaseService {
   static readonly CreateProblemTypePath = '/v1/problem-types';
 
   /**
-   * Custom ID will be ignored.
+   * Define the basic properties of an problem type.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createProblemType()` instead.
@@ -149,7 +153,7 @@ export class ProblemTypeService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Define the basic properties of an problem type.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createProblemType$Response()` instead.
@@ -171,7 +175,7 @@ export class ProblemTypeService extends BaseService {
   static readonly GetProblemTypePath = '/v1/problem-types/{problemTypeId}';
 
   /**
-   * Retrieve a specific problem type
+   * Retrieve a specific problem type and its basic properties.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getProblemType()` instead.
@@ -201,7 +205,7 @@ export class ProblemTypeService extends BaseService {
   }
 
   /**
-   * Retrieve a specific problem type
+   * Retrieve a specific problem type and its basic properties.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getProblemType$Response()` instead.
@@ -224,7 +228,7 @@ export class ProblemTypeService extends BaseService {
   static readonly UpdateProblemTypePath = '/v1/problem-types/{problemTypeId}';
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an problem type (e.g. name).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateProblemType()` instead.
@@ -255,7 +259,7 @@ export class ProblemTypeService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an problem type (e.g. name).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateProblemType$Response()` instead.
@@ -278,6 +282,8 @@ export class ProblemTypeService extends BaseService {
   static readonly DeleteProblemTypePath = '/v1/problem-types/{problemTypeId}';
 
   /**
+   * Delete an problem type. This also removes all references to other entities (e.g. algorithm).
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteProblemType()` instead.
    *
@@ -306,6 +312,8 @@ export class ProblemTypeService extends BaseService {
   }
 
   /**
+   * Delete an problem type. This also removes all references to other entities (e.g. algorithm).
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteProblemType$Response()` instead.
    *
@@ -327,6 +335,8 @@ export class ProblemTypeService extends BaseService {
   static readonly GetProblemTypeParentListPath = '/v1/problem-types/{problemTypeId}/problem-type-parents';
 
   /**
+   * Retrieved all parent problem types of a specific problem type. If a problem type has not parent an empty list is returned
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getProblemTypeParentList()` instead.
    *
@@ -379,6 +389,8 @@ export class ProblemTypeService extends BaseService {
   }
 
   /**
+   * Retrieved all parent problem types of a specific problem type. If a problem type has not parent an empty list is returned
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getProblemTypeParentList$Response()` instead.
    *

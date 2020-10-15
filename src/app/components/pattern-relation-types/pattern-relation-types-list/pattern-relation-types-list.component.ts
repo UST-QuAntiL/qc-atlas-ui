@@ -82,7 +82,8 @@ export class PatternRelationTypesListComponent implements OnInit {
             this.getPatternRelationTypesHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
-                this.pagingInfo
+                this.pagingInfo,
+                1
               )
             );
             this.utilService.callSnackBar(
@@ -141,7 +142,7 @@ export class PatternRelationTypesListComponent implements OnInit {
               );
             }
             snackbarMessages.push(
-              this.utilService.generateFinalDeletionMessage(
+              this.utilService.generateFinishingSnackarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'pattern relation types'

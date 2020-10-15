@@ -255,7 +255,7 @@ export class AlgorithmService extends BaseService {
   static readonly UpdateAlgorithmPath = '/v1/algorithms/{algorithmId}';
 
   /**
-   * Update the basic properties of an algorithm (e.g. name). References to sub-objects (e.g. a ProblemType) are not updated via this operation - use the corresponding sub-route for updating them (e.g. /problem-types).
+   * Update the basic properties of an algorithm (e.g. name). References to sub-objects (e.g. a ProblemType) are not updated via this operation - use the corresponding sub-route for updating them (e.g. PUT on /problem-types/{problemTypeId}).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateAlgorithm()` instead.
@@ -286,7 +286,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Update the basic properties of an algorithm (e.g. name). References to sub-objects (e.g. a ProblemType) are not updated via this operation - use the corresponding sub-route for updating them (e.g. /problem-types).
+   * Update the basic properties of an algorithm (e.g. name). References to sub-objects (e.g. a ProblemType) are not updated via this operation - use the corresponding sub-route for updating them (e.g. PUT on /problem-types/{problemTypeId}).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateAlgorithm$Response()` instead.
@@ -309,7 +309,7 @@ export class AlgorithmService extends BaseService {
   static readonly DeleteAlgorithmPath = '/v1/algorithms/{algorithmId}';
 
   /**
-   * Delete an algorithm. This also deletes all entities that depend on it (e.g., the algorithm's relations to other algorithms).
+   * Delete an algorithm. This also deletes all entities that depend on it (e.g. the algorithm's relations to other algorithms).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteAlgorithm()` instead.
@@ -339,7 +339,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete an algorithm. This also deletes all entities that depend on it (e.g., the algorithm's relations to other algorithms).
+   * Delete an algorithm. This also deletes all entities that depend on it (e.g. the algorithm's relations to other algorithms).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteAlgorithm$Response()` instead.
@@ -362,7 +362,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetAlgorithmRelationsOfAlgorithmPath = '/v1/algorithms/{algorithmId}/algorithm-relations';
 
   /**
-   * Retrieve all relations for an algorithm.
+   * Retrieve all relations of an algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getAlgorithmRelationsOfAlgorithm()` instead.
@@ -416,7 +416,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve all relations for an algorithm.
+   * Retrieve all relations of an algorithm.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getAlgorithmRelationsOfAlgorithm$Response()` instead.
@@ -459,7 +459,7 @@ export class AlgorithmService extends BaseService {
   static readonly CreateAlgorithmRelationPath = '/v1/algorithms/{algorithmId}/algorithm-relations';
 
   /**
-   * Custom ID will be ignored.
+   * Create a relation between two algorithms.The algorithm relation type has to be already created (e.g. via POST on /algorithm-relation-types). As a result only the ID is required for the algorithm relation type, other attributes will be ignored not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createAlgorithmRelation()` instead.
@@ -490,7 +490,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Create a relation between two algorithms.The algorithm relation type has to be already created (e.g. via POST on /algorithm-relation-types). As a result only the ID is required for the algorithm relation type, other attributes will be ignored not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createAlgorithmRelation$Response()` instead.
@@ -513,6 +513,8 @@ export class AlgorithmService extends BaseService {
   static readonly GetAlgorithmRelationPath = '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
+   * Retrieve a specific relation between two algorithms.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getAlgorithmRelation()` instead.
    *
@@ -543,6 +545,8 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Retrieve a specific relation between two algorithms.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getAlgorithmRelation$Response()` instead.
    *
@@ -565,7 +569,7 @@ export class AlgorithmService extends BaseService {
   static readonly UpdateAlgorithmRelationPath = '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
-   * Custom ID will be ignored.
+   * Update a relation between two algorithms. For the algorithm relation type only the ID is required,other algorithm relation type attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateAlgorithmRelation()` instead.
@@ -598,7 +602,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Update a relation between two algorithms. For the algorithm relation type only the ID is required,other algorithm relation type attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateAlgorithmRelation$Response()` instead.
@@ -622,6 +626,8 @@ export class AlgorithmService extends BaseService {
   static readonly DeleteAlgorithmRelationPath = '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
+   * Delete a specific relation between a two algorithms. The algorithm relation type is not affected by this.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteAlgorithmRelation()` instead.
    *
@@ -652,6 +658,8 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Delete a specific relation between a two algorithms. The algorithm relation type is not affected by this.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteAlgorithmRelation$Response()` instead.
    *
@@ -674,7 +682,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetApplicationAreasOfAlgorithmPath = '/v1/algorithms/{algorithmId}/application-areas';
 
   /**
-   * Get the application areas for an algorithm.
+   * Retrieve application areas of an algorithm. If none are found an empty list is returned.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getApplicationAreasOfAlgorithm()` instead.
@@ -728,7 +736,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Get the application areas for an algorithm.
+   * Retrieve application areas of an algorithm. If none are found an empty list is returned.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getApplicationAreasOfAlgorithm$Response()` instead.
@@ -771,7 +779,7 @@ export class AlgorithmService extends BaseService {
   static readonly LinkAlgorithmAndApplicationAreaPath = '/v1/algorithms/{algorithmId}/application-areas';
 
   /**
-   * Add a reference to an existing application area (that was previously created via a POST on /application-areas). For application area only ID is required, other attributes will not change. If the applicationArea doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing application area (that was previously created via a POST on e.g. /application-areas). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `linkAlgorithmAndApplicationArea()` instead.
@@ -802,7 +810,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a reference to an existing application area (that was previously created via a POST on /application-areas). For application area only ID is required, other attributes will not change. If the applicationArea doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing application area (that was previously created via a POST on e.g. /application-areas). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `linkAlgorithmAndApplicationArea$Response()` instead.
@@ -825,7 +833,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetApplicationAreaOfAlgorithmPath = '/v1/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
 
   /**
-   * Get a specific application area of an algorithm
+   * Retrieve a specific application area of an algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getApplicationAreaOfAlgorithm()` instead.
@@ -857,7 +865,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Get a specific application area of an algorithm
+   * Retrieve a specific application area of an algorithm.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getApplicationAreaOfAlgorithm$Response()` instead.
@@ -881,7 +889,7 @@ export class AlgorithmService extends BaseService {
   static readonly UnlinkAlgorithmAndApplicationAreaPath = '/v1/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
 
   /**
-   * Delete a reference to an application area of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/problem-types/{problemTypeId}).
+   * Delete a reference to an application area of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/application-areas).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `unlinkAlgorithmAndApplicationArea()` instead.
@@ -913,7 +921,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a reference to an application area of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/problem-types/{problemTypeId}).
+   * Delete a reference to an application area of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/application-areas).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `unlinkAlgorithmAndApplicationArea$Response()` instead.
@@ -937,7 +945,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetComputeResourcePropertiesOfAlgorithmPath = '/v1/algorithms/{algorithmId}/compute-resource-properties';
 
   /**
-   * Retrieve the required compute resource properties of an algorithm
+   * Retrieve the required compute resource properties of an algorithm. If none are found an empty list is returned.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getComputeResourcePropertiesOfAlgorithm()` instead.
@@ -991,7 +999,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve the required compute resource properties of an algorithm
+   * Retrieve the required compute resource properties of an algorithm. If none are found an empty list is returned.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getComputeResourcePropertiesOfAlgorithm$Response()` instead.
@@ -1034,7 +1042,7 @@ export class AlgorithmService extends BaseService {
   static readonly CreateComputeResourcePropertyForAlgorithmPath = '/v1/algorithms/{algorithmId}/compute-resource-properties';
 
   /**
-   * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
+   * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. The compute resource property type has to be already created (e.g. via POST on /compute-resource-property-types). As a result only the ID is required for the compute resource property type, other attributes will be ignored not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createComputeResourcePropertyForAlgorithm()` instead.
@@ -1065,7 +1073,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
+   * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. The compute resource property type has to be already created (e.g. via POST on /compute-resource-property-types). As a result only the ID is required for the compute resource property type, other attributes will be ignored not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createComputeResourcePropertyForAlgorithm$Response()` instead.
@@ -1088,7 +1096,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetComputeResourcePropertyOfAlgorithmPath = '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
-   * Retrieve a specific compute resource property of an algorithm
+   * Retrieve a specific compute resource property of an algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getComputeResourcePropertyOfAlgorithm()` instead.
@@ -1120,7 +1128,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve a specific compute resource property of an algorithm
+   * Retrieve a specific compute resource property of an algorithm.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getComputeResourcePropertyOfAlgorithm$Response()` instead.
@@ -1144,7 +1152,7 @@ export class AlgorithmService extends BaseService {
   static readonly UpdateComputeResourcePropertyOfAlgorithmPath = '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
-   * Update a Compute resource property of an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
+   * Update a Compute resource property of an algorithm. For the compute resource property type only the ID is required, other compute resource property type attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateComputeResourcePropertyOfAlgorithm()` instead.
@@ -1177,7 +1185,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Update a Compute resource property of an algorithm. For compute resource property type only ID is required, other compute resource property type attributes will not change.
+   * Update a Compute resource property of an algorithm. For the compute resource property type only the ID is required, other compute resource property type attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateComputeResourcePropertyOfAlgorithm$Response()` instead.
@@ -1201,7 +1209,7 @@ export class AlgorithmService extends BaseService {
   static readonly DeleteComputeResourcePropertyOfAlgorithmPath = '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
-   * Delete a Compute resource property of an algorithm
+   * Delete a Compute resource property of an algorithm. The compute resource property type is not affected by this.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteComputeResourcePropertyOfAlgorithm()` instead.
@@ -1233,7 +1241,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a Compute resource property of an algorithm
+   * Delete a Compute resource property of an algorithm. The compute resource property type is not affected by this.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteComputeResourcePropertyOfAlgorithm$Response()` instead.
@@ -1257,7 +1265,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetImplementationsOfAlgorithmPath = '/v1/algorithms/{algorithmId}/implementations';
 
   /**
-   * Retrieve all implementations for an algorithm
+   * Retrieve implementations of an algorithm. If none are found an empty list is returned.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getImplementationsOfAlgorithm()` instead.
@@ -1267,12 +1275,36 @@ export class AlgorithmService extends BaseService {
   getImplementationsOfAlgorithm$Response(params: {
     algorithmId: string;
 
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+
   }): Observable<StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>> {
 
     const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetImplementationsOfAlgorithmPath, 'get');
     if (params) {
 
       rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
 
     }
     return this.http.request(rb.build({
@@ -1287,7 +1319,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve all implementations for an algorithm
+   * Retrieve implementations of an algorithm. If none are found an empty list is returned.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getImplementationsOfAlgorithm$Response()` instead.
@@ -1296,6 +1328,26 @@ export class AlgorithmService extends BaseService {
    */
   getImplementationsOfAlgorithm(params: {
     algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
 
   }): Observable<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }> {
 
@@ -1310,7 +1362,7 @@ export class AlgorithmService extends BaseService {
   static readonly CreateImplementationPath = '/v1/algorithms/{algorithmId}/implementations';
 
   /**
-   * Create a new implementation for the algorithm.
+   * Define the basic properties of an implementation for an algorithm. References to sub-objects (e.g. a software platform) can be added via sub-routes (e.g. POST on /software-platforms).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createImplementation()` instead.
@@ -1341,7 +1393,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Create a new implementation for the algorithm.
+   * Define the basic properties of an implementation for an algorithm. References to sub-objects (e.g. a software platform) can be added via sub-routes (e.g. POST on /software-platforms).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createImplementation$Response()` instead.
@@ -1364,7 +1416,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
-   * Retrieve a specific implementation of the algorithm.
+   * Retrieve a specific implementation and its basic properties of an algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getImplementation()` instead.
@@ -1396,7 +1448,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve a specific implementation of the algorithm.
+   * Retrieve a specific implementation and its basic properties of an algorithm.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getImplementation$Response()` instead.
@@ -1420,7 +1472,7 @@ export class AlgorithmService extends BaseService {
   static readonly UpdateImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an implementation (e.g. name). References to sub-objects (e.g. a software platform) are not updated via this operation - use the corresponding sub-route for updating them (e.g. PUT on /software-platforms/{softwarePlatformId}).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateImplementation()` instead.
@@ -1453,7 +1505,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an implementation (e.g. name). References to sub-objects (e.g. a software platform) are not updated via this operation - use the corresponding sub-route for updating them (e.g. PUT on /software-platforms/{softwarePlatformId}).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateImplementation$Response()` instead.
@@ -1477,6 +1529,8 @@ export class AlgorithmService extends BaseService {
   static readonly DeleteImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
+   * Delete an implementation. This also removes all references to other entities (e.g. software platforms).
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteImplementation()` instead.
    *
@@ -1507,6 +1561,8 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Delete an implementation. This also removes all references to other entities (e.g. software platforms).
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteImplementation$Response()` instead.
    *
@@ -1529,7 +1585,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetComputeResourcePropertiesOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
 
   /**
-   * Retrieve the required computing resources of an implementation
+   * Retrieve referenced compute resource properties of an implementation. If none are found an empty list is returned.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getComputeResourcePropertiesOfImplementation()` instead.
@@ -1585,7 +1641,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve the required computing resources of an implementation
+   * Retrieve referenced compute resource properties of an implementation. If none are found an empty list is returned.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getComputeResourcePropertiesOfImplementation$Response()` instead.
@@ -1629,7 +1685,7 @@ export class AlgorithmService extends BaseService {
   static readonly CreateComputeResourcePropertyForImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
 
   /**
-   * Add a computing resource (e.g. a certain number of qubits) that is required by an implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
+   * Add a compute resource property (e.g. a certain number of qubits) that is required by an implementation. The compute resource property type has to be already created (e.g. via POST on /compute-resource-property-types). As a result only the ID is required for the compute resource property type, other attributes will be ignored not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createComputeResourcePropertyForImplementation()` instead.
@@ -1662,7 +1718,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a computing resource (e.g. a certain number of qubits) that is required by an implementation. Custom ID will be ignored. For computing resource type only ID is required, other computing resource type attributes will not change
+   * Add a compute resource property (e.g. a certain number of qubits) that is required by an implementation. The compute resource property type has to be already created (e.g. via POST on /compute-resource-property-types). As a result only the ID is required for the compute resource property type, other attributes will be ignored not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createComputeResourcePropertyForImplementation$Response()` instead.
@@ -1686,7 +1742,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetComputeResourcePropertyOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
-   * Retrieve a specific compute resource property of an implementation
+   * Retrieve a specific compute resource property of an implementation.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getComputeResourcePropertyOfImplementation()` instead.
@@ -1720,7 +1776,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve a specific compute resource property of an implementation
+   * Retrieve a specific compute resource property of an implementation.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getComputeResourcePropertyOfImplementation$Response()` instead.
@@ -1745,7 +1801,7 @@ export class AlgorithmService extends BaseService {
   static readonly UpdateComputeResourcePropertyOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
-   * Update a Compute resource property of an implementation. For compute resource property type only ID is required, other compute resource property type attributes will not change.
+   * Update a Compute resource property of an implementation. For the compute resource property type only the ID is required, other compute resource property type attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateComputeResourcePropertyOfImplementation()` instead.
@@ -1780,7 +1836,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Update a Compute resource property of an implementation. For compute resource property type only ID is required, other compute resource property type attributes will not change.
+   * Update a Compute resource property of an implementation. For the compute resource property type only the ID is required, other compute resource property type attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateComputeResourcePropertyOfImplementation$Response()` instead.
@@ -1805,7 +1861,7 @@ export class AlgorithmService extends BaseService {
   static readonly DeleteComputeResourcePropertyOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
-   * Delete a Compute resource property of an implementation
+   * Delete a Compute resource property of an implementation. The compute resource property type is not affected by this.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteComputeResourcePropertyOfImplementation()` instead.
@@ -1839,7 +1895,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a Compute resource property of an implementation
+   * Delete a Compute resource property of an implementation. The compute resource property type is not affected by this.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteComputeResourcePropertyOfImplementation$Response()` instead.
@@ -1864,7 +1920,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetPublicationsOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications';
 
   /**
-   * Get referenced publications for an implementation
+   * Retrieve referenced publications of an implementation. If none are found an empty list is returned.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPublicationsOfImplementation()` instead.
@@ -1920,7 +1976,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Get referenced publications for an implementation
+   * Retrieve referenced publications of an implementation. If none are found an empty list is returned.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPublicationsOfImplementation$Response()` instead.
@@ -1964,7 +2020,7 @@ export class AlgorithmService extends BaseService {
   static readonly LinkImplementationAndPublicationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications';
 
   /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing publication (that was previously created via a POST on e.g. /publications). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `linkImplementationAndPublication()` instead.
@@ -1997,7 +2053,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications/). Custom ID will be ignored. For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing publication (that was previously created via a POST on e.g. /publications). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `linkImplementationAndPublication$Response()` instead.
@@ -2021,7 +2077,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetPublicationOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
 
   /**
-   * Retrieve a publication of an implementation
+   * Retrieve a specific publication of an implementation
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPublicationOfImplementation()` instead.
@@ -2055,7 +2111,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve a publication of an implementation
+   * Retrieve a specific publication of an implementation
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPublicationOfImplementation$Response()` instead.
@@ -2080,7 +2136,7 @@ export class AlgorithmService extends BaseService {
   static readonly UnlinkImplementationAndPublicationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
 
   /**
-   * Delete a reference to a publication of the implementation.
+   * Delete a reference to a publication of an implementation. The reference has to be previously created via a POST on /algorithms/{algorithmId}/implementations/{implementationId}/publications).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `unlinkImplementationAndPublication()` instead.
@@ -2114,7 +2170,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a reference to a publication of the implementation.
+   * Delete a reference to a publication of an implementation. The reference has to be previously created via a POST on /algorithms/{algorithmId}/implementations/{implementationId}/publications).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `unlinkImplementationAndPublication$Response()` instead.
@@ -2139,7 +2195,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetSoftwarePlatformsOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
 
   /**
-   * Get referenced software platform for an implementation
+   * Retrieve referenced software platform for an implementation. If none are found an empty list is returned.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getSoftwarePlatformsOfImplementation()` instead.
@@ -2195,7 +2251,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Get referenced software platform for an implementation
+   * Retrieve referenced software platform for an implementation. If none are found an empty list is returned.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getSoftwarePlatformsOfImplementation$Response()` instead.
@@ -2239,7 +2295,7 @@ export class AlgorithmService extends BaseService {
   static readonly LinkImplementationAndSoftwarePlatformPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
 
   /**
-   * Add a reference to an existing software platform(that was previously created via a POST on /software-platforms/).Custom ID will be ignored. For software platform only ID is required,other software platform attributes will not change.If the software platform doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing software platform (that was previously created via a POST on e.g. /software-platforms). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `linkImplementationAndSoftwarePlatform()` instead.
@@ -2272,7 +2328,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a reference to an existing software platform(that was previously created via a POST on /software-platforms/).Custom ID will be ignored. For software platform only ID is required,other software platform attributes will not change.If the software platform doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing software platform (that was previously created via a POST on e.g. /software-platforms). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `linkImplementationAndSoftwarePlatform$Response()` instead.
@@ -2296,7 +2352,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetSoftwarePlatformOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
 
   /**
-   * Retrieve a specific software platform and its basic properties.
+   * Retrieve a specific software platform and its basic properties of an implementation.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getSoftwarePlatformOfImplementation()` instead.
@@ -2330,7 +2386,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve a specific software platform and its basic properties.
+   * Retrieve a specific software platform and its basic properties of an implementation.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getSoftwarePlatformOfImplementation$Response()` instead.
@@ -2355,7 +2411,7 @@ export class AlgorithmService extends BaseService {
   static readonly UnlinkImplementationAndSoftwarePlatformPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
 
   /**
-   * Delete a reference to a software platform of the implementation
+   * Delete a reference to a software platform of an implementation. The reference has to be previously created via a POST on /algorithms/{algorithmId}/implementations/{implementationId}/software-platforms).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `unlinkImplementationAndSoftwarePlatform()` instead.
@@ -2389,7 +2445,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a reference to a software platform of the implementation
+   * Delete a reference to a software platform of an implementation. The reference has to be previously created via a POST on /algorithms/{algorithmId}/implementations/{implementationId}/software-platforms).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `unlinkImplementationAndSoftwarePlatform$Response()` instead.
@@ -2414,6 +2470,8 @@ export class AlgorithmService extends BaseService {
   static readonly GetTagsOfImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
+   * Retrieve all tags associated with a specific implementation.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getTagsOfImplementation()` instead.
    *
@@ -2444,6 +2502,8 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Retrieve all tags associated with a specific implementation.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getTagsOfImplementation$Response()` instead.
    *
@@ -2466,6 +2526,8 @@ export class AlgorithmService extends BaseService {
   static readonly AddTagToImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
+   * Add a tag to an implementation. The tag does not have to exist before adding it.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `addTagToImplementation()` instead.
    *
@@ -2497,6 +2559,8 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Add a tag to an implementation. The tag does not have to exist before adding it.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `addTagToImplementation$Response()` instead.
    *
@@ -2519,6 +2583,8 @@ export class AlgorithmService extends BaseService {
   static readonly RemoveTagFromImplementationPath = '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
+   * Remove a tag from an implementation.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `removeTagFromImplementation()` instead.
    *
@@ -2550,6 +2616,8 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Remove a tag from an implementation.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `removeTagFromImplementation$Response()` instead.
    *
@@ -2572,7 +2640,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetPatternRelationsOfAlgorithmPath = '/v1/algorithms/{algorithmId}/pattern-relations';
 
   /**
-   * Retrieve pattern relations for an algorithms.
+   * Retrieve pattern relations of an algorithms. If none are found an empty list is returned.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPatternRelationsOfAlgorithm()` instead.
@@ -2626,7 +2694,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve pattern relations for an algorithms.
+   * Retrieve pattern relations of an algorithms. If none are found an empty list is returned.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPatternRelationsOfAlgorithm$Response()` instead.
@@ -2669,7 +2737,7 @@ export class AlgorithmService extends BaseService {
   static readonly CreatePatternRelationForAlgorithmPath = '/v1/algorithms/{algorithmId}/pattern-relations';
 
   /**
-   * Add a pattern relation from an algorithm to a given pattern.Custom ID will be ignored. For pattern relation type only ID is required,other pattern relation type attributes will not change.
+   * Create a relation between a pattern and an algorithm.The pattern relation type has to be already created (e.g. via POST on /pattern-relation-types). As a result only the ID is required for the pattern relation type, other attributes will be ignored not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createPatternRelationForAlgorithm()` instead.
@@ -2700,7 +2768,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a pattern relation from an algorithm to a given pattern.Custom ID will be ignored. For pattern relation type only ID is required,other pattern relation type attributes will not change.
+   * Create a relation between a pattern and an algorithm.The pattern relation type has to be already created (e.g. via POST on /pattern-relation-types). As a result only the ID is required for the pattern relation type, other attributes will be ignored not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createPatternRelationForAlgorithm$Response()` instead.
@@ -2723,7 +2791,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetPatternRelationOfAlgorithmPath = '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
 
   /**
-   * Retrieve a specific pattern relation
+   * Retrieve a specific relation between a pattern and an algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPatternRelationOfAlgorithm()` instead.
@@ -2755,7 +2823,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve a specific pattern relation
+   * Retrieve a specific relation between a pattern and an algorithm.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPatternRelationOfAlgorithm$Response()` instead.
@@ -2779,7 +2847,7 @@ export class AlgorithmService extends BaseService {
   static readonly UpdatePatternRelationOfAlgorithmPath = '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
 
   /**
-   * Update a reference to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
+   * Update a relation between a pattern and an algorithm. For the pattern relation type only the ID is required,other pattern relation type attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updatePatternRelationOfAlgorithm()` instead.
@@ -2812,7 +2880,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Update a reference to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
+   * Update a relation between a pattern and an algorithm. For the pattern relation type only the ID is required,other pattern relation type attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updatePatternRelationOfAlgorithm$Response()` instead.
@@ -2836,7 +2904,7 @@ export class AlgorithmService extends BaseService {
   static readonly DeletePatternRelationOfAlgorithmPath = '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
 
   /**
-   * Delete a pattern relation of an specific algorithm
+   * Delete a specific relation between a pattern and an algorithm. The pattern relation type is not affected by this.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deletePatternRelationOfAlgorithm()` instead.
@@ -2868,7 +2936,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a pattern relation of an specific algorithm
+   * Delete a specific relation between a pattern and an algorithm. The pattern relation type is not affected by this.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deletePatternRelationOfAlgorithm$Response()` instead.
@@ -2892,7 +2960,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetProblemTypesOfAlgorithmPath = '/v1/algorithms/{algorithmId}/problem-types';
 
   /**
-   * Get the problem types for an algorithm.
+   * Retrieve problem types of an algorithm. If none are found an empty list is returned.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getProblemTypesOfAlgorithm()` instead.
@@ -2946,7 +3014,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Get the problem types for an algorithm.
+   * Retrieve problem types of an algorithm. If none are found an empty list is returned.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getProblemTypesOfAlgorithm$Response()` instead.
@@ -2989,7 +3057,7 @@ export class AlgorithmService extends BaseService {
   static readonly LinkAlgorithmAndProblemTypePath = '/v1/algorithms/{algorithmId}/problem-types';
 
   /**
-   * Add a reference to an existing ProblemType (that was previously created via a POST on /problem-types). For problem type only ID is required, other problem type attributes will not change. If the ProblemType doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing ProblemType (that was previously created via a POST on /problem-types). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `linkAlgorithmAndProblemType()` instead.
@@ -3020,7 +3088,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a reference to an existing ProblemType (that was previously created via a POST on /problem-types). For problem type only ID is required, other problem type attributes will not change. If the ProblemType doesn't exist yet, a 404 error is thrown.
+   * Add a reference to an existing ProblemType (that was previously created via a POST on /problem-types). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `linkAlgorithmAndProblemType$Response()` instead.
@@ -3043,7 +3111,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetProblemTypeOfAlgorithmPath = '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
 
   /**
-   * Retrieve a specific problem type of an algorithm
+   * Retrieve a specific problem type of an algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getProblemTypeOfAlgorithm()` instead.
@@ -3075,7 +3143,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve a specific problem type of an algorithm
+   * Retrieve a specific problem type of an algorithm.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getProblemTypeOfAlgorithm$Response()` instead.
@@ -3099,7 +3167,7 @@ export class AlgorithmService extends BaseService {
   static readonly UnlinkAlgorithmAndProblemTypePath = '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
 
   /**
-   * Delete a reference to a problem types of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/problem-types/{problemTypeId}).
+   * Delete a reference to a problem types of an algorithm. The reference has to be previously created via a POST on e.g. /algorithms/{algorithmId}/problem-types).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `unlinkAlgorithmAndProblemType()` instead.
@@ -3131,7 +3199,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a reference to a problem types of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/problem-types/{problemTypeId}).
+   * Delete a reference to a problem types of an algorithm. The reference has to be previously created via a POST on e.g. /algorithms/{algorithmId}/problem-types).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `unlinkAlgorithmAndProblemType$Response()` instead.
@@ -3155,7 +3223,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetPublicationsOfAlgorithmPath = '/v1/algorithms/{algorithmId}/publications';
 
   /**
-   * Get referenced publications for an algorithm.
+   * Retrieve referenced publications of an algorithm. If none are found an empty list is returned.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPublicationsOfAlgorithm()` instead.
@@ -3209,7 +3277,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Get referenced publications for an algorithm.
+   * Retrieve referenced publications of an algorithm. If none are found an empty list is returned.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPublicationsOfAlgorithm$Response()` instead.
@@ -3252,7 +3320,7 @@ export class AlgorithmService extends BaseService {
   static readonly LinkAlgorithmAndPublicationPath = '/v1/algorithms/{algorithmId}/publications';
 
   /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications). For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is returned.
+   * Add a reference to an existing publication (that was previously created via a POST on e.g. /publications). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `linkAlgorithmAndPublication()` instead.
@@ -3283,7 +3351,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications). For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is returned.
+   * Add a reference to an existing publication (that was previously created via a POST on e.g. /publications). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `linkAlgorithmAndPublication$Response()` instead.
@@ -3306,7 +3374,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetPublicationOfAlgorithmPath = '/v1/algorithms/{algorithmId}/publications/{publicationId}';
 
   /**
-   * Retrieve a publication of an algorithm
+   * Retrieve a specific publication and its basic properties of an algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPublicationOfAlgorithm()` instead.
@@ -3338,7 +3406,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve a publication of an algorithm
+   * Retrieve a specific publication and its basic properties of an algorithm.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPublicationOfAlgorithm$Response()` instead.
@@ -3362,7 +3430,7 @@ export class AlgorithmService extends BaseService {
   static readonly UnlinkAlgorithmAndPublicationPath = '/v1/algorithms/{algorithmId}/publications/{publicationId}';
 
   /**
-   * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications/{publicationId}).
+   * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `unlinkAlgorithmAndPublication()` instead.
@@ -3394,7 +3462,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications/{publicationId}).
+   * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `unlinkAlgorithmAndPublication$Response()` instead.
@@ -3700,7 +3768,7 @@ export class AlgorithmService extends BaseService {
   static readonly GetSketchImagePath = '/v1/algorithms/{algorithmId}/sketches/{sketchId}/image';
 
   /**
-   * Retrieve aa image from a specific Sketch.
+   * Retrieve the image of specific Sketch.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getSketchImage()` instead.
@@ -3721,8 +3789,8 @@ export class AlgorithmService extends BaseService {
 
     }
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: 'image/jpeg'
+      responseType: 'json',
+      accept: 'application/hal+json'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -3732,7 +3800,7 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
-   * Retrieve aa image from a specific Sketch.
+   * Retrieve the image of specific Sketch.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getSketchImage$Response()` instead.

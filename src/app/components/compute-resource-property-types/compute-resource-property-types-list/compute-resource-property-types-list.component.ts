@@ -85,7 +85,8 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
             this.getComputeResourcePropertyTypesHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
-                this.pagingInfo
+                this.pagingInfo,
+                1
               )
             );
             this.utilService.callSnackBar(
@@ -144,7 +145,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
               );
             }
             snackbarMessages.push(
-              this.utilService.generateFinalDeletionMessage(
+              this.utilService.generateFinishingSnackarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'compute resource property types'

@@ -37,6 +37,8 @@ export class PublicationService extends BaseService {
   static readonly GetPublicationsPath = '/v1/publications';
 
   /**
+   * Retrieve all publications.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPublications()` instead.
    *
@@ -87,6 +89,8 @@ export class PublicationService extends BaseService {
   }
 
   /**
+   * Retrieve all publications.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPublications$Response()` instead.
    *
@@ -127,6 +131,8 @@ export class PublicationService extends BaseService {
   static readonly CreatePublicationPath = '/v1/publications';
 
   /**
+   * Define the basic properties of an publication.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createPublication()` instead.
    *
@@ -154,6 +160,8 @@ export class PublicationService extends BaseService {
   }
 
   /**
+   * Define the basic properties of an publication.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createPublication$Response()` instead.
    *
@@ -174,7 +182,7 @@ export class PublicationService extends BaseService {
   static readonly GetPublicationPath = '/v1/publications/{publicationId}';
 
   /**
-   * Retrieve a publication
+   * Retrieve a specific publication and its basic properties.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPublication()` instead.
@@ -204,7 +212,7 @@ export class PublicationService extends BaseService {
   }
 
   /**
-   * Retrieve a publication
+   * Retrieve a specific publication and its basic properties.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPublication$Response()` instead.
@@ -227,6 +235,8 @@ export class PublicationService extends BaseService {
   static readonly UpdatePublicationPath = '/v1/publications/{publicationId}';
 
   /**
+   * Update the basic properties of an publication (e.g. title).
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updatePublication()` instead.
    *
@@ -256,6 +266,8 @@ export class PublicationService extends BaseService {
   }
 
   /**
+   * Update the basic properties of an publication (e.g. title).
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updatePublication$Response()` instead.
    *
@@ -277,6 +289,8 @@ export class PublicationService extends BaseService {
   static readonly DeletePublicationPath = '/v1/publications/{publicationId}';
 
   /**
+   * Delete an publication. This also removes all references to other entities (e.g. algorithm).
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deletePublication()` instead.
    *
@@ -305,6 +319,8 @@ export class PublicationService extends BaseService {
   }
 
   /**
+   * Delete an publication. This also removes all references to other entities (e.g. algorithm).
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deletePublication$Response()` instead.
    *
@@ -326,6 +342,8 @@ export class PublicationService extends BaseService {
   static readonly GetAlgorithmsOfPublicationPath = '/v1/publications/{publicationId}/algorithms';
 
   /**
+   * Retrieve referenced algorithms of an publication. If none are found an empty list is returned.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getAlgorithmsOfPublication()` instead.
    *
@@ -378,6 +396,8 @@ export class PublicationService extends BaseService {
   }
 
   /**
+   * Retrieve referenced algorithms of an publication. If none are found an empty list is returned.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getAlgorithmsOfPublication$Response()` instead.
    *
@@ -419,7 +439,7 @@ export class PublicationService extends BaseService {
   static readonly LinkPublicationAndAlgorithmPath = '/v1/publications/{publicationId}/algorithms';
 
   /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications). For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is returned.
+   * Add a reference to an existing algorithm (that was previously created via a POST on e.g. /algorithms). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `linkPublicationAndAlgorithm()` instead.
@@ -450,7 +470,7 @@ export class PublicationService extends BaseService {
   }
 
   /**
-   * Add a reference to an existing publication (that was previously created via a POST on /publications). For publication only ID is required, other publication attributes will not change. If the publication doesn't exist yet, a 404 error is returned.
+   * Add a reference to an existing algorithm (that was previously created via a POST on e.g. /algorithms). Only the ID is required in the request body, other attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `linkPublicationAndAlgorithm$Response()` instead.
@@ -585,7 +605,7 @@ export class PublicationService extends BaseService {
   static readonly GetImplementationsOfPublicationPath = '/v1/publications/{publicationId}/implementations';
 
   /**
-   * Retrieve all Implementations referencing a specific publication.
+   * Retrieve referenced implementations of an publication. If none are found an empty list is returned.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getImplementationsOfPublication()` instead.
@@ -639,7 +659,7 @@ export class PublicationService extends BaseService {
   }
 
   /**
-   * Retrieve all Implementations referencing a specific publication.
+   * Retrieve referenced implementations of an publication. If none are found an empty list is returned.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getImplementationsOfPublication$Response()` instead.
@@ -682,7 +702,7 @@ export class PublicationService extends BaseService {
   static readonly GetImplementationOfPublicationPath = '/v1/publications/{publicationId}/implementations/{implementationId}';
 
   /**
-   * Retrieve a specific implementation of the algorithm.
+   * Retrieve a specific implementation of a publication.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getImplementationOfPublication()` instead.
@@ -714,7 +734,7 @@ export class PublicationService extends BaseService {
   }
 
   /**
-   * Retrieve a specific implementation of the algorithm.
+   * Retrieve a specific implementation of a publication.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getImplementationOfPublication$Response()` instead.

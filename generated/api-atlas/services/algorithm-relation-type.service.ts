@@ -30,6 +30,8 @@ export class AlgorithmRelationTypeService extends BaseService {
   static readonly GetAlgorithmRelationTypesPath = '/v1/algorithm-relation-types';
 
   /**
+   * Retrieve all algorithm relation types.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getAlgorithmRelationTypes()` instead.
    *
@@ -80,6 +82,8 @@ export class AlgorithmRelationTypeService extends BaseService {
   }
 
   /**
+   * Retrieve all algorithm relation types.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getAlgorithmRelationTypes$Response()` instead.
    *
@@ -120,7 +124,7 @@ export class AlgorithmRelationTypeService extends BaseService {
   static readonly CreateAlgorithmRelationTypePath = '/v1/algorithm-relation-types';
 
   /**
-   * Custom ID will be ignored.
+   * Define the basic properties of an algorithm relation type.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createAlgorithmRelationType()` instead.
@@ -149,7 +153,7 @@ export class AlgorithmRelationTypeService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Define the basic properties of an algorithm relation type.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createAlgorithmRelationType$Response()` instead.
@@ -171,6 +175,8 @@ export class AlgorithmRelationTypeService extends BaseService {
   static readonly GetAlgorithmRelationTypePath = '/v1/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
+   * Retrieve a specific algorithm relation type and its basic properties.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getAlgorithmRelationType()` instead.
    *
@@ -199,6 +205,8 @@ export class AlgorithmRelationTypeService extends BaseService {
   }
 
   /**
+   * Retrieve a specific algorithm relation type and its basic properties.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getAlgorithmRelationType$Response()` instead.
    *
@@ -220,7 +228,7 @@ export class AlgorithmRelationTypeService extends BaseService {
   static readonly UpdateAlgorithmRelationTypePath = '/v1/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an algorithm relation type (e.g. name).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateAlgorithmRelationType()` instead.
@@ -251,7 +259,7 @@ export class AlgorithmRelationTypeService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an algorithm relation type (e.g. name).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updateAlgorithmRelationType$Response()` instead.
@@ -274,6 +282,8 @@ export class AlgorithmRelationTypeService extends BaseService {
   static readonly DeleteAlgorithmRelationTypePath = '/v1/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
+   * Delete an algorithm relation type.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteAlgorithmRelationType()` instead.
    *
@@ -302,6 +312,8 @@ export class AlgorithmRelationTypeService extends BaseService {
   }
 
   /**
+   * Delete an algorithm relation type.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deleteAlgorithmRelationType$Response()` instead.
    *

@@ -4,9 +4,11 @@ import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm
 import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../util/util.service';
 import { CreateImplementationDialogComponent } from '../dialogs/create-implementation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
+import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-implementations-list',
@@ -19,32 +21,46 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   implementations: EntityModelImplementationDto[];
   variableNames: string[] = ['name', 'description', 'dependencies'];
   tableColumns: string[] = ['Name', 'Description', 'Dependencies'];
+  pagingInfo: any = {};
+  paginatorConfig: any = {
+    amountChoices: [10, 25, 50],
+    selectedAmount: 10,
+  };
 
   constructor(
     private algorithmService: AlgorithmService,
     private utilService: UtilService,
-    private router: Router
+    private router: Router,
+    private genericDataService: GenericDataService
   ) {}
 
-  ngOnInit(): void {
-    this.getImplementations();
+  ngOnInit(): void {}
+
+  getImplementations(params): void {
+    this.algorithmService.getImplementationsOfAlgorithm(params).subscribe(
+      (implementations) => {
+        this.prepareImplementationData(implementations);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
-  getImplementations(): void {
-    this.algorithmService
-      .getImplementationsOfAlgorithm({ algorithmId: this.algorithm.id })
-      .subscribe(
-        (impls) => {
-          if (impls._embedded) {
-            this.implementations = impls._embedded.implementations;
-          } else {
-            this.implementations = [];
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+  getImplementationsHateoas(url: string): void {
+    this.genericDataService.getData(url).subscribe((relations) => {
+      this.prepareImplementationData(relations);
+    });
+  }
+
+  prepareImplementationData(implementations): void {
+    if (implementations._embedded) {
+      this.implementations = implementations._embedded.implementations;
+    } else {
+      this.implementations = [];
+    }
+    this.pagingInfo.page = implementations.page;
+    this.pagingInfo._links = implementations._links;
   }
 
   onAddImplementation(): void {
@@ -93,22 +109,47 @@ export class AlgorithmImplementationsListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const promises: Array<Promise<void>> = [];
+          const deletionTasks = [];
+          const snackbarMessages = [];
+          let successfulDeletions = 0;
           for (const implementation of event.elements) {
-            promises.push(
+            deletionTasks.push(
               this.algorithmService
                 .deleteImplementation({
                   algorithmId: this.algorithm.id,
                   implementationId: implementation.id,
                 })
                 .toPromise()
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted implementation "' +
+                      implementation.name +
+                      '"'
+                  );
+                })
             );
           }
-          Promise.all(promises).then(() => {
-            this.getImplementations();
-            this.utilService.callSnackBar(
-              'Successfully deleted implementation(s)'
+          forkJoin(deletionTasks).subscribe(() => {
+            if (
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                event.elements.length,
+                this.pagingInfo
+              )
+            ) {
+              this.getImplementationsHateoas(this.pagingInfo._links.prev.href);
+            } else {
+              this.getImplementationsHateoas(this.pagingInfo._links.self.href);
+            }
+            snackbarMessages.push(
+              this.utilService.generateFinishingSnackarMessage(
+                successfulDeletions,
+                dialogResult.data.length,
+                'implementations'
+              )
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });
@@ -121,5 +162,10 @@ export class AlgorithmImplementationsListComponent implements OnInit {
       'implementations',
       implementation.id,
     ]);
+  }
+
+  onDatalistConfigChanged(event) {
+    event.algorithmId = this.algorithm.id;
+    this.getImplementations(event);
   }
 }

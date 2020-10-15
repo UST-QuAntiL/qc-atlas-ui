@@ -30,6 +30,8 @@ export class PatternRelationTypeService extends BaseService {
   static readonly GetPatternRelationTypesPath = '/v1/pattern-relation-types';
 
   /**
+   * Retrieve all pattern relation types.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPatternRelationTypes()` instead.
    *
@@ -80,6 +82,8 @@ export class PatternRelationTypeService extends BaseService {
   }
 
   /**
+   * Retrieve all pattern relation types.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPatternRelationTypes$Response()` instead.
    *
@@ -120,7 +124,7 @@ export class PatternRelationTypeService extends BaseService {
   static readonly CreatePatternRelationTypePath = '/v1/pattern-relation-types';
 
   /**
-   * Custom ID will be ignored.
+   * Define the basic properties of an pattern relation type.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createPatternRelationType()` instead.
@@ -149,7 +153,7 @@ export class PatternRelationTypeService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Define the basic properties of an pattern relation type.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createPatternRelationType$Response()` instead.
@@ -171,6 +175,8 @@ export class PatternRelationTypeService extends BaseService {
   static readonly GetPatternRelationTypePath = '/v1/pattern-relation-types/{patternRelationTypeId}';
 
   /**
+   * Retrieve a specific pattern relation type and its basic properties.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPatternRelationType()` instead.
    *
@@ -199,6 +205,8 @@ export class PatternRelationTypeService extends BaseService {
   }
 
   /**
+   * Retrieve a specific pattern relation type and its basic properties.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPatternRelationType$Response()` instead.
    *
@@ -220,7 +228,7 @@ export class PatternRelationTypeService extends BaseService {
   static readonly UpdatePatternRelationTypePath = '/v1/pattern-relation-types/{patternRelationTypeId}';
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an pattern relation type (e.g. name).
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updatePatternRelationType()` instead.
@@ -251,7 +259,7 @@ export class PatternRelationTypeService extends BaseService {
   }
 
   /**
-   * Custom ID will be ignored.
+   * Update the basic properties of an pattern relation type (e.g. name).
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updatePatternRelationType$Response()` instead.
@@ -274,6 +282,8 @@ export class PatternRelationTypeService extends BaseService {
   static readonly DeletePatternRelationTypePath = '/v1/pattern-relation-types/{patternRelationTypeId}';
 
   /**
+   * Delete an pattern relation type.
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deletePatternRelationType()` instead.
    *
@@ -302,6 +312,8 @@ export class PatternRelationTypeService extends BaseService {
   }
 
   /**
+   * Delete an pattern relation type.
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deletePatternRelationType$Response()` instead.
    *
