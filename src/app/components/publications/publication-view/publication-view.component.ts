@@ -74,7 +74,7 @@ export class PublicationViewComponent implements OnInit {
         },
         (error) => {
           this.utilService.callSnackBar(
-            'Error! Publication could not be saved.'
+            'Error! Publication could not be updated.'
           );
         }
       );
