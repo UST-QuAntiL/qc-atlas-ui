@@ -197,7 +197,9 @@ export class PublicationImplementationsListComponent implements OnInit {
           })
           .catch(() => {
             snackbarMessages.push(
-              'Error! Could not link implementation "' + implementation.name + '".'
+              'Error! Could not link implementation "' +
+                implementation.name +
+                '".'
             );
           })
       );
@@ -248,7 +250,9 @@ export class PublicationImplementationsListComponent implements OnInit {
           })
           .catch(() => {
             snackbarMessages.push(
-              'Error! Could not unlink implementation "' + implementation.name + '".'
+              'Error! Could not unlink implementation "' +
+                implementation.name +
+                '".'
             );
           })
       );
