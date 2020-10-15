@@ -35,11 +35,16 @@ export class PatternRelationTypesListComponent implements OnInit {
   ngOnInit(): void {}
 
   getPatternRelationTypes(params: any): void {
-    this.patternRelationTypeService
-      .getPatternRelationTypes(params)
-      .subscribe((data) => {
+    this.patternRelationTypeService.getPatternRelationTypes(params).subscribe(
+      (data) => {
         this.preparePatternRelationTypeData(data);
-      });
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Pattern relation types could not be retrieved.'
+        );
+      }
+    );
   }
 
   getPatternRelationTypesHateoas(url: string): void {
@@ -78,18 +83,25 @@ export class PatternRelationTypesListComponent implements OnInit {
         params.body = algorithmRelationType;
         this.patternRelationTypeService
           .createPatternRelationType(params)
-          .subscribe((data) => {
-            this.getPatternRelationTypesHateoas(
-              this.utilService.getLastPageAfterCreation(
-                this.pagingInfo._links.self.href,
-                this.pagingInfo,
-                1
-              )
-            );
-            this.utilService.callSnackBar(
-              'Successfully added pattern relation type'
-            );
-          });
+          .subscribe(
+            (data) => {
+              this.getPatternRelationTypesHateoas(
+                this.utilService.getLastPageAfterCreation(
+                  this.pagingInfo._links.self.href,
+                  this.pagingInfo,
+                  1
+                )
+              );
+              this.utilService.callSnackBar(
+                'Successfully created pattern relation type'
+              );
+            },
+            (error) => {
+              this.utilService.callSnackBar(
+                'Error! Pattern relation type could not be created.'
+              );
+            }
+          );
       }
     });
   }
@@ -177,14 +189,21 @@ export class PatternRelationTypesListComponent implements OnInit {
         };
         this.patternRelationTypeService
           .updatePatternRelationType(params)
-          .subscribe((data) => {
-            this.getPatternRelationTypesHateoas(
-              this.pagingInfo._links.self.href
-            );
-            this.utilService.callSnackBar(
-              'Successfully edited pattern relation type'
-            );
-          });
+          .subscribe(
+            (data) => {
+              this.getPatternRelationTypesHateoas(
+                this.pagingInfo._links.self.href
+              );
+              this.utilService.callSnackBar(
+                'Successfully updated pattern relation type'
+              );
+            },
+            (error) => {
+              this.utilService.callSnackBar(
+                'Error! Pattern relation type could not be updated.'
+              );
+            }
+          );
       }
     });
   }
