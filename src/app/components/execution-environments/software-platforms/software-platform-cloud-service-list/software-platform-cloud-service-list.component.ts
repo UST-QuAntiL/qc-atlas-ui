@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
-import { MatDialog } from '@angular/material/dialog';
 import { forkJoin, Observable } from 'rxjs';
 import {
   LinkObject,
@@ -56,7 +55,6 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
   constructor(
     private executionEnvironmentService: ExecutionEnvironmentsService,
     private router: Router,
-    private dialog: MatDialog,
     private utilService: UtilService,
     private genericDataService: GenericDataService
   ) {}
@@ -121,13 +119,15 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
     this.dialogData.pagingInfo._links = data._links;
   }
 
-  openLinkCloudServiceDialog() {
+  openLinkCloudServiceDialog(): void {
     this.getAllCloudServices().subscribe((data) => {
       this.updateLinkDialogData(data);
-      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
-        width: '800px',
-        data: this.dialogData,
-      });
+      const dialogRef = this.utilService.createDialog(
+        LinkItemListDialogComponent,
+        this.dialogData,
+        1000,
+        700
+      );
       const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
         (search: QueryParams) => {
           this.getAllCloudServices(search).subscribe((updatedData) => {

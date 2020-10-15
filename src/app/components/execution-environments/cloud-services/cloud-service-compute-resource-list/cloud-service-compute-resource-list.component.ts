@@ -3,7 +3,6 @@ import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
-import { MatDialog } from '@angular/material/dialog';
 import { forkJoin, Observable } from 'rxjs';
 import {
   LinkObject,
@@ -54,7 +53,6 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
   constructor(
     private executionEnvironmentService: ExecutionEnvironmentsService,
     private router: Router,
-    private dialog: MatDialog,
     private utilService: UtilService,
     private genericDataService: GenericDataService
   ) {}
@@ -119,13 +117,15 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
     this.dialogData.pagingInfo._links = data._links;
   }
 
-  openLinkComputeResourceDialog() {
+  openLinkComputeResourceDialog(): void {
     this.getAllComputeResources().subscribe((data) => {
       this.updateLinkDialogData(data);
-      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
-        width: '800px',
-        data: this.dialogData,
-      });
+      const dialogRef = this.utilService.createDialog(
+        LinkItemListDialogComponent,
+        this.dialogData,
+        1000,
+        700
+      );
       const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
         (search: QueryParams) => {
           this.getAllComputeResources(search).subscribe((updatedData) => {

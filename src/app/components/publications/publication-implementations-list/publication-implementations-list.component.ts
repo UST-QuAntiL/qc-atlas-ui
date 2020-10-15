@@ -6,11 +6,9 @@ import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { forkJoin, Observable } from 'rxjs';
 import { ImplementationsService } from 'api-atlas/services/implementations.service';
-import { MatDialog } from '@angular/material/dialog';
 import {
   LinkObject,
   QueryParams,
-  UrlData,
 } from '../../generics/data-list/data-list.component';
 import {
   DialogData,
@@ -71,7 +69,6 @@ export class PublicationImplementationsListComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private implementationService: ImplementationsService,
     private router: Router,
-    private dialog: MatDialog,
     private utilService: UtilService,
     private genericDataService: GenericDataService
   ) {}
@@ -134,13 +131,15 @@ export class PublicationImplementationsListComponent implements OnInit {
     this.dialogData.pagingInfo._links = data._links;
   }
 
-  openLinkImplementationDialog() {
+  openLinkImplementationDialog(): void {
     this.getAllImplementations().subscribe((data) => {
       this.updateLinkDialogData(data);
-      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
-        width: '800px',
-        data: this.dialogData,
-      });
+      const dialogRef = this.utilService.createDialog(
+        LinkItemListDialogComponent,
+        this.dialogData,
+        1000,
+        700
+      );
       const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
         (search: QueryParams) => {
           this.getAllImplementations(search).subscribe((updatedData) => {

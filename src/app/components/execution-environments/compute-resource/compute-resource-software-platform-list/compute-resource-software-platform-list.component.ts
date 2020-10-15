@@ -3,7 +3,6 @@ import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-envir
 import { Router } from '@angular/router';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
-import { MatDialog } from '@angular/material/dialog';
 import { forkJoin, Observable } from 'rxjs';
 import {
   LinkObject,
@@ -58,8 +57,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private genericDataService: GenericDataService,
     private router: Router,
-    private utilService: UtilService,
-    private dialog: MatDialog
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -125,10 +123,12 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
   openLinkSoftwarePlatformDialog() {
     this.getAllSoftwarePlatforms().subscribe((data) => {
       this.updateLinkDialogData(data);
-      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
-        width: '800px',
-        data: this.dialogData,
-      });
+      const dialogRef = this.utilService.createDialog(
+        LinkItemListDialogComponent,
+        this.dialogData,
+        1000,
+        700
+      );
       const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
         (search: QueryParams) => {
           this.getAllSoftwarePlatforms(search).subscribe((updatedData) => {
