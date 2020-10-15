@@ -54,11 +54,16 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     size?: number;
     sort?: string[];
   }): void {
-    this.algorithmService
-      .getPatternRelationsOfAlgorithm(params)
-      .subscribe((relations) => {
+    this.algorithmService.getPatternRelationsOfAlgorithm(params).subscribe(
+      (relations) => {
         this.prepareRelations(relations);
-      });
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Pattern relations could not be retrieved.'
+        );
+      }
+    );
   }
 
   getPatternRelationsHateoas(url: string): void {

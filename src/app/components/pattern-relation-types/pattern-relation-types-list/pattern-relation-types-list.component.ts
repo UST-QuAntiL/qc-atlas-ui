@@ -93,7 +93,7 @@ export class PatternRelationTypesListComponent implements OnInit {
                 )
               );
               this.utilService.callSnackBar(
-                'Successfully created pattern relation type'
+                'Successfully created pattern relation type.'
               );
             },
             (error) => {
@@ -131,7 +131,14 @@ export class PatternRelationTypesListComponent implements OnInit {
                   patternRelationTypeId: patternRelationType.id,
                 })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted pattern relation type "' +
+                      patternRelationType.name +
+                      '".'
+                  );
+                })
                 .catch((errorResponse) =>
                   snackbarMessages.push(JSON.parse(errorResponse.error).message)
                 )
@@ -195,7 +202,7 @@ export class PatternRelationTypesListComponent implements OnInit {
                 this.pagingInfo._links.self.href
               );
               this.utilService.callSnackBar(
-                'Successfully updated pattern relation type'
+                'Successfully updated pattern relation type.'
               );
             },
             (error) => {

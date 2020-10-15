@@ -87,7 +87,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
               )
             );
             this.utilService.callSnackBar(
-              'Successfully added algorithm relation type'
+              'Successfully added algorithm relation type.'
             );
           });
       }
@@ -119,7 +119,14 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
                   algorithmRelationTypeId: algorithmRelationType.id,
                 })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted algorithm relation type"' +
+                      algorithmRelationType.name +
+                      '".'
+                  );
+                })
                 .catch((errorResponse) =>
                   snackbarMessages.push(JSON.parse(errorResponse.error).message)
                 )
@@ -182,7 +189,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
               this.pagingInfo._links.self.href
             );
             this.utilService.callSnackBar(
-              'Successfully edited algorithm relation type'
+              'Successfully edited algorithm relation type.'
             );
           });
       }

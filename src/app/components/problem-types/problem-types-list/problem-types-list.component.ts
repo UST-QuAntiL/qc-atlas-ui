@@ -107,7 +107,7 @@ export class ProblemTypesListComponent implements OnInit {
                 1
               )
             );
-            this.utilService.callSnackBar('Successfully created problem type');
+            this.utilService.callSnackBar('Successfully created problem type.');
           },
           () => {
             this.utilService.callSnackBar(
@@ -143,7 +143,14 @@ export class ProblemTypesListComponent implements OnInit {
                   problemTypeId: problemType.id,
                 })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted problem type "' +
+                      problemType.name +
+                      '".'
+                  );
+                })
                 .catch((errorResponse) =>
                   snackbarMessages.push(JSON.parse(errorResponse.error).message)
                 )
@@ -211,7 +218,7 @@ export class ProblemTypesListComponent implements OnInit {
             .subscribe((data) => {
               this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
               this.utilService.callSnackBar(
-                'Successfully updated problem type'
+                'Successfully updated problem type.'
               );
             });
         }

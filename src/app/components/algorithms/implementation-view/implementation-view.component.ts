@@ -265,15 +265,20 @@ export class ImplementationViewComponent implements OnInit {
   }
 
   private loadGeneral(): void {
-    this.executionEnvironmentsService
-      .getSoftwarePlatforms()
-      .subscribe((list) => {
+    this.executionEnvironmentsService.getSoftwarePlatforms().subscribe(
+      (list) => {
         const softwarePlatforms = list._embedded?.softwarePlatforms || [];
         this.softwarePlatformOptions = softwarePlatforms.map((sp) => ({
           label: sp.name,
           value: sp.id,
         }));
-      });
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Software platform could not be retrieved.'
+        );
+      }
+    );
     this.activatedRoute.params.subscribe(({ algoId, implId }) => {
       this.algorithmService
         .getAlgorithm({ algorithmId: algoId })
