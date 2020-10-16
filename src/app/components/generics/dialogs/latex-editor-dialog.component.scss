@@ -1,34 +1,34 @@
 @import "theme";
 
 .dialog-container {
+  size: auto;
   background: rgba(mat-color($qc-atlas-ui-accent), 0.20);
   margin: 0;
 }
 
 .card-container {
   margin: 10px;
-  width: auto;
+  size: auto;
   border: lightgray;
   color: rgba(0, 0, 0, 0.54);
 }
 
 .text-container {
-  width: 450px;
+  size: auto;
   border-style: solid;
   border-width: thin;
   margin: 5px;
 }
 
 .packages-container {
-  height: 100px;
+  size: auto;
 }
 
 .latex-container {
-  height: 300px;
+  size: auto;
 }
 
 .control-button {
-  vertical-align: bottom;
   margin: 5px;
 }
 

@@ -1,8 +1,10 @@
-<div class="dialog-container">
+<div class="dialog-container ">
   <h1 mat-dialog-title id="title" >{{data.title}}</h1>
   <mat-card class="card-container">
     <div>Default LaTeX packages:</div>
-    <mat-label style="font-weight: bold">{{defaultLatexPackages}}</mat-label>
+    <div *ngFor="let defaultPackage of defaultLatexPackages">
+      <mat-label style="font-weight: bold">{{defaultPackage}}</mat-label>
+    </div>
   </mat-card>
   <mat-card class="card-container">
     <div style="margin-top: 15px">Additional LaTeX packages</div>
@@ -24,7 +26,7 @@
   </mat-card>
   <mat-card class="card-container">
     <button color="red" outline="true" type="button" mdbBtn class="control-button cancel-button" (click)="dialogRef.close()">Cancel</button>
-    <button color="green" style="float: right" outline="true" type="button" mdbBtn class="control-button submit-button" (click)="onSubmit()">Submit</button>
-    <button color="darkorange" style="float: right" outline="true" type="button" mdbBtn class="control-button preview-button" (click)="onGenerateLatex()">Preview</button>
+    <button color="green" outline="true" type="button" mdbBtn class="control-button submit-button" (click)="onSubmit()">Submit</button>
+    <button color="darkorange" outline="true" type="button" mdbBtn class="control-button preview-button" (click)="onGenerateLatex()">Preview</button>
   </mat-card>
 </div>
