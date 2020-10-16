@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { RenderLatexControllerService } from 'api-latex/services/render-latex-controller.service';
 import { LatexEditorDialogComponent } from '../dialogs/latex-editor-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { DoProvider } from './abstract-value-accessor';
@@ -19,20 +18,17 @@ export class TextInputComponent implements OnInit {
   @Input() maxLines = 1;
   @Input() isLink: boolean;
   @Input() pattern?: string;
-  @Input() isLatexInput = false;
+  @Input() latexActive = false;
 
   inputValue: string;
+  toggleLatex = false;
   packedLatexValue: string;
-  renderOutput: string;
   urlToRenderedPdfBlob: string;
 
-  constructor(
-    private utilService: UtilService,
-    private latexRendererService: RenderLatexControllerService
-  ) {}
+  constructor(private utilService: UtilService) {}
 
   saveChanges(): void {
-    if (this.isLatexInput) {
+    if (this.toggleLatex) {
       this.onSaveChanges.emit(this.packedLatexValue);
     } else {
       this.onSaveChanges.emit(this.inputValue);
@@ -40,7 +36,7 @@ export class TextInputComponent implements OnInit {
   }
 
   inputChanged(): void {
-    if (this.isLatexInput) {
+    if (this.toggleLatex) {
       this.onChange.emit(this.packedLatexValue);
     } else {
       if (!this.inputValue) {
@@ -55,8 +51,10 @@ export class TextInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLatexInput = this.utilService.isLatexText(this.value);
-    if (this.isLatexInput) {
+    this.toggleLatex = this.latexActive
+      ? this.utilService.isLatexText(this.value)
+      : false;
+    if (this.toggleLatex) {
       this.packedLatexValue = this.value;
       this.renderLatexContent(this.packedLatexValue);
     } else {
@@ -65,11 +63,9 @@ export class TextInputComponent implements OnInit {
   }
 
   toggleLatexFlag(): void {
-    this.isLatexInput = !this.isLatexInput;
-    if (this.isLatexInput) {
+    if (this.toggleLatex) {
       this.packedLatexValue = this.inputValue;
       this.inputValue = null;
-      this.openLatexEditor();
       this.renderLatexContent(this.packedLatexValue);
     } else {
       this.inputValue = this.utilService.getUnpackedLatexText(

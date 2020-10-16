@@ -20,11 +20,14 @@ export class LatexRendererServiceConstants {
   unpackTextAndPackages(
     packedData = ''
   ): { latexContent: string; latexPackages: string } {
-    const splitData = packedData.split(this.latexFormatIndicator);
-    const content = splitData[0];
+    let content = '';
     const packages: string[] = [];
-    for (let i = 1; i < splitData.length; i++) {
-      packages.push(splitData[i]);
+    if (packedData) {
+      const splitData = packedData.split(this.latexFormatIndicator);
+      content = splitData[0];
+      for (let i = 1; i < splitData.length; i++) {
+        packages.push(splitData[i]);
+      }
     }
     return { latexContent: content, latexPackages: packages.join('') };
   }
