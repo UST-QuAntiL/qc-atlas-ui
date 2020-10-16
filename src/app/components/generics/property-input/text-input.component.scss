@@ -24,4 +24,10 @@
 
 mat-form-field {
   min-width: 100%;
+  line-height: normal;
+}
+
+textarea.mat-input-element {
+  padding: 0;
+  margin: 0;
 }
