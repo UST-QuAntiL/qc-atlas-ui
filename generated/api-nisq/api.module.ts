@@ -8,6 +8,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { AnalysisResultService } from './services/analysis-result.service';
 import { ExecutionResultService } from './services/execution-result.service';
 import { ImplementationService } from './services/implementation.service';
 import { QpuService } from './services/qpu.service';
@@ -22,6 +23,7 @@ import { SdksService } from './services/sdks.service';
   exports: [],
   declarations: [],
   providers: [
+    AnalysisResultService,
     ExecutionResultService,
     ImplementationService,
     QpuService,

@@ -9,7 +9,8 @@
           [allowRemoving]="true"
           [tags]="tags"
           (onRemove)="removeTag($event)"
-          (onAdd)="addTag($event)">
+          (onAdd)="addTag($event)"
+        >
         </app-tags-component>
       </div>
     </div>
@@ -28,8 +29,12 @@
         (onAddProblemType)="addProblemType($event)"
         (onRemoveProblemType)="removeProblemTypeFromAlgorithm($event)"
       ></app-algorithm-properties>
-      <button class="master-save-button" *ngIf="!guard.objectsEqual(frontendAlgorithm, algorithm)" mat-fab
-              (click)="saveAlgorithm(frontendAlgorithm, true)">
+      <button
+        class="master-save-button"
+        *ngIf="!guard.objectsEqual(frontendAlgorithm, algorithm)"
+        mat-fab
+        (click)="saveAlgorithm(frontendAlgorithm, true)"
+      >
         <mat-icon class="master-save-icon">save</mat-icon>
       </button>
     </mat-tab>
@@ -58,6 +63,13 @@
         *ngIf="this.algorithm"
         [algo]="this.algorithm"
       ></app-algorithm-nisq-analyzer>
+    </mat-tab>
+    <mat-tab [hidden]="isNisqUsed" label="NISQ Results">
+      <ng-template matTabContent>
+        <app-algorithm-nisq-analyzer-results
+          [algo]="this.algorithm"
+        ></app-algorithm-nisq-analyzer-results>
+      </ng-template>
     </mat-tab>
     <mat-tab label="Discussion">
       <h1>Discussion WIP</h1>

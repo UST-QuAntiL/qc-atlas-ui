@@ -8,8 +8,6 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { ExecutionRequestDto } from '../models/execution-request-dto';
-import { ExecutionResultDto } from '../models/execution-result-dto';
 import { ImplementationDto } from '../models/implementation-dto';
 import { ImplementationListDto } from '../models/implementation-list-dto';
 import { ParameterDto } from '../models/parameter-dto';
@@ -253,69 +251,6 @@ export class ImplementationService extends BaseService {
       map(
         (r: StrictHttpResponse<ImplementationDto>) =>
           r.body as ImplementationDto
-      )
-    );
-  }
-
-  /**
-   * Path part for operation executeImplementation
-   */
-  static readonly ExecuteImplementationPath =
-    '/implementations/{implId}/execute';
-
-  /**
-   * Execute an implementation
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `executeImplementation()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  executeImplementation$Response(params: {
-    implId: string;
-    body: ExecutionRequestDto;
-  }): Observable<StrictHttpResponse<ExecutionResultDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ImplementationService.ExecuteImplementationPath,
-      'post'
-    );
-    if (params) {
-      rb.path('implId', params.implId, {});
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<ExecutionResultDto>;
-        })
-      );
-  }
-
-  /**
-   * Execute an implementation
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `executeImplementation$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  executeImplementation(params: {
-    implId: string;
-    body: ExecutionRequestDto;
-  }): Observable<ExecutionResultDto> {
-    return this.executeImplementation$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<ExecutionResultDto>) =>
-          r.body as ExecutionResultDto
       )
     );
   }

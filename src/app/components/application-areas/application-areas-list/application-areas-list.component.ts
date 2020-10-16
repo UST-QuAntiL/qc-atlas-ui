@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
-import { AddApplicationAreaDialogComponent } from '../dialogs/add-application-area/add-application-area-dialog.component';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
 import { UtilService } from '../../../util/util.service';
-import { EditApplicationAreaDialogComponent } from '../dialogs/edit-application-area/edit-application-area-dialog.component';
+import { AddOrEditApplicationAreaDialogComponent } from '../dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
 
 @Component({
   selector: 'app-application-areas-list',
@@ -31,7 +29,6 @@ export class ApplicationAreasListComponent implements OnInit {
   constructor(
     private applicationAreasService: ApplicationAreasService,
     private genericDataService: GenericDataService,
-    private dialog: MatDialog,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -65,9 +62,12 @@ export class ApplicationAreasListComponent implements OnInit {
 
   onAddElement(): void {
     const params: any = {};
-    const dialogRef = this.dialog.open(AddApplicationAreaDialogComponent, {
-      data: { title: 'Add new application area' },
-    });
+    const dialogRef = this.utilService.createDialog(
+      AddOrEditApplicationAreaDialogComponent,
+      {
+        title: 'Create application area',
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
@@ -80,7 +80,12 @@ export class ApplicationAreasListComponent implements OnInit {
         this.applicationAreasService
           .createApplicationArea(params)
           .subscribe((data) => {
-            this.getApplicationAreas({});
+            this.getApplicationAreasHateoas(
+              this.utilService.getLastPageAfterCreation(
+                this.pagingInfo._links.self.href,
+                this.pagingInfo
+              )
+            );
             this.utilService.callSnackBar(
               'Successfully added application area'
             );
@@ -105,6 +110,8 @@ export class ApplicationAreasListComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           const deletionTasks = [];
+          const snackbarMessages = [];
+          let successfulDeletions = 0;
           for (const applicationArea of event.elements) {
             deletionTasks.push(
               this.applicationAreasService
@@ -112,55 +119,64 @@ export class ApplicationAreasListComponent implements OnInit {
                   applicationAreaId: applicationArea.id,
                 })
                 .toPromise()
+                .then(() => successfulDeletions++)
+                .catch((errorResponse) =>
+                  snackbarMessages.push(JSON.parse(errorResponse.error).message)
+                )
             );
           }
-          forkJoin(deletionTasks).subscribe(
-            () => {
-              this.getApplicationAreas(event.queryParams);
-              this.utilService.callSnackBar(
-                'Successfully deleted application area(s)'
-              );
-            },
-            () => {
-              this.getApplicationAreas(event.queryParams);
-              this.utilService.callSnackBar(
-                'Delete rejected! Application area is used in other places.'
-              );
+          forkJoin(deletionTasks).subscribe(() => {
+            if (
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                this.applicationAreas.length,
+                this.pagingInfo
+              )
+            ) {
+              this.getApplicationAreasHateoas(this.pagingInfo._links.prev.href);
+            } else {
+              this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
             }
-          );
+            snackbarMessages.push(
+              this.utilService.generateFinalDeletionMessage(
+                successfulDeletions,
+                dialogResult.data.length,
+                'application areas'
+              )
+            );
+            this.utilService.callSnackBarSequence(snackbarMessages);
+          });
         }
       });
   }
 
   onEditElement(event: any): void {
-    const dialogRef = this.dialog.open(EditApplicationAreaDialogComponent, {
-      data: {
+    const dialogRef = this.utilService.createDialog(
+      AddOrEditApplicationAreaDialogComponent,
+      {
         title: 'Edit application area',
         name: event.name,
-      },
-      autoFocus: false,
-    });
+      }
+    );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        if (dialogResult.newName !== event.name) {
-          const newApplicationAreaDto: EntityModelApplicationAreaDto = {
-            id: event.id,
-            name: dialogResult.newName,
-          };
-          const params: any = {
-            applicationAreaId: newApplicationAreaDto.id,
-            body: newApplicationAreaDto,
-          };
-          this.applicationAreasService
-            .updateApplicationArea(params)
-            .subscribe((data) => {
-              this.getApplicationAreas(event.queryParams);
-              this.utilService.callSnackBar(
-                'Successfully edited application area'
-              );
-            });
-        }
+        const newApplicationAreaDto: EntityModelApplicationAreaDto = {
+          id: event.id,
+          name: dialogResult.name,
+        };
+        const params: any = {
+          applicationAreaId: newApplicationAreaDto.id,
+          body: newApplicationAreaDto,
+        };
+        this.applicationAreasService
+          .updateApplicationArea(params)
+          .subscribe((data) => {
+            this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
+            this.utilService.callSnackBar(
+              'Successfully edited application area'
+            );
+          });
       }
     });
   }

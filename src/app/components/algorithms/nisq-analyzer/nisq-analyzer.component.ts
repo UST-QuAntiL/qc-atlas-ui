@@ -16,7 +16,6 @@ import { AlgorithmDto, CloudServiceDto } from 'api-atlas/models';
 import {
   ParameterDto,
   AnalysisResultDto,
-  ExecutionRequestDto,
   ExecutionResultDto,
   ImplementationDto as NISQImplementationDto,
 } from 'api-nisq/models';
@@ -46,17 +45,14 @@ export class NisqAnalyzerComponent implements OnInit {
   inputFormGroup: FormGroup;
 
   // 2) Analyze phase
-  analyzeParams: {};
+  analyzeColumns = ['backendName', 'width', 'depth', 'execution'];
   analyzerResults: AnalysisResultDto[] = [];
+  expandedElement: AnalysisResultDto | null;
 
   // 3) Execution
+  resultBackendColumns = ['backendName', 'width', 'depth'];
   executedAnalyseResult: AnalysisResultDto;
   results?: ExecutionResultDto = undefined;
-
-  // Misc UI state
-  analyzeColumns = ['backendName', 'width', 'depth', 'execution'];
-  resultBackendColumns = ['backendName', 'width', 'depth'];
-  expandedElement: ExecutionRequestDto | null;
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
@@ -97,7 +93,7 @@ export class NisqAnalyzerComponent implements OnInit {
   submit(): boolean {
     const value = this.inputFormGroup.value;
     // Merge a list of parameter objects into a single parameter object.
-    this.analyzeParams = Object.assign.apply(undefined, [
+    const analyzeParams = Object.assign.apply(undefined, [
       {
         token: value.qiskitToken,
       },
@@ -107,7 +103,7 @@ export class NisqAnalyzerComponent implements OnInit {
     this.nisqAnalyzerService
       .analyze({
         algorithmId: this.algo.id,
-        parameters: this.analyzeParams,
+        parameters: analyzeParams,
       })
       .subscribe((results) => (this.analyzerResults = results));
     return true;
@@ -116,31 +112,23 @@ export class NisqAnalyzerComponent implements OnInit {
   execute(analysisResult: AnalysisResultDto): void {
     this.results = undefined;
     this.executedAnalyseResult = analysisResult;
-    const request = {
-      parameters: this.analyzeParams,
-      qpuId: analysisResult.qpu.id,
-      analysedDepth: analysisResult.analysedDepth,
-      analysedWidth: analysisResult.analysedWidth,
-    };
-    this.nisqAnalyzerService
-      .execute(analysisResult.implementation.id, request)
-      .subscribe((results) => {
-        if (results.status === 'FAILED' || results.status === 'FINISHED') {
-          this.results = results;
-        } else {
-          interval(1000)
-            .pipe(
-              exhaustMap(() =>
-                this.http.get<ExecutionResultDto>(results._links['self'].href)
-              ),
-              first(
-                (value) =>
-                  value.status === 'FAILED' || value.status === 'FINISHED'
-              )
+    this.nisqAnalyzerService.execute(analysisResult.id).subscribe((results) => {
+      if (results.status === 'FAILED' || results.status === 'FINISHED') {
+        this.results = results;
+      } else {
+        interval(1000)
+          .pipe(
+            exhaustMap(() =>
+              this.http.get<ExecutionResultDto>(results._links['self'].href)
+            ),
+            first(
+              (value) =>
+                value.status === 'FAILED' || value.status === 'FINISHED'
             )
-            .subscribe((finalResult) => (this.results = finalResult));
-        }
-      });
+          )
+          .subscribe((finalResult) => (this.results = finalResult));
+      }
+    });
   }
 
   groupResultsByImplementation(

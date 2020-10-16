@@ -3,6 +3,7 @@ import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
+import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../../util/util.service';
 import {
   SelectParams,
@@ -118,18 +119,35 @@ export class CloudServiceListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const promises: Array<Promise<void>> = [];
+          const deletionTasks = [];
+          let successfulDeletions = 0;
           for (const cloudService of deleteParams.elements) {
-            promises.push(
+            deletionTasks.push(
               this.executionEnvironmentsService
                 .deleteCloudService({ cloudServiceId: cloudService.id })
                 .toPromise()
+                .then(() => successfulDeletions++)
             );
           }
-          Promise.all(promises).then(() => {
-            this.getCloudServices(deleteParams.queryParams);
+          forkJoin(deletionTasks).subscribe(() => {
+            console.log(this.pagingInfo.page);
+            if (
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                this.cloudServices.length,
+                this.pagingInfo
+              )
+            ) {
+              this.getCloudServicesHateoas(this.pagingInfo._links.prev.href);
+            } else {
+              this.getCloudServicesHateoas(this.pagingInfo._links.self.href);
+            }
             this.utilService.callSnackBar(
-              'Successfully deleted cloud service(s)'
+              'Successfully deleted ' +
+                successfulDeletions +
+                '/' +
+                dialogResult.data.length +
+                ' cloud services.'
             );
           });
         }

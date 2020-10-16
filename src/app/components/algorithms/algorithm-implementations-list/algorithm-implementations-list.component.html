@@ -5,6 +5,7 @@
                [dataColumns]=tableColumns
                [allowAdd]=true
                [allowDelete]="true"
+               [emptyTableMessage]="'No implementations for this algorithm found'"
                (addElement)="onAddImplementation()"
                (submitDeleteElements)="onDeleteImplementation($event)"
                (elementClicked)="onImplementationClicked($event)">

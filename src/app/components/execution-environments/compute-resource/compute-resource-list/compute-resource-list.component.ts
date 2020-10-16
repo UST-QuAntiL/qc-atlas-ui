@@ -3,6 +3,7 @@ import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-com
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
+import { forkJoin } from 'rxjs';
 import {
   SelectParams,
   QueryParams,
@@ -115,21 +116,42 @@ export class ComputeResourceListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const promises: Array<Promise<void>> = [];
+          const deletionTasks = [];
+          const snackbarMessages = [];
+          let successfulDeletions = 0;
           for (const computeResource of deleteParams.elements) {
-            promises.push(
+            deletionTasks.push(
               this.executionEnvironmentsService
                 .deleteComputeResource({
                   computeResourceId: computeResource.id,
                 })
                 .toPromise()
+                .then(() => successfulDeletions++)
+                .catch((errorResponse) =>
+                  snackbarMessages.push(JSON.parse(errorResponse.error).message)
+                )
             );
           }
-          Promise.all(promises).then(() => {
-            this.getComputeResources(deleteParams.queryParams);
-            this.utilService.callSnackBar(
-              'Successfully deleted compute resource(s)'
+          forkJoin(deletionTasks).subscribe(() => {
+            if (
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                this.computeResources.length,
+                this.pagingInfo
+              )
+            ) {
+              this.getComputeResourcesHateoas(this.pagingInfo._links.prev.href);
+            } else {
+              this.getComputeResourcesHateoas(this.pagingInfo._links.self.href);
+            }
+            snackbarMessages.push(
+              this.utilService.generateFinalDeletionMessage(
+                successfulDeletions,
+                dialogResult.data.length,
+                'compute resources'
+              )
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });

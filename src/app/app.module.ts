@@ -40,29 +40,42 @@ import { ServicesModule } from './services/services.module';
 import { ChangePageGuard } from './services/deactivation-guard';
 import { LinkItemListDialogComponent } from './components/generics/dialogs/link-item-list-dialog.component';
 import { ProblemTypesListComponent } from './components/problem-types/problem-types-list/problem-types-list.component';
-import { AddProblemTypeDialogComponent } from './components/problem-types/dialogs/add-problem-type/add-problem-type-dialog.component';
-import { EditProblemTypeDialogComponent } from './components/problem-types/dialogs/edit-problem-type/edit-problem-type-dialog.component';
+import { AddOrEditProblemTypeDialogComponent } from './components/problem-types/dialogs/add-or-edit-problem-type/add-or-edit-problem-type-dialog.component';
 import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
-import { AddApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-application-area/add-application-area-dialog.component';
-import { EditApplicationAreaDialogComponent } from './components/application-areas/dialogs/edit-application-area/edit-application-area-dialog.component';
+// eslint-disable-next-line max-len
+import { AddOrEditApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
+// eslint-disable-next-line max-len
+import { AddOrEditAlgorithmRelationTypeDialogComponent } from './components/algorithm-relation-types/dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
+// eslint-disable-next-line max-len
+import { AlgorithmRelationTypesListComponent } from './components/algorithm-relation-types/algorithm-relation-types-list/algorithm-relation-types-list.component';
+import { PatternRelationTypesListComponent } from './components/pattern-relation-types/pattern-relation-types-list/pattern-relation-types-list.component';
+// eslint-disable-next-line max-len
+import { AddOrEditPatternRelationTypeDialogComponent } from './components/pattern-relation-types/dialogs/add-or-edit-pattern-relation-type-dialog/add-or-edit-pattern-relation-type-dialog.component';
+// eslint-disable-next-line max-len
+import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
+// eslint-disable-next-line max-len
+import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './components/compute-resource-property-types/dialogs/add-or-edit-compute-resource-property-type-dialog/add-or-edit-compute-resource-property-type-dialog.component';
 
 @NgModule({
   declarations: [
     // components
     AppComponent,
     PageNotFoundComponent,
-    ApplicationAreasListComponent,
-    ProblemTypesListComponent,
     // dialogs
     JsonImportDialogComponent,
     MissingEntityDialogComponent,
     NavigationComponent,
-    AddProblemTypeDialogComponent,
-    EditProblemTypeDialogComponent,
-    AddApplicationAreaDialogComponent,
-    EditApplicationAreaDialogComponent,
+    AddOrEditProblemTypeDialogComponent,
+    AddOrEditApplicationAreaDialogComponent,
+    AddOrEditAlgorithmRelationTypeDialogComponent,
     LinkItemListDialogComponent,
     ProblemTypesListComponent,
+    AlgorithmRelationTypesListComponent,
+    ApplicationAreasListComponent,
+    PatternRelationTypesListComponent,
+    AddOrEditPatternRelationTypeDialogComponent,
+    ComputeResourcePropertyTypesListComponent,
+    AddOrEditComputeResourcePropertyTypeDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

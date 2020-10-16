@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { AlgorithmDto } from 'api-atlas/models';
 import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
 import { UtilService } from '../../../util/util.service';
@@ -106,19 +107,38 @@ export class AlgorithmListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const promises: Array<Promise<void>> = [];
+          const deletionTasks = [];
+          let successfulDeletions = 0;
           for (const algorithm of event.elements) {
-            promises.push(
+            deletionTasks.push(
               this.algorithmService
                 .deleteAlgorithm({
                   algorithmId: algorithm.id,
                 })
                 .toPromise()
+                .then(() => successfulDeletions++)
             );
           }
-          Promise.all(promises).then(() => {
-            this.getAlgorithms(event.queryParams);
-            this.utilService.callSnackBar('Successfully deleted algorithm(s)');
+          forkJoin(deletionTasks).subscribe(() => {
+            console.log(this.pagingInfo.page);
+            if (
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulDeletions,
+                this.algorithms.length,
+                this.pagingInfo
+              )
+            ) {
+              this.getAlgorithmsHateoas(this.pagingInfo._links.prev.href);
+            } else {
+              this.getAlgorithmsHateoas(this.pagingInfo._links.self.href);
+            }
+            this.utilService.callSnackBar(
+              'Successfully deleted ' +
+                successfulDeletions +
+                '/' +
+                dialogResult.data.length +
+                ' algorithms.'
+            );
           });
         }
       });
