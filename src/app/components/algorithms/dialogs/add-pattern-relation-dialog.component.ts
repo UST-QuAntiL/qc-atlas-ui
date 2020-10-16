@@ -11,6 +11,7 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { EntityModelPatternModel } from 'api-patternpedia/models/entity-model-pattern-model';
 import { environment as Env } from '../../../../environments/environment';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-add-pattern-relation-dialog',
@@ -51,6 +52,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
     private patternRelationTypeService: PatternRelationTypeService,
     private patternLanguageService: PatternLanguageControllerService,
     private patternService: PatternControllerService,
+    private utilService: UtilService,
     public dialogRef: MatDialogRef<AddPatternRelationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
@@ -105,13 +107,14 @@ export class AddPatternRelationDialogComponent implements OnInit {
 
   getPatternLanguages(): void {
     this.arePatternLanguagesLoaded = false;
-    this.patternLanguageService
-      .getAllPatternLanguageModels()
-      .subscribe((languages) => {
-        this.patternLanguages = languages._embedded.patternLanguageModels;
+    this.patternLanguageService.getAllPatternLanguageModels().subscribe(
+      (languages) => {
+        this.patternLanguages = languages._embedded
+          ? languages._embedded.patternLanguageModels
+          : [];
         this.filteredPatternLanguages = this.patternLanguages;
         this.arePatternLanguagesLoaded = true;
-        // If pattern langauge is selected move it to front of list
+        // If pattern language is selected move it to front of list
         if (this.selectedPatternLanguage) {
           this.reorderArray(
             this.filteredPatternLanguages,
@@ -119,23 +122,44 @@ export class AddPatternRelationDialogComponent implements OnInit {
           );
         }
         this.onLanguageSearch();
-      });
+      },
+      () => {
+        this.arePatternLanguagesLoaded = true;
+        this.patternLanguages = [];
+        this.filteredPatternLanguages = this.patternLanguages;
+        this.utilService.callSnackBar(
+          'Error! Could not retrieve pattern languages from patternpedia.'
+        );
+      }
+    );
   }
 
   getPatterns(patternLanguageId: string): void {
     this.arePatternsLoaded = false;
     this.patternService
       .getPatternsOfPatternLanguage({ patternLanguageId })
-      .subscribe((patterns) => {
-        this.patterns = patterns._embedded.patternModels;
-        this.filteredPatterns = this.patterns;
-        this.arePatternsLoaded = true;
-        // If pattern is selected move it to front of list
-        if (this.selectedPattern) {
-          this.reorderArray(this.filteredPatterns, this.selectedPattern);
+      .subscribe(
+        (patterns) => {
+          this.patterns = patterns._embedded
+            ? patterns._embedded.patternModels
+            : [];
+          this.filteredPatterns = this.patterns;
+          this.arePatternsLoaded = true;
+          // If pattern is selected move it to front of list
+          if (this.selectedPattern) {
+            this.reorderArray(this.filteredPatterns, this.selectedPattern);
+          }
+          this.onPatternSearch();
+        },
+        () => {
+          this.arePatternsLoaded = true;
+          this.patterns = [];
+          this.filteredPatterns = this.patterns;
+          this.utilService.callSnackBar(
+            'Error! Could not retrieve patterns from patternpedia.'
+          );
         }
-        this.onPatternSearch();
-      });
+      );
   }
 
   reorderArray(array: any[], element: any) {
