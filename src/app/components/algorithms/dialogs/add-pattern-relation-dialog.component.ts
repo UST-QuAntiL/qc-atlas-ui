@@ -114,7 +114,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
           : [];
         this.filteredPatternLanguages = this.patternLanguages;
         this.arePatternLanguagesLoaded = true;
-        // If pattern langauge is selected move it to front of list
+        // If pattern language is selected move it to front of list
         if (this.selectedPatternLanguage) {
           this.reorderArray(
             this.filteredPatternLanguages,
