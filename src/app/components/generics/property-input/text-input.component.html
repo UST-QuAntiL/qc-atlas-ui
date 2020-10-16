@@ -7,28 +7,26 @@
 
   <mat-form-field>
     <mat-label class="input-label">{{ name }}</mat-label>
-    <label (click)="toggleLatex ? openLatexEditor() : null">
-      <input
-        *ngIf="!multiline"
-        type="text"
-        [(ngModel)]="inputValue"
-        [pattern]="pattern"
-        (ngModelChange)="inputChanged()"
-        matInput
-        (keydown.enter)="saveChanges()"
-      />
-      <textarea
-        *ngIf="multiline"
-        [(ngModel)]="inputValue"
-        [pattern]="pattern"
-        (ngModelChange)="inputChanged()"
-        [disabled]="toggleLatex"
-        [matAutosizeMaxRows]="maxLines"
-        [matAutosizeMinRows]="2"
-        [matTextareaAutosize]="true"
-        matInput
-      ></textarea>
-    </label>
+    <input
+      *ngIf="!multiline"
+      type="text"
+      [(ngModel)]="inputValue"
+      [pattern]="pattern"
+      (ngModelChange)="inputChanged()"
+      matInput
+      (keydown.enter)="saveChanges()"
+    />
+    <textarea
+      *ngIf="multiline"
+      [(ngModel)]="inputValue"
+      [pattern]="pattern"
+      (ngModelChange)="inputChanged()"
+      [disabled]="toggleLatex"
+      [matAutosizeMaxRows]="maxLines"
+      [matAutosizeMinRows]="2"
+      [matTextareaAutosize]="true"
+      matInput
+    ></textarea>
     <button
       *ngIf="(!toggleLatex && (inputValue !== value)) || (toggleLatex && (packedLatexValue !== value))"
       mat-button
