@@ -15,9 +15,9 @@
       [(ngModel)]="inputValue"
       [pattern]="pattern"
       (ngModelChange)="inputChanged()"
-      cdkTextareaAutosize
-      cdkAutosizeMinRows="1"
-      cdkAutosizeMaxRows="50"
+      [matAutosizeMaxRows]="maxLines"
+      [matAutosizeMinRows]="1"
+      [matTextareaAutosize]="true"
       matInput
     ></textarea>
     <button
