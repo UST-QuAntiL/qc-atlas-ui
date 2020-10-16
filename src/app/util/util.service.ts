@@ -145,6 +145,9 @@ export class UtilService {
       ' ' +
       objectType +
       '.'
+    );
+  }
+
   public isLatexText(packedData: string): boolean {
     return packedData
       ? packedData.includes(

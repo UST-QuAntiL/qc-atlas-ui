@@ -10,7 +10,7 @@ export class LatexRendererServiceConstants {
   }
 
   public getDefaultRenderOutput(): string {
-    return 'pdf';
+    return 'svg';
   }
 
   public packTextAndPackages(text = '', packages: string): string {
