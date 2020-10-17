@@ -1,31 +1,28 @@
 @import "theme";
 
 .dialog-container {
-  size: auto;
+  width: 100%;
+  max-width: 100%;
   background: rgba(mat-color($qc-atlas-ui-accent), 0.20);
   margin: 0;
 }
 
 .card-container {
+  width: 100%;
+  max-width: 100%;
   margin: 10px;
-  size: auto;
   border: lightgray;
   color: rgba(0, 0, 0, 0.54);
 }
 
-.text-container {
-  size: auto;
-  border-style: solid;
-  border-width: thin;
+.content-container {
+  width: 100%;
+  max-width: 100%;
   margin: 5px;
 }
 
-.packages-container {
-  size: auto;
-}
-
-.latex-container {
-  size: auto;
+.input-label {
+  color: rgba(0, 0, 0, 0.54);
 }
 
 .control-button {
