@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
@@ -55,7 +54,6 @@ import { LatexEditorDialogComponent } from './dialogs/latex-editor-dialog.compon
   ],
   imports: [
     ReactiveFormsModule,
-    CommonModule,
     FormsModule,
     MDBBootstrapModule,
     MatInputModule,
