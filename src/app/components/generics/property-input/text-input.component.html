@@ -3,7 +3,7 @@
                     [(ngModel)]="toggleLatex"
                     (ngModelChange)="toggleLatexFlag()"
                     style="float: right; font-size: x-small"
-  >Enable LaTeX rendering</mat-slide-toggle>
+  >{{toggleLatex ? 'Disable LaTeX rendering' : 'Enable LaTeX rendering'}}</mat-slide-toggle>
 
   <mat-form-field>
     <mat-label class="input-label">{{ name }}</mat-label>
@@ -28,7 +28,8 @@
       matInput
     ></textarea>
     <button
-      *ngIf="(!toggleLatex && (inputValue !== value)) || (toggleLatex && (packedLatexValue !== value))"
+      *ngIf="(!toggleLatex && (inputValue !== value)) ||
+      (toggleLatex && (packedLatexValue !== value))"
       mat-button
       matSuffix
       mat-icon-button
@@ -58,7 +59,7 @@
       mat-icon-button
       aria-label="Clear"
       (click)="openLatexEditor()">
-      <mat-icon>edit</mat-icon>
+      <mat-icon svgIcon="latex" style="background-size: 24px 24px"></mat-icon>
     </button>
   </mat-form-field>
 </div>

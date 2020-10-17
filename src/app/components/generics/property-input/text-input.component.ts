@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { LatexEditorDialogComponent } from '../dialogs/latex-editor-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { DoProvider } from './abstract-value-accessor';
@@ -25,7 +27,16 @@ export class TextInputComponent implements OnInit {
   packedLatexValue: string;
   urlToRenderedPdfBlob: string;
 
-  constructor(private utilService: UtilService) {}
+  constructor(
+    private utilService: UtilService,
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer
+  ) {
+    iconRegistry.addSvgIcon(
+      'latex',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/latex_icon.svg')
+    );
+  }
 
   saveChanges(): void {
     if (this.toggleLatex) {
