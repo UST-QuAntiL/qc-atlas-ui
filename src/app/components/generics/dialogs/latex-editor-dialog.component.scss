@@ -1,0 +1,46 @@
+@import "theme";
+
+.dialog-container {
+  width: 100%;
+  max-width: 100%;
+  background: rgba(mat-color($qc-atlas-ui-accent), 0.20);
+  margin: 0;
+}
+
+.card-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 10px;
+  border: lightgray;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.content-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 5px;
+}
+
+.input-label {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.control-button {
+  margin: 5px;
+}
+
+.control-button:hover {
+  color: white !important;
+}
+
+.preview-button:hover {
+  background-color: darkorange !important;
+}
+
+.submit-button:hover {
+  background-color: green !important;
+}
+
+.cancel-button:hover {
+  background-color: red !important;
+}

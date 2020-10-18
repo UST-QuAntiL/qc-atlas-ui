@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as deepEqual from 'fast-deep-equal';
+import { LatexContent } from 'api-latex/models/latex-content';
+import { RenderLatexControllerService } from 'api-latex/services/render-latex-controller.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { MissingEntityDialogComponent } from '../components/dialogs/missing-entity-dialog.component';
+import { LatexRendererServiceConstants } from './latex-renderer-service-constants';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +16,12 @@ export class UtilService {
   isSelectedColor = 'primary';
   timeOut = 3000;
 
-  constructor(private snackBar: MatSnackBar, public dialog: MatDialog) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog,
+    private latexRendererService: RenderLatexControllerService,
+    private latexRendererServiceConstants: LatexRendererServiceConstants
+  ) {}
 
   public callSnackBar(text: string): void {
     this.snackBar.open(text, 'OK', {
@@ -144,6 +154,66 @@ export class UtilService {
       ' ' +
       objectType +
       '.'
+    );
+  }
+
+  public isLatexText(packedData: string): boolean {
+    return packedData
+      ? packedData.includes(
+          this.latexRendererServiceConstants.latexFormatIndicator
+        )
+      : false;
+  }
+
+  public getUnpackedLatexText(packedData: string): string {
+    const data = this.latexRendererServiceConstants.unpackTextAndPackages(
+      packedData
+    );
+    return data.latexContent;
+  }
+
+  public renderPackedDataAndReturnUrlToPdfBlob(
+    packedData: string
+  ): Observable<string> {
+    const data = this.latexRendererServiceConstants.unpackTextAndPackages(
+      packedData
+    );
+    return this.renderLatexContentAndReturnUrlToPdfBlob(
+      data.latexContent,
+      data.latexPackages
+    );
+  }
+
+  public renderLatexContentAndReturnUrlToPdfBlob(
+    latexContent: string,
+    additionalPackages: string
+  ): Observable<string> {
+    const packages = this.latexRendererServiceConstants.getDefaultLatexPackages();
+    if (additionalPackages) {
+      for (const additionalPackage of this.latexRendererServiceConstants.formatLatexPackagesToArray(
+        additionalPackages
+      )) {
+        if (!packages.includes(additionalPackage)) {
+          packages.push(additionalPackage);
+        }
+      }
+    }
+    const latexBody: LatexContent = {
+      content: this.latexRendererServiceConstants.formatLatexContent(
+        latexContent
+      ),
+      latexPackages: packages,
+      output: this.latexRendererServiceConstants.getDefaultRenderOutput(),
+    };
+    return this.latexRendererService.renderLatex({ body: latexBody }).pipe(
+      map((response: string[]) => {
+        if (response) {
+          const latexBlob = this.latexRendererServiceConstants.createBlobFromRenderedResult(
+            response
+          );
+          return URL.createObjectURL(latexBlob);
+        }
+      })
     );
   }
 }

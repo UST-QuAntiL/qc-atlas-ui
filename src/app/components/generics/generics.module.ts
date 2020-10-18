@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
@@ -21,6 +20,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from '../../app-routing.module';
 import { GenericDataService } from '../../util/generic-data.service';
 import { TextInputComponent } from './property-input/text-input.component';
@@ -34,6 +36,7 @@ import { PrologInputComponent } from './property-input/prolog-input.component';
 import { PrologValidator } from './prolog.validator';
 import { TagsComponent } from './tags/tags.component';
 import { TagsDialogComponent } from './tags/dialog/tags-dialog.component';
+import { LatexEditorDialogComponent } from './dialogs/latex-editor-dialog.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +51,7 @@ import { TagsDialogComponent } from './tags/dialog/tags-dialog.component';
     PrologValidator,
     TagsComponent,
     TagsDialogComponent,
+    LatexEditorDialogComponent,
   ],
   imports: [
     ReactiveFormsModule,
@@ -73,6 +77,8 @@ import { TagsDialogComponent } from './tags/dialog/tags-dialog.component';
     MatListModule,
     MatCardModule,
     MatTooltipModule,
+    PdfViewerModule,
+    MatSlideToggleModule,
   ],
   exports: [
     TextInputComponent,

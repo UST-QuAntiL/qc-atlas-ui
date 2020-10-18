@@ -6,4 +6,7 @@ import { QuantumImplementationDto } from './quantum-implementation-dto';
 /**
  * Either a quantum or a classic implementation
  */
-export type EntityModelImplementationDto = { '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto);
+export type EntityModelImplementationDto = { _links?: Array<Link> } & (
+  | ClassicImplementationDto
+  | QuantumImplementationDto
+);

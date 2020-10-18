@@ -1,8 +1,8 @@
 <div class="m-4">
   <div class="row">
     <div class="col-12">
+      <mat-label class="mr-4">{{ title }}</mat-label>
       <mat-form-field *ngIf="!useToAddLinks">
-        <mat-label>{{ title }}</mat-label>
         <input matInput [(ngModel)]="inputValue" matInput (keydown.enter)="addElement()">
         <button *ngIf="!useToAddLinks" (click)="addElement()"
                 mat-button

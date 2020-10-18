@@ -1,2 +1,7 @@
 /* tslint:disable */
-export type CreateDirectedEdgeRequest = { 'sourcePatternId'?: string, 'targetPatternId'?: string, 'type'?: string, 'description'?: {} };
+export type CreateDirectedEdgeRequest = {
+  sourcePatternId?: string;
+  targetPatternId?: string;
+  type?: string;
+  description?: {};
+};
