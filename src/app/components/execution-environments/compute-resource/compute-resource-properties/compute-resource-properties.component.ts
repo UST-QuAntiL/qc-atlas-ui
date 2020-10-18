@@ -4,6 +4,7 @@ import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
 import { quantumComputationModelOptions } from '../../../../util/options';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
+import { UtilService } from '../../../../util/util.service';
 
 @Component({
   selector: 'app-compute-resource-properties',
@@ -20,7 +21,8 @@ export class ComputeResourcePropertiesComponent implements OnInit {
 
   constructor(
     private executionEnvironmentService: ExecutionEnvironmentsService,
-    private updateFieldService: UpdateFieldEventService
+    private updateFieldService: UpdateFieldEventService,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -44,9 +46,19 @@ export class ComputeResourcePropertiesComponent implements OnInit {
         computeResourceId: this.computeResource.id,
         body: property,
       })
-      .subscribe(() => {
-        this.fetchComputeResourceProperties();
-      });
+      .subscribe(
+        () => {
+          this.utilService.callSnackBar(
+            'Compute resource property was successfully added.'
+          );
+          this.fetchComputeResourceProperties();
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not add compute resource property.'
+          );
+        }
+      );
   }
 
   updateComputeResourceProperty(
@@ -58,9 +70,19 @@ export class ComputeResourcePropertiesComponent implements OnInit {
         computeResourcePropertyId: property.id,
         body: property,
       })
-      .subscribe(() => {
-        this.fetchComputeResourceProperties();
-      });
+      .subscribe(
+        () => {
+          this.utilService.callSnackBar(
+            'Compute resource property was successfully updated.'
+          );
+          this.fetchComputeResourceProperties();
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not update compute resource property.'
+          );
+        }
+      );
   }
 
   deleteComputeResourceProperty(
@@ -71,13 +93,23 @@ export class ComputeResourcePropertiesComponent implements OnInit {
         computeResourceId: this.computeResource.id,
         computeResourcePropertyId: property.id,
       })
-      .subscribe(() => {
-        this.computeResourceProperties = this.computeResourceProperties.filter(
-          (elem: EntityModelComputeResourcePropertyDto) =>
-            elem.id !== property.id
-        );
-        this.fetchComputeResourceProperties();
-      });
+      .subscribe(
+        () => {
+          this.utilService.callSnackBar(
+            'Compute resource property was successfully deleted.'
+          );
+          this.computeResourceProperties = this.computeResourceProperties.filter(
+            (elem: EntityModelComputeResourcePropertyDto) =>
+              elem.id !== property.id
+          );
+          this.fetchComputeResourceProperties();
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not delete compute resource property.'
+          );
+        }
+      );
   }
 
   fetchComputeResourceProperties(): void {

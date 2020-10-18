@@ -29,7 +29,7 @@ export class TagService extends BaseService {
   static readonly GetTagsPath = '/v1/tags';
 
   /**
-   * Retrieve all created tags
+   * Retrieve all created tags.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getTags()` instead.
@@ -88,7 +88,7 @@ export class TagService extends BaseService {
   }
 
   /**
-   * Retrieve all created tags
+   * Retrieve all created tags.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getTags$Response()` instead.
@@ -141,7 +141,7 @@ export class TagService extends BaseService {
   static readonly CreateTagPath = '/v1/tags';
 
   /**
-   * Create a new tag
+   * Create a new tag with its value and category.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createTag()` instead.
@@ -185,7 +185,7 @@ export class TagService extends BaseService {
   }
 
   /**
-   * Create a new tag
+   * Create a new tag with its value and category.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createTag$Response()` instead.
@@ -215,7 +215,7 @@ export class TagService extends BaseService {
   static readonly GetTagPath = '/v1/tags/{value}';
 
   /**
-   * Retrieve a specific tag
+   * Retrieve a specific tag.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getTag()` instead.
@@ -255,7 +255,7 @@ export class TagService extends BaseService {
   }
 
   /**
-   * Retrieve a specific tag
+   * Retrieve a specific tag.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getTag$Response()` instead.
@@ -285,7 +285,7 @@ export class TagService extends BaseService {
   static readonly GetAlgorithmsOfTagPath = '/v1/tags/{value}/algorithms';
 
   /**
-   * Retrieve all algorithms under a specific tag
+   * Retrieve all algorithms under a specific tag.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getAlgorithmsOfTag()` instead.
@@ -325,7 +325,7 @@ export class TagService extends BaseService {
   }
 
   /**
-   * Retrieve all algorithms under a specific tag
+   * Retrieve all algorithms under a specific tag.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getAlgorithmsOfTag$Response()` instead.
@@ -358,7 +358,7 @@ export class TagService extends BaseService {
     '/v1/tags/{value}/implementations';
 
   /**
-   * Retrieve all implementations under a specific tag
+   * Retrieve all implementations under a specific tag.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getImplementationsOfTag()` instead.
@@ -400,7 +400,7 @@ export class TagService extends BaseService {
   }
 
   /**
-   * Retrieve all implementations under a specific tag
+   * Retrieve all implementations under a specific tag.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getImplementationsOfTag$Response()` instead.

@@ -8,7 +8,7 @@ import { PatternRelationDto } from 'api-atlas/models';
 import { PatternControllerService } from 'api-patternpedia/services/pattern-controller.service';
 import { EntityModelPattern } from 'api-patternpedia/models/entity-model-pattern';
 import { EntityModelPatternLanguage } from 'api-patternpedia/models';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -30,12 +30,19 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   tableColumns: string[] = ['Pattern', 'Relation Type', 'Description'];
   externalLinkVariables: string[] = ['pattern'];
 
+  pagingInfo: any = {};
+  paginatorConfig: any = {
+    amountChoices: [10, 25, 50],
+    selectedAmount: 10,
+  };
+
   constructor(
     private patternRelationTypeService: PatternRelationTypeService,
     private algorithmService: AlgorithmService,
     private patternService: PatternControllerService,
     private utilService: UtilService,
-    private dataService: GenericDataService
+    private dataService: GenericDataService,
+    private genericDataService: GenericDataService
   ) {}
 
   ngOnInit(): void {}
@@ -47,17 +54,34 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     size?: number;
     sort?: string[];
   }): void {
-    this.algorithmService
-      .getPatternRelationsOfAlgorithm(params)
-      .subscribe((relations) => {
-        if (relations._embedded) {
-          this.patternRelations = relations._embedded.patternRelations;
-          this.generateTableObjects();
-        } else {
-          this.patternRelations = [];
-          this.tableObjects = [];
-        }
-      });
+    this.algorithmService.getPatternRelationsOfAlgorithm(params).subscribe(
+      (relations) => {
+        this.prepareRelations(relations);
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Pattern relations could not be retrieved.'
+        );
+      }
+    );
+  }
+
+  getPatternRelationsHateoas(url: string): void {
+    this.genericDataService.getData(url).subscribe((relations) => {
+      this.prepareRelations(relations);
+    });
+  }
+
+  prepareRelations(relations): void {
+    if (relations._embedded) {
+      this.patternRelations = relations._embedded.patternRelations;
+      this.generateTableObjects();
+    } else {
+      this.patternRelations = [];
+      this.tableObjects = [];
+    }
+    this.pagingInfo.page = relations.page;
+    this.pagingInfo._links = relations._links;
   }
 
   createPatternRelation(patternRelationDto: PatternRelationDto): void {
@@ -66,10 +90,25 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
         algorithmId: this.algorithm.id,
         body: patternRelationDto,
       })
-      .subscribe(() => {
-        this.getPatternRelations({ algorithmId: this.algorithm.id });
-        this.utilService.callSnackBar('Successfully created pattern relation');
-      });
+      .subscribe(
+        () => {
+          this.getPatternRelationsHateoas(
+            this.utilService.getLastPageAfterCreation(
+              this.pagingInfo._links.self.href,
+              this.pagingInfo,
+              1
+            )
+          );
+          this.utilService.callSnackBar(
+            'Pattern relation was successfully created.'
+          );
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not create pattern relation.'
+          );
+        }
+      );
   }
 
   updatePatternRelation(
@@ -82,10 +121,19 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
         patternRelationId: relationId,
         body: patternRelationDto,
       })
-      .subscribe(() => {
-        this.getPatternRelations({ algorithmId: this.algorithm.id });
-        this.utilService.callSnackBar('Successfully updated pattern relation');
-      });
+      .subscribe(
+        () => {
+          this.getPatternRelationsHateoas(this.pagingInfo._links.self.href);
+          this.utilService.callSnackBar(
+            'Pattern relation was successfully updated.'
+          );
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not update pattern relation.'
+          );
+        }
+      );
   }
 
   onAddElement(): void {
@@ -191,28 +239,63 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const deletionTasks = [];
-
+        const unlinkTasks = [];
+        const snackbarMessages = [];
+        let successfulUnlinks = 0;
         for (const relation of event.elements) {
-          deletionTasks.push(
-            this.algorithmService.deletePatternRelationOfAlgorithm({
-              algorithmId: this.algorithm.id,
-              patternRelationId: relation.id,
-            })
+          unlinkTasks.push(
+            this.algorithmService
+              .deletePatternRelationOfAlgorithm({
+                algorithmId: this.algorithm.id,
+                patternRelationId: relation.id,
+              })
+              .toPromise()
+              .then(() => {
+                successfulUnlinks++;
+                snackbarMessages.push(
+                  'Successfully unlinked pattern "' +
+                    relation.patternName +
+                    '".'
+                );
+              })
+              .catch(() => {
+                snackbarMessages.push(
+                  'Error! Could not unlink pattern "' +
+                    relation.patternName +
+                    '".'
+                );
+              })
           );
         }
-        forkJoin(deletionTasks).subscribe(() => {
-          this.getPatternRelations({ algorithmId: this.algorithm.id });
-          this.utilService.callSnackBar(
-            'Successfully removed pattern relation(s)'
+        forkJoin(unlinkTasks).subscribe(() => {
+          if (
+            this.utilService.isLastPageEmptyAfterDeletion(
+              successfulUnlinks,
+              this.tableObjects.length,
+              this.pagingInfo
+            )
+          ) {
+            this.getPatternRelationsHateoas(this.pagingInfo._links.prev.href);
+          } else {
+            this.getPatternRelationsHateoas(this.pagingInfo._links.self.href);
+          }
+          snackbarMessages.push(
+            this.utilService.generateFinishingSnackbarMessage(
+              successfulUnlinks,
+              dialogResult.data.length,
+              'patterns',
+              'unlinked'
+            )
           );
+          this.utilService.callSnackBarSequence(snackbarMessages);
         });
       }
     });
   }
 
   onDatalistConfigChanged(event): void {
-    this.getPatternRelations({ algorithmId: this.algorithm.id });
+    event.algorithmId = this.algorithm.id;
+    this.getPatternRelations(event);
   }
 
   onElementClicked(event): void {
@@ -222,7 +305,6 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
       this.fixedEncodeURIComponent(event.languageObject.uri) +
       '/' +
       this.fixedEncodeURIComponent(event.pattern);
-    console.log(encodedUri);
     window.open(encodedUri, '_blank');
   }
 

@@ -82,22 +82,26 @@ export class UtilService {
    *
    * @param currentUrl
    * @param pagingInfo
+   * @param createdElements
    * @return correctUrl
    */
-  public getLastPageAfterCreation(currentUrl: string, pagingInfo: any): string {
+  public getLastPageAfterCreation(
+    currentUrl: string,
+    pagingInfo: any,
+    createdElements: number
+  ): string {
     const url = new URL(currentUrl);
-    let correctPage;
-
     if (url.searchParams.get('sort') || url.searchParams.get('search')) {
       return currentUrl;
     }
 
-    // If current last page is not full, then it stays the last page
-    if (pagingInfo.page.totalElements % pagingInfo.page.size !== 0) {
-      correctPage = pagingInfo.page.totalPages - 1;
-    } else {
-      correctPage = pagingInfo.page.totalPages;
-    }
+    const totalElementsAfterCreation =
+      pagingInfo.page.totalElements + createdElements;
+    const lastPageAfterCreation = Math.ceil(
+      totalElementsAfterCreation / pagingInfo.page.size
+    );
+
+    const correctPage = lastPageAfterCreation - 1;
 
     // Adjust URL with correct page parameter
     url.searchParams.set('page', correctPage.toString());
@@ -130,15 +134,20 @@ export class UtilService {
    * @param successfulDeletions
    * @param expectedDeletions
    * @param objectType
+   * @param performedOperation
    * @return deletionMessage
    */
-  public generateFinalDeletionMessage(
+  public generateFinishingSnackbarMessage(
     successfulDeletions: number,
     expectedDeletions: number,
-    objectType: string
+    objectType: string,
+    performedOperation?: string
   ): string {
+    performedOperation = performedOperation ? performedOperation : 'deleted';
     return (
-      'Successfully deleted ' +
+      'Successfully ' +
+      performedOperation +
+      ' ' +
       successfulDeletions +
       '/' +
       expectedDeletions +

@@ -28,7 +28,7 @@ export class PatternRelationService extends BaseService {
   static readonly GetPatternRelationsPath = '/v1/pattern-relations';
 
   /**
-   * Retrieve all pattern relations
+   * Retrieve all relations between pattern and algorithms.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPatternRelations()` instead.
@@ -93,7 +93,7 @@ export class PatternRelationService extends BaseService {
   }
 
   /**
-   * Retrieve all pattern relations
+   * Retrieve all relations between pattern and algorithms.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPatternRelations$Response()` instead.
@@ -150,7 +150,7 @@ export class PatternRelationService extends BaseService {
   static readonly CreatePatternRelationPath = '/v1/pattern-relations';
 
   /**
-   * Add a pattern relation from an algorithm to a given pattern.Custom ID will be ignored. For pattern relation type only ID is required,other pattern relation type attributes will not change.
+   * Create a relation between a pattern and an algorithm.The pattern relation type has to be already created (e.g. via POST on /pattern-relation-types). As a result only the ID is required for the pattern relation type, other attributes will be ignored not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createPatternRelation()` instead.
@@ -200,7 +200,7 @@ export class PatternRelationService extends BaseService {
   }
 
   /**
-   * Add a pattern relation from an algorithm to a given pattern.Custom ID will be ignored. For pattern relation type only ID is required,other pattern relation type attributes will not change.
+   * Create a relation between a pattern and an algorithm.The pattern relation type has to be already created (e.g. via POST on /pattern-relation-types). As a result only the ID is required for the pattern relation type, other attributes will be ignored not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `createPatternRelation$Response()` instead.
@@ -248,7 +248,7 @@ export class PatternRelationService extends BaseService {
     '/v1/pattern-relations/{patternRelationId}';
 
   /**
-   * Retrieve a specific pattern relation
+   * Retrieve a specific relation between a pattern and an algorithm.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPatternRelation()` instead.
@@ -298,7 +298,7 @@ export class PatternRelationService extends BaseService {
   }
 
   /**
-   * Retrieve a specific pattern relation
+   * Retrieve a specific relation between a pattern and an algorithm.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getPatternRelation$Response()` instead.
@@ -346,7 +346,7 @@ export class PatternRelationService extends BaseService {
     '/v1/pattern-relations/{patternRelationId}';
 
   /**
-   * Update a reference to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
+   * Update a relation between a pattern and an algorithm. For the pattern relation type only the ID is required,other pattern relation type attributes will be ignored and not changed.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updatePatternRelation()` instead.
@@ -399,7 +399,7 @@ export class PatternRelationService extends BaseService {
   }
 
   /**
-   * Update a reference to a pattern. Custom ID will be ignored. For pattern relation type only ID is required, other pattern relation type attributes will not change.
+   * Update a relation between a pattern and an algorithm. For the pattern relation type only the ID is required,other pattern relation type attributes will be ignored and not changed.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `updatePatternRelation$Response()` instead.
@@ -448,7 +448,7 @@ export class PatternRelationService extends BaseService {
     '/v1/pattern-relations/{patternRelationId}';
 
   /**
-   * Delete a pattern relation.
+   * Delete a specific relation between a pattern and an algorithm. The pattern relation type is not affected by this.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deletePatternRelation()` instead.
@@ -484,7 +484,7 @@ export class PatternRelationService extends BaseService {
   }
 
   /**
-   * Delete a pattern relation.
+   * Delete a specific relation between a pattern and an algorithm. The pattern relation type is not affected by this.
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `deletePatternRelation$Response()` instead.

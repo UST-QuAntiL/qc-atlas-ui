@@ -36,11 +36,16 @@ export class ApplicationAreasListComponent implements OnInit {
   ngOnInit(): void {}
 
   getApplicationAreas(params: any): void {
-    this.applicationAreasService
-      .getApplicationAreas(params)
-      .subscribe((data) => {
+    this.applicationAreasService.getApplicationAreas(params).subscribe(
+      (data) => {
         this.prepareApplicationAreaData(data);
-      });
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Application areas could not be retrieved.'
+        );
+      }
+    );
   }
 
   getApplicationAreasHateoas(url: string): void {
@@ -77,19 +82,25 @@ export class ApplicationAreasListComponent implements OnInit {
         };
 
         params.body = applicationAreaDtoDto;
-        this.applicationAreasService
-          .createApplicationArea(params)
-          .subscribe((data) => {
+        this.applicationAreasService.createApplicationArea(params).subscribe(
+          (data) => {
             this.getApplicationAreasHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
-                this.pagingInfo
+                this.pagingInfo,
+                1
               )
             );
             this.utilService.callSnackBar(
-              'Successfully added application area'
+              'Application area was successfully added.'
             );
-          });
+          },
+          () => {
+            this.utilService.callSnackBar(
+              'Error! Could not add application area.'
+            );
+          }
+        );
       }
     });
   }
@@ -119,7 +130,14 @@ export class ApplicationAreasListComponent implements OnInit {
                   applicationAreaId: applicationArea.id,
                 })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted application area "' +
+                      applicationArea.name +
+                      '".'
+                  );
+                })
                 .catch((errorResponse) =>
                   snackbarMessages.push(JSON.parse(errorResponse.error).message)
                 )
@@ -138,7 +156,7 @@ export class ApplicationAreasListComponent implements OnInit {
               this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
             }
             snackbarMessages.push(
-              this.utilService.generateFinalDeletionMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'application areas'
@@ -169,14 +187,19 @@ export class ApplicationAreasListComponent implements OnInit {
           applicationAreaId: newApplicationAreaDto.id,
           body: newApplicationAreaDto,
         };
-        this.applicationAreasService
-          .updateApplicationArea(params)
-          .subscribe((data) => {
+        this.applicationAreasService.updateApplicationArea(params).subscribe(
+          (data) => {
             this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
             this.utilService.callSnackBar(
-              'Successfully edited application area'
+              'Application area was successfully edited.'
             );
-          });
+          },
+          () => {
+            this.utilService.callSnackBar(
+              'Error! Could not update application area.'
+            );
+          }
+        );
       }
     });
   }

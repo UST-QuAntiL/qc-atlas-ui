@@ -4,7 +4,6 @@ import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
 import { PublicationDto } from 'api-atlas/models/publication-dto';
-import { MatDialog } from '@angular/material/dialog';
 import { forkJoin, Observable } from 'rxjs';
 import {
   LinkObject,
@@ -61,8 +60,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     private publicationService: PublicationService,
     private genericDataService: GenericDataService,
     private router: Router,
-    private utilService: UtilService,
-    private dialog: MatDialog
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -78,11 +76,18 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.linkObject.linkedData = [];
     this.algorithmService
       .getPublicationsOfAlgorithm({ algorithmId: this.algorithm.id })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.publications;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.publications;
+          }
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked publications could not be retrieved.'
+          );
         }
-      });
+      );
   }
 
   getPagedLinkedPublications(params: any): void {
@@ -121,13 +126,15 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     this.dialogData.pagingInfo._links = data._links;
   }
 
-  openLinkPublicationDialog() {
+  openLinkPublicationDialog(): void {
     this.getAllPublications().subscribe((data) => {
       this.updateLinkDialogData(data);
-      const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
-        width: '800px',
-        data: this.dialogData,
-      });
+      const dialogRef = this.utilService.createDialog(
+        LinkItemListDialogComponent,
+        this.dialogData,
+        1000,
+        700
+      );
       const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
         (search: QueryParams) => {
           this.getAllPublications(search).subscribe((updatedData) => {
@@ -166,6 +173,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     // Empty unlinked publications
     this.linkObject.data = [];
     const linkTasks = [];
+    const snackbarMessages = [];
     let successfulLinks = 0;
     for (const publication of publications) {
       linkTasks.push(
@@ -175,26 +183,45 @@ export class AlgorithmPublicationsListComponent implements OnInit {
             body: publication,
           })
           .toPromise()
-          .then(() => successfulLinks++)
+          .then(() => {
+            successfulLinks++;
+            snackbarMessages.push(
+              'Successfully linked publication "' + publication.title + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link publication "' + publication.title + '".'
+            );
+          })
       );
     }
     forkJoin(linkTasks).subscribe(() => {
       this.getHateaosDataFromGenericService(
-        this.pagingInfo._links.self.href
+        this.utilService.getLastPageAfterCreation(
+          this.pagingInfo._links.self.href,
+          this.pagingInfo,
+          successfulLinks
+        )
       ).subscribe((data) => {
         this.updateDisplayedData(data);
       });
       this.getAllLinkedPublications();
-      const snackbarText =
-        successfulLinks > 1
-          ? 'Successfully linked ' + successfulLinks + ' publications'
-          : 'Publication sucessfully linked';
-      this.utilService.callSnackBar(snackbarText);
+      snackbarMessages.push(
+        this.utilService.generateFinishingSnackbarMessage(
+          successfulLinks,
+          publications.length,
+          'publications',
+          'linked'
+        )
+      );
+      this.utilService.callSnackBarSequence(snackbarMessages);
     });
   }
 
   unlinkPublications(event): void {
     const deletionTasks = [];
+    const snackbarMessages = [];
     let successfulDeletions = 0;
     for (const publication of event.elements) {
       deletionTasks.push(
@@ -204,7 +231,17 @@ export class AlgorithmPublicationsListComponent implements OnInit {
             publicationId: publication.id,
           })
           .toPromise()
-          .then(() => successfulDeletions++)
+          .then(() => {
+            successfulDeletions++;
+            snackbarMessages.push(
+              'Successfully unlinked publication "' + publication.title + '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Could not unlink publication "' + publication.title + '".'
+            );
+          })
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
@@ -219,11 +256,15 @@ export class AlgorithmPublicationsListComponent implements OnInit {
         this.updateDisplayedData(data);
       });
       this.getAllLinkedPublications();
-      const snackbarText =
-        successfulDeletions > 1
-          ? 'Successfully unlinked ' + successfulDeletions + ' publications'
-          : 'Publication sucessfully unlinked';
-      this.utilService.callSnackBar(snackbarText);
+      snackbarMessages.push(
+        this.utilService.generateFinishingSnackbarMessage(
+          successfulDeletions,
+          event.elements.length,
+          'publications',
+          'unlinked'
+        )
+      );
+      this.utilService.callSnackBarSequence(snackbarMessages);
     });
   }
 

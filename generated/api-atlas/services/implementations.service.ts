@@ -197,6 +197,41 @@ export class ImplementationsService extends BaseService {
   }
 
   /**
+   * Path part for operation getImplementation1
+   */
+  static readonly GetImplementation1Path = '/v1/implementations/{implementationId}';
+
+  /**
+   * Retrieve a specific implementation and its basic properties.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementation1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementation1$Response(params: {
+    implementationId: string;
+
+  }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ImplementationsService.GetImplementation1Path, 'get');
+    if (params) {
+
+      rb.path('implementationId', params.implementationId, {});
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>;
+      })
+    );
+  }
+
+  /**
    * Retrieve a specific implementation and its basic properties.
    *
    * This method provides access to only to the response body.
@@ -206,27 +241,12 @@ export class ImplementationsService extends BaseService {
    */
   getImplementation1(params: {
     implementationId: string;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+
+  }): Observable<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)> {
+
     return this.getImplementation1$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
-      )
+      map((r: StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>) => r.body as { '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto))
     );
   }
+
 }

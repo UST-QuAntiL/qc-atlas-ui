@@ -7,9 +7,12 @@
                [allowEdit]=true
                [allowDelete]="true"
                [emptyTableMessage]="'No related algorithms found'"
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
                (addElement)="onAddElement()"
                (submitDeleteElements)="onDeleteElements($event)"
                (datalistConfigChanged)="onDatalistConfigChanged($event)"
+               (pageChange)="getAlgorithmRelationsHateoas($event)"
                (elementClicked)="onElementClicked($event)"
                (updateClicked)="onUpdateClicked($event)">
     </app-table>

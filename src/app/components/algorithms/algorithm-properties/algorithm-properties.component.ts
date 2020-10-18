@@ -27,6 +27,7 @@ import {
   sketchOptions,
 } from '../../../util/options';
 import { LinkObject } from '../../generics/data-list/data-list.component';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-algorithm-properties',
@@ -93,7 +94,8 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   constructor(
     private algorithmService: AlgorithmService,
     private applicationAreaService: ApplicationAreasService,
-    private problemTypeService: ProblemTypeService
+    private problemTypeService: ProblemTypeService,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -272,9 +274,19 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         algorithmId: this.algorithm.id,
         body: property,
       })
-      .subscribe((e) => {
-        this.fetchComputeResourceProperties();
-      });
+      .subscribe(
+        (e) => {
+          this.utilService.callSnackBar(
+            'Compute resource property was successfully added.'
+          );
+          this.fetchComputeResourceProperties();
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not add compute resource property.'
+          );
+        }
+      );
   }
 
   updateComputeResourceProperty(
@@ -286,9 +298,19 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         computeResourcePropertyId: property.id,
         body: property,
       })
-      .subscribe((e) => {
-        this.fetchComputeResourceProperties();
-      });
+      .subscribe(
+        (e) => {
+          this.utilService.callSnackBar(
+            'Compute resource property was successfully updated.'
+          );
+          this.fetchComputeResourceProperties();
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not update compute resource property.'
+          );
+        }
+      );
   }
 
   deleteComputeResourceProperty(
@@ -299,13 +321,23 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         algorithmId: this.algorithm.id,
         computeResourcePropertyId: property.id,
       })
-      .subscribe((e) => {
-        this.computeResourceProperties = this.computeResourceProperties.filter(
-          (elem: EntityModelComputeResourcePropertyDto) =>
-            elem.id !== property.id
-        );
-        this.fetchComputeResourceProperties();
-      });
+      .subscribe(
+        (e) => {
+          this.utilService.callSnackBar(
+            'Compute resource property was successfully deleted.'
+          );
+          this.computeResourceProperties = this.computeResourceProperties.filter(
+            (elem: EntityModelComputeResourcePropertyDto) =>
+              elem.id !== property.id
+          );
+          this.fetchComputeResourceProperties();
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not delete compute resource property.'
+          );
+        }
+      );
   }
 
   fetchComputeResourceProperties(): void {

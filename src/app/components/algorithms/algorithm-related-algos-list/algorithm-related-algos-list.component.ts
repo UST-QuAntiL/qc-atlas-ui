@@ -8,9 +8,11 @@ import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
 import { Router } from '@angular/router';
 import { AlgorithmRelationTypeDto } from 'api-atlas/models';
+import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../util/util.service';
 import { AddAlgorithmRelationDialogComponent } from '../dialogs/add-algorithm-relation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
+import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-related-algos-list',
@@ -39,7 +41,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private algorithmRelationTypeService: AlgorithmRelationTypeService,
     private utilService: UtilService,
-    private router: Router
+    private router: Router,
+    private genericDataService: GenericDataService
   ) {}
 
   ngOnInit(): void {}
@@ -53,18 +56,32 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }): void {
     this.algorithmService.getAlgorithmRelationsOfAlgorithm(params).subscribe(
       (relations) => {
-        if (relations._embedded) {
-          this.algorithmRelations = relations._embedded.algorithmRelations;
-          this.generateTableObjects();
-        } else {
-          this.algorithmRelations = [];
-          this.tableObjects = [];
-        }
+        this.prepareRelations(relations);
       },
       (error) => {
-        console.log(error);
+        this.utilService.callSnackBar(
+          'Error! Algorithm relations could not be retrieved.'
+        );
       }
     );
+  }
+
+  getAlgorithmRelationsHateoas(url: string): void {
+    this.genericDataService.getData(url).subscribe((relations) => {
+      this.prepareRelations(relations);
+    });
+  }
+
+  prepareRelations(relations): void {
+    if (relations._embedded) {
+      this.algorithmRelations = relations._embedded.algorithmRelations;
+      this.generateTableObjects();
+    } else {
+      this.algorithmRelations = [];
+      this.tableObjects = [];
+    }
+    this.pagingInfo.page = relations.page;
+    this.pagingInfo._links = relations._links;
   }
 
   createAlgorithmRelation(algorithmRelationDto: AlgorithmRelationDto): void {
@@ -73,12 +90,25 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         algorithmId: this.algorithm.id,
         body: algorithmRelationDto,
       })
-      .subscribe(() => {
-        this.getAlgorithmRelations({ algorithmId: this.algorithm.id });
-        this.utilService.callSnackBar(
-          'Successfully created algorithm relation'
-        );
-      });
+      .subscribe(
+        () => {
+          this.getAlgorithmRelationsHateoas(
+            this.utilService.getLastPageAfterCreation(
+              this.pagingInfo._links.self.href,
+              this.pagingInfo,
+              1
+            )
+          );
+          this.utilService.callSnackBar(
+            'Algorithm Relation was successfully created.'
+          );
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Algorithm Relation could not be created.'
+          );
+        }
+      );
   }
 
   updateAlgorithmRelation(
@@ -91,12 +121,19 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
         algorithmRelationId: relationId,
         body: algorithmRelationDto,
       })
-      .subscribe(() => {
-        this.getAlgorithmRelations({ algorithmId: this.algorithm.id });
-        this.utilService.callSnackBar(
-          'Successfully updated algorithm relation'
-        );
-      });
+      .subscribe(
+        () => {
+          this.getAlgorithmRelationsHateoas(this.pagingInfo._links.self.href);
+          this.utilService.callSnackBar(
+            'Algorithm Relation was successfully updated.'
+          );
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Algorithm Relation could not be updated.'
+          );
+        }
+      );
   }
 
   onAddElement(): void {
@@ -155,29 +192,67 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const promises: Array<Promise<void>> = [];
+          const unlinkTasks = [];
+          const snackbarMessages = [];
+          let successfulUnlinks = 0;
           for (const relation of event.elements) {
-            promises.push(
+            unlinkTasks.push(
               this.algorithmService
                 .deleteAlgorithmRelation({
                   algorithmId: this.algorithm.id,
                   algorithmRelationId: relation.id,
                 })
                 .toPromise()
+                .then(() => {
+                  successfulUnlinks++;
+                  snackbarMessages.push(
+                    'Successfully unlinked algorithm "' +
+                      relation.targetAlgName +
+                      '".'
+                  );
+                })
+                .catch(() => {
+                  snackbarMessages.push(
+                    'Error! Could not unlink algorithm "' +
+                      relation.targetAlgName +
+                      '".'
+                  );
+                })
             );
           }
-          Promise.all(promises).then(() => {
-            this.getAlgorithmRelations({ algorithmId: this.algorithm.id });
-            this.utilService.callSnackBar(
-              'Successfully removed algorithm relation(s)'
+          forkJoin(unlinkTasks).subscribe(() => {
+            if (
+              this.utilService.isLastPageEmptyAfterDeletion(
+                successfulUnlinks,
+                this.tableObjects.length,
+                this.pagingInfo
+              )
+            ) {
+              this.getAlgorithmRelationsHateoas(
+                this.pagingInfo._links.prev.href
+              );
+            } else {
+              this.getAlgorithmRelationsHateoas(
+                this.pagingInfo._links.self.href
+              );
+            }
+            snackbarMessages.push(
+              this.utilService.generateFinishingSnackbarMessage(
+                successfulUnlinks,
+                dialogResult.data.length,
+                'algorithms',
+                'unlinked'
+              )
             );
+            this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }
       });
   }
 
   onDatalistConfigChanged(event): void {
-    this.getAlgorithmRelations({ algorithmId: this.algorithm.id });
+    event.algorithmId = this.algorithm.id;
+    this.getAlgorithmRelations(event);
   }
 
   onUpdateClicked(event): void {

@@ -81,17 +81,25 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
         params.body = computeResourcePropertyType;
         this.computeResourcePropertyTypeService
           .createComputingResourcePropertyType(params)
-          .subscribe((data) => {
-            this.getComputeResourcePropertyTypesHateoas(
-              this.utilService.getLastPageAfterCreation(
-                this.pagingInfo._links.self.href,
-                this.pagingInfo
-              )
-            );
-            this.utilService.callSnackBar(
-              'Successfully added compute resource property type'
-            );
-          });
+          .subscribe(
+            () => {
+              this.getComputeResourcePropertyTypesHateoas(
+                this.utilService.getLastPageAfterCreation(
+                  this.pagingInfo._links.self.href,
+                  this.pagingInfo,
+                  1
+                )
+              );
+              this.utilService.callSnackBar(
+                'Compute resource property type was successfully created.'
+              );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not create compute resource property type.'
+              );
+            }
+          );
       }
     });
   }
@@ -121,7 +129,14 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
                   computeResourcePropertyTypeId: computeResourcePropertyType.id,
                 })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted compute resource property type "' +
+                      computeResourcePropertyType.name +
+                      '".'
+                  );
+                })
                 .catch((errorResponse) =>
                   snackbarMessages.push(JSON.parse(errorResponse.error).message)
                 )
@@ -144,7 +159,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
               );
             }
             snackbarMessages.push(
-              this.utilService.generateFinalDeletionMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'compute resource property types'
@@ -183,14 +198,21 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
         };
         this.computeResourcePropertyTypeService
           .updateComputingResourcePropertyType(params)
-          .subscribe((data) => {
-            this.getComputeResourcePropertyTypesHateoas(
-              this.pagingInfo._links.self.href
-            );
-            this.utilService.callSnackBar(
-              'Successfully edited compute resource property type'
-            );
-          });
+          .subscribe(
+            () => {
+              this.getComputeResourcePropertyTypesHateoas(
+                this.pagingInfo._links.self.href
+              );
+              this.utilService.callSnackBar(
+                'Compute resource property type was successfully updated.'
+              );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not update compute resource property type.'
+              );
+            }
+          );
       }
     });
   }

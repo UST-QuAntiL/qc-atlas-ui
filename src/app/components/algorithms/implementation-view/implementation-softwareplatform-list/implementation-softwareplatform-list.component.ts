@@ -1,12 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { Router } from '@angular/router';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
-import { MatDialog } from '@angular/material/dialog';
-import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
+import { forkJoin, Observable } from 'rxjs';
 import {
   LinkObject,
   QueryParams,
@@ -14,7 +12,10 @@ import {
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { GenericDataService } from '../../../../util/generic-data.service';
-import { LinkItemListDialogComponent } from '../../../generics/dialogs/link-item-list-dialog.component';
+import {
+  DialogData,
+  LinkItemListDialogComponent,
+} from '../../../generics/dialogs/link-item-list-dialog.component';
 
 @Component({
   selector: 'app-implementation-softwareplatform-list',
@@ -24,10 +25,10 @@ import { LinkItemListDialogComponent } from '../../../generics/dialogs/link-item
 export class ImplementationSoftwareplatformListComponent implements OnInit {
   @Input() implementation: ImplementationDto;
 
-  publications: EntityModelSoftwarePlatformDto[];
   variableNames: string[] = ['name', 'link', 'license', 'version'];
   tableColumns: string[] = ['Name', 'Link', 'License', 'Version'];
   externalLinkVariables = ['link'];
+  displayedData = [];
   linkObject: LinkObject = {
     title: 'Link software platform with ',
     subtitle: 'Search software platform by name',
@@ -35,11 +36,23 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
     data: [],
     linkedData: [],
   };
-  tableAddAllowed = true;
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
+  };
+
+  dialogData: DialogData = {
+    title: 'Link existing software platforms',
+    linkObject: this.linkObject,
+    tableColumns: ['Name', 'Version', 'Licence'],
+    variableNames: ['name', 'version', 'licence'],
+    noButtonText: 'Cancel',
+    pagingInfo: {},
+    paginatorConfig: {
+      amountChoices: [10, 25, 50],
+      selectedAmount: 10,
+    },
   };
 
   constructor(
@@ -47,162 +60,240 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private genericDataService: GenericDataService,
     private router: Router,
-    private utilService: UtilService,
-    private dialog: MatDialog
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
     this.linkObject.title += this.implementation.name;
-    this.getAllLinkedPlatforms();
+    this.getAllLinkedSoftwarePlatforms();
   }
 
-  getAllLinkedPlatforms(): void {
+  getAllSoftwarePlatforms(search?: QueryParams): Observable<any> {
+    return this.executionEnvironmentsService
+      .getSoftwarePlatforms(search)
+      .pipe((data) => data);
+  }
+
+  getAllLinkedSoftwarePlatforms(): void {
+    this.linkObject.linkedData = [];
     this.algorithmService
       .getSoftwarePlatformsOfImplementation({
-        implementationId: this.implementation.id,
         algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
       })
-      .subscribe((softwarePlatforms) => {
-        this.linkObject.linkedData = [];
-        if (softwarePlatforms._embedded) {
-          this.linkObject.linkedData =
-            softwarePlatforms._embedded.softwarePlatforms;
+      .subscribe(
+        (data) => {
+          if (data._embedded) {
+            this.linkObject.linkedData = data._embedded.softwarePlatforms;
+          }
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked software platforms could not be retrieved.'
+          );
         }
+      );
+  }
+
+  getPagedLinkedSoftwarePlatforms(params: any): void {
+    this.algorithmService
+      .getSoftwarePlatformsOfImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
+        page: params.page,
+        size: params.size,
+        sort: params.sort,
+        search: params.sort,
+      })
+      .subscribe((data) => {
+        this.updateDisplayedData(data);
       });
   }
 
-  updateSoftwarePlatformData(data): void {
+  updateDisplayedData(data): void {
+    // clear link object data
+    this.displayedData = [];
+    // If software platforms found
+    if (data._embedded) {
+      this.displayedData = data._embedded.softwarePlatforms;
+    }
+    this.pagingInfo.page = data.page;
+    this.pagingInfo._links = data._links;
+  }
+
+  updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If software platforms found
     if (data._embedded) {
       this.linkObject.data = data._embedded.softwarePlatforms;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
-  }
-
-  getLinkedPlatforms(params: {
-    algorithmId: string;
-    implementationId: string;
-    softwarePlatformId: string;
-  }): void {
-    this.algorithmService
-      .getSoftwarePlatformOfImplementation(params)
-      .subscribe((data) => {
-        this.updateSoftwarePlatformData(data);
-      });
-  }
-
-  getLinkedPlatformsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.updateSoftwarePlatformData(data);
-    });
+    this.dialogData.pagingInfo.page = data.page;
+    this.dialogData.pagingInfo._links = data._links;
   }
 
   openLinkSoftwarePlatformDialog(): void {
-    this.executionEnvironmentsService
-      .getSoftwarePlatforms()
-      .subscribe((data) => {
-        this.updateSoftwarePlatformData(data);
-        const dialogRef = this.dialog.open(LinkItemListDialogComponent, {
-          width: '800px',
-          data: {
-            title: 'Link existing software platforms',
-            linkObject: this.linkObject,
-            tableColumns: ['Name', 'Version', 'Licence'],
-            variableNames: ['name', 'version', 'licence'],
-            pagingInfo: this.pagingInfo,
-            paginatorConfig: this.paginatorConfig,
-            noButtonText: 'Cancel',
-          },
-        });
-        const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
-          (search: QueryParams) => {
-            this.executionEnvironmentsService
-              .getSoftwarePlatforms(search)
-              .subscribe((updatedData) => {
-                this.updateSoftwarePlatformData(updatedData);
-                dialogRef.componentInstance.data.linkObject = this.linkObject;
-              });
-          }
-        );
-        const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-          (page: string) => {
-            this.genericDataService.getData(page).subscribe((pageData) => {
-              this.updateSoftwarePlatformData(pageData);
-              dialogRef.componentInstance.data.linkObject = this.linkObject;
-            });
-          }
-        );
-        const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
-          (element: ComputeResourceDto) => {
-            this.routeToSoftwarePlatform(element);
-            dialogRef.close();
-          }
-        );
+    this.getAllSoftwarePlatforms().subscribe((data) => {
+      this.updateLinkDialogData(data);
+      const dialogRef = this.utilService.createDialog(
+        LinkItemListDialogComponent,
+        this.dialogData,
+        1000,
+        700
+      );
+      const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+        (search: QueryParams) => {
+          this.getAllSoftwarePlatforms(search).subscribe((updatedData) => {
+            this.updateLinkDialogData(updatedData);
+            dialogRef.componentInstance.data.linkObject = this.linkObject;
+          });
+        }
+      );
+      const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
+        (page: string) => {
+          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+            this.updateLinkDialogData(pageData);
+            dialogRef.componentInstance.data.linkObject = this.linkObject;
+          });
+        }
+      );
+      const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
+        (element: SoftwarePlatformDto) => {
+          this.routeToSoftwarePlatform(element);
+          dialogRef.close();
+        }
+      );
 
-        dialogRef.afterClosed().subscribe((dialogResult) => {
-          searchTextSub.unsubscribe();
-          pagingSub.unsubscribe();
-          elementClickedSub.unsubscribe();
-          if (dialogResult) {
-            for (const computeResource of dialogResult.selectedItems) {
-              this.linkSoftwarePlatform(computeResource);
-            }
-          }
-        });
+      dialogRef.afterClosed().subscribe((dialogResult) => {
+        searchTextSub.unsubscribe();
+        pagingSub.unsubscribe();
+        elementClickedSub.unsubscribe();
+        if (dialogResult) {
+          this.linkSoftwarePlatforms(dialogResult.selectedItems);
+        }
       });
+    });
   }
 
-  linkSoftwarePlatform(platform: SoftwarePlatformDto): void {
-    // Empty unlinked algorithms
+  linkSoftwarePlatforms(softwarePlatforms: SoftwarePlatformDto[]): void {
+    // Empty unlinked software platforms
     this.linkObject.data = [];
-    this.executionEnvironmentsService
-      .linkSoftwarePlatformAndImplementation({
-        softwarePlatformId: platform.id,
-        body: this.implementation,
-      })
-      .subscribe((data) => {
-        this.getLinkedPlatformsHateoas(this.pagingInfo._links.self.href);
-        this.getAllLinkedPlatforms();
-        this.utilService.callSnackBar('Successfully linked software platform');
+    const linkTasks = [];
+    const snackbarMessages = [];
+    let successfulLinks = 0;
+    for (const softwarePlatform of softwarePlatforms) {
+      linkTasks.push(
+        this.algorithmService
+          .linkImplementationAndSoftwarePlatform({
+            algorithmId: this.implementation.implementedAlgorithmId,
+            implementationId: this.implementation.id,
+            body: softwarePlatform,
+          })
+          .toPromise()
+          .then(() => {
+            successfulLinks++;
+            snackbarMessages.push(
+              'Successfully linked software platform "' +
+                softwarePlatform.name +
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not link software platform "' +
+                softwarePlatform.name +
+                '".'
+            );
+          })
+      );
+    }
+    forkJoin(linkTasks).subscribe(() => {
+      this.getHateaosDataFromGenericService(
+        this.utilService.getLastPageAfterCreation(
+          this.pagingInfo._links.self.href,
+          this.pagingInfo,
+          successfulLinks
+        )
+      ).subscribe((data) => {
+        this.updateDisplayedData(data);
       });
+      this.getAllLinkedSoftwarePlatforms();
+      snackbarMessages.push(
+        this.utilService.generateFinishingSnackbarMessage(
+          successfulLinks,
+          softwarePlatforms.length,
+          'software platforms',
+          'linked'
+        )
+      );
+      this.utilService.callSnackBarSequence(snackbarMessages);
+    });
   }
 
   unlinkSoftwarePlatforms(event): void {
-    const promises: Array<Promise<void>> = [];
-    for (const platform of event.elements) {
-      promises.push(
-        this.executionEnvironmentsService
-          .unlinkSoftwarePlatformAndImplementation({
-            softwarePlatformId: platform.id,
+    const deletionTasks = [];
+    const snackbarMessages = [];
+    let successfulDeletions = 0;
+    for (const softwarePlatform of event.elements) {
+      deletionTasks.push(
+        this.algorithmService
+          .unlinkImplementationAndSoftwarePlatform({
+            algorithmId: this.implementation.implementedAlgorithmId,
             implementationId: this.implementation.id,
+            softwarePlatformId: softwarePlatform.id,
           })
           .toPromise()
+          .then(() => {
+            successfulDeletions++;
+            snackbarMessages.push(
+              'Successfully unlinked software platform "' +
+                softwarePlatform.name +
+                '".'
+            );
+          })
+          .catch(() => {
+            snackbarMessages.push(
+              'Error! Could not unlink software platform "' +
+                softwarePlatform.name +
+                '".'
+            );
+          })
       );
     }
-    Promise.all(promises).then(() => {
-      this.utilService.callSnackBar(
-        'Successfully unlinked software platform(s)'
+    forkJoin(deletionTasks).subscribe(() => {
+      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
+        successfulDeletions,
+        this.displayedData.length,
+        this.pagingInfo
+      )
+        ? this.pagingInfo._links.prev.href
+        : this.pagingInfo._links.self.href;
+      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
+        this.updateDisplayedData(data);
+      });
+      this.getAllLinkedSoftwarePlatforms();
+      snackbarMessages.push(
+        this.utilService.generateFinishingSnackbarMessage(
+          successfulDeletions,
+          event.elements.length,
+          'software platforms',
+          'unlinked'
+        )
       );
-      this.loadCorrectPageAfterDelete(event.elements.length);
-      this.getAllLinkedPlatforms();
+      this.utilService.callSnackBarSequence(snackbarMessages);
     });
   }
 
   onDatalistConfigChanged(event): void {
-    event.algorithmId = this.implementation.implementedAlgorithmId;
-    event.implementationId = this.implementation.id;
-    this.getLinkedPlatforms(event);
+    this.getPagedLinkedSoftwarePlatforms(event);
   }
 
-  onElementClicked(platform: any): void {
-    this.routeToSoftwarePlatform(platform);
+  onElementClicked(softwarePlatform: SoftwarePlatformDto): void {
+    this.routeToSoftwarePlatform(softwarePlatform);
   }
 
   onUrlClicked(urlData: UrlData): void {
-    // No check needed since publications have only one url-field called 'link'
+    // No check needed since software platforms have only one url-field called 'link'
     window.open(urlData.element['link'], '_blank');
   }
 
@@ -214,24 +305,13 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
     ]);
   }
 
-  onPageChanged(event): void {
-    this.getLinkedPlatformsHateoas(event);
+  getHateaosDataFromGenericService(url: string): Observable<any> {
+    return this.genericDataService.getData(url).pipe((data) => data);
   }
 
-  /**
-   * This method is used to load the correct page if elements are
-   * deleted since deleting objects can lead to a decrease of the amount of pages.
-   *
-   * @param deletedElements
-   */
-  loadCorrectPageAfterDelete(deletedElements: number): void {
-    if (
-      this.linkObject.linkedData.length === deletedElements &&
-      this.pagingInfo.page.number !== 0
-    ) {
-      this.getLinkedPlatformsHateoas(this.pagingInfo._links.prev.href);
-    } else {
-      this.getLinkedPlatformsHateoas(this.pagingInfo._links.self.href);
-    }
+  onPageChanged(event): void {
+    this.getHateaosDataFromGenericService(event).subscribe((data) => {
+      this.updateDisplayedData(data);
+    });
   }
 }

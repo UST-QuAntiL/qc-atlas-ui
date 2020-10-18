@@ -63,7 +63,9 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
           this.getTagsForAlgorithm(algoId);
         },
         (error) => {
-          console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Algorithm could not be retrieved.'
+          );
         }
       );
     });
@@ -94,10 +96,11 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
             heading: this.createBreadcrumbHeader(this.algorithm),
             subHeading: this.algorithm.computationModel + ' Algorithm',
           };
-          this.utilService.callSnackBar('Successfully updated algorithm');
+          this.utilService.callSnackBar('Algorithm was successfully updated.');
         },
         (error) => {
           console.log(error);
+          this.utilService.callSnackBar('Error! Could not update algorithm.');
         }
       );
   }
@@ -143,7 +146,13 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         algorithmId: this.algorithm.id,
         body: tag,
       })
-      .subscribe();
+      .toPromise()
+      .then(() => {
+        this.utilService.callSnackBar('Tag was successfully added.');
+      })
+      .catch(() => {
+        this.utilService.callSnackBar('Error! Could not add tag.');
+      });
   }
 
   removeTag(tag: TagDto): void {
@@ -152,7 +161,13 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         algorithmId: this.algorithm.id,
         body: tag,
       })
-      .subscribe();
+      .toPromise()
+      .then(() => {
+        this.utilService.callSnackBar('Tag was successfully removed.');
+      })
+      .catch(() => {
+        this.utilService.callSnackBar('Error! Could not remove tag.');
+      });
   }
 
   updateAlgorithmField(event: { field; value }): void {
@@ -166,16 +181,27 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         algorithmId: this.algorithm.id,
         body: applicationArea,
       })
-      .subscribe((areas) => {
-        this.utilService.callSnackBar(
-          'Successfully linked application area "' +
-            applicationArea.name +
-            '" to algorithm "' +
-            this.algorithm.name +
-            '"'
-        );
-        this.getApplicationAreasForAlgorithm(this.algorithm.id);
-      });
+      .subscribe(
+        () => {
+          this.utilService.callSnackBar(
+            'Successfully linked application area "' +
+              applicationArea.name +
+              '" to algorithm "' +
+              this.algorithm.name +
+              '".'
+          );
+          this.getApplicationAreasForAlgorithm(this.algorithm.id);
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not link application area "' +
+              applicationArea.name +
+              '" to algorithm "' +
+              this.algorithm.name +
+              '".'
+          );
+        }
+      );
   }
 
   removeApplicationArea(applicationArea: EntityModelApplicationAreaDto): void {
@@ -192,11 +218,18 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
               applicationArea.name +
               '" from algorithm "' +
               this.algorithm.name +
-              '"'
+              '".'
           );
         },
         (error) => {
           console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not remove link to application area "' +
+              applicationArea.name +
+              '" from algorithm "' +
+              this.algorithm.name +
+              '".'
+          );
         }
       );
   }
@@ -218,33 +251,17 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
               '"'
           );
         },
-        (error) => console.log(error)
+        (error) => {
+          console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not link problem type "' +
+              problemType.name +
+              '" to algorithm "' +
+              this.algorithm.name +
+              '".'
+          );
+        }
       );
-    // this.problemTypeService.createProblemType({ body: problemType }).subscribe(
-    //   (type) => {
-    //     this.algorithmService
-    //       .linkAlgorithmAndProblemType({
-    //         algorithmId: this.algorithm.id,
-    //         body: type,
-    //       })
-    //       .subscribe(
-    //         () => {
-    //           this.getProblemTypesForAlgorithm(this.algorithm.id);
-    //           this.utilService.callSnackBar(
-    //             'Successfully linked application area "' +
-    //               type.name +
-    //               '" to algorithm "' +
-    //               this.algorithm.name +
-    //               '"'
-    //           );
-    //         },
-    //         (error) => console.log(error)
-    //       );
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
   }
 
   removeProblemTypeFromAlgorithm(problemType: EntityModelProblemTypeDto): void {
@@ -261,11 +278,18 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
               problemType.name +
               '" from algorithm "' +
               this.algorithm.name +
-              '"'
+              '".'
           );
         },
         (error) => {
           console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not remove link to problem type "' +
+              problemType.name +
+              '" from algorithm "' +
+              this.algorithm.name +
+              '".'
+          );
         }
       );
   }

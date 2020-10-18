@@ -36,9 +36,16 @@ export class ProblemTypesListComponent implements OnInit {
   ngOnInit(): void {}
 
   getProblemTypes(params: any): void {
-    this.problemTypeService.getProblemTypes(params).subscribe((data) => {
-      this.prepareProblemTypeData(data);
-    });
+    this.problemTypeService.getProblemTypes(params).subscribe(
+      (data) => {
+        this.prepareProblemTypeData(data);
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Problem types could not be retrieved.'
+        );
+      }
+    );
   }
 
   getProblemTypesHateoas(url: string): void {
@@ -91,15 +98,23 @@ export class ProblemTypesListComponent implements OnInit {
         }
 
         params.body = problemTypeDto;
-        this.problemTypeService.createProblemType(params).subscribe((data) => {
-          this.getProblemTypesHateoas(
-            this.utilService.getLastPageAfterCreation(
-              this.pagingInfo._links.self.href,
-              this.pagingInfo
-            )
-          );
-          this.utilService.callSnackBar('Successfully added problem type');
-        });
+        this.problemTypeService.createProblemType(params).subscribe(
+          (data) => {
+            this.getProblemTypesHateoas(
+              this.utilService.getLastPageAfterCreation(
+                this.pagingInfo._links.self.href,
+                this.pagingInfo,
+                1
+              )
+            );
+            this.utilService.callSnackBar('Successfully created problem type.');
+          },
+          () => {
+            this.utilService.callSnackBar(
+              'Error! Problem type could not be created.'
+            );
+          }
+        );
       }
     });
   }
@@ -128,7 +143,14 @@ export class ProblemTypesListComponent implements OnInit {
                   problemTypeId: problemType.id,
                 })
                 .toPromise()
-                .then(() => successfulDeletions++)
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted problem type "' +
+                      problemType.name +
+                      '".'
+                  );
+                })
                 .catch((errorResponse) =>
                   snackbarMessages.push(JSON.parse(errorResponse.error).message)
                 )
@@ -147,7 +169,7 @@ export class ProblemTypesListComponent implements OnInit {
               this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
             }
             snackbarMessages.push(
-              this.utilService.generateFinalDeletionMessage(
+              this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 dialogResult.data.length,
                 'problem types'
@@ -176,25 +198,36 @@ export class ProblemTypesListComponent implements OnInit {
       }
     );
 
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        const updatedProblemType: EntityModelProblemTypeDto = {
-          id: dialogResult.id,
-          name: dialogResult.name,
-          parentProblemType: dialogResult.parentProblemType
-            ? dialogResult.parentProblemType.id
-            : null,
-        };
+    dialogRef.afterClosed().subscribe(
+      (dialogResult) => {
+        if (dialogResult) {
+          const updatedProblemType: EntityModelProblemTypeDto = {
+            id: dialogResult.id,
+            name: dialogResult.name,
+            parentProblemType: dialogResult.parentProblemType
+              ? dialogResult.parentProblemType.id
+              : null,
+          };
 
-        const params: any = {
-          problemTypeId: updatedProblemType.id,
-          body: updatedProblemType,
-        };
-        this.problemTypeService.updateProblemType(params).subscribe((data) => {
-          this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
-          this.utilService.callSnackBar('Successfully edited problem type');
-        });
+          const params: any = {
+            problemTypeId: updatedProblemType.id,
+            body: updatedProblemType,
+          };
+          this.problemTypeService
+            .updateProblemType(params)
+            .subscribe((data) => {
+              this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
+              this.utilService.callSnackBar(
+                'Successfully updated problem type.'
+              );
+            });
+        }
+      },
+      (error) => {
+        this.utilService.callSnackBar(
+          'Error! Problem Type could not be updated.'
+        );
       }
-    });
+    );
   }
 }
