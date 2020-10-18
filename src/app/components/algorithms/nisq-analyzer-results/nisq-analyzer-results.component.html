@@ -8,89 +8,64 @@
       (matSortChange)="changeSort($event.active, $event.direction)"
     >
       <ng-container matColumnDef="inputParameters">
-        <th class="backend-column" mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef>
           Input
         </th>
-        <td class="backend-column" mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element">
           {{ formatParameters(element) }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="implementation.name">
-        <th
-          class="backend-column"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-        >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Implementation
         </th>
-        <td class="backend-column" mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element">
           {{ element.implementation.name }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="qpu.name">
-        <th
-          class="backend-column"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-        >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
           QPU
         </th>
-        <td class="backend-column" mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element">
           {{ element.qpu.name }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="analysedWidth">
-        <th
-          class="value-column"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-        >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Width
         </th>
-        <td class="value-column" mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element">
           {{ element.analysedWidth }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="analysedDepth">
-        <th
-          class="value-column"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-        >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Depth
         </th>
-        <td class="value-column" mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element">
           {{ element.analysedDepth }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="time">
-        <th
-          class="value-column"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-        >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Time
         </th>
-        <td class="value-column" mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element">
           {{ element.time }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="execution">
-        <th class="action-column" mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef>
           Execution Result(s)
         </th>
-        <td class="action-column" mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element">
           <button
             mat-raised-button
             *ngIf="hasExecutionResult(element)"
