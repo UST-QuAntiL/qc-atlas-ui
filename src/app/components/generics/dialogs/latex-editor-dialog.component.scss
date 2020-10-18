@@ -27,6 +27,7 @@
 
 .control-button {
   margin: 5px;
+  height: 100%;
 }
 
 .control-button:hover {
@@ -34,7 +35,7 @@
 }
 
 .preview-button:hover {
-  background-color: darkorange !important;
+  background-color: orange !important;
 }
 
 .submit-button:hover {
