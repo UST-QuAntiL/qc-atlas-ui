@@ -20,7 +20,9 @@ export class TextInputComponent implements OnInit {
   @Input() maxLines = 1;
   @Input() isLink: boolean;
   @Input() pattern?: string;
-  @Input() latexActive = false;
+
+  // TODO fix latex-renderer service running in a docker container to leverage the latex feature
+  @Input() latexActive = true;
 
   inputValue: string;
   toggleLatex = false;
