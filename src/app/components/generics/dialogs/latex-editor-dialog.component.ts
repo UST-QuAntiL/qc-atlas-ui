@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -17,9 +18,10 @@ export class LatexEditorDialogComponent implements OnInit {
   inputText = '';
   latexPackages = '';
   defaultLatexPackages = [];
-  urlToRenderedPdfBlob: string;
+  urlToRenderedBlob: SafeUrl;
 
   constructor(
+    private sanitizer: DomSanitizer,
     public dialogRef: MatDialogRef<LatexEditorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
@@ -51,14 +53,14 @@ export class LatexEditorDialogComponent implements OnInit {
   }
 
   onGenerateLatex(): void {
-    this.urlToRenderedPdfBlob = undefined;
+    this.urlToRenderedBlob = undefined;
     this.utilService
       .renderLatexContentAndReturnUrlToPdfBlob(
         this.inputText,
         this.latexPackages
       )
-      .subscribe((response) => {
-        this.urlToRenderedPdfBlob = response;
+      .subscribe((url) => {
+        this.urlToRenderedBlob = this.sanitizer.bypassSecurityTrustUrl(url);
       });
   }
 }

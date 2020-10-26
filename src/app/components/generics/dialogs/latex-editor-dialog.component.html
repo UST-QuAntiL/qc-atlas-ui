@@ -1,9 +1,9 @@
 <mat-dialog-content class="dialog-container">
-  <h1 mat-dialog-title id="title" >{{data.title}}</h1>
+  <h1 mat-dialog-title id="title">{{ data.title }}</h1>
   <mat-card class="card-container">
     <div>Default LaTeX packages:</div>
     <div *ngFor="let defaultPackage of defaultLatexPackages">
-      <mat-label style="font-weight: bold">{{defaultPackage}}</mat-label>
+      <mat-label style="font-weight: bold;">{{ defaultPackage }}</mat-label>
     </div>
   </mat-card>
   <mat-card class="card-container">
@@ -36,11 +36,42 @@
   </mat-card>
   <mat-card class="card-container">
     <mat-label class="input-label">Rendered result</mat-label>
-    <pdf-viewer *ngIf="urlToRenderedPdfBlob" [src]="urlToRenderedPdfBlob" [render-text]="true" style="display: block"></pdf-viewer>
+    <img
+      *ngIf="urlToRenderedBlob"
+      [src]="urlToRenderedBlob"
+      style="display: block;"
+    />
   </mat-card>
   <mat-card class="card-container">
-    <button color="red" outline="true" type="button" mdbBtn class="control-button cancel-button" (click)="dialogRef.close()">Cancel</button>
-    <button color="orange" outline="true" type="button" mdbBtn class="control-button preview-button" (click)="onGenerateLatex()">Preview</button>
-    <button color="green" outline="true" type="button" mdbBtn class="control-button submit-button" (click)="onSubmit()">Submit</button>
+    <button
+      color="red"
+      outline="true"
+      type="button"
+      mdbBtn
+      class="control-button cancel-button"
+      (click)="dialogRef.close()"
+    >
+      Cancel
+    </button>
+    <button
+      color="orange"
+      outline="true"
+      type="button"
+      mdbBtn
+      class="control-button preview-button"
+      (click)="onGenerateLatex()"
+    >
+      Preview
+    </button>
+    <button
+      color="green"
+      outline="true"
+      type="button"
+      mdbBtn
+      class="control-button submit-button"
+      (click)="onSubmit()"
+    >
+      Submit
+    </button>
   </mat-card>
 </mat-dialog-content>

@@ -1,9 +1,13 @@
 <div>
-  <mat-slide-toggle *ngIf="latexActive && multiline"
-                    [(ngModel)]="toggleLatex"
-                    (ngModelChange)="toggleLatexFlag()"
-                    style="float: right; font-size: x-small"
-  >{{toggleLatex ? 'Disable LaTeX rendering' : 'Enable LaTeX rendering'}}</mat-slide-toggle>
+  <mat-slide-toggle
+    *ngIf="latexActive && multiline"
+    [(ngModel)]="toggleLatex"
+    (ngModelChange)="toggleLatexFlag()"
+    style="float: right; font-size: x-small;"
+    >{{
+      toggleLatex ? 'Disable LaTeX rendering' : 'Enable LaTeX rendering'
+    }}</mat-slide-toggle
+  >
 
   <mat-form-field>
     <mat-label class="input-label">{{ name }}</mat-label>
@@ -28,8 +32,10 @@
       matInput
     ></textarea>
     <button
-      *ngIf="(!toggleLatex && (inputValue !== value)) ||
-      (toggleLatex && (packedLatexValue !== value))"
+      *ngIf="
+        (!toggleLatex && inputValue !== value) ||
+        (toggleLatex && packedLatexValue !== value)
+      "
       mat-button
       matSuffix
       mat-icon-button
@@ -58,11 +64,16 @@
       matSuffix
       mat-icon-button
       aria-label="Clear"
-      (click)="openLatexEditor()">
-      <mat-icon svgIcon="latex" style="background-size: 24px 24px"></mat-icon>
+      (click)="openLatexEditor()"
+    >
+      <mat-icon svgIcon="latex" style="background-size: 24px 24px;"></mat-icon>
     </button>
   </mat-form-field>
 </div>
 <div>
-  <pdf-viewer *ngIf="urlToRenderedPdfBlob" [src]="urlToRenderedPdfBlob" [render-text]="true" style="display: block"></pdf-viewer>
+  <img
+    *ngIf="urlToRenderedBlob"
+    [src]="urlToRenderedBlob"
+    style="display: block;"
+  />
 </div>

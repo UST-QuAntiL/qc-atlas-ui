@@ -206,7 +206,7 @@ export class UtilService {
       output: this.latexRendererServiceConstants.getDefaultRenderOutput(),
     };
     return this.latexRendererService.renderLatex({ body: latexBody }).pipe(
-      map((response: string[]) => {
+      map((response) => {
         if (response) {
           const latexBlob = this.latexRendererServiceConstants.createBlobFromRenderedResult(
             response
