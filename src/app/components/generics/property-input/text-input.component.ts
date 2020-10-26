@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { LatexEditorDialogComponent } from '../dialogs/latex-editor-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { DoProvider } from './abstract-value-accessor';
@@ -27,7 +27,7 @@ export class TextInputComponent implements OnInit {
   inputValue: string;
   toggleLatex = false;
   packedLatexValue: string;
-  urlToRenderedPdfBlob: string;
+  urlToRenderedBlob: SafeUrl;
 
   constructor(
     private utilService: UtilService,
@@ -84,7 +84,7 @@ export class TextInputComponent implements OnInit {
       this.inputValue = this.utilService.getUnpackedLatexText(
         this.packedLatexValue
       );
-      this.urlToRenderedPdfBlob = null;
+      this.urlToRenderedBlob = null;
       if (this.inputValue !== this.value) {
         this.inputChanged();
       }
@@ -116,8 +116,8 @@ export class TextInputComponent implements OnInit {
   private renderLatexContent(latexValue: string): void {
     this.utilService
       .renderPackedDataAndReturnUrlToPdfBlob(latexValue)
-      .subscribe((blobUrl) => {
-        this.urlToRenderedPdfBlob = blobUrl;
+      .subscribe((url) => {
+        this.urlToRenderedBlob = this.sanitizer.bypassSecurityTrustUrl(url);
       });
   }
 }
