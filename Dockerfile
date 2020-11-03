@@ -1,24 +1,25 @@
-FROM node:14.9.0-alpine
-
+FROM node:alpine AS builder
 RUN apk add --no-cache git gettext
 
-ENV ALTAS_URL localhost
-ENV ATLAS_PORT 8080
-ENV PATTERNPEDIA_URL localhost
-ENV PATTERNPEDIA_PORT 8081
-ENV NISQ_ANALYZER_URL localhost
+ENV QC_ATLAS_HOST_NAME localhost
+ENV QC_ATLAS_PORT 8080
+ENV PATTERN_ATLAS_HOST_NAME localhost
+ENV PATTERN_ATLAS_PORT 8081
+ENV NISQ_ANALYZER_HOST_NAME localhost
 ENV NISQ_ANALYZER_PORT 8082
-ENV PATTERN_ATLAS_UI_URL localhost
+ENV PATTERN_ATLAS_UI_HOST_NAME localhost
 ENV PATTERN_ATLAS_UI_PORT 4201
+ENV LATEX_RENDERER_HOST_NAME localhost
+ENV LATEX_RENDERER_PORT 8083
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package*.json ./
 COPY . .
 
-RUN npm install -g @angular/cli @angular-devkit/build-angular && npm install
-RUN chmod +x docker-entrypoint.sh
+RUN npm install && npm run build --prod
 
-EXPOSE 4200
+FROM nginx:alpine
+COPY --from=builder app/dist/* /usr/share/nginx/html
 
-CMD ["sh", "docker-entrypoint.sh"]
+# When the container starts, replace the env.js with values from environment variables
+CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/assets/env.js.template > /usr/share/nginx/html/assets/env.js && exec nginx -g 'daemon off;'"]
