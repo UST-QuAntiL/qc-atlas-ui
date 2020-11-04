@@ -1,0 +1,50 @@
+<div class="p-4">
+
+  <div class="row">
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
+        <app-text-input
+          name="Vendor"
+          [value]="computeResource.vendor"
+          (onChange)="onPropertyChanged($event,   'vendor')"
+          (onSaveChanges)="onChangesSaved($event, 'vendor')">
+        </app-text-input>
+      </mat-card>
+    </div>
+
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
+        <app-text-input
+          name="Technology"
+          [value]="computeResource.technology"
+          (onChange)="onPropertyChanged($event,   'technology')"
+          (onSaveChanges)="onChangesSaved($event, 'technology')">
+        </app-text-input>
+      </mat-card>
+    </div>
+
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
+        <app-select-input
+          name="Quantum computation model"
+          [value]="computeResource.quantumComputationModel"
+          [choices]="availableQuantumComputationModelOptions"
+          (onChange)="onPropertyChanged($event,   'quantumComputationModel')"
+          (onSaveChanges)="onChangesSaved($event, 'quantumComputationModel')">
+        </app-select-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-compute-resource-property-list
+          [title]="'Compute resource properties'"
+          [resourceProperties]="computeResourceProperties">
+        </app-compute-resource-property-list>
+      </mat-card>
+    </div>
+  </div>
+
+</div>

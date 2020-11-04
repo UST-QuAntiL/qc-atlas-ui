@@ -19,6 +19,7 @@ import { ComputeResourceViewComponent } from './compute-resource-view/compute-re
 import { ComputeResourceListComponent } from './compute-resource-list/compute-resource-list.component';
 import { ComputeResourceSelectionCriteriaComponent } from './compute-resource-selection-criteria/compute-resource-selection-criteria.component';
 import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-resource-dialog.component';
+import { ComputeResourceProvenanceComponent } from './compute-resource-provenance/compute-resource-provenance.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-r
     ComputeResourcePropertiesComponent,
     ComputeResourceSelectionCriteriaComponent,
     CreateComputeResourceDialogComponent,
+    ComputeResourceProvenanceComponent,
   ],
   imports: [
     CommonModule,
