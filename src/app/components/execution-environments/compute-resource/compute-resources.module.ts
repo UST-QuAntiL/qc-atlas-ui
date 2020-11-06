@@ -7,6 +7,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { GenericsModule } from '../../generics/generics.module';
@@ -20,6 +23,8 @@ import { ComputeResourceListComponent } from './compute-resource-list/compute-re
 import { ComputeResourceSelectionCriteriaComponent } from './compute-resource-selection-criteria/compute-resource-selection-criteria.component';
 import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-resource-dialog.component';
 import { ComputeResourceProvenanceComponent } from './compute-resource-provenance/compute-resource-provenance.component';
+
+
 
 @NgModule({
   declarations: [
@@ -43,6 +48,9 @@ import { ComputeResourceProvenanceComponent } from './compute-resource-provenanc
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatExpansionModule,
     FormsModule,
     ComputeResourcePropertyModule,
     MatIconModule,
