@@ -220,6 +220,9 @@ export class ComputeResourceProvenanceComponent implements OnInit {
         ]);
 
         this.gates = this.qpu.gates;
+        this.gates.forEach((g) => {
+          g.qasmDef = g.qasmDef.replace('gate ', '');
+        });
         this.gateProps = this.qpu.properties?.gates;
 
         this.qpu.properties?.gates?.forEach((gate) => {
