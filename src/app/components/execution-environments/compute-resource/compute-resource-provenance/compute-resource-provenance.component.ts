@@ -119,7 +119,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
 
   // qpu
   qpu?: Qpu;
-  gates?: Gate[];#
+  gates?: Gate[];
 
   // gate table
   gateProps?: QpuPropsGate[] = [];
