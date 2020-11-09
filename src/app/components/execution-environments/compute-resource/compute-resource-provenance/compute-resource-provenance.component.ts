@@ -16,7 +16,7 @@ import {
 } from '@angular/animations';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 
-import { QpuService, QpuSearchControllerService } from 'api-qprov/services';
+import { QpuService, QraphService } from 'api-qprov/services';
 import { Qpu, QpuPropsGate, Gate } from 'api-qprov/models';
 
 export interface GateAttribute {
@@ -164,8 +164,8 @@ export class ComputeResourceProvenanceComponent implements OnInit {
   };
 
   constructor(
-    private qpuSearchControllerService: QpuSearchControllerService,
-    private qpuService: QpuService
+    private qpuService: QpuService,
+    private qraphService: QraphService
   ) {}
 
   // qraph
@@ -194,12 +194,12 @@ export class ComputeResourceProvenanceComponent implements OnInit {
 
   ngOnInit(): void {
     // fetch graph data
-    this.qpuService
+    this.qraphService
       .getQubitGraph({ backendName: this.computeResource.name })
       .subscribe(this.qGraphHandler);
 
     // fetch qpu data
-    this.qpuSearchControllerService
+    this.qpuService
       .executeSearchQpuGet({
         backendName: this.computeResource.name,
       })
@@ -220,7 +220,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
         ]);
 
         this.gates = this.qpu.gates;
-        this.gates.forEach((g) => {
+        this.gates?.forEach((g) => {
           g.qasmDef = g.qasmDef.replace('gate ', '');
         });
         this.gateProps = this.qpu.properties?.gates;
