@@ -10,6 +10,7 @@ export { Link } from './models/link';
 export { Links } from './models/links';
 export { ModelAndView } from './models/model-and-view';
 export { Parameter } from './models/parameter';
+export { QGraphEdge } from './models/q-graph-edge';
 export { Qpu } from './models/qpu';
 export { QpuProperties } from './models/qpu-properties';
 export { QpuPropsGate } from './models/qpu-props-gate';

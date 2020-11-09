@@ -6,6 +6,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 import { ActuatorService } from './services/actuator.service';
 import { BasicErrorControllerService } from './services/basic-error-controller.service';
 import { ProfileControllerService } from './services/profile-controller.service';
+import { QpuService } from './services/qpu.service';
 import { QpuEntityControllerService } from './services/qpu-entity-controller.service';
 import { QpuSearchControllerService } from './services/qpu-search-controller.service';
 import { QubitEntityControllerService } from './services/qubit-entity-controller.service';
@@ -22,6 +23,7 @@ import { QubitSearchControllerService } from './services/qubit-search-controller
     ActuatorService,
     BasicErrorControllerService,
     ProfileControllerService,
+    QpuService,
     QpuEntityControllerService,
     QpuSearchControllerService,
     QubitEntityControllerService,

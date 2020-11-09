@@ -26,9 +26,9 @@ export class ActuatorService extends BaseService {
   }
 
   /**
-   * Path part for operation links1
+   * Path part for operation links0
    */
-  static readonly Links1Path = '/actuator';
+  static readonly Links0Path = '/actuator';
 
   /**
    * Actuator root web endpoint.
@@ -36,15 +36,15 @@ export class ActuatorService extends BaseService {
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `links1()` instead.
+   * To access only the response body, use `links0()` instead.
    *
    * This method doesn't expect any request body.
    */
-  links1$Response(params?: {
+  links0$Response(params?: {
 
   }): Observable<StrictHttpResponse<{}>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ActuatorService.Links1Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, ActuatorService.Links0Path, 'get');
     if (params) {
 
 
@@ -66,15 +66,15 @@ export class ActuatorService extends BaseService {
    *
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `links1$Response()` instead.
+   * To access the full response (for headers, for example), `links0$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  links1(params?: {
+  links0(params?: {
 
   }): Observable<{}> {
 
-    return this.links1$Response(params).pipe(
+    return this.links0$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
   }
@@ -188,9 +188,9 @@ export class ActuatorService extends BaseService {
   }
 
   /**
-   * Path part for operation handle0
+   * Path part for operation handle1
    */
-  static readonly Handle0Path = '/actuator/info';
+  static readonly Handle1Path = '/actuator/info';
 
   /**
    * Actuator web endpoint 'info'.
@@ -198,15 +198,15 @@ export class ActuatorService extends BaseService {
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `handle0()` instead.
+   * To access only the response body, use `handle1()` instead.
    *
    * This method doesn't expect any request body.
    */
-  handle0$Response(params?: {
+  handle1$Response(params?: {
 
   }): Observable<StrictHttpResponse<{}>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ActuatorService.Handle0Path, 'get');
+    const rb = new RequestBuilder(this.rootUrl, ActuatorService.Handle1Path, 'get');
     if (params) {
 
 
@@ -228,15 +228,15 @@ export class ActuatorService extends BaseService {
    *
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `handle0$Response()` instead.
+   * To access the full response (for headers, for example), `handle1$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  handle0(params?: {
+  handle1(params?: {
 
   }): Observable<{}> {
 
-    return this.handle0$Response(params).pipe(
+    return this.handle1$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
   }
