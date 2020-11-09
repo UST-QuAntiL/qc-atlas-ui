@@ -1,16 +1,12 @@
-import { Subscription } from 'rxjs';
-import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+// import { Subscription } from 'rxjs';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatExpansionModule } from '@angular/material/expansion';
-
+import { Node, Edge } from '@swimlane/ngx-graph';
+import * as shape from 'd3-shape';
+import { Subject } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
+
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   animate,
   state,
@@ -19,35 +15,23 @@ import {
   trigger,
 } from '@angular/animations';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
-import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
-import { ExecutionEnvironmentsService } from 'api-atlas/services';
-import { CreateQpuRequestDto, QpuDto, SdkDto } from 'api-nisq/models';
 
-// import { QpuSearchControllerService } from 'api-qprov/services';
-import { QpuSearchControllerService } from '../../../../../../generated/api-qprov/services';
-import {
-  Qpu,
-  QpuProperties,
-  QpuPropsGate,
-  Gate,
-  Parameter,
-} from '../../../../../../generated/api-qprov/models';
-import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
-import { quantumComputationModelOptions } from '../../../../util/options';
+import { QpuService, QpuSearchControllerService } from 'api-qprov/services';
+import { Qpu, QpuPropsGate, Gate } from 'api-qprov/models';
 
 export interface GateAttribute {
   date: string;
   basisGate: string;
-  gate: string;
-  gateError: number;
-  gateLength: number;
+  gate: string | undefined;
+  gateError: number | undefined;
+  gateLength: number | undefined;
 }
 
-export interface GateAttrs {
-  date: string;
-  gate: string;
-  gateError: number;
-  gateLength: number;
+export interface QPUProp {
+  key: string;
+  label: string;
+  icon: string;
+  value?: number | string | Date;
 }
 
 @Component({
@@ -70,20 +54,75 @@ export class ComputeResourceProvenanceComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
-  availableQuantumComputationModelOptions = quantumComputationModelOptions;
+  // qraph
+  center$: Subject<boolean> = new Subject();
+  update$: Subject<boolean> = new Subject();
+  zoomToFit$: Subject<boolean> = new Subject();
+
+  curve = shape.curveLinear;
+
+  qGraphEdges: Edge[] = [];
+  qGraphNodes: Node[] = [];
+  qGraphEdgesS;
+  qGraphNodesS;
+
+  // qraph builder/handler
+  qGraphHandler = {
+    next: (gEdge): void => {
+      const edgeList: string[] = [];
+      const nodeSet: Set<number> = new Set();
+
+      gEdge.forEach((edge) => {
+        const sid: number = edge.source;
+        const tid: number = edge.target;
+        const eid: number = edge.id;
+
+        // check if we know the source/target node already
+        if (!nodeSet.has(sid)) {
+          // add node to set
+          nodeSet.add(sid);
+          // add edge to graph
+          this.qGraphNodes.push({ id: sid.toString(), label: sid.toString() });
+        }
+        if (!nodeSet.has(tid)) {
+          // add node to set
+          nodeSet.add(tid);
+          // add edge to graph
+          this.qGraphNodes.push({ id: tid.toString(), label: tid.toString() });
+        }
+
+        // check if we know this edge or its reverse already
+        const nPairEdge: string = sid.toString() + tid.toString();
+        const nPairEdgeRev: string = tid.toString() + sid.toString();
+        if (!edgeList.includes(nPairEdge)) {
+          // add edge and reverse edge to list
+          edgeList.push(nPairEdge);
+          edgeList.push(nPairEdgeRev);
+          // add edge to graph
+          this.qGraphEdges.push({
+            id: eid.toString(),
+            source: sid.toString(),
+            target: tid.toString(),
+          });
+        }
+      });
+
+      // update graph (see: https://swimlane.github.io/ngx-graph/demos/interactive-demo#triggering-update)
+      this.qGraphNodes = [...this.qGraphNodes];
+      this.qGraphEdges = [...this.qGraphEdges];
+      this.updateGraph();
+
+      this.qGraphEdgesS = JSON.stringify(this.qGraphEdges);
+      this.qGraphNodesS = JSON.stringify(this.qGraphNodes);
+    },
+  };
+
+  // qpu
   qpu?: Qpu;
-  gates?: Gate[];
+  gates?: Gate[];#
 
-  step = 4;
-  gateParams?: Map<string, Map<string, Parameter[]>> = new Map();
+  // gate table
   gateProps?: QpuPropsGate[] = [];
-
-  valuesToShow?: Array<Map<string, any>> = [];
-
-  displayedColumns: string[] = ['id', 'name', 'parameters', 'qasmDef'];
-  columnsToDisplay: string[] = ['id', 'name', 'parameters', 'qasmDef'];
-  gatePropsColumns: string[] = ['gate', 'name', 'parameters', 'qubits'];
   gateTableHeader: string[] = [
     'date',
     'basisGate',
@@ -95,25 +134,56 @@ export class ComputeResourceProvenanceComponent implements OnInit {
   gateData: GateAttribute[] = [];
   gateDataSource: MatTableDataSource<GateAttribute>;
 
-  gateReduceData: GateAttribute;
-  gateReduceMap: Map<string, GateAttrs[]> = new Map();
-  gateReduceDataSource: MatTableDataSource<GateAttribute>;
-
-  DATA;
-  spans = [];
-
-  expandedElement: Parameter | null;
+  // qpu properties
+  qpuProperties: Set<QPUProp>;
+  maxShots: QPUProp = {
+    key: 'maxShots',
+    label: 'Max. Shots',
+    icon: 'settings_input_component',
+  };
+  maxCircuits: QPUProp = {
+    key: 'maxExperiments',
+    label: 'Max. Circuits',
+    icon: 'nfc',
+  };
+  // fix key
+  quantumVolume: QPUProp = {
+    key: 'url',
+    label: 'Quantum Volume',
+    icon: '',
+  };
+  backendVersion: QPUProp = {
+    key: 'backendVersion',
+    label: 'Backend Version',
+    icon: 'model_training',
+  };
+  nQubits: QPUProp = {
+    key: 'nQubits',
+    label: '# of Qubits',
+    icon: 'blur_linear',
+  };
 
   constructor(
-    private executionEnvironmentService: ExecutionEnvironmentsService,
-    private updateFieldService: UpdateFieldEventService,
-    private qpuSearchService: QpuSearchControllerService
-  ) {
-    // this.cacheSpan('Basis Gate', (d) => d.basisGate);
-    // console.log(this.spans);
+    private qpuSearchControllerService: QpuSearchControllerService,
+    private qpuService: QpuService
+  ) {}
+
+  // qraph
+  centerGraph(): void {
+    console.log('centering qraph...');
+    this.center$.next(true);
+  }
+  fitGraph(): void {
+    console.log('fitting qraph...');
+    this.zoomToFit$.next(true);
+  }
+  updateGraph(): void {
+    console.log('updating qraph...');
+    this.update$.next(true);
   }
 
-  applyFilter(event: Event) {
+  // table
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.gateDataSource.filter = filterValue.trim().toLowerCase();
 
@@ -122,37 +192,50 @@ export class ComputeResourceProvenanceComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit(): void {
-    // this.gateDataSource.paginator = this.paginator;
-    // this.gateDataSource.sort = this.sort;
-  }
-
   ngOnInit(): void {
-    console.log(this.computeResource.name);
+    // fetch graph data
+    this.qpuService
+      .getQubitGraph({ backendName: this.computeResource.name })
+      .subscribe(this.qGraphHandler);
 
-    this.qpuSearchService
+    // fetch qpu data
+    this.qpuSearchControllerService
       .executeSearchQpuGet({
         backendName: this.computeResource.name,
       })
       .subscribe((query) => {
         this.qpu = query;
-        this.gates = this.qpu.gates;
-        this.gateProps = this.qpu.properties.gates;
+        this.qpu.provider = this.qpu.provider?.toUpperCase();
 
-        this.qpu.properties.gates.forEach((gate) => {
+        // fill qpu properties to show in ui
+        this.nQubits.value = this.qpu.nQubits;
+        this.backendVersion.value = this.qpu.backendVersion;
+        this.maxCircuits.value = this.qpu.maxExperiments;
+        this.maxShots.value = this.qpu.maxShots;
+        this.qpuProperties = new Set([
+          this.nQubits,
+          this.maxShots,
+          this.maxCircuits,
+          this.backendVersion,
+        ]);
+
+        this.gates = this.qpu.gates;
+        this.gateProps = this.qpu.properties?.gates;
+
+        this.qpu.properties?.gates?.forEach((gate) => {
           let basisGate;
-          this.qpu.basisGates.forEach((value, index, array) => {
-            if (gate.name.startsWith(value)) {
+          this.qpu?.basisGates?.forEach((value) => {
+            if (gate.name?.startsWith(value)) {
               basisGate = value;
             }
           });
 
           const gateError = gate.parameters.find(
-            (value, _index) => value.name === 'gate_error'
+            (value) => value.name === 'gate_error'
           ).value;
 
           const gateLength = gate.parameters.find(
-            (value, _index) => value.name === 'gate_length'
+            (value) => value.name === 'gate_length'
           ).value;
 
           this.gateData.push({
@@ -164,21 +247,10 @@ export class ComputeResourceProvenanceComponent implements OnInit {
           });
         });
 
+        // create a mat-table with pahinator and sorting
         this.gateDataSource = new MatTableDataSource(this.gateData);
         this.gateDataSource.paginator = this.paginator;
         this.gateDataSource.sort = this.sort;
       });
-  }
-
-  setStep(index: number) {
-    this.step = index;
-  }
-
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
   }
 }

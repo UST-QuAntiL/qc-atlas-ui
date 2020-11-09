@@ -2,207 +2,231 @@
   <div *ngIf="!qpu" class="d-flex align-content-center justify-content-center">
     <mat-spinner></mat-spinner>
   </div>
-
   <div *ngIf="qpu" class="row">
-    <div class="col-xl-5 col-lg-11">
-      <mat-card class="m-5">
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-3 mr-1">
         <mat-card-header>
-          <mat-card-title
-            >{{ qpu.backendName }}
-            <span class="small">{{ qpu.backendVersion }}</span></mat-card-title
-          >
-          <mat-card-subtitle
-            >{{ qpu.provider }} | {{ qpu.description }}</mat-card-subtitle
-          >
+          <mat-card-title-group>
+            <mat-card-title>
+              <h3>
+                <span title="Provider: IBMQ">{{ qpu.provider }}</span>
+                {{ qpu.backendName }}
+              </h3>
+            </mat-card-title>
+            <mat-card-subtitle>{{ qpu.description }}</mat-card-subtitle>
+          </mat-card-title-group>
         </mat-card-header>
-        <mat-card-content> </mat-card-content>
+
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item>
+              <mat-icon mat-list-icon>update</mat-icon>
+              <div mat-line>
+                <strong
+                  title="Online since {{ qpu.onlineDate | date: 'yy/MM/dd' }}"
+                  >{{
+                    qpu.properties.lastUpdateDate | date: 'yy/MM/dd | HH:mm:ss'
+                  }}</strong
+                >
+              </div>
+              <div mat-line><small>Last Calibration Update</small></div>
+            </mat-list-item>
+            <mat-list-item *ngFor="let prop of qpuProperties">
+              <mat-icon mat-list-icon>{{ prop.icon }}</mat-icon>
+              <div mat-line>
+                <strong>{{ prop.value }}</strong>
+              </div>
+              <div mat-line>
+                <small>{{ prop.label }}</small>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="col-xl-8 col-lg-12">
+      <mat-card class="m-3 ml-1">
+        <mat-card-header>
+          <mat-card-title-group>
+            <mat-card-title>
+              <h3>Qraph</h3>
+            </mat-card-title>
+            <mat-card-subtitle
+              >*imagine a funny subtitle here*</mat-card-subtitle
+            >
+          </mat-card-title-group>
+        </mat-card-header>
+        <mat-card-content class="full-width">
+          <div *ngIf="!qGraphEdges || !qGraphNodes">
+            <mat-spinner></mat-spinner>
+          </div>
+          <ngx-graph
+            *ngIf="qGraphEdges && qGraphNodes"
+            class="chart-container p-1"
+            layout="dagre"
+            autoZoom="true"
+            autoCenter="true"
+            [showMiniMap]="false"
+            [links]="qGraphEdges"
+            [nodes]="qGraphNodes"
+            [center$]="center$"
+            [update$]="update$"
+            [zoomToFit$]="zoomToFit$"
+          >
+          </ngx-graph>
+        </mat-card-content>
+        <mat-card-actions>
+          <button
+            class="m-1"
+            (click)="fitGraph()"
+            color="accent"
+            mat-flat-button
+          >
+            fit
+          </button>
+          <button
+            class="m-1"
+            (click)="centerGraph()"
+            color="accent"
+            mat-flat-button
+          >
+            center
+          </button>
+          <button
+            class="m-1"
+            (click)="updateGraph()"
+            color="warn"
+            hidden
+            disabled
+            mat-flat-button
+          >
+            update
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <!-- <mat-card class="m-3 mr-1" hidden *ngIf="qGraphNodes">
+      <mat-card-content>
+        {{ qGraphNodes.length }} | {{ qGraphNodesS }}
+      </mat-card-content>
+      <mat-card-content>
+        {{ qGraphEdges.length }} | {{ qGraphEdgesS }}
+      </mat-card-content>
+    </mat-card> -->
+  </div>
+
+  <!-- -->
+
+  <div class="row">
+    <div class="col-xl-6 col-lg-12">
+      <mat-card class="m-3 mr-1">
+        <mat-card-header>
+          <mat-card-title>Basis Gates</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="let bgate of gates" hideToggle>
+              <mat-expansion-panel-header>
+                <mat-card-title class="text-primary text-monospace">{{
+                  bgate.name
+                }}</mat-card-title>
+                <mat-panel-title class="p-2">
+                  <strong class="text-monospace">{{ bgate.qasmDef }}</strong>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-panel-description>
+                <div>todo: <strong>more data</strong></div>
+              </mat-panel-description>
+              <mat-panel-description>
+                <div>
+                  qasmDef: <strong>{{ bgate.qasmDef }}</strong>
+                </div>
+              </mat-panel-description>
+              <mat-panel-description>
+                <div>qubits: <strong>...</strong></div>
+              </mat-panel-description>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="col-xl-6 col-lg-12">
+      <mat-card class="m-3 ml-1">
+        <mat-card-header>
+          <mat-card-title>Gates</mat-card-title>
+
+          <mat-form-field>
+            <mat-label>Filter</mat-label>
+            <input
+              matInput
+              (keyup)="applyFilter($event)"
+              placeholder="Ex. cx_"
+              #input
+            />
+          </mat-form-field>
+        </mat-card-header>
+        <mat-card-content>
+          <table
+            mat-table
+            [dataSource]="gateDataSource"
+            class="mat-elevation-z8"
+            matSort
+            matPaginator
+            class=""
+          >
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+              <td mat-cell *matCellDef="let gate">
+                {{ gate.date | date: 'yy/MM/dd | HH:mm' }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="basisGate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Basis Gate
+              </th>
+              <td mat-cell *matCellDef="let gate">{{ gate.basisGate }}</td>
+            </ng-container>
+            <ng-container matColumnDef="gate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Gate</th>
+              <td mat-cell *matCellDef="let gate">{{ gate.gate }}</td>
+            </ng-container>
+            <ng-container matColumnDef="gateError">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Gate Error
+              </th>
+              <td mat-cell *matCellDef="let gate">{{ gate.gateError }}</td>
+            </ng-container>
+            <ng-container matColumnDef="gateLength">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Gate Length
+              </th>
+              <td mat-cell *matCellDef="let gate">{{ gate.gateLength }}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="gateTableHeader"></tr>
+            <tr
+              mat-row
+              *matRowDef="let gateDataSource; columns: gateTableHeader"
+            ></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="5">
+                No data matching the filter "{{ input.value }}"
+              </td>
+            </tr>
+          </table>
+          <mat-paginator
+            [pageSizeOptions]="[5, 15, 50, 100]"
+            [pageSize]="15"
+            showFirstLastButtons
+          ></mat-paginator>
+        </mat-card-content>
       </mat-card>
     </div>
   </div>
-
-  <div class="col-xl-5">
-    <mat-card-title>Basis Gates</mat-card-title>
-    <mat-accordion class="example-headers-align">
-      <mat-expansion-panel *ngFor="let bgate of gates" hideToggle>
-        <mat-expansion-panel-header class="center center-text align-items-center centered-text">
-          <mat-panel-title class="center center-text align-items-center centered-text">
-            <strong>{{ bgate.name }}</strong>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-panel-description>
-          <div>
-            Parameters: <strong>{{ bgate.parameters }}</strong>
-          </div>
-        </mat-panel-description>
-        <mat-panel-description>
-          <div>
-            qasmDef: <strong>{{ bgate.qasmDef }}</strong>
-          </div>
-        </mat-panel-description>
-        <mat-panel-description>
-          <div>
-            qubits:  <strong>...</strong>
-          </div>
-        </mat-panel-description>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </div>
-
-  <div class="col-xl-5 col-lg-11">
-    <mat-card-title>Gates</mat-card-title>
-
-    <mat-form-field>
-      <mat-label>Filter</mat-label>
-      <input
-        matInput
-        (keyup)="applyFilter($event)"
-        placeholder="Ex. cx_"
-        #input
-      />
-    </mat-form-field>
-
-    <table
-      mat-table
-      [dataSource]="gateDataSource"
-      class="mat-elevation-z8"
-      matSort
-      matPaginator
-    >
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-        <td mat-cell *matCellDef="let gate">
-          {{ gate.date | date: 'yy/MM/dd | HH:mm' }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="basisGate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Basis Gate</th>
-        <td mat-cell *matCellDef="let gate">{{ gate.basisGate }}</td>
-      </ng-container>
-      <ng-container matColumnDef="gate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Gate</th>
-        <td mat-cell *matCellDef="let gate">{{ gate.gate }}</td>
-      </ng-container>
-      <ng-container matColumnDef="gateError">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Gate Error</th>
-        <td mat-cell *matCellDef="let gate">{{ gate.gateError }}</td>
-      </ng-container>
-      <ng-container matColumnDef="gateLength">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Gate Length</th>
-        <td mat-cell *matCellDef="let gate">{{ gate.gateLength }}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="gateTableHeader"></tr>
-      <tr
-        mat-row
-        *matRowDef="let gateDataSource; columns: gateTableHeader"
-      ></tr>
-
-      <!-- Row shown when there is no matching data. -->
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="5">
-          No data matching the filter "{{ input.value }}"
-        </td>
-      </tr>
-    </table>
-    <mat-paginator
-      [pageSizeOptions]="[5, 15, 50, 100]"
-      [pageSize]="15"
-      showFirstLastButtons
-    ></mat-paginator>
-  </div>
 </div>
-
-<!-- <table mat-table [dataSource]="gates" class="mat-elevation-z8 m-5">
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef> id </th>
-      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="parameters">
-      <th mat-header-cell *matHeaderCellDef> Parameters </th>
-      <td mat-cell *matCellDef="let element"> {{element.parameters[0]}} <span *ngFor="let param of element.parameters">{{element.parameters[1]}}</span> </td>
-      <td mat-cell *matCellDef="let element">  </td>
-    </ng-container>
-
-    <ng-container matColumnDef="qasmDef">
-      <th mat-header-cell *matHeaderCellDef> qasmDef </th>
-      <td mat-cell *matCellDef="let element"> {{element.qasmDef}} </td>
-    </ng-container>
-
-  </table>
-
-
-
-
-
-  <table mat-table [dataSource]="gateProps" class="mat-elevation-z8 m-5">
-
-    <tr mat-header-row *matHeaderRowDef="gatePropsColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: gatePropsColumns;"></tr>
-
-    <ng-container matColumnDef="gate">
-      <th mat-header-cell *matHeaderCellDef> Gate </th>
-      <td mat-cell *matCellDef="let element"> {{element.gate}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="parameters">
-      <th mat-header-cell *matHeaderCellDef> Parameters </th>
-      <td mat-cell *matCellDef="let element"> {{element.parameters}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="qubits">
-      <th mat-header-cell *matHeaderCellDef> qubits </th>
-      <td mat-cell *matCellDef="let element"> {{element.qubits}} </td>
-    </ng-container>
-
-  </table> -->
-
-<!-- <table mat-table
-       [dataSource]="valuesToShow" multiTemplateDataRows
-       class="mat-elevation-z8">
-    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-      <th mat-header-cell *matHeaderCellDef> {{column}} </th>
-      <td mat-cell *matCellDef="let element"> {{element[column] | json }} </td>
-    </ng-container>
-
-    Expanded Content Column - The detail row is made up of this one column that spans across all columns
-    <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-        <div class="qprov-gates-element-detail"
-            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-          <div class="qprov-gates-element-diagram">
-            <div class="qprov-gates-element-id"> {{element.id}} </div>
-            <div class="qprov-gates-element-name"> {{element.name}} </div>
-            <div class="qprov-gates-element-parameters"> {{element.parameters[0].date | date}} </div>
-            <div class="qprov-gates-element-qasmDef"> {{element.qasmDef}} </div>
-          </div>
-          <div class="qprov-gates-element-description">
-            Hibernate: select parameters0_.gate_id as gate_id1_4_0_, parameters0_.parameters as paramete2_4_0_ from gate_parameters parameters0_ where parameters0_.gate_id=?
-            <span class="qprov-gates-element-description-attribution"> -- Wikipedia </span>
-          </div>
-        </div>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-        class="qprov-gates-element-row"
-        [class.qprov-gates-expanded-row]="expandedElement === element"
-        (click)="expandedElement = expandedElement === element ? null : element">
-    </tr>
-    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="qprov-gates-detail-row"></tr>
-  </table> -->
+´

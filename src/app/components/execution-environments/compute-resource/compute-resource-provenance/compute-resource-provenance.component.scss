@@ -1,47 +1,17 @@
+.mat-list-icon {
+  color: rgba(63, 81, 181, 0.9);
+}
+
+mat-card-subtitle {
+  font-weight: normal;
+}
+
 table {
   width: 100%;
 }
 
-tr.qprov-gates-detail-row {
-  height: 0;
-}
-
-tr.qprov-gates-element-row:not(.qprov-gates-expanded-row):hover {
-  background: whitesmoke;
-}
-
-tr.qprov-gates-element-row:not(.qprov-gates-expanded-row):active {
-  background: #efefef;
-}
-
-.qprov-gates-element-row td {
-  border-bottom-width: 0;
-}
-
-.qprov-gates-element-detail {
-  overflow: hidden;
-  display: flex;
-}
-
-.qprov-gates-element-diagram {
-  min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
+h3 span {
+  color: gray;
   font-weight: lighter;
-  margin: 8px 0;
-  height: 104px;
-}
-
-.qprov-gates-element-symbol {
-  font-weight: bold;
-  font-size: 40px;
-  line-height: normal;
-}
-
-.qprov-gates-element-description {
-  padding: 16px;
-}
-
-.qprov-gates-element-description-attribution {
-  opacity: 0.5;
+  font-size: 90%;
 }
