@@ -1,8 +1,6 @@
 export { AbstractJsonSchemaPropertyObject } from './models/abstract-json-schema-property-object';
 export { CollectionModelQpu } from './models/collection-model-qpu';
-export { CollectionModelQubit } from './models/collection-model-qubit';
 export { EntityModelQpu } from './models/entity-model-qpu';
-export { EntityModelQubit } from './models/entity-model-qubit';
 export { Gate } from './models/gate';
 export { Item } from './models/item';
 export { JsonSchema } from './models/json-schema';
@@ -17,5 +15,4 @@ export { QpuPropsGate } from './models/qpu-props-gate';
 export { Qubit } from './models/qubit';
 export { RepresentationModelObject } from './models/representation-model-object';
 export { RepresentationModelQpu } from './models/representation-model-qpu';
-export { RepresentationModelQubit } from './models/representation-model-qubit';
 export { View } from './models/view';

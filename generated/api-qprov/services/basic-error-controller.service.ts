@@ -22,93 +22,6 @@ export class BasicErrorControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation error51
-   */
-  static readonly Error51Path = '/error';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `error51$Json()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  error51$Json$Response(params?: {
-
-  }): Observable<StrictHttpResponse<{}>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error51Path, 'get');
-    if (params) {
-
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{}>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `error51$Json$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  error51$Json(params?: {
-
-  }): Observable<{}> {
-
-    return this.error51$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<{}>) => r.body as {})
-    );
-  }
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `error51$Html()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  error51$Html$Response(params?: {
-
-  }): Observable<StrictHttpResponse<ModelAndView>> {
-
-    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error51Path, 'get');
-    if (params) {
-
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/html'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ModelAndView>;
-      })
-    );
-  }
-
-  /**
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `error51$Html$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  error51$Html(params?: {
-
-  }): Observable<ModelAndView> {
-
-    return this.error51$Html$Response(params).pipe(
-      map((r: StrictHttpResponse<ModelAndView>) => r.body as ModelAndView)
-    );
-  }
-
-  /**
    * Path part for operation error61
    */
   static readonly Error61Path = '/error';
@@ -123,7 +36,7 @@ export class BasicErrorControllerService extends BaseService {
 
   }): Observable<StrictHttpResponse<{}>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error61Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error61Path, 'get');
     if (params) {
 
 
@@ -164,7 +77,7 @@ export class BasicErrorControllerService extends BaseService {
 
   }): Observable<StrictHttpResponse<ModelAndView>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error61Path, 'put');
+    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error61Path, 'get');
     if (params) {
 
 
@@ -191,6 +104,93 @@ export class BasicErrorControllerService extends BaseService {
   }): Observable<ModelAndView> {
 
     return this.error61$Html$Response(params).pipe(
+      map((r: StrictHttpResponse<ModelAndView>) => r.body as ModelAndView)
+    );
+  }
+
+  /**
+   * Path part for operation error21
+   */
+  static readonly Error21Path = '/error';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `error21$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  error21$Json$Response(params?: {
+
+  }): Observable<StrictHttpResponse<{}>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error21Path, 'put');
+    if (params) {
+
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<{}>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `error21$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  error21$Json(params?: {
+
+  }): Observable<{}> {
+
+    return this.error21$Json$Response(params).pipe(
+      map((r: StrictHttpResponse<{}>) => r.body as {})
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `error21$Html()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  error21$Html$Response(params?: {
+
+  }): Observable<StrictHttpResponse<ModelAndView>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error21Path, 'put');
+    if (params) {
+
+
+    }
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: 'text/html'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ModelAndView>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `error21$Html$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  error21$Html(params?: {
+
+  }): Observable<ModelAndView> {
+
+    return this.error21$Html$Response(params).pipe(
       map((r: StrictHttpResponse<ModelAndView>) => r.body as ModelAndView)
     );
   }
@@ -457,21 +457,21 @@ export class BasicErrorControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation error21
+   * Path part for operation error51
    */
-  static readonly Error21Path = '/error';
+  static readonly Error51Path = '/error';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `error21$Json()` instead.
+   * To access only the response body, use `error51$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  error21$Json$Response(params?: {
+  error51$Json$Response(params?: {
 
   }): Observable<StrictHttpResponse<{}>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error21Path, 'head');
+    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error51Path, 'head');
     if (params) {
 
 
@@ -489,30 +489,30 @@ export class BasicErrorControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `error21$Json$Response()` instead.
+   * To access the full response (for headers, for example), `error51$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  error21$Json(params?: {
+  error51$Json(params?: {
 
   }): Observable<{}> {
 
-    return this.error21$Json$Response(params).pipe(
+    return this.error51$Json$Response(params).pipe(
       map((r: StrictHttpResponse<{}>) => r.body as {})
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `error21$Html()` instead.
+   * To access only the response body, use `error51$Html()` instead.
    *
    * This method doesn't expect any request body.
    */
-  error21$Html$Response(params?: {
+  error51$Html$Response(params?: {
 
   }): Observable<StrictHttpResponse<ModelAndView>> {
 
-    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error21Path, 'head');
+    const rb = new RequestBuilder(this.rootUrl, BasicErrorControllerService.Error51Path, 'head');
     if (params) {
 
 
@@ -530,15 +530,15 @@ export class BasicErrorControllerService extends BaseService {
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `error21$Html$Response()` instead.
+   * To access the full response (for headers, for example), `error51$Html$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  error21$Html(params?: {
+  error51$Html(params?: {
 
   }): Observable<ModelAndView> {
 
-    return this.error21$Html$Response(params).pipe(
+    return this.error51$Html$Response(params).pipe(
       map((r: StrictHttpResponse<ModelAndView>) => r.body as ModelAndView)
     );
   }

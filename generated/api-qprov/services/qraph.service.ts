@@ -8,12 +8,12 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { EntityModelQubit } from '../models/entity-model-qubit';
+import { QGraphEdge } from '../models/q-graph-edge';
 
 @Injectable({
   providedIn: 'root',
 })
-export class QubitSearchControllerService extends BaseService {
+export class QraphService extends BaseService {
   constructor(
     config: ApiConfiguration,
     http: HttpClient
@@ -22,25 +22,25 @@ export class QubitSearchControllerService extends BaseService {
   }
 
   /**
-   * Path part for operation executeSearchQubitGet
+   * Path part for operation getQubitGraph
    */
-  static readonly ExecuteSearchQubitGetPath = '/qubits/search/findById';
+  static readonly GetQubitGraphPath = '/qraph/qpus/{backendName}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `executeSearchQubitGet()` instead.
+   * To access only the response body, use `getQubitGraph()` instead.
    *
    * This method doesn't expect any request body.
    */
-  executeSearchQubitGet$Response(params?: {
-    id?: number;
+  getQubitGraph$Response(params: {
+    backendName: string;
 
-  }): Observable<StrictHttpResponse<EntityModelQubit>> {
+  }): Observable<StrictHttpResponse<Array<QGraphEdge>>> {
 
-    const rb = new RequestBuilder(this.rootUrl, QubitSearchControllerService.ExecuteSearchQubitGetPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, QraphService.GetQubitGraphPath, 'get');
     if (params) {
 
-      rb.query('id', params.id, {});
+      rb.path('backendName', params.backendName, {});
 
     }
     return this.http.request(rb.build({
@@ -49,24 +49,24 @@ export class QubitSearchControllerService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelQubit>;
+        return r as StrictHttpResponse<Array<QGraphEdge>>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `executeSearchQubitGet$Response()` instead.
+   * To access the full response (for headers, for example), `getQubitGraph$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  executeSearchQubitGet(params?: {
-    id?: number;
+  getQubitGraph(params: {
+    backendName: string;
 
-  }): Observable<EntityModelQubit> {
+  }): Observable<Array<QGraphEdge>> {
 
-    return this.executeSearchQubitGet$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelQubit>) => r.body as EntityModelQubit)
+    return this.getQubitGraph$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<QGraphEdge>>) => r.body as Array<QGraphEdge>)
     );
   }
 
