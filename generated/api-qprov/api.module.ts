@@ -3,8 +3,6 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
-import { ActuatorService } from './services/actuator.service';
-import { BasicErrorControllerService } from './services/basic-error-controller.service';
 import { ProfileControllerService } from './services/profile-controller.service';
 import { QpuService } from './services/qpu.service';
 import { QraphService } from './services/qraph.service';
@@ -17,8 +15,6 @@ import { QraphService } from './services/qraph.service';
   exports: [],
   declarations: [],
   providers: [
-    ActuatorService,
-    BasicErrorControllerService,
     ProfileControllerService,
     QpuService,
     QraphService,
