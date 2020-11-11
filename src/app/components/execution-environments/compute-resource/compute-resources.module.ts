@@ -14,6 +14,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
+import { TooltipModule } from '@swimlane/ngx-charts';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
@@ -53,6 +54,7 @@ import { ComputeResourceProvenanceComponent } from './compute-resource-provenanc
     MatTableModule,
     MatExpansionModule,
     NgxGraphModule,
+    TooltipModule,
     FormsModule,
     ComputeResourcePropertyModule,
     MatIconModule,
