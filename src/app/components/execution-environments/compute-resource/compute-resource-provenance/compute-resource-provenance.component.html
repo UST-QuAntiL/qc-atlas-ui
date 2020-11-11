@@ -53,7 +53,8 @@
               <h3>Qraph</h3>
             </mat-card-title>
             <mat-card-subtitle
-              >*imagine a funny subtitle here*</mat-card-subtitle
+              >
+              <strong>{{ qpu.backendName }}</strong> Qubit Map · <strong>{{ qpu.nQubits }}</strong> Quibits</mat-card-subtitle
             >
           </mat-card-title-group>
         </mat-card-header>
@@ -65,8 +66,11 @@
             *ngIf="qGraphEdges && qGraphNodes"
             class="chart-container p-1"
             layout="dagre"
-            autoZoom="true"
-            autoCenter="true"
+            [draggingEnabled]="false"
+            [panningEnabled]="true"
+            [enableZoom]="false"
+            [autoZoom]="true"
+            [autoCenter]="false"
             [showMiniMap]="false"
             [links]="qGraphEdges"
             [nodes]="qGraphNodes"
@@ -74,6 +78,34 @@
             [update$]="update$"
             [zoomToFit$]="zoomToFit$"
           >
+            <ng-template #nodeTemplate let-node>
+              <svg:g
+                class="node"
+                ngx-tooltip
+                [tooltipPlacement]="'top'"
+                [tooltipType]="'tooltip'"
+                [tooltipTitle]="node.label"
+              >
+                <circle
+                  [attr.r]="node.dimension.width"
+                  [attr.cx]="node.dimension.width"
+                  [attr.cy]="node.dimension.width"
+                  [attr.fill]="node.data.color"
+                  class="ng-star-inserted"
+                ></circle>
+
+                <svg:text
+                  alignment-baseline="central"
+                  font-size="x-large"
+                  font-weight="bold"
+                  [attr.x]="node.dimension.height / 3"
+                  [attr.y]="node.dimension.height / 2"
+                >
+                  {{ node.label }}
+                </svg:text>
+              </svg:g>
+            </ng-template>
+            -->
           </ngx-graph>
         </mat-card-content>
         <mat-card-actions>
@@ -103,6 +135,8 @@
           >
             update
           </button>
+          last update:
+          {{ qpu.properties.lastUpdateDate | date: 'MM/dd | HH:mm:ss' }}
         </mat-card-actions>
       </mat-card>
     </div>
