@@ -200,12 +200,12 @@ export class ComputeResourceProvenanceComponent implements OnInit {
 
     // fetch qpu data
     this.qpuService
-      .executeSearchQpuGet({
+      .findByBackendName({
         backendName: this.computeResource.name,
       })
       .subscribe((query) => {
         this.qpu = query;
-        this.qpu.provider = this.qpu.provider?.toUpperCase();
+        this.qpu.provider = this.qpu.provider.toUpperCase();
 
         // fill qpu properties to show in ui
         this.nQubits.value = this.qpu.nQubits;
