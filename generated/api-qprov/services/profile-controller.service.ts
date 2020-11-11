@@ -71,7 +71,7 @@ export class ProfileControllerService extends BaseService {
   /**
    * Path part for operation descriptor1
    */
-  static readonly Descriptor1Path = '/profile/qpus';
+  static readonly Descriptor1Path = '/profile/qPUs';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

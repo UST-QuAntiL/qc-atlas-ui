@@ -5,6 +5,8 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { ProfileControllerService } from './services/profile-controller.service';
 import { QpuService } from './services/qpu.service';
+import { QpuEntityControllerService } from './services/qpu-entity-controller.service';
+import { QpuSearchControllerService } from './services/qpu-search-controller.service';
 import { QraphService } from './services/qraph.service';
 
 /**
@@ -17,6 +19,8 @@ import { QraphService } from './services/qraph.service';
   providers: [
     ProfileControllerService,
     QpuService,
+    QpuEntityControllerService,
+    QpuSearchControllerService,
     QraphService,
     ApiConfiguration
   ],
