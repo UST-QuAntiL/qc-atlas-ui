@@ -16,12 +16,12 @@ import {
 } from '@angular/animations';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 
-import { QpuService, QraphService } from 'api-qprov/services';
-import { Qpu, QpuPropsGate, Gate } from 'api-qprov/models';
+import { QpuService } from '../../../../../../generated/api-qprov/services';
+import { Qpu, Gate } from '../../../../../../generated/api-qprov/models';
 
 export interface GateAttribute {
-  date: string;
-  basisGate: string;
+  gateDate: string;
+  // basisGate: string;
   gate: string | undefined;
   gateError: number | undefined;
   gateLength: number | undefined;
@@ -59,77 +59,19 @@ export class ComputeResourceProvenanceComponent implements OnInit {
   update$: Subject<boolean> = new Subject();
   zoomToFit$: Subject<boolean> = new Subject();
 
-  curve = shape.curveLinear;
+  curve = shape.curveBundle;
 
   qGraphEdges: Edge[] = [];
   qGraphNodes: Node[] = [];
-  qGraphEdgesS;
-  qGraphNodesS;
-
-  // qraph builder/handler
-  qGraphHandler = {
-    next: (gEdge): void => {
-      const edgeList: string[] = [];
-      const nodeSet: Set<number> = new Set();
-
-      gEdge.forEach((edge) => {
-        const sid: number = edge.source;
-        const tid: number = edge.target;
-        const eid: number = edge.id;
-
-        // check if we know the source/target node already
-        if (!nodeSet.has(sid)) {
-          // add node to set
-          nodeSet.add(sid);
-          // add edge to graph
-          this.qGraphNodes.push({ id: sid.toString(), label: sid.toString() });
-        }
-        if (!nodeSet.has(tid)) {
-          // add node to set
-          nodeSet.add(tid);
-          // add edge to graph
-          this.qGraphNodes.push({ id: tid.toString(), label: tid.toString() });
-        }
-
-        // check if we know this edge or its reverse already
-        const nPairEdge: string = sid.toString() + tid.toString();
-        const nPairEdgeRev: string = tid.toString() + sid.toString();
-        if (!edgeList.includes(nPairEdge)) {
-          // add edge and reverse edge to list
-          edgeList.push(nPairEdge);
-          edgeList.push(nPairEdgeRev);
-          // add edge to graph
-          this.qGraphEdges.push({
-            id: eid.toString(),
-            source: sid.toString(),
-            target: tid.toString(),
-          });
-        }
-      });
-
-      // update graph (see: https://swimlane.github.io/ngx-graph/demos/interactive-demo#triggering-update)
-      this.qGraphNodes = [...this.qGraphNodes];
-      this.qGraphEdges = [...this.qGraphEdges];
-      this.updateGraph();
-
-      this.qGraphEdgesS = JSON.stringify(this.qGraphEdges);
-      this.qGraphNodesS = JSON.stringify(this.qGraphNodes);
-    },
-  };
 
   // qpu
   qpu?: Qpu;
   gates?: Gate[];
+  bGates?: Gate[];
 
   // gate table
-  gateProps?: QpuPropsGate[] = [];
-  gateTableHeader: string[] = [
-    'date',
-    'basisGate',
-    'gate',
-    'gateError',
-    'gateLength',
-  ];
+  // gateProps?: QpuPropsGate[] = [];
+  gateTableHeader: string[] = ['gateDate', 'gate', 'gateError', 'gateLength'];
 
   gateData: GateAttribute[] = [];
   gateDataSource: MatTableDataSource<GateAttribute>;
@@ -146,12 +88,6 @@ export class ComputeResourceProvenanceComponent implements OnInit {
     label: 'Max. Circuits',
     icon: 'nfc',
   };
-  // fix key
-  quantumVolume: QPUProp = {
-    key: 'url',
-    label: 'Quantum Volume',
-    icon: '',
-  };
   backendVersion: QPUProp = {
     key: 'backendVersion',
     label: 'Backend Version',
@@ -163,10 +99,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
     icon: 'blur_linear',
   };
 
-  constructor(
-    private qpuService: QpuService,
-    private qraphService: QraphService
-  ) {}
+  constructor(private qpuService: QpuService) {}
 
   // qraph
   centerGraph(): void {
@@ -193,22 +126,26 @@ export class ComputeResourceProvenanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // fetch graph data
-    this.qraphService
-      .getQubitGraph({ backendName: this.computeResource.name })
-      .subscribe(this.qGraphHandler);
-
     // fetch qpu data
     this.qpuService
-      .findByBackendName({
+      .findByQpuCompKeyBackendName({
         backendName: this.computeResource.name,
       })
       .subscribe((query) => {
         this.qpu = query;
-        this.qpu.provider = this.qpu.provider.toUpperCase();
+        if (this.qpu === null) {
+          return;
+        }
+        this.qpu.providerId = this.qpu.providerId?.toUpperCase();
+
+        // convert timestamps to milliseconds format
+        this.qpu.onlineDate = String(Number(this.qpu.onlineDate) * 1000);
+        this.qpu.lastUpdateDate = String(
+          Number(this.qpu.lastUpdateDate) * 1000
+        );
 
         // fill qpu properties to show in ui
-        this.nQubits.value = this.qpu.nQubits;
+        this.nQubits.value = this.qpu.nqubits;
         this.backendVersion.value = this.qpu.backendVersion;
         this.maxCircuits.value = this.qpu.maxExperiments;
         this.maxShots.value = this.qpu.maxShots;
@@ -219,36 +156,102 @@ export class ComputeResourceProvenanceComponent implements OnInit {
           this.backendVersion,
         ]);
 
+        // Qraph
+        const nodeSet: Set<string> = new Set();
+        const edgeList: string[] = [];
+
+        // Qraph Nodes
+        this.qpu.qubits?.forEach((qubit) => {
+          const t1 = qubit.parameters?.find((param) => param.name === 't1')
+            ?.value;
+          const t2 = qubit.parameters?.find((param) => param.name === 't2')
+            ?.value;
+          const readoutError = qubit.parameters?.find(
+            (param) => param.name === 'readout_error'
+          )?.value;
+
+          const tooltip: string =
+            'T1: <strong>' +
+            t1 +
+            '</strong><br />' +
+            'T2: ' +
+            t2 +
+            '<br />Readout Error: ' +
+            readoutError;
+
+          const qN: Node = {
+            id: String(qubit.providerGivenId),
+            label: String('Q' + qubit.providerGivenId),
+            data: { t1, t2, tooltip },
+          };
+
+          // check if we know the source/target node already
+          if (qN.label && !nodeSet.has(qN.label)) {
+            // add node to set
+            nodeSet.add(qN.label);
+            // add edge to graph
+            this.qGraphNodes.push(qN);
+          }
+        });
+
         this.gates = this.qpu.gates;
-        this.gates?.forEach((g) => {
-          g.qasmDef = g.qasmDef.replace('gate ', '');
-        });
-        this.gateProps = this.qpu.properties?.gates;
+        this.bGates = this.gates?.filter((gate) => gate.qasmDef);
+        this.bGates?.forEach(
+          (bg) => (bg.qasmDef = bg.qasmDef?.replace('gate ', ''))
+        );
 
-        this.qpu.properties?.gates?.forEach((gate) => {
-          let basisGate;
-          this.qpu?.basisGates?.forEach((value) => {
-            if (gate.name?.startsWith(value)) {
-              basisGate = value;
+        this.gates?.forEach((gate) => {
+          const gateDate = String(
+            Number(gate.gateParameters?.find((param) => param.date)?.value) *
+              1000
+          );
+          const gateError = gate.gateParameters?.find(
+            (param) => param.name === 'gate_error'
+          )?.value;
+          const gateLength = gate.gateParameters?.find(
+            (param) => param.name === 'gate_error'
+          )?.value;
+
+          if (gateDate) {
+            this.gateData.push({
+              gateDate,
+              gate: gate.name,
+              gateError,
+              gateLength,
+            });
+          }
+
+          // Qraph Edges
+          if (gate.qubits?.length === 2) {
+            const sid = Number(gate.qubits?.sort().pop());
+            const tid = Number(gate.qubits?.pop());
+            const eid = String(gate.name);
+
+            // check if we know this edge or its reverse already
+            const nPairEdge: string = sid.toString() + tid.toString();
+            const nPairEdgeRev: string = tid.toString() + sid.toString();
+            const tooltip: string =
+              'Error: ' + gateError + '<br />' + 'Length: ' + gateLength;
+
+            if (!edgeList.includes(nPairEdge)) {
+              // add edge and reverse edge to list
+              edgeList.push(nPairEdge);
+              edgeList.push(nPairEdgeRev);
+              // add edge to graph
+              this.qGraphEdges.push({
+                id: eid,
+                label: eid,
+                source: sid.toString(),
+                target: tid.toString(),
+                data: { tooltip },
+              });
             }
-          });
-
-          const gateError = gate.parameters.find(
-            (value) => value.name === 'gate_error'
-          ).value;
-
-          const gateLength = gate.parameters.find(
-            (value) => value.name === 'gate_length'
-          ).value;
-
-          this.gateData.push({
-            date: String(gate.parameters[0].date),
-            basisGate,
-            gate: gate.name,
-            gateError,
-            gateLength,
-          });
+          }
         });
+
+        this.qGraphNodes = [...this.qGraphNodes];
+        this.qGraphEdges = [...this.qGraphEdges];
+        this.updateGraph();
 
         // create a mat-table with pahinator and sorting
         this.gateDataSource = new MatTableDataSource(this.gateData);

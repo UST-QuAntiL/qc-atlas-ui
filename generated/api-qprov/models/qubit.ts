@@ -1,2 +1,3 @@
 /* tslint:disable */
-export type Qubit = { 'id'?: number, 'date'?: string, 'name'?: string, 'unit'?: string, 'value'?: number };
+import { Parameter } from './parameter';
+export type Qubit = { 'qubitId'?: string, 'parameters'?: Array<Parameter>, 'providerGivenId'?: number, 'providerId'?: string, 'backendName'?: string };

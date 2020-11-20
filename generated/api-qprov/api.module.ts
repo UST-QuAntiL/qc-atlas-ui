@@ -3,11 +3,9 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { ProvService } from './services/prov.service';
 import { ProfileControllerService } from './services/profile-controller.service';
 import { QpuService } from './services/qpu.service';
-import { QpuEntityControllerService } from './services/qpu-entity-controller.service';
-import { QpuSearchControllerService } from './services/qpu-search-controller.service';
-import { QraphService } from './services/qraph.service';
 
 /**
  * Module that provides all services and configuration.
@@ -17,11 +15,9 @@ import { QraphService } from './services/qraph.service';
   exports: [],
   declarations: [],
   providers: [
+    ProvService,
     ProfileControllerService,
     QpuService,
-    QpuEntityControllerService,
-    QpuSearchControllerService,
-    QraphService,
     ApiConfiguration
   ],
 })

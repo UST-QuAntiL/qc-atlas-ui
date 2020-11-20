@@ -1,2 +1,2 @@
 /* tslint:disable */
-export type Parameter = { 'id'?: number, 'date'?: string, 'name'?: string, 'unit'?: string, 'value'?: number };
+export type Parameter = { 'parameterId'?: string, 'name'?: string, 'value'?: number, 'date'?: string };

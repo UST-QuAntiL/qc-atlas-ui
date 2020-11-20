@@ -1,5 +1,5 @@
 /* tslint:disable */
 import { Gate } from './gate';
 import { Links } from './links';
-import { QpuProperties } from './qpu-properties';
-export type EntityModelQpu = { 'id'?: number, 'provider'?: string, 'backendName'?: string, 'backendVersion'?: string, 'properties'?: QpuProperties, 'nQubits'?: number, 'basisGates'?: Array<string>, 'gates'?: Array<Gate>, 'memory'?: boolean, 'maxShots'?: number, 'nUchannels'?: number, 'dt'?: number, 'dtm'?: number, 'repTimes'?: Array<number>, 'measKernels'?: Array<string>, 'discriminators'?: Array<string>, 'description'?: string, 'maxExperiments'?: number, 'nRegisters'?: number, 'onlineDate'?: string, 'url'?: string, 'allowQCircuit'?: boolean, 'allowObjectStorage'?: boolean, 'nqubits'?: number, 'nuchannels'?: number, 'nregisters'?: number, '_links'?: Links };
+import { Qubit } from './qubit';
+export type EntityModelQpu = { 'qpuId'?: string, 'qubits'?: Array<Qubit>, 'gates'?: Array<Gate>, 'backendVersion'?: string, 'lastUpdateDate'?: string, 'onlineDate'?: string, 'description'?: string, 'maxExperiments'?: number, 'maxShots'?: number, 'dt'?: number, 'dtm'?: number, 'nqubits'?: number, 'nregisters'?: number, 'providerId'?: string, 'backendName'?: string, '_links'?: Links };

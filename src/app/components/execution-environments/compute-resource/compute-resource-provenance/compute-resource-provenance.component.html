@@ -3,13 +3,13 @@
     <mat-spinner></mat-spinner>
   </div>
   <div *ngIf="qpu" class="row">
-    <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-3 mr-1">
+    <div class="col-xl-6">
+      <mat-card class="m-2">
         <mat-card-header>
           <mat-card-title-group>
             <mat-card-title>
               <h3>
-                <span title="Provider: IBMQ">{{ qpu.provider }}</span>
+                <span title="Provider: IBMQ">{{ qpu.providerId }}</span>
                 {{ qpu.backendName }}
               </h3>
             </mat-card-title>
@@ -23,9 +23,11 @@
               <mat-icon mat-list-icon>update</mat-icon>
               <div mat-line>
                 <strong
-                  title="Online since {{ qpu.onlineDate | date: 'yy/MM/dd' }}"
+                  title="Online since {{
+                    qpu.onlineDate | date: 'yy/MM/dd | HH:mm:ss'
+                  }}"
                   >{{
-                    qpu.properties.lastUpdateDate | date: 'yy/MM/dd | HH:mm:ss'
+                    qpu.lastUpdateDate | date: 'yy/MM/dd | HH:mm:ss'
                   }}</strong
                 >
               </div>
@@ -43,18 +45,31 @@
           </mat-list>
         </mat-card-content>
       </mat-card>
+      <mat-card class="m-1">
+        <mat-card-header>
+          <mat-card-title>Available Gates</mat-card-title>
+        </mat-card-header>
+        <mat-card-content *ngFor="let bgate of bGates">
+          <mat-card-title class="text-primary text-monospace">{{
+            bgate.name
+          }}</mat-card-title>
+          <mat-panel-title class="p-1">
+            <strong class="text-monospace">{{ bgate.qasmDef }}</strong>
+          </mat-panel-title>
+        </mat-card-content>
+      </mat-card>
     </div>
 
-    <div class="col-xl-8 col-lg-12">
-      <mat-card class="m-3 ml-1">
+    <div class="col-xl-6">
+      <mat-card class="m-2">
         <mat-card-header>
           <mat-card-title-group>
             <mat-card-title>
               <h3>Qraph</h3>
             </mat-card-title>
-            <mat-card-subtitle
-              >
-              <strong>{{ qpu.backendName }}</strong> Qubit Map · <strong>{{ qpu.nQubits }}</strong> Quibits</mat-card-subtitle
+            <mat-card-subtitle>
+              <strong>{{ qpu.backendName }}</strong> Qubit Map ·
+              <strong>{{ qpu.nqubits }}</strong> Quibits</mat-card-subtitle
             >
           </mat-card-title-group>
         </mat-card-header>
@@ -66,6 +81,7 @@
             *ngIf="qGraphEdges && qGraphNodes"
             class="chart-container p-1"
             layout="dagre"
+            [curve]="curve"
             [draggingEnabled]="false"
             [panningEnabled]="true"
             [enableZoom]="false"
@@ -84,7 +100,7 @@
                 ngx-tooltip
                 [tooltipPlacement]="'top'"
                 [tooltipType]="'tooltip'"
-                [tooltipTitle]="node.label"
+                [tooltipTitle]="node.data.tooltip"
               >
                 <circle
                   [attr.r]="node.dimension.width"
@@ -96,13 +112,38 @@
 
                 <svg:text
                   alignment-baseline="central"
-                  font-size="x-large"
+                  font-size="large"
                   font-weight="bold"
                   [attr.x]="node.dimension.height / 3"
                   [attr.y]="node.dimension.height / 2"
                 >
                   {{ node.label }}
                 </svg:text>
+              </svg:g>
+            </ng-template>
+            <ng-template #linkTemplate let-link>
+              <svg:g
+                class="edge"
+                ngx-tooltip
+                [tooltipPlacement]="'top'"
+                [tooltipType]="'tooltip'"
+                [tooltipTitle]="link.data.tooltip"
+              >
+                <svg:path
+                  class="line"
+                  stroke-width="2"
+                  marker-end="url(#arrow)"
+                ></svg:path>
+                <!-- <svg:text class="edge-label" text-anchor="middle">
+                  <textPath
+                    class="text-path"
+                    [attr.href]="'#' + link.id"
+                    [style.dominant-baseline]="link.dominantBaseline"
+                    startOffset="60%"
+                  >
+                    {{ link.label }}
+                  </textPath>
+                </svg:text> -->
               </svg:g>
             </ng-template>
             -->
@@ -136,59 +177,15 @@
             update
           </button>
           last update:
-          {{ qpu.properties.lastUpdateDate | date: 'MM/dd | HH:mm:ss' }}
+          {{ qpu.lastUpdateDate | date: 'MM/dd | HH:mm:ss' }}
         </mat-card-actions>
       </mat-card>
     </div>
-
-    <!-- <mat-card class="m-3 mr-1" hidden *ngIf="qGraphNodes">
-      <mat-card-content>
-        {{ qGraphNodes.length }} | {{ qGraphNodesS }}
-      </mat-card-content>
-      <mat-card-content>
-        {{ qGraphEdges.length }} | {{ qGraphEdgesS }}
-      </mat-card-content>
-    </mat-card> -->
   </div>
 
-  <!-- -->
-
   <div class="row">
-    <div class="col-xl-5 col-lg-12">
-      <mat-card class="m-3 mr-1">
-        <mat-card-header>
-          <mat-card-title>Basis Gates</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-accordion>
-            <mat-expansion-panel *ngFor="let bgate of gates" hideToggle>
-              <mat-expansion-panel-header>
-                <mat-card-title class="text-primary text-monospace">{{
-                  bgate.name
-                }}</mat-card-title>
-                <mat-panel-title class="p-2">
-                  <strong class="text-monospace">{{ bgate.qasmDef }}</strong>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <mat-panel-description>
-                <div>todo: <strong>more data</strong></div>
-              </mat-panel-description>
-              <mat-panel-description>
-                <div>
-                  qasmDef: <strong>{{ bgate.qasmDef }}</strong>
-                </div>
-              </mat-panel-description>
-              <mat-panel-description>
-                <div>qubits: <strong>...</strong></div>
-              </mat-panel-description>
-            </mat-expansion-panel>
-          </mat-accordion>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <div class="col-xl-7 col-lg-12">
-      <mat-card class="m-3 ml-1">
+    <div class="col-xl-12 col-lg-12 align-center content-align-center">
+      <mat-card class="m-2">
         <mat-card-header>
           <mat-card-title>Gates</mat-card-title>
 
@@ -211,17 +208,11 @@
             matPaginator
             class=""
           >
-            <ng-container matColumnDef="date">
+            <ng-container matColumnDef="gateDate">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
               <td mat-cell *matCellDef="let gate">
-                {{ gate.date | date: 'yy/MM/dd | HH:mm' }}
+                {{ gate.gateDate | date: 'yy/MM/dd | HH:mm' }}
               </td>
-            </ng-container>
-            <ng-container matColumnDef="basisGate">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Basis Gate
-              </th>
-              <td mat-cell *matCellDef="let gate">{{ gate.basisGate }}</td>
             </ng-container>
             <ng-container matColumnDef="gate">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Gate</th>
