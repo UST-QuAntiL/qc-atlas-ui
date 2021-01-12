@@ -20,6 +20,9 @@ import { ComputeResourceListComponent } from './compute-resource-list/compute-re
 import { ComputeResourceSelectionCriteriaComponent } from './compute-resource-selection-criteria/compute-resource-selection-criteria.component';
 import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-resource-dialog.component';
 import { ComputeResourceProvenanceComponent } from './compute-resource-provenance/compute-resource-provenance.component';
+import { MatListModule } from '@angular/material/list';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -47,6 +50,9 @@ import { ComputeResourceProvenanceComponent } from './compute-resource-provenanc
     ComputeResourcePropertyModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatListModule,
+    MatExpansionModule,
+    MatTableModule,
   ],
   exports: [ComputeResourceViewComponent, ComputeResourceListComponent],
 })

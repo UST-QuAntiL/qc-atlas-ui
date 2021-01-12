@@ -1,1 +1,157 @@
-<p>compute-resource-provenance works!</p>
+<div *ngIf="!ready">
+  <h2 class="m-4">Loading provenance data for the compute resource</h2>
+  <div class="d-flex align-content-center justify-content-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>
+<div *ngIf="ready">
+  <div *ngIf="!provider">
+    <h2 class="m-4">Unable to find corresponding vendor with name '{{ computeResource.vendor }}' over the QProv
+      API!</h2>
+  </div>
+  <div *ngIf="provider">
+    <div *ngIf="!qpu">
+      <h2 class="m-4">No QPU with name '{{ computeResource.name }}' available for vendor with name
+        '{{ computeResource.vendor }}'!</h2>
+    </div>
+    <div *ngIf="qpu">
+      <div class="p-4">
+        <div class="row">
+          <div class="col-xl-4 col-lg-12">
+            <mat-card class="m-2">
+              <mat-card-header>
+                <mat-card-title-group>
+                  <mat-card-title>
+                    <h3>
+                      <span>{{ qpu.name }}</span>
+                    </h3>
+                  </mat-card-title>
+                  <mat-card-subtitle>Vendor: {{ provider.name }}</mat-card-subtitle>
+                  <mat-card-subtitle>Version: {{ qpu.version }}</mat-card-subtitle>
+                  <mat-card-subtitle>Simulator: {{ qpu.simulator }}</mat-card-subtitle>
+                </mat-card-title-group>
+              </mat-card-header>
+
+              <mat-card-content>
+                <mat-list>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>update</mat-icon>
+                    <div mat-line>
+                      <strong
+                        title="Last update in QProv at {{
+                    qpu.lastUpdated | date: 'yy/MM/dd | HH:mm:ss'
+                  }}"
+                      >{{
+                        qpu.lastUpdated | date: 'yy/MM/dd | HH:mm:ss'
+                        }}</strong>
+                    </div>
+                    <div mat-line><small>Last Provenance Data Update</small></div>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>update</mat-icon>
+                    <div mat-line>
+                      <strong
+                        title="Last calibration at {{
+                    qpu.lastCalibrated | date: 'yy/MM/dd | HH:mm:ss'
+                  }}"
+                      >{{
+                        qpu.lastCalibrated | date: 'yy/MM/dd | HH:mm:ss'
+                        }}</strong>
+                    </div>
+                    <div mat-line><small>Last Calibration Update</small></div>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>opacity</mat-icon>
+                    <div mat-line>
+                      <strong title="Number of Qubits: {{qpu.numberOfQubits}}">{{qpu.numberOfQubits}}</strong>
+                    </div>
+                    <div mat-line><small>Number of Qubits</small></div>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>settings_input_component</mat-icon>
+                    <div mat-line>
+                      <strong title="Maximum shots: {{qpu.maxShots}}">{{qpu.maxShots}}</strong>
+                    </div>
+                    <div mat-line><small>Maximum Number of Shots</small></div>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>query_builder</mat-icon>
+                    <div mat-line>
+                      <strong title="Current Queue Size: {{qpu.queueSize}}">{{qpu.queueSize}}</strong>
+                    </div>
+                    <div mat-line><small>Current Queue Size</small></div>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>av_timer</mat-icon>
+                    <div mat-line>
+                      <strong title="Maximum Gate Time: {{qpu.maxGateTime}}">{{qpu.maxGateTime}} µs</strong>
+                    </div>
+                    <div mat-line><small>Maximum Gate Time</small></div>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>timeline</mat-icon>
+                    <div mat-line>
+                      <strong title="Average T1 Time: {{qpu.avgT1Time}}">{{qpu.avgT1Time}} us</strong>
+                    </div>
+                    <div mat-line><small>Average T1 Time</small></div>
+                  </mat-list-item>
+                </mat-list>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div class="col-xl-6">
+            <mat-card class="m-2">
+              <mat-card-header>
+                <mat-card-title-group>
+                  <mat-card-title>
+                    <h3>Topology</h3>
+                  </mat-card-title>
+                </mat-card-title-group>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mx-3 mb-2">
+            <mat-card class="m-1">
+              <mat-card-header>
+                <mat-card-title>Qubit Characteristics</mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content>
+                <app-table
+                  [data]=displayedDataQubits
+                  [variableNames]=variableNamesQubits
+                  [dataColumns]=tableColumnsQubits
+                  [allowAdd]=false
+                  [allowDelete]=false
+                  [allowSort]=true
+                  [emptyTableMessage]="'No qubit information found'">
+                </app-table>
+              </mat-card-content>
+            </mat-card>
+
+            <mat-card class="m-1">
+              <mat-card-header>
+                <mat-card-title>Gate Characteristics</mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content>
+                <app-table
+                  [data]=displayedDataGates
+                  [variableNames]=variableNamesGates
+                  [dataColumns]=tableColumnsGates
+                  [allowAdd]=false
+                  [allowDelete]=false
+                  [allowSort]=true
+                  [emptyTableMessage]="'No gate information found'">
+                </app-table>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
