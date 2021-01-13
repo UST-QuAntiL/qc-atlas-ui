@@ -7,25 +7,6 @@ import * as shape from 'd3-shape';
 import { Node, Edge } from '@swimlane/ngx-graph';
 import { Subject } from 'rxjs';
 
-export class Qubit {
-  id: string;
-  name: string;
-  calibrationDate: string;
-  t1Time: string;
-  t2Time: string;
-  readoutError: string;
-}
-
-export class Gate {
-  id: string;
-  name: string;
-  multiQubit: boolean;
-  operatingQubits: string;
-  calibrationDate: string;
-  gateFidelity: string;
-  gateTime: string;
-}
-
 @Component({
   selector: 'app-compute-resource-provenance',
   templateUrl: './compute-resource-provenance.component.html',
@@ -158,9 +139,14 @@ export class ComputeResourceProvenanceComponent implements OnInit {
       .subscribe((qubitResult) => {
         // iterate over qubits and retrieve characteristics and related gates
         for (const qubitDto of qubitResult._embedded.qubitDtoes) {
-          const qubit = new Qubit();
-          qubit.id = qubitDto.id;
-          qubit.name = qubitDto.name;
+          const qubit = {
+            id: qubitDto.id,
+            name: qubitDto.name,
+            calibrationDate: '-',
+            t1Time: '-',
+            t2Time: '-',
+            readoutError: '-',
+          };
 
           this.providerService
             .getQubitCharacterisitcs({
@@ -170,11 +156,6 @@ export class ComputeResourceProvenanceComponent implements OnInit {
               latest: true,
             })
             .subscribe((qubitCharacteristicsResult) => {
-              // add entries if no characteristics are available
-              qubit.calibrationDate = '-';
-              qubit.t1Time = '-';
-              qubit.t2Time = '-';
-              qubit.readoutError = '-';
               if (
                 qubitCharacteristicsResult._embedded.qubitCharacteristicsDtoes
                   .length > 0
@@ -222,9 +203,15 @@ export class ComputeResourceProvenanceComponent implements OnInit {
         // iterate over qubits and retrieve characteristics and related gates
         const gatesToAdd = [];
         gateResponse._embedded.gateDtoes.forEach((gateDto) => {
-          const gate = new Gate();
-          gate.id = gateDto.id;
-          gate.name = gateDto.name;
+          const gate = {
+            id: gateDto.id,
+            name: gateDto.name,
+            operatingQubits: '-',
+            multiQubit: false,
+            calibrationDate: '-',
+            gateTime: '-',
+            gateFidelity: '-',
+          };
 
           if (gateDto.multiQubitGate) {
             // filter duplicate gate entries from multiple
@@ -244,7 +231,6 @@ export class ComputeResourceProvenanceComponent implements OnInit {
             gate.multiQubit = true;
           } else {
             gate.operatingQubits = qubitDto.name;
-            gate.multiQubit = false;
           }
 
           // load gate characteristics
@@ -257,10 +243,6 @@ export class ComputeResourceProvenanceComponent implements OnInit {
               latest: true,
             })
             .subscribe((gateCharacteristicsResult) => {
-              // add entries if no characteristics are available
-              gate.calibrationDate = '-';
-              gate.gateTime = '-';
-              gate.gateFidelity = '-';
               if (
                 gateCharacteristicsResult._embedded.gateCharacteristicsDtoes
                   .length > 0
@@ -335,8 +317,8 @@ export class ComputeResourceProvenanceComponent implements OnInit {
     }
 
     this.update$.next(true);
-    this.zoomToFit$.next(true);
     this.center$.next(true);
+    this.zoomToFit$.next(true);
   }
 
   /**
@@ -344,7 +326,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
    *
    * @param id the Id of the qubit to return
    */
-  getQubitById(id): Qubit {
+  getQubitById(id): any {
     for (const qubit of this.displayedDataQubits) {
       if (qubit.id === id) {
         return qubit;
@@ -358,7 +340,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
    *
    * @param id the Id of the gate to return
    */
-  getGateById(id): Gate {
+  getGateById(id): any {
     for (const gate of this.displayedDataGates) {
       if (gate.id === id) {
         return gate;
