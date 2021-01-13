@@ -8,6 +8,7 @@ import { Node, Edge } from '@swimlane/ngx-graph';
 import { Subject } from 'rxjs';
 
 export class Qubit {
+  id: string;
   name: string;
   calibrationDate: string;
   t1Time: string;
@@ -16,6 +17,7 @@ export class Qubit {
 }
 
 export class Gate {
+  id: string;
   name: string;
   operatingQubits: string;
   calibrationDate: string;
@@ -156,6 +158,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
         // iterate over qubits and retrieve characteristics and related gates
         for (const qubitDto of qubitResult._embedded.qubitDtoes) {
           const qubit = new Qubit();
+          qubit.id = qubitDto.id;
           qubit.name = qubitDto.name;
 
           this.providerService
@@ -166,25 +169,23 @@ export class ComputeResourceProvenanceComponent implements OnInit {
               latest: true,
             })
             .subscribe((qubitCharacteristicsResult) => {
-
               // add entries if no characteristics are available
+              qubit.calibrationDate = '-';
+              qubit.t1Time = '-';
+              qubit.t2Time = '-';
+              qubit.readoutError = '-';
               if (
                 qubitCharacteristicsResult._embedded.qubitCharacteristicsDtoes
-                  .length < 1
+                  .length > 0
               ) {
-                qubit.calibrationDate = '-';
-                qubit.t1Time = '-';
-                qubit.t2Time = '-';
-                qubit.readoutError = '-';
-              } else {
                 const currentCharacteristics =
                   qubitCharacteristicsResult._embedded
                     .qubitCharacteristicsDtoes[0];
                 qubit.calibrationDate = new Date(
                   currentCharacteristics.calibrationTime
                 ).toUTCString();
-                qubit.t1Time = currentCharacteristics.t1Time.toString() + ' ns';
-                qubit.t2Time = currentCharacteristics.t2Time.toString() + ' ns';
+                qubit.t1Time = currentCharacteristics.t1Time.toString() + ' µs';
+                qubit.t2Time = currentCharacteristics.t2Time.toString() + ' µs';
                 qubit.readoutError =
                   currentCharacteristics.readoutError.toString() + '%';
               }
@@ -193,7 +194,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
           this.displayedDataQubits.push(qubit);
 
           // add details about gates on the current qubit
-          this.addGateDataForQubit(qubitDto.id);
+          this.addGateDataForQubit(qubitDto);
         }
 
         // update UI
@@ -204,11 +205,109 @@ export class ComputeResourceProvenanceComponent implements OnInit {
   /**
    * Add the data about the characteristics of the gates on the given qubit
    *
-   * @param qubitId
+   * @param qubitDto the Dto of the qubit to retrieve the gates for
    */
-  addGateDataForQubit(qubitId): void {
-    console.log(qubitId);
-    // TODO
+  addGateDataForQubit(qubitDto): void {
+    this.providerService
+      .getGates({
+        providerId: this.provider.id,
+        qpuId: this.qpu.id,
+        qubitId: qubitDto.id,
+      })
+      .subscribe((gateResponse) => {
+        // iterate over qubits and retrieve characteristics and related gates
+        gateResponse._embedded.gateDtoes.forEach((gateDto) => {
+          const gate = new Gate();
+          gate.id = gateDto.id;
+          gate.name = gateDto.name;
+
+          if (gateDto.multiQubitGate) {
+            // filter duplicate gate entries from multiple
+            if (this.getGateById(gateDto.id) !== null) {
+              return;
+            }
+
+            const operatingQubitNames = [];
+            for (const operatingQubit of gateDto.operatingQubits) {
+              const qubit = this.getQubitById(operatingQubit);
+              if (qubit !== null) {
+                operatingQubitNames.push(qubit.name);
+              }
+            }
+
+            gate.operatingQubits = operatingQubitNames.sort().join(', ');
+          } else {
+            gate.operatingQubits = qubitDto.name;
+          }
+
+          // load gate characteristics
+          this.providerService
+            .getGateCharacterisitcs({
+              providerId: this.provider.id,
+              qpuId: this.qpu.id,
+              qubitId: qubitDto.id,
+              gateId: gateDto.id,
+              latest: true,
+            })
+            .subscribe((gateCharacteristicsResult) => {
+              // add entries if no characteristics are available
+              gate.calibrationDate = '-';
+              gate.gateTime = '-';
+              gate.gateFidelity = '-';
+              if (
+                gateCharacteristicsResult._embedded.gateCharacteristicsDtoes
+                  .length > 0
+              ) {
+                const currentCharacteristics =
+                  gateCharacteristicsResult._embedded
+                    .gateCharacteristicsDtoes[0];
+                gate.calibrationDate = new Date(
+                  currentCharacteristics.calibrationTime
+                ).toUTCString();
+
+                if (currentCharacteristics.gateTime !== 0) {
+                  gate.gateTime =
+                    currentCharacteristics.gateTime.toString() + ' ns';
+                }
+
+                if (currentCharacteristics.gateFidelity !== 0) {
+                  gate.gateFidelity =
+                    currentCharacteristics.gateFidelity.toString() + ' %';
+                }
+              }
+            });
+
+          this.displayedDataGates.push(gate);
+        });
+      });
+  }
+
+  /**
+   * Get a qubit by Id
+   *
+   * @param id the Id of the qubit to return
+   */
+  getQubitById(id): Qubit {
+    for (const qubit of this.displayedDataQubits) {
+      if (qubit.id === id) {
+        return qubit;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Get a gate by Id
+   *
+   * @param id the Id of the gate to return
+   */
+  getGateById(id): Gate {
+    for (const gate of this.displayedDataGates) {
+      if (gate.id === id) {
+        return gate;
+      }
+    }
+    return null;
   }
 
   centerGraph(): void {
