@@ -23,6 +23,7 @@ import { ComputeResourceProvenanceComponent } from './compute-resource-provenanc
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
 
 @NgModule({
   declarations: [
@@ -35,25 +36,26 @@ import { MatTableModule } from '@angular/material/table';
     CreateComputeResourceDialogComponent,
     ComputeResourceProvenanceComponent,
   ],
-  imports: [
-    CommonModule,
-    MatTabsModule,
-    GenericsModule,
-    MatCardModule,
-    NavigationBreadcrumbModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    FormsModule,
-    ComputeResourcePropertyModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatListModule,
-    MatExpansionModule,
-    MatTableModule,
-  ],
+    imports: [
+        CommonModule,
+        MatTabsModule,
+        GenericsModule,
+        MatCardModule,
+        NavigationBreadcrumbModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        FormsModule,
+        ComputeResourcePropertyModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        MatListModule,
+        MatExpansionModule,
+        MatTableModule,
+        NgxGraphModule,
+    ],
   exports: [ComputeResourceViewComponent, ComputeResourceListComponent],
 })
 export class ComputeResourcesModule {}

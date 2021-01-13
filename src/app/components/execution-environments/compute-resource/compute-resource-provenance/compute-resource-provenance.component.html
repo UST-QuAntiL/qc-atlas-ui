@@ -99,8 +99,8 @@
               </mat-card-content>
             </mat-card>
           </div>
-          <div class="col-xl-6">
-            <mat-card class="m-2">
+          <div class="col-xl-4 col-lg-12">
+            <mat-card class="m2">
               <mat-card-header>
                 <mat-card-title-group>
                   <mat-card-title>
@@ -108,6 +108,62 @@
                   </mat-card-title>
                 </mat-card-title-group>
               </mat-card-header>
+              <mat-card-content class="full-width">
+                <div *ngIf="!edges || !nodes">
+                  <mat-spinner></mat-spinner>
+                </div>
+                <ngx-graph
+                  *ngIf="edges && nodes"
+                  layout="dagre"
+                  [view]="[500,540]"
+                  [curve]="curve"
+                  [draggingEnabled]="false"
+                  [panningEnabled]="true"
+                  [enableZoom]="true"
+                  [autoZoom]="true"
+                  [autoCenter]="true"
+                  [showMiniMap]="false"
+                  [links]="edges"
+                  [nodes]="nodes"
+                  [center$]="center$"
+                  [update$]="update$"
+                  [zoomToFit$]="zoomToFit$"
+                >
+                  <ng-template #nodeTemplate let-node>
+                    <svg:g class="node">
+                      <circle
+                        [attr.r]="node.dimension.width"
+                        [attr.cx]="node.dimension.width"
+                        [attr.cy]="node.dimension.width"
+                        [attr.fill]="node.data.color"
+                        class="ng-star-inserted"
+                      ></circle>
+
+                      <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">
+                        {{node.label}}
+                      </svg:text>
+                    </svg:g>
+                  </ng-template>
+                </ngx-graph>
+              </mat-card-content>
+              <mat-card-actions>
+                <button
+                  class="m-1"
+                  (click)="fitGraph()"
+                  color="accent"
+                  mat-flat-button
+                >
+                  Fit Graph
+                </button>
+                <button
+                  class="m-1"
+                  (click)="centerGraph()"
+                  color="accent"
+                  mat-flat-button
+                >
+                  Center Graph
+                </button>
+              </mat-card-actions>
             </mat-card>
           </div>
         </div>

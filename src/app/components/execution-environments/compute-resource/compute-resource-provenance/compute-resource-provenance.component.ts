@@ -19,6 +19,7 @@ export class Qubit {
 export class Gate {
   id: string;
   name: string;
+  multiQubit: boolean;
   operatingQubits: string;
   calibrationDate: string;
   gateFidelity: string;
@@ -197,6 +198,9 @@ export class ComputeResourceProvenanceComponent implements OnInit {
           this.addGateDataForQubit(qubitDto);
         }
 
+        // generate topology graph nodes for the QPU
+        this.generateTopologyGraphNodes();
+
         // update UI
         this.ready = true;
       });
@@ -216,6 +220,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
       })
       .subscribe((gateResponse) => {
         // iterate over qubits and retrieve characteristics and related gates
+        const gatesToAdd = [];
         gateResponse._embedded.gateDtoes.forEach((gateDto) => {
           const gate = new Gate();
           gate.id = gateDto.id;
@@ -236,8 +241,10 @@ export class ComputeResourceProvenanceComponent implements OnInit {
             }
 
             gate.operatingQubits = operatingQubitNames.sort().join(', ');
+            gate.multiQubit = true;
           } else {
             gate.operatingQubits = qubitDto.name;
+            gate.multiQubit = false;
           }
 
           // load gate characteristics
@@ -278,8 +285,58 @@ export class ComputeResourceProvenanceComponent implements OnInit {
             });
 
           this.displayedDataGates.push(gate);
+          gatesToAdd.push(gate);
         });
+
+        // update topology graph for the QPU
+        this.generateTopologyGraphEdges(gatesToAdd);
       });
+  }
+
+  /**
+   * Generate the topology graph nodes from the qubits of the QPU
+   */
+  generateTopologyGraphNodes(): void {
+    for (const qubit of this.displayedDataQubits) {
+      const node: Node = {
+        id: String(qubit.name),
+        label: String('Q' + qubit.name),
+      };
+      this.nodes.push(node);
+    }
+
+    this.update$.next(true);
+    this.zoomToFit$.next(true);
+  }
+
+  /**
+   * Generate the topology graph nodes from the qubits of the QPU
+   */
+  generateTopologyGraphEdges(gatesToAdd): void {
+    for (const gate of gatesToAdd) {
+      // edges are only needed for multi-qubit gates
+      if (gate.multiQubit) {
+        const operatingQubits = gate.operatingQubits
+          .replace(/ /g, '')
+          .split(',');
+
+        // only multi qubit gates on two qubits are supported
+        if (operatingQubits.length !== 2) {
+          continue;
+        }
+
+        this.edges.push({
+          id: gate.name,
+          label: gate.name,
+          source: operatingQubits[0],
+          target: operatingQubits[1],
+        });
+      }
+    }
+
+    this.update$.next(true);
+    this.zoomToFit$.next(true);
+    this.center$.next(true);
   }
 
   /**
@@ -311,17 +368,10 @@ export class ComputeResourceProvenanceComponent implements OnInit {
   }
 
   centerGraph(): void {
-    console.log('centering qraph...');
     this.center$.next(true);
   }
 
   fitGraph(): void {
-    console.log('fitting qraph...');
     this.zoomToFit$.next(true);
-  }
-
-  updateGraph(): void {
-    console.log('updating qraph...');
-    this.update$.next(true);
   }
 }
