@@ -84,14 +84,14 @@
                   <mat-list-item>
                     <mat-icon mat-list-icon>av_timer</mat-icon>
                     <div mat-line>
-                      <strong title="Maximum Gate Time: {{qpu.maxGateTime}}">{{qpu.maxGateTime}} µs</strong>
+                      <strong title="Maximum Gate Time: {{qpu.maxGateTime}}">{{qpu.maxGateTime}} ns</strong>
                     </div>
                     <div mat-line><small>Maximum Gate Time</small></div>
                   </mat-list-item>
                   <mat-list-item>
                     <mat-icon mat-list-icon>timeline</mat-icon>
                     <div mat-line>
-                      <strong title="Average T1 Time: {{qpu.avgT1Time}}">{{qpu.avgT1Time}} us</strong>
+                      <strong title="Average T1 Time: {{qpu.avgT1Time}}">{{qpu.avgT1Time}} µs</strong>
                     </div>
                     <div mat-line><small>Average T1 Time</small></div>
                   </mat-list-item>
@@ -114,7 +114,7 @@
 
         <div class="row">
           <div class="mx-3 mb-2">
-            <mat-card class="m-1">
+            <mat-card class="m-2">
               <mat-card-header>
                 <mat-card-title>Qubit Characteristics</mat-card-title>
               </mat-card-header>
@@ -126,7 +126,7 @@
                   [dataColumns]=tableColumnsQubits
                   [allowAdd]=false
                   [allowDelete]=false
-                  [allowSort]=true
+                  [allowSort]=false
                   [emptyTableMessage]="'No qubit information found'">
                 </app-table>
               </mat-card-content>
@@ -144,7 +144,7 @@
                   [dataColumns]=tableColumnsGates
                   [allowAdd]=false
                   [allowDelete]=false
-                  [allowSort]=true
+                  [allowSort]=false
                   [emptyTableMessage]="'No gate information found'">
                 </app-table>
               </mat-card-content>

@@ -3,20 +3,24 @@ import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { EntityModelQpuDto } from 'api-qprov/models/entity-model-qpu-dto';
 import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
 import { ProviderService } from 'api-qprov/services/provider.service';
-import { EntityModelGateDto } from 'api-qprov/models/entity-model-gate-dto';
-import { EntityModelGateCharacteristicsDto } from 'api-qprov/models/entity-model-gate-characteristics-dto';
-import { EntityModelQubitDto } from 'api-qprov/models/entity-model-qubit-dto';
-import { EntityModelQubitCharacteristicsDto } from 'api-qprov/models/entity-model-qubit-characteristics-dto';
-import { MatTableDataSource } from '@angular/material/table';
+import * as shape from 'd3-shape';
+import { Node, Edge } from '@swimlane/ngx-graph';
+import { Subject } from 'rxjs';
 
-export interface Qubit {
-  qubitDefinition: EntityModelQubitDto;
-  qubitCharacteristics: EntityModelQubitCharacteristicsDto;
+export class Qubit {
+  name: string;
+  calibrationDate: string;
+  t1Time: string;
+  t2Time: string;
+  readoutError: string;
 }
 
-export interface Gate {
-  gateDefinition: EntityModelGateDto;
-  gateCharacteristics: EntityModelGateCharacteristicsDto;
+export class Gate {
+  name: string;
+  operatingQubits: string;
+  calibrationDate: string;
+  gateFidelity: string;
+  gateTime: string;
 }
 
 @Component({
@@ -34,16 +38,14 @@ export class ComputeResourceProvenanceComponent implements OnInit {
   // fields for the tables
   displayedDataQubits = [];
   variableNamesQubits: string[] = [
-    'Qubit Name',
-    'Connected Qubits',
-    'Calibration Date',
-    'T1 Time',
-    'T2 Time',
-    'Readout-Error',
+    'name',
+    'calibrationDate',
+    't1Time',
+    't2Time',
+    'readoutError',
   ];
   tableColumnsQubits: string[] = [
     'Qubit Name',
-    'Connected Qubits',
     'Calibration Date',
     'T1 Time',
     'T2 Time',
@@ -51,11 +53,11 @@ export class ComputeResourceProvenanceComponent implements OnInit {
   ];
   displayedDataGates = [];
   variableNamesGates: string[] = [
-    'Gate Name',
-    'Operating Qubits',
-    'Calibration Date',
-    'Gate Fidelity',
-    'Gate Time',
+    'name',
+    'operatingQubits',
+    'calibrationDate',
+    'gateFidelity',
+    'gateTime',
   ];
   tableColumnsGates: string[] = [
     'Gate Name',
@@ -65,8 +67,15 @@ export class ComputeResourceProvenanceComponent implements OnInit {
     'Gate Time',
   ];
 
-  constructor(private providerService: ProviderService) {
-  }
+  // fields for the topology graph
+  curve = shape.curveBundle;
+  center$: Subject<boolean> = new Subject();
+  update$: Subject<boolean> = new Subject();
+  zoomToFit$: Subject<boolean> = new Subject();
+  edges: Edge[] = [];
+  nodes: Node[] = [];
+
+  constructor(private providerService: ProviderService) {}
 
   ngOnInit(): void {
     // load providers from QProv
@@ -91,10 +100,8 @@ export class ComputeResourceProvenanceComponent implements OnInit {
             return;
           }
 
-          // TODO: display details
-          console.log('Ready');
-          this.ready = true;
-          return;
+          // add qubit data
+          this.addQubitDataForQpu();
         });
     });
   }
@@ -126,7 +133,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
    */
   getQpuDtoByProviderAndName(result): void {
     if (result === null) {
-      console.error('Error while loading qpus!');
+      console.error('Error while loading QPUs!');
       return;
     }
 
@@ -137,5 +144,85 @@ export class ComputeResourceProvenanceComponent implements OnInit {
         return;
       }
     }
+  }
+
+  /**
+   * Add the data about the characteristics of the qubits of the QPU
+   */
+  addQubitDataForQpu(): void {
+    this.providerService
+      .getQubits({ providerId: this.provider.id, qpuId: this.qpu.id })
+      .subscribe((qubitResult) => {
+        // iterate over qubits and retrieve characteristics and related gates
+        for (const qubitDto of qubitResult._embedded.qubitDtoes) {
+          const qubit = new Qubit();
+          qubit.name = qubitDto.name;
+
+          this.providerService
+            .getQubitCharacterisitcs({
+              providerId: this.provider.id,
+              qpuId: this.qpu.id,
+              qubitId: qubitDto.id,
+              latest: true,
+            })
+            .subscribe((qubitCharacteristicsResult) => {
+
+              // add entries if no characteristics are available
+              if (
+                qubitCharacteristicsResult._embedded.qubitCharacteristicsDtoes
+                  .length < 1
+              ) {
+                qubit.calibrationDate = '-';
+                qubit.t1Time = '-';
+                qubit.t2Time = '-';
+                qubit.readoutError = '-';
+              } else {
+                const currentCharacteristics =
+                  qubitCharacteristicsResult._embedded
+                    .qubitCharacteristicsDtoes[0];
+                qubit.calibrationDate = new Date(
+                  currentCharacteristics.calibrationTime
+                ).toUTCString();
+                qubit.t1Time = currentCharacteristics.t1Time.toString() + ' ns';
+                qubit.t2Time = currentCharacteristics.t2Time.toString() + ' ns';
+                qubit.readoutError =
+                  currentCharacteristics.readoutError.toString() + '%';
+              }
+            });
+
+          this.displayedDataQubits.push(qubit);
+
+          // add details about gates on the current qubit
+          this.addGateDataForQubit(qubitDto.id);
+        }
+
+        // update UI
+        this.ready = true;
+      });
+  }
+
+  /**
+   * Add the data about the characteristics of the gates on the given qubit
+   *
+   * @param qubitId
+   */
+  addGateDataForQubit(qubitId): void {
+    console.log(qubitId);
+    // TODO
+  }
+
+  centerGraph(): void {
+    console.log('centering qraph...');
+    this.center$.next(true);
+  }
+
+  fitGraph(): void {
+    console.log('fitting qraph...');
+    this.zoomToFit$.next(true);
+  }
+
+  updateGraph(): void {
+    console.log('updating qraph...');
+    this.update$.next(true);
   }
 }
