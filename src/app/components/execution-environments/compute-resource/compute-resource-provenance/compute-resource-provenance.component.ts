@@ -103,7 +103,10 @@ export class ComputeResourceProvenanceComponent implements OnInit {
 
     // search for provider specified in computeResource
     for (const providerDto of result._embedded.providerDtoes) {
-      if (providerDto.name.toLowerCase() === this.computeResource.vendor.toLowerCase()) {
+      if (
+        providerDto.name.toLowerCase() ===
+        this.computeResource.vendor.toLowerCase()
+      ) {
         this.provider = providerDto;
         return;
       }
@@ -123,7 +126,9 @@ export class ComputeResourceProvenanceComponent implements OnInit {
 
     // search for qpu specified in computeResource
     for (const qpuDto of result._embedded.qpuDtoes) {
-      if (qpuDto.name.toLowerCase() === this.computeResource.name.toLowerCase()) {
+      if (
+        qpuDto.name.toLowerCase() === this.computeResource.name.toLowerCase()
+      ) {
         this.qpu = qpuDto;
         return;
       }
