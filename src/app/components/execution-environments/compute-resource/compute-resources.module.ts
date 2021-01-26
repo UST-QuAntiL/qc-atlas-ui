@@ -9,6 +9,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTableModule } from '@angular/material/table';
+import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
@@ -19,6 +23,7 @@ import { ComputeResourceViewComponent } from './compute-resource-view/compute-re
 import { ComputeResourceListComponent } from './compute-resource-list/compute-resource-list.component';
 import { ComputeResourceSelectionCriteriaComponent } from './compute-resource-selection-criteria/compute-resource-selection-criteria.component';
 import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-resource-dialog.component';
+import { ComputeResourceProvenanceComponent } from './compute-resource-provenance/compute-resource-provenance.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +34,7 @@ import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-r
     ComputeResourcePropertiesComponent,
     ComputeResourceSelectionCriteriaComponent,
     CreateComputeResourceDialogComponent,
+    ComputeResourceProvenanceComponent,
   ],
   imports: [
     CommonModule,
@@ -45,6 +51,10 @@ import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-r
     ComputeResourcePropertyModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatListModule,
+    MatExpansionModule,
+    MatTableModule,
+    NgxGraphModule,
   ],
   exports: [ComputeResourceViewComponent, ComputeResourceListComponent],
 })
