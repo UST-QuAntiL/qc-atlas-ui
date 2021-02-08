@@ -1,2 +1,2 @@
 /* tslint:disable */
-export type ProvNamespaceDto = { 'prefixes'?: {}, 'namespaces'?: {} };
+export type ProvNamespaceDto = { prefixes?: {}; namespaces?: {} };

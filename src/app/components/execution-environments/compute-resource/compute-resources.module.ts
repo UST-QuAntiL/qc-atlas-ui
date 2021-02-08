@@ -21,7 +21,6 @@ import { ComputeResourceCloudServiceListComponent } from './compute-resource-clo
 import { ComputeResourcePropertiesComponent } from './compute-resource-properties/compute-resource-properties.component';
 import { ComputeResourceViewComponent } from './compute-resource-view/compute-resource-view.component';
 import { ComputeResourceListComponent } from './compute-resource-list/compute-resource-list.component';
-import { ComputeResourceSelectionCriteriaComponent } from './compute-resource-selection-criteria/compute-resource-selection-criteria.component';
 import { CreateComputeResourceDialogComponent } from './dialogs/create-compute-resource-dialog.component';
 import { ComputeResourceProvenanceComponent } from './compute-resource-provenance/compute-resource-provenance.component';
 
@@ -32,7 +31,6 @@ import { ComputeResourceProvenanceComponent } from './compute-resource-provenanc
     ComputeResourceSoftwarePlatformListComponent,
     ComputeResourceCloudServiceListComponent,
     ComputeResourcePropertiesComponent,
-    ComputeResourceSelectionCriteriaComponent,
     CreateComputeResourceDialogComponent,
     ComputeResourceProvenanceComponent,
   ],

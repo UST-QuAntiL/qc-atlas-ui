@@ -5,9 +5,8 @@ export type ImplementationDto = {
   id?: string;
   name?: string;
   implementedAlgorithm?: string;
+  language?: string;
   selectionRule?: string;
-  widthRule?: string;
-  depthRule?: string;
   sdk?: string;
   fileLocation?: string;
   inputParameters?: ParameterListDto;

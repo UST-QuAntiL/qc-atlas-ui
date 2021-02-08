@@ -15,6 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTableModule } from '@angular/material/table';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../../generics/generics.module';
@@ -23,6 +24,7 @@ import { AlgorithmModule } from '../algorithm.module';
 import { ImplementationViewComponent } from './implementation-view.component';
 import { ImplementationPublicationsListComponent } from './implementation-publications-list/implementation-publications-list.component';
 import { ImplementationSoftwareplatformListComponent } from './implementation-softwareplatform-list/implementation-softwareplatform-list.component';
+import { ImplementationExecutionComponent } from './implementation-execution/implementation-execution.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { ImplementationSoftwareplatformListComponent } from './implementation-so
     ImplementationPublicationsListComponent,
     ImplSelectionCriteriaComponent,
     ImplementationSoftwareplatformListComponent,
+    ImplementationExecutionComponent,
   ],
   imports: [
     CommonModule,
@@ -52,6 +55,7 @@ import { ImplementationSoftwareplatformListComponent } from './implementation-so
     MatCheckboxModule,
     MatProgressSpinnerModule,
     AlgorithmModule,
+    MatTableModule,
   ],
 })
 export class ImplementationViewModule {}

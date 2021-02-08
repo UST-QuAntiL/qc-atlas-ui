@@ -19,8 +19,8 @@ export class NisqAnalyzerResultsComponent implements OnInit {
     'inputParameters',
     'implementation.name',
     'qpu.name',
-    'analysedWidth',
-    'analysedDepth',
+    'analyzedWidth',
+    'analyzedDepth',
     'time',
     'execution',
   ];

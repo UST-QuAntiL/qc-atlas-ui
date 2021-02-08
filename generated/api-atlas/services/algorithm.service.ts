@@ -1810,17 +1810,23 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
-  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetImplementationsOfAlgorithmPath, 'get');
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetImplementationsOfAlgorithmPath,
+      'get'
+    );
     if (params) {
       rb.path('algorithmId', params.algorithmId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
     return this.http
       .request(
@@ -1872,9 +1878,10 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
-  }): Observable<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }> {
-
+  }): Observable<{
+    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+    page?: PageMetadata;
+  }> {
     return this.getImplementationsOfAlgorithm$Response(params).pipe(
       map(
         (
@@ -5266,15 +5273,19 @@ export class AlgorithmService extends BaseService {
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('sketchId', params.sketchId, {});
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<string>>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<Array<string>>;
+        })
+      );
   }
 
   /**

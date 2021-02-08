@@ -25,10 +25,7 @@ import { RepresentationModelObject } from '../models/representation-model-object
   providedIn: 'root',
 })
 export class ProviderService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -45,24 +42,29 @@ export class ProviderService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getProviders$Response(params?: {
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelProviderDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetProvidersPath, 'get');
-    if (params) {
-
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelProviderDto>;
-      })
+  getProviders$Response(params?: {}): Observable<
+    StrictHttpResponse<CollectionModelEntityModelProviderDto>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetProvidersPath,
+      'get'
     );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<CollectionModelEntityModelProviderDto>;
+        })
+      );
   }
 
   /**
@@ -73,12 +75,12 @@ export class ProviderService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getProviders(params?: {
-
-  }): Observable<CollectionModelEntityModelProviderDto> {
-
+  getProviders(params?: {}): Observable<CollectionModelEntityModelProviderDto> {
     return this.getProviders$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelProviderDto>) => r.body as CollectionModelEntityModelProviderDto)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelProviderDto>) =>
+          r.body as CollectionModelEntityModelProviderDto
+      )
     );
   }
 
@@ -97,24 +99,28 @@ export class ProviderService extends BaseService {
    */
   getProvider$Response(params: {
     providerId: string;
-
   }): Observable<StrictHttpResponse<EntityModelProviderDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetProviderPath, 'get');
-    if (params) {
-
-      rb.path('providerId', params.providerId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProviderDto>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetProviderPath,
+      'get'
     );
+    if (params) {
+      rb.path('providerId', params.providerId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProviderDto>;
+        })
+      );
   }
 
   /**
@@ -127,11 +133,12 @@ export class ProviderService extends BaseService {
    */
   getProvider(params: {
     providerId: string;
-
   }): Observable<EntityModelProviderDto> {
-
     return this.getProvider$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProviderDto>) => r.body as EntityModelProviderDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProviderDto>) =>
+          r.body as EntityModelProviderDto
+      )
     );
   }
 
@@ -150,24 +157,28 @@ export class ProviderService extends BaseService {
    */
   getQpUs$Response(params: {
     providerId: string;
-
   }): Observable<StrictHttpResponse<CollectionModelEntityModelQpuDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetQpUsPath, 'get');
-    if (params) {
-
-      rb.path('providerId', params.providerId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelQpuDto>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetQpUsPath,
+      'get'
     );
+    if (params) {
+      rb.path('providerId', params.providerId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<CollectionModelEntityModelQpuDto>;
+        })
+      );
   }
 
   /**
@@ -180,11 +191,12 @@ export class ProviderService extends BaseService {
    */
   getQpUs(params: {
     providerId: string;
-
   }): Observable<CollectionModelEntityModelQpuDto> {
-
     return this.getQpUs$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelQpuDto>) => r.body as CollectionModelEntityModelQpuDto)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelQpuDto>) =>
+          r.body as CollectionModelEntityModelQpuDto
+      )
     );
   }
 
@@ -204,25 +216,29 @@ export class ProviderService extends BaseService {
   getQpu$Response(params: {
     providerId: string;
     qpuId: string;
-
   }): Observable<StrictHttpResponse<EntityModelQpuDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetQpuPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetQpuPath,
+      'get'
+    );
     if (params) {
-
       rb.path('providerId', params.providerId, {});
       rb.path('qpuId', params.qpuId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelQpuDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelQpuDto>;
+        })
+      );
   }
 
   /**
@@ -236,18 +252,20 @@ export class ProviderService extends BaseService {
   getQpu(params: {
     providerId: string;
     qpuId: string;
-
   }): Observable<EntityModelQpuDto> {
-
     return this.getQpu$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelQpuDto>) => r.body as EntityModelQpuDto)
+      map(
+        (r: StrictHttpResponse<EntityModelQpuDto>) =>
+          r.body as EntityModelQpuDto
+      )
     );
   }
 
   /**
    * Path part for operation getLinksToAggregatedData
    */
-  static readonly GetLinksToAggregatedDataPath = '/providers/{providerId}/qpus/{qpuId}/aggregated-data';
+  static readonly GetLinksToAggregatedDataPath =
+    '/providers/{providerId}/qpus/{qpuId}/aggregated-data';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -258,25 +276,29 @@ export class ProviderService extends BaseService {
   getLinksToAggregatedData$Response(params: {
     providerId: string;
     qpuId: string;
-
   }): Observable<StrictHttpResponse<RepresentationModelObject>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetLinksToAggregatedDataPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetLinksToAggregatedDataPath,
+      'get'
+    );
     if (params) {
-
       rb.path('providerId', params.providerId, {});
       rb.path('qpuId', params.qpuId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModelObject>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<RepresentationModelObject>;
+        })
+      );
   }
 
   /**
@@ -288,18 +310,20 @@ export class ProviderService extends BaseService {
   getLinksToAggregatedData(params: {
     providerId: string;
     qpuId: string;
-
   }): Observable<RepresentationModelObject> {
-
     return this.getLinksToAggregatedData$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
+      map(
+        (r: StrictHttpResponse<RepresentationModelObject>) =>
+          r.body as RepresentationModelObject
+      )
     );
   }
 
   /**
    * Path part for operation getCalibrationMatrix
    */
-  static readonly GetCalibrationMatrixPath = '/providers/{providerId}/qpus/{qpuId}/aggregated-data/calibration-matrix';
+  static readonly GetCalibrationMatrixPath =
+    '/providers/{providerId}/qpus/{qpuId}/aggregated-data/calibration-matrix';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -311,26 +335,34 @@ export class ProviderService extends BaseService {
     providerId: string;
     qpuId: string;
     latest: boolean;
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelCalibrationMatrixDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetCalibrationMatrixPath, 'get');
+  }): Observable<
+    StrictHttpResponse<CollectionModelEntityModelCalibrationMatrixDto>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetCalibrationMatrixPath,
+      'get'
+    );
     if (params) {
-
       rb.path('providerId', params.providerId, {});
       rb.path('qpuId', params.qpuId, {});
       rb.query('latest', params.latest, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelCalibrationMatrixDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelCalibrationMatrixDto
+          >;
+        })
+      );
   }
 
   /**
@@ -343,11 +375,13 @@ export class ProviderService extends BaseService {
     providerId: string;
     qpuId: string;
     latest: boolean;
-
   }): Observable<CollectionModelEntityModelCalibrationMatrixDto> {
-
     return this.getCalibrationMatrix$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelCalibrationMatrixDto>) => r.body as CollectionModelEntityModelCalibrationMatrixDto)
+      map(
+        (
+          r: StrictHttpResponse<CollectionModelEntityModelCalibrationMatrixDto>
+        ) => r.body as CollectionModelEntityModelCalibrationMatrixDto
+      )
     );
   }
 
@@ -367,25 +401,29 @@ export class ProviderService extends BaseService {
   getQubits$Response(params: {
     providerId: string;
     qpuId: string;
-
   }): Observable<StrictHttpResponse<CollectionModelEntityModelQubitDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetQubitsPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetQubitsPath,
+      'get'
+    );
     if (params) {
-
       rb.path('providerId', params.providerId, {});
       rb.path('qpuId', params.qpuId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelQubitDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<CollectionModelEntityModelQubitDto>;
+        })
+      );
   }
 
   /**
@@ -399,18 +437,20 @@ export class ProviderService extends BaseService {
   getQubits(params: {
     providerId: string;
     qpuId: string;
-
   }): Observable<CollectionModelEntityModelQubitDto> {
-
     return this.getQubits$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelQubitDto>) => r.body as CollectionModelEntityModelQubitDto)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelQubitDto>) =>
+          r.body as CollectionModelEntityModelQubitDto
+      )
     );
   }
 
   /**
    * Path part for operation getQubit
    */
-  static readonly GetQubitPath = '/providers/{providerId}/qpus/{qpuId}/qubits/{qubitId}';
+  static readonly GetQubitPath =
+    '/providers/{providerId}/qpus/{qpuId}/qubits/{qubitId}';
 
   /**
    * Retrieve a specific Qubit and its basic properties.
@@ -424,26 +464,30 @@ export class ProviderService extends BaseService {
     providerId: string;
     qpuId: string;
     qubitId: string;
-
   }): Observable<StrictHttpResponse<EntityModelQubitDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetQubitPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetQubitPath,
+      'get'
+    );
     if (params) {
-
       rb.path('providerId', params.providerId, {});
       rb.path('qpuId', params.qpuId, {});
       rb.path('qubitId', params.qubitId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelQubitDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelQubitDto>;
+        })
+      );
   }
 
   /**
@@ -458,18 +502,20 @@ export class ProviderService extends BaseService {
     providerId: string;
     qpuId: string;
     qubitId: string;
-
   }): Observable<EntityModelQubitDto> {
-
     return this.getQubit$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelQubitDto>) => r.body as EntityModelQubitDto)
+      map(
+        (r: StrictHttpResponse<EntityModelQubitDto>) =>
+          r.body as EntityModelQubitDto
+      )
     );
   }
 
   /**
    * Path part for operation getQubitCharacterisitcs
    */
-  static readonly GetQubitCharacterisitcsPath = '/providers/{providerId}/qpus/{qpuId}/qubits/{qubitId}/characteristics';
+  static readonly GetQubitCharacterisitcsPath =
+    '/providers/{providerId}/qpus/{qpuId}/qubits/{qubitId}/characteristics';
 
   /**
    * Retrieve the calibration characteristics from the given qubit. By using the latest parameter only the latest data is retrieved, otherwise all available data.
@@ -484,27 +530,35 @@ export class ProviderService extends BaseService {
     qpuId: string;
     qubitId: string;
     latest: boolean;
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelQubitCharacteristicsDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetQubitCharacterisitcsPath, 'get');
+  }): Observable<
+    StrictHttpResponse<CollectionModelEntityModelQubitCharacteristicsDto>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetQubitCharacterisitcsPath,
+      'get'
+    );
     if (params) {
-
       rb.path('providerId', params.providerId, {});
       rb.path('qpuId', params.qpuId, {});
       rb.path('qubitId', params.qubitId, {});
       rb.query('latest', params.latest, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelQubitCharacteristicsDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelQubitCharacteristicsDto
+          >;
+        })
+      );
   }
 
   /**
@@ -520,18 +574,23 @@ export class ProviderService extends BaseService {
     qpuId: string;
     qubitId: string;
     latest: boolean;
-
   }): Observable<CollectionModelEntityModelQubitCharacteristicsDto> {
-
     return this.getQubitCharacterisitcs$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelQubitCharacteristicsDto>) => r.body as CollectionModelEntityModelQubitCharacteristicsDto)
+      map(
+        (
+          r: StrictHttpResponse<
+            CollectionModelEntityModelQubitCharacteristicsDto
+          >
+        ) => r.body as CollectionModelEntityModelQubitCharacteristicsDto
+      )
     );
   }
 
   /**
    * Path part for operation getGates
    */
-  static readonly GetGatesPath = '/providers/{providerId}/qpus/{qpuId}/qubits/{qubitId}/gates';
+  static readonly GetGatesPath =
+    '/providers/{providerId}/qpus/{qpuId}/qubits/{qubitId}/gates';
 
   /**
    * Retrieve all Gates that can be executed on the Qubit.
@@ -545,26 +604,30 @@ export class ProviderService extends BaseService {
     providerId: string;
     qpuId: string;
     qubitId: string;
-
   }): Observable<StrictHttpResponse<CollectionModelEntityModelGateDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetGatesPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetGatesPath,
+      'get'
+    );
     if (params) {
-
       rb.path('providerId', params.providerId, {});
       rb.path('qpuId', params.qpuId, {});
       rb.path('qubitId', params.qubitId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelGateDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<CollectionModelEntityModelGateDto>;
+        })
+      );
   }
 
   /**
@@ -579,18 +642,20 @@ export class ProviderService extends BaseService {
     providerId: string;
     qpuId: string;
     qubitId: string;
-
   }): Observable<CollectionModelEntityModelGateDto> {
-
     return this.getGates$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelGateDto>) => r.body as CollectionModelEntityModelGateDto)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelGateDto>) =>
+          r.body as CollectionModelEntityModelGateDto
+      )
     );
   }
 
   /**
    * Path part for operation getGate
    */
-  static readonly GetGatePath = '/providers/{providerId}/qpus/{qpuId}/qubits/{qubitId}/gates/{gateId}';
+  static readonly GetGatePath =
+    '/providers/{providerId}/qpus/{qpuId}/qubits/{qubitId}/gates/{gateId}';
 
   /**
    * Retrieve a specific Qubit and its basic properties.
@@ -605,27 +670,31 @@ export class ProviderService extends BaseService {
     qpuId: string;
     qubitId: string;
     gateId: string;
-
   }): Observable<StrictHttpResponse<EntityModelGateDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetGatePath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetGatePath,
+      'get'
+    );
     if (params) {
-
       rb.path('providerId', params.providerId, {});
       rb.path('qpuId', params.qpuId, {});
       rb.path('qubitId', params.qubitId, {});
       rb.path('gateId', params.gateId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelGateDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelGateDto>;
+        })
+      );
   }
 
   /**
@@ -641,18 +710,20 @@ export class ProviderService extends BaseService {
     qpuId: string;
     qubitId: string;
     gateId: string;
-
   }): Observable<EntityModelGateDto> {
-
     return this.getGate$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelGateDto>) => r.body as EntityModelGateDto)
+      map(
+        (r: StrictHttpResponse<EntityModelGateDto>) =>
+          r.body as EntityModelGateDto
+      )
     );
   }
 
   /**
    * Path part for operation getGateCharacterisitcs
    */
-  static readonly GetGateCharacterisitcsPath = '/providers/{providerId}/qpus/{qpuId}/qubits/{qubitId}/gates/{gateId}/characteristics';
+  static readonly GetGateCharacterisitcsPath =
+    '/providers/{providerId}/qpus/{qpuId}/qubits/{qubitId}/gates/{gateId}/characteristics';
 
   /**
    * Retrieve the calibration characteristics from the given gate. By using the latest parameter only the latest data is retrieved, otherwise all available data.
@@ -668,28 +739,36 @@ export class ProviderService extends BaseService {
     qubitId: string;
     gateId: string;
     latest: boolean;
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelGateCharacteristicsDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProviderService.GetGateCharacterisitcsPath, 'get');
+  }): Observable<
+    StrictHttpResponse<CollectionModelEntityModelGateCharacteristicsDto>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProviderService.GetGateCharacterisitcsPath,
+      'get'
+    );
     if (params) {
-
       rb.path('providerId', params.providerId, {});
       rb.path('qpuId', params.qpuId, {});
       rb.path('qubitId', params.qubitId, {});
       rb.path('gateId', params.gateId, {});
       rb.query('latest', params.latest, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelGateCharacteristicsDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelGateCharacteristicsDto
+          >;
+        })
+      );
   }
 
   /**
@@ -706,12 +785,15 @@ export class ProviderService extends BaseService {
     qubitId: string;
     gateId: string;
     latest: boolean;
-
   }): Observable<CollectionModelEntityModelGateCharacteristicsDto> {
-
     return this.getGateCharacterisitcs$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelGateCharacteristicsDto>) => r.body as CollectionModelEntityModelGateCharacteristicsDto)
+      map(
+        (
+          r: StrictHttpResponse<
+            CollectionModelEntityModelGateCharacteristicsDto
+          >
+        ) => r.body as CollectionModelEntityModelGateCharacteristicsDto
+      )
     );
   }
-
 }

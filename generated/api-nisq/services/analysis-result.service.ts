@@ -23,10 +23,11 @@ export class AnalysisResultService extends BaseService {
   /**
    * Path part for operation getAnalysisResults
    */
-  static readonly GetAnalysisResultsPath = '/results/algorithm/{algoId}';
+  static readonly GetAnalysisResultsPath =
+    '/analysis-results/algorithm/{algoId}';
 
   /**
-   * Retrieve all execution results for an Implementation
+   * Retrieve all analysis results for an Algorithm
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getAnalysisResults()` instead.
@@ -66,7 +67,7 @@ export class AnalysisResultService extends BaseService {
   }
 
   /**
-   * Retrieve all execution results for an Implementation
+   * Retrieve all analysis results for an Algorithm
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getAnalysisResults$Response()` instead.
@@ -92,10 +93,10 @@ export class AnalysisResultService extends BaseService {
   /**
    * Path part for operation getAnalysisResult
    */
-  static readonly GetAnalysisResultPath = '/results/{resId}';
+  static readonly GetAnalysisResultPath = '/analysis-results/{resId}';
 
   /**
-   * Retrieve all execution results for an Implementation
+   * Retrieve a single analysis result
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getAnalysisResult()` instead.
@@ -129,7 +130,7 @@ export class AnalysisResultService extends BaseService {
   }
 
   /**
-   * Retrieve all execution results for an Implementation
+   * Retrieve a single analysis result
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getAnalysisResult$Response()` instead.
@@ -148,10 +149,11 @@ export class AnalysisResultService extends BaseService {
   /**
    * Path part for operation executeAnalysisResult
    */
-  static readonly ExecuteAnalysisResultPath = '/results/{resId}/execute';
+  static readonly ExecuteAnalysisResultPath =
+    '/analysis-results/{resId}/execute';
 
   /**
-   * Execute an implementation
+   * Execute an analysis configuration
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `executeAnalysisResult()` instead.
@@ -185,7 +187,7 @@ export class AnalysisResultService extends BaseService {
   }
 
   /**
-   * Execute an implementation
+   * Execute an analysis configuration
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `executeAnalysisResult$Response()` instead.

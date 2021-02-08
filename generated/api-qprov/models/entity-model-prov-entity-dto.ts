@@ -6,4 +6,12 @@ import { Other } from './other';
 import { QualifiedName } from './qualified-name';
 import { Type } from './type';
 import { Value } from './value';
-export type EntityModelProvEntityDto = { 'id'?: QualifiedName, 'label'?: Array<LangString>, 'location'?: Array<Location>, 'type'?: Array<Type>, 'value'?: Value, 'others'?: Array<Other>, '_links'?: Links };
+export type EntityModelProvEntityDto = {
+  id?: QualifiedName;
+  label?: Array<LangString>;
+  location?: Array<Location>;
+  type?: Array<Type>;
+  value?: Value;
+  others?: Array<Other>;
+  _links?: Links;
+};

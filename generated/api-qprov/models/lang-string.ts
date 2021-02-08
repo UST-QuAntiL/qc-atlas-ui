@@ -1,2 +1,2 @@
 /* tslint:disable */
-export type LangString = { 'value'?: string, 'lang'?: string };
+export type LangString = { value?: string; lang?: string };
