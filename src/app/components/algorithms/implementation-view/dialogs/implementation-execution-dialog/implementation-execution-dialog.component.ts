@@ -25,13 +25,31 @@ export class ImplementationExecutionDialogComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
-  get name(): AbstractControl | null {
-    return this.implementationExecutionForm.get('name');
+  get vendor(): AbstractControl | null {
+    return this.implementationExecutionForm.get('vendor');
+  }
+
+  get qpu(): AbstractControl | null {
+    return this.implementationExecutionForm.get('qpu');
+  }
+
+  get token(): AbstractControl | null {
+    return this.implementationExecutionForm.get('token');
   }
 
   ngOnInit(): void {
     this.implementationExecutionForm = new FormGroup({
-      name: new FormControl(this.data.name, [
+      vendor: new FormControl(this.data.vendor, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
+      qpu: new FormControl(this.data.qpu, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
+      token: new FormControl(this.data.token, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
@@ -39,7 +57,9 @@ export class ImplementationExecutionDialogComponent implements OnInit {
     });
 
     this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.name = this.name.value;
+      this.data.vendor = this.vendor.value;
+      this.data.qpu = this.qpu.value;
+      this.data.token = this.token.value;
     });
   }
 
@@ -48,11 +68,15 @@ export class ImplementationExecutionDialogComponent implements OnInit {
   }
 
   isRequiredDataMissing(): boolean {
-    return this.name.errors?.required;
+    return this.vendor.errors?.required;
+    return this.qpu.errors?.required;
+    return this.token.errors?.required;
   }
 }
 
 export interface DialogData {
   title: string;
-  name: string;
+  vendor: string;
+  qpu: string;
+  token: string;
 }

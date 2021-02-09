@@ -1,24 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
+import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/implementation-dto';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CompilerAnalysisResultDto } from 'api-nisq/models/compiler-analysis-result-dto';
 import { CompilationJobDto } from 'api-nisq/models/compilation-job-dto';
-import { map, switchMap, tap, filter } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { CompilerAnalysisResultService } from 'api-nisq/services/compiler-analysis-result.service';
 import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
-import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
-import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
-import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
-import { RootService } from 'api-nisq/services';
+import { ImplementationService, RootService } from 'api-nisq/services';
 import { CompilerSelectionDto } from 'api-nisq/models';
+import { cloneDeep } from 'lodash';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
-import { AddAlgorithmRelationDialogComponent } from '../../dialogs/add-algorithm-relation-dialog.component';
 import { UtilService } from '../../../../util/util.service';
-import { GenericDataService } from '../../../../util/generic-data.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
-import { CreateComputeResourceDialogComponent } from '../../../execution-environments/compute-resource/dialogs/create-compute-resource-dialog.component';
 
 @Component({
   selector: 'app-implementation-execution',
@@ -40,6 +36,7 @@ export class ImplementationExecutionComponent implements OnInit {
     'execution',
   ];
 
+  nisqImpl: NisqImplementationDto;
   compilerResults$: Observable<CompilerAnalysisResultDto[]>;
   expandedElement: CompilerAnalysisResultDto | null;
   expandedElementExecResult: ExecutionResultDto | null;
@@ -50,7 +47,8 @@ export class ImplementationExecutionComponent implements OnInit {
     private readonly http: HttpClient,
     private readonly compilerResultService: CompilerAnalysisResultService,
     private utilService: UtilService,
-    private rootService: RootService
+    private rootService: RootService,
+    private nisqImplementationService: ImplementationService
   ) {}
 
   ngOnInit(): void {
@@ -70,6 +68,14 @@ export class ImplementationExecutionComponent implements OnInit {
           )
         )
       );
+    this.nisqImplementationService
+      .getImplementations({ algoId: this.algo.id })
+      .subscribe((impls) => {
+        const foundImpl = impls.implementationDtos.find(
+          (i) => i.name === this.impl.name
+        );
+        this.nisqImpl = foundImpl;
+      });
   }
 
   changeSort(active: string, direction: 'asc' | 'desc' | ''): void {
@@ -110,28 +116,21 @@ export class ImplementationExecutionComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          const computeResourceDto: ComputeResourceDto = {
-            id: null,
-            name: dialogResult.name,
-          };
           const compilerSelectionDto: CompilerSelectionDto = {
-            providerName: 'ibmq',
-            circuitLanguage: 'Qiskit',
-            circuitName: 'test',
-            qpuName: 'ibmq_qasm_simulator',
-            circuitUrl:
-              'https://raw.githubusercontent.com/UST-QuAntiL/nisq-analyzer-content/master/compiler-selection/Shor/shor-fix-15-qiskit.py',
-            token:
-              'e03bd2c9aa8b6afc80a3e071a99ecd8b32126b7df796228bdccfeb4e3d406e318b4c9bea020fcf0bfd51e9511367b5d7a118ae86ae388fc9097c123650954544',
+            providerName: dialogResult.vendor,
+            circuitLanguage: this.nisqImpl.language,
+            circuitName: this.nisqImpl.name,
+            qpuName: dialogResult.qpu,
+            circuitUrl: this.nisqImpl.fileLocation,
+            token: dialogResult.token,
           };
           this.rootService
             .selectCompilerForFile1$Json({
-              providerName: 'ibmq',
-              circuitLanguage: 'Qiskit',
-              circuitName: 'test',
-              qpuName: 'ibmq_qasm_simulator',
-              token:
-                'e03bd2c9aa8b6afc80a3e071a99ecd8b32126b7df796228bdccfeb4e3d406e318b4c9bea020fcf0bfd51e9511367b5d7a118ae86ae388fc9097c123650954544',
+              providerName: dialogResult.vendor,
+              circuitLanguage: this.nisqImpl.language,
+              circuitName: this.nisqImpl.name,
+              qpuName: dialogResult.qpu,
+              token: dialogResult.token,
               body: compilerSelectionDto,
             })
             .subscribe(
@@ -150,5 +149,9 @@ export class ImplementationExecutionComponent implements OnInit {
             );
         }
       });
+  }
+
+  refresh(): void {
+    this.ngOnInit();
   }
 }

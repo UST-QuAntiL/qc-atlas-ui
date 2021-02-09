@@ -17,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../../generics/generics.module';
@@ -61,6 +62,7 @@ import { ImplementationExecutionDialogComponent } from './dialogs/implementation
     MatTableModule,
     MatDialogModule,
     ReactiveFormsModule,
+    MatInputModule,
   ],
 })
 export class ImplementationViewModule {}
