@@ -17,9 +17,18 @@
                 </td>
             </ng-container>
 
+            <ng-container matColumnDef="provider">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Provider
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.provider }}
+                </td>
+            </ng-container>
+
             <ng-container matColumnDef="compiler">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Compiler
+                    Vendor
                 </th>
                 <td mat-cell *matCellDef="let element">
                     {{ element.compiler }}
@@ -99,5 +108,16 @@
                     class="detail-row"
             ></tr>
         </table>
+        <div class="btn-wrapper">
+            <button
+                    mat-raised-button
+                    type="Compilation"
+                    color="primary"
+                    class="btn-compile"
+                    (click)="onAddElement()"
+            >
+                New Compilation
+            </button>
+        </div>
     </div>
 </mat-card>

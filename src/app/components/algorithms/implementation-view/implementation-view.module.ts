@@ -9,13 +9,14 @@ import {
   CardsModule,
   IconsModule,
 } from 'angular-bootstrap-md';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../../generics/generics.module';
@@ -25,6 +26,7 @@ import { ImplementationViewComponent } from './implementation-view.component';
 import { ImplementationPublicationsListComponent } from './implementation-publications-list/implementation-publications-list.component';
 import { ImplementationSoftwareplatformListComponent } from './implementation-softwareplatform-list/implementation-softwareplatform-list.component';
 import { ImplementationExecutionComponent } from './implementation-execution/implementation-execution.component';
+import { ImplementationExecutionDialogComponent } from './dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { ImplementationExecutionComponent } from './implementation-execution/imp
     ImplSelectionCriteriaComponent,
     ImplementationSoftwareplatformListComponent,
     ImplementationExecutionComponent,
+    ImplementationExecutionDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -56,6 +59,8 @@ import { ImplementationExecutionComponent } from './implementation-execution/imp
     MatProgressSpinnerModule,
     AlgorithmModule,
     MatTableModule,
+    MatDialogModule,
+    ReactiveFormsModule,
   ],
 })
 export class ImplementationViewModule {}

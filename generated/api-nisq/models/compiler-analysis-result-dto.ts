@@ -10,5 +10,6 @@ export type CompilerAnalysisResultDto = {
   circuitName?: string;
   initialCircuit?: string;
   transpiledCircuit?: string;
+  time?: string;
   _links?: Links;
 };
