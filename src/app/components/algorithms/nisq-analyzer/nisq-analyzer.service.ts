@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { AnalysisResultService, RootService } from 'api-nisq/services';
+import {
+  AnalysisResultService,
+  CompilerAnalysisResultService,
+  RootService,
+} from 'api-nisq/services';
 import {
   AnalysisResultDto,
   ParameterDto,
@@ -19,6 +23,7 @@ export class NisqAnalyzerService {
   constructor(
     private algorithmService: AlgorithmService,
     private analysisResultService: AnalysisResultService,
+    private compilerAnalysisResult: CompilerAnalysisResultService,
     private rootService: RootService,
     private http: HttpClient
   ) {}
@@ -37,6 +42,12 @@ export class NisqAnalyzerService {
 
   execute(resId: string) {
     return this.analysisResultService.executeAnalysisResult({
+      resId,
+    });
+  }
+
+  executeCompilationResult(resId: string) {
+    return this.compilerAnalysisResult.executeCompilationResult({
       resId,
     });
   }

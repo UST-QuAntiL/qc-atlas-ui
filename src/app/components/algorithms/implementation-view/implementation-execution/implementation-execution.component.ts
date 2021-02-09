@@ -2,19 +2,20 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/implementation-dto';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, interval, Observable } from 'rxjs';
 import { CompilerAnalysisResultDto } from 'api-nisq/models/compiler-analysis-result-dto';
 import { CompilationJobDto } from 'api-nisq/models/compilation-job-dto';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { exhaustMap, first, map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { CompilerAnalysisResultService } from 'api-nisq/services/compiler-analysis-result.service';
 import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
 import { ImplementationService, RootService } from 'api-nisq/services';
-import { CompilerSelectionDto } from 'api-nisq/models';
+import { AnalysisResultDto, CompilerSelectionDto } from 'api-nisq/models';
 import { cloneDeep } from 'lodash';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
+import { NisqAnalyzerService } from '../../nisq-analyzer/nisq-analyzer.service';
 
 @Component({
   selector: 'app-implementation-execution',
@@ -36,6 +37,8 @@ export class ImplementationExecutionComponent implements OnInit {
     'execution',
   ];
 
+  executedCompilationResult: CompilerAnalysisResultDto;
+  results?: ExecutionResultDto = undefined;
   nisqImpl: NisqImplementationDto;
   compilerResults$: Observable<CompilerAnalysisResultDto[]>;
   expandedElement: CompilerAnalysisResultDto | null;
@@ -48,7 +51,8 @@ export class ImplementationExecutionComponent implements OnInit {
     private readonly compilerResultService: CompilerAnalysisResultService,
     private utilService: UtilService,
     private rootService: RootService,
-    private nisqImplementationService: ImplementationService
+    private nisqImplementationService: ImplementationService,
+    private nisqAnalyzerService: NisqAnalyzerService
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +88,38 @@ export class ImplementationExecutionComponent implements OnInit {
     } else {
       this.sort$.next([`${active},${direction}`]);
     }
+  }
+
+  execute(analysisResult: CompilerAnalysisResultDto): void {
+    this.results = undefined;
+    this.executedCompilationResult = analysisResult;
+    this.nisqAnalyzerService
+      .executeCompilationResult(analysisResult.id)
+      .subscribe(
+        (results) => {
+          this.utilService.callSnackBar(
+            'Successfully created execution job "' + results.id + '".'
+          );
+          if (results.status === 'FAILED' || results.status === 'FINISHED') {
+            this.results = results;
+          } else {
+            interval(1000)
+              .pipe(
+                exhaustMap(() =>
+                  this.http.get<ExecutionResultDto>(results._links['self'].href)
+                ),
+                first(
+                  (value) =>
+                    value.status === 'FAILED' || value.status === 'FINISHED'
+                )
+              )
+              .subscribe((finalResult) => (this.results = finalResult));
+          }
+        },
+        () => {
+          this.utilService.callSnackBar('Error! Could not execute.');
+        }
+      );
   }
 
   hasExecutionResult(analysisResult: CompilerAnalysisResultDto): boolean {
@@ -143,7 +179,7 @@ export class ImplementationExecutionComponent implements OnInit {
               },
               () => {
                 this.utilService.callSnackBar(
-                  'Error! Could not create compute resource.'
+                  'Error! Could not create compilation job.'
                 );
               }
             );

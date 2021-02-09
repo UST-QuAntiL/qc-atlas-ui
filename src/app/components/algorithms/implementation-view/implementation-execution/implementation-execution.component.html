@@ -71,11 +71,20 @@
                             mat-raised-button
                             *ngIf="hasExecutionResult(element)"
                             type="button"
+                            color="accent"
                             (click)="showExecutionResult(element)"
                     >
                         Show result
                     </button>
-                    <span *ngIf="!hasExecutionResult(element)">No results yet</span>
+                    <button
+                            mat-raised-button
+                            *ngIf="!hasExecutionResult(element)"
+                            type="button"
+                            color="primary"
+                            (click)="execute(element)"
+                    >
+                        Execute
+                    </button>
                 </td>
             </ng-container>
 
