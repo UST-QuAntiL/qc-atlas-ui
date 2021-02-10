@@ -10,8 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { CompilerAnalysisResultService } from 'api-nisq/services/compiler-analysis-result.service';
 import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
 import { ImplementationService, RootService } from 'api-nisq/services';
-import { AnalysisResultDto, CompilerSelectionDto } from 'api-nisq/models';
-import { cloneDeep } from 'lodash';
+import { CompilerSelectionDto } from 'api-nisq/models';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
@@ -37,6 +36,7 @@ export class ImplementationExecutionComponent implements OnInit {
     'execution',
   ];
 
+  latestCompilationJob?: CompilationJobDto = undefined;
   executedCompilationResult: CompilerAnalysisResultDto;
   results?: ExecutionResultDto = undefined;
   nisqImpl: NisqImplementationDto;
@@ -165,6 +165,7 @@ export class ImplementationExecutionComponent implements OnInit {
             })
             .subscribe(
               (compilationJob: CompilationJobDto) => {
+                this.latestCompilationJob = compilationJob;
                 this.utilService.callSnackBar(
                   'Successfully created compilation job "' +
                     compilationJob.id +
@@ -193,6 +194,18 @@ export class ImplementationExecutionComponent implements OnInit {
   }
 
   refresh(): void {
-    this.ngOnInit();
+    if (this.latestCompilationJob) {
+      this.compilerResultService
+        .getCompilerAnalysisJob({
+          resId: this.latestCompilationJob.id,
+        })
+        .subscribe((compileJob) => {
+          if (compileJob.ready) {
+            this.ngOnInit();
+          }
+        });
+    } else {
+      this.ngOnInit();
+    }
   }
 }
