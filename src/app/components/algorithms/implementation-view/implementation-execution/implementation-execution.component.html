@@ -1,5 +1,25 @@
 <mat-card class="m-2">
     <div class="mx-3 mb-2">
+        <div class="btn-wrapper">
+            <button
+                    mat-raised-button
+                    type="Compilation"
+                    color="primary"
+                    class="btn-compile"
+                    (click)="onAddElement()"
+            >
+                New Compilation
+            </button>
+            <button
+                    mat-raised-button
+                    type="Refresh"
+                    color="accent"
+                    class="btn-compile"
+                    (click)="refresh()"
+            >
+                Refresh
+            </button>
+        </div>
         <table
                 mat-table
                 [dataSource]="compilerResults$ | async"
@@ -117,25 +137,5 @@
                     class="detail-row"
             ></tr>
         </table>
-        <div class="btn-wrapper">
-            <button
-                    mat-raised-button
-                    type="Compilation"
-                    color="primary"
-                    class="btn-compile"
-                    (click)="onAddElement()"
-            >
-                New Compilation
-            </button>
-            <button
-                    mat-raised-button
-                    type="Refresh"
-                    color="accent"
-                    class="btn-compile"
-                    (click)="refresh()"
-            >
-                Refresh
-            </button>
-        </div>
     </div>
 </mat-card>
