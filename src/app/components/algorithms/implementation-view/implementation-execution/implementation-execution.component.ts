@@ -72,14 +72,7 @@ export class ImplementationExecutionComponent implements OnInit {
           )
         )
       );
-    this.nisqImplementationService
-      .getImplementations({ algoId: this.algo.id })
-      .subscribe((impls) => {
-        const foundImpl = impls.implementationDtos.find(
-          (i) => i.name === this.impl.name
-        );
-        this.nisqImpl = foundImpl;
-      });
+    this.refreshNisqImpl();
   }
 
   changeSort(active: string, direction: 'asc' | 'desc' | ''): void {
@@ -145,6 +138,7 @@ export class ImplementationExecutionComponent implements OnInit {
   }
 
   onAddElement(): void {
+    this.refreshNisqImpl();
     this.utilService
       .createDialog(ImplementationExecutionDialogComponent, {
         title: 'Start Compilation',
@@ -184,6 +178,17 @@ export class ImplementationExecutionComponent implements OnInit {
               }
             );
         }
+      });
+  }
+
+  refreshNisqImpl(): void {
+    this.nisqImplementationService
+      .getImplementations({ algoId: this.algo.id })
+      .subscribe((impls) => {
+        const foundImpl = impls.implementationDtos.find(
+          (i) => i.name === this.impl.name
+        );
+        this.nisqImpl = foundImpl;
       });
   }
 
