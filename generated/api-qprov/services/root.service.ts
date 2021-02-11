@@ -14,10 +14,7 @@ import { RepresentationModelObject } from '../models/representation-model-object
   providedIn: 'root',
 })
 export class RootService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -32,24 +29,25 @@ export class RootService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  root$Response(params?: {
-
-  }): Observable<StrictHttpResponse<RepresentationModelObject>> {
-
+  root$Response(params?: {}): Observable<
+    StrictHttpResponse<RepresentationModelObject>
+  > {
     const rb = new RequestBuilder(this.rootUrl, RootService.RootPath, 'get');
     if (params) {
-
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModelObject>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<RepresentationModelObject>;
+        })
+      );
   }
 
   /**
@@ -58,13 +56,12 @@ export class RootService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  root(params?: {
-
-  }): Observable<RepresentationModelObject> {
-
+  root(params?: {}): Observable<RepresentationModelObject> {
     return this.root$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
+      map(
+        (r: StrictHttpResponse<RepresentationModelObject>) =>
+          r.body as RepresentationModelObject
+      )
     );
   }
-
 }

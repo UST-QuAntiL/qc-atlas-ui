@@ -16,10 +16,7 @@ import { RepresentationModelObject } from '../models/representation-model-object
   providedIn: 'root',
 })
 export class ProvenanceTemplateService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -36,24 +33,31 @@ export class ProvenanceTemplateService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getProvenanceTemplates$Response(params?: {
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelProvDocumentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceTemplateService.GetProvenanceTemplatesPath, 'get');
-    if (params) {
-
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelProvDocumentDto>;
-      })
+  getProvenanceTemplates$Response(params?: {}): Observable<
+    StrictHttpResponse<CollectionModelEntityModelProvDocumentDto>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceTemplateService.GetProvenanceTemplatesPath,
+      'get'
     );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelProvDocumentDto
+          >;
+        })
+      );
   }
 
   /**
@@ -64,12 +68,14 @@ export class ProvenanceTemplateService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getProvenanceTemplates(params?: {
-
-  }): Observable<CollectionModelEntityModelProvDocumentDto> {
-
+  getProvenanceTemplates(params?: {}): Observable<
+    CollectionModelEntityModelProvDocumentDto
+  > {
     return this.getProvenanceTemplates$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelProvDocumentDto>) => r.body as CollectionModelEntityModelProvDocumentDto)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelProvDocumentDto>) =>
+          r.body as CollectionModelEntityModelProvDocumentDto
+      )
     );
   }
 
@@ -87,26 +93,44 @@ export class ProvenanceTemplateService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   handleProvTemplateUpload$Response(params: {
-    format: 'PROVN' | 'XML' | 'TURTLE' | 'RDFXML' | 'TRIG' | 'JSON' | 'JSONLD' | 'DOT' | 'JPEG' | 'PNG' | 'SVG' | 'PDF';
-      body?: { 'file'?: Blob }
+    format:
+      | 'PROVN'
+      | 'XML'
+      | 'TURTLE'
+      | 'RDFXML'
+      | 'TRIG'
+      | 'JSON'
+      | 'JSONLD'
+      | 'DOT'
+      | 'JPEG'
+      | 'PNG'
+      | 'SVG'
+      | 'PDF';
+    body?: { file?: Blob };
   }): Observable<StrictHttpResponse<EntityModelProvDocumentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceTemplateService.HandleProvTemplateUploadPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceTemplateService.HandleProvTemplateUploadPath,
+      'post'
+    );
     if (params) {
-
       rb.query('format', params.format, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvDocumentDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvDocumentDto>;
+        })
+      );
   }
 
   /**
@@ -118,19 +142,34 @@ export class ProvenanceTemplateService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   handleProvTemplateUpload(params: {
-    format: 'PROVN' | 'XML' | 'TURTLE' | 'RDFXML' | 'TRIG' | 'JSON' | 'JSONLD' | 'DOT' | 'JPEG' | 'PNG' | 'SVG' | 'PDF';
-      body?: { 'file'?: Blob }
+    format:
+      | 'PROVN'
+      | 'XML'
+      | 'TURTLE'
+      | 'RDFXML'
+      | 'TRIG'
+      | 'JSON'
+      | 'JSONLD'
+      | 'DOT'
+      | 'JPEG'
+      | 'PNG'
+      | 'SVG'
+      | 'PDF';
+    body?: { file?: Blob };
   }): Observable<EntityModelProvDocumentDto> {
-
     return this.handleProvTemplateUpload$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvDocumentDto>) => r.body as EntityModelProvDocumentDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvDocumentDto>) =>
+          r.body as EntityModelProvDocumentDto
+      )
     );
   }
 
   /**
    * Path part for operation getProvTemplate
    */
-  static readonly GetProvTemplatePath = '/provenance-templates/{provTemplateId}';
+  static readonly GetProvTemplatePath =
+    '/provenance-templates/{provTemplateId}';
 
   /**
    * Retrieve a specific PROV template.
@@ -142,24 +181,28 @@ export class ProvenanceTemplateService extends BaseService {
    */
   getProvTemplate$Response(params: {
     provTemplateId: number;
-
   }): Observable<StrictHttpResponse<EntityModelProvDocumentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceTemplateService.GetProvTemplatePath, 'get');
-    if (params) {
-
-      rb.path('provTemplateId', params.provTemplateId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvDocumentDto>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceTemplateService.GetProvTemplatePath,
+      'get'
     );
+    if (params) {
+      rb.path('provTemplateId', params.provTemplateId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvDocumentDto>;
+        })
+      );
   }
 
   /**
@@ -172,18 +215,20 @@ export class ProvenanceTemplateService extends BaseService {
    */
   getProvTemplate(params: {
     provTemplateId: number;
-
   }): Observable<EntityModelProvDocumentDto> {
-
     return this.getProvTemplate$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvDocumentDto>) => r.body as EntityModelProvDocumentDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvDocumentDto>) =>
+          r.body as EntityModelProvDocumentDto
+      )
     );
   }
 
   /**
    * Path part for operation deleteProvTemplate
    */
-  static readonly DeleteProvTemplatePath = '/provenance-templates/{provTemplateId}';
+  static readonly DeleteProvTemplatePath =
+    '/provenance-templates/{provTemplateId}';
 
   /**
    * Delete a PROV template.
@@ -195,24 +240,30 @@ export class ProvenanceTemplateService extends BaseService {
    */
   deleteProvTemplate$Response(params: {
     provTemplateId: number;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceTemplateService.DeleteProvTemplatePath, 'delete');
-    if (params) {
-
-      rb.path('provTemplateId', params.provTemplateId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceTemplateService.DeleteProvTemplatePath,
+      'delete'
     );
+    if (params) {
+      rb.path('provTemplateId', params.provTemplateId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -223,11 +274,7 @@ export class ProvenanceTemplateService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteProvTemplate(params: {
-    provTemplateId: number;
-
-  }): Observable<void> {
-
+  deleteProvTemplate(params: { provTemplateId: number }): Observable<void> {
     return this.deleteProvTemplate$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -236,7 +283,8 @@ export class ProvenanceTemplateService extends BaseService {
   /**
    * Path part for operation getProvTemplateJpeg
    */
-  static readonly GetProvTemplateJpegPath = '/provenance-templates/{provTemplateId}/jpeg';
+  static readonly GetProvTemplateJpegPath =
+    '/provenance-templates/{provTemplateId}/jpeg';
 
   /**
    * Retrieve a specific PROV template and return it as JPEG image.
@@ -248,24 +296,28 @@ export class ProvenanceTemplateService extends BaseService {
    */
   getProvTemplateJpeg$Response(params: {
     provTemplateId: number;
-
   }): Observable<StrictHttpResponse<RepresentationModelObject>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceTemplateService.GetProvTemplateJpegPath, 'get');
-    if (params) {
-
-      rb.path('provTemplateId', params.provTemplateId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModelObject>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceTemplateService.GetProvTemplateJpegPath,
+      'get'
     );
+    if (params) {
+      rb.path('provTemplateId', params.provTemplateId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<RepresentationModelObject>;
+        })
+      );
   }
 
   /**
@@ -278,18 +330,20 @@ export class ProvenanceTemplateService extends BaseService {
    */
   getProvTemplateJpeg(params: {
     provTemplateId: number;
-
   }): Observable<RepresentationModelObject> {
-
     return this.getProvTemplateJpeg$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
+      map(
+        (r: StrictHttpResponse<RepresentationModelObject>) =>
+          r.body as RepresentationModelObject
+      )
     );
   }
 
   /**
    * Path part for operation getProvTemplateParameters
    */
-  static readonly GetProvTemplateParametersPath = '/provenance-templates/{provTemplateId}/parameters';
+  static readonly GetProvTemplateParametersPath =
+    '/provenance-templates/{provTemplateId}/parameters';
 
   /**
    * Retrieve the parameters that are required to instantiate a PROV document from a PROV template.
@@ -301,24 +355,28 @@ export class ProvenanceTemplateService extends BaseService {
    */
   getProvTemplateParameters$Response(params: {
     provTemplateId: number;
-
   }): Observable<StrictHttpResponse<RepresentationModelObject>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceTemplateService.GetProvTemplateParametersPath, 'get');
-    if (params) {
-
-      rb.path('provTemplateId', params.provTemplateId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModelObject>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceTemplateService.GetProvTemplateParametersPath,
+      'get'
     );
+    if (params) {
+      rb.path('provTemplateId', params.provTemplateId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<RepresentationModelObject>;
+        })
+      );
   }
 
   /**
@@ -331,18 +389,20 @@ export class ProvenanceTemplateService extends BaseService {
    */
   getProvTemplateParameters(params: {
     provTemplateId: number;
-
   }): Observable<RepresentationModelObject> {
-
     return this.getProvTemplateParameters$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
+      map(
+        (r: StrictHttpResponse<RepresentationModelObject>) =>
+          r.body as RepresentationModelObject
+      )
     );
   }
 
   /**
    * Path part for operation getProvTemplatePdf
    */
-  static readonly GetProvTemplatePdfPath = '/provenance-templates/{provTemplateId}/pdf';
+  static readonly GetProvTemplatePdfPath =
+    '/provenance-templates/{provTemplateId}/pdf';
 
   /**
    * Retrieve a specific PROV template and return it as PDF.
@@ -354,24 +414,28 @@ export class ProvenanceTemplateService extends BaseService {
    */
   getProvTemplatePdf$Response(params: {
     provTemplateId: number;
-
   }): Observable<StrictHttpResponse<RepresentationModelObject>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceTemplateService.GetProvTemplatePdfPath, 'get');
-    if (params) {
-
-      rb.path('provTemplateId', params.provTemplateId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModelObject>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceTemplateService.GetProvTemplatePdfPath,
+      'get'
     );
+    if (params) {
+      rb.path('provTemplateId', params.provTemplateId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<RepresentationModelObject>;
+        })
+      );
   }
 
   /**
@@ -384,18 +448,20 @@ export class ProvenanceTemplateService extends BaseService {
    */
   getProvTemplatePdf(params: {
     provTemplateId: number;
-
   }): Observable<RepresentationModelObject> {
-
     return this.getProvTemplatePdf$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
+      map(
+        (r: StrictHttpResponse<RepresentationModelObject>) =>
+          r.body as RepresentationModelObject
+      )
     );
   }
 
   /**
    * Path part for operation getProvTemplateXml
    */
-  static readonly GetProvTemplateXmlPath = '/provenance-templates/{provTemplateId}/xml-document';
+  static readonly GetProvTemplateXmlPath =
+    '/provenance-templates/{provTemplateId}/xml-document';
 
   /**
    * Retrieve a specific PROV template and return it as serialized XML document.
@@ -407,24 +473,28 @@ export class ProvenanceTemplateService extends BaseService {
    */
   getProvTemplateXml$Response(params: {
     provTemplateId: number;
-
   }): Observable<StrictHttpResponse<RepresentationModelObject>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceTemplateService.GetProvTemplateXmlPath, 'get');
-    if (params) {
-
-      rb.path('provTemplateId', params.provTemplateId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModelObject>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceTemplateService.GetProvTemplateXmlPath,
+      'get'
     );
+    if (params) {
+      rb.path('provTemplateId', params.provTemplateId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<RepresentationModelObject>;
+        })
+      );
   }
 
   /**
@@ -437,12 +507,12 @@ export class ProvenanceTemplateService extends BaseService {
    */
   getProvTemplateXml(params: {
     provTemplateId: number;
-
   }): Observable<RepresentationModelObject> {
-
     return this.getProvTemplateXml$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
+      map(
+        (r: StrictHttpResponse<RepresentationModelObject>) =>
+          r.body as RepresentationModelObject
+      )
     );
   }
-
 }

@@ -1,2 +1,7 @@
 /* tslint:disable */
-export type Namespace = { 'prefixes'?: {}, 'namespaces'?: {}, 'defaultNamespace'?: string, 'parent'?: Namespace };
+export type Namespace = {
+  prefixes?: {};
+  namespaces?: {};
+  defaultNamespace?: string;
+  parent?: Namespace;
+};

@@ -1,14 +1,14 @@
 /* tslint:disable */
 import { ImplementationDto } from './implementation-dto';
 import { Links } from './links';
-import { QpuDto } from './qpu-dto';
 export type AnalysisResultDto = {
   id?: string;
-  qpu?: QpuDto;
+  qpu?: string;
+  provider?: string;
+  sdkConnector?: string;
   implementation?: ImplementationDto;
-  estimate?: boolean;
-  analysedDepth?: number;
-  analysedWidth?: number;
+  analyzedDepth?: number;
+  analyzedWidth?: number;
   inputParameters?: {};
   time?: string;
   _links?: Links;

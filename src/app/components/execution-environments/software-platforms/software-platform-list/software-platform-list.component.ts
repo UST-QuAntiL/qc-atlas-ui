@@ -4,6 +4,8 @@ import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { SdksService } from 'api-nisq/services/sdks.service';
+import { SdkDto } from 'api-nisq/models/sdk-dto';
 import {
   SelectParams,
   QueryParams,
@@ -34,6 +36,7 @@ export class SoftwarePlatformListComponent implements OnInit {
   constructor(
     private utilService: UtilService,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
+    private sdksService: SdksService,
     private genericDataService: GenericDataService,
     private router: Router
   ) {}
@@ -92,6 +95,11 @@ export class SoftwarePlatformListComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          const sdkDto: SdkDto = {
+            id: null,
+            name: dialogResult.name,
+          };
+          this.sdksService.createSdk({ body: sdkDto }).subscribe();
           const softwarePlatformDto: SoftwarePlatformDto = {
             id: null,
             name: dialogResult.name,

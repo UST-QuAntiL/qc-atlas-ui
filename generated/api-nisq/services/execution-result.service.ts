@@ -22,8 +22,7 @@ export class ExecutionResultService extends BaseService {
   /**
    * Path part for operation getExecutionResults
    */
-  static readonly GetExecutionResultsPath =
-    '/implementations/{implId}/results/';
+  static readonly GetExecutionResultsPath = '/execution-results/';
 
   /**
    * Retrieve all execution results for an Implementation
@@ -33,8 +32,8 @@ export class ExecutionResultService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getExecutionResults$Response(params: {
-    implId: string;
+  getExecutionResults$Response(params?: {
+    implId?: string;
   }): Observable<StrictHttpResponse<ExecutionResultListDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -42,7 +41,7 @@ export class ExecutionResultService extends BaseService {
       'get'
     );
     if (params) {
-      rb.path('implId', params.implId, {});
+      rb.query('implId', params.implId, {});
     }
     return this.http
       .request(
@@ -67,8 +66,8 @@ export class ExecutionResultService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getExecutionResults(params: {
-    implId: string;
+  getExecutionResults(params?: {
+    implId?: string;
   }): Observable<ExecutionResultListDto> {
     return this.getExecutionResults$Response(params).pipe(
       map(
@@ -81,8 +80,7 @@ export class ExecutionResultService extends BaseService {
   /**
    * Path part for operation getExecutionResult
    */
-  static readonly GetExecutionResultPath =
-    '/implementations/{implId}/results/{resultId}';
+  static readonly GetExecutionResultPath = '/execution-results/{resultId}';
 
   /**
    * Retrieve a single execution result
@@ -93,7 +91,6 @@ export class ExecutionResultService extends BaseService {
    * This method doesn't expect any request body.
    */
   getExecutionResult$Response(params: {
-    implId: string;
     resultId: string;
   }): Observable<StrictHttpResponse<ExecutionResultDto>> {
     const rb = new RequestBuilder(
@@ -102,7 +99,6 @@ export class ExecutionResultService extends BaseService {
       'get'
     );
     if (params) {
-      rb.path('implId', params.implId, {});
       rb.path('resultId', params.resultId, {});
     }
     return this.http
@@ -129,7 +125,6 @@ export class ExecutionResultService extends BaseService {
    * This method doesn't expect any request body.
    */
   getExecutionResult(params: {
-    implId: string;
     resultId: string;
   }): Observable<ExecutionResultDto> {
     return this.getExecutionResult$Response(params).pipe(

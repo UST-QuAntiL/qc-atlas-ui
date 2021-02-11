@@ -9,9 +9,9 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { AnalysisResultService } from './services/analysis-result.service';
+import { CompilerAnalysisResultService } from './services/compiler-analysis-result.service';
 import { ExecutionResultService } from './services/execution-result.service';
 import { ImplementationService } from './services/implementation.service';
-import { QpuService } from './services/qpu.service';
 import { RootService } from './services/root.service';
 import { SdksService } from './services/sdks.service';
 
@@ -24,9 +24,9 @@ import { SdksService } from './services/sdks.service';
   declarations: [],
   providers: [
     AnalysisResultService,
+    CompilerAnalysisResultService,
     ExecutionResultService,
     ImplementationService,
-    QpuService,
     RootService,
     SdksService,
     ApiConfiguration,

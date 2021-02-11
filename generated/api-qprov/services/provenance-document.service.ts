@@ -28,10 +28,7 @@ import { RepresentationModelObject } from '../models/representation-model-object
   providedIn: 'root',
 })
 export class ProvenanceDocumentService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -48,24 +45,31 @@ export class ProvenanceDocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getProvenanceDocuments$Response(params?: {
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelProvDocumentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvenanceDocumentsPath, 'get');
-    if (params) {
-
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelProvDocumentDto>;
-      })
+  getProvenanceDocuments$Response(params?: {}): Observable<
+    StrictHttpResponse<CollectionModelEntityModelProvDocumentDto>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvenanceDocumentsPath,
+      'get'
     );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelProvDocumentDto
+          >;
+        })
+      );
   }
 
   /**
@@ -76,12 +80,14 @@ export class ProvenanceDocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getProvenanceDocuments(params?: {
-
-  }): Observable<CollectionModelEntityModelProvDocumentDto> {
-
+  getProvenanceDocuments(params?: {}): Observable<
+    CollectionModelEntityModelProvDocumentDto
+  > {
     return this.getProvenanceDocuments$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelProvDocumentDto>) => r.body as CollectionModelEntityModelProvDocumentDto)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelProvDocumentDto>) =>
+          r.body as CollectionModelEntityModelProvDocumentDto
+      )
     );
   }
 
@@ -99,26 +105,44 @@ export class ProvenanceDocumentService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createProvDocument$Response(params?: {
-    format?: 'PROVN' | 'XML' | 'TURTLE' | 'RDFXML' | 'TRIG' | 'JSON' | 'JSONLD' | 'DOT' | 'JPEG' | 'PNG' | 'SVG' | 'PDF';
-      body?: { 'file'?: Blob }
+    format?:
+      | 'PROVN'
+      | 'XML'
+      | 'TURTLE'
+      | 'RDFXML'
+      | 'TRIG'
+      | 'JSON'
+      | 'JSONLD'
+      | 'DOT'
+      | 'JPEG'
+      | 'PNG'
+      | 'SVG'
+      | 'PDF';
+    body?: { file?: Blob };
   }): Observable<StrictHttpResponse<EntityModelProvDocumentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.CreateProvDocumentPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.CreateProvDocumentPath,
+      'post'
+    );
     if (params) {
-
       rb.query('format', params.format, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvDocumentDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvDocumentDto>;
+        })
+      );
   }
 
   /**
@@ -130,19 +154,34 @@ export class ProvenanceDocumentService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createProvDocument(params?: {
-    format?: 'PROVN' | 'XML' | 'TURTLE' | 'RDFXML' | 'TRIG' | 'JSON' | 'JSONLD' | 'DOT' | 'JPEG' | 'PNG' | 'SVG' | 'PDF';
-      body?: { 'file'?: Blob }
+    format?:
+      | 'PROVN'
+      | 'XML'
+      | 'TURTLE'
+      | 'RDFXML'
+      | 'TRIG'
+      | 'JSON'
+      | 'JSONLD'
+      | 'DOT'
+      | 'JPEG'
+      | 'PNG'
+      | 'SVG'
+      | 'PDF';
+    body?: { file?: Blob };
   }): Observable<EntityModelProvDocumentDto> {
-
     return this.createProvDocument$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvDocumentDto>) => r.body as EntityModelProvDocumentDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvDocumentDto>) =>
+          r.body as EntityModelProvDocumentDto
+      )
     );
   }
 
   /**
    * Path part for operation getProvDocument
    */
-  static readonly GetProvDocumentPath = '/provenance-documents/{provDocumentId}';
+  static readonly GetProvDocumentPath =
+    '/provenance-documents/{provDocumentId}';
 
   /**
    * Retrieve a specific PROV document.
@@ -154,24 +193,28 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvDocument$Response(params: {
     provDocumentId: number;
-
   }): Observable<StrictHttpResponse<EntityModelProvDocumentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvDocumentPath, 'get');
-    if (params) {
-
-      rb.path('provDocumentId', params.provDocumentId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvDocumentDto>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvDocumentPath,
+      'get'
     );
+    if (params) {
+      rb.path('provDocumentId', params.provDocumentId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvDocumentDto>;
+        })
+      );
   }
 
   /**
@@ -184,18 +227,20 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvDocument(params: {
     provDocumentId: number;
-
   }): Observable<EntityModelProvDocumentDto> {
-
     return this.getProvDocument$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvDocumentDto>) => r.body as EntityModelProvDocumentDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvDocumentDto>) =>
+          r.body as EntityModelProvDocumentDto
+      )
     );
   }
 
   /**
    * Path part for operation deleteProvDocument
    */
-  static readonly DeleteProvDocumentPath = '/provenance-documents/{provDocumentId}';
+  static readonly DeleteProvDocumentPath =
+    '/provenance-documents/{provDocumentId}';
 
   /**
    * Delete a PROV document.
@@ -207,24 +252,30 @@ export class ProvenanceDocumentService extends BaseService {
    */
   deleteProvDocument$Response(params: {
     provDocumentId: number;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.DeleteProvDocumentPath, 'delete');
-    if (params) {
-
-      rb.path('provDocumentId', params.provDocumentId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.DeleteProvDocumentPath,
+      'delete'
     );
+    if (params) {
+      rb.path('provDocumentId', params.provDocumentId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -235,11 +286,7 @@ export class ProvenanceDocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteProvDocument(params: {
-    provDocumentId: number;
-
-  }): Observable<void> {
-
+  deleteProvDocument(params: { provDocumentId: number }): Observable<void> {
     return this.deleteProvDocument$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -248,7 +295,8 @@ export class ProvenanceDocumentService extends BaseService {
   /**
    * Path part for operation getProvActivities
    */
-  static readonly GetProvActivitiesPath = '/provenance-documents/{provDocumentId}/activities';
+  static readonly GetProvActivitiesPath =
+    '/provenance-documents/{provDocumentId}/activities';
 
   /**
    * Retrieve all PROV activities of the PROV document.
@@ -260,24 +308,32 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvActivities$Response(params: {
     provDocumentId: number;
-
-  }): Observable<StrictHttpResponse<CollectionModelEntityModelProvActivityDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvActivitiesPath, 'get');
-    if (params) {
-
-      rb.path('provDocumentId', params.provDocumentId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelProvActivityDto>;
-      })
+  }): Observable<
+    StrictHttpResponse<CollectionModelEntityModelProvActivityDto>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvActivitiesPath,
+      'get'
     );
+    if (params) {
+      rb.path('provDocumentId', params.provDocumentId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelProvActivityDto
+          >;
+        })
+      );
   }
 
   /**
@@ -290,18 +346,20 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvActivities(params: {
     provDocumentId: number;
-
   }): Observable<CollectionModelEntityModelProvActivityDto> {
-
     return this.getProvActivities$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelProvActivityDto>) => r.body as CollectionModelEntityModelProvActivityDto)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelProvActivityDto>) =>
+          r.body as CollectionModelEntityModelProvActivityDto
+      )
     );
   }
 
   /**
    * Path part for operation addProvActivityToDocument
    */
-  static readonly AddProvActivityToDocumentPath = '/provenance-documents/{provDocumentId}/activities';
+  static readonly AddProvActivityToDocumentPath =
+    '/provenance-documents/{provDocumentId}/activities';
 
   /**
    * Create a new PROV activity in the specified PROV document.
@@ -313,25 +371,31 @@ export class ProvenanceDocumentService extends BaseService {
    */
   addProvActivityToDocument$Response(params: {
     provDocumentId: number;
-      body: QualifiedName
+    body: QualifiedName;
   }): Observable<StrictHttpResponse<EntityModelProvActivityDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.AddProvActivityToDocumentPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.AddProvActivityToDocumentPath,
+      'post'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvActivityDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvActivityDto>;
+        })
+      );
   }
 
   /**
@@ -344,18 +408,21 @@ export class ProvenanceDocumentService extends BaseService {
    */
   addProvActivityToDocument(params: {
     provDocumentId: number;
-      body: QualifiedName
+    body: QualifiedName;
   }): Observable<EntityModelProvActivityDto> {
-
     return this.addProvActivityToDocument$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvActivityDto>) => r.body as EntityModelProvActivityDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvActivityDto>) =>
+          r.body as EntityModelProvActivityDto
+      )
     );
   }
 
   /**
    * Path part for operation getProvActivity
    */
-  static readonly GetProvActivityPath = '/provenance-documents/{provDocumentId}/activities/{provActitvityId}';
+  static readonly GetProvActivityPath =
+    '/provenance-documents/{provDocumentId}/activities/{provActitvityId}';
 
   /**
    * Retrieve a specific PROV activity.
@@ -368,25 +435,29 @@ export class ProvenanceDocumentService extends BaseService {
   getProvActivity$Response(params: {
     provDocumentId: number;
     provActitvityId: number;
-
   }): Observable<StrictHttpResponse<EntityModelProvActivityDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvActivityPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvActivityPath,
+      'get'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
       rb.path('provActitvityId', params.provActitvityId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvActivityDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvActivityDto>;
+        })
+      );
   }
 
   /**
@@ -400,18 +471,20 @@ export class ProvenanceDocumentService extends BaseService {
   getProvActivity(params: {
     provDocumentId: number;
     provActitvityId: number;
-
   }): Observable<EntityModelProvActivityDto> {
-
     return this.getProvActivity$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvActivityDto>) => r.body as EntityModelProvActivityDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvActivityDto>) =>
+          r.body as EntityModelProvActivityDto
+      )
     );
   }
 
   /**
    * Path part for operation deleteProvActivity
    */
-  static readonly DeleteProvActivityPath = '/provenance-documents/{provDocumentId}/activities/{provActitvityId}';
+  static readonly DeleteProvActivityPath =
+    '/provenance-documents/{provDocumentId}/activities/{provActitvityId}';
 
   /**
    * Delete a PROV activity.
@@ -424,25 +497,31 @@ export class ProvenanceDocumentService extends BaseService {
   deleteProvActivity$Response(params: {
     provDocumentId: number;
     provActitvityId: number;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.DeleteProvActivityPath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.DeleteProvActivityPath,
+      'delete'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
       rb.path('provActitvityId', params.provActitvityId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -456,9 +535,7 @@ export class ProvenanceDocumentService extends BaseService {
   deleteProvActivity(params: {
     provDocumentId: number;
     provActitvityId: number;
-
   }): Observable<void> {
-
     return this.deleteProvActivity$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -467,7 +544,8 @@ export class ProvenanceDocumentService extends BaseService {
   /**
    * Path part for operation setProvActivity
    */
-  static readonly SetProvActivityPath = '/provenance-documents/{provDocumentId}/activities/{provActivityId}';
+  static readonly SetProvActivityPath =
+    '/provenance-documents/{provDocumentId}/activities/{provActivityId}';
 
   /**
    * Update the activity in a specific PROV document.
@@ -480,26 +558,32 @@ export class ProvenanceDocumentService extends BaseService {
   setProvActivity$Response(params: {
     provDocumentId: number;
     provActivityId: number;
-      body: ProvActivityDto
+    body: ProvActivityDto;
   }): Observable<StrictHttpResponse<EntityModelProvActivityDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.SetProvActivityPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.SetProvActivityPath,
+      'put'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
       rb.path('provActivityId', params.provActivityId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvActivityDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvActivityDto>;
+        })
+      );
   }
 
   /**
@@ -513,18 +597,21 @@ export class ProvenanceDocumentService extends BaseService {
   setProvActivity(params: {
     provDocumentId: number;
     provActivityId: number;
-      body: ProvActivityDto
+    body: ProvActivityDto;
   }): Observable<EntityModelProvActivityDto> {
-
     return this.setProvActivity$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvActivityDto>) => r.body as EntityModelProvActivityDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvActivityDto>) =>
+          r.body as EntityModelProvActivityDto
+      )
     );
   }
 
   /**
    * Path part for operation getProvAgents
    */
-  static readonly GetProvAgentsPath = '/provenance-documents/{provDocumentId}/agents';
+  static readonly GetProvAgentsPath =
+    '/provenance-documents/{provDocumentId}/agents';
 
   /**
    * Retrieve all PROV agents of the PROV document.
@@ -536,24 +623,30 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvAgents$Response(params: {
     provDocumentId: number;
-
   }): Observable<StrictHttpResponse<CollectionModelEntityModelProvAgentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvAgentsPath, 'get');
-    if (params) {
-
-      rb.path('provDocumentId', params.provDocumentId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelProvAgentDto>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvAgentsPath,
+      'get'
     );
+    if (params) {
+      rb.path('provDocumentId', params.provDocumentId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelProvAgentDto
+          >;
+        })
+      );
   }
 
   /**
@@ -566,18 +659,20 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvAgents(params: {
     provDocumentId: number;
-
   }): Observable<CollectionModelEntityModelProvAgentDto> {
-
     return this.getProvAgents$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelProvAgentDto>) => r.body as CollectionModelEntityModelProvAgentDto)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelProvAgentDto>) =>
+          r.body as CollectionModelEntityModelProvAgentDto
+      )
     );
   }
 
   /**
    * Path part for operation addProvAgentToDocument
    */
-  static readonly AddProvAgentToDocumentPath = '/provenance-documents/{provDocumentId}/agents';
+  static readonly AddProvAgentToDocumentPath =
+    '/provenance-documents/{provDocumentId}/agents';
 
   /**
    * Create a new PROV agent in the specified PROV document.
@@ -589,25 +684,31 @@ export class ProvenanceDocumentService extends BaseService {
    */
   addProvAgentToDocument$Response(params: {
     provDocumentId: number;
-      body: QualifiedName
+    body: QualifiedName;
   }): Observable<StrictHttpResponse<EntityModelProvAgentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.AddProvAgentToDocumentPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.AddProvAgentToDocumentPath,
+      'post'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvAgentDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvAgentDto>;
+        })
+      );
   }
 
   /**
@@ -620,18 +721,21 @@ export class ProvenanceDocumentService extends BaseService {
    */
   addProvAgentToDocument(params: {
     provDocumentId: number;
-      body: QualifiedName
+    body: QualifiedName;
   }): Observable<EntityModelProvAgentDto> {
-
     return this.addProvAgentToDocument$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvAgentDto>) => r.body as EntityModelProvAgentDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvAgentDto>) =>
+          r.body as EntityModelProvAgentDto
+      )
     );
   }
 
   /**
    * Path part for operation getProvAgent
    */
-  static readonly GetProvAgentPath = '/provenance-documents/{provDocumentId}/agents/{provAgentId}';
+  static readonly GetProvAgentPath =
+    '/provenance-documents/{provDocumentId}/agents/{provAgentId}';
 
   /**
    * Retrieve a specific PROV agent.
@@ -644,25 +748,29 @@ export class ProvenanceDocumentService extends BaseService {
   getProvAgent$Response(params: {
     provDocumentId: number;
     provAgentId: number;
-
   }): Observable<StrictHttpResponse<EntityModelProvAgentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvAgentPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvAgentPath,
+      'get'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
       rb.path('provAgentId', params.provAgentId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvAgentDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvAgentDto>;
+        })
+      );
   }
 
   /**
@@ -676,18 +784,20 @@ export class ProvenanceDocumentService extends BaseService {
   getProvAgent(params: {
     provDocumentId: number;
     provAgentId: number;
-
   }): Observable<EntityModelProvAgentDto> {
-
     return this.getProvAgent$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvAgentDto>) => r.body as EntityModelProvAgentDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvAgentDto>) =>
+          r.body as EntityModelProvAgentDto
+      )
     );
   }
 
   /**
    * Path part for operation setProvAgent
    */
-  static readonly SetProvAgentPath = '/provenance-documents/{provDocumentId}/agents/{provAgentId}';
+  static readonly SetProvAgentPath =
+    '/provenance-documents/{provDocumentId}/agents/{provAgentId}';
 
   /**
    * Update the agent in a specific PROV document.
@@ -700,26 +810,32 @@ export class ProvenanceDocumentService extends BaseService {
   setProvAgent$Response(params: {
     provDocumentId: number;
     provAgentId: number;
-      body: ProvAgentDto
+    body: ProvAgentDto;
   }): Observable<StrictHttpResponse<EntityModelProvAgentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.SetProvAgentPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.SetProvAgentPath,
+      'put'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
       rb.path('provAgentId', params.provAgentId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvAgentDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvAgentDto>;
+        })
+      );
   }
 
   /**
@@ -733,18 +849,21 @@ export class ProvenanceDocumentService extends BaseService {
   setProvAgent(params: {
     provDocumentId: number;
     provAgentId: number;
-      body: ProvAgentDto
+    body: ProvAgentDto;
   }): Observable<EntityModelProvAgentDto> {
-
     return this.setProvAgent$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvAgentDto>) => r.body as EntityModelProvAgentDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvAgentDto>) =>
+          r.body as EntityModelProvAgentDto
+      )
     );
   }
 
   /**
    * Path part for operation deleteProvAgent
    */
-  static readonly DeleteProvAgentPath = '/provenance-documents/{provDocumentId}/agents/{provAgentId}';
+  static readonly DeleteProvAgentPath =
+    '/provenance-documents/{provDocumentId}/agents/{provAgentId}';
 
   /**
    * Delete a PROV agent.
@@ -757,25 +876,31 @@ export class ProvenanceDocumentService extends BaseService {
   deleteProvAgent$Response(params: {
     provDocumentId: number;
     provAgentId: number;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.DeleteProvAgentPath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.DeleteProvAgentPath,
+      'delete'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
       rb.path('provAgentId', params.provAgentId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -789,9 +914,7 @@ export class ProvenanceDocumentService extends BaseService {
   deleteProvAgent(params: {
     provDocumentId: number;
     provAgentId: number;
-
   }): Observable<void> {
-
     return this.deleteProvAgent$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -800,7 +923,8 @@ export class ProvenanceDocumentService extends BaseService {
   /**
    * Path part for operation getProvEntities
    */
-  static readonly GetProvEntitiesPath = '/provenance-documents/{provDocumentId}/entities';
+  static readonly GetProvEntitiesPath =
+    '/provenance-documents/{provDocumentId}/entities';
 
   /**
    * Retrieve all PROV entities of the PROV document.
@@ -812,24 +936,30 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvEntities$Response(params: {
     provDocumentId: number;
-
   }): Observable<StrictHttpResponse<CollectionModelEntityModelProvEntityDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvEntitiesPath, 'get');
-    if (params) {
-
-      rb.path('provDocumentId', params.provDocumentId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CollectionModelEntityModelProvEntityDto>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvEntitiesPath,
+      'get'
     );
+    if (params) {
+      rb.path('provDocumentId', params.provDocumentId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            CollectionModelEntityModelProvEntityDto
+          >;
+        })
+      );
   }
 
   /**
@@ -842,18 +972,20 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvEntities(params: {
     provDocumentId: number;
-
   }): Observable<CollectionModelEntityModelProvEntityDto> {
-
     return this.getProvEntities$Response(params).pipe(
-      map((r: StrictHttpResponse<CollectionModelEntityModelProvEntityDto>) => r.body as CollectionModelEntityModelProvEntityDto)
+      map(
+        (r: StrictHttpResponse<CollectionModelEntityModelProvEntityDto>) =>
+          r.body as CollectionModelEntityModelProvEntityDto
+      )
     );
   }
 
   /**
    * Path part for operation addProvEntityToDocument
    */
-  static readonly AddProvEntityToDocumentPath = '/provenance-documents/{provDocumentId}/entities';
+  static readonly AddProvEntityToDocumentPath =
+    '/provenance-documents/{provDocumentId}/entities';
 
   /**
    * Create a new PROV entity in the specified PROV document.
@@ -865,25 +997,31 @@ export class ProvenanceDocumentService extends BaseService {
    */
   addProvEntityToDocument$Response(params: {
     provDocumentId: number;
-      body: QualifiedName
+    body: QualifiedName;
   }): Observable<StrictHttpResponse<EntityModelProvEntityDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.AddProvEntityToDocumentPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.AddProvEntityToDocumentPath,
+      'post'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvEntityDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvEntityDto>;
+        })
+      );
   }
 
   /**
@@ -896,18 +1034,21 @@ export class ProvenanceDocumentService extends BaseService {
    */
   addProvEntityToDocument(params: {
     provDocumentId: number;
-      body: QualifiedName
+    body: QualifiedName;
   }): Observable<EntityModelProvEntityDto> {
-
     return this.addProvEntityToDocument$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvEntityDto>) => r.body as EntityModelProvEntityDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvEntityDto>) =>
+          r.body as EntityModelProvEntityDto
+      )
     );
   }
 
   /**
    * Path part for operation getProvEntity
    */
-  static readonly GetProvEntityPath = '/provenance-documents/{provDocumentId}/entities/{provEntityId}';
+  static readonly GetProvEntityPath =
+    '/provenance-documents/{provDocumentId}/entities/{provEntityId}';
 
   /**
    * Retrieve a specific PROV entity.
@@ -920,25 +1061,29 @@ export class ProvenanceDocumentService extends BaseService {
   getProvEntity$Response(params: {
     provDocumentId: number;
     provEntityId: number;
-
   }): Observable<StrictHttpResponse<EntityModelProvEntityDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvEntityPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvEntityPath,
+      'get'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
       rb.path('provEntityId', params.provEntityId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvEntityDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvEntityDto>;
+        })
+      );
   }
 
   /**
@@ -952,18 +1097,20 @@ export class ProvenanceDocumentService extends BaseService {
   getProvEntity(params: {
     provDocumentId: number;
     provEntityId: number;
-
   }): Observable<EntityModelProvEntityDto> {
-
     return this.getProvEntity$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvEntityDto>) => r.body as EntityModelProvEntityDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvEntityDto>) =>
+          r.body as EntityModelProvEntityDto
+      )
     );
   }
 
   /**
    * Path part for operation setProvEntity
    */
-  static readonly SetProvEntityPath = '/provenance-documents/{provDocumentId}/entities/{provEntityId}';
+  static readonly SetProvEntityPath =
+    '/provenance-documents/{provDocumentId}/entities/{provEntityId}';
 
   /**
    * Update the entity in a specific PROV document.
@@ -976,26 +1123,32 @@ export class ProvenanceDocumentService extends BaseService {
   setProvEntity$Response(params: {
     provDocumentId: number;
     provEntityId: number;
-      body: ProvEntityDto
+    body: ProvEntityDto;
   }): Observable<StrictHttpResponse<EntityModelProvEntityDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.SetProvEntityPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.SetProvEntityPath,
+      'put'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
       rb.path('provEntityId', params.provEntityId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvEntityDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvEntityDto>;
+        })
+      );
   }
 
   /**
@@ -1009,18 +1162,21 @@ export class ProvenanceDocumentService extends BaseService {
   setProvEntity(params: {
     provDocumentId: number;
     provEntityId: number;
-      body: ProvEntityDto
+    body: ProvEntityDto;
   }): Observable<EntityModelProvEntityDto> {
-
     return this.setProvEntity$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvEntityDto>) => r.body as EntityModelProvEntityDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvEntityDto>) =>
+          r.body as EntityModelProvEntityDto
+      )
     );
   }
 
   /**
    * Path part for operation deleteProvEntity
    */
-  static readonly DeleteProvEntityPath = '/provenance-documents/{provDocumentId}/entities/{provEntityId}';
+  static readonly DeleteProvEntityPath =
+    '/provenance-documents/{provDocumentId}/entities/{provEntityId}';
 
   /**
    * Delete a PROV entity.
@@ -1033,25 +1189,31 @@ export class ProvenanceDocumentService extends BaseService {
   deleteProvEntity$Response(params: {
     provDocumentId: number;
     provEntityId: number;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.DeleteProvEntityPath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.DeleteProvEntityPath,
+      'delete'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
       rb.path('provEntityId', params.provEntityId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -1065,9 +1227,7 @@ export class ProvenanceDocumentService extends BaseService {
   deleteProvEntity(params: {
     provDocumentId: number;
     provEntityId: number;
-
   }): Observable<void> {
-
     return this.deleteProvEntity$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -1076,7 +1236,8 @@ export class ProvenanceDocumentService extends BaseService {
   /**
    * Path part for operation getProvDocumentJpeg
    */
-  static readonly GetProvDocumentJpegPath = '/provenance-documents/{provDocumentId}/jpeg';
+  static readonly GetProvDocumentJpegPath =
+    '/provenance-documents/{provDocumentId}/jpeg';
 
   /**
    * Retrieve a specific PROV document and return it as JPEG image.
@@ -1088,24 +1249,28 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvDocumentJpeg$Response(params: {
     provDocumentId: number;
-
   }): Observable<StrictHttpResponse<RepresentationModelObject>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvDocumentJpegPath, 'get');
-    if (params) {
-
-      rb.path('provDocumentId', params.provDocumentId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModelObject>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvDocumentJpegPath,
+      'get'
     );
+    if (params) {
+      rb.path('provDocumentId', params.provDocumentId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<RepresentationModelObject>;
+        })
+      );
   }
 
   /**
@@ -1118,18 +1283,20 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvDocumentJpeg(params: {
     provDocumentId: number;
-
   }): Observable<RepresentationModelObject> {
-
     return this.getProvDocumentJpeg$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
+      map(
+        (r: StrictHttpResponse<RepresentationModelObject>) =>
+          r.body as RepresentationModelObject
+      )
     );
   }
 
   /**
    * Path part for operation getProvNamespace
    */
-  static readonly GetProvNamespacePath = '/provenance-documents/{provDocumentId}/namespace';
+  static readonly GetProvNamespacePath =
+    '/provenance-documents/{provDocumentId}/namespace';
 
   /**
    * Retrieve the namespace of a specific PROV document.
@@ -1141,24 +1308,28 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvNamespace$Response(params: {
     provDocumentId: number;
-
   }): Observable<StrictHttpResponse<EntityModelProvNamespaceDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvNamespacePath, 'get');
-    if (params) {
-
-      rb.path('provDocumentId', params.provDocumentId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvNamespaceDto>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvNamespacePath,
+      'get'
     );
+    if (params) {
+      rb.path('provDocumentId', params.provDocumentId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvNamespaceDto>;
+        })
+      );
   }
 
   /**
@@ -1171,18 +1342,20 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvNamespace(params: {
     provDocumentId: number;
-
   }): Observable<EntityModelProvNamespaceDto> {
-
     return this.getProvNamespace$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvNamespaceDto>) => r.body as EntityModelProvNamespaceDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvNamespaceDto>) =>
+          r.body as EntityModelProvNamespaceDto
+      )
     );
   }
 
   /**
    * Path part for operation setProvNamespace
    */
-  static readonly SetProvNamespacePath = '/provenance-documents/{provDocumentId}/namespace';
+  static readonly SetProvNamespacePath =
+    '/provenance-documents/{provDocumentId}/namespace';
 
   /**
    * Update the namespace of a specific PROV document.
@@ -1194,25 +1367,31 @@ export class ProvenanceDocumentService extends BaseService {
    */
   setProvNamespace$Response(params: {
     provDocumentId: number;
-      body: ProvNamespaceDto
+    body: ProvNamespaceDto;
   }): Observable<StrictHttpResponse<EntityModelProvNamespaceDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.SetProvNamespacePath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.SetProvNamespacePath,
+      'put'
+    );
     if (params) {
-
       rb.path('provDocumentId', params.provDocumentId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<EntityModelProvNamespaceDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelProvNamespaceDto>;
+        })
+      );
   }
 
   /**
@@ -1225,18 +1404,21 @@ export class ProvenanceDocumentService extends BaseService {
    */
   setProvNamespace(params: {
     provDocumentId: number;
-      body: ProvNamespaceDto
+    body: ProvNamespaceDto;
   }): Observable<EntityModelProvNamespaceDto> {
-
     return this.setProvNamespace$Response(params).pipe(
-      map((r: StrictHttpResponse<EntityModelProvNamespaceDto>) => r.body as EntityModelProvNamespaceDto)
+      map(
+        (r: StrictHttpResponse<EntityModelProvNamespaceDto>) =>
+          r.body as EntityModelProvNamespaceDto
+      )
     );
   }
 
   /**
    * Path part for operation getProvDocumentPdf
    */
-  static readonly GetProvDocumentPdfPath = '/provenance-documents/{provDocumentId}/pdf';
+  static readonly GetProvDocumentPdfPath =
+    '/provenance-documents/{provDocumentId}/pdf';
 
   /**
    * Retrieve a specific PROV document and return it as PDF.
@@ -1248,24 +1430,28 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvDocumentPdf$Response(params: {
     provDocumentId: number;
-
   }): Observable<StrictHttpResponse<RepresentationModelObject>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvDocumentPdfPath, 'get');
-    if (params) {
-
-      rb.path('provDocumentId', params.provDocumentId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModelObject>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvDocumentPdfPath,
+      'get'
     );
+    if (params) {
+      rb.path('provDocumentId', params.provDocumentId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<RepresentationModelObject>;
+        })
+      );
   }
 
   /**
@@ -1278,18 +1464,20 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvDocumentPdf(params: {
     provDocumentId: number;
-
   }): Observable<RepresentationModelObject> {
-
     return this.getProvDocumentPdf$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
+      map(
+        (r: StrictHttpResponse<RepresentationModelObject>) =>
+          r.body as RepresentationModelObject
+      )
     );
   }
 
   /**
    * Path part for operation getProvDocumentXml
    */
-  static readonly GetProvDocumentXmlPath = '/provenance-documents/{provDocumentId}/xml-document';
+  static readonly GetProvDocumentXmlPath =
+    '/provenance-documents/{provDocumentId}/xml-document';
 
   /**
    * Retrieve a specific PROV document and return it as serialized XML document.
@@ -1301,24 +1489,28 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvDocumentXml$Response(params: {
     provDocumentId: number;
-
   }): Observable<StrictHttpResponse<RepresentationModelObject>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ProvenanceDocumentService.GetProvDocumentXmlPath, 'get');
-    if (params) {
-
-      rb.path('provDocumentId', params.provDocumentId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<RepresentationModelObject>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ProvenanceDocumentService.GetProvDocumentXmlPath,
+      'get'
     );
+    if (params) {
+      rb.path('provDocumentId', params.provDocumentId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<RepresentationModelObject>;
+        })
+      );
   }
 
   /**
@@ -1331,12 +1523,12 @@ export class ProvenanceDocumentService extends BaseService {
    */
   getProvDocumentXml(params: {
     provDocumentId: number;
-
   }): Observable<RepresentationModelObject> {
-
     return this.getProvDocumentXml$Response(params).pipe(
-      map((r: StrictHttpResponse<RepresentationModelObject>) => r.body as RepresentationModelObject)
+      map(
+        (r: StrictHttpResponse<RepresentationModelObject>) =>
+          r.body as RepresentationModelObject
+      )
     );
   }
-
 }

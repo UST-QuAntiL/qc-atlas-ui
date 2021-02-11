@@ -101,7 +101,7 @@
               Backend Name
             </th>
             <td class="backend-column" mat-cell *matCellDef="let element">
-              {{ element.qpu.name }}
+              {{ element.qpu }}
             </td>
           </ng-container>
 
@@ -110,7 +110,7 @@
               Width
             </th>
             <td class="value-column" mat-cell *matCellDef="let element">
-              {{ element.analysedWidth }}
+              {{ element.analyzedWidth }}
             </td>
           </ng-container>
 
@@ -119,7 +119,7 @@
               Depth
             </th>
             <td class="value-column" mat-cell *matCellDef="let element">
-              {{ element.analysedDepth }}
+              {{ element.analyzedDepth }}
             </td>
           </ng-container>
 
@@ -209,7 +209,7 @@
               Backend Name
             </th>
             <td class="backend-column" mat-cell *matCellDef="let element">
-              {{ executedAnalyseResult.qpu.name }}
+              {{ executedAnalyseResult.qpu }}
             </td>
           </ng-container>
 
@@ -218,7 +218,7 @@
               Width
             </th>
             <td class="value-column" mat-cell *matCellDef="let element">
-              {{ executedAnalyseResult.analysedWidth }}
+              {{ executedAnalyseResult.analyzedWidth }}
             </td>
           </ng-container>
 
@@ -227,7 +227,7 @@
               Depth
             </th>
             <td class="value-column" mat-cell *matCellDef="let element">
-              {{ executedAnalyseResult.analysedDepth }}
+              {{ executedAnalyseResult.analyzedDepth }}
             </td>
           </ng-container>
 

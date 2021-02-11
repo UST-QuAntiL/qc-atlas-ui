@@ -32,6 +32,12 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
 
   selection = new SelectionModel<number>(true);
   sdks$: Observable<Option[]>;
+  languages: Option[] = [
+    { value: 'Qiskit', label: 'Qiskit' },
+    { value: 'OpenQASM', label: 'OpenQASM' },
+    { value: 'Quil', label: 'Quil' },
+    { value: 'PyQuil', label: 'PyQuil' },
+  ];
 
   constructor(
     private nisqImplementationService: NISQImplementationService,
@@ -157,6 +163,7 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
       selectionRule: '',
       // TODO
       sdk: 'Qiskit',
+      language: 'OpenQASM',
       fileLocation: 'http://example.com/',
     };
     this.nisqImplementationService

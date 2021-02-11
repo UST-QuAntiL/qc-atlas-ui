@@ -1691,24 +1691,43 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   createComputeResourcePropertyForComputeResource$Response(params: {
     computeResourceId: string;
-      body: ComputeResourcePropertyDto
-  }): Observable<StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ExecutionEnvironmentsService.CreateComputeResourcePropertyForComputeResourcePath, 'post');
+    body: ComputeResourcePropertyDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      value?: string;
+      type: ComputeResourcePropertyTypeDto;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ExecutionEnvironmentsService.CreateComputeResourcePropertyForComputeResourcePath,
+      'post'
+    );
     if (params) {
       rb.path('computeResourceId', params.computeResourceId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            value?: string;
+            type: ComputeResourcePropertyTypeDto;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
   }
 
   /**
@@ -1721,11 +1740,32 @@ export class ExecutionEnvironmentsService extends BaseService {
    */
   createComputeResourcePropertyForComputeResource(params: {
     computeResourceId: string;
-      body: ComputeResourcePropertyDto
-  }): Observable<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }> {
-
-    return this.createComputeResourcePropertyForComputeResource$Response(params).pipe(
-      map((r: StrictHttpResponse<{ 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> }>) => r.body as { 'id': string, 'value'?: string, 'type': ComputeResourcePropertyTypeDto, '_links'?: Array<Link> })
+    body: ComputeResourcePropertyDto;
+  }): Observable<{
+    id: string;
+    value?: string;
+    type: ComputeResourcePropertyTypeDto;
+    _links?: Array<Link>;
+  }> {
+    return this.createComputeResourcePropertyForComputeResource$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            value?: string;
+            type: ComputeResourcePropertyTypeDto;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            value?: string;
+            type: ComputeResourcePropertyTypeDto;
+            _links?: Array<Link>;
+          }
+      )
     );
   }
 

@@ -25,6 +25,15 @@
           (onSaveChanges)="saveImplementation()"
         ></app-select-input>
       </div>
+      <div class="col-lg-6 col-md-12">
+        <app-select-input
+                name="Language"
+                [value]="nisqImpl.language"
+                [choices]="languages"
+                (onChange)="nisqImpl.language = $event"
+                (onSaveChanges)="saveImplementation()"
+        ></app-select-input>
+      </div>
     </div>
   </mat-card>
   <div class="d-flex justify-content-between header-container">
