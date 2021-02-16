@@ -29,6 +29,10 @@ export const environment = {
     window['env']['LATEX_RENDERER_PORT']
       ? `http://${window['env']['LATEX_RENDERER_HOST_NAME']}:${window['env']['LATEX_RENDERER_PORT']}`
       : 'http://localhost:8083',
+  QPROV_API_URL:
+    window['env']['QPROV_HOST_NAME'] && window['env']['QPROV_PORT']
+      ? `http://${window['env']['QPROV_HOST_NAME']}:${window['env']['QPROV_PORT']}`
+      : 'http://localhost:8084',
 };
 
 /*

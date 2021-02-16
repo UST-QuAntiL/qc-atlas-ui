@@ -18,6 +18,7 @@ import { MatCardModule } from '@angular/material/card';
 import { ApiModule as PatternAltasAPIModule } from 'api-patternpedia/api.module';
 import { ApiModule as NisqApiModule } from 'api-nisq/api.module';
 import { ApiModule as LatexRendererAPIModule } from 'api-latex/api.module';
+import { ApiModule as QProvAPIModule } from 'api-qprov/api.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -91,6 +92,9 @@ import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './component
     NisqApiModule.forRoot({ rootUrl: environment.NISQ_API_URL }),
     LatexRendererAPIModule.forRoot({
       rootUrl: environment.LATEX_RENDERER_API_URL,
+    }),
+    QProvAPIModule.forRoot({
+      rootUrl: environment.QPROV_API_URL,
     }),
     AppRoutingModule,
     // material modules
