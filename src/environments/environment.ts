@@ -31,8 +31,8 @@ export const environment = {
       : 'http://localhost:8083',
   QPROV_API_URL:
     window['env']['QPROV_HOST_NAME'] && window['env']['QPROV_PORT']
-      ? `http://${window['env']['QPROV_HOST_NAME']}:${window['env']['QPROV_PORT']}`
-      : 'http://localhost:8084',
+      ? `http://${window['env']['QPROV_HOST_NAME']}:${window['env']['QPROV_PORT']}/qprov`
+      : 'http://localhost:8084/qprov',
 };
 
 /*
