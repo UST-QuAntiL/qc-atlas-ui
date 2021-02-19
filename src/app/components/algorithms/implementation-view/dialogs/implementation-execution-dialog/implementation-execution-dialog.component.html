@@ -3,9 +3,25 @@
     <form [formGroup]="implementationExecutionForm">
         <mat-form-field class="input-field">
             <mat-label>Vendor</mat-label>
-            <input id="vendor" formControlName="vendor" matInput required>
+            <mat-select formControlName="vendor" (selectionChange)="onVendorChanged($event.value)" required>
+                <mat-option [value]="'IBMQ'">IBMQ</mat-option>
+                <mat-option [value]="'Rigetti'">Rigetti</mat-option>
+            </mat-select>
         </mat-form-field>
-        <mat-form-field class="input-field">
+        <mat-form-field class="input-field" *ngIf="isIbmqSelected">
+            <mat-label>QPU</mat-label>
+            <mat-select formControlName="qpu" required>
+                <mat-option *ngFor="let qpu of qpuArray" [value]="qpu">{{qpu}}</mat-option>
+            </mat-select>
+<!--            <app-select-input-->
+<!--                    name="QPU"-->
+<!--                    [value]="qpu"-->
+<!--                    [choices]="ibmqQpus$ | async"-->
+<!--                    (onChange)="qpu = $event"-->
+<!--                    (onSaveChanges)="onQpuChanged()"-->
+<!--            ></app-select-input>-->
+        </mat-form-field>
+        <mat-form-field class="input-field" *ngIf="!isIbmqSelected">
             <mat-label>QPU</mat-label>
             <input id="qpu" formControlName="qpu" matInput required>
         </mat-form-field>
