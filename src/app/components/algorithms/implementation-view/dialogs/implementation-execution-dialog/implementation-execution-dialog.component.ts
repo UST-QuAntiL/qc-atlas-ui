@@ -27,7 +27,6 @@ export class ImplementationExecutionDialogComponent implements OnInit {
   provider?: EntityModelProviderDto;
   ready?: boolean;
   qpuArray: string[];
-  ibmqQpus$: string[];
   isIbmqSelected = true;
 
   constructor(
@@ -50,7 +49,6 @@ export class ImplementationExecutionDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.qpuArray = [];
     this.implementationExecutionForm = new FormGroup({
       vendor: new FormControl(this.data.vendor, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -89,31 +87,19 @@ export class ImplementationExecutionDialogComponent implements OnInit {
   }
 
   onVendorChanged(value: string): void {
+    this.qpuArray = [];
     this.isIbmqSelected = true;
     if (value === 'IBMQ') {
       this.providerService.getProviders().subscribe((result) => {
-        // abort if provider is not found
         this.getProviderDtoByName(result);
         if (!this.provider) {
           console.error('Provider with given name not found!');
           this.ready = true;
           return;
         }
-
-        // search for QPU names from the given provider
-        // this.ibmqQpus$ = this.providerService
-        //   .getQpUs({ providerId: this.provider.id })
-        //   .pipe(
-        //     map((dto) =>
-        //       dto._embedded.qpuDtoes.map((qpu) => ({
-        //         value: qpu.name,
-        //       }))
-        //     )
-        //   );
         this.providerService
           .getQpUs({ providerId: this.provider.id })
           .subscribe((qpuResult) => {
-            // abort if QPU is not found
             this.getQpuArrayByProvider(qpuResult);
             if (this.qpuArray.length === 0) {
               console.error('QPUs not found!');
@@ -127,18 +113,11 @@ export class ImplementationExecutionDialogComponent implements OnInit {
     }
   }
 
-  /**
-   * Update the provider with the resulting dto from the QProv API if available
-   *
-   * @param result the response from the QProv API with all available providers
-   */
   getProviderDtoByName(result): void {
     if (result === null) {
       console.error('Error while loading provider!');
       return;
     }
-
-    // search for provider specified in computeResource
     for (const providerDto of result._embedded.providerDtoes) {
       if (providerDto.name.toLowerCase() === 'ibmq') {
         this.provider = providerDto;
@@ -147,17 +126,11 @@ export class ImplementationExecutionDialogComponent implements OnInit {
     }
   }
 
-  /**
-   * Update the qpu array with the resulting dto from the QProv API if available
-   *
-   * @param result the response from the QProv API with all available qpus from the provider
-   */
   getQpuArrayByProvider(result): void {
     if (result === null) {
       console.error('Error while loading QPUs!');
       return;
     }
-
     for (const qpuDto of result._embedded.qpuDtoes) {
       this.qpuArray.push(qpuDto.name);
     }
