@@ -17,6 +17,8 @@ import { CardsModule } from 'angular-bootstrap-md';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BrowserModule } from '@angular/platform-browser';
+import { MatSortModule } from '@angular/material/sort';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
@@ -77,6 +79,8 @@ import { NisqAnalyzerResultsComponent } from './nisq-analyzer-results/nisq-analy
     MatStepperModule,
     MatProgressSpinnerModule,
     MatTableModule,
+    BrowserModule,
+    MatSortModule,
   ],
   exports: [
     AlgorithmListComponent,
