@@ -8,6 +8,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { AnalysisJobDto } from '../models/analysis-job-dto';
+import { AnalysisJobListDto } from '../models/analysis-job-list-dto';
 import { AnalysisResultDto } from '../models/analysis-result-dto';
 import { AnalysisResultListDto } from '../models/analysis-result-list-dto';
 import { ExecutionResultDto } from '../models/execution-result-dto';
@@ -87,6 +89,117 @@ export class AnalysisResultService extends BaseService {
         (r: StrictHttpResponse<AnalysisResultListDto>) =>
           r.body as AnalysisResultListDto
       )
+    );
+  }
+
+  /**
+   * Path part for operation getImplementationSelectionJobs
+   */
+  static readonly GetImplementationSelectionJobsPath = '/analysis-results/jobs';
+
+  /**
+   * Retrieve all compiler analysis jobs
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementationSelectionJobs()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationSelectionJobs$Response(params?: {}): Observable<
+    StrictHttpResponse<AnalysisJobListDto>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AnalysisResultService.GetImplementationSelectionJobsPath,
+      'get'
+    );
+    if (params) {
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<AnalysisJobListDto>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve all compiler analysis jobs
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementationSelectionJobs$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationSelectionJobs(params?: {}): Observable<AnalysisJobListDto> {
+    return this.getImplementationSelectionJobs$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<AnalysisJobListDto>) =>
+          r.body as AnalysisJobListDto
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getImplementationSelectionJob
+   */
+  static readonly GetImplementationSelectionJobPath =
+    '/analysis-results/jobs/{resId}';
+
+  /**
+   * Retrieve a single implementation selection result
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementationSelectionJob()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationSelectionJob$Response(params: {
+    resId: string;
+  }): Observable<StrictHttpResponse<AnalysisJobDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AnalysisResultService.GetImplementationSelectionJobPath,
+      'get'
+    );
+    if (params) {
+      rb.path('resId', params.resId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<AnalysisJobDto>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve a single implementation selection result
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementationSelectionJob$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationSelectionJob(params: {
+    resId: string;
+  }): Observable<AnalysisJobDto> {
+    return this.getImplementationSelectionJob$Response(params).pipe(
+      map((r: StrictHttpResponse<AnalysisJobDto>) => r.body as AnalysisJobDto)
     );
   }
 

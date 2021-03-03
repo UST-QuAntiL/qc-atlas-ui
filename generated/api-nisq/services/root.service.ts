@@ -8,7 +8,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { AnalysisResultListDto } from '../models/analysis-result-list-dto';
+import { AnalysisJobDto } from '../models/analysis-job-dto';
 import { CompilationJobDto } from '../models/compilation-job-dto';
 import { CompilerSelectionDto } from '../models/compiler-selection-dto';
 import { ParameterListDto } from '../models/parameter-list-dto';
@@ -301,7 +301,7 @@ export class RootService extends BaseService {
    */
   selectImplementations$Response(params: {
     body: SelectionRequestDto;
-  }): Observable<StrictHttpResponse<AnalysisResultListDto>> {
+  }): Observable<StrictHttpResponse<AnalysisJobDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       RootService.SelectImplementationsPath,
@@ -320,7 +320,7 @@ export class RootService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<AnalysisResultListDto>;
+          return r as StrictHttpResponse<AnalysisJobDto>;
         })
       );
   }
@@ -335,12 +335,9 @@ export class RootService extends BaseService {
    */
   selectImplementations(params: {
     body: SelectionRequestDto;
-  }): Observable<AnalysisResultListDto> {
+  }): Observable<AnalysisJobDto> {
     return this.selectImplementations$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<AnalysisResultListDto>) =>
-          r.body as AnalysisResultListDto
-      )
+      map((r: StrictHttpResponse<AnalysisJobDto>) => r.body as AnalysisJobDto)
     );
   }
 

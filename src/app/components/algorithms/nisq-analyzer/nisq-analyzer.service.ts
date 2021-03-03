@@ -7,12 +7,15 @@ import {
   RootService,
 } from 'api-nisq/services';
 import {
+  AnalysisJobDto,
+  AnalysisJobListDto,
   AnalysisResultDto,
   ParameterDto,
   SelectionRequestDto,
 } from 'api-nisq/models';
 import { map } from 'rxjs/operators';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { StrictHttpResponse } from 'api-nisq/strict-http-response';
 
 @Injectable({
   providedIn: 'root',
@@ -34,10 +37,14 @@ export class NisqAnalyzerService {
       .pipe(map((list) => list.parameters));
   }
 
-  analyze(body: SelectionRequestDto): Observable<AnalysisResultDto[]> {
+  analyze(body: SelectionRequestDto): Observable<AnalysisJobDto> {
     return this.rootService
       .selectImplementations({ body })
-      .pipe(map((list) => list.analysisResultList));
+      .pipe(map((job) => job));
+  }
+
+  getJob(resId: string): Observable<AnalysisJobDto> {
+    return this.analysisResultService.getImplementationSelectionJob({ resId });
   }
 
   execute(resId: string) {

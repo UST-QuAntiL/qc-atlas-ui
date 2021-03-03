@@ -1,3 +1,5 @@
+export { AnalysisJobDto } from './models/analysis-job-dto';
+export { AnalysisJobListDto } from './models/analysis-job-list-dto';
 export { AnalysisResultDto } from './models/analysis-result-dto';
 export { AnalysisResultListDto } from './models/analysis-result-list-dto';
 export { CompilationJobDto } from './models/compilation-job-dto';

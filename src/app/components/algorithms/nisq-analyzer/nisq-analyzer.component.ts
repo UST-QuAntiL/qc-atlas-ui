@@ -9,7 +9,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { interval } from 'rxjs';
-import { exhaustMap, first } from 'rxjs/operators';
+import { exhaustMap, first, startWith, switchMap } from 'rxjs/operators';
 
 import { ExecutionEnvironmentsService } from 'api-atlas/services';
 import { AlgorithmDto, CloudServiceDto } from 'api-atlas/models';
@@ -18,6 +18,7 @@ import {
   AnalysisResultDto,
   ExecutionResultDto,
   ImplementationDto as NISQImplementationDto,
+  AnalysisJobDto,
 } from 'api-nisq/models';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
 
@@ -47,7 +48,10 @@ export class NisqAnalyzerComponent implements OnInit {
   // 2) Analyze phase
   analyzeColumns = ['backendName', 'width', 'depth', 'execution'];
   analyzerResults: AnalysisResultDto[] = [];
+  analyzerJob: AnalysisJobDto;
+  jobReady = false;
   expandedElement: AnalysisResultDto | null;
+  pollingAnalysisJobData: any;
 
   // 3) Execution
   resultBackendColumns = ['backendName', 'width', 'depth'];
@@ -62,6 +66,7 @@ export class NisqAnalyzerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.jobReady = false;
     this.executionEnvironmentsService
       .getCloudServices()
       .subscribe(
@@ -90,7 +95,7 @@ export class NisqAnalyzerComponent implements OnInit {
     });
   }
 
-  submit(): boolean {
+  startAnalysis(): boolean {
     const value = this.inputFormGroup.value;
     // Merge a list of parameter objects into a single parameter object.
     const analyzeParams = Object.assign.apply(undefined, [
@@ -99,13 +104,33 @@ export class NisqAnalyzerComponent implements OnInit {
       },
       ...value.params,
     ]);
-    this.analyzerResults = undefined;
+    this.analyzerJob = undefined;
+    this.jobReady = false;
     this.nisqAnalyzerService
       .analyze({
         algorithmId: this.algo.id,
         parameters: analyzeParams,
       })
-      .subscribe((results) => (this.analyzerResults = results));
+      .subscribe((job) => {
+        this.analyzerJob = job;
+        this.jobReady = job.ready;
+
+        this.pollingAnalysisJobData = interval(2000)
+          .pipe(
+            startWith(0),
+            switchMap(() =>
+              this.nisqAnalyzerService.getJob(this.analyzerJob.id)
+            )
+          )
+          .subscribe((jobResult) => {
+            this.analyzerJob = jobResult;
+            this.jobReady = jobResult.ready;
+            if (this.jobReady) {
+              this.analyzerResults = jobResult.analysisResultList;
+              this.pollingAnalysisJobData.unsubscribe();
+            }
+          });
+      });
     return true;
   }
 

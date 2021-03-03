@@ -68,7 +68,7 @@
           mat-raised-button
           type="submit"
           [disabled]="inputFormGroup.invalid"
-          (click)="submit() && stepper.next()"
+          (click)="startAnalysis() && stepper.next()"
         >
           Analyze!
         </button>
@@ -78,18 +78,18 @@
 
   <mat-step [editable]="false" label="Analyzer Results">
     <div
-      *ngIf="!analyzerResults"
+      *ngIf="!jobReady"
       class="d-flex align-content-center justify-content-center"
     >
       <mat-spinner></mat-spinner>
     </div>
     <div
-      *ngIf="analyzerResults && analyzerResults.length === 0"
+      *ngIf="jobReady && analyzerResults && analyzerResults.length === 0"
       class="d-flex align-content-center justify-content-center py-5"
     >
       No suitable implementation and/or QPU found!
     </div>
-    <ng-container *ngIf="analyzerResults && analyzerResults.length !== 0">
+    <ng-container *ngIf="jobReady && analyzerResults && analyzerResults.length !== 0">
       <div
         class="p-2 overflow-auto"
         *ngFor="let result of groupResultsByImplementation(analyzerResults)"
