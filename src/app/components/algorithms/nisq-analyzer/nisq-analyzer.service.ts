@@ -15,7 +15,6 @@ import {
 } from 'api-nisq/models';
 import { map } from 'rxjs/operators';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { StrictHttpResponse } from 'api-nisq/strict-http-response';
 
 @Injectable({
   providedIn: 'root',
@@ -44,7 +43,7 @@ export class NisqAnalyzerService {
   }
 
   getJob(resId: string): Observable<AnalysisJobDto> {
-    return this.analysisResultService.getImplementationSelectionJob({ resId });
+    return this.analysisResultService.getAnalysisJob({ resId });
   }
 
   execute(resId: string) {

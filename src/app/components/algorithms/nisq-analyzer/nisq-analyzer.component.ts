@@ -19,7 +19,10 @@ import {
   ExecutionResultDto,
   ImplementationDto as NISQImplementationDto,
   AnalysisJobDto,
+  CompilationJobDto,
 } from 'api-nisq/models';
+import { UtilService } from '../../../util/util.service';
+import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
 
 @Component({
@@ -61,6 +64,7 @@ export class NisqAnalyzerComponent implements OnInit {
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private nisqAnalyzerService: NisqAnalyzerService,
+    private utilService: UtilService,
     private formBuilder: FormBuilder,
     private http: HttpClient
   ) {}
@@ -95,43 +99,62 @@ export class NisqAnalyzerComponent implements OnInit {
     });
   }
 
-  startAnalysis(): boolean {
-    const value = this.inputFormGroup.value;
-    // Merge a list of parameter objects into a single parameter object.
-    const analyzeParams = Object.assign.apply(undefined, [
-      {
-        token: value.qiskitToken,
-      },
-      ...value.params,
-    ]);
-    this.analyzerJob = undefined;
-    this.jobReady = false;
-    this.nisqAnalyzerService
-      .analyze({
-        algorithmId: this.algo.id,
-        parameters: analyzeParams,
+  onAddAnalysis(): void {
+    this.utilService
+      .createDialog(AddNewAnalysisDialogComponent, {
+        title: 'Start Analysis',
+        algo: this.algo.id,
       })
-      .subscribe((job) => {
-        this.analyzerJob = job;
-        this.jobReady = job.ready;
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          // Merge a list of parameter objects into a single parameter object.
+          const analyzeParams = Object.assign.apply(undefined, [
+            {
+              token: dialogResult.token,
+            },
+            ...dialogResult.params,
+          ]);
+          this.analyzerJob = undefined;
+          this.jobReady = false;
+          this.nisqAnalyzerService
+            .analyze({
+              algorithmId: this.algo.id,
+              parameters: analyzeParams,
+            })
+            .subscribe((job) => {
+              this.analyzerJob = job;
+              this.jobReady = job.ready;
 
-        this.pollingAnalysisJobData = interval(2000)
-          .pipe(
-            startWith(0),
-            switchMap(() =>
-              this.nisqAnalyzerService.getJob(this.analyzerJob.id)
-            )
-          )
-          .subscribe((jobResult) => {
-            this.analyzerJob = jobResult;
-            this.jobReady = jobResult.ready;
-            if (this.jobReady) {
-              this.analyzerResults = jobResult.analysisResultList;
-              this.pollingAnalysisJobData.unsubscribe();
-            }
-          });
+              this.utilService.callSnackBar(
+                'Successfully created compilation job "' + job.id + '".'
+              );
+
+              this.pollingAnalysisJobData = interval(2000)
+                .pipe(
+                  startWith(0),
+                  switchMap(() =>
+                    this.nisqAnalyzerService.getJob(this.analyzerJob.id)
+                  )
+                )
+                .subscribe(
+                  (jobResult) => {
+                    this.analyzerJob = jobResult;
+                    this.jobReady = jobResult.ready;
+                    if (this.jobReady) {
+                      this.analyzerResults = jobResult.analysisResultList;
+                      this.pollingAnalysisJobData.unsubscribe();
+                    }
+                  },
+                  () => {
+                    this.utilService.callSnackBar(
+                      'Error! Could not create analysis job.'
+                    );
+                  }
+                );
+            });
+        }
       });
-    return true;
   }
 
   execute(analysisResult: AnalysisResultDto): void {

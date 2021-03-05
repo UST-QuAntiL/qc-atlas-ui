@@ -57,3 +57,17 @@ tr.element-row:not(.expanded-row):active {
 .action-column {
   min-width: 125px;
 }
+
+.btn-wrapper {
+  margin-bottom: 5px;
+}
+
+.btn-wrapper > button {
+  margin-right: 10px;
+  width: 15em;
+}
+
+.mat-raised-button {
+  width: 10em;
+}
+

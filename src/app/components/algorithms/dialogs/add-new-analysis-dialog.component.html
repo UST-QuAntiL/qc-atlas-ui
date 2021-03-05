@@ -1,0 +1,47 @@
+<div *ngIf="addNewAnalysisForm">
+    <h1 mat-dialog-title>{{data.title}}</h1>
+    <div mat-dialog-content>
+        <form [formGroup]="addNewAnalysisForm">
+            <div formArrayName="params">
+                <div *ngFor="let param of parameters; let i = index" [formGroupName]="i">
+                    <mat-form-field class="input-field">
+                        <mat-label>{{ param.name }}</mat-label>
+                        <input
+                                matInput
+                                [pattern]="patternForParam(param)"
+                                [placeholder]="param.description"
+                                [formControlName]="param.name"
+                        />
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <mat-form-field class="input-field">
+                <mat-label>Cloud Service</mat-label>
+                <mat-select
+                        formControlName="cloudService"
+                >
+                    <mat-option *ngFor="let cs of cloudServices" [value]="cs.name">
+                        {{ cs.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="input-field" [hidden]="true">
+                <mat-label>Number of shots (for later execution)</mat-label>
+                <input matInput pattern="[0-9]+" formControlName="shotCount"/>
+            </mat-form-field>
+
+            <mat-form-field class="input-field">
+                <mat-label>Your Token</mat-label>
+                <input matInput required formControlName="token"/>
+            </mat-form-field>
+        </form>
+    </div>
+
+    <div mat-dialog-actions>
+        <button mat-button (click)="onNoClick()">Cancel</button>
+        <button mat-button [disabled]="addNewAnalysisForm.invalid" [mat-dialog-close]="data">Ok
+        </button>
+    </div>
+</div>
