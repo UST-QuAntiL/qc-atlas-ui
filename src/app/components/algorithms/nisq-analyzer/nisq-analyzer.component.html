@@ -1,31 +1,31 @@
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
-    <div class="btn-wrapper">
-      <button
-              mat-raised-button
-              type="Analysis"
-              color="primary"
-              class="btn-compile"
-              (click)="onAddAnalysis()"
-      >
-        New Analysis
-      </button>
-      <button
-              mat-raised-button
-              type="Refresh"
-              color="accent"
-              class="btn-compile"
-              (click)="refresh()"
-      >
-        Refresh
-      </button>
-    </div>
     <mat-horizontal-stepper
       [linear]="true"
       #stepper="matHorizontalStepper"
     >
       <mat-step [editable]="false" label="Input">
         <h3>Analysis Jobs</h3>
+        <div class="btn-wrapper">
+          <button
+                  mat-raised-button
+                  type="Analysis"
+                  color="primary"
+                  class="btn-compile"
+                  (click)="onAddAnalysis()"
+          >
+            New Analysis
+          </button>
+          <button
+                  mat-raised-button
+                  type="Refresh"
+                  color="accent"
+                  class="btn-compile"
+                  (click)="refresh()"
+          >
+            Refresh
+          </button>
+        </div>
         <table
                 mat-table
                 [dataSource]="analyzerJobs$ | async"

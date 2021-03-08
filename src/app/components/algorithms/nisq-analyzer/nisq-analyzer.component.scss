@@ -60,6 +60,7 @@ tr.element-row:not(.expanded-row):active {
 
 .btn-wrapper {
   margin-bottom: 5px;
+  margin-top: 10px;
 }
 
 .btn-wrapper > button {
@@ -69,5 +70,9 @@ tr.element-row:not(.expanded-row):active {
 
 .mat-raised-button {
   width: 10em;
+}
+
+:host ::ng-deep .mat-horizontal-stepper-header-container {
+  display: none !important;
 }
 
