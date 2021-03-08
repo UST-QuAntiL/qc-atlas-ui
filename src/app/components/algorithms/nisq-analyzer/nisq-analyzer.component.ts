@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import {
   animate,
   state,
@@ -8,8 +8,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { interval } from 'rxjs';
-import { exhaustMap, first, startWith, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, interval, Observable } from 'rxjs';
+import { exhaustMap, first, map, startWith, switchMap } from 'rxjs/operators';
 
 import { ExecutionEnvironmentsService } from 'api-atlas/services';
 import { AlgorithmDto, CloudServiceDto } from 'api-atlas/models';
@@ -19,8 +19,8 @@ import {
   ExecutionResultDto,
   ImplementationDto as NISQImplementationDto,
   AnalysisJobDto,
-  CompilationJobDto,
 } from 'api-nisq/models';
+import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
@@ -46,11 +46,14 @@ export class NisqAnalyzerComponent implements OnInit {
   // 1) Selection
   params: ParameterDto[];
   cloudServices: CloudServiceDto[];
-  inputFormGroup: FormGroup;
 
   // 2) Analyze phase
   analyzeColumns = ['backendName', 'width', 'depth', 'execution'];
   analyzerResults: AnalysisResultDto[] = [];
+  jobColumns = ['inputParameters', 'time', 'ready'];
+  analyzerJobs$: Observable<AnalysisJobDto[]>;
+  analyzerJobList: AnalysisJobDto[];
+  sort$ = new BehaviorSubject<string[] | undefined>(undefined);
   analyzerJob: AnalysisJobDto;
   jobReady = false;
   expandedElement: AnalysisResultDto | null;
@@ -63,6 +66,7 @@ export class NisqAnalyzerComponent implements OnInit {
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
+    private analysisResultService: AnalysisResultService,
     private nisqAnalyzerService: NisqAnalyzerService,
     private utilService: UtilService,
     private formBuilder: FormBuilder,
@@ -70,33 +74,42 @@ export class NisqAnalyzerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.jobReady = false;
-    this.executionEnvironmentsService
-      .getCloudServices()
-      .subscribe(
-        (value) => (this.cloudServices = value._embedded.cloudServices ?? [])
-      );
-    this.nisqAnalyzerService.getParams(this.algo.id).subscribe((params) => {
-      this.params = this.nisqAnalyzerService.collapseParams(
-        params.filter((p) => p.name !== 'token')
-      );
-      this.inputFormGroup = this.formBuilder.group({
-        params: this.formBuilder.array(
-          this.params.map((param) =>
-            this.formBuilder.group({
-              [param.name]: [''],
-            })
-          )
-        ),
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        cloudService: ['', Validators.required],
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        shotCount: [''],
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        qiskitToken: ['', Validators.required],
-      });
-      this.onCloudServiceChanged('');
-    });
+    this.analyzerJobs$ = this.sort$
+      .pipe(
+        switchMap((sort) =>
+          this.analysisResultService.getAnalysisJobsOfAlgorithm({
+            algoId: this.algo.id,
+            sort,
+          })
+        )
+      )
+      .pipe(map((dto) => dto.analysisJobList));
+  }
+
+  changeSort(active: string, direction: 'asc' | 'desc' | ''): void {
+    if (!active || !direction) {
+      this.sort$.next(undefined);
+    } else {
+      this.sort$.next([`${active},${direction}`]);
+    }
+  }
+
+  formatParameters(analysisJob: AnalysisJobDto): string {
+    const result: string[] = [];
+    for (const key of Object.keys(analysisJob.inputParameters)) {
+      if (key === 'token') {
+        continue;
+      }
+      result.push(`${key} = ${analysisJob.inputParameters[key]}`);
+    }
+    return result.join(' ');
+  }
+
+  filterInputParams(inputParameters: any): {} {
+    // Remove token from input parameters, as it is handled separately.
+    inputParameters = Object.assign({}, inputParameters);
+    delete inputParameters.token;
+    return inputParameters;
   }
 
   onAddAnalysis(): void {
@@ -127,8 +140,9 @@ export class NisqAnalyzerComponent implements OnInit {
               this.jobReady = job.ready;
 
               this.utilService.callSnackBar(
-                'Successfully created compilation job "' + job.id + '".'
+                'Successfully created analysis job "' + job.id + '".'
               );
+              this.ngOnInit();
 
               this.pollingAnalysisJobData = interval(2000)
                 .pipe(
@@ -142,6 +156,7 @@ export class NisqAnalyzerComponent implements OnInit {
                     this.analyzerJob = jobResult;
                     this.jobReady = jobResult.ready;
                     if (this.jobReady) {
+                      this.ngOnInit();
                       this.analyzerResults = jobResult.analysisResultList;
                       this.pollingAnalysisJobData.unsubscribe();
                     }
@@ -155,6 +170,29 @@ export class NisqAnalyzerComponent implements OnInit {
             });
         }
       });
+  }
+
+  showAnalysisResult(analysisJob: AnalysisJobDto): void {}
+
+  groupResultsByImplementation(
+    analysisResults: AnalysisResultDto[]
+  ): GroupedResults[] {
+    const results: GroupedResults[] = [];
+
+    for (const analysisResult of analysisResults) {
+      const group = results.find(
+        (res) => res.implementation.id === analysisResult.implementation.id
+      );
+      if (group) {
+        group.results.push(analysisResult);
+      } else {
+        results.push({
+          implementation: analysisResult.implementation,
+          results: [analysisResult],
+        });
+      }
+    }
+    return results;
   }
 
   execute(analysisResult: AnalysisResultDto): void {
@@ -179,57 +217,13 @@ export class NisqAnalyzerComponent implements OnInit {
     });
   }
 
-  groupResultsByImplementation(
-    analysisResults: AnalysisResultDto[]
-  ): GroupedResults[] {
-    const results: GroupedResults[] = [];
-
-    for (const analysisResult of analysisResults) {
-      const group = results.find(
-        (res) => res.implementation.id === analysisResult.implementation.id
-      );
-      if (group) {
-        group.results.push(analysisResult);
-      } else {
-        results.push({
-          implementation: analysisResult.implementation,
-          results: [analysisResult],
-        });
-      }
-    }
-    return results;
-  }
-
-  filterInputParams(inputParameters: any): {} {
-    // Remove token from input parameters, as it is handled separately.
-    inputParameters = Object.assign({}, inputParameters);
-    delete inputParameters.token;
-    return inputParameters;
-  }
-
   beautifyResult(result: string): string {
     // TODO: once we have JSON, prettify
     return result;
   }
 
-  patternForParam(param: ParameterDto): string {
-    switch (param.type) {
-      case 'Integer':
-        return '[0-9]+';
-      // https://stackoverflow.com/questions/12643009/regular-expression-for-floating-point-numbers
-      case 'Float':
-        return '[+-]?([0-9]*[.])?[0-9]+';
-      default:
-        return undefined;
-    }
-  }
-
-  onCloudServiceChanged(value: string): void {
-    if (value === 'IBMQ') {
-      this.inputFormGroup.controls.qiskitToken.enable();
-    } else {
-      this.inputFormGroup.controls.qiskitToken.disable();
-    }
+  refresh(): void {
+    this.ngOnInit();
   }
 }
 
