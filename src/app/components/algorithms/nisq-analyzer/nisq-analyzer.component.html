@@ -4,14 +4,13 @@
       [linear]="true"
       #stepper="matHorizontalStepper"
     >
-      <mat-step [editable]="false" label="Input">
+      <mat-step [editable]="true" label="Input">
         <h3>Analysis Jobs</h3>
         <div class="btn-wrapper">
           <button
                   mat-raised-button
                   type="Analysis"
                   color="primary"
-                  class="btn-compile"
                   (click)="onAddAnalysis()"
           >
             New Analysis
@@ -20,7 +19,6 @@
                   mat-raised-button
                   type="Refresh"
                   color="accent"
-                  class="btn-compile"
                   (click)="refresh()"
           >
             Refresh
@@ -61,7 +59,7 @@
                       *ngIf="element.ready"
                       type="button"
                       color="accent"
-                      (click)="showAnalysisResult(element); stepper.next()"
+                      (click)="showAnalysisResult(element) && stepper.next()"
               >
                 Show analysis
               </button>
@@ -107,7 +105,28 @@
         </table>
       </mat-step>
 
-      <mat-step [editable]="false" label="Analyzer Results">
+      <mat-step [editable]="true" label="Analyzer Results">
+        <div class="btn-wrapper">
+          <button
+                  mat-raised-button
+                  type="Back"
+                  color="accent"
+                  (click)="stepper.previous()"
+          >
+            Back
+          </button>
+        </div>
+        <div *ngIf="analyzerJob">
+        <div
+                *ngFor="
+                let resParam of filterInputParams(
+                  analyzerJob.inputParameters
+                ) | keyvalue
+              "
+        >
+          <h3>Analysis Job from {{ analyzerJob.time }}, Input: {{ resParam.key }} = {{ resParam.value }}</h3>
+        </div>
+        </div>
         <div
           *ngIf="jobReady && analyzerResults && analyzerResults.length === 0"
           class="d-flex align-content-center justify-content-center py-5"
@@ -200,7 +219,7 @@
         </ng-container>
       </mat-step>
 
-      <mat-step [editable]="false" label="Execution Results">
+      <mat-step [editable]="true" label="Execution Results">
         <div
           *ngIf="!results"
           class="d-flex align-content-center justify-content-center"

@@ -172,7 +172,14 @@ export class NisqAnalyzerComponent implements OnInit {
       });
   }
 
-  showAnalysisResult(analysisJob: AnalysisJobDto): void {}
+  showAnalysisResult(analysisJob: AnalysisJobDto): boolean {
+    this.nisqAnalyzerService.getJob(analysisJob.id).subscribe((jobResult) => {
+      this.jobReady = jobResult.ready;
+      this.analyzerJob = jobResult;
+      this.analyzerResults = jobResult.analysisResultList;
+    });
+    return true;
+  }
 
   groupResultsByImplementation(
     analysisResults: AnalysisResultDto[]
