@@ -137,16 +137,7 @@
                   Backend Name
                 </th>
                 <td class="backend-column" mat-cell *matCellDef="let element">
-                  {{ element.qpu }}
-                  <button
-                          mat-raised-button
-                          type="button"
-                          color="accent"
-                          (click)="showBackendQueueSize(element)"
-                  >
-                    ?
-                  </button>
-                  Test {{queueLengths[element.qpu]}}
+                  <strong>{{ element.qpu }}</strong> (Queue length: {{queueLengths[element.qpu]}})
                 </td>
               </ng-container>
 
@@ -188,10 +179,8 @@
                   *matCellDef="let element"
                   [attr.colspan]="analyzeColumns.length"
                 >
-                  <div
-                    class="element-detail"
-                    [@detailExpand]="
                   <div class="element-detail"
+                       [@detailExpand]="
                       element == expandedElement ? 'expanded' : 'collapsed'
                     "
                   >
