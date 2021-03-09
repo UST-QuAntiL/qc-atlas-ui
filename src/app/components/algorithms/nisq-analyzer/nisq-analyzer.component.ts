@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import {
   animate,
@@ -58,6 +58,8 @@ export class NisqAnalyzerComponent implements OnInit {
   jobReady = false;
   expandedElement: AnalysisResultDto | null;
   pollingAnalysisJobData: any;
+  queueLengths = new Map<string, number>();
+  getBackend = false;
 
   // 3) Execution
   resultBackendColumns = ['backendName', 'width', 'depth'];
@@ -229,9 +231,21 @@ export class NisqAnalyzerComponent implements OnInit {
     return result;
   }
 
-  refresh(): void {
-    this.ngOnInit();
+  showBackendQueueSize(analysisResult: AnalysisResultDto): void {
+    this.nisqAnalyzerService
+      .getIBMQBackendState(analysisResult.qpu)
+      .subscribe((data) => {
+        this.queueLengths[analysisResult.qpu] = data.lengthQueue;
+      });
   }
+}
+
+interface QiskitBackendState {
+  state: boolean;
+  status: string;
+  message: string;
+  lengthQueue: number;
+  backend_version: string;
 }
 
 export interface GroupedResults {

@@ -83,11 +83,9 @@ export class NisqAnalyzerService {
     return Object.values(paramMap);
   }
 
-  getIBMQBackendState(
-    backendName: string
-  ): Observable<HttpResponse<QiskitBackendState>> {
+  getIBMQBackendState(backendName: string): Observable<QiskitBackendState> {
     const url = this.ibmqQueueSizeUrl.replace(/<backendName>/g, backendName);
-    return this.http.get<QiskitBackendState>(url, { observe: 'response' });
+    return this.http.get<QiskitBackendState>(url);
   }
 }
 

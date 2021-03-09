@@ -15,14 +15,6 @@
           >
             New Analysis
           </button>
-          <button
-                  mat-raised-button
-                  type="Refresh"
-                  color="accent"
-                  (click)="refresh()"
-          >
-            Refresh
-          </button>
         </div>
         <table
                 mat-table
@@ -146,6 +138,15 @@
                 </th>
                 <td class="backend-column" mat-cell *matCellDef="let element">
                   {{ element.qpu }}
+                  <button
+                          mat-raised-button
+                          type="button"
+                          color="accent"
+                          (click)="showBackendQueueSize(element)"
+                  >
+                    ?
+                  </button>
+                  Test {{queueLengths[element.qpu]}}
                 </td>
               </ng-container>
 
@@ -190,11 +191,10 @@
                   <div
                     class="element-detail"
                     [@detailExpand]="
+                  <div class="element-detail"
                       element == expandedElement ? 'expanded' : 'collapsed'
                     "
                   >
-                    Max depth: {{ element.maxDepth }} Qbits:
-                    {{ element.qbits }} Provider: {{ element.backendProviderName }}
                   </div>
                 </td>
               </ng-container>
@@ -205,9 +205,7 @@
                 *matRowDef="let element; columns: analyzeColumns"
                 class="element-row"
                 [class.example-expanded-row]="expandedElement === element"
-                (click)="
-                  expandedElement = expandedElement === element ? null : element
-                "
+                (click)="expandedElement = expandedElement === element ? null : element"
               ></tr>
               <tr
                 mat-row
