@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import {
   animate,
@@ -52,18 +52,18 @@ export class NisqAnalyzerComponent implements OnInit {
   analyzerResults: AnalysisResultDto[] = [];
   jobColumns = ['inputParameters', 'time', 'ready'];
   analyzerJobs$: Observable<AnalysisJobDto[]>;
-  analyzerJobList: AnalysisJobDto[];
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
   analyzerJob: AnalysisJobDto;
   jobReady = false;
   expandedElement: AnalysisResultDto | null;
   pollingAnalysisJobData: any;
   queueLengths = new Map<string, number>();
-  getBackend = false;
+  executionResultsAvailable = new Map<string, boolean>();
 
   // 3) Execution
   resultBackendColumns = ['backendName', 'width', 'depth'];
   executedAnalyseResult: AnalysisResultDto;
+  expandedElementExecResult: ExecutionResultDto | null;
   results?: ExecutionResultDto = undefined;
 
   constructor(
@@ -182,6 +182,7 @@ export class NisqAnalyzerComponent implements OnInit {
 
       for (const analysisResult of this.analyzerResults) {
         this.showBackendQueueSize(analysisResult);
+        this.hasExecutionResult(analysisResult);
       }
     });
     return true;
@@ -228,6 +229,36 @@ export class NisqAnalyzerComponent implements OnInit {
           .subscribe((finalResult) => (this.results = finalResult));
       }
     });
+  }
+
+  hasExecutionResult(analysisResult: AnalysisResultDto): void {
+    this.analysisResultService
+      .getAnalysisResult({ resId: analysisResult.id })
+      .subscribe((result) => {
+        this.executionResultsAvailable[analysisResult.id] = !!Object.keys(
+          result._links
+        ).find((key) => key.startsWith('execute-'));
+      });
+  }
+
+  showExecutionResult(analysisResult: AnalysisResultDto): void {
+    if (Object.is(this.expandedElement, analysisResult)) {
+      this.expandedElement = undefined;
+      this.expandedElementExecResult = undefined;
+      return;
+    }
+    this.analysisResultService
+      .getAnalysisResult({ resId: analysisResult.id })
+      .subscribe((result) => {
+        const key = Object.keys(result._links).find((k) =>
+          k.startsWith('execute-')
+        );
+        const href = result._links[key].href;
+        this.http.get<ExecutionResultDto>(href).subscribe((dto) => {
+          this.expandedElement = analysisResult;
+          this.expandedElementExecResult = dto;
+        });
+      });
   }
 
   beautifyResult(result: string): string {
