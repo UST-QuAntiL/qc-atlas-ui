@@ -59,6 +59,7 @@ export class NisqAnalyzerComponent implements OnInit {
   pollingAnalysisJobData: any;
   queueLengths = new Map<string, number>();
   executionResultsAvailable = new Map<string, boolean>();
+  loadingResults = new Map<string, boolean>();
 
   // 3) Execution
   resultBackendColumns = ['backendName', 'width', 'depth'];
@@ -210,6 +211,7 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   execute(analysisResult: AnalysisResultDto): void {
+    this.loadingResults[analysisResult.id] = true;
     this.results = undefined;
     this.executedAnalyseResult = analysisResult;
     this.nisqAnalyzerService.execute(analysisResult.id).subscribe(
@@ -247,6 +249,7 @@ export class NisqAnalyzerComponent implements OnInit {
         this.executionResultsAvailable[analysisResult.id] = !!Object.keys(
           result._links
         ).find((key) => key.startsWith('execute-'));
+        this.loadingResults[analysisResult.id] = false;
       });
   }
 

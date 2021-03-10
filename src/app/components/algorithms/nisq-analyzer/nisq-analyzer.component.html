@@ -162,24 +162,30 @@
               <ng-container matColumnDef="execution">
                 <th mat-header-cell *matHeaderCellDef>Execution Result</th>
                 <td mat-cell *matCellDef="let element">
-                  <button
-                          mat-raised-button
-                          *ngIf="executionResultsAvailable[element.id]; else performExecution"
-                          type="button"
-                          color="accent"
-                          (click)="showExecutionResult(element)"
+                  <div *ngIf="loadingResults[element.id]; else showButtons" class="mat-spinner-buttons"
                   >
-                    Show result
-                  </button>
-                  <ng-template #performExecution>
+                    <mat-spinner [diameter]="40"></mat-spinner>
+                  </div>
+                  <ng-template #showButtons>
                     <button
                             mat-raised-button
+                            *ngIf="executionResultsAvailable[element.id]; else performExecution"
                             type="button"
-                            color="primary"
-                            (click)="execute(element)"
+                            color="accent"
+                            (click)="showExecutionResult(element)"
                     >
-                      Execute
+                      Show result
                     </button>
+                    <ng-template #performExecution>
+                      <button
+                              mat-raised-button
+                              type="button"
+                              color="primary"
+                              (click)="execute(element)"
+                      >
+                        Execute
+                      </button>
+                    </ng-template>
                   </ng-template>
                 </td>
               </ng-container>
