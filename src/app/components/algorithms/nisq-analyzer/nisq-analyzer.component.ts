@@ -212,24 +212,32 @@ export class NisqAnalyzerComponent implements OnInit {
   execute(analysisResult: AnalysisResultDto): void {
     this.results = undefined;
     this.executedAnalyseResult = analysisResult;
-    this.nisqAnalyzerService.execute(analysisResult.id).subscribe((results) => {
-      if (results.status === 'FAILED' || results.status === 'FINISHED') {
-        this.results = results;
-      } else {
-        interval(1000)
-          .pipe(
-            exhaustMap(() =>
-              this.http.get<ExecutionResultDto>(results._links['self'].href)
-            ),
-            first(
-              (value) =>
-                value.status === 'FAILED' || value.status === 'FINISHED'
+    this.nisqAnalyzerService.execute(analysisResult.id).subscribe(
+      (results) => {
+        if (results.status === 'FAILED' || results.status === 'FINISHED') {
+          this.results = results;
+        } else {
+          interval(1000)
+            .pipe(
+              exhaustMap(() =>
+                this.http.get<ExecutionResultDto>(results._links['self'].href)
+              ),
+              first(
+                (value) =>
+                  value.status === 'FAILED' || value.status === 'FINISHED'
+              )
             )
-          )
-          .subscribe((finalResult) => (this.results = finalResult));
+            .subscribe((finalResult) => (this.results = finalResult));
+        }
+        this.utilService.callSnackBar(
+          'Successfully started execution "' + results.id + '".'
+        );
+        this.hasExecutionResult(analysisResult);
+      },
+      () => {
+        this.utilService.callSnackBar('Error! Could not start execution.');
       }
-      this.hasExecutionResult(analysisResult);
-    });
+    );
   }
 
   hasExecutionResult(analysisResult: AnalysisResultDto): void {
