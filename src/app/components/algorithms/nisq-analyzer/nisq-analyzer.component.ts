@@ -228,6 +228,7 @@ export class NisqAnalyzerComponent implements OnInit {
           )
           .subscribe((finalResult) => (this.results = finalResult));
       }
+      this.hasExecutionResult(analysisResult);
     });
   }
 

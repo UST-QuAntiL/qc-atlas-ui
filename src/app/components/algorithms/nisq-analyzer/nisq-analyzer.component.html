@@ -159,27 +159,28 @@
                 </td>
               </ng-container>
 
-              <ng-container #vc matColumnDef="execution">
+              <ng-container matColumnDef="execution">
                 <th mat-header-cell *matHeaderCellDef>Execution Result</th>
                 <td mat-cell *matCellDef="let element">
                   <button
                           mat-raised-button
-                          *ngIf="executionResultsAvailable[element.id]"
+                          *ngIf="executionResultsAvailable[element.id]; else performExecution"
                           type="button"
                           color="accent"
                           (click)="showExecutionResult(element)"
                   >
                     Show result
                   </button>
-                  <button
-                          mat-raised-button
-                          *ngIf="!executionResultsAvailable[element.id]"
-                          type="button"
-                          color="primary"
-                          (click)="execute(element); hasExecutionResult(element)"
-                  >
-                    Execute
-                  </button>
+                  <ng-template #performExecution>
+                    <button
+                            mat-raised-button
+                            type="button"
+                            color="primary"
+                            (click)="execute(element)"
+                    >
+                      Execute
+                    </button>
+                  </ng-template>
                 </td>
               </ng-container>
 
