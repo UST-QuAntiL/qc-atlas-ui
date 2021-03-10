@@ -21,6 +21,8 @@ import {
   AnalysisJobDto,
 } from 'api-nisq/models';
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
+import { ImplementationService } from 'api-nisq/services/implementation.service';
+import { SdksService } from 'api-nisq/services/sdks.service';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
@@ -46,6 +48,8 @@ export class NisqAnalyzerComponent implements OnInit {
   // 1) Selection
   params: ParameterDto[];
   cloudServices: CloudServiceDto[];
+  implListEmpty = true;
+  sdksEmpty = true;
 
   // 2) Analyze phase
   analyzeColumns = ['backendName', 'width', 'depth', 'execution'];
@@ -73,10 +77,24 @@ export class NisqAnalyzerComponent implements OnInit {
     private nisqAnalyzerService: NisqAnalyzerService,
     private utilService: UtilService,
     private formBuilder: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private implementationService: ImplementationService,
+    private sdkService: SdksService
   ) {}
 
   ngOnInit(): void {
+    this.sdkService.getSdks().subscribe((sdks) => {
+      if (sdks.sdkDtos.length > 0) {
+        this.sdksEmpty = false;
+      }
+    });
+    this.implementationService
+      .getImplementations({ algoId: this.algo.id })
+      .subscribe((implementations) => {
+        if (implementations.implementationDtos.length > 0) {
+          this.implListEmpty = false;
+        }
+      });
     this.analyzerJobs$ = this.sort$
       .pipe(
         switchMap((sort) =>
