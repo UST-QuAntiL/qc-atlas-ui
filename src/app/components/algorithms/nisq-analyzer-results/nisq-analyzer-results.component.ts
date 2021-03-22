@@ -63,7 +63,7 @@ export class NisqAnalyzerResultsComponent implements OnInit {
       if (key === 'token') {
         continue;
       }
-      result.push(`${key}: ${analysisResult.inputParameters[key]}`);
+      result.push(`${key} = ${analysisResult.inputParameters[key]}`);
     }
     return result.join(' ');
   }

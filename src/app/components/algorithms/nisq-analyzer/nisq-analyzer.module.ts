@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
+import { GenericsModule } from '../../generics/generics.module';
 import { NisqAnalyzerComponent } from './nisq-analyzer.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
 
@@ -24,6 +26,8 @@ import { NisqAnalyzerService } from './nisq-analyzer.service';
     MatSelectModule,
     MatTableModule,
     MatProgressSpinnerModule,
+    MatCardModule,
+    GenericsModule,
   ],
   exports: [NisqAnalyzerComponent],
   providers: [NisqAnalyzerService],

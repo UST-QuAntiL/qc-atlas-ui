@@ -7,6 +7,8 @@ import {
   RootService,
 } from 'api-nisq/services';
 import {
+  AnalysisJobDto,
+  AnalysisJobListDto,
   AnalysisResultDto,
   ParameterDto,
   SelectionRequestDto,
@@ -34,10 +36,14 @@ export class NisqAnalyzerService {
       .pipe(map((list) => list.parameters));
   }
 
-  analyze(body: SelectionRequestDto): Observable<AnalysisResultDto[]> {
+  analyze(body: SelectionRequestDto): Observable<AnalysisJobDto> {
     return this.rootService
       .selectImplementations({ body })
-      .pipe(map((list) => list.analysisResultList));
+      .pipe(map((job) => job));
+  }
+
+  getJob(resId: string): Observable<AnalysisJobDto> {
+    return this.analysisResultService.getAnalysisJob({ resId });
   }
 
   execute(resId: string) {
@@ -77,11 +83,9 @@ export class NisqAnalyzerService {
     return Object.values(paramMap);
   }
 
-  getIBMQBackendState(
-    backendName: string
-  ): Observable<HttpResponse<QiskitBackendState>> {
+  getIBMQBackendState(backendName: string): Observable<QiskitBackendState> {
     const url = this.ibmqQueueSizeUrl.replace(/<backendName>/g, backendName);
-    return this.http.get<QiskitBackendState>(url, { observe: 'response' });
+    return this.http.get<QiskitBackendState>(url);
   }
 }
 

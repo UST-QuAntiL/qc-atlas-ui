@@ -57,3 +57,31 @@ tr.element-row:not(.expanded-row):active {
 .action-column {
   min-width: 125px;
 }
+
+.btn-wrapper {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.btn-wrapper > button {
+  margin-right: 10px;
+  width: 15em;
+}
+
+.mat-raised-button {
+  width: 10em;
+}
+
+:host ::ng-deep .mat-horizontal-stepper-header-container {
+  display: none !important;
+}
+
+.mat-spinner-buttons {
+  margin-left: 45px;
+}
+
+.impls-required {
+  display: flex;
+  justify-content: center;
+}
+

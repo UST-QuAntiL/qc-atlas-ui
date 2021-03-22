@@ -37,6 +37,7 @@ import { AddPatternRelationDialogComponent } from './dialogs/add-pattern-relatio
 import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-relation-dialog.component';
 import { ImplementationPropertiesComponent } from './implementation-properties/implementation-properties.component';
 import { NisqAnalyzerResultsComponent } from './nisq-analyzer-results/nisq-analyzer-results.component';
+import { AddNewAnalysisDialogComponent } from './dialogs/add-new-analysis-dialog.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { NisqAnalyzerResultsComponent } from './nisq-analyzer-results/nisq-analy
     AddAlgorithmRelationDialogComponent,
     ImplementationPropertiesComponent,
     NisqAnalyzerResultsComponent,
+    AddNewAnalysisDialogComponent,
   ],
   imports: [
     MatTabsModule,

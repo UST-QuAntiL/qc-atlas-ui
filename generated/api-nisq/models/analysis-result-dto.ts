@@ -5,7 +5,7 @@ export type AnalysisResultDto = {
   id?: string;
   qpu?: string;
   provider?: string;
-  sdkConnector?: string;
+  compiler?: string;
   implementation?: ImplementationDto;
   analyzedDepth?: number;
   analyzedWidth?: number;
