@@ -35,7 +35,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getCloudServices
    */
-  static readonly GetCloudServicesPath = '/v1/cloud-services';
+  static readonly GetCloudServicesPath = '/cloud-services';
 
   /**
    * Retrieve all cloud services.
@@ -151,7 +151,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation createCloudService
    */
-  static readonly CreateCloudServicePath = '/v1/cloud-services';
+  static readonly CreateCloudServicePath = '/cloud-services';
 
   /**
    * Define the basic properties of a cloud service. References to sub-objects (e.g. a compute resource) can be added via sub-routes (e.g. POST on /cloud-services/{cloudServiceId}/compute-resources).
@@ -253,7 +253,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getCloudService
    */
-  static readonly GetCloudServicePath = '/v1/cloud-services/{cloudServiceId}';
+  static readonly GetCloudServicePath = '/cloud-services/{cloudServiceId}';
 
   /**
    * Retrieve a specific cloud service and its basic properties.
@@ -355,8 +355,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation updateCloudService
    */
-  static readonly UpdateCloudServicePath =
-    '/v1/cloud-services/{cloudServiceId}';
+  static readonly UpdateCloudServicePath = '/cloud-services/{cloudServiceId}';
 
   /**
    * Update the basic properties of a cloud service (e.g. name). References to sub-objects (e.g. a compute resource) are not updated via this operation - use the corresponding sub-route for updating them (e.g. PUT on /compute-resources/{computeResourceId}).
@@ -462,8 +461,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation deleteCloudService
    */
-  static readonly DeleteCloudServicePath =
-    '/v1/cloud-services/{cloudServiceId}';
+  static readonly DeleteCloudServicePath = '/cloud-services/{cloudServiceId}';
 
   /**
    * Delete a cloud service. This also removes all references to other entities (e.g. compute resource).
@@ -519,7 +517,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getComputeResourcesOfCloudService
    */
   static readonly GetComputeResourcesOfCloudServicePath =
-    '/v1/cloud-services/{cloudServiceId}/compute-resources';
+    '/cloud-services/{cloudServiceId}/compute-resources';
 
   /**
    * Retrieve referenced compute resources of an cloud service. If none are found an empty list is returned.
@@ -647,7 +645,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation linkCloudServiceAndComputeResource
    */
   static readonly LinkCloudServiceAndComputeResourcePath =
-    '/v1/cloud-services/{cloudServiceId}/compute-resources';
+    '/cloud-services/{cloudServiceId}/compute-resources';
 
   /**
    * Add a reference to an existing compute resource (that was previously created via a POST on e.g. /compute-resources). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -709,7 +707,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation unlinkCloudServiceAndComputeResource
    */
   static readonly UnlinkCloudServiceAndComputeResourcePath =
-    '/v1/cloud-services/{cloudServiceId}/compute-resources/{computeResourceId}';
+    '/cloud-services/{cloudServiceId}/compute-resources/{computeResourceId}';
 
   /**
    * Delete a reference to a compute resource of a cloud service. The reference has to be previously created via a POST on /cloud-services/{cloudServiceId}/compute-resources).
@@ -770,7 +768,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getSoftwarePlatformsOfCloudService
    */
   static readonly GetSoftwarePlatformsOfCloudServicePath =
-    '/v1/cloud-services/{cloudServiceId}/software-platforms';
+    '/cloud-services/{cloudServiceId}/software-platforms';
 
   /**
    * Retrieve referenced software platforms of an cloud service. If none are found an empty list is returned.
@@ -897,7 +895,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getComputeResources
    */
-  static readonly GetComputeResourcesPath = '/v1/compute-resources';
+  static readonly GetComputeResourcesPath = '/compute-resources';
 
   /**
    * Retrieve all compute resources.
@@ -1019,7 +1017,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation createComputeResource
    */
-  static readonly CreateComputeResourcePath = '/v1/compute-resources';
+  static readonly CreateComputeResourcePath = '/compute-resources';
 
   /**
    * Define the basic properties of a compute resource. References to sub-objects (e.g. a compute resource property) can be added via sub-routes (e.g. POST on /compute-resources/{computeResourceId}/compute-resource-properties).
@@ -1132,7 +1130,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getComputeResource
    */
   static readonly GetComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}';
+    '/compute-resources/{computeResourceId}';
 
   /**
    * Retrieve a specific compute resource and its basic properties.
@@ -1245,7 +1243,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation updateComputeResource
    */
   static readonly UpdateComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}';
+    '/compute-resources/{computeResourceId}';
 
   /**
    * Update the basic properties of a compute resource (e.g. name). References to sub-objects (e.g. a compute resource property) are not updated via this operation - use the corresponding sub-route for updating them (e.g. PUT on /compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}).
@@ -1362,7 +1360,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation deleteComputeResource
    */
   static readonly DeleteComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}';
+    '/compute-resources/{computeResourceId}';
 
   /**
    * Delete a compute resource. This also removes all references to other entities (e.g. software platform).
@@ -1420,7 +1418,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getCloudServicesOfComputeResource
    */
   static readonly GetCloudServicesOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/cloud-services';
+    '/compute-resources/{computeResourceId}/cloud-services';
 
   /**
    * Retrieve referenced cloud services of a compute resource. If none are found an empty list is returned.
@@ -1537,7 +1535,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getComputeResourcePropertiesOfComputeResource
    */
   static readonly GetComputeResourcePropertiesOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/compute-resource-properties';
+    '/compute-resources/{computeResourceId}/compute-resource-properties';
 
   /**
    * Retrieve referenced compute resource properties of a compute resource. If none are found an empty list is returned.
@@ -1679,7 +1677,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation createComputeResourcePropertyForComputeResource
    */
   static readonly CreateComputeResourcePropertyForComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/compute-resource-properties';
+    '/compute-resources/{computeResourceId}/compute-resource-properties';
 
   /**
    * Add a compute resource property (e.g. a certain number of qubits) that is provided by an compute resource. The compute resource property type has to be already created (e.g. via POST on /compute-resource-property-types). As a result only the ID is required for the compute resource property type, other attributes will be ignored not changed.
@@ -1773,7 +1771,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getComputeResourcePropertyOfComputeResource
    */
   static readonly GetComputeResourcePropertyOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
+    '/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Retrieve a specific compute resource property of an compute resource.
@@ -1870,7 +1868,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation updateComputeResourcePropertyOfComputeResource
    */
   static readonly UpdateComputeResourcePropertyOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
+    '/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Update a Compute resource property of an compute resource. For the compute resource property type only the ID is required, other compute resource property type attributes will be ignored and not changed.
@@ -1971,7 +1969,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation deleteComputeResourcePropertyOfComputeResource
    */
   static readonly DeleteComputeResourcePropertyOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
+    '/compute-resources/{computeResourceId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Delete a Compute resource property of an compute resource. The compute resource property type is not affected by this.
@@ -2036,7 +2034,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getSoftwarePlatformsOfComputeResource
    */
   static readonly GetSoftwarePlatformsOfComputeResourcePath =
-    '/v1/compute-resources/{computeResourceId}/software-platforms';
+    '/compute-resources/{computeResourceId}/software-platforms';
 
   /**
    * Retrieve referenced software platform of a compute resource. If none are found an empty list is returned.
@@ -2158,7 +2156,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation getSoftwarePlatforms
    */
-  static readonly GetSoftwarePlatformsPath = '/v1/software-platforms';
+  static readonly GetSoftwarePlatformsPath = '/software-platforms';
 
   /**
    * Retrieve all software platforms.
@@ -2280,7 +2278,7 @@ export class ExecutionEnvironmentsService extends BaseService {
   /**
    * Path part for operation createSoftwarePlatform
    */
-  static readonly CreateSoftwarePlatformPath = '/v1/software-platforms';
+  static readonly CreateSoftwarePlatformPath = '/software-platforms';
 
   /**
    * Define the basic properties of a software platform. References to sub-objects (e.g. a compute resource) can be added via sub-routes (e.g. via POST on /compute-resources).
@@ -2378,7 +2376,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getSoftwarePlatform
    */
   static readonly GetSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}';
+    '/software-platforms/{softwarePlatformId}';
 
   /**
    * Retrieve a specific software platform and its basic properties.
@@ -2476,7 +2474,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation updateSoftwarePlatform
    */
   static readonly UpdateSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}';
+    '/software-platforms/{softwarePlatformId}';
 
   /**
    * Update the basic properties of a software platform (e.g. name). References to sub-objects (e.g. a compute resource) are not updated via this operation - use the corresponding sub-route for updating them (e.g. via PUT on /compute-resources/{computeResourceId}).
@@ -2578,7 +2576,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation deleteSoftwarePlatform
    */
   static readonly DeleteSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}';
+    '/software-platforms/{softwarePlatformId}';
 
   /**
    * Delete a software platform. This also removes all references to other entities (e.g. compute resource)
@@ -2636,7 +2634,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getCloudServicesOfSoftwarePlatform
    */
   static readonly GetCloudServicesOfSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}/cloud-services';
+    '/software-platforms/{softwarePlatformId}/cloud-services';
 
   /**
    * Retrieve referenced cloud services of a software platform. If none are found an empty list is returned.
@@ -2758,7 +2756,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation linkSoftwarePlatformAndCloudService
    */
   static readonly LinkSoftwarePlatformAndCloudServicePath =
-    '/v1/software-platforms/{softwarePlatformId}/cloud-services';
+    '/software-platforms/{softwarePlatformId}/cloud-services';
 
   /**
    * Add a reference to an existing cloud service (that was previously created via a POST on e.g. /cloud-services). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -2820,7 +2818,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation unlinkSoftwarePlatformAndCloudService
    */
   static readonly UnlinkSoftwarePlatformAndCloudServicePath =
-    '/v1/software-platforms/{softwarePlatformId}/cloud-services/{cloudServiceId}';
+    '/software-platforms/{softwarePlatformId}/cloud-services/{cloudServiceId}';
 
   /**
    * Delete a reference to a {object} of an {object}. The reference has to be previously created via a POST on /software-platforms/{softwarePlatformId}/cloud-services).
@@ -2881,7 +2879,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getComputeResourcesOfSoftwarePlatform
    */
   static readonly GetComputeResourcesOfSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}/compute-resources';
+    '/software-platforms/{softwarePlatformId}/compute-resources';
 
   /**
    * Retrieve referenced compute resources for a software platform. If none are found an empty list is returned.
@@ -3009,7 +3007,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation linkSoftwarePlatformAndComputeResource
    */
   static readonly LinkSoftwarePlatformAndComputeResourcePath =
-    '/v1/software-platforms/{softwarePlatformId}/compute-resources';
+    '/software-platforms/{softwarePlatformId}/compute-resources';
 
   /**
    * Add a reference to an existing compute resource (that was previously created via a POST on e.g. /compute-resources). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -3071,7 +3069,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation unlinkSoftwarePlatformAndComputeResource
    */
   static readonly UnlinkSoftwarePlatformAndComputeResourcePath =
-    '/v1/software-platforms/{softwarePlatformId}/compute-resources/{computeResourceId}';
+    '/software-platforms/{softwarePlatformId}/compute-resources/{computeResourceId}';
 
   /**
    * Delete a reference to a {object} of an {object}. The reference has to be previously created via a POST on /software-platforms/{softwarePlatformId}/compute-resources).
@@ -3132,7 +3130,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getImplementationsOfSoftwarePlatform
    */
   static readonly GetImplementationsOfSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}/implementations';
+    '/software-platforms/{softwarePlatformId}/implementations';
 
   /**
    * Get a specific implementations of a software platform. If none are found an empty list is returned.
@@ -3260,7 +3258,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation linkSoftwarePlatformAndImplementation
    */
   static readonly LinkSoftwarePlatformAndImplementationPath =
-    '/v1/software-platforms/{softwarePlatformId}/implementations';
+    '/software-platforms/{softwarePlatformId}/implementations';
 
   /**
    * Add a reference to an existing implementation (that was previously created via a POST on e.g. /algorithms/{algorithmId}/ implementations). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -3322,7 +3320,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation getImplementationOfSoftwarePlatform
    */
   static readonly GetImplementationOfSoftwarePlatformPath =
-    '/v1/software-platforms/{softwarePlatformId}/implementations/{implementationId}';
+    '/software-platforms/{softwarePlatformId}/implementations/{implementationId}';
 
   /**
    * Retrieve a specific implementation of a software platform. If none are found an empty list is returned.
@@ -3411,7 +3409,7 @@ export class ExecutionEnvironmentsService extends BaseService {
    * Path part for operation unlinkSoftwarePlatformAndImplementation
    */
   static readonly UnlinkSoftwarePlatformAndImplementationPath =
-    '/v1/software-platforms/{softwarePlatformId}/implementations/{implementationId}';
+    '/software-platforms/{softwarePlatformId}/implementations/{implementationId}';
 
   /**
    * Delete a reference to a implementation of an software platform. The reference has to be previously created via a POST on /software-platforms/{softwarePlatformId}/implementations).

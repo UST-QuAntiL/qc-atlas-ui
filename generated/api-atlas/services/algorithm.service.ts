@@ -16,11 +16,16 @@ import { ClassicAlgorithmDto } from '../models/classic-algorithm-dto';
 import { ClassicImplementationDto } from '../models/classic-implementation-dto';
 import { ComputeResourcePropertyDto } from '../models/compute-resource-property-dto';
 import { ComputeResourcePropertyTypeDto } from '../models/compute-resource-property-type-dto';
+import { DiscussionCommentDto } from '../models/discussion-comment-dto';
+import { DiscussionTopicDto } from '../models/discussion-topic-dto';
 import { EntityModelAlgorithmDto } from '../models/entity-model-algorithm-dto';
 import { EntityModelAlgorithmRelationDto } from '../models/entity-model-algorithm-relation-dto';
 import { EntityModelApplicationAreaDto } from '../models/entity-model-application-area-dto';
 import { EntityModelComputeResourcePropertyDto } from '../models/entity-model-compute-resource-property-dto';
+import { EntityModelDiscussionCommentDto } from '../models/entity-model-discussion-comment-dto';
+import { EntityModelDiscussionTopicDto } from '../models/entity-model-discussion-topic-dto';
 import { EntityModelImplementationDto } from '../models/entity-model-implementation-dto';
+import { EntityModelImplementationPackageDto } from '../models/entity-model-implementation-package-dto';
 import { EntityModelPatternRelationDto } from '../models/entity-model-pattern-relation-dto';
 import { EntityModelProblemTypeDto } from '../models/entity-model-problem-type-dto';
 import { EntityModelPublicationDto } from '../models/entity-model-publication-dto';
@@ -28,6 +33,7 @@ import { EntityModelSketchDto } from '../models/entity-model-sketch-dto';
 import { EntityModelSoftwarePlatformDto } from '../models/entity-model-software-platform-dto';
 import { EntityModelTagDto } from '../models/entity-model-tag-dto';
 import { ImplementationDto } from '../models/implementation-dto';
+import { ImplementationPackageDto } from '../models/implementation-package-dto';
 import { Link } from '../models/link';
 import { PageMetadata } from '../models/page-metadata';
 import { PatternRelationDto } from '../models/pattern-relation-dto';
@@ -51,7 +57,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getAlgorithms
    */
-  static readonly GetAlgorithmsPath = '/v1/algorithms';
+  static readonly GetAlgorithmsPath = '/algorithms';
 
   /**
    * Retrieve all algorithms (quantum, hybrid and classic).
@@ -167,7 +173,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation createAlgorithm
    */
-  static readonly CreateAlgorithmPath = '/v1/algorithms';
+  static readonly CreateAlgorithmPath = '/algorithms';
 
   /**
    * Define the basic properties of an algorithm. References to sub-objects (e.g. a ProblemType) can be added via sub-routes (e.g. POST on /algorithms/{algorithmId}/problem-types).
@@ -246,7 +252,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getAlgorithm
    */
-  static readonly GetAlgorithmPath = '/v1/algorithms/{algorithmId}';
+  static readonly GetAlgorithmPath = '/algorithms/{algorithmId}';
 
   /**
    * Retrieve a specific algorithm and its basic properties.
@@ -325,7 +331,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation updateAlgorithm
    */
-  static readonly UpdateAlgorithmPath = '/v1/algorithms/{algorithmId}';
+  static readonly UpdateAlgorithmPath = '/algorithms/{algorithmId}';
 
   /**
    * Update the basic properties of an algorithm (e.g. name). References to sub-objects (e.g. a ProblemType) are not updated via this operation - use the corresponding sub-route for updating them (e.g. PUT on /problem-types/{problemTypeId}).
@@ -408,7 +414,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation deleteAlgorithm
    */
-  static readonly DeleteAlgorithmPath = '/v1/algorithms/{algorithmId}';
+  static readonly DeleteAlgorithmPath = '/algorithms/{algorithmId}';
 
   /**
    * Delete an algorithm. This also deletes all entities that depend on it (e.g. the algorithm's relations to other algorithms).
@@ -464,7 +470,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getAlgorithmRelationsOfAlgorithm
    */
   static readonly GetAlgorithmRelationsOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/algorithm-relations';
+    '/algorithms/{algorithmId}/algorithm-relations';
 
   /**
    * Retrieve all relations of an algorithm.
@@ -594,7 +600,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation createAlgorithmRelation
    */
   static readonly CreateAlgorithmRelationPath =
-    '/v1/algorithms/{algorithmId}/algorithm-relations';
+    '/algorithms/{algorithmId}/algorithm-relations';
 
   /**
    * Create a relation between two algorithms.The algorithm relation type has to be already created (e.g. via POST on /algorithm-relation-types). As a result only the ID is required for the algorithm relation type, other attributes will be ignored not changed.
@@ -696,7 +702,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getAlgorithmRelation
    */
   static readonly GetAlgorithmRelationPath =
-    '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
+    '/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
    * Retrieve a specific relation between two algorithms.
@@ -797,7 +803,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation updateAlgorithmRelation
    */
   static readonly UpdateAlgorithmRelationPath =
-    '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
+    '/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
    * Update a relation between two algorithms. For the algorithm relation type only the ID is required,other algorithm relation type attributes will be ignored and not changed.
@@ -902,7 +908,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deleteAlgorithmRelation
    */
   static readonly DeleteAlgorithmRelationPath =
-    '/v1/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
+    '/algorithms/{algorithmId}/algorithm-relations/{algorithmRelationId}';
 
   /**
    * Delete a specific relation between a two algorithms. The algorithm relation type is not affected by this.
@@ -963,7 +969,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getApplicationAreasOfAlgorithm
    */
   static readonly GetApplicationAreasOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/application-areas';
+    '/algorithms/{algorithmId}/application-areas';
 
   /**
    * Retrieve application areas of an algorithm. If none are found an empty list is returned.
@@ -1091,7 +1097,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation linkAlgorithmAndApplicationArea
    */
   static readonly LinkAlgorithmAndApplicationAreaPath =
-    '/v1/algorithms/{algorithmId}/application-areas';
+    '/algorithms/{algorithmId}/application-areas';
 
   /**
    * Add a reference to an existing application area (that was previously created via a POST on e.g. /application-areas). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -1153,7 +1159,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getApplicationAreaOfAlgorithm
    */
   static readonly GetApplicationAreaOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
+    '/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
 
   /**
    * Retrieve a specific application area of an algorithm.
@@ -1226,7 +1232,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation unlinkAlgorithmAndApplicationArea
    */
   static readonly UnlinkAlgorithmAndApplicationAreaPath =
-    '/v1/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
+    '/algorithms/{algorithmId}/application-areas/{applicationAreaId}';
 
   /**
    * Delete a reference to an application area of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/application-areas).
@@ -1287,7 +1293,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getComputeResourcePropertiesOfAlgorithm
    */
   static readonly GetComputeResourcePropertiesOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/compute-resource-properties';
+    '/algorithms/{algorithmId}/compute-resource-properties';
 
   /**
    * Retrieve the required compute resource properties of an algorithm. If none are found an empty list is returned.
@@ -1427,7 +1433,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation createComputeResourcePropertyForAlgorithm
    */
   static readonly CreateComputeResourcePropertyForAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/compute-resource-properties';
+    '/algorithms/{algorithmId}/compute-resource-properties';
 
   /**
    * Add a compute resource property (e.g. a certain number of qubits) that is required by an algorithm. The compute resource property type has to be already created (e.g. via POST on /compute-resource-property-types). As a result only the ID is required for the compute resource property type, other attributes will be ignored not changed.
@@ -1519,7 +1525,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getComputeResourcePropertyOfAlgorithm
    */
   static readonly GetComputeResourcePropertyOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
+    '/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Retrieve a specific compute resource property of an algorithm.
@@ -1614,7 +1620,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation updateComputeResourcePropertyOfAlgorithm
    */
   static readonly UpdateComputeResourcePropertyOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
+    '/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Update a Compute resource property of an algorithm. For the compute resource property type only the ID is required, other compute resource property type attributes will be ignored and not changed.
@@ -1713,7 +1719,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deleteComputeResourcePropertyOfAlgorithm
    */
   static readonly DeleteComputeResourcePropertyOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
+    '/algorithms/{algorithmId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Delete a Compute resource property of an algorithm. The compute resource property type is not affected by this.
@@ -1775,10 +1781,1366 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Path part for operation getDiscussionTopicsOfAlgorithm
+   */
+  static readonly GetDiscussionTopicsOfAlgorithmPath =
+    '/algorithms/{algorithmId}/discussion-topics';
+
+  /**
+   * Retrieve discussion topics of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionTopicsOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicsOfAlgorithm$Response(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { discussionTopics?: Array<EntityModelDiscussionTopicDto> };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetDiscussionTopicsOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion topics of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionTopicsOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicsOfAlgorithm(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    _embedded?: { discussionTopics?: Array<EntityModelDiscussionTopicDto> };
+    page?: PageMetadata;
+  }> {
+    return this.getDiscussionTopicsOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
+            };
+            page?: PageMetadata;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation createDiscussionTopicOfAlgorithm
+   */
+  static readonly CreateDiscussionTopicOfAlgorithmPath =
+    '/algorithms/{algorithmId}/discussion-topics';
+
+  /**
+   * Create a discussion topic of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createDiscussionTopicOfAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionTopicOfAlgorithm$Response(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      title: string;
+      description?: string;
+      status: 'OPEN' | 'CLOSED';
+      date: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.CreateDiscussionTopicOfAlgorithmPath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Create a discussion topic of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createDiscussionTopicOfAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionTopicOfAlgorithm(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<{
+    id: string;
+    title: string;
+    description?: string;
+    status: 'OPEN' | 'CLOSED';
+    date: string;
+    _links?: Array<Link>;
+  }> {
+    return this.createDiscussionTopicOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getDiscussionTopicOfAlgorithm
+   */
+  static readonly GetDiscussionTopicOfAlgorithmPath =
+    '/algorithms/{algorithmId}/discussion-topics/{topicId}';
+
+  /**
+   * Retrieve discussion topic of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionTopicOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicOfAlgorithm$Response(params: {
+    algorithmId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      title: string;
+      description?: string;
+      status: 'OPEN' | 'CLOSED';
+      date: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetDiscussionTopicOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion topic of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionTopicOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicOfAlgorithm(params: {
+    algorithmId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    id: string;
+    title: string;
+    description?: string;
+    status: 'OPEN' | 'CLOSED';
+    date: string;
+    _links?: Array<Link>;
+  }> {
+    return this.getDiscussionTopicOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation updateDiscussionTopicOfAlgorithm
+   */
+  static readonly UpdateDiscussionTopicOfAlgorithmPath =
+    '/algorithms/{algorithmId}/discussion-topics/{topicId}';
+
+  /**
+   * Update discussion topic of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateDiscussionTopicOfAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionTopicOfAlgorithm$Response(params: {
+    algorithmId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      title: string;
+      description?: string;
+      status: 'OPEN' | 'CLOSED';
+      date: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UpdateDiscussionTopicOfAlgorithmPath,
+      'put'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Update discussion topic of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateDiscussionTopicOfAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionTopicOfAlgorithm(params: {
+    algorithmId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<{
+    id: string;
+    title: string;
+    description?: string;
+    status: 'OPEN' | 'CLOSED';
+    date: string;
+    _links?: Array<Link>;
+  }> {
+    return this.updateDiscussionTopicOfAlgorithm$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deleteDiscussionTopicOfAlgorithm
+   */
+  static readonly DeleteDiscussionTopicOfAlgorithmPath =
+    '/algorithms/{algorithmId}/discussion-topics/{topicId}';
+
+  /**
+   * Delete discussion topic of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteDiscussionTopicOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionTopicOfAlgorithm$Response(params: {
+    algorithmId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.DeleteDiscussionTopicOfAlgorithmPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete discussion topic of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteDiscussionTopicOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionTopicOfAlgorithm(params: {
+    algorithmId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<void> {
+    return this.deleteDiscussionTopicOfAlgorithm$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getDiscussionCommentsOfDiscussionTopicOfAlgorithm
+   */
+  static readonly GetDiscussionCommentsOfDiscussionTopicOfAlgorithmPath =
+    '/algorithms/{algorithmId}/discussion-topics/{topicId}/discussion-comments';
+
+  /**
+   * Retrieve discussion comments of a discussion topic of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionCommentsOfDiscussionTopicOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentsOfDiscussionTopicOfAlgorithm$Response(params: {
+    algorithmId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: {
+        discussionComments?: Array<EntityModelDiscussionCommentDto>;
+      };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetDiscussionCommentsOfDiscussionTopicOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              discussionComments?: Array<EntityModelDiscussionCommentDto>;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion comments of a discussion topic of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionCommentsOfDiscussionTopicOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentsOfDiscussionTopicOfAlgorithm(params: {
+    algorithmId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    _embedded?: { discussionComments?: Array<EntityModelDiscussionCommentDto> };
+    page?: PageMetadata;
+  }> {
+    return this.getDiscussionCommentsOfDiscussionTopicOfAlgorithm$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              discussionComments?: Array<EntityModelDiscussionCommentDto>;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              discussionComments?: Array<EntityModelDiscussionCommentDto>;
+            };
+            page?: PageMetadata;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation createDiscussionCommentOfDiscussionTopicOfAlgorithm
+   */
+  static readonly CreateDiscussionCommentOfDiscussionTopicOfAlgorithmPath =
+    '/algorithms/{algorithmId}/discussion-topics/{topicId}/discussion-comments';
+
+  /**
+   * Create discussion comment of a discussion topic of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createDiscussionCommentOfDiscussionTopicOfAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(params: {
+    algorithmId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      text: string;
+      date: string;
+      replyTo?: DiscussionCommentDto;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.CreateDiscussionCommentOfDiscussionTopicOfAlgorithmPath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Create discussion comment of a discussion topic of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createDiscussionCommentOfDiscussionTopicOfAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionCommentOfDiscussionTopicOfAlgorithm(params: {
+    algorithmId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<{
+    id: string;
+    text: string;
+    date: string;
+    replyTo?: DiscussionCommentDto;
+    _links?: Array<Link>;
+  }> {
+    return this.createDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getDiscussionCommentOfDiscussionTopicOfAlgorithm
+   */
+  static readonly GetDiscussionCommentOfDiscussionTopicOfAlgorithmPath =
+    '/algorithms/{algorithmId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+
+  /**
+   * Retrieve discussion comment of a discussion topic of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionCommentOfDiscussionTopicOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(params: {
+    algorithmId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      text: string;
+      date: string;
+      replyTo?: DiscussionCommentDto;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetDiscussionCommentOfDiscussionTopicOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.path('commentId', params.commentId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion comment of a discussion topic of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionCommentOfDiscussionTopicOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentOfDiscussionTopicOfAlgorithm(params: {
+    algorithmId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    id: string;
+    text: string;
+    date: string;
+    replyTo?: DiscussionCommentDto;
+    _links?: Array<Link>;
+  }> {
+    return this.getDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation updateDiscussionCommentOfDiscussionTopicOfAlgorithm
+   */
+  static readonly UpdateDiscussionCommentOfDiscussionTopicOfAlgorithmPath =
+    '/algorithms/{algorithmId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+
+  /**
+   * Update discussion comment of a discussion topic of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateDiscussionCommentOfDiscussionTopicOfAlgorithm()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(params: {
+    algorithmId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      text: string;
+      date: string;
+      replyTo?: DiscussionCommentDto;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UpdateDiscussionCommentOfDiscussionTopicOfAlgorithmPath,
+      'put'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.path('commentId', params.commentId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Update discussion comment of a discussion topic of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateDiscussionCommentOfDiscussionTopicOfAlgorithm$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionCommentOfDiscussionTopicOfAlgorithm(params: {
+    algorithmId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<{
+    id: string;
+    text: string;
+    date: string;
+    replyTo?: DiscussionCommentDto;
+    _links?: Array<Link>;
+  }> {
+    return this.updateDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deleteDiscussionCommentOfDiscussionTopicOfAlgorithm
+   */
+  static readonly DeleteDiscussionCommentOfDiscussionTopicOfAlgorithmPath =
+    '/algorithms/{algorithmId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+
+  /**
+   * Delete discussion comment of a discussion topic of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteDiscussionCommentOfDiscussionTopicOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(params: {
+    algorithmId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.DeleteDiscussionCommentOfDiscussionTopicOfAlgorithmPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.path('commentId', params.commentId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete discussion comment of a discussion topic of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteDiscussionCommentOfDiscussionTopicOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionCommentOfDiscussionTopicOfAlgorithm(params: {
+    algorithmId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<void> {
+    return this.deleteDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(
+      params
+    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
+  }
+
+  /**
    * Path part for operation getImplementationsOfAlgorithm
    */
   static readonly GetImplementationsOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/implementations';
+    '/algorithms/{algorithmId}/implementations';
 
   /**
    * Retrieve implementations of an algorithm. If none are found an empty list is returned.
@@ -1906,7 +3268,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation createImplementation
    */
   static readonly CreateImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations';
+    '/algorithms/{algorithmId}/implementations';
 
   /**
    * Define the basic properties of an implementation for an algorithm. References to sub-objects (e.g. a software platform) can be added via sub-routes (e.g. POST on /software-platforms).
@@ -1996,7 +3358,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getImplementation
    */
   static readonly GetImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
+    '/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
    * Retrieve a specific implementation and its basic properties of an algorithm.
@@ -2085,7 +3447,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation updateImplementation
    */
   static readonly UpdateImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
+    '/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
    * Update the basic properties of an implementation (e.g. name). References to sub-objects (e.g. a software platform) are not updated via this operation - use the corresponding sub-route for updating them (e.g. PUT on /software-platforms/{softwarePlatformId}).
@@ -2178,7 +3540,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deleteImplementation
    */
   static readonly DeleteImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}';
+    '/algorithms/{algorithmId}/implementations/{implementationId}';
 
   /**
    * Delete an implementation. This also removes all references to other entities (e.g. software platforms).
@@ -2239,7 +3601,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getComputeResourcePropertiesOfImplementation
    */
   static readonly GetComputeResourcePropertiesOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
 
   /**
    * Retrieve referenced compute resource properties of an implementation. If none are found an empty list is returned.
@@ -2384,7 +3746,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation createComputeResourcePropertyForImplementation
    */
   static readonly CreateComputeResourcePropertyForImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties';
 
   /**
    * Add a compute resource property (e.g. a certain number of qubits) that is required by an implementation. The compute resource property type has to be already created (e.g. via POST on /compute-resource-property-types). As a result only the ID is required for the compute resource property type, other attributes will be ignored not changed.
@@ -2481,7 +3843,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getComputeResourcePropertyOfImplementation
    */
   static readonly GetComputeResourcePropertyOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Retrieve a specific compute resource property of an implementation.
@@ -2581,7 +3943,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation updateComputeResourcePropertyOfImplementation
    */
   static readonly UpdateComputeResourcePropertyOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Update a Compute resource property of an implementation. For the compute resource property type only the ID is required, other compute resource property type attributes will be ignored and not changed.
@@ -2685,7 +4047,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deleteComputeResourcePropertyOfImplementation
    */
   static readonly DeleteComputeResourcePropertyOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/compute-resource-properties/{computeResourcePropertyId}';
 
   /**
    * Delete a Compute resource property of an implementation. The compute resource property type is not affected by this.
@@ -2750,10 +4112,2235 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Path part for operation getDiscussionTopicsOfImplementation
+   */
+  static readonly GetDiscussionTopicsOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/discussion-topics';
+
+  /**
+   * Retrieve discussion topics of an implementation of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionTopicsOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicsOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { discussionTopics?: Array<EntityModelDiscussionTopicDto> };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetDiscussionTopicsOfImplementationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion topics of an implementation of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionTopicsOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicsOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    _embedded?: { discussionTopics?: Array<EntityModelDiscussionTopicDto> };
+    page?: PageMetadata;
+  }> {
+    return this.getDiscussionTopicsOfImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
+            };
+            page?: PageMetadata;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation createDiscussionTopicOfImplementation
+   */
+  static readonly CreateDiscussionTopicOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/discussion-topics';
+
+  /**
+   * Create a discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createDiscussionTopicOfImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionTopicOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      title: string;
+      description?: string;
+      status: 'OPEN' | 'CLOSED';
+      date: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.CreateDiscussionTopicOfImplementationPath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Create a discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createDiscussionTopicOfImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionTopicOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<{
+    id: string;
+    title: string;
+    description?: string;
+    status: 'OPEN' | 'CLOSED';
+    date: string;
+    _links?: Array<Link>;
+  }> {
+    return this.createDiscussionTopicOfImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getDiscussionTopicOfImplementation
+   */
+  static readonly GetDiscussionTopicOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/discussion-topics/{topicId}';
+
+  /**
+   * Retrieve discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionTopicOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      title: string;
+      description?: string;
+      status: 'OPEN' | 'CLOSED';
+      date: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetDiscussionTopicOfImplementationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionTopicOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    id: string;
+    title: string;
+    description?: string;
+    status: 'OPEN' | 'CLOSED';
+    date: string;
+    _links?: Array<Link>;
+  }> {
+    return this.getDiscussionTopicOfImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation updateDiscussionTopicOfImplementation
+   */
+  static readonly UpdateDiscussionTopicOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/discussion-topics/{topicId}';
+
+  /**
+   * Update discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateDiscussionTopicOfImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionTopicOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      title: string;
+      description?: string;
+      status: 'OPEN' | 'CLOSED';
+      date: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UpdateDiscussionTopicOfImplementationPath,
+      'put'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Update discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateDiscussionTopicOfImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionTopicOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<{
+    id: string;
+    title: string;
+    description?: string;
+    status: 'OPEN' | 'CLOSED';
+    date: string;
+    _links?: Array<Link>;
+  }> {
+    return this.updateDiscussionTopicOfImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deleteDiscussionTopicOfImplementation
+   */
+  static readonly DeleteDiscussionTopicOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/discussion-topics/{topicId}';
+
+  /**
+   * Delete discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteDiscussionTopicOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionTopicOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.DeleteDiscussionTopicOfImplementationPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteDiscussionTopicOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionTopicOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<void> {
+    return this.deleteDiscussionTopicOfImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getDiscussionCommentsOfDiscussionTopicOfImplementation
+   */
+  static readonly GetDiscussionCommentsOfDiscussionTopicOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/discussion-topics/{topicId}/discussion-comments';
+
+  /**
+   * Retrieve discussion comments of a discussion topic of an implementation of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionCommentsOfDiscussionTopicOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentsOfDiscussionTopicOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: {
+        discussionComments?: Array<EntityModelDiscussionCommentDto>;
+      };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetDiscussionCommentsOfDiscussionTopicOfImplementationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              discussionComments?: Array<EntityModelDiscussionCommentDto>;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion comments of a discussion topic of an implementation of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionCommentsOfDiscussionTopicOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentsOfDiscussionTopicOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    _embedded?: { discussionComments?: Array<EntityModelDiscussionCommentDto> };
+    page?: PageMetadata;
+  }> {
+    return this.getDiscussionCommentsOfDiscussionTopicOfImplementation$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              discussionComments?: Array<EntityModelDiscussionCommentDto>;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              discussionComments?: Array<EntityModelDiscussionCommentDto>;
+            };
+            page?: PageMetadata;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation createDiscussionCommentOfDiscussionTopicOfImplementation
+   */
+  static readonly CreateDiscussionCommentOfDiscussionTopicOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/discussion-topics/{topicId}/discussion-comments';
+
+  /**
+   * Create discussion comment of a discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createDiscussionCommentOfDiscussionTopicOfImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionCommentOfDiscussionTopicOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      text: string;
+      date: string;
+      replyTo?: DiscussionCommentDto;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.CreateDiscussionCommentOfDiscussionTopicOfImplementationPath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Create discussion comment of a discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createDiscussionCommentOfDiscussionTopicOfImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionCommentOfDiscussionTopicOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<{
+    id: string;
+    text: string;
+    date: string;
+    replyTo?: DiscussionCommentDto;
+    _links?: Array<Link>;
+  }> {
+    return this.createDiscussionCommentOfDiscussionTopicOfImplementation$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getDiscussionCommentOfDiscussionTopicOfImplementation
+   */
+  static readonly GetDiscussionCommentOfDiscussionTopicOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+
+  /**
+   * Retrieve discussion comment of a discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionCommentOfDiscussionTopicOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentOfDiscussionTopicOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      text: string;
+      date: string;
+      replyTo?: DiscussionCommentDto;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetDiscussionCommentOfDiscussionTopicOfImplementationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.path('commentId', params.commentId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion comment of a discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionCommentOfDiscussionTopicOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentOfDiscussionTopicOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    id: string;
+    text: string;
+    date: string;
+    replyTo?: DiscussionCommentDto;
+    _links?: Array<Link>;
+  }> {
+    return this.getDiscussionCommentOfDiscussionTopicOfImplementation$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation updateDiscussionCommentOfDiscussionTopicOfImplementation
+   */
+  static readonly UpdateDiscussionCommentOfDiscussionTopicOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+
+  /**
+   * Update discussion comment of a discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateDiscussionCommentOfDiscussionTopicOfImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionCommentOfDiscussionTopicOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      text: string;
+      date: string;
+      replyTo?: DiscussionCommentDto;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UpdateDiscussionCommentOfDiscussionTopicOfImplementationPath,
+      'put'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.path('commentId', params.commentId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Update discussion comment of a discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateDiscussionCommentOfDiscussionTopicOfImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionCommentOfDiscussionTopicOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<{
+    id: string;
+    text: string;
+    date: string;
+    replyTo?: DiscussionCommentDto;
+    _links?: Array<Link>;
+  }> {
+    return this.updateDiscussionCommentOfDiscussionTopicOfImplementation$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deleteDiscussionCommentOfDiscussionTopicOfImplementation
+   */
+  static readonly DeleteDiscussionCommentOfDiscussionTopicOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+
+  /**
+   * Delete discussion comment of a discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteDiscussionCommentOfDiscussionTopicOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionCommentOfDiscussionTopicOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.DeleteDiscussionCommentOfDiscussionTopicOfImplementationPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.path('commentId', params.commentId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete discussion comment of a discussion topic of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteDiscussionCommentOfDiscussionTopicOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionCommentOfDiscussionTopicOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<void> {
+    return this.deleteDiscussionCommentOfDiscussionTopicOfImplementation$Response(
+      params
+    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
+  }
+
+  /**
+   * Path part for operation getImplementationPackagesOfImplementation
+   */
+  static readonly GetImplementationPackagesOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/implementation-packages';
+
+  /**
+   * Retrieve discussion topics of an implementation of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementationPackagesOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationPackagesOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: {
+        implementationPackages?: Array<EntityModelImplementationPackageDto>;
+      };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetImplementationPackagesOfImplementationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              implementationPackages?: Array<
+                EntityModelImplementationPackageDto
+              >;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion topics of an implementation of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementationPackagesOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationPackagesOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    _embedded?: {
+      implementationPackages?: Array<EntityModelImplementationPackageDto>;
+    };
+    page?: PageMetadata;
+  }> {
+    return this.getImplementationPackagesOfImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              implementationPackages?: Array<
+                EntityModelImplementationPackageDto
+              >;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              implementationPackages?: Array<
+                EntityModelImplementationPackageDto
+              >;
+            };
+            page?: PageMetadata;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation createImplementationPackageOfImplementation
+   */
+  static readonly CreateImplementationPackageOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/implementation-packages';
+
+  /**
+   * Create a implementation package of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createImplementationPackageOfImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createImplementationPackageOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    body: ImplementationPackageDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      name?: string;
+      description?: string;
+      packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.CreateImplementationPackageOfImplementationPath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            name?: string;
+            description?: string;
+            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Create a implementation package of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createImplementationPackageOfImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createImplementationPackageOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    body: ImplementationPackageDto;
+  }): Observable<{
+    id: string;
+    name?: string;
+    description?: string;
+    packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+    _links?: Array<Link>;
+  }> {
+    return this.createImplementationPackageOfImplementation$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            name?: string;
+            description?: string;
+            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            name?: string;
+            description?: string;
+            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getImplementationPackageOfImplementation
+   */
+  static readonly GetImplementationPackageOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/implementation-packages/{implementationPackageId}';
+
+  /**
+   * Retrieve implementation package of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementationPackageOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationPackageOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      name?: string;
+      description?: string;
+      packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetImplementationPackageOfImplementationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('implementationPackageId', params.implementationPackageId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            name?: string;
+            description?: string;
+            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve implementation package of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementationPackageOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationPackageOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+  }): Observable<{
+    id: string;
+    name?: string;
+    description?: string;
+    packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+    _links?: Array<Link>;
+  }> {
+    return this.getImplementationPackageOfImplementation$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            name?: string;
+            description?: string;
+            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            name?: string;
+            description?: string;
+            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation updateImplementationPackageOfImplementation
+   */
+  static readonly UpdateImplementationPackageOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/implementation-packages/{implementationPackageId}';
+
+  /**
+   * Update implementation package of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateImplementationPackageOfImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateImplementationPackageOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+    body: ImplementationPackageDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      name?: string;
+      description?: string;
+      packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UpdateImplementationPackageOfImplementationPath,
+      'put'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('implementationPackageId', params.implementationPackageId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            name?: string;
+            description?: string;
+            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Update implementation package of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateImplementationPackageOfImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateImplementationPackageOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+    body: ImplementationPackageDto;
+  }): Observable<{
+    id: string;
+    name?: string;
+    description?: string;
+    packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+    _links?: Array<Link>;
+  }> {
+    return this.updateImplementationPackageOfImplementation$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            name?: string;
+            description?: string;
+            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            name?: string;
+            description?: string;
+            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deleteImplementationPackageOfImplementation
+   */
+  static readonly DeleteImplementationPackageOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/implementation-packages/{implementationPackageId}';
+
+  /**
+   * Delete implementation package of an implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteImplementationPackageOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteImplementationPackageOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.DeleteImplementationPackageOfImplementationPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('implementationPackageId', params.implementationPackageId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete implementation package of an implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteImplementationPackageOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteImplementationPackageOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+  }): Observable<void> {
+    return this.deleteImplementationPackageOfImplementation$Response(
+      params
+    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
+  }
+
+  /**
+   * Path part for operation getFileOfImplementationPackage
+   */
+  static readonly GetFileOfImplementationPackagePath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/implementation-packages/{implementationPackageId}/file';
+
+  /**
+   * Retrieve the file of an implementation package
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getFileOfImplementationPackage()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFileOfImplementationPackage$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+  }): Observable<
+    StrictHttpResponse<{
+      id?: string;
+      name?: string;
+      mimeType?: string;
+      fileURL?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetFileOfImplementationPackagePath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('implementationPackageId', params.implementationPackageId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            name?: string;
+            mimeType?: string;
+            fileURL?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve the file of an implementation package
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getFileOfImplementationPackage$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFileOfImplementationPackage(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+  }): Observable<{
+    id?: string;
+    name?: string;
+    mimeType?: string;
+    fileURL?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.getFileOfImplementationPackage$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            name?: string;
+            mimeType?: string;
+            fileURL?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id?: string;
+            name?: string;
+            mimeType?: string;
+            fileURL?: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation createFileForImplementationPackage
+   */
+  static readonly CreateFileForImplementationPackagePath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/implementation-packages/{implementationPackageId}/file';
+
+  /**
+   * Uploads and adds a file to a given implementation
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createFileForImplementationPackage()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  createFileForImplementationPackage$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+    body?: { file?: Blob };
+  }): Observable<
+    StrictHttpResponse<{
+      id?: string;
+      name?: string;
+      mimeType?: string;
+      fileURL?: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.CreateFileForImplementationPackagePath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('implementationPackageId', params.implementationPackageId, {});
+
+      rb.body(params.body, 'multipart/form-data');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id?: string;
+            name?: string;
+            mimeType?: string;
+            fileURL?: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Uploads and adds a file to a given implementation
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createFileForImplementationPackage$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  createFileForImplementationPackage(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+    body?: { file?: Blob };
+  }): Observable<{
+    id?: string;
+    name?: string;
+    mimeType?: string;
+    fileURL?: string;
+    _links?: Array<Link>;
+  }> {
+    return this.createFileForImplementationPackage$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id?: string;
+            name?: string;
+            mimeType?: string;
+            fileURL?: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id?: string;
+            name?: string;
+            mimeType?: string;
+            fileURL?: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deleteFileOfImplementation
+   */
+  static readonly DeleteFileOfImplementationPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/implementation-packages/{implementationPackageId}/file';
+
+  /**
+   * Delete a file of an implementation.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteFileOfImplementation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteFileOfImplementation$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.DeleteFileOfImplementationPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('implementationPackageId', params.implementationPackageId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete a file of an implementation.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteFileOfImplementation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteFileOfImplementation(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+  }): Observable<void> {
+    return this.deleteFileOfImplementation$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation downloadFileContent
+   */
+  static readonly DownloadFileContentPath =
+    '/algorithms/{algorithmId}/implementations/{implementationId}/implementation-packages/{implementationPackageId}/file/content';
+
+  /**
+   * Downloads a specific file content of an Implementation
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `downloadFileContent()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  downloadFileContent$Response(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+  }): Observable<StrictHttpResponse<Array<string>>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.DownloadFileContentPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('implementationPackageId', params.implementationPackageId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<Array<string>>;
+        })
+      );
+  }
+
+  /**
+   * Downloads a specific file content of an Implementation
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `downloadFileContent$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  downloadFileContent(params: {
+    algorithmId: string;
+    implementationId: string;
+    implementationPackageId: string;
+  }): Observable<Array<string>> {
+    return this.downloadFileContent$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<string>>) => r.body as Array<string>)
+    );
+  }
+
+  /**
    * Path part for operation getPublicationsOfImplementation
    */
   static readonly GetPublicationsOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/publications';
 
   /**
    * Retrieve referenced publications of an implementation. If none are found an empty list is returned.
@@ -2878,7 +6465,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation linkImplementationAndPublication
    */
   static readonly LinkImplementationAndPublicationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/publications';
 
   /**
    * Add a reference to an existing publication (that was previously created via a POST on e.g. /publications). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -2943,7 +6530,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getPublicationOfImplementation
    */
   static readonly GetPublicationOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
 
   /**
    * Retrieve a specific publication of an implementation
@@ -3047,7 +6634,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation unlinkImplementationAndPublication
    */
   static readonly UnlinkImplementationAndPublicationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/publications/{publicationId}';
 
   /**
    * Delete a reference to a publication of an implementation. The reference has to be previously created via a POST on /algorithms/{algorithmId}/implementations/{implementationId}/publications).
@@ -3111,7 +6698,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getSoftwarePlatformsOfImplementation
    */
   static readonly GetSoftwarePlatformsOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
 
   /**
    * Retrieve referenced software platform for an implementation. If none are found an empty list is returned.
@@ -3237,7 +6824,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation linkImplementationAndSoftwarePlatform
    */
   static readonly LinkImplementationAndSoftwarePlatformPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms';
 
   /**
    * Add a reference to an existing software platform (that was previously created via a POST on e.g. /software-platforms). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -3302,7 +6889,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getSoftwarePlatformOfImplementation
    */
   static readonly GetSoftwarePlatformOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
 
   /**
    * Retrieve a specific software platform and its basic properties of an implementation.
@@ -3406,7 +6993,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation unlinkImplementationAndSoftwarePlatform
    */
   static readonly UnlinkImplementationAndSoftwarePlatformPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/software-platforms/{softwarePlatformId}';
 
   /**
    * Delete a reference to a software platform of an implementation. The reference has to be previously created via a POST on /algorithms/{algorithmId}/implementations/{implementationId}/software-platforms).
@@ -3470,7 +7057,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getTagsOfImplementation
    */
   static readonly GetTagsOfImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
    * Retrieve all tags associated with a specific implementation.
@@ -3539,7 +7126,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation addTagToImplementation
    */
   static readonly AddTagToImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
    * Add a tag to an implementation. The tag does not have to exist before adding it.
@@ -3604,7 +7191,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation removeTagFromImplementation
    */
   static readonly RemoveTagFromImplementationPath =
-    '/v1/algorithms/{algorithmId}/implementations/{implementationId}/tags';
+    '/algorithms/{algorithmId}/implementations/{implementationId}/tags';
 
   /**
    * Remove a tag from an implementation.
@@ -3669,7 +7256,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getPatternRelationsOfAlgorithm
    */
   static readonly GetPatternRelationsOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/pattern-relations';
+    '/algorithms/{algorithmId}/pattern-relations';
 
   /**
    * Retrieve pattern relations of an algorithms. If none are found an empty list is returned.
@@ -3797,7 +7384,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation createPatternRelationForAlgorithm
    */
   static readonly CreatePatternRelationForAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/pattern-relations';
+    '/algorithms/{algorithmId}/pattern-relations';
 
   /**
    * Create a relation between a pattern and an algorithm.The pattern relation type has to be already created (e.g. via POST on /pattern-relation-types). As a result only the ID is required for the pattern relation type, other attributes will be ignored not changed.
@@ -3899,7 +7486,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getPatternRelationOfAlgorithm
    */
   static readonly GetPatternRelationOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
+    '/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
 
   /**
    * Retrieve a specific relation between a pattern and an algorithm.
@@ -4000,7 +7587,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation updatePatternRelationOfAlgorithm
    */
   static readonly UpdatePatternRelationOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
+    '/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
 
   /**
    * Update a relation between a pattern and an algorithm. For the pattern relation type only the ID is required,other pattern relation type attributes will be ignored and not changed.
@@ -4105,7 +7692,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deletePatternRelationOfAlgorithm
    */
   static readonly DeletePatternRelationOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
+    '/algorithms/{algorithmId}/pattern-relations/{patternRelationId}';
 
   /**
    * Delete a specific relation between a pattern and an algorithm. The pattern relation type is not affected by this.
@@ -4166,7 +7753,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getProblemTypesOfAlgorithm
    */
   static readonly GetProblemTypesOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/problem-types';
+    '/algorithms/{algorithmId}/problem-types';
 
   /**
    * Retrieve problem types of an algorithm. If none are found an empty list is returned.
@@ -4288,7 +7875,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation linkAlgorithmAndProblemType
    */
   static readonly LinkAlgorithmAndProblemTypePath =
-    '/v1/algorithms/{algorithmId}/problem-types';
+    '/algorithms/{algorithmId}/problem-types';
 
   /**
    * Add a reference to an existing ProblemType (that was previously created via a POST on /problem-types). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -4350,7 +7937,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getProblemTypeOfAlgorithm
    */
   static readonly GetProblemTypeOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
+    '/algorithms/{algorithmId}/problem-types/{problemTypeId}';
 
   /**
    * Retrieve a specific problem type of an algorithm.
@@ -4441,7 +8028,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation unlinkAlgorithmAndProblemType
    */
   static readonly UnlinkAlgorithmAndProblemTypePath =
-    '/v1/algorithms/{algorithmId}/problem-types/{problemTypeId}';
+    '/algorithms/{algorithmId}/problem-types/{problemTypeId}';
 
   /**
    * Delete a reference to a problem types of an algorithm. The reference has to be previously created via a POST on e.g. /algorithms/{algorithmId}/problem-types).
@@ -4502,7 +8089,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getPublicationsOfAlgorithm
    */
   static readonly GetPublicationsOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/publications';
+    '/algorithms/{algorithmId}/publications';
 
   /**
    * Retrieve referenced publications of an algorithm. If none are found an empty list is returned.
@@ -4624,7 +8211,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation linkAlgorithmAndPublication
    */
   static readonly LinkAlgorithmAndPublicationPath =
-    '/v1/algorithms/{algorithmId}/publications';
+    '/algorithms/{algorithmId}/publications';
 
   /**
    * Add a reference to an existing publication (that was previously created via a POST on e.g. /publications). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -4686,7 +8273,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getPublicationOfAlgorithm
    */
   static readonly GetPublicationOfAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/publications/{publicationId}';
+    '/algorithms/{algorithmId}/publications/{publicationId}';
 
   /**
    * Retrieve a specific publication and its basic properties of an algorithm.
@@ -4787,7 +8374,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation unlinkAlgorithmAndPublication
    */
   static readonly UnlinkAlgorithmAndPublicationPath =
-    '/v1/algorithms/{algorithmId}/publications/{publicationId}';
+    '/algorithms/{algorithmId}/publications/{publicationId}';
 
   /**
    * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications).
@@ -4847,7 +8434,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getSketches
    */
-  static readonly GetSketchesPath = '/v1/algorithms/{algorithmId}/sketches';
+  static readonly GetSketchesPath = '/algorithms/{algorithmId}/sketches';
 
   /**
    * Retrieve all sketches for a specific algorithm.
@@ -4905,7 +8492,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation uploadSketch
    */
-  static readonly UploadSketchPath = '/v1/algorithms/{algorithmId}/sketches';
+  static readonly UploadSketchPath = '/algorithms/{algorithmId}/sketches';
 
   /**
    * Add a Sketch to the algorithm.
@@ -5003,7 +8590,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getSketch
    */
   static readonly GetSketchPath =
-    '/v1/algorithms/{algorithmId}/sketches/{sketchId}';
+    '/algorithms/{algorithmId}/sketches/{sketchId}';
 
   /**
    * Retrieve a specific Sketch and its basic properties.
@@ -5094,7 +8681,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation updateSketch
    */
   static readonly UpdateSketchPath =
-    '/v1/algorithms/{algorithmId}/sketches/{sketchId}';
+    '/algorithms/{algorithmId}/sketches/{sketchId}';
 
   /**
    * Update the properties of a sketch.
@@ -5189,7 +8776,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation deleteSketch
    */
   static readonly DeleteSketchPath =
-    '/v1/algorithms/{algorithmId}/sketches/{sketchId}';
+    '/algorithms/{algorithmId}/sketches/{sketchId}';
 
   /**
    * Delete a sketch of the algorithm.
@@ -5250,7 +8837,7 @@ export class AlgorithmService extends BaseService {
    * Path part for operation getSketchImage
    */
   static readonly GetSketchImagePath =
-    '/v1/algorithms/{algorithmId}/sketches/{sketchId}/image';
+    '/algorithms/{algorithmId}/sketches/{sketchId}/image';
 
   /**
    * Retrieve the image of specific Sketch.
@@ -5308,7 +8895,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation getTagsOfAlgorithm
    */
-  static readonly GetTagsOfAlgorithmPath = '/v1/algorithms/{algorithmId}/tags';
+  static readonly GetTagsOfAlgorithmPath = '/algorithms/{algorithmId}/tags';
 
   /**
    * Retrieve all tags associated with a specific algorithm.
@@ -5373,7 +8960,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation addTagToAlgorithm
    */
-  static readonly AddTagToAlgorithmPath = '/v1/algorithms/{algorithmId}/tags';
+  static readonly AddTagToAlgorithmPath = '/algorithms/{algorithmId}/tags';
 
   /**
    * Add a tag to an algorithm. The tag does not have to exist before adding it.
@@ -5434,8 +9021,7 @@ export class AlgorithmService extends BaseService {
   /**
    * Path part for operation removeTagFromAlgorithm
    */
-  static readonly RemoveTagFromAlgorithmPath =
-    '/v1/algorithms/{algorithmId}/tags';
+  static readonly RemoveTagFromAlgorithmPath = '/algorithms/{algorithmId}/tags';
 
   /**
    * Remove a tag from an algorithm.
