@@ -24,7 +24,7 @@ export class ApplicationAreasService extends BaseService {
   /**
    * Path part for operation getApplicationAreas
    */
-  static readonly GetApplicationAreasPath = '/v1/application-areas';
+  static readonly GetApplicationAreasPath = '/application-areas';
 
   /**
    * Retrieve all application areas
@@ -146,7 +146,7 @@ export class ApplicationAreasService extends BaseService {
   /**
    * Path part for operation createApplicationArea
    */
-  static readonly CreateApplicationAreaPath = '/v1/application-areas';
+  static readonly CreateApplicationAreaPath = '/application-areas';
 
   /**
    * Define the basic properties of an application area.
@@ -216,7 +216,7 @@ export class ApplicationAreasService extends BaseService {
    * Path part for operation getApplicationArea
    */
   static readonly GetApplicationAreaPath =
-    '/v1/application-areas/{applicationAreaId}';
+    '/application-areas/{applicationAreaId}';
 
   /**
    * Retrieve a specific application area and its basic properties.
@@ -286,7 +286,7 @@ export class ApplicationAreasService extends BaseService {
    * Path part for operation updateApplicationArea
    */
   static readonly UpdateApplicationAreaPath =
-    '/v1/application-areas/{applicationAreaId}';
+    '/application-areas/{applicationAreaId}';
 
   /**
    * Update the basic properties of an application area (e.g. name).
@@ -360,7 +360,7 @@ export class ApplicationAreasService extends BaseService {
    * Path part for operation deleteApplicationArea
    */
   static readonly DeleteApplicationAreaPath =
-    '/v1/application-areas/{applicationAreaId}';
+    '/application-areas/{applicationAreaId}';
 
   /**
    * Delete an application area. This removes the application area from all algorithms it is references in.

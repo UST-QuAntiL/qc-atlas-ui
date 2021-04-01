@@ -11,7 +11,11 @@ import { map, filter } from 'rxjs/operators';
 import { AlgorithmDto } from '../models/algorithm-dto';
 import { ClassicAlgorithmDto } from '../models/classic-algorithm-dto';
 import { ClassicImplementationDto } from '../models/classic-implementation-dto';
+import { DiscussionCommentDto } from '../models/discussion-comment-dto';
+import { DiscussionTopicDto } from '../models/discussion-topic-dto';
 import { EntityModelAlgorithmDto } from '../models/entity-model-algorithm-dto';
+import { EntityModelDiscussionCommentDto } from '../models/entity-model-discussion-comment-dto';
+import { EntityModelDiscussionTopicDto } from '../models/entity-model-discussion-topic-dto';
 import { EntityModelImplementationDto } from '../models/entity-model-implementation-dto';
 import { EntityModelPublicationDto } from '../models/entity-model-publication-dto';
 import { Link } from '../models/link';
@@ -31,7 +35,7 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation getPublications
    */
-  static readonly GetPublicationsPath = '/v1/publications';
+  static readonly GetPublicationsPath = '/publications';
 
   /**
    * Retrieve all publications.
@@ -147,7 +151,7 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation createPublication
    */
-  static readonly CreatePublicationPath = '/v1/publications';
+  static readonly CreatePublicationPath = '/publications';
 
   /**
    * Define the basic properties of an publication.
@@ -244,7 +248,7 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation getPublication
    */
-  static readonly GetPublicationPath = '/v1/publications/{publicationId}';
+  static readonly GetPublicationPath = '/publications/{publicationId}';
 
   /**
    * Retrieve a specific publication and its basic properties.
@@ -341,7 +345,7 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation updatePublication
    */
-  static readonly UpdatePublicationPath = '/v1/publications/{publicationId}';
+  static readonly UpdatePublicationPath = '/publications/{publicationId}';
 
   /**
    * Update the basic properties of an publication (e.g. title).
@@ -442,7 +446,7 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation deletePublication
    */
-  static readonly DeletePublicationPath = '/v1/publications/{publicationId}';
+  static readonly DeletePublicationPath = '/publications/{publicationId}';
 
   /**
    * Delete an publication. This also removes all references to other entities (e.g. algorithm).
@@ -498,7 +502,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getAlgorithmsOfPublication
    */
   static readonly GetAlgorithmsOfPublicationPath =
-    '/v1/publications/{publicationId}/algorithms';
+    '/publications/{publicationId}/algorithms';
 
   /**
    * Retrieve referenced algorithms of an publication. If none are found an empty list is returned.
@@ -620,7 +624,7 @@ export class PublicationService extends BaseService {
    * Path part for operation linkPublicationAndAlgorithm
    */
   static readonly LinkPublicationAndAlgorithmPath =
-    '/v1/publications/{publicationId}/algorithms';
+    '/publications/{publicationId}/algorithms';
 
   /**
    * Add a reference to an existing algorithm (that was previously created via a POST on e.g. /algorithms). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -682,7 +686,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getAlgorithmOfPublication
    */
   static readonly GetAlgorithmOfPublicationPath =
-    '/v1/publications/{publicationId}/algorithms/{algorithmId}';
+    '/publications/{publicationId}/algorithms/{algorithmId}';
 
   /**
    * Retrieve a specific algorithm of a publication.
@@ -765,7 +769,7 @@ export class PublicationService extends BaseService {
    * Path part for operation unlinkPublicationAndAlgorithm
    */
   static readonly UnlinkPublicationAndAlgorithmPath =
-    '/v1/publications/{publicationId}/algorithms/{algorithmId}';
+    '/publications/{publicationId}/algorithms/{algorithmId}';
 
   /**
    * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications/{publicationId}).
@@ -823,10 +827,1366 @@ export class PublicationService extends BaseService {
   }
 
   /**
+   * Path part for operation getDiscussionTopicsOfPublication
+   */
+  static readonly GetDiscussionTopicsOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics';
+
+  /**
+   * Retrieve discussion topics of a publication. If none are found an empty list is returned.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionTopicsOfPublication()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicsOfPublication$Response(params: {
+    publicationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { discussionTopics?: Array<EntityModelDiscussionTopicDto> };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetDiscussionTopicsOfPublicationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion topics of a publication. If none are found an empty list is returned.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionTopicsOfPublication$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicsOfPublication(params: {
+    publicationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    _embedded?: { discussionTopics?: Array<EntityModelDiscussionTopicDto> };
+    page?: PageMetadata;
+  }> {
+    return this.getDiscussionTopicsOfPublication$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
+            };
+            page?: PageMetadata;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation createDiscussionTopicOfPublication
+   */
+  static readonly CreateDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics';
+
+  /**
+   * Create a discussion topic of a publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createDiscussionTopicOfPublication()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionTopicOfPublication$Response(params: {
+    publicationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      title: string;
+      description?: string;
+      status: 'OPEN' | 'CLOSED';
+      date: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.CreateDiscussionTopicOfPublicationPath,
+      'post'
+    );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Create a discussion topic of a publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createDiscussionTopicOfPublication$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionTopicOfPublication(params: {
+    publicationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<{
+    id: string;
+    title: string;
+    description?: string;
+    status: 'OPEN' | 'CLOSED';
+    date: string;
+    _links?: Array<Link>;
+  }> {
+    return this.createDiscussionTopicOfPublication$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getDiscussionTopicOfPublication
+   */
+  static readonly GetDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}';
+
+  /**
+   * Retrieve discussion topic of a publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionTopicOfPublication()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicOfPublication$Response(params: {
+    publicationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      title: string;
+      description?: string;
+      status: 'OPEN' | 'CLOSED';
+      date: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetDiscussionTopicOfPublicationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion topic of a publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionTopicOfPublication$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionTopicOfPublication(params: {
+    publicationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    id: string;
+    title: string;
+    description?: string;
+    status: 'OPEN' | 'CLOSED';
+    date: string;
+    _links?: Array<Link>;
+  }> {
+    return this.getDiscussionTopicOfPublication$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation updateDiscussionTopicOfPublication
+   */
+  static readonly UpdateDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}';
+
+  /**
+   * Update discussion topic of a publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateDiscussionTopicOfPublication()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionTopicOfPublication$Response(params: {
+    publicationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      title: string;
+      description?: string;
+      status: 'OPEN' | 'CLOSED';
+      date: string;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.UpdateDiscussionTopicOfPublicationPath,
+      'put'
+    );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Update discussion topic of a publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateDiscussionTopicOfPublication$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionTopicOfPublication(params: {
+    publicationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionTopicDto;
+  }): Observable<{
+    id: string;
+    title: string;
+    description?: string;
+    status: 'OPEN' | 'CLOSED';
+    date: string;
+    _links?: Array<Link>;
+  }> {
+    return this.updateDiscussionTopicOfPublication$Response(params).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            title: string;
+            description?: string;
+            status: 'OPEN' | 'CLOSED';
+            date: string;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deleteDiscussionTopicOfPublication
+   */
+  static readonly DeleteDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}';
+
+  /**
+   * Delete discussion topic of a publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteDiscussionTopicOfPublication()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionTopicOfPublication$Response(params: {
+    publicationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.DeleteDiscussionTopicOfPublicationPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete discussion topic of a publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteDiscussionTopicOfPublication$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionTopicOfPublication(params: {
+    publicationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<void> {
+    return this.deleteDiscussionTopicOfPublication$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getDiscussionCommentsOfDiscussionTopicOfPublication
+   */
+  static readonly GetDiscussionCommentsOfDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments';
+
+  /**
+   * Retrieve discussion comments of a discussion topic of a publication. If none are found an empty list is returned.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionCommentsOfDiscussionTopicOfPublication()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentsOfDiscussionTopicOfPublication$Response(params: {
+    publicationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: {
+        discussionComments?: Array<EntityModelDiscussionCommentDto>;
+      };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetDiscussionCommentsOfDiscussionTopicOfPublicationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              discussionComments?: Array<EntityModelDiscussionCommentDto>;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion comments of a discussion topic of a publication. If none are found an empty list is returned.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionCommentsOfDiscussionTopicOfPublication$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentsOfDiscussionTopicOfPublication(params: {
+    publicationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    _embedded?: { discussionComments?: Array<EntityModelDiscussionCommentDto> };
+    page?: PageMetadata;
+  }> {
+    return this.getDiscussionCommentsOfDiscussionTopicOfPublication$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              discussionComments?: Array<EntityModelDiscussionCommentDto>;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              discussionComments?: Array<EntityModelDiscussionCommentDto>;
+            };
+            page?: PageMetadata;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation createDiscussionCommentOfDiscussionTopicOfPublication
+   */
+  static readonly CreateDiscussionCommentOfDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments';
+
+  /**
+   * Create discussion comment of a discussion topic of a publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createDiscussionCommentOfDiscussionTopicOfPublication()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionCommentOfDiscussionTopicOfPublication$Response(params: {
+    publicationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      text: string;
+      date: string;
+      replyTo?: DiscussionCommentDto;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.CreateDiscussionCommentOfDiscussionTopicOfPublicationPath,
+      'post'
+    );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Create discussion comment of a discussion topic of a publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createDiscussionCommentOfDiscussionTopicOfPublication$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createDiscussionCommentOfDiscussionTopicOfPublication(params: {
+    publicationId: string;
+    topicId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<{
+    id: string;
+    text: string;
+    date: string;
+    replyTo?: DiscussionCommentDto;
+    _links?: Array<Link>;
+  }> {
+    return this.createDiscussionCommentOfDiscussionTopicOfPublication$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getDiscussionCommentOfDiscussionTopicOfPublication
+   */
+  static readonly GetDiscussionCommentOfDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+
+  /**
+   * Retrieve discussion comment of a discussion topic of a publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDiscussionCommentOfDiscussionTopicOfPublication()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentOfDiscussionTopicOfPublication$Response(params: {
+    publicationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      text: string;
+      date: string;
+      replyTo?: DiscussionCommentDto;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetDiscussionCommentOfDiscussionTopicOfPublicationPath,
+      'get'
+    );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.path('commentId', params.commentId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve discussion comment of a discussion topic of a publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getDiscussionCommentOfDiscussionTopicOfPublication$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDiscussionCommentOfDiscussionTopicOfPublication(params: {
+    publicationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<{
+    id: string;
+    text: string;
+    date: string;
+    replyTo?: DiscussionCommentDto;
+    _links?: Array<Link>;
+  }> {
+    return this.getDiscussionCommentOfDiscussionTopicOfPublication$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation updateDiscussionCommentOfDiscussionTopicOfPublication
+   */
+  static readonly UpdateDiscussionCommentOfDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+
+  /**
+   * Update discussion comment of a discussion topic of a publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateDiscussionCommentOfDiscussionTopicOfPublication()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionCommentOfDiscussionTopicOfPublication$Response(params: {
+    publicationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<
+    StrictHttpResponse<{
+      id: string;
+      text: string;
+      date: string;
+      replyTo?: DiscussionCommentDto;
+      _links?: Array<Link>;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.UpdateDiscussionCommentOfDiscussionTopicOfPublicationPath,
+      'put'
+    );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.path('commentId', params.commentId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>;
+        })
+      );
+  }
+
+  /**
+   * Update discussion comment of a discussion topic of a publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `updateDiscussionCommentOfDiscussionTopicOfPublication$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateDiscussionCommentOfDiscussionTopicOfPublication(params: {
+    publicationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+    body: DiscussionCommentDto;
+  }): Observable<{
+    id: string;
+    text: string;
+    date: string;
+    replyTo?: DiscussionCommentDto;
+    _links?: Array<Link>;
+  }> {
+    return this.updateDiscussionCommentOfDiscussionTopicOfPublication$Response(
+      params
+    ).pipe(
+      map(
+        (
+          r: StrictHttpResponse<{
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }>
+        ) =>
+          r.body as {
+            id: string;
+            text: string;
+            date: string;
+            replyTo?: DiscussionCommentDto;
+            _links?: Array<Link>;
+          }
+      )
+    );
+  }
+
+  /**
+   * Path part for operation deleteDiscussionCommentOfDiscussionTopicOfPublication
+   */
+  static readonly DeleteDiscussionCommentOfDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+
+  /**
+   * Delete discussion comment of a discussion topic of a publication.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteDiscussionCommentOfDiscussionTopicOfPublication()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionCommentOfDiscussionTopicOfPublication$Response(params: {
+    publicationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.DeleteDiscussionCommentOfDiscussionTopicOfPublicationPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+      rb.path('topicId', params.topicId, {});
+      rb.path('commentId', params.commentId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete discussion comment of a discussion topic of a publication.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `deleteDiscussionCommentOfDiscussionTopicOfPublication$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteDiscussionCommentOfDiscussionTopicOfPublication(params: {
+    publicationId: string;
+    topicId: string;
+    commentId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<void> {
+    return this.deleteDiscussionCommentOfDiscussionTopicOfPublication$Response(
+      params
+    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
+  }
+
+  /**
    * Path part for operation getImplementationsOfPublication
    */
   static readonly GetImplementationsOfPublicationPath =
-    '/v1/publications/{publicationId}/implementations';
+    '/publications/{publicationId}/implementations';
 
   /**
    * Retrieve referenced implementations of an publication. If none are found an empty list is returned.
@@ -954,7 +2314,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getImplementationOfPublication
    */
   static readonly GetImplementationOfPublicationPath =
-    '/v1/publications/{publicationId}/implementations/{implementationId}';
+    '/publications/{publicationId}/implementations/{implementationId}';
 
   /**
    * Retrieve a specific implementation of a publication.

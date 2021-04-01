@@ -24,8 +24,7 @@ export class AlgorithmRelationTypeService extends BaseService {
   /**
    * Path part for operation getAlgorithmRelationTypes
    */
-  static readonly GetAlgorithmRelationTypesPath =
-    '/v1/algorithm-relation-types';
+  static readonly GetAlgorithmRelationTypesPath = '/algorithm-relation-types';
 
   /**
    * Retrieve all algorithm relation types.
@@ -151,8 +150,7 @@ export class AlgorithmRelationTypeService extends BaseService {
   /**
    * Path part for operation createAlgorithmRelationType
    */
-  static readonly CreateAlgorithmRelationTypePath =
-    '/v1/algorithm-relation-types';
+  static readonly CreateAlgorithmRelationTypePath = '/algorithm-relation-types';
 
   /**
    * Define the basic properties of an algorithm relation type.
@@ -222,7 +220,7 @@ export class AlgorithmRelationTypeService extends BaseService {
    * Path part for operation getAlgorithmRelationType
    */
   static readonly GetAlgorithmRelationTypePath =
-    '/v1/algorithm-relation-types/{algorithmRelationTypeId}';
+    '/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
    * Retrieve a specific algorithm relation type and its basic properties.
@@ -292,7 +290,7 @@ export class AlgorithmRelationTypeService extends BaseService {
    * Path part for operation updateAlgorithmRelationType
    */
   static readonly UpdateAlgorithmRelationTypePath =
-    '/v1/algorithm-relation-types/{algorithmRelationTypeId}';
+    '/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
    * Update the basic properties of an algorithm relation type (e.g. name).
@@ -366,7 +364,7 @@ export class AlgorithmRelationTypeService extends BaseService {
    * Path part for operation deleteAlgorithmRelationType
    */
   static readonly DeleteAlgorithmRelationTypePath =
-    '/v1/algorithm-relation-types/{algorithmRelationTypeId}';
+    '/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
    * Delete an algorithm relation type.

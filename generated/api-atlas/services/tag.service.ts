@@ -26,7 +26,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation getTags
    */
-  static readonly GetTagsPath = '/v1/tags';
+  static readonly GetTagsPath = '/tags';
 
   /**
    * Retrieve all created tags.
@@ -138,7 +138,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation createTag
    */
-  static readonly CreateTagPath = '/v1/tags';
+  static readonly CreateTagPath = '/tags';
 
   /**
    * Create a new tag with its value and category.
@@ -212,7 +212,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation getTag
    */
-  static readonly GetTagPath = '/v1/tags/{value}';
+  static readonly GetTagPath = '/tags/{value}';
 
   /**
    * Retrieve a specific tag.
@@ -282,7 +282,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation getAlgorithmsOfTag
    */
-  static readonly GetAlgorithmsOfTagPath = '/v1/tags/{value}/algorithms';
+  static readonly GetAlgorithmsOfTagPath = '/tags/{value}/algorithms';
 
   /**
    * Retrieve all algorithms under a specific tag.
@@ -354,8 +354,7 @@ export class TagService extends BaseService {
   /**
    * Path part for operation getImplementationsOfTag
    */
-  static readonly GetImplementationsOfTagPath =
-    '/v1/tags/{value}/implementations';
+  static readonly GetImplementationsOfTagPath = '/tags/{value}/implementations';
 
   /**
    * Retrieve all implementations under a specific tag.

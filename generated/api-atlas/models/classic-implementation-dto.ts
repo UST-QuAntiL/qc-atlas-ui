@@ -5,7 +5,6 @@ export type ClassicImplementationDto = {
   id: string;
   implementedAlgorithmId?: string;
   name: string;
-  link?: string;
   inputFormat?: string;
   outputFormat?: string;
   description?: string;

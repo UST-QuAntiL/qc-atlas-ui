@@ -25,7 +25,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * Path part for operation getResourcePropertyTypes
    */
   static readonly GetResourcePropertyTypesPath =
-    '/v1/compute-resource-property-types';
+    '/compute-resource-property-types';
 
   /**
    * Retrieve all compute resource property types.
@@ -162,7 +162,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * Path part for operation createComputingResourcePropertyType
    */
   static readonly CreateComputingResourcePropertyTypePath =
-    '/v1/compute-resource-property-types';
+    '/compute-resource-property-types';
 
   /**
    * Define the basic properties of an compute resource property type.
@@ -255,7 +255,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * Path part for operation getComputingResourcePropertyType
    */
   static readonly GetComputingResourcePropertyTypePath =
-    '/v1/compute-resource-property-types/{computeResourcePropertyTypeId}';
+    '/compute-resource-property-types/{computeResourcePropertyTypeId}';
 
   /**
    * Retrieve a specific compute resource property type and its basic properties.
@@ -352,7 +352,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * Path part for operation updateComputingResourcePropertyType
    */
   static readonly UpdateComputingResourcePropertyTypePath =
-    '/v1/compute-resource-property-types/{computeResourcePropertyTypeId}';
+    '/compute-resource-property-types/{computeResourcePropertyTypeId}';
 
   /**
    * Update the basic properties of an compute resource property type (e.g. name).
@@ -453,7 +453,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    * Path part for operation deleteComputingResourcePropertyType
    */
   static readonly DeleteComputingResourcePropertyTypePath =
-    '/v1/compute-resource-property-types/{computeResourcePropertyTypeId}';
+    '/compute-resource-property-types/{computeResourcePropertyTypeId}';
 
   /**
    * Delete an compute resource property type.

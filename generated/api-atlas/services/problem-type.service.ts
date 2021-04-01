@@ -24,7 +24,7 @@ export class ProblemTypeService extends BaseService {
   /**
    * Path part for operation getProblemTypes
    */
-  static readonly GetProblemTypesPath = '/v1/problem-types';
+  static readonly GetProblemTypesPath = '/problem-types';
 
   /**
    * Retrieve all problem types.
@@ -140,7 +140,7 @@ export class ProblemTypeService extends BaseService {
   /**
    * Path part for operation createProblemType
    */
-  static readonly CreateProblemTypePath = '/v1/problem-types';
+  static readonly CreateProblemTypePath = '/problem-types';
 
   /**
    * Define the basic properties of an problem type.
@@ -227,7 +227,7 @@ export class ProblemTypeService extends BaseService {
   /**
    * Path part for operation getProblemType
    */
-  static readonly GetProblemTypePath = '/v1/problem-types/{problemTypeId}';
+  static readonly GetProblemTypePath = '/problem-types/{problemTypeId}';
 
   /**
    * Retrieve a specific problem type and its basic properties.
@@ -314,7 +314,7 @@ export class ProblemTypeService extends BaseService {
   /**
    * Path part for operation updateProblemType
    */
-  static readonly UpdateProblemTypePath = '/v1/problem-types/{problemTypeId}';
+  static readonly UpdateProblemTypePath = '/problem-types/{problemTypeId}';
 
   /**
    * Update the basic properties of an problem type (e.g. name).
@@ -405,7 +405,7 @@ export class ProblemTypeService extends BaseService {
   /**
    * Path part for operation deleteProblemType
    */
-  static readonly DeleteProblemTypePath = '/v1/problem-types/{problemTypeId}';
+  static readonly DeleteProblemTypePath = '/problem-types/{problemTypeId}';
 
   /**
    * Delete an problem type. This also removes all references to other entities (e.g. algorithm).
@@ -461,7 +461,7 @@ export class ProblemTypeService extends BaseService {
    * Path part for operation getProblemTypeParentList
    */
   static readonly GetProblemTypeParentListPath =
-    '/v1/problem-types/{problemTypeId}/problem-type-parents';
+    '/problem-types/{problemTypeId}/problem-type-parents';
 
   /**
    * Retrieved all parent problem types of a specific problem type. If a problem type has not parent an empty list is returned
