@@ -26,6 +26,7 @@ export { EntityModelPatternRelationDto } from './models/entity-model-pattern-rel
 export { EntityModelPatternRelationTypeDto } from './models/entity-model-pattern-relation-type-dto';
 export { EntityModelProblemTypeDto } from './models/entity-model-problem-type-dto';
 export { EntityModelPublicationDto } from './models/entity-model-publication-dto';
+export { EntityModelRevisionDto } from './models/entity-model-revision-dto';
 export { EntityModelSketchDto } from './models/entity-model-sketch-dto';
 export { EntityModelSoftwarePlatformDto } from './models/entity-model-software-platform-dto';
 export { EntityModelTagDto } from './models/entity-model-tag-dto';

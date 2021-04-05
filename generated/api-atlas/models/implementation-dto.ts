@@ -5,6 +5,4 @@ import { QuantumImplementationDto } from './quantum-implementation-dto';
 /**
  * Either a quantum or a classic implementation
  */
-export type ImplementationDto =
-  | ClassicImplementationDto
-  | QuantumImplementationDto;
+export type ImplementationDto = ClassicImplementationDto | QuantumImplementationDto;
