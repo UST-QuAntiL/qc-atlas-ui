@@ -10,6 +10,7 @@ import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { TagDto } from 'api-atlas/models/tag-dto';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
+import { EntityModelRevisionDto } from 'api-atlas/models/entity-model-revision-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
@@ -222,7 +223,6 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
           );
         },
         (error) => {
-          console.log(error);
           this.utilService.callSnackBar(
             'Error! Could not remove link to application area "' +
               applicationArea.name +
@@ -300,6 +300,34 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     return this.algorithm.acronym
       ? header + ' (' + this.algorithm.acronym + ')'
       : header;
+  }
+
+  getRevision(revision: EntityModelRevisionDto): void {
+    this.algorithmService
+      .getAlgorithmRevision({
+        algorithmId: this.algorithm.id,
+        revisionId: revision.id,
+      })
+      .subscribe(
+        (algorithmRevision) => {
+          this.algorithm = algorithmRevision;
+          this.links[0] = {
+            heading: this.createBreadcrumbHeader(this.algorithm),
+            subHeading: ' Algorithm',
+          };
+          this.utilService.callSnackBar(
+            'Algorithm revision ' +
+              revision.id +
+              ' has been loaded successfully.'
+          );
+        },
+        (error) => {
+          console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not load Algorithm revision ' + revision.id
+          );
+        }
+      );
   }
 
   private getTagsForAlgorithm(algoId: string): void {

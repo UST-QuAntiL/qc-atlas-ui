@@ -70,6 +70,12 @@
           [algo]="this.algorithm"
         ></app-algorithm-nisq-analyzer-results>
       </ng-template>
+    </mat-tab >
+    <mat-tab label="Revisions">
+      <app-algorithm-revisions
+        [algorithm]="algorithm"
+        (onRevisionClicked)="getRevision($event)"
+      ></app-algorithm-revisions>
     </mat-tab>
   </mat-tab-group>
 </div>

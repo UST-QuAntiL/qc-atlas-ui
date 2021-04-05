@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { LatexEditorDialogComponent } from '../dialogs/latex-editor-dialog.component';
@@ -11,7 +11,7 @@ import { DoProvider } from './abstract-value-accessor';
   styleUrls: ['./text-input.component.scss'],
   providers: [DoProvider(TextInputComponent)],
 })
-export class TextInputComponent implements OnInit {
+export class TextInputComponent implements OnInit, OnChanges {
   @Output() onSaveChanges: EventEmitter<string> = new EventEmitter<string>();
   @Output() onChange: EventEmitter<string> = new EventEmitter<string>();
   @Input() name = '';
@@ -38,6 +38,10 @@ export class TextInputComponent implements OnInit {
       'latex',
       sanitizer.bypassSecurityTrustResourceUrl('assets/latex_icon.svg')
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.inputValue = this.value;
   }
 
   saveChanges(): void {
