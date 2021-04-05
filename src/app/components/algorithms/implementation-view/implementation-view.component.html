@@ -65,6 +65,12 @@
         ></app-implementation-execution>
       </div>
     </mat-tab>
+    <mat-tab label="Revisions">
+      <app-implementation-revisions
+        [implementation]="implementation"
+        (onRevisionClicked)="getRevision($event)"
+      ></app-implementation-revisions>
+    </mat-tab>
   </mat-tab-group>
 </div>
 <div

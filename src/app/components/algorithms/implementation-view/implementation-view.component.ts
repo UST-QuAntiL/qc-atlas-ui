@@ -6,7 +6,12 @@ import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
-import { EntityModelImplementationDto, TagDto } from 'api-atlas/models';
+import {
+  EntityModelImplementationDto,
+  EntityModelRevisionDto,
+  TagDto,
+} from 'api-atlas/models';
+import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import { QueryParams } from '../../generics/data-list/data-list.component';
@@ -43,6 +48,7 @@ export class ImplementationViewComponent implements OnInit {
 
   constructor(
     private algorithmService: AlgorithmService,
+    private implementationsService: ImplementationsService,
     private softwarePlatformService: ExecutionEnvironmentsService,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private publicationService: PublicationService,
@@ -262,6 +268,30 @@ export class ImplementationViewComponent implements OnInit {
   updateImplementationField(event: { field; value }): void {
     this.implementation[event.field] = event.value;
     this.saveImplementation(this.implementation, false);
+  }
+
+  getRevision(revision: EntityModelRevisionDto): void {
+    this.implementationsService
+      .getImplementationRevision({
+        implementationId: this.implementation.id,
+        revisionId: revision.id,
+      })
+      .subscribe(
+        (implementationRevision) => {
+          this.implementation = implementationRevision;
+          this.utilService.callSnackBar(
+            'Implementation revision ' +
+              revision.id +
+              ' has been loaded successfully.'
+          );
+        },
+        (error) => {
+          console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not load Implementation revision ' + revision.id
+          );
+        }
+      );
   }
 
   private loadGeneral(): void {

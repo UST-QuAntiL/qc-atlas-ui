@@ -39,6 +39,7 @@ import { ImplementationPropertiesComponent } from './implementation-properties/i
 import { NisqAnalyzerResultsComponent } from './nisq-analyzer-results/nisq-analyzer-results.component';
 import { AddNewAnalysisDialogComponent } from './dialogs/add-new-analysis-dialog.component';
 import { AlgorithmRevisionsComponent } from './algorithm-revisions/algorithm-revisions.component';
+import { ImplementationRevisionsComponent } from './implementation-revisions/implementation-revisions.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { AlgorithmRevisionsComponent } from './algorithm-revisions/algorithm-rev
     NisqAnalyzerResultsComponent,
     AddNewAnalysisDialogComponent,
     AlgorithmRevisionsComponent,
+    ImplementationRevisionsComponent,
   ],
   imports: [
     MatTabsModule,
@@ -99,6 +101,7 @@ import { AlgorithmRevisionsComponent } from './algorithm-revisions/algorithm-rev
     AddPatternRelationDialogComponent,
     AddAlgorithmRelationDialogComponent,
     ImplementationPropertiesComponent,
+    ImplementationRevisionsComponent,
   ],
 })
 export class AlgorithmModule {}

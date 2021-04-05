@@ -174,19 +174,19 @@ export class ImplementationsService extends BaseService {
   }
 
   /**
-   * Path part for operation getImplementationVersions
+   * Path part for operation getImplementationRevisions
    */
-  static readonly GetImplementationVersionsPath = '/v1/implementations/{implementationId}/revisions';
+  static readonly GetImplementationRevisionsPath = '/v1/implementations/{implementationId}/revisions';
 
   /**
    * Retrieve all revisions of an implementation
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getImplementationVersions()` instead.
+   * To access only the response body, use `getImplementationRevisions()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getImplementationVersions$Response(params: {
+  getImplementationRevisions$Response(params: {
     implementationId: string;
 
     /**
@@ -211,7 +211,7 @@ export class ImplementationsService extends BaseService {
 
   }): Observable<StrictHttpResponse<{ '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata }>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ImplementationsService.GetImplementationVersionsPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, ImplementationsService.GetImplementationRevisionsPath, 'get');
     if (params) {
 
       rb.path('implementationId', params.implementationId, {});
@@ -236,11 +236,11 @@ export class ImplementationsService extends BaseService {
    * Retrieve all revisions of an implementation
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getImplementationVersions$Response()` instead.
+   * To access the full response (for headers, for example), `getImplementationRevisions$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getImplementationVersions(params: {
+  getImplementationRevisions(params: {
     implementationId: string;
 
     /**
@@ -265,7 +265,7 @@ export class ImplementationsService extends BaseService {
 
   }): Observable<{ '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata }> {
 
-    return this.getImplementationVersions$Response(params).pipe(
+    return this.getImplementationRevisions$Response(params).pipe(
       map((r: StrictHttpResponse<{ '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata })
     );
   }
@@ -287,26 +287,6 @@ export class ImplementationsService extends BaseService {
     implementationId: string;
     revisionId: number;
 
-    /**
-     * Filter criteria for this query
-     */
-    search?: string;
-
-    /**
-     * Zero-based page index (0..N)
-     */
-    page?: number;
-
-    /**
-     * The size of the page to be returned
-     */
-    size?: number;
-
-    /**
-     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     */
-    sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>> {
 
     const rb = new RequestBuilder(this.rootUrl, ImplementationsService.GetImplementationRevisionPath, 'get');
@@ -314,10 +294,6 @@ export class ImplementationsService extends BaseService {
 
       rb.path('implementationId', params.implementationId, {});
       rb.path('revisionId', params.revisionId, {});
-      rb.query('search', params.search, {});
-      rb.query('page', params.page, {});
-      rb.query('size', params.size, {});
-      rb.query('sort', params.sort, {});
 
     }
     return this.http.request(rb.build({
@@ -342,26 +318,6 @@ export class ImplementationsService extends BaseService {
   getImplementationRevision(params: {
     implementationId: string;
     revisionId: number;
-
-    /**
-     * Filter criteria for this query
-     */
-    search?: string;
-
-    /**
-     * Zero-based page index (0..N)
-     */
-    page?: number;
-
-    /**
-     * The size of the page to be returned
-     */
-    size?: number;
-
-    /**
-     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     */
-    sort?: Array<string>;
 
   }): Observable<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)> {
 
