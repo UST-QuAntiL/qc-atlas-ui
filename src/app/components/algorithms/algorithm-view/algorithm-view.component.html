@@ -28,6 +28,7 @@
         (removeApplicationArea)="removeApplicationArea($event)"
         (onAddProblemType)="addProblemType($event)"
         (onRemoveProblemType)="removeProblemTypeFromAlgorithm($event)"
+        (onRevisionClicked)="getRevision($event)"
       ></app-algorithm-properties>
       <button
         class="master-save-button"
@@ -71,11 +72,5 @@
         ></app-algorithm-nisq-analyzer-results>
       </ng-template>
     </mat-tab >
-    <mat-tab label="Revisions">
-      <app-algorithm-revisions
-        [algorithm]="algorithm"
-        (onRevisionClicked)="getRevision($event)"
-      ></app-algorithm-revisions>
-    </mat-tab>
   </mat-tab-group>
 </div>

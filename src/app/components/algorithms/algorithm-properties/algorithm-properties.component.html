@@ -164,6 +164,26 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <div class="mx-3 mb-2">
+          <app-table [data]=revisions
+                     [variableNames]=variableNames
+                     [dataColumns]=tableColumns
+                     [allowSort]=true
+                     [pagination]=pagingInfo
+                     [paginatorConfig]=paginatorConfig
+                     [emptyTableMessage]="'No versions found'"
+                     (elementClicked)="onElementClicked($event)"
+                     (datalistConfigChanged)="fetchRevisions($event)"
+                     (pageChange)="getRevisionsHateoas($event)">
+          </app-table>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
   <!-- TODO: finish Sketch -->
   <div class="row">
     <div class="col-lg-6 col-sm-12">

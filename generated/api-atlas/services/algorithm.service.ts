@@ -6119,12 +6119,36 @@ export class AlgorithmService extends BaseService {
   getAlgorithmRevisions$Response(params: {
     algorithmId: string;
 
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+
   }): Observable<StrictHttpResponse<{ '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata }>> {
 
     const rb = new RequestBuilder(this.rootUrl, AlgorithmService.GetAlgorithmRevisionsPath, 'get');
     if (params) {
 
       rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
 
     }
     return this.http.request(rb.build({
@@ -6148,6 +6172,26 @@ export class AlgorithmService extends BaseService {
    */
   getAlgorithmRevisions(params: {
     algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
 
   }): Observable<{ '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata }> {
 

@@ -25,6 +25,7 @@
         (deleteComputeResourceProperty)="deleteComputeResourceProperty($event)"
         (addComputeResourceProperty)="addComputeResourceProperty($event)"
         (updateComputeResourceProperty)="updateComputeResourceProperty($event)"
+        (onRevisionClicked)="getRevision($event)"
       >
       </app-implementation-properties>
       <button
@@ -64,12 +65,6 @@
                 [guard]="guard"
         ></app-implementation-execution>
       </div>
-    </mat-tab>
-    <mat-tab label="Revisions">
-      <app-implementation-revisions
-        [implementation]="implementation"
-        (onRevisionClicked)="getRevision($event)"
-      ></app-implementation-revisions>
     </mat-tab>
   </mat-tab-group>
 </div>
