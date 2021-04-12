@@ -27,16 +27,8 @@ import {
   quantumComputationModelOptions,
   sketchOptions,
 } from '../../../util/options';
-import {
-  LinkObject,
-  QueryParams,
-} from '../../generics/data-list/data-list.component';
+import { LinkObject } from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
-import { GenericDataService } from '../../../util/generic-data.service';
-import {
-  ConfirmDialogComponent,
-  ConfirmDialogData,
-} from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'app-algorithm-properties',
@@ -65,9 +57,6 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   @Input() frontendAlgorithm: EntityModelAlgorithmDto;
   @Input() linkedProblemTypes: EntityModelProblemTypeDto[];
   @Input() linkedApplicationAreas: EntityModelApplicationAreaDto[];
-  @Output() onRevisionClicked: EventEmitter<
-    EntityModelRevisionDto
-  > = new EventEmitter<EntityModelRevisionDto>();
 
   @ViewChild('problemTypeTree')
   problemTypeTreeComponent: ProblemTypeTreeComponent;
@@ -103,11 +92,9 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     { value: 'QUANTUM_ANNEALING', label: 'Quantum Annealing' },
   ];
 
-  revisions: any[] = [];
   tableColumns = ['Id', 'Date'];
   variableNames = ['id', 'creationDate'];
   pagingInfo: any = {};
-  lastParams: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -117,15 +104,13 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     private algorithmService: AlgorithmService,
     private applicationAreaService: ApplicationAreasService,
     private problemTypeService: ProblemTypeService,
-    private utilService: UtilService,
-    private genericDataService: GenericDataService
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
     this.problemTypeLinkObject.title += this.algorithm.name;
     this.applicationAreaLinkObject.title += this.algorithm.name;
     this.fetchComputeResourceProperties();
-    this.fetchRevisions(this.lastParams);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -376,55 +361,5 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
             e._embedded.computeResourceProperties;
         }
       });
-  }
-
-  fetchRevisions(params: QueryParams): void {
-    this.lastParams = params;
-    this.algorithmService
-      .getAlgorithmRevisions({
-        algorithmId: this.algorithm.id,
-        page: params.page,
-        size: params.size,
-      })
-      .subscribe((data) => {
-        console.log(data);
-        this.prepareRevisionData(data);
-      });
-  }
-
-  getRevisionsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareRevisionData(data);
-    });
-  }
-
-  prepareRevisionData(data): void {
-    // Read all incoming data
-    if (data._embedded) {
-      this.revisions = data._embedded.revisions;
-    } else {
-      this.revisions = [];
-    }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
-  }
-
-  onElementClicked(revision: any): void {
-    const dialogData: ConfirmDialogData = {
-      title: 'Confirm Loading Revision',
-      message:
-        'You are about to load an algorithm revision. Do you want to continue? ',
-      yesButtonText: 'yes',
-      noButtonText: 'no',
-    };
-    const dialogRef = this.utilService.createDialog(
-      ConfirmDialogComponent,
-      dialogData
-    );
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        this.onRevisionClicked.emit(revision);
-      }
-    });
   }
 }
