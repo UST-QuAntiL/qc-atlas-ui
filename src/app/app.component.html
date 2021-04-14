@@ -1,1 +1,4 @@
-<app-navigation></app-navigation>
+<mat-spinner *ngIf="loading; else loadedConfig"></mat-spinner>
+<ng-template #loadedConfig>
+    <app-navigation></app-navigation>
+</ng-template>

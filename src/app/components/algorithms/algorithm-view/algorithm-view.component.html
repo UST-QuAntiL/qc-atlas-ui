@@ -55,16 +55,17 @@
     </mat-tab>
     <mat-tab label="Publications">
       <app-algorithm-publications-list
-        [algorithm]="algorithm"
-      ></app-algorithm-publications-list>
+        [algorithm]="algorithm">
+      </app-algorithm-publications-list>
     </mat-tab>
-    <mat-tab [hidden]="isNisqUsed" label="NISQ Analyzer">
-      <app-algorithm-nisq-analyzer
-        *ngIf="this.algorithm"
-        [algo]="this.algorithm"
-      ></app-algorithm-nisq-analyzer>
-    </mat-tab>
-    <mat-tab [hidden]="isNisqUsed" label="NISQ Results">
+      <mat-tab label="NISQ Analyzer" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
+        <app-algorithm-nisq-analyzer
+                *ngIf="this.algorithm"
+                [algo]="this.algorithm"
+        ></app-algorithm-nisq-analyzer>
+      </mat-tab>
+
+    <mat-tab label="NISQ Results" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
       <ng-template matTabContent>
         <app-algorithm-nisq-analyzer-results
           [algo]="this.algorithm"

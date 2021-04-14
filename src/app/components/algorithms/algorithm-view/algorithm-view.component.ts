@@ -12,8 +12,8 @@ import { TagDto } from 'api-atlas/models/tag-dto';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
+import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
-import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-algorithm-view',
@@ -21,7 +21,7 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./algorithm-view.component.scss'],
 })
 export class AlgorithmViewComponent implements OnInit, OnDestroy {
-  isNisqUsed = environment.nisqAnalyzer;
+  readonly UiFeatures = UiFeatures;
 
   algorithm: EntityModelAlgorithmDto;
   frontendAlgorithm: EntityModelAlgorithmDto;

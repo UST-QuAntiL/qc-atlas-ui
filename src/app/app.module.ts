@@ -22,6 +22,7 @@ import { ApiModule as QProvAPIModule } from 'api-qprov/api.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -56,6 +57,8 @@ import { AddOrEditPatternRelationTypeDialogComponent } from './components/patter
 import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
 // eslint-disable-next-line max-len
 import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './components/compute-resource-property-types/dialogs/add-or-edit-compute-resource-property-type-dialog/add-or-edit-compute-resource-property-type-dialog.component';
+import { QcAtlasUiRepositoryConfigurationService } from './directives/qc-atlas-ui-repository-configuration.service';
+import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module';
 
 @NgModule({
   declarations: [
@@ -97,6 +100,7 @@ import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './component
       rootUrl: environment.QPROV_API_URL,
     }),
     AppRoutingModule,
+    QcAtlasUiFeatureToggleModule,
     // material modules
     MatSidenavModule,
     MatToolbarModule,
@@ -120,9 +124,9 @@ import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './component
     MatAutocompleteModule,
     MatSelectModule,
     MatInputModule,
+    MatProgressSpinnerModule,
   ],
   bootstrap: [AppComponent],
-  exports: [],
   providers: [UtilService, ChangePageGuard],
 })
 export class AppModule {}
