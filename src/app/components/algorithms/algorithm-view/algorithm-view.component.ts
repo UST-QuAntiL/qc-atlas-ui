@@ -23,12 +23,15 @@ import { environment } from '../../../../environments/environment';
 })
 export class AlgorithmViewComponent implements OnInit, OnDestroy {
   isNisqUsed = environment.nisqAnalyzer;
-
+  revisions: EntityModelRevisionDto[] = [];
   algorithm: EntityModelAlgorithmDto;
   frontendAlgorithm: EntityModelAlgorithmDto;
   applicationAreas: EntityModelApplicationAreaDto[];
   problemTypes: EntityModelProblemTypeDto[];
   tags: TagDto[] = [];
+  generalTab = true;
+  revisionBadgeVisible = true;
+  revisionCounter = 0;
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
@@ -62,6 +65,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
           this.getApplicationAreasForAlgorithm(algoId);
           this.getProblemTypesForAlgorithm(algoId);
           this.getTagsForAlgorithm(algoId);
+          this.fetchRevisions();
         },
         (error) => {
           this.utilService.callSnackBar(
@@ -72,6 +76,9 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  changeTab(tabNumber: number): void {
+    tabNumber === 0 ? (this.generalTab = true) : (this.generalTab = false);
+  }
   ngOnDestroy(): void {
     this.routeSub.unsubscribe();
   }
@@ -97,6 +104,9 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
             heading: this.createBreadcrumbHeader(this.algorithm),
             subHeading: this.algorithm.computationModel + ' Algorithm',
           };
+          this.revisionCounter++;
+          this.revisionBadgeVisible = false;
+          this.fetchRevisions();
           this.utilService.callSnackBar('Algorithm was successfully updated.');
         },
         (error) => {
@@ -295,11 +305,9 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   }
 
   createBreadcrumbHeader(algorithm: AlgorithmDto): string {
-    const header = this.algorithm.name;
+    const header = algorithm.name;
 
-    return this.algorithm.acronym
-      ? header + ' (' + this.algorithm.acronym + ')'
-      : header;
+    return algorithm.acronym ? header + ' (' + algorithm.acronym + ')' : header;
   }
 
   getRevision(revision: EntityModelRevisionDto): void {
@@ -310,10 +318,14 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       })
       .subscribe(
         (algorithmRevision) => {
-          this.algorithm = algorithmRevision;
+          this.frontendAlgorithm = algorithmRevision;
+          let subheading = this.frontendAlgorithm.computationModel
+            .toString()
+            .toLowerCase();
+          subheading = subheading[0].toUpperCase() + subheading.slice(1);
           this.links[0] = {
-            heading: this.createBreadcrumbHeader(this.algorithm),
-            subHeading: ' Algorithm',
+            heading: this.createBreadcrumbHeader(this.frontendAlgorithm),
+            subHeading: subheading + ' Algorithm',
           };
           this.utilService.callSnackBar(
             'Algorithm revision ' +
@@ -328,6 +340,30 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
           );
         }
       );
+  }
+
+  fetchRevisions(): void {
+    this.algorithmService
+      .getAlgorithmRevisions({
+        algorithmId: this.algorithm.id,
+      })
+      .subscribe((data) => {
+        this.prepareRevisionData(data);
+      });
+  }
+
+  prepareRevisionData(data): void {
+    // Read all incoming data
+    if (data._embedded) {
+      this.revisions = data._embedded.revisions;
+    } else {
+      this.revisions = [];
+    }
+  }
+
+  resetRevisionBadge(): void {
+    this.revisionBadgeVisible = true;
+    this.revisionCounter = 0;
   }
 
   private getTagsForAlgorithm(algoId: string): void {

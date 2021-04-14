@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { LatexEditorDialogComponent } from '../dialogs/latex-editor-dialog.component';
@@ -20,6 +28,7 @@ export class TextInputComponent implements OnInit, OnChanges {
   @Input() maxLines = 1;
   @Input() isLink: boolean;
   @Input() pattern?: string;
+  @Input() baseValue: string;
 
   // TODO fix latex-renderer service running in a docker container to leverage the latex feature
   @Input() latexActive = true;

@@ -34,6 +34,7 @@
     <button
       *ngIf="
         (!toggleLatex && inputValue !== value) ||
+        (!toggleLatex && value !== baseValue && baseValue !== undefined) ||
         (toggleLatex && packedLatexValue !== value)
       "
       mat-button

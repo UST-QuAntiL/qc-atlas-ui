@@ -1,7 +1,20 @@
 <div *ngIf="algorithm" class="m-2">
   <div class="row p-2 m-0 align-items-center">
     <div class="col">
-      <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+      <div class="float-left mx-2">
+        <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+          <mat-form-field *ngIf="generalTab" appearance="fill"  [matBadge]="revisionCounter.toString()" matBadgeOverlap="true" matBadgePosition="before" [matBadgeHidden]="revisionBadgeVisible" (click)="resetRevisionBadge()">
+            <mat-label>Revision</mat-label>
+            <mat-select (selectionChange)="getRevision($event.value)">
+              <mat-option class="current-rev-option" [value]="revisions[revisions.length - 1]">
+                {{revisions[revisions.length - 1].creationDate}} (current Version)
+              </mat-option>
+              <mat-option *ngFor="let revision of revisions.slice(0,revisions.length - 1).reverse()" [value]="revision">
+                {{revision.creationDate}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+      </div>
     </div>
     <div class="col">
       <div class="float-right mx-2">
@@ -16,7 +29,7 @@
     </div>
   </div>
 
-  <mat-tab-group>
+  <mat-tab-group (selectedIndexChange)="changeTab($event)">
     <mat-tab label="General">
       <app-algorithm-properties
         [frontendAlgorithm]="frontendAlgorithm"
@@ -28,7 +41,6 @@
         (removeApplicationArea)="removeApplicationArea($event)"
         (onAddProblemType)="addProblemType($event)"
         (onRemoveProblemType)="removeProblemTypeFromAlgorithm($event)"
-        (onRevisionClicked)="getRevision($event)"
       ></app-algorithm-properties>
       <button
         class="master-save-button"
@@ -71,6 +83,6 @@
           [algo]="this.algorithm"
         ></app-algorithm-nisq-analyzer-results>
       </ng-template>
-    </mat-tab >
+    </mat-tab>
   </mat-tab-group>
 </div>

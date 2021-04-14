@@ -13,7 +13,6 @@ import {
   EntityModelApplicationAreaDto,
   EntityModelComputeResourcePropertyDto,
   EntityModelProblemTypeDto,
-  EntityModelRevisionDto,
 } from 'api-atlas/models';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
