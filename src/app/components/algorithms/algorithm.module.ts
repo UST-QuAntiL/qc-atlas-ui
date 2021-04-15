@@ -19,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatSortModule } from '@angular/material/sort';
+import { MatBadgeModule } from '@angular/material/badge';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
@@ -38,7 +39,6 @@ import { AddAlgorithmRelationDialogComponent } from './dialogs/add-algorithm-rel
 import { ImplementationPropertiesComponent } from './implementation-properties/implementation-properties.component';
 import { NisqAnalyzerResultsComponent } from './nisq-analyzer-results/nisq-analyzer-results.component';
 import { AddNewAnalysisDialogComponent } from './dialogs/add-new-analysis-dialog.component';
-import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [
