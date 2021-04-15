@@ -30,6 +30,7 @@ export class ImplementationViewComponent implements OnInit {
   algorithm: AlgorithmDto;
   softwarePlatformOptions: Option[];
   tags: TagDto[] = [];
+  revisions: EntityModelRevisionDto[] = [];
 
   isNisqUsed = environment.nisqAnalyzer;
   tableColumns = ['Name', 'Datatype', 'Description', 'Value'];
@@ -45,6 +46,9 @@ export class ImplementationViewComponent implements OnInit {
     { heading: '', subHeading: '' },
   ];
   computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
+  generalTabVisible = true;
+  revisionBadgeHidden = true;
+  revisionCounter = 0;
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -92,6 +96,9 @@ export class ImplementationViewComponent implements OnInit {
             heading: this.implementation.name,
             subHeading: subheading,
           };
+          this.revisionCounter++;
+          this.revisionBadgeHidden = false;
+          this.fetchRevisions();
           this.utilService.callSnackBar(
             'Implementation was successfully updated.'
           );
@@ -109,13 +116,14 @@ export class ImplementationViewComponent implements OnInit {
     // replace with switch case once quantum resource etc works in the backend
     if (tabNumber === 0) {
       this.loadGeneral();
+      this.generalTabVisible = true;
+    } else {
+      this.generalTabVisible = false;
     }
   }
 
   onDatalistConfigChanged(params: QueryParams): void {
-    this.publicationService.getPublications(params).subscribe((data) => {
-      console.log(data._embedded?.publications);
-    });
+    this.publicationService.getPublications(params).subscribe((data) => {});
   }
 
   onElementClicked(implementation: any): void {
@@ -305,6 +313,30 @@ export class ImplementationViewComponent implements OnInit {
       );
   }
 
+  fetchRevisions(): void {
+    this.implementationsService
+      .getImplementationRevisions({
+        implementationId: this.implementation.id,
+      })
+      .subscribe((data) => {
+        this.prepareRevisionData(data);
+      });
+  }
+
+  prepareRevisionData(data): void {
+    // Read all incoming data
+    if (data._embedded) {
+      this.revisions = data._embedded.revisions;
+    } else {
+      this.revisions = [];
+    }
+  }
+
+  resetRevisionBadge(): void {
+    this.revisionBadgeHidden = true;
+    this.revisionCounter = 0;
+  }
+
   private loadGeneral(): void {
     this.executionEnvironmentsService.getSoftwarePlatforms().subscribe(
       (list) => {
@@ -353,6 +385,7 @@ export class ImplementationViewComponent implements OnInit {
             this.links[1].heading = this.implementation.name;
             this.fetchComputeResourceProperties();
             this.getTagsForImplementation(algoId, implId);
+            this.fetchRevisions();
           },
           () => {
             this.utilService.callSnackBar(

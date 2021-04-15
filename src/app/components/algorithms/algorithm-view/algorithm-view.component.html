@@ -1,5 +1,5 @@
 <div *ngIf="algorithm" class="m-2">
-  <div class="row p-2 m-0 align-items-center">
+  <div class="row p-2 m-0">
     <div class="col">
       <div class="float-left mx-2">
         <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="col">
-      <div class="float-right mx-2">
+      <div class="float-right mx-2 p-3">
         <app-tags-component
           [allowRemoving]="true"
           [tags]="tags"

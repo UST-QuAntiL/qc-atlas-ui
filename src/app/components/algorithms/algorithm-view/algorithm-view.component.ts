@@ -77,7 +77,11 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   }
 
   changeTab(tabNumber: number): void {
-    tabNumber === 0 ? (this.generalTab = true) : (this.generalTab = false);
+    if (tabNumber === 0) {
+      this.generalTab = true;
+    } else {
+      this.generalTab = false;
+    }
   }
   ngOnDestroy(): void {
     this.routeSub.unsubscribe();
