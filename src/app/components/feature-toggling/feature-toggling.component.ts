@@ -31,23 +31,8 @@ export class FeatureTogglingComponent implements OnInit {
 
     this.links[0] = {
       heading: 'Feature Selection',
-      subHeading: '',
+      subHeading: 'Set the visibility of supported features',
     };
-  }
-
-  saveChanges() {
-    this.http
-      .put<QcAtlasUiConfiguration>(
-        environment.CONFIG_SEVER_URL + '/features',
-        this.config
-      )
-      .subscribe(
-        () => this.utilService.callSnackBar('Successfully saved at config!'),
-        (error) =>
-          this.utilService.callSnackBar(
-            'Error while saving config!' + error.message
-          )
-      );
   }
 
   toggleFeature(event, feature): void {
