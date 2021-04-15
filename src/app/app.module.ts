@@ -59,6 +59,7 @@ import { ComputeResourcePropertyTypesListComponent } from './components/compute-
 import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './components/compute-resource-property-types/dialogs/add-or-edit-compute-resource-property-type-dialog/add-or-edit-compute-resource-property-type-dialog.component';
 import { QcAtlasUiRepositoryConfigurationService } from './directives/qc-atlas-ui-repository-configuration.service';
 import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module';
+import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module
     AddOrEditPatternRelationTypeDialogComponent,
     ComputeResourcePropertyTypesListComponent,
     AddOrEditComputeResourcePropertyTypeDialogComponent,
+    FeatureTogglingComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
