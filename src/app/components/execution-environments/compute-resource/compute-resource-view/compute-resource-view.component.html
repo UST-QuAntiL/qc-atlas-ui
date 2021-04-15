@@ -23,7 +23,7 @@
         [computeResource]="computeResource"
       ></app-compute-resource-cloud-service-list>
     </mat-tab>
-    <mat-tab label="Provenance">
+    <mat-tab label="Provenance" *qcAtlasUiShowOnFeature="UiFeatures.QPROV">
       <app-compute-resource-provenance
         [computeResource]="computeResource"
       ></app-compute-resource-provenance>

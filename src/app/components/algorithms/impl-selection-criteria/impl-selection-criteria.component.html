@@ -36,7 +36,7 @@
       </div>
     </div>
   </mat-card>
-  <div class="d-flex justify-content-between header-container">
+  <div class="d-flex justify-content-between header-container" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
     <h4>Input Parameters</h4>
     <div class="d-flex">
       <button
@@ -60,66 +60,68 @@
       </button>
     </div>
   </div>
-  <div *ngFor="let param of nisqImpl.inputParameters.parameters; let i = index">
-    <mat-card class="m-4">
-      <div class="row">
-        <div class="col-md-1 col-sm-2 col-2 text-center align-self-center">
-          <mat-checkbox
-            color="warn"
-            [checked]="selection.isSelected(i)"
-            (click)="$event.stopPropagation()"
-            (change)="$event ? selection.toggle(i) : null"
-          >
-          </mat-checkbox>
-        </div>
-        <div class="col-md-11 col-sm-10 col-10">
-          <div class="row justify-content-between">
-            <div class="col">
-              <app-text-input
-                name="Name of the Parameter"
-                [value]="param.name"
-                (onChange)="param.name = $event"
-              >
-              </app-text-input>
-            </div>
-            <div class="col">
-              <app-text-input
-                name="Description"
-                [value]="param.description"
-                (onChange)="param.description = $event"
-              >
-              </app-text-input>
-            </div>
-            <div class="col">
-              <app-select-input
-                name="Datatype"
-                [value]="param.type"
-                [choices]="[
-                  { value: 'Integer', label: 'Integer' },
-                  { value: 'Float', label: 'Float' },
-                  { value: 'String', label: 'String' }
-                ]"
-                (onChange)="param.type = $event"
-              >
-              </app-select-input>
-            </div>
-            <div class="col">
-              <app-text-input
-                name="Restriction"
-                [value]="param.restriction"
-                (onChange)="param.restriction = $event"
-              >
-              </app-text-input>
+  <div *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
+    <div *ngFor="let param of nisqImpl.inputParameters.parameters; let i = index">
+      <mat-card class="m-4">
+        <div class="row">
+          <div class="col-md-1 col-sm-2 col-2 text-center align-self-center">
+            <mat-checkbox
+              color="warn"
+              [checked]="selection.isSelected(i)"
+              (click)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(i) : null"
+            >
+            </mat-checkbox>
+          </div>
+          <div class="col-md-11 col-sm-10 col-10">
+            <div class="row justify-content-between">
+              <div class="col">
+                <app-text-input
+                  name="Name of the Parameter"
+                  [value]="param.name"
+                  (onChange)="param.name = $event"
+                >
+                </app-text-input>
+              </div>
+              <div class="col">
+                <app-text-input
+                  name="Description"
+                  [value]="param.description"
+                  (onChange)="param.description = $event"
+                >
+                </app-text-input>
+              </div>
+              <div class="col">
+                <app-select-input
+                  name="Datatype"
+                  [value]="param.type"
+                  [choices]="[
+                    { value: 'Integer', label: 'Integer' },
+                    { value: 'Float', label: 'Float' },
+                    { value: 'String', label: 'String' }
+                  ]"
+                  (onChange)="param.type = $event"
+                >
+                </app-select-input>
+              </div>
+              <div class="col">
+                <app-text-input
+                  name="Restriction"
+                  [value]="param.restriction"
+                  (onChange)="param.restriction = $event"
+                >
+                </app-text-input>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </mat-card>
+      </mat-card>
+    </div>
   </div>
-  <div class="header-container">
+  <div class="header-container" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
     <h4>Prolog Rules</h4>
   </div>
-  <mat-card class="m-4">
+  <mat-card class="m-4" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
     <div class="row">
       <div class="col-12">
         <app-prolog-input

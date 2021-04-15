@@ -8,6 +8,7 @@ import { FieldUpdate } from '../../../../util/FieldUpdate';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
+import { UiFeatures } from '../../../../directives/qc-atlas-ui-repository-configuration.service';
 
 @Component({
   selector: 'app-compute-resource-view',
@@ -15,6 +16,7 @@ import { UtilService } from '../../../../util/util.service';
   styleUrls: ['./compute-resource-view.component.scss'],
 })
 export class ComputeResourceViewComponent implements OnInit {
+  readonly UiFeatures = UiFeatures;
   computeResource: EntityModelComputeResourceDto;
   frontendComputeResource: EntityModelComputeResourceDto;
 

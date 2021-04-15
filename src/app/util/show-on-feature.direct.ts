@@ -25,12 +25,13 @@ export class ShowOnFeatureDirective implements OnInit {
       let found = false;
       for (const feature of this.featuresToShow) {
         if (this.configurationService.configuration.features[feature]) {
-          this.viewContainerRef.createEmbeddedView(this.templateRef);
           found = true;
         }
       }
       if (!found) {
         this.viewContainerRef.clear();
+      } else {
+        this.viewContainerRef.createEmbeddedView(this.templateRef);
       }
     } else if (typeof this.featuresToShow === 'string') {
       if (
