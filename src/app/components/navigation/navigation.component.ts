@@ -4,9 +4,12 @@ import {
   Breakpoints,
   BreakpointState,
 } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import {
+  QcAtlasUiConfiguration,
+  QcAtlasUiRepositoryConfigurationService,
+  UiFeatures,
+} from '../../directives/qc-atlas-ui-repository-configuration.service';
 
 @Component({
   selector: 'app-navigation',
@@ -14,15 +17,21 @@ import { Router } from '@angular/router';
   styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
+  UiFeatures = UiFeatures;
+  patternAtlasFeatureIsSet: boolean;
+  config: QcAtlasUiConfiguration;
+
   title = 'qc-atlas-ui';
   hideNav = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private router: Router
+    private router: Router,
+    private configData: QcAtlasUiRepositoryConfigurationService
   ) {}
 
   ngOnInit(): void {
+    this.config = this.configData.configuration;
     this.breakpointObserver
       .observe([Breakpoints.Small, Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
@@ -32,6 +41,10 @@ export class NavigationComponent implements OnInit {
           this.hideNav = false;
         }
       });
+  }
+
+  checkPatternAtlasFeatureMode(): void {
+    this.patternAtlasFeatureIsSet = this.config.features.patternAtlas;
   }
 
   goToHome(): void {
