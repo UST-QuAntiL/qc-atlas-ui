@@ -85,7 +85,7 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
   hasNestedChild = (_: number, nodeData: TreeNode): boolean =>
     nodeData.hasParents;
 
-  onSingleDelete(element: TreeNode) {
+  onSingleDelete(element: TreeNode): void {
     this.onRemoveElement.emit(element.problemType);
   }
 }

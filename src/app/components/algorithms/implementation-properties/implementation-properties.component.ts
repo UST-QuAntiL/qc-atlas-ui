@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
-import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 
 @Component({
   selector: 'app-implementation-properties',

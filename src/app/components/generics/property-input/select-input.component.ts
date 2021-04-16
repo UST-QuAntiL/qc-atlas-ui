@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractValueAccessor, DoProvider } from './abstract-value-accessor';
+import { DoProvider } from './abstract-value-accessor';
 
 export interface Option {
   value: string;
@@ -27,7 +27,7 @@ export class SelectInputComponent implements OnInit {
     this.onSaveChanges.emit(this.inputValue);
   }
 
-  get selectedValue() {
+  get selectedValue(): string {
     return this.choices.find((opt) => opt.value === this.value)?.label || 'n/a';
   }
 

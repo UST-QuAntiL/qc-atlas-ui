@@ -46,7 +46,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
               subHeading: '',
             };
           },
-          (error) => {
+          () => {
             this.utilService.callSnackBar(
               'Error! Software platform could not be retrieved.'
             );
@@ -86,7 +86,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
             'Successfully updated software platform.'
           );
         },
-        (error) => {
+        () => {
           this.utilService.callSnackBar(
             'Error! Software platform could not be updated.'
           );

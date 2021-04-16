@@ -62,7 +62,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
           this.getProblemTypesForAlgorithm(algoId);
           this.getTagsForAlgorithm(algoId);
         },
-        (error) => {
+        () => {
           this.utilService.callSnackBar(
             'Error! Algorithm could not be retrieved.'
           );

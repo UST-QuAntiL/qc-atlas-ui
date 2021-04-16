@@ -39,7 +39,7 @@ export class PublicationViewComponent implements OnInit {
             subHeading: '',
           };
         },
-        (error) => {
+        () => {
           this.utilService.callSnackBar(
             'Error! Publications could not be retrieved.'
           );
@@ -72,7 +72,7 @@ export class PublicationViewComponent implements OnInit {
           };
           this.utilService.callSnackBar('Successfully updated publication.');
         },
-        (error) => {
+        () => {
           this.utilService.callSnackBar(
             'Error! Publication could not be updated.'
           );

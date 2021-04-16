@@ -104,7 +104,7 @@ export class DataListComponent implements OnInit {
     this.selection.clear();
   }
 
-  onLinkSubmitted() {
+  onLinkSubmitted(): void {
     this.submitLinkElements.emit(this.generateSelectParameter());
     this.selection.clear();
   }
