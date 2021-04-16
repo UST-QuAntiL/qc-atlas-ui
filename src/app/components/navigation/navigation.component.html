@@ -33,7 +33,7 @@
           <span class="pl-3">Compute Resources</span>
         </a>
       </div>
-      <a mat-list-item (click)="minorComponentsCollapse.show(); executionEnvironmentCollapseContent.hide(); checkPatternAtlasFeatureMode()">
+      <a mat-list-item (click)="minorComponentsCollapse.show(); executionEnvironmentCollapseContent.hide()">
         Manage Components
         <mat-icon class="collapse-arrow-icon">{{ minorComponentsCollapse.isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
       </a>
@@ -50,9 +50,9 @@
            routerLinkActive="routerLinkActive">
           <span class="pl-3">Algorithm Relation Types</span>
         </a>
-        <a *ngIf="patternAtlasFeatureIsSet" class="sub-tab" mat-list-item [routerLink]="'./pattern-relation-types'"
+        <a *ngIf="configData.configuration.features.patternAtlas" class="sub-tab" mat-list-item [routerLink]="'./pattern-relation-types'"
            routerLinkActive="routerLinkActive">
-          <span class="pl-3" *ngIf="patternAtlasFeatureIsSet">Pattern Relation Types</span>
+          <span class="pl-3" *ngIf="configData.configuration.features.patternAtlas">Pattern Relation Types</span>
         </a>
         <a class="sub-tab" mat-list-item [routerLink]="'./compute-resource-property-types'"
            routerLinkActive="routerLinkActive">

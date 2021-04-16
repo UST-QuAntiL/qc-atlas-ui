@@ -1,5 +1,8 @@
 {
-  "feature": {
-    "hello": "world"
+  "features": {
+    "nisqAnalyzer": "true",
+    "qprov": "true",
+    "patternAtlas": "true",
+    "nisqAnalyzerCompilerComparison": "true"
   }
 }

@@ -6,7 +6,6 @@ import {
 } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import {
-  QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
   UiFeatures,
 } from '../../directives/qc-atlas-ui-repository-configuration.service';
@@ -18,8 +17,6 @@ import {
 })
 export class NavigationComponent implements OnInit {
   UiFeatures = UiFeatures;
-  patternAtlasFeatureIsSet: boolean;
-  config: QcAtlasUiConfiguration;
 
   title = 'qc-atlas-ui';
   hideNav = false;
@@ -27,24 +24,15 @@ export class NavigationComponent implements OnInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router,
-    private configData: QcAtlasUiRepositoryConfigurationService
+    public configData: QcAtlasUiRepositoryConfigurationService
   ) {}
 
   ngOnInit(): void {
-    this.config = this.configData.configuration;
     this.breakpointObserver
       .observe([Breakpoints.Small, Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
-        if (state.matches) {
-          this.hideNav = true;
-        } else {
-          this.hideNav = false;
-        }
+        this.hideNav = state.matches;
       });
-  }
-
-  checkPatternAtlasFeatureMode(): void {
-    this.patternAtlasFeatureIsSet = this.config.features.patternAtlas;
   }
 
   goToHome(): void {

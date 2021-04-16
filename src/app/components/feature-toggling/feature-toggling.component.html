@@ -8,19 +8,19 @@
 <mat-card class="m-2">
     <div class="mx-3 mb-2">
         <input type="checkbox" [(ngModel)]="config.features.nisqAnalyzer" id="nisqAnalyzer" name="nisqAnalyzer"
-               [checked]="config.features.nisqAnalyzer" (change)="toggleFeature($event, 'nisqAnalyzer')">
+               [checked]="config.features.nisqAnalyzer" (change)="toggleFeature(UiFeatures.NISQ_ANALYZER)">
         <label for="nisqAnalyzer">NISQ Analyzer</label>
         <br>
         <input type="checkbox" [(ngModel)]="config.features.nisqAnalyzerCompilerComparison" id="nisqAnalyzerCompilerComparison" name="nisqAnalyzerCompilerComparison"
-               [checked]="config.features.nisqAnalyzerCompilerComparison" (change)="toggleFeature($event, 'nisqAnalyzerCompilerComparison')">
+               [checked]="config.features.nisqAnalyzerCompilerComparison" (change)="toggleFeature(UiFeatures.NISQ_ANALYZER_COMPILER_COMPARISON)">
         <label for="nisqAnalyzerCompilerComparison">NISQ Analyzer - Compiler Comparison</label>
         <br>
         <input type="checkbox" [(ngModel)]="config.features.patternAtlas" id="patternAtlas" name="patternAtlas"
-               [checked]="config.features.patternAtlas" (change)="toggleFeature($event, 'patternAtlas')">
+               [checked]="config.features.patternAtlas" (change)="toggleFeature(UiFeatures.PATTERN_ATLAS)">
         <label for="patternAtlas">Pattern Atlas</label>
         <br>
         <input type="checkbox" [(ngModel)]="config.features.qprov" id="qprov" name="qprov"
-               [checked]="config.features.qprov" (change)="toggleFeature($event, 'qprov')">
+               [checked]="config.features.qprov" (change)="toggleFeature(UiFeatures.QPROV)">
         <label for="qprov">QProv</label>
     </div>
 </mat-card>

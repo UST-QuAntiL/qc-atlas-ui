@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.configService.getConfigurationFromBackend().subscribe(
-      (config) => (this.loading = false),
+      () => (this.loading = false),
       (error) => {
         this.loading = false;
         this.utilService.callSnackBar(

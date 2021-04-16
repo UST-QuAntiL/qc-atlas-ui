@@ -35,23 +35,28 @@ export class FeatureTogglingComponent implements OnInit {
     };
   }
 
-  toggleFeature(event, feature): void {
+  toggleFeature(feature): void {
     let url = environment.CONFIG_SEVER_URL + '/features/';
     let value = '';
-    if (feature === 'qprov') {
-      url += this.UiFeatures.QPROV;
-      value = String(this.config.features.qprov);
-    } else if (feature === 'patternAtlas') {
-      url += this.UiFeatures.PATTERN_ATLAS;
-      value = String(this.config.features.patternAtlas);
-    } else if (feature === 'nisqAnalyzerCompilerComparison') {
-      url += this.UiFeatures.NISQ_ANALYZER_COMPILER_COMPARISON;
-      value = String(this.config.features.nisqAnalyzerCompilerComparison);
-    } else if (feature === 'nisqAnalyzer') {
-      url += this.UiFeatures.NISQ_ANALYZER;
-      value = String(this.config.features.nisqAnalyzer);
-    } else {
-      console.error('Feature does not exist');
+    switch (feature) {
+      case this.UiFeatures.QPROV:
+        url += this.UiFeatures.QPROV;
+        value = String(this.config.features.qprov);
+        break;
+      case this.UiFeatures.PATTERN_ATLAS:
+        url += this.UiFeatures.PATTERN_ATLAS;
+        value = String(this.config.features.patternAtlas);
+        break;
+      case this.UiFeatures.NISQ_ANALYZER_COMPILER_COMPARISON:
+        url += this.UiFeatures.NISQ_ANALYZER_COMPILER_COMPARISON;
+        value = String(this.config.features.nisqAnalyzerCompilerComparison);
+        break;
+      case this.UiFeatures.NISQ_ANALYZER:
+        url += this.UiFeatures.NISQ_ANALYZER;
+        value = String(this.config.features.nisqAnalyzer);
+        break;
+      default:
+        console.error('Feature does not exist');
     }
 
     this.http.put(url, {}, { params: { value } }).subscribe(
