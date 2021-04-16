@@ -41,7 +41,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
       (implementations) => {
         this.prepareImplementationData(implementations);
       },
-      (error) => {
+      () => {
         this.utilService.callSnackBar(
           'Error! Implementation could not be retrieved.'
         );
@@ -180,7 +180,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
     ]);
   }
 
-  onDatalistConfigChanged(event) {
+  onDatalistConfigChanged(event): void {
     event.algorithmId = this.algorithm.id;
     this.getImplementations(event);
   }

@@ -57,7 +57,6 @@ import { AddOrEditPatternRelationTypeDialogComponent } from './components/patter
 import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
 // eslint-disable-next-line max-len
 import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './components/compute-resource-property-types/dialogs/add-or-edit-compute-resource-property-type-dialog/add-or-edit-compute-resource-property-type-dialog.component';
-import { QcAtlasUiRepositoryConfigurationService } from './directives/qc-atlas-ui-repository-configuration.service';
 import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module';
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
 
