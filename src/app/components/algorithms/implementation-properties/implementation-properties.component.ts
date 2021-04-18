@@ -1,23 +1,7 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
 import { EntityModelRevisionDto } from 'api-atlas/models/entity-model-revision-dto';
-import { ImplementationsService } from 'api-atlas/services/implementations.service';
-import { QueryParams } from '../../generics/data-list/data-list.component';
-import { GenericDataService } from '../../../util/generic-data.service';
-import { UtilService } from '../../../util/util.service';
-import {
-  ConfirmDialogComponent,
-  ConfirmDialogData,
-} from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'app-implementation-properties',
@@ -46,13 +30,7 @@ export class ImplementationPropertiesComponent implements OnInit {
     EntityModelRevisionDto
   > = new EventEmitter<EntityModelRevisionDto>();
 
-  revisions: any[] = [];
-
-  constructor(
-    private implementationService: ImplementationsService,
-    private genericDataService: GenericDataService,
-    private utilService: UtilService
-  ) {}
+  constructor() {}
 
   ngOnInit(): void {}
 

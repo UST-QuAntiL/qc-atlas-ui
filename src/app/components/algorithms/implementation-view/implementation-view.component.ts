@@ -286,7 +286,7 @@ export class ImplementationViewComponent implements OnInit {
       })
       .subscribe(
         (implementationRevision) => {
-          this.implementation = implementationRevision;
+          this.frontendImplementation = implementationRevision;
           let subheading = this.algorithm.computationModel
             .toString()
             .toLowerCase();
@@ -295,7 +295,7 @@ export class ImplementationViewComponent implements OnInit {
             subheading.slice(1) +
             ' Implementation';
           this.links[1] = {
-            heading: this.implementation.name,
+            heading: this.frontendImplementation.name,
             subHeading: subheading,
           };
           this.utilService.callSnackBar(
