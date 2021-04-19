@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { QcAtlasUiRepositoryConfigurationService } from './directives/qc-atlas-ui-repository-configuration.service';
 import { UtilService } from './util/util.service';
 
@@ -19,7 +20,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.configService.getConfigurationFromBackend().subscribe(
       () => (this.loading = false),
-      (error) => {
+      (error: HttpErrorResponse) => {
         this.loading = false;
         this.utilService.callSnackBar(
           'Error while loading config from config server!' + error.message

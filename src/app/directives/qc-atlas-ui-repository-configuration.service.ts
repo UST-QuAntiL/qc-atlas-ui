@@ -68,6 +68,16 @@ export class QcAtlasUiRepositoryConfigurationService {
       );
   }
 
+  applyConfig(feature: UiFeatures, checked: boolean): Observable<string> {
+    const url = environment.CONFIG_SEVER_URL + '/features/' + feature;
+
+    return this.http.put<string>(
+      url,
+      {},
+      { params: { value: String(checked) } }
+    );
+  }
+
   /**
    * etcd stores and serves the configuration in a from like
    * <code>{ "key": "/features", "dir": true, "nodes": [
