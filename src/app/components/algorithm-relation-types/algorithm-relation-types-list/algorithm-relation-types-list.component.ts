@@ -78,7 +78,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
         params.body = algorithmRelationType;
         this.algorithmRelationTypeService
           .createAlgorithmRelationType(params)
-          .subscribe((data) => {
+          .subscribe(() => {
             this.getAlgorithmRelationTypesHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
@@ -184,7 +184,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
         };
         this.algorithmRelationTypeService
           .updateAlgorithmRelationType(params)
-          .subscribe((data) => {
+          .subscribe(() => {
             this.getAlgorithmRelationTypesHateoas(
               this.pagingInfo._links.self.href
             );

@@ -48,7 +48,7 @@ export class SoftwarePlatformListComponent implements OnInit {
       (data) => {
         this.prepareSoftwarePlatformData(data);
       },
-      (error) => {
+      () => {
         this.utilService.callSnackBar(
           'Error! Software platforms could not be retrieved.'
         );

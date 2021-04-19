@@ -9,11 +9,10 @@ import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { TagDto } from 'api-atlas/models/tag-dto';
-import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
+import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
-import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-algorithm-view',
@@ -21,7 +20,7 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./algorithm-view.component.scss'],
 })
 export class AlgorithmViewComponent implements OnInit, OnDestroy {
-  isNisqUsed = environment.nisqAnalyzer;
+  readonly UiFeatures = UiFeatures;
 
   algorithm: EntityModelAlgorithmDto;
   frontendAlgorithm: EntityModelAlgorithmDto;
@@ -55,14 +54,14 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
             .toLowerCase();
           subheading = subheading[0].toUpperCase() + subheading.slice(1);
           this.links[0] = {
-            heading: this.createBreadcrumbHeader(this.algorithm),
+            heading: this.createBreadcrumbHeader(),
             subHeading: subheading + ' Algorithm',
           };
           this.getApplicationAreasForAlgorithm(algoId);
           this.getProblemTypesForAlgorithm(algoId);
           this.getTagsForAlgorithm(algoId);
         },
-        (error) => {
+        () => {
           this.utilService.callSnackBar(
             'Error! Algorithm could not be retrieved.'
           );
@@ -93,7 +92,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
             ) as EntityModelAlgorithmDto;
           }
           this.links[0] = {
-            heading: this.createBreadcrumbHeader(this.algorithm),
+            heading: this.createBreadcrumbHeader(),
             subHeading: this.algorithm.computationModel + ' Algorithm',
           };
           this.utilService.callSnackBar('Algorithm was successfully updated.');
@@ -294,7 +293,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       );
   }
 
-  createBreadcrumbHeader(algorithm: AlgorithmDto): string {
+  createBreadcrumbHeader(): string {
     const header = this.algorithm.name;
 
     return this.algorithm.acronym

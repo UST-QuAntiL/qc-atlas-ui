@@ -289,7 +289,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
     });
   }
 
-  onUrlClicked(urlData: UrlData) {
+  onUrlClicked(urlData: UrlData): void {
     // No check needed since cloud services have only one url-field called 'url'
     window.open(urlData.element['url'], '_blank');
   }

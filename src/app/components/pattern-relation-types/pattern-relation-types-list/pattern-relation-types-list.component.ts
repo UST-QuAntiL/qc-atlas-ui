@@ -84,7 +84,7 @@ export class PatternRelationTypesListComponent implements OnInit {
         this.patternRelationTypeService
           .createPatternRelationType(params)
           .subscribe(
-            (data) => {
+            () => {
               this.getPatternRelationTypesHateoas(
                 this.utilService.getLastPageAfterCreation(
                   this.pagingInfo._links.self.href,
@@ -96,7 +96,7 @@ export class PatternRelationTypesListComponent implements OnInit {
                 'Successfully created pattern relation type.'
               );
             },
-            (error) => {
+            () => {
               this.utilService.callSnackBar(
                 'Error! Pattern relation type could not be created.'
               );
@@ -197,7 +197,7 @@ export class PatternRelationTypesListComponent implements OnInit {
         this.patternRelationTypeService
           .updatePatternRelationType(params)
           .subscribe(
-            (data) => {
+            () => {
               this.getPatternRelationTypesHateoas(
                 this.pagingInfo._links.self.href
               );
@@ -205,7 +205,7 @@ export class PatternRelationTypesListComponent implements OnInit {
                 'Successfully updated pattern relation type.'
               );
             },
-            (error) => {
+            () => {
               this.utilService.callSnackBar(
                 'Error! Pattern relation type could not be updated.'
               );

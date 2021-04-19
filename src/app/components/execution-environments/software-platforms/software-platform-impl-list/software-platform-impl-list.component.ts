@@ -94,7 +94,7 @@ export class SoftwarePlatformImplListComponent implements OnInit {
             this.linkObject.linkedData = data._embedded.implementations;
           }
         },
-        (error) => {
+        () => {
           this.utilService.callSnackBar(
             'Error! Linked implementations could not be retrieved.'
           );

@@ -275,7 +275,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         body: property,
       })
       .subscribe(
-        (e) => {
+        () => {
           this.utilService.callSnackBar(
             'Compute resource property was successfully added.'
           );
@@ -299,7 +299,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         body: property,
       })
       .subscribe(
-        (e) => {
+        () => {
           this.utilService.callSnackBar(
             'Compute resource property was successfully updated.'
           );
@@ -322,7 +322,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         computeResourcePropertyId: property.id,
       })
       .subscribe(
-        (e) => {
+        () => {
           this.utilService.callSnackBar(
             'Compute resource property was successfully deleted.'
           );

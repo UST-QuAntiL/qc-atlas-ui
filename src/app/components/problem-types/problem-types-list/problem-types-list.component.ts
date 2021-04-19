@@ -99,7 +99,7 @@ export class ProblemTypesListComponent implements OnInit {
 
         params.body = problemTypeDto;
         this.problemTypeService.createProblemType(params).subscribe(
-          (data) => {
+          () => {
             this.getProblemTypesHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
@@ -213,17 +213,13 @@ export class ProblemTypesListComponent implements OnInit {
             problemTypeId: updatedProblemType.id,
             body: updatedProblemType,
           };
-          this.problemTypeService
-            .updateProblemType(params)
-            .subscribe((data) => {
-              this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
-              this.utilService.callSnackBar(
-                'Successfully updated problem type.'
-              );
-            });
+          this.problemTypeService.updateProblemType(params).subscribe(() => {
+            this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
+            this.utilService.callSnackBar('Successfully updated problem type.');
+          });
         }
       },
-      (error) => {
+      () => {
         this.utilService.callSnackBar(
           'Error! Problem Type could not be updated.'
         );

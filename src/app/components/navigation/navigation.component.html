@@ -50,15 +50,18 @@
            routerLinkActive="routerLinkActive">
           <span class="pl-3">Algorithm Relation Types</span>
         </a>
-        <a class="sub-tab" mat-list-item [routerLink]="'./pattern-relation-types'"
+        <a *ngIf="configData.configuration.features.patternAtlas" class="sub-tab" mat-list-item [routerLink]="'./pattern-relation-types'"
            routerLinkActive="routerLinkActive">
-          <span class="pl-3">Pattern Relation Types</span>
+          <span class="pl-3" *ngIf="configData.configuration.features.patternAtlas">Pattern Relation Types</span>
         </a>
         <a class="sub-tab" mat-list-item [routerLink]="'./compute-resource-property-types'"
            routerLinkActive="routerLinkActive">
           <span class="pl-3">Compute Resource Property Types</span>
         </a>
       </div>
+      <a mat-list-item (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide()" [routerLink]="'./feature-toggling'" routerLinkActive="routerLinkActive">
+        Settings
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

@@ -16,6 +16,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { GenericsModule } from '../../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
+import { QcAtlasUiFeatureToggleModule } from '../../../directives/feature-toggle.module';
 import { ComputeResourceSoftwarePlatformListComponent } from './compute-resource-software-platform-list/compute-resource-software-platform-list.component';
 import { ComputeResourceCloudServiceListComponent } from './compute-resource-cloud-service-list/compute-resource-cloud-service-list.component';
 import { ComputeResourcePropertiesComponent } from './compute-resource-properties/compute-resource-properties.component';
@@ -53,6 +54,7 @@ import { ComputeResourceProvenanceComponent } from './compute-resource-provenanc
     MatExpansionModule,
     MatTableModule,
     NgxGraphModule,
+    QcAtlasUiFeatureToggleModule,
   ],
   exports: [ComputeResourceViewComponent, ComputeResourceListComponent],
 })

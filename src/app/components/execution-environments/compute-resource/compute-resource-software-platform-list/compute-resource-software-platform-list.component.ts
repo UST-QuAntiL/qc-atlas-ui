@@ -120,7 +120,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
     this.dialogData.pagingInfo._links = data._links;
   }
 
-  openLinkSoftwarePlatformDialog() {
+  openLinkSoftwarePlatformDialog(): void {
     this.getAllSoftwarePlatforms().subscribe((data) => {
       this.updateLinkDialogData(data);
       const dialogRef = this.utilService.createDialog(

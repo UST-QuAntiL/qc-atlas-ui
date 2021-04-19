@@ -22,6 +22,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
+import { QcAtlasUiFeatureToggleModule } from '../../directives/feature-toggle.module';
 import { NisqAnalyzerModule } from './nisq-analyzer/nisq-analyzer.module';
 import { AlgorithmListComponent } from './algorithm-list/algorithm-list.component';
 import { AlgorithmViewComponent } from './algorithm-view/algorithm-view.component';
@@ -83,6 +84,7 @@ import { AddNewAnalysisDialogComponent } from './dialogs/add-new-analysis-dialog
     MatTableModule,
     BrowserModule,
     MatSortModule,
+    QcAtlasUiFeatureToggleModule,
   ],
   exports: [
     AlgorithmListComponent,
