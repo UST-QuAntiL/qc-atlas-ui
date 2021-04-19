@@ -1,4 +1,3 @@
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 (function (window) {
   window['env'] = window['env'] || {};
 
