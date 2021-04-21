@@ -91,14 +91,6 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     { value: 'QUANTUM_ANNEALING', label: 'Quantum Annealing' },
   ];
 
-  tableColumns = ['Id', 'Date'];
-  variableNames = ['id', 'creationDate'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
-    amountChoices: [10, 25, 50],
-    selectedAmount: 10,
-  };
-
   constructor(
     private algorithmService: AlgorithmService,
     private applicationAreaService: ApplicationAreasService,
