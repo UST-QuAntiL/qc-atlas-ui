@@ -1,6 +1,6 @@
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
 # QC Atlas UI
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 User Interface for the QuAntiL Environment supporting
  - [QC Atlas](https://github.com/UST-QuAntiL/qc-atlas)
@@ -17,7 +17,7 @@ The UI was generated with [Angular CLI](https://github.com/angular/angular-cli) 
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server. Navigate to <http://localhost:4200>. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
