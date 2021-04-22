@@ -151,48 +151,51 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2" *ngIf="algorithm.computationModel === 'QUANTUM'">
-        <app-text-input name="Speedup"
-                        [value]="algorithm.speedUp"
-                        (onChange)="onPropertyChanged($event, 'speedUp')"
-                        (onSaveChanges)="onChangesSaved($event, 'speedUp')"></app-text-input>
-      </mat-card>
+  <div *ngIf="algorithm.computationModel === 'QUANTUM' && frontendAlgorithm.computationModel === 'QUANTUM'">
+    <div class="row">
+      <div class="col-lg-6 col-sm-12">
+        <mat-card class="m-2">
+          <app-text-input name="Speedup"
+                          [value]="frontendAlgorithm.speedUp"
+                          [baseValue]="algorithm.speedUp"
+                          (onChange)="onPropertyChanged($event, 'speedUp')"
+                          (onSaveChanges)="onChangesSaved($event, 'speedUp')"></app-text-input>
+        </mat-card>
+      </div>
+
+      <div class="col-lg-6 col-sm-12">
+        <mat-card class="m-2">
+          <app-checkbox-input name="NISQ ready"
+                              [value]="frontendAlgorithm.nisqReady"
+                              [baseValue]="algorithm.nisqReady"
+                              (onChange)="onPropertyChanged($event, 'nisqReady')"
+                              (onSaveChanges)="onChangesSaved($event, 'nisqReady')">
+          </app-checkbox-input>
+        </mat-card>
+      </div>
     </div>
 
-    <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2" *ngIf="algorithm.computationModel === 'QUANTUM'">
-        <app-checkbox-input name="NISQ ready"
-                            [value]="algorithm.nisqReady"
-                            (onChange)="onPropertyChanged($event, 'nisqReady')"
-                            (onSaveChanges)="onChangesSaved($event, 'nisqReady')">
-        </app-checkbox-input>
-      </mat-card>
+    <!-- TODO: finish Sketch -->
+    <div class="row">
+      <div class="col-lg-6 col-sm-12">
+        <mat-card class="m-2">
+          <app-select-input name="Quantum computation model"
+                            [value]="algorithm.quantumComputationModel"
+                            [choices]="availableQuantumComputationModelOptions"
+                            (onChange)="onPropertyChanged($event,   'quantumComputationModel')"
+                            (onSaveChanges)="onChangesSaved($event,   'quantumComputationModel')">
+          </app-select-input>
+        </mat-card>
+      </div>
+      <!-- <div class="col-lg-6 col-sm-12">
+         <mat-card class="m-2">
+           <app-select-input name="Sketch type"
+                             [value]="algorithm.sketches"
+                             [includeEmpty]="true"
+                             [choices]="availableSketchOptions"
+                             (onSaveChanges)="onChangesSaved($event, 'sketch')"></app-select-input>
+         </mat-card>
+       </div>-->
     </div>
-  </div>
-
-  <!-- TODO: finish Sketch -->
-  <div class="row">
-    <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2" *ngIf="algorithm.computationModel === 'QUANTUM'">
-        <app-select-input name="Quantum computation model"
-                          [value]="algorithm.quantumComputationModel"
-                          [choices]="availableQuantumComputationModelOptions"
-                          (onChange)="onPropertyChanged($event,   'quantumComputationModel')"
-                          (onSaveChanges)="onChangesSaved($event,   'quantumComputationModel')">
-        </app-select-input>
-      </mat-card>
-    </div>
-
-    <!-- <div class="col-lg-6 col-sm-12">
-       <mat-card class="m-2">
-         <app-select-input name="Sketch type"
-                           [value]="algorithm.sketches"
-                           [includeEmpty]="true"
-                           [choices]="availableSketchOptions"
-                           (onSaveChanges)="onChangesSaved($event, 'sketch')"></app-select-input>
-       </mat-card>
-     </div>-->
   </div>
 </div>
