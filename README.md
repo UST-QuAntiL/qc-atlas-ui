@@ -42,7 +42,7 @@ You are solely responsible for determining the appropriateness of using or redis
 
 ## License
 
-SPDX-License-Identifier: EPL-2.0 OR Apache-2.0
+SPDX-License-Identifier: Apache-2.0
 
   [Federal Ministry for Economic Affairs and Energy]: http://www.bmwi.de/EN
   [PlanQK]: https://planqk.de
