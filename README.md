@@ -1,10 +1,23 @@
-# QcAtlasUi
+# QC Atlas UI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.2.
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+User Interface for the QuAntiL Environment supporting
+ - [QC Atlas](https://github.com/UST-QuAntiL/qc-atlas)
+ - [LaTeX Renderer](https://github.com/UST-QuAntiL/latex-renderer)
+ - [NISQ Analyzer](https://github.com/UST-QuAntiL/nisq-analyzer)
+ - [Pattern Atlas](https://github.com/PatternAtlas/pattern-atlas-api)
+ - [QProv](https://github.com/UST-QuAntiL/qprov)
+
+A detailed user guide and documentation can be found [here](https://quantil.readthedocs.io/en/latest/).
+
+For running the UI with all its backend components, visit [quantil-docker](https://github.com/UST-QuAntiL/quantil-docker).
+
+The UI was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.2.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:80/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server. Navigate to <http://localhost:4200>. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 

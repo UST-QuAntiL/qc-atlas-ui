@@ -35,12 +35,20 @@ export class FeatureTogglingComponent implements OnInit {
   }
 
   toggleFeature(feature: UiFeatures, event: Event): void {
-    this.configService.applyConfig(feature, event.target['checked']).subscribe(
-      () => this.utilService.callSnackBar('Successfully saved config!'),
-      (error: HttpErrorResponse) =>
-        this.utilService.callSnackBar(
-          'Error while saving config!' + error.message
-        )
-    );
+    if (this.config.features.showSettings) {
+      this.configService
+        .applyConfig(feature, event.target['checked'])
+        .subscribe(
+          () => this.utilService.callSnackBar('Successfully saved config!'),
+          (error: HttpErrorResponse) =>
+            this.utilService.callSnackBar(
+              'Error while saving config!' + error.message
+            )
+        );
+    } else {
+      this.utilService.callSnackBar(
+        'Adjustments are not allowed and will not be saved!'
+      );
+    }
   }
 }
