@@ -3,6 +3,7 @@
     "nisqAnalyzer": "true",
     "qprov": "true",
     "patternAtlas": "true",
-    "nisqAnalyzerCompilerComparison": "true"
+    "nisqAnalyzerCompilerComparison": "true",
+    "showSettings":  "true"
   }
 }

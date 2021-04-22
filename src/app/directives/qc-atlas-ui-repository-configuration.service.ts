@@ -9,6 +9,7 @@ export enum UiFeatures {
   QPROV = 'qprov',
   PATTERN_ATLAS = 'patternAtlas',
   NISQ_ANALYZER_COMPILER_COMPARISON = 'nisqAnalyzerCompilerComparison',
+  SHOW_SETTINGS = 'showSettings',
 }
 
 export interface QcAtlasUiConfiguration {
@@ -17,6 +18,7 @@ export interface QcAtlasUiConfiguration {
     qprov: boolean;
     patternAtlas: boolean;
     nisqAnalyzerCompilerComparison: boolean;
+    showSettings: boolean;
   };
 }
 
@@ -40,6 +42,7 @@ const initialValues: QcAtlasUiConfiguration = {
     qprov: false,
     patternAtlas: false,
     nisqAnalyzerCompilerComparison: false,
+    showSettings: false,
   },
 };
 
