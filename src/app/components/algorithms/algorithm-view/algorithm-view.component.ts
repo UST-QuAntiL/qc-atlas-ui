@@ -30,7 +30,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   problemTypes: EntityModelProblemTypeDto[];
   tags: TagDto[] = [];
   generalTab = true;
-  revisionBadgeVisible = true;
+  revisionBadgeHidden = true;
   revisionCounter = 0;
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
@@ -109,7 +109,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
             subHeading: this.algorithm.computationModel + ' Algorithm',
           };
           this.revisionCounter++;
-          this.revisionBadgeVisible = false;
+          this.revisionBadgeHidden = false;
           this.fetchRevisions();
           this.utilService.callSnackBar('Algorithm was successfully updated.');
         },
@@ -366,7 +366,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   }
 
   resetRevisionBadge(): void {
-    this.revisionBadgeVisible = true;
+    this.revisionBadgeHidden = true;
     this.revisionCounter = 0;
   }
 
