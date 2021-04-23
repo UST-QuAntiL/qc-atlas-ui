@@ -50,7 +50,9 @@ export class TextInputComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.inputValue = this.value;
+    if (changes.hasOwnProperty('value')) {
+      this.inputValue = changes.value.currentValue;
+    }
   }
 
   saveChanges(): void {
