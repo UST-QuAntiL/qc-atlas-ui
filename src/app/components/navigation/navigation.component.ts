@@ -4,9 +4,11 @@ import {
   Breakpoints,
   BreakpointState,
 } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import {
+  QcAtlasUiRepositoryConfigurationService,
+  UiFeatures,
+} from '../../directives/qc-atlas-ui-repository-configuration.service';
 
 @Component({
   selector: 'app-navigation',
@@ -14,23 +16,22 @@ import { Router } from '@angular/router';
   styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
+  UiFeatures = UiFeatures;
+
   title = 'qc-atlas-ui';
   hideNav = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private router: Router
+    private router: Router,
+    public configData: QcAtlasUiRepositoryConfigurationService
   ) {}
 
   ngOnInit(): void {
     this.breakpointObserver
       .observe([Breakpoints.Small, Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
-        if (state.matches) {
-          this.hideNav = true;
-        } else {
-          this.hideNav = false;
-        }
+        this.hideNav = state.matches;
       });
   }
 

@@ -80,7 +80,7 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
             this.linkObject.linkedData = data._embedded.computeResources;
           }
         },
-        (error) => {
+        () => {
           this.utilService.callSnackBar(
             'Error! Linked compute resources could not be retrieved.'
           );

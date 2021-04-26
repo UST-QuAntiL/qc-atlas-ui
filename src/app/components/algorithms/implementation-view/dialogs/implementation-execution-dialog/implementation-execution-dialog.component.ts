@@ -12,10 +12,6 @@ import {
 } from '@angular/forms';
 import { ProviderService } from 'api-qprov/services/provider.service';
 import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { CompilerSelectionDto } from 'api-nisq/models/compiler-selection-dto';
-import { Option } from '../../../../generics/property-input/select-input.component';
 
 @Component({
   selector: 'app-implementation-execution-dialog',

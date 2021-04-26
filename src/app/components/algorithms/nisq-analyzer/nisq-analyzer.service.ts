@@ -8,13 +8,12 @@ import {
 } from 'api-nisq/services';
 import {
   AnalysisJobDto,
-  AnalysisJobListDto,
-  AnalysisResultDto,
+  ExecutionResultDto,
   ParameterDto,
   SelectionRequestDto,
 } from 'api-nisq/models';
 import { map } from 'rxjs/operators';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -46,13 +45,13 @@ export class NisqAnalyzerService {
     return this.analysisResultService.getAnalysisJob({ resId });
   }
 
-  execute(resId: string) {
+  execute(resId: string): Observable<ExecutionResultDto> {
     return this.analysisResultService.executeAnalysisResult({
       resId,
     });
   }
 
-  executeCompilationResult(resId: string) {
+  executeCompilationResult(resId: string): Observable<ExecutionResultDto> {
     return this.compilerAnalysisResult.executeCompilationResult({
       resId,
     });
@@ -65,7 +64,7 @@ export class NisqAnalyzerService {
    *
    * @param params
    */
-  collapseParams(params: ParameterDto[]) {
+  collapseParams(params: ParameterDto[]): ParameterDto[] {
     const paramMap: { [key: string]: ParameterDto } = {};
     for (const param of params) {
       const finalParam = paramMap[param.name];

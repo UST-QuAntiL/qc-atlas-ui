@@ -162,7 +162,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
       );
   }
 
-  reorderArray(array: any[], element: any) {
+  reorderArray(array: any[], element: any): void {
     array.sort((x, y) =>
       x.id === element.id ? -1 : y.id === element.id ? 1 : 0
     );

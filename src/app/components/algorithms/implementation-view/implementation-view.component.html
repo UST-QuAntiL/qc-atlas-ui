@@ -61,7 +61,7 @@
         [implementation]="implementation"
       ></app-implementation-softwareplatform-list>
     </mat-tab>
-    <mat-tab [hidden]="isNisqUsed" label="Selection Criteria">
+    <mat-tab label="Selection Criteria" *qcAtlasUiShowOnFeature="[UiFeatures.NISQ_ANALYZER_COMPILER_COMPARISON, UiFeatures.NISQ_ANALYZER]">
       <div class="tab-body p-4">
         <app-impl-selection-criteria
                 [algo]="algorithm"
@@ -70,7 +70,7 @@
         ></app-impl-selection-criteria>
       </div>
     </mat-tab>
-    <mat-tab [hidden]="isNisqUsed" label="Execution">
+    <mat-tab label="Execution" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER_COMPILER_COMPARISON">
       <div class="tab-body p-4">
         <app-implementation-execution
                 [algo]="algorithm"

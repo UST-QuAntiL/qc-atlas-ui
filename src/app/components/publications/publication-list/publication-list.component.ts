@@ -102,7 +102,7 @@ export class PublicationListComponent implements OnInit {
               });
           }
         },
-        (error) => {
+        () => {
           this.utilService.callSnackBar('Could not create publication !');
         }
       );

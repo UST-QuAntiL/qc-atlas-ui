@@ -26,6 +26,7 @@ import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb
 import { GenericsModule } from '../../generics/generics.module';
 import { ImplSelectionCriteriaComponent } from '../impl-selection-criteria/impl-selection-criteria.component';
 import { AlgorithmModule } from '../algorithm.module';
+import { QcAtlasUiFeatureToggleModule } from '../../../directives/feature-toggle.module';
 import { ImplementationViewComponent } from './implementation-view.component';
 import { ImplementationPublicationsListComponent } from './implementation-publications-list/implementation-publications-list.component';
 import { ImplementationSoftwareplatformListComponent } from './implementation-softwareplatform-list/implementation-softwareplatform-list.component';
@@ -68,6 +69,7 @@ import { ImplementationExecutionDialogComponent } from './dialogs/implementation
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
+    QcAtlasUiFeatureToggleModule,
     MatBadgeModule,
   ],
 })

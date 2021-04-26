@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BaseService } from 'api-atlas/base-service';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class GenericDataService extends BaseService {
     super(config, http);
   }
 
-  getData(url: string) {
+  getData(url: string): Observable<any> {
     return this.http.get(url);
   }
 }

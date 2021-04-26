@@ -84,6 +84,7 @@ import { AddNewAnalysisDialogComponent } from './dialogs/add-new-analysis-dialog
     MatTableModule,
     BrowserModule,
     MatSortModule,
+    QcAtlasUiFeatureToggleModule,
     MatBadgeModule,
   ],
   exports: [

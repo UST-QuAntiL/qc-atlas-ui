@@ -83,7 +83,7 @@ export class ApplicationAreasListComponent implements OnInit {
 
         params.body = applicationAreaDtoDto;
         this.applicationAreasService.createApplicationArea(params).subscribe(
-          (data) => {
+          () => {
             this.getApplicationAreasHateoas(
               this.utilService.getLastPageAfterCreation(
                 this.pagingInfo._links.self.href,
@@ -188,7 +188,7 @@ export class ApplicationAreasListComponent implements OnInit {
           body: newApplicationAreaDto,
         };
         this.applicationAreasService.updateApplicationArea(params).subscribe(
-          (data) => {
+          () => {
             this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
             this.utilService.callSnackBar(
               'Application area was successfully edited.'

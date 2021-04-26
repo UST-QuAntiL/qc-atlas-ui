@@ -33,6 +33,11 @@ export const environment = {
     window['env']['QPROV_HOST_NAME'] && window['env']['QPROV_PORT']
       ? `http://${window['env']['QPROV_HOST_NAME']}:${window['env']['QPROV_PORT']}/qprov`
       : 'http://localhost:8084/qprov',
+  CONFIG_SEVER_URL:
+    window['env']['CONFIG_SERVER_HOST_NAME'] &&
+    window['env']['CONFIG_SERVER_PORT']
+      ? `http://${window['env']['CONFIG_SERVER_HOST_NAME']}:${window['env']['CONFIG_SERVER_PORT']}/v2/keys`
+      : 'http://localhost:2379/v2/keys',
 };
 
 /*

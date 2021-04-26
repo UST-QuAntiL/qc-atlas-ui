@@ -21,6 +21,7 @@ import { AlgorithmRelationTypesListComponent } from './components/algorithm-rela
 import { PatternRelationTypesListComponent } from './components/pattern-relation-types/pattern-relation-types-list/pattern-relation-types-list.component';
 // eslint-disable-next-line max-len
 import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
+import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -95,6 +96,7 @@ const routes: Routes = [
     redirectTo: '/algorithms',
     pathMatch: 'full',
   },
+  { path: 'feature-toggling', component: FeatureTogglingComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 

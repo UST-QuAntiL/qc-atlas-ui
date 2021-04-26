@@ -12,6 +12,7 @@ import {
 import { ChangePageGuard } from '../../../services/deactivation-guard';
 import { parsePrologRule, PrologRule } from '../../../util/MinimalPrologParser';
 import { Option } from '../../generics/property-input/select-input.component';
+import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 
 @Component({
   selector: 'app-impl-selection-criteria',
@@ -23,6 +24,7 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
   @Input() impl: ImplementationDto;
   @Input() guard: ChangePageGuard;
 
+  readonly UiFeatures = UiFeatures;
   oldNisqImpl: NisqImplementationDto;
   nisqImpl: NisqImplementationDto;
 

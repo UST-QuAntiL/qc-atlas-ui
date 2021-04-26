@@ -1,10 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
 import {
-  ConfirmDialogComponent,
-  ConfirmDialogData,
-} from '../../generics/dialogs/confirm-dialog.component';
-import {
   EditComputeResourcePropertyDialogComponent,
   EditComputeResourcePropertyDialogData,
 } from '../dialogs/edit-compute-resource-property-dialog.component';
