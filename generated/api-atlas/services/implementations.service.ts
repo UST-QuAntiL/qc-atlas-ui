@@ -19,10 +19,7 @@ import { QuantumImplementationDto } from '../models/quantum-implementation-dto';
   providedIn: 'root',
 })
 export class ImplementationsService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -40,7 +37,6 @@ export class ImplementationsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getImplementations$Response(params?: {
-
     /**
      * Filter criteria for this query
      */
@@ -60,27 +56,41 @@ export class ImplementationsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
-  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ImplementationsService.GetImplementationsPath, 'get');
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ImplementationsService.GetImplementationsPath,
+      'get'
+    );
     if (params) {
-
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+            page?: PageMetadata;
+          }>;
+        })
+      );
   }
 
   /**
@@ -92,7 +102,6 @@ export class ImplementationsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getImplementations(params?: {
-
     /**
      * Filter criteria for this query
      */
@@ -112,18 +121,35 @@ export class ImplementationsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
-  }): Observable<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }> {
-
+  }): Observable<{
+    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
+    page?: PageMetadata;
+  }> {
     return this.getImplementations$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'implementations'?: Array<EntityModelImplementationDto> }, 'page'?: PageMetadata })
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: {
+              implementations?: Array<EntityModelImplementationDto>;
+            };
+            page?: PageMetadata;
+          }
+      )
     );
   }
 
   /**
    * Path part for operation getImplementation1
    */
-  static readonly GetImplementation1Path = '/v1/implementations/{implementationId}';
+  static readonly GetImplementation1Path =
+    '/v1/implementations/{implementationId}';
 
   /**
    * Retrieve a specific implementation and its basic properties.
@@ -135,24 +161,40 @@ export class ImplementationsService extends BaseService {
    */
   getImplementation1$Response(params: {
     implementationId: string;
-
-  }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ImplementationsService.GetImplementation1Path, 'get');
-    if (params) {
-
-      rb.path('implementationId', params.implementationId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>;
-      })
+  }): Observable<
+    StrictHttpResponse<
+      { _links?: Array<Link> } & (
+        | ClassicImplementationDto
+        | QuantumImplementationDto
+      )
+    >
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ImplementationsService.GetImplementation1Path,
+      'get'
     );
+    if (params) {
+      rb.path('implementationId', params.implementationId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            { _links?: Array<Link> } & (
+              | ClassicImplementationDto
+              | QuantumImplementationDto
+            )
+          >;
+        })
+      );
   }
 
   /**
@@ -165,18 +207,35 @@ export class ImplementationsService extends BaseService {
    */
   getImplementation1(params: {
     implementationId: string;
-
-  }): Observable<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)> {
-
+  }): Observable<
+    { _links?: Array<Link> } & (
+      | ClassicImplementationDto
+      | QuantumImplementationDto
+    )
+  > {
     return this.getImplementation1$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>) => r.body as { '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto))
+      map(
+        (
+          r: StrictHttpResponse<
+            { _links?: Array<Link> } & (
+              | ClassicImplementationDto
+              | QuantumImplementationDto
+            )
+          >
+        ) =>
+          r.body as { _links?: Array<Link> } & (
+            | ClassicImplementationDto
+            | QuantumImplementationDto
+          )
+      )
     );
   }
 
   /**
    * Path part for operation getImplementationRevisions
    */
-  static readonly GetImplementationRevisionsPath = '/v1/implementations/{implementationId}/revisions';
+  static readonly GetImplementationRevisionsPath =
+    '/v1/implementations/{implementationId}/revisions';
 
   /**
    * Retrieve all revisions of an implementation
@@ -208,28 +267,40 @@ export class ImplementationsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
-  }): Observable<StrictHttpResponse<{ '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata }>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ImplementationsService.GetImplementationRevisionsPath, 'get');
+  }): Observable<
+    StrictHttpResponse<{
+      _embedded?: { revisions?: Array<EntityModelRevisionDto> };
+      page?: PageMetadata;
+    }>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ImplementationsService.GetImplementationRevisionsPath,
+      'get'
+    );
     if (params) {
-
       rb.path('implementationId', params.implementationId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata }>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<{
+            _embedded?: { revisions?: Array<EntityModelRevisionDto> };
+            page?: PageMetadata;
+          }>;
+        })
+      );
   }
 
   /**
@@ -262,18 +333,31 @@ export class ImplementationsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
-  }): Observable<{ '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata }> {
-
+  }): Observable<{
+    _embedded?: { revisions?: Array<EntityModelRevisionDto> };
+    page?: PageMetadata;
+  }> {
     return this.getImplementationRevisions$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata }>) => r.body as { '_embedded'?: { 'revisions'?: Array<EntityModelRevisionDto> }, 'page'?: PageMetadata })
+      map(
+        (
+          r: StrictHttpResponse<{
+            _embedded?: { revisions?: Array<EntityModelRevisionDto> };
+            page?: PageMetadata;
+          }>
+        ) =>
+          r.body as {
+            _embedded?: { revisions?: Array<EntityModelRevisionDto> };
+            page?: PageMetadata;
+          }
+      )
     );
   }
 
   /**
    * Path part for operation getImplementationRevision
    */
-  static readonly GetImplementationRevisionPath = '/v1/implementations/{implementationId}/revisions/{revisionId}';
+  static readonly GetImplementationRevisionPath =
+    '/v1/implementations/{implementationId}/revisions/{revisionId}';
 
   /**
    * Retrieve a specific revision of an implementation and its basic properties
@@ -286,25 +370,41 @@ export class ImplementationsService extends BaseService {
   getImplementationRevision$Response(params: {
     implementationId: string;
     revisionId: number;
-
-  }): Observable<StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>> {
-
-    const rb = new RequestBuilder(this.rootUrl, ImplementationsService.GetImplementationRevisionPath, 'get');
+  }): Observable<
+    StrictHttpResponse<
+      { _links?: Array<Link> } & (
+        | ClassicImplementationDto
+        | QuantumImplementationDto
+      )
+    >
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ImplementationsService.GetImplementationRevisionPath,
+      'get'
+    );
     if (params) {
-
       rb.path('implementationId', params.implementationId, {});
       rb.path('revisionId', params.revisionId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<
+            { _links?: Array<Link> } & (
+              | ClassicImplementationDto
+              | QuantumImplementationDto
+            )
+          >;
+        })
+      );
   }
 
   /**
@@ -318,12 +418,27 @@ export class ImplementationsService extends BaseService {
   getImplementationRevision(params: {
     implementationId: string;
     revisionId: number;
-
-  }): Observable<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)> {
-
+  }): Observable<
+    { _links?: Array<Link> } & (
+      | ClassicImplementationDto
+      | QuantumImplementationDto
+    )
+  > {
     return this.getImplementationRevision$Response(params).pipe(
-      map((r: StrictHttpResponse<{ '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto)>) => r.body as { '_links'?: Array<Link> } & (ClassicImplementationDto | QuantumImplementationDto))
+      map(
+        (
+          r: StrictHttpResponse<
+            { _links?: Array<Link> } & (
+              | ClassicImplementationDto
+              | QuantumImplementationDto
+            )
+          >
+        ) =>
+          r.body as { _links?: Array<Link> } & (
+            | ClassicImplementationDto
+            | QuantumImplementationDto
+          )
+      )
     );
   }
-
 }

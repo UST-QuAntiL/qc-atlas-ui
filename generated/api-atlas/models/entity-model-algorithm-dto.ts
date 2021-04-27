@@ -6,4 +6,7 @@ import { QuantumAlgorithmDto } from './quantum-algorithm-dto';
 /**
  * Either a quantum or a classic algorithm
  */
-export type EntityModelAlgorithmDto = { '_links'?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto);
+export type EntityModelAlgorithmDto = { _links?: Array<Link> } & (
+  | ClassicAlgorithmDto
+  | QuantumAlgorithmDto
+);
