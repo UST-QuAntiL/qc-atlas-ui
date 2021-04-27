@@ -25,7 +25,7 @@ export class PatternRelationService extends BaseService {
   /**
    * Path part for operation getPatternRelations
    */
-  static readonly GetPatternRelationsPath = '/v1/pattern-relations';
+  static readonly GetPatternRelationsPath = '/pattern-relations';
 
   /**
    * Retrieve all relations between pattern and algorithms.
@@ -147,7 +147,7 @@ export class PatternRelationService extends BaseService {
   /**
    * Path part for operation createPatternRelation
    */
-  static readonly CreatePatternRelationPath = '/v1/pattern-relations';
+  static readonly CreatePatternRelationPath = '/pattern-relations';
 
   /**
    * Create a relation between a pattern and an algorithm.The pattern relation type has to be already created (e.g. via POST on /pattern-relation-types). As a result only the ID is required for the pattern relation type, other attributes will be ignored not changed.
@@ -245,7 +245,7 @@ export class PatternRelationService extends BaseService {
    * Path part for operation getPatternRelation
    */
   static readonly GetPatternRelationPath =
-    '/v1/pattern-relations/{patternRelationId}';
+    '/pattern-relations/{patternRelationId}';
 
   /**
    * Retrieve a specific relation between a pattern and an algorithm.
@@ -343,7 +343,7 @@ export class PatternRelationService extends BaseService {
    * Path part for operation updatePatternRelation
    */
   static readonly UpdatePatternRelationPath =
-    '/v1/pattern-relations/{patternRelationId}';
+    '/pattern-relations/{patternRelationId}';
 
   /**
    * Update a relation between a pattern and an algorithm. For the pattern relation type only the ID is required,other pattern relation type attributes will be ignored and not changed.
@@ -445,7 +445,7 @@ export class PatternRelationService extends BaseService {
    * Path part for operation deletePatternRelation
    */
   static readonly DeletePatternRelationPath =
-    '/v1/pattern-relations/{patternRelationId}';
+    '/pattern-relations/{patternRelationId}';
 
   /**
    * Delete a specific relation between a pattern and an algorithm. The pattern relation type is not affected by this.

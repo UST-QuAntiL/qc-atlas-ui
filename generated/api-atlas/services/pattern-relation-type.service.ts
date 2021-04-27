@@ -24,7 +24,7 @@ export class PatternRelationTypeService extends BaseService {
   /**
    * Path part for operation getPatternRelationTypes
    */
-  static readonly GetPatternRelationTypesPath = '/v1/pattern-relation-types';
+  static readonly GetPatternRelationTypesPath = '/pattern-relation-types';
 
   /**
    * Retrieve all pattern relation types.
@@ -150,7 +150,7 @@ export class PatternRelationTypeService extends BaseService {
   /**
    * Path part for operation createPatternRelationType
    */
-  static readonly CreatePatternRelationTypePath = '/v1/pattern-relation-types';
+  static readonly CreatePatternRelationTypePath = '/pattern-relation-types';
 
   /**
    * Define the basic properties of an pattern relation type.
@@ -220,7 +220,7 @@ export class PatternRelationTypeService extends BaseService {
    * Path part for operation getPatternRelationType
    */
   static readonly GetPatternRelationTypePath =
-    '/v1/pattern-relation-types/{patternRelationTypeId}';
+    '/pattern-relation-types/{patternRelationTypeId}';
 
   /**
    * Retrieve a specific pattern relation type and its basic properties.
@@ -290,7 +290,7 @@ export class PatternRelationTypeService extends BaseService {
    * Path part for operation updatePatternRelationType
    */
   static readonly UpdatePatternRelationTypePath =
-    '/v1/pattern-relation-types/{patternRelationTypeId}';
+    '/pattern-relation-types/{patternRelationTypeId}';
 
   /**
    * Update the basic properties of an pattern relation type (e.g. name).
@@ -364,7 +364,7 @@ export class PatternRelationTypeService extends BaseService {
    * Path part for operation deletePatternRelationType
    */
   static readonly DeletePatternRelationTypePath =
-    '/v1/pattern-relation-types/{patternRelationTypeId}';
+    '/pattern-relation-types/{patternRelationTypeId}';
 
   /**
    * Delete an pattern relation type.

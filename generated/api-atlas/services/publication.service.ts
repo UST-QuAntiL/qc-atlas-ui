@@ -35,7 +35,7 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation getPublications
    */
-  static readonly GetPublicationsPath = '/v1/publications';
+  static readonly GetPublicationsPath = '/publications';
 
   /**
    * Retrieve all publications.
@@ -151,7 +151,7 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation createPublication
    */
-  static readonly CreatePublicationPath = '/v1/publications';
+  static readonly CreatePublicationPath = '/publications';
 
   /**
    * Define the basic properties of an publication.
@@ -248,7 +248,7 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation getPublication
    */
-  static readonly GetPublicationPath = '/v1/publications/{publicationId}';
+  static readonly GetPublicationPath = '/publications/{publicationId}';
 
   /**
    * Retrieve a specific publication and its basic properties.
@@ -345,7 +345,7 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation updatePublication
    */
-  static readonly UpdatePublicationPath = '/v1/publications/{publicationId}';
+  static readonly UpdatePublicationPath = '/publications/{publicationId}';
 
   /**
    * Update the basic properties of an publication (e.g. title).
@@ -446,7 +446,7 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation deletePublication
    */
-  static readonly DeletePublicationPath = '/v1/publications/{publicationId}';
+  static readonly DeletePublicationPath = '/publications/{publicationId}';
 
   /**
    * Delete an publication. This also removes all references to other entities (e.g. algorithm).
@@ -502,7 +502,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getAlgorithmsOfPublication
    */
   static readonly GetAlgorithmsOfPublicationPath =
-    '/v1/publications/{publicationId}/algorithms';
+    '/publications/{publicationId}/algorithms';
 
   /**
    * Retrieve referenced algorithms of an publication. If none are found an empty list is returned.
@@ -624,7 +624,7 @@ export class PublicationService extends BaseService {
    * Path part for operation linkPublicationAndAlgorithm
    */
   static readonly LinkPublicationAndAlgorithmPath =
-    '/v1/publications/{publicationId}/algorithms';
+    '/publications/{publicationId}/algorithms';
 
   /**
    * Add a reference to an existing algorithm (that was previously created via a POST on e.g. /algorithms). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -686,7 +686,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getAlgorithmOfPublication
    */
   static readonly GetAlgorithmOfPublicationPath =
-    '/v1/publications/{publicationId}/algorithms/{algorithmId}';
+    '/publications/{publicationId}/algorithms/{algorithmId}';
 
   /**
    * Retrieve a specific algorithm of a publication.
@@ -769,7 +769,7 @@ export class PublicationService extends BaseService {
    * Path part for operation unlinkPublicationAndAlgorithm
    */
   static readonly UnlinkPublicationAndAlgorithmPath =
-    '/v1/publications/{publicationId}/algorithms/{algorithmId}';
+    '/publications/{publicationId}/algorithms/{algorithmId}';
 
   /**
    * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications/{publicationId}).
@@ -830,7 +830,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getDiscussionTopicsOfPublication
    */
   static readonly GetDiscussionTopicsOfPublicationPath =
-    '/v1/publications/{publicationId}/discussion-topics';
+    '/publications/{publicationId}/discussion-topics';
 
   /**
    * Retrieve discussion topics of a publication. If none are found an empty list is returned.
@@ -958,7 +958,7 @@ export class PublicationService extends BaseService {
    * Path part for operation createDiscussionTopicOfPublication
    */
   static readonly CreateDiscussionTopicOfPublicationPath =
-    '/v1/publications/{publicationId}/discussion-topics';
+    '/publications/{publicationId}/discussion-topics';
 
   /**
    * Create a discussion topic of a publication.
@@ -1104,7 +1104,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getDiscussionTopicOfPublication
    */
   static readonly GetDiscussionTopicOfPublicationPath =
-    '/v1/publications/{publicationId}/discussion-topics/{topicId}';
+    '/publications/{publicationId}/discussion-topics/{topicId}';
 
   /**
    * Retrieve discussion topic of a publication.
@@ -1249,7 +1249,7 @@ export class PublicationService extends BaseService {
    * Path part for operation updateDiscussionTopicOfPublication
    */
   static readonly UpdateDiscussionTopicOfPublicationPath =
-    '/v1/publications/{publicationId}/discussion-topics/{topicId}';
+    '/publications/{publicationId}/discussion-topics/{topicId}';
 
   /**
    * Update discussion topic of a publication.
@@ -1398,7 +1398,7 @@ export class PublicationService extends BaseService {
    * Path part for operation deleteDiscussionTopicOfPublication
    */
   static readonly DeleteDiscussionTopicOfPublicationPath =
-    '/v1/publications/{publicationId}/discussion-topics/{topicId}';
+    '/publications/{publicationId}/discussion-topics/{topicId}';
 
   /**
    * Delete discussion topic of a publication.
@@ -1503,7 +1503,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getDiscussionCommentsOfDiscussionTopicOfPublication
    */
   static readonly GetDiscussionCommentsOfDiscussionTopicOfPublicationPath =
-    '/v1/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments';
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments';
 
   /**
    * Retrieve discussion comments of a discussion topic of a publication. If none are found an empty list is returned.
@@ -1638,7 +1638,7 @@ export class PublicationService extends BaseService {
    * Path part for operation createDiscussionCommentOfDiscussionTopicOfPublication
    */
   static readonly CreateDiscussionCommentOfDiscussionTopicOfPublicationPath =
-    '/v1/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments';
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments';
 
   /**
    * Create discussion comment of a discussion topic of a publication.
@@ -1784,7 +1784,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getDiscussionCommentOfDiscussionTopicOfPublication
    */
   static readonly GetDiscussionCommentOfDiscussionTopicOfPublicationPath =
-    '/v1/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
 
   /**
    * Retrieve discussion comment of a discussion topic of a publication.
@@ -1929,7 +1929,7 @@ export class PublicationService extends BaseService {
    * Path part for operation updateDiscussionCommentOfDiscussionTopicOfPublication
    */
   static readonly UpdateDiscussionCommentOfDiscussionTopicOfPublicationPath =
-    '/v1/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
 
   /**
    * Update discussion comment of a discussion topic of a publication.
@@ -2078,7 +2078,7 @@ export class PublicationService extends BaseService {
    * Path part for operation deleteDiscussionCommentOfDiscussionTopicOfPublication
    */
   static readonly DeleteDiscussionCommentOfDiscussionTopicOfPublicationPath =
-    '/v1/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
 
   /**
    * Delete discussion comment of a discussion topic of a publication.
@@ -2186,7 +2186,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getImplementationsOfPublication
    */
   static readonly GetImplementationsOfPublicationPath =
-    '/v1/publications/{publicationId}/implementations';
+    '/publications/{publicationId}/implementations';
 
   /**
    * Retrieve referenced implementations of an publication. If none are found an empty list is returned.
@@ -2314,7 +2314,7 @@ export class PublicationService extends BaseService {
    * Path part for operation getImplementationOfPublication
    */
   static readonly GetImplementationOfPublicationPath =
-    '/v1/publications/{publicationId}/implementations/{implementationId}';
+    '/publications/{publicationId}/implementations/{implementationId}';
 
   /**
    * Retrieve a specific implementation of a publication.

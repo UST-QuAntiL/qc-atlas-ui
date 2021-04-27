@@ -26,7 +26,7 @@ export class ImplementationsService extends BaseService {
   /**
    * Path part for operation getImplementations
    */
-  static readonly GetImplementationsPath = '/v1/implementations';
+  static readonly GetImplementationsPath = '/implementations';
 
   /**
    * Retrieve all implementations unaffected by its implemented algorithm
@@ -149,7 +149,7 @@ export class ImplementationsService extends BaseService {
    * Path part for operation getImplementation1
    */
   static readonly GetImplementation1Path =
-    '/v1/implementations/{implementationId}';
+    '/implementations/{implementationId}';
 
   /**
    * Retrieve a specific implementation and its basic properties.
@@ -235,7 +235,7 @@ export class ImplementationsService extends BaseService {
    * Path part for operation getImplementationRevisions
    */
   static readonly GetImplementationRevisionsPath =
-    '/v1/implementations/{implementationId}/revisions';
+    '/implementations/{implementationId}/revisions';
 
   /**
    * Retrieve all revisions of an implementation
@@ -357,7 +357,7 @@ export class ImplementationsService extends BaseService {
    * Path part for operation getImplementationRevision
    */
   static readonly GetImplementationRevisionPath =
-    '/v1/implementations/{implementationId}/revisions/{revisionId}';
+    '/implementations/{implementationId}/revisions/{revisionId}';
 
   /**
    * Retrieve a specific revision of an implementation and its basic properties
