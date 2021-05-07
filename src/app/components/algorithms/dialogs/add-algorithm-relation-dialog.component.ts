@@ -63,8 +63,8 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     this.algoRelationTypeService
       .getAlgorithmRelationTypes()
       .subscribe((relationTypes) => {
-        this.algoRelationTypes = relationTypes._embedded
-          ? relationTypes._embedded.algoRelationTypes
+        this.algoRelationTypes = relationTypes.content
+          ? relationTypes.content
           : [];
         this.stateGroups.push({
           optionName: 'Existing Algorithm-Relations',
@@ -148,8 +148,8 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
       this.algorithmService
         .getAlgorithms({ page: 0, size: 25, search: this.targetAlg.value })
         .subscribe((algorithms) => {
-          if (algorithms._embedded) {
-            this.filterLinkableAlgorithms(algorithms._embedded.algorithms);
+          if (algorithms.content) {
+            this.filterLinkableAlgorithms(algorithms.content);
             this.selectedAlgorithm = this.linkableAlgorithms.find(
               (x) => x.name === this.targetAlg.value
             );

@@ -173,8 +173,8 @@ export class AddPatternRelationDialogComponent implements OnInit {
     this.patternRelationTypeService
       .getPatternRelationTypes({})
       .subscribe((relationTypes) => {
-        if (relationTypes._embedded) {
-          this.relationTypes = relationTypes._embedded.patternRelationTypes;
+        if (relationTypes.content) {
+          this.relationTypes = relationTypes.content;
         }
         this.pushExistingRelationTypesToGroup();
         this.areRelationTypesLoaded = true;

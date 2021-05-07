@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
+import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
@@ -22,7 +22,7 @@ import {
   styleUrls: ['./cloud-service-software-platform-list.component.scss'],
 })
 export class CloudServiceSoftwarePlatformListComponent implements OnInit {
-  @Input() cloudService: EntityModelCloudServiceDto;
+  @Input() cloudService: CloudServiceDto;
 
   variableNames: string[] = ['name', 'link', 'license', 'version'];
   tableColumns: string[] = ['Name', 'Link', 'License', 'Version'];
@@ -80,8 +80,8 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.softwarePlatforms;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
         },
         () => {

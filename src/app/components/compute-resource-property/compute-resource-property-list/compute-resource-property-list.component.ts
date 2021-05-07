@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
+import { ComputeResourcePropertyDto } from 'api-atlas/models/compute-resource-property-dto';
 import {
   EditComputeResourcePropertyDialogComponent,
   EditComputeResourcePropertyDialogData,
@@ -14,20 +14,20 @@ import { UtilService } from '../../../util/util.service';
 export class ComputeResourcePropertyListComponent implements OnInit {
   @Input() title: string;
   @Input()
-  resourceProperties: EntityModelComputeResourcePropertyDto[] = [];
+  resourceProperties: ComputeResourcePropertyDto[] = [];
 
   @Output()
-  addProperty: EventEmitter<
-    EntityModelComputeResourcePropertyDto
-  > = new EventEmitter<EntityModelComputeResourcePropertyDto>();
+  addProperty: EventEmitter<ComputeResourcePropertyDto> = new EventEmitter<
+    ComputeResourcePropertyDto
+  >();
   @Output()
-  deleteProperty: EventEmitter<
-    EntityModelComputeResourcePropertyDto
-  > = new EventEmitter<EntityModelComputeResourcePropertyDto>();
+  deleteProperty: EventEmitter<ComputeResourcePropertyDto> = new EventEmitter<
+    ComputeResourcePropertyDto
+  >();
   @Output()
-  updateProperty: EventEmitter<
-    EntityModelComputeResourcePropertyDto
-  > = new EventEmitter<EntityModelComputeResourcePropertyDto>();
+  updateProperty: EventEmitter<ComputeResourcePropertyDto> = new EventEmitter<
+    ComputeResourcePropertyDto
+  >();
 
   hoveredEntry = '';
 
@@ -43,11 +43,11 @@ export class ComputeResourcePropertyListComponent implements OnInit {
     );
   }
 
-  onDelete(element: EntityModelComputeResourcePropertyDto): void {
+  onDelete(element: ComputeResourcePropertyDto): void {
     this.deleteProperty.emit(element);
   }
 
-  onEdit(element: EntityModelComputeResourcePropertyDto): void {
+  onEdit(element: ComputeResourcePropertyDto): void {
     this.showEditDialog(
       element,
       'Edit Computing Resource Property',
@@ -56,9 +56,9 @@ export class ComputeResourcePropertyListComponent implements OnInit {
   }
 
   showEditDialog(
-    element: EntityModelComputeResourcePropertyDto,
+    element: ComputeResourcePropertyDto,
     dialogTitle: string,
-    emmiter: EventEmitter<EntityModelComputeResourcePropertyDto>
+    emmiter: EventEmitter<ComputeResourcePropertyDto>
   ): void {
     const dialogData: EditComputeResourcePropertyDialogData = {
       title: dialogTitle,
@@ -71,7 +71,7 @@ export class ComputeResourcePropertyListComponent implements OnInit {
 
     dialogRef
       .afterClosed()
-      .subscribe((dialogResult: EntityModelComputeResourcePropertyDto) => {
+      .subscribe((dialogResult: ComputeResourcePropertyDto) => {
         if (dialogResult != null) {
           emmiter.emit(dialogResult);
         }

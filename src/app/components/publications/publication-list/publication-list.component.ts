@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api-atlas/services/publication.service';
-import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
@@ -19,7 +19,7 @@ import { UtilService } from '../../../util/util.service';
   styleUrls: ['./publication-list.component.scss'],
 })
 export class PublicationListComponent implements OnInit {
-  publications: EntityModelPublicationDto[] = [];
+  publications: PublicationDto[] = [];
   tableColumns = ['Title', 'URL', 'DOI', 'Authors'];
   variableNames = ['title', 'url', 'doi', 'authors'];
   externalLinkVariables = ['url'];

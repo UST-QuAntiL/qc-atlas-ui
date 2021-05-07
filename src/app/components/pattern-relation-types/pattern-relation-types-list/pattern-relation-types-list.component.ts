@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
-import { EntityModelPatternRelationTypeDto } from 'api-atlas/models/entity-model-pattern-relation-type-dto';
+import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { UtilService } from '../../../util/util.service';
@@ -75,7 +75,7 @@ export class PatternRelationTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const algorithmRelationType: EntityModelPatternRelationTypeDto = {
+        const algorithmRelationType: PatternRelationTypeDto = {
           id: undefined,
           name: dialogResult.name,
         };
@@ -185,7 +185,7 @@ export class PatternRelationTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const updatedPatternRelationType: EntityModelPatternRelationTypeDto = {
+        const updatedPatternRelationType: PatternRelationTypeDto = {
           id: dialogResult.id,
           name: dialogResult.name,
         };

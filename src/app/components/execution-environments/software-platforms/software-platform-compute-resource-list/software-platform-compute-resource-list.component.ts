@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
+import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
@@ -21,7 +21,7 @@ import {
   styleUrls: ['./software-platform-compute-resource-list.component.scss'],
 })
 export class SoftwarePlatformComputeResourceListComponent implements OnInit {
-  @Input() softwarePlatform: EntityModelSoftwarePlatformDto;
+  @Input() softwarePlatform: SoftwarePlatformDto;
   displayedData = [];
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
@@ -76,8 +76,8 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
       })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.computeResources;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
         },
         () => {

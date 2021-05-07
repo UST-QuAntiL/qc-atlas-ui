@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
@@ -22,7 +21,7 @@ import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog
   styleUrls: ['./software-platform-list.component.scss'],
 })
 export class SoftwarePlatformListComponent implements OnInit {
-  softwarePlatforms: EntityModelSoftwarePlatformDto[] = [];
+  softwarePlatforms: SoftwarePlatformDto[] = [];
 
   tableColumns = ['Name', 'Version', 'Licence', 'Link'];
   variableNames = ['name', 'version', 'licence', 'link'];
@@ -72,9 +71,7 @@ export class SoftwarePlatformListComponent implements OnInit {
     this.pagingInfo._links = data._links;
   }
 
-  onSoftwarePlatformClicked(
-    softwarePlatform: EntityModelSoftwarePlatformDto
-  ): void {
+  onSoftwarePlatformClicked(softwarePlatform: SoftwarePlatformDto): void {
     this.router.navigate([
       'execution-environments',
       'software-platforms',
@@ -107,7 +104,7 @@ export class SoftwarePlatformListComponent implements OnInit {
           this.executionEnvironmentsService
             .createSoftwarePlatform({ body: softwarePlatformDto })
             .subscribe(
-              (softwarePlatform: EntityModelSoftwarePlatformDto) => {
+              (softwarePlatform: SoftwarePlatformDto) => {
                 this.router.navigate([
                   'execution-environments',
                   'software-platforms',

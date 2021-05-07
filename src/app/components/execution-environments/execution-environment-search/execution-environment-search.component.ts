@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
-import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
-import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
+import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
+import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
+import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { QueryParams } from '../../generics/data-list/data-list.component';
@@ -13,12 +13,12 @@ import { GenericDataService } from '../../../util/generic-data.service';
   styleUrls: ['./execution-environment-search.component.scss'],
 })
 export class ExecutionEnvironmentSearchComponent implements OnInit {
-  softwarePlatforms: EntityModelSoftwarePlatformDto[] = [];
+  softwarePlatforms: SoftwarePlatformDto[] = [];
   tableColumnsSoftwarePlatform = ['Name', 'Version', 'Licence', 'Link'];
   variableNamesSoftwarePlatform = ['name', 'version', 'licence', 'link'];
   pagingInfoSoftwarePlatforms: any = {};
 
-  cloudServices: EntityModelCloudServiceDto[] = [];
+  cloudServices: CloudServiceDto[] = [];
   tableColumnsCloudServices = [
     'Name',
     'Provider',
@@ -35,7 +35,7 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
   ];
   pagingInfoCloudServices: any = {};
 
-  computeResources: EntityModelComputeResourceDto[] = [];
+  computeResources: ComputeResourceDto[] = [];
   tableColumnsComputeResources = [
     'Name',
     'Vendor',
@@ -85,9 +85,7 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
     this.pagingInfoSoftwarePlatforms._links = data._links;
   }
 
-  onSoftwarePlatformClicked(
-    softwarePlatform: EntityModelSoftwarePlatformDto
-  ): void {
+  onSoftwarePlatformClicked(softwarePlatform: SoftwarePlatformDto): void {
     this.router.navigate([
       'execution-environments',
       'software-platforms',
@@ -119,7 +117,7 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
     this.pagingInfoCloudServices._links = data._links;
   }
 
-  onCloudServiceClicked(cloudService: EntityModelCloudServiceDto): void {
+  onCloudServiceClicked(cloudService: CloudServiceDto): void {
     this.router.navigate([
       'execution-environments',
       'cloud-services',
@@ -151,9 +149,7 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
     this.pagingInfoComputeResources._links = data._links;
   }
 
-  onComputeResourceClicked(
-    computeResource: EntityModelComputeResourceDto
-  ): void {
+  onComputeResourceClicked(computeResource: ComputeResourceDto): void {
     this.router.navigate([
       'execution-environments',
       'compute-resources',

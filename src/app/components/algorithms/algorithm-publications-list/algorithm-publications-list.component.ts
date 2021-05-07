@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
@@ -23,7 +23,7 @@ import { GenericDataService } from '../../../util/generic-data.service';
   styleUrls: ['./algorithm-publications-list.component.scss'],
 })
 export class AlgorithmPublicationsListComponent implements OnInit {
-  @Input() algorithm: EntityModelAlgorithmDto;
+  @Input() algorithm: AlgorithmDto;
 
   variableNames: string[] = ['title', 'authors', 'doi', 'url'];
   tableColumns: string[] = ['Title', 'Authors', 'DOI', 'URL'];
@@ -78,8 +78,8 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       .getPublicationsOfAlgorithm({ algorithmId: this.algorithm.id })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.publications;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
         },
         () => {

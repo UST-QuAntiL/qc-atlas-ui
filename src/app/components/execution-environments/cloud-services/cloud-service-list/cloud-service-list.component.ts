@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
@@ -20,7 +19,7 @@ import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog
   styleUrls: ['./cloud-service-list.component.scss'],
 })
 export class CloudServiceListComponent implements OnInit {
-  @Input() cloudServices: EntityModelCloudServiceDto[];
+  @Input() cloudServices: CloudServiceDto[];
 
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
   variableNames = ['name', 'provider', 'description', 'costModel', 'url'];
@@ -69,7 +68,7 @@ export class CloudServiceListComponent implements OnInit {
     this.pagingInfo._links = data._links;
   }
 
-  onCloudServiceClicked(cloudService: EntityModelCloudServiceDto): void {
+  onCloudServiceClicked(cloudService: CloudServiceDto): void {
     this.router.navigate([
       'execution-environments',
       'cloud-services',
@@ -97,7 +96,7 @@ export class CloudServiceListComponent implements OnInit {
           this.executionEnvironmentsService
             .createCloudService({ body: cloudServiceDto })
             .subscribe(
-              (cloudService: EntityModelCloudServiceDto) => {
+              (cloudService: CloudServiceDto) => {
                 this.router.navigate([
                   'execution-environments',
                   'cloud-services',

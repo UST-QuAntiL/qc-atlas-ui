@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { EntityModelAlgorithmRelationDto } from 'api-atlas/models/entity-model-algorithm-relation-dto';
 import { MatDialog } from '@angular/material/dialog';
 import { AlgorithmRelationDto } from 'api-atlas/models/algorithm-relation-dto';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
@@ -20,10 +18,10 @@ import { GenericDataService } from '../../../util/generic-data.service';
   styleUrls: ['./algorithm-related-algos-list.component.scss'],
 })
 export class AlgorithmRelatedAlgosListComponent implements OnInit {
-  @Input() algorithm: EntityModelAlgorithmDto;
+  @Input() algorithm: AlgorithmDto;
 
   tableObjects: AlgorithmRelationTableObject[];
-  algorithmRelations: EntityModelAlgorithmRelationDto[];
+  algorithmRelations: AlgorithmRelationDto[];
   variableNames: string[] = [
     'targetAlgName',
     'relationTypeName',

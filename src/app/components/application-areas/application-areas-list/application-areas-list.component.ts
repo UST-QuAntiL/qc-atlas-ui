@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
-import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
+import { ApplicationAreaDto } from 'api-atlas/models/application-area-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import {
@@ -76,7 +76,7 @@ export class ApplicationAreasListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const applicationAreaDtoDto: EntityModelApplicationAreaDto = {
+        const applicationAreaDtoDto: ApplicationAreaDto = {
           id: dialogResult.id,
           name: dialogResult.name,
         };
@@ -179,7 +179,7 @@ export class ApplicationAreasListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const newApplicationAreaDto: EntityModelApplicationAreaDto = {
+        const newApplicationAreaDto: ApplicationAreaDto = {
           id: event.id,
           name: dialogResult.name,
         };

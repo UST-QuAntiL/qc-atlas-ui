@@ -50,9 +50,7 @@ export class AddNewAnalysisDialogComponent implements OnInit {
   ngOnInit(): void {
     this.executionEnvironmentsService
       .getCloudServices()
-      .subscribe(
-        (value) => (this.cloudServices = value._embedded.cloudServices ?? [])
-      );
+      .subscribe((value) => (this.cloudServices = value.content ?? []));
     this.nisqAnalyzerService.getParams(this.data.algo).subscribe((params) => {
       this.parameters = this.nisqAnalyzerService.collapseParams(
         params.filter((p) => p.name !== 'token')

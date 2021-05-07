@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
@@ -19,7 +18,7 @@ import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog
   styleUrls: ['./compute-resource-list.component.scss'],
 })
 export class ComputeResourceListComponent implements OnInit {
-  @Input() computeResources: EntityModelComputeResourceDto[];
+  @Input() computeResources: ComputeResourceDto[];
 
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
@@ -62,9 +61,7 @@ export class ComputeResourceListComponent implements OnInit {
     this.pagingInfo._links = data._links;
   }
 
-  onComputeResourceClicked(
-    computeResource: EntityModelComputeResourceDto
-  ): void {
+  onComputeResourceClicked(computeResource: ComputeResourceDto): void {
     this.router.navigate([
       'execution-environments',
       'compute-resources',
@@ -87,7 +84,7 @@ export class ComputeResourceListComponent implements OnInit {
           this.executionEnvironmentsService
             .createComputeResource({ body: computeResourceDto })
             .subscribe(
-              (computeResource: EntityModelComputeResourceDto) => {
+              (computeResource: ComputeResourceDto) => {
                 this.router.navigate([
                   'execution-environments',
                   'compute-resources',

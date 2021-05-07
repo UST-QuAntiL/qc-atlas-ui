@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
+import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
@@ -22,7 +22,7 @@ import {
   styleUrls: ['./software-platform-impl-list.component.scss'],
 })
 export class SoftwarePlatformImplListComponent implements OnInit {
-  @Input() softwarePlatform: EntityModelSoftwarePlatformDto;
+  @Input() softwarePlatform: SoftwarePlatformDto;
   displayedData = [];
   tableColumns = [
     'Name',
@@ -90,8 +90,8 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.implementations;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
         },
         () => {

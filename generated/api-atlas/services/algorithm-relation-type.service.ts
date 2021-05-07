@@ -9,9 +9,7 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { AlgorithmRelationTypeDto } from '../models/algorithm-relation-type-dto';
-import { EntityModelAlgorithmRelationTypeDto } from '../models/entity-model-algorithm-relation-type-dto';
-import { Link } from '../models/link';
-import { PageMetadata } from '../models/page-metadata';
+import { PageAlgorithmRelationTypeDto } from '../models/page-algorithm-relation-type-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -54,14 +52,7 @@ export class AlgorithmRelationTypeService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        algoRelationTypes?: Array<EntityModelAlgorithmRelationTypeDto>;
-      };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageAlgorithmRelationTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmRelationTypeService.GetAlgorithmRelationTypesPath,
@@ -83,12 +74,7 @@ export class AlgorithmRelationTypeService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              algoRelationTypes?: Array<EntityModelAlgorithmRelationTypeDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageAlgorithmRelationTypeDto>;
         })
       );
   }
@@ -121,28 +107,11 @@ export class AlgorithmRelationTypeService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: {
-      algoRelationTypes?: Array<EntityModelAlgorithmRelationTypeDto>;
-    };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageAlgorithmRelationTypeDto> {
     return this.getAlgorithmRelationTypes$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              algoRelationTypes?: Array<EntityModelAlgorithmRelationTypeDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              algoRelationTypes?: Array<EntityModelAlgorithmRelationTypeDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageAlgorithmRelationTypeDto>) =>
+          r.body as PageAlgorithmRelationTypeDto
       )
     );
   }
@@ -162,9 +131,7 @@ export class AlgorithmRelationTypeService extends BaseService {
    */
   createAlgorithmRelationType$Response(params: {
     body: AlgorithmRelationTypeDto;
-  }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
-  > {
+  }): Observable<StrictHttpResponse<AlgorithmRelationTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmRelationTypeService.CreateAlgorithmRelationTypePath,
@@ -183,11 +150,7 @@ export class AlgorithmRelationTypeService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<AlgorithmRelationTypeDto>;
         })
       );
   }
@@ -202,16 +165,11 @@ export class AlgorithmRelationTypeService extends BaseService {
    */
   createAlgorithmRelationType(params: {
     body: AlgorithmRelationTypeDto;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+  }): Observable<AlgorithmRelationTypeDto> {
     return this.createAlgorithmRelationType$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
+        (r: StrictHttpResponse<AlgorithmRelationTypeDto>) =>
+          r.body as AlgorithmRelationTypeDto
       )
     );
   }
@@ -232,9 +190,7 @@ export class AlgorithmRelationTypeService extends BaseService {
    */
   getAlgorithmRelationType$Response(params: {
     algorithmRelationTypeId: string;
-  }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
-  > {
+  }): Observable<StrictHttpResponse<AlgorithmRelationTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmRelationTypeService.GetAlgorithmRelationTypePath,
@@ -253,11 +209,7 @@ export class AlgorithmRelationTypeService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<AlgorithmRelationTypeDto>;
         })
       );
   }
@@ -272,16 +224,11 @@ export class AlgorithmRelationTypeService extends BaseService {
    */
   getAlgorithmRelationType(params: {
     algorithmRelationTypeId: string;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+  }): Observable<AlgorithmRelationTypeDto> {
     return this.getAlgorithmRelationType$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
+        (r: StrictHttpResponse<AlgorithmRelationTypeDto>) =>
+          r.body as AlgorithmRelationTypeDto
       )
     );
   }
@@ -303,9 +250,7 @@ export class AlgorithmRelationTypeService extends BaseService {
   updateAlgorithmRelationType$Response(params: {
     algorithmRelationTypeId: string;
     body: AlgorithmRelationTypeDto;
-  }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
-  > {
+  }): Observable<StrictHttpResponse<AlgorithmRelationTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmRelationTypeService.UpdateAlgorithmRelationTypePath,
@@ -326,11 +271,7 @@ export class AlgorithmRelationTypeService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<AlgorithmRelationTypeDto>;
         })
       );
   }
@@ -346,16 +287,11 @@ export class AlgorithmRelationTypeService extends BaseService {
   updateAlgorithmRelationType(params: {
     algorithmRelationTypeId: string;
     body: AlgorithmRelationTypeDto;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+  }): Observable<AlgorithmRelationTypeDto> {
     return this.updateAlgorithmRelationType$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
+        (r: StrictHttpResponse<AlgorithmRelationTypeDto>) =>
+          r.body as AlgorithmRelationTypeDto
       )
     );
   }

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
-import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
+import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { forkJoin, Observable } from 'rxjs';
 import {
   LinkObject,
@@ -22,7 +22,7 @@ import { GenericDataService } from '../../../../util/generic-data.service';
   styleUrls: ['./compute-resource-software-platform-list.component.scss'],
 })
 export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
-  @Input() computeResource: EntityModelComputeResourceDto;
+  @Input() computeResource: ComputeResourceDto;
   displayedData = [];
   variableNames: string[] = ['name', 'link', 'license', 'version'];
   tableColumns: string[] = ['Name', 'Link', 'License', 'Version'];
@@ -78,8 +78,8 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
         computeResourceId: this.computeResource.id,
       })
       .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.softwarePlatforms;
+        if (data.content) {
+          this.linkObject.linkedData = data.content;
         }
       });
   }

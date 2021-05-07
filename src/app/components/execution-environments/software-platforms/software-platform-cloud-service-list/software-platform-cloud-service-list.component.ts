@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
-import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
+import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { forkJoin, Observable } from 'rxjs';
 import {
@@ -22,7 +22,7 @@ import {
   styleUrls: ['./software-platform-cloud-service-list.component.scss'],
 })
 export class SoftwarePlatformCloudServiceListComponent implements OnInit {
-  @Input() softwarePlatform: EntityModelSoftwarePlatformDto;
+  @Input() softwarePlatform: SoftwarePlatformDto;
   displayedData = [];
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
   variableNames = ['name', 'provider', 'description', 'costModel', 'url'];
@@ -78,8 +78,8 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
       })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.cloudServices;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
         },
         () => {

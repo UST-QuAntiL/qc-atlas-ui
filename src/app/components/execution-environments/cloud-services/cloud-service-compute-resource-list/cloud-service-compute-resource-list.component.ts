@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
+import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
@@ -21,7 +21,7 @@ import {
   styleUrls: ['./cloud-service-compute-resource-list.component.scss'],
 })
 export class CloudServiceComputeResourceListComponent implements OnInit {
-  @Input() cloudService: EntityModelCloudServiceDto;
+  @Input() cloudService: CloudServiceDto;
   displayedData = [];
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
@@ -75,8 +75,8 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
         cloudServiceId: this.cloudService.id,
       })
       .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.computeResources;
+        if (data.content) {
+          this.linkObject.linkedData = data.content;
         }
       });
   }

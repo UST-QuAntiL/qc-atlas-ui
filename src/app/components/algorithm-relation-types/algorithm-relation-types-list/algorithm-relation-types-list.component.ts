@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
-import { EntityModelAlgorithmRelationTypeDto } from 'api-atlas/models/entity-model-algorithm-relation-type-dto';
+import { PageAlgorithmRelationTypeDto } from 'api-atlas/models/page-algorithm-relation-type-dto';
 import { forkJoin } from 'rxjs';
+import { AlgorithmRelationTypeDto } from 'api-atlas/models/algorithm-relation-type-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { UtilService } from '../../../util/util.service';
 import {
@@ -70,7 +71,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const algorithmRelationType: EntityModelAlgorithmRelationTypeDto = {
+        const algorithmRelationType: AlgorithmRelationTypeDto = {
           id: undefined,
           name: dialogResult.name,
         };
@@ -173,7 +174,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const updatedAlgorithmRelationType: EntityModelAlgorithmRelationTypeDto = {
+        const updatedAlgorithmRelationType: AlgorithmRelationTypeDto = {
           id: dialogResult.id,
           name: dialogResult.name,
         };

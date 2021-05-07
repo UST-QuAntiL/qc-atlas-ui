@@ -83,8 +83,8 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
       })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.softwarePlatforms;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
         },
         () => {

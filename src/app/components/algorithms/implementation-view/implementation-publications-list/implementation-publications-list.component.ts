@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
-import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
+import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { forkJoin, Observable } from 'rxjs';
 import { GenericDataService } from '../../../../util/generic-data.service';
@@ -23,7 +23,7 @@ import {
   styleUrls: ['./implementation-publications-list.component.scss'],
 })
 export class ImplementationPublicationsListComponent implements OnInit {
-  @Input() implementation: EntityModelImplementationDto;
+  @Input() implementation: ImplementationDto;
 
   variableNames: string[] = ['title', 'authors', 'doi', 'url'];
   tableColumns: string[] = ['Title', 'Authors', 'DOI', 'URL'];
@@ -81,8 +81,8 @@ export class ImplementationPublicationsListComponent implements OnInit {
       })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.publications;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
         },
         () => {

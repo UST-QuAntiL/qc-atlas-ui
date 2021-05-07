@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
@@ -23,7 +23,7 @@ import { GenericDataService } from '../../../util/generic-data.service';
   styleUrls: ['./publication-implementations-list.component.scss'],
 })
 export class PublicationImplementationsListComponent implements OnInit {
-  @Input() publication: EntityModelPublicationDto;
+  @Input() publication: PublicationDto;
   displayedData = [];
   tableColumns = [
     'Name',
@@ -90,8 +90,8 @@ export class PublicationImplementationsListComponent implements OnInit {
       .getImplementationsOfPublication({ publicationId: this.publication.id })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.implementations;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
         },
         () => {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
-import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
+import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import {
@@ -89,7 +89,7 @@ export class ProblemTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const problemTypeDto: EntityModelProblemTypeDto = {
+        const problemTypeDto: ProblemTypeDto = {
           id: undefined,
           name: dialogResult.name,
         };
@@ -182,7 +182,7 @@ export class ProblemTypesListComponent implements OnInit {
   }
 
   onEditElement(event: any): void {
-    let parentProblemTypeDto: EntityModelProblemTypeDto;
+    let parentProblemTypeDto: ProblemTypeDto;
     for (const problemType of this.problemTypes) {
       if (problemType.id === event.parentProblemType) {
         parentProblemTypeDto = problemType;
@@ -201,7 +201,7 @@ export class ProblemTypesListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       (dialogResult) => {
         if (dialogResult) {
-          const updatedProblemType: EntityModelProblemTypeDto = {
+          const updatedProblemType: ProblemTypeDto = {
             id: dialogResult.id,
             name: dialogResult.name,
             parentProblemType: dialogResult.parentProblemType

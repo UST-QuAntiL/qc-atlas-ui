@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
+import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 
 @Component({
@@ -8,8 +8,8 @@ import { UpdateFieldEventService } from '../../../../services/update-field-event
   styleUrls: ['./software-platform-properties.component.scss'],
 })
 export class SoftwarePlatformPropertiesComponent implements OnInit {
-  @Input() softwarePlatform: EntityModelSoftwarePlatformDto;
-  @Input() frontendSoftwarePlatform: EntityModelSoftwarePlatformDto;
+  @Input() softwarePlatform: SoftwarePlatformDto;
+  @Input() frontendSoftwarePlatform: SoftwarePlatformDto;
   @Output() updateSoftwarePlatformField: EventEmitter<{
     field;
     value;

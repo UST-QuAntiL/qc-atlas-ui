@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ComputeResourcePropertyTypesService } from 'api-atlas/services/compute-resource-property-types.service';
-import { EntityModelComputeResourcePropertyTypeDto } from 'api-atlas/models/entity-model-compute-resource-property-type-dto';
+import { ComputeResourcePropertyTypeDto } from 'api-atlas/models/compute-resource-property-type-dto';
 import { forkJoin } from 'rxjs';
 import { GenericDataService } from '../../../util/generic-data.service';
 import { UtilService } from '../../../util/util.service';
@@ -71,7 +71,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const computeResourcePropertyType: EntityModelComputeResourcePropertyTypeDto = {
+        const computeResourcePropertyType: ComputeResourcePropertyTypeDto = {
           id: undefined,
           name: dialogResult.name,
           datatype: dialogResult.datatype,
@@ -185,7 +185,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const updatedComputeResourcePropertyType: EntityModelComputeResourcePropertyTypeDto = {
+        const updatedComputeResourcePropertyType: ComputeResourcePropertyTypeDto = {
           id: dialogResult.id,
           name: dialogResult.name,
           datatype: dialogResult.datatype,

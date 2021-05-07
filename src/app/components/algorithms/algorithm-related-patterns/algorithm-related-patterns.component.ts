@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
-import { EntityModelPatternRelationDto } from 'api-atlas/models/entity-model-pattern-relation-dto';
 import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
@@ -24,7 +23,7 @@ import { GenericDataService } from '../../../util/generic-data.service';
 export class AlgorithmRelatedPatternsComponent implements OnInit {
   @Input() algorithm: AlgorithmDto;
 
-  patternRelations: EntityModelPatternRelationDto[];
+  patternRelations: PatternRelationDto[];
   tableObjects: PatternRelationTableObject[] = [];
   variableNames: string[] = ['patternName', 'patternType', 'description'];
   tableColumns: string[] = ['Pattern', 'Relation Type', 'Description'];
