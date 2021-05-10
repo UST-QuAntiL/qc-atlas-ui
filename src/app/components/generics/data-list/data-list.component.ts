@@ -29,7 +29,7 @@ export class DataListComponent implements OnInit {
   @Output() addElement = new EventEmitter<void>();
   @Output() submitDeleteElements = new EventEmitter<SelectParams>();
   @Output() submitLinkElements = new EventEmitter<SelectParams>();
-  @Output() pageChange = new EventEmitter<string>();
+  @Output() pageChange = new EventEmitter<QueryParams>();
   @Output() datalistConfigChanged = new EventEmitter<QueryParams>();
   selection = new SelectionModel<any>(true, []);
   searchText = '';
@@ -75,8 +75,9 @@ export class DataListComponent implements OnInit {
     );
   }
 
-  changePage(link: string): void {
-    this.pageChange.emit(link);
+  changePage(pageNumber: number): void {
+    this.pagination.number = pageNumber;
+    this.pageChange.emit(this.generateGetParameter());
     this.selection.clear();
   }
 
@@ -184,7 +185,7 @@ export class DataListComponent implements OnInit {
   private generateGetParameter(): QueryParams {
     const params: QueryParams = {};
     if (this.pagination) {
-      params.page = this.pagination.page.number;
+      params.page = this.pagination.number;
 
       if (this.paginatorConfig) {
         params.size = this.paginatorConfig.selectedAmount;
@@ -193,6 +194,8 @@ export class DataListComponent implements OnInit {
 
     if (this.sortDirection && this.sortActiveElement) {
       params.sort = [this.sortActiveElement + ',' + this.sortDirection];
+    } else {
+      params.sort = [];
     }
 
     if (this.allowSearch && this.searchText) {
@@ -203,14 +206,11 @@ export class DataListComponent implements OnInit {
   }
 
   private generateInitialPaginator(): void {
-    if (!this.pagination._links) {
-      this.pagination._links = {};
+    if (!this.pagination.totalPages) {
+      this.pagination.totalPages = 0;
     }
-    if (!this.pagination.page) {
-      this.pagination.page = {};
-    }
-    if (!this.pagination.page.number) {
-      this.pagination.page.number = 0;
+    if (!this.pagination.number) {
+      this.pagination.number = 0;
     }
   }
 }

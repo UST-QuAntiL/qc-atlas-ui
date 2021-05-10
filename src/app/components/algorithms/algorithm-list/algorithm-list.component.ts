@@ -3,7 +3,6 @@ import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { AlgorithmDto } from 'api-atlas/models';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { GenericDataService } from '../../../util/generic-data.service';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import {
@@ -28,7 +27,6 @@ export class AlgorithmListComponent implements OnInit {
 
   constructor(
     private algorithmService: AlgorithmService,
-    private genericDataService: GenericDataService,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -48,21 +46,15 @@ export class AlgorithmListComponent implements OnInit {
     );
   }
 
-  getAlgorithmsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareAlgorithmData(data);
-    });
-  }
-
   prepareAlgorithmData(data): void {
     // Read all incoming data
-    if (data._embedded) {
-      this.algorithms = data._embedded.algorithms;
+    if (data.content) {
+      this.algorithms = data.content;
     } else {
       this.algorithms = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.number = data.number;
   }
 
   onElementClicked(algorithm: any): void {
@@ -154,9 +146,10 @@ export class AlgorithmListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getAlgorithmsHateoas(this.pagingInfo._links.prev.href);
+              event.queryParams.page--;
+              this.getAlgorithms(event.queryParams);
             } else {
-              this.getAlgorithmsHateoas(this.pagingInfo._links.self.href);
+              this.getAlgorithms(event.queryParams);
             }
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
@@ -172,10 +165,16 @@ export class AlgorithmListComponent implements OnInit {
   }
 
   onPageChanged(event): void {
-    this.getAlgorithmsHateoas(event);
+    if (event.sort.length === 0) {
+      event.sort = ['name,asc'];
+    }
+    this.getAlgorithms(event);
   }
 
   onDatalistConfigChanged(event): void {
+    if (event.sort.length === 0) {
+      event.sort = ['name,asc'];
+    }
     this.getAlgorithms(event);
   }
 }

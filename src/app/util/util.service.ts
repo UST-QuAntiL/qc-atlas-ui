@@ -96,9 +96,9 @@ export class UtilService {
     }
 
     const totalElementsAfterCreation =
-      pagingInfo.page.totalElements + createdElements;
+      pagingInfo.totalElements + createdElements;
     const lastPageAfterCreation = Math.ceil(
-      totalElementsAfterCreation / pagingInfo.page.size
+      totalElementsAfterCreation / pagingInfo.size
     );
 
     const correctPage = lastPageAfterCreation - 1;
@@ -123,8 +123,8 @@ export class UtilService {
   ): boolean {
     return (
       currentAmountOfElements === elementsDeleted &&
-      pagingInfo.page.number !== 0 &&
-      pagingInfo.page.number === pagingInfo.page.totalPages - 1
+      pagingInfo.number !== 0 &&
+      pagingInfo.number === pagingInfo.totalPages - 1
     );
   }
 

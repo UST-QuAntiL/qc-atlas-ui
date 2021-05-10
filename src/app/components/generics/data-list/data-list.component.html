@@ -126,32 +126,32 @@
               <!-- First Page button -->
               <li class="page-item"><a class="page-link no-events">
                 <mat-icon class="page-button no-select"
-                          [ngClass]="[pagination._links.first && pagination._links.first.href != pagination._links.self.href ? 'enabled' : 'disabled']"
-                          (click)="changePage(pagination._links.first.href)">first_page
+                          [ngClass]="[pagination.totalPages > 0 && pagination.number != 0 ? 'enabled' : 'disabled']"
+                          (click)="changePage(0)">first_page
                 </mat-icon>
               </a></li>
               <!-- Previous Page button -->
               <li class="page-item"><a class="page-link no-events">
                 <mat-icon class="page-button no-select"
-                          [ngClass]="[pagination._links.prev ? 'enabled' : 'disabled']"
-                          (click)="changePage(pagination._links.prev.href)">chevron_left
+                          [ngClass]="[pagination.number > 0 ? 'enabled' : 'disabled']"
+                          (click)="changePage(pagination.number - 1)">chevron_left
                 </mat-icon>
               </a></li>
               <!-- Current Page field -->
               <li class="page-item"><a
-                class="page-link current-page no-select"> {{ pagination.page.number + 1 }} </a></li>
+                class="page-link current-page no-select"> {{ pagination.number + 1 }} </a></li>
               <!-- Next Page button -->
               <li class="page-item"><a class="page-link no-events">
                 <mat-icon class="page-button no-select"
-                          [ngClass]="[pagination._links.next ? 'enabled' : 'disabled']"
-                          (click)="changePage(pagination._links.next.href)">chevron_right
+                          [ngClass]="[pagination.number < pagination.totalPages - 1 ? 'enabled' : 'disabled']"
+                          (click)="changePage(pagination.number + 1)">chevron_right
                 </mat-icon>
               </a></li>
               <!-- Last Page button -->
               <li class="page-item"><a class="page-link no-events">
                 <mat-icon class="page-button no-select"
-                          [ngClass]="[(pagination._links.last && pagination._links.last.href != pagination._links.self.href) ? 'enabled' : 'disabled']"
-                          (click)="changePage(pagination._links.last.href)">last_page
+                          [ngClass]="[(pagination.totalPages > 0 && pagination.number != pagination.totalPages - 1) ? 'enabled' : 'disabled']"
+                          (click)="changePage(pagination.totalPages - 1)">last_page
                 </mat-icon>
               </a></li>
             </div>
