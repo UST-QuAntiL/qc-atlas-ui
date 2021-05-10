@@ -7,7 +7,6 @@ import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { UtilService } from '../../../util/util.service';
 import { CreateImplementationDialogComponent } from '../dialogs/create-implementation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
-import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-implementations-list',
@@ -29,8 +28,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   constructor(
     private algorithmService: AlgorithmService,
     private utilService: UtilService,
-    private router: Router,
-    private genericDataService: GenericDataService
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -48,20 +46,14 @@ export class AlgorithmImplementationsListComponent implements OnInit {
     );
   }
 
-  getImplementationsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((relations) => {
-      this.prepareImplementationData(relations);
-    });
-  }
-
   prepareImplementationData(implementations): void {
-    if (implementations._embedded) {
-      this.implementations = implementations._embedded.implementations;
+    if (implementations.content) {
+      this.implementations = implementations.content;
     } else {
       this.implementations = [];
     }
-    this.pagingInfo.page = implementations.page;
-    this.pagingInfo._links = implementations._links;
+    this.pagingInfo.totalPages = implementations.totalPages;
+    this.pagingInfo.number = implementations.number;
   }
 
   onAddImplementation(): void {
@@ -149,18 +141,21 @@ export class AlgorithmImplementationsListComponent implements OnInit {
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
-                event.elements.length,
+                this.implementations.length,
                 this.pagingInfo
               )
             ) {
-              this.getImplementationsHateoas(this.pagingInfo._links.prev.href);
-            } else {
-              this.getImplementationsHateoas(this.pagingInfo._links.self.href);
+              event.queryParams.page--;
             }
+            if (event.queryParams.sort.length === 0) {
+              event.queryParams.sort = ['name,asc'];
+            }
+            event.queryParams.algorithmId = this.algorithm.id;
+            this.getImplementations(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
-                dialogResult.data.length,
+                event.elements.length,
                 'implementations'
               )
             );
@@ -179,8 +174,19 @@ export class AlgorithmImplementationsListComponent implements OnInit {
     ]);
   }
 
+  onPageChanged(event): void {
+    event.algorithmId = this.algorithm.id;
+    if (event.sort.length === 0) {
+      event.sort = ['name,asc'];
+    }
+    this.getImplementations(event);
+  }
+
   onDatalistConfigChanged(event): void {
     event.algorithmId = this.algorithm.id;
+    if (event.sort.length === 0) {
+      event.sort = ['name,asc'];
+    }
     this.getImplementations(event);
   }
 }

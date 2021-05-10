@@ -147,10 +147,11 @@ export class AlgorithmListComponent implements OnInit {
               )
             ) {
               event.queryParams.page--;
-              this.getAlgorithms(event.queryParams);
-            } else {
-              this.getAlgorithms(event.queryParams);
             }
+            if (event.queryParams.sort.length === 0) {
+              event.queryParams.sort = ['name,asc'];
+            }
+            this.getAlgorithms(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
