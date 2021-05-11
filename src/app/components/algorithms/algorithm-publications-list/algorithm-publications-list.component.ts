@@ -72,58 +72,50 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     return this.publicationService.getPublications(search).pipe((data) => data);
   }
 
-  getAllLinkedPublications(): void {
+  getAllLinkedPublications(params?: any): void {
     this.linkObject.linkedData = [];
-    this.algorithmService
-      .getPublicationsOfAlgorithm({ algorithmId: this.algorithm.id })
-      .subscribe(
-        (data) => {
-          if (data.content) {
-            this.linkObject.linkedData = data.content;
-          }
-        },
-        () => {
-          this.utilService.callSnackBar(
-            'Error! Linked publications could not be retrieved.'
-          );
+    params.algorithmId = this.algorithm.id;
+    this.algorithmService.getPublicationsOfAlgorithm(params).subscribe(
+      (data) => {
+        if (data.content) {
+          this.linkObject.linkedData = data.content;
         }
-      );
-  }
-
-  getPagedLinkedPublications(params: any): void {
-    this.algorithmService
-      .getPublicationsOfAlgorithm({
-        algorithmId: this.algorithm.id,
-        page: params.page,
-        size: params.size,
-        sort: params.sort,
-        search: params.sort,
-      })
-      .subscribe((data) => {
         this.updateDisplayedData(data);
-      });
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Linked publications could not be retrieved.'
+        );
+      }
+    );
   }
 
   updateDisplayedData(data): void {
     // clear link object data
     this.displayedData = [];
     // If publications found
-    if (data._embedded) {
-      this.displayedData = data._embedded.publications;
+    if (data.content) {
+      this.displayedData = data.content;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
+    this.pagingInfo.search = data.search;
   }
 
   updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If publications found
-    if (data._embedded) {
-      this.linkObject.data = data._embedded.publications;
+    if (data.content) {
+      this.linkObject.data = data.content;
     }
-    this.dialogData.pagingInfo.page = data.page;
-    this.dialogData.pagingInfo._links = data._links;
+    this.dialogData.pagingInfo.totalPages = data.totalPages;
+    this.dialogData.pagingInfo.number = data.number;
+    this.dialogData.pagingInfo.size = data.size;
+    this.dialogData.pagingInfo.sort = data.sort;
   }
 
   openLinkPublicationDialog(): void {
@@ -144,8 +136,8 @@ export class AlgorithmPublicationsListComponent implements OnInit {
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-        (page: string) => {
-          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+        (page: QueryParams) => {
+          this.getAllPublications(page).subscribe((pageData) => {
             this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
@@ -197,16 +189,15 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       );
     }
     forkJoin(linkTasks).subscribe(() => {
-      this.getHateaosDataFromGenericService(
-        this.utilService.getLastPageAfterCreation(
-          this.pagingInfo._links.self.href,
-          this.pagingInfo,
-          successfulLinks
-        )
-      ).subscribe((data) => {
-        this.updateDisplayedData(data);
+      const correctPage = this.utilService.getLastPageAfterCreation(
+        this.pagingInfo,
+        successfulLinks
+      );
+      this.getAllLinkedPublications({
+        size: this.pagingInfo.size,
+        page: correctPage,
+        sort: this.pagingInfo.sort,
       });
-      this.getAllLinkedPublications();
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
@@ -245,17 +236,16 @@ export class AlgorithmPublicationsListComponent implements OnInit {
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
-      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
-        successfulDeletions,
-        this.displayedData.length,
-        this.pagingInfo
-      )
-        ? this.pagingInfo._links.prev.href
-        : this.pagingInfo._links.self.href;
-      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedPublications();
+      if (
+        this.utilService.isLastPageEmptyAfterDeletion(
+          successfulDeletions,
+          this.displayedData.length,
+          this.pagingInfo
+        )
+      ) {
+        event.queryParams.page--;
+      }
+      this.getAllLinkedPublications(event.queryParams);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
@@ -268,14 +258,6 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     });
   }
 
-  onDatalistConfigChanged(event): void {
-    this.getPagedLinkedPublications(event);
-  }
-
-  onElementClicked(publication: PublicationDto): void {
-    this.routeToPublication(publication);
-  }
-
   onUrlClicked(urlData: UrlData): void {
     // No check needed since publications have only one url-field called 'url'
     window.open(urlData.element['url'], '_blank');
@@ -283,15 +265,5 @@ export class AlgorithmPublicationsListComponent implements OnInit {
 
   routeToPublication(publication: PublicationDto): void {
     this.router.navigate(['publications', publication.id]);
-  }
-
-  getHateaosDataFromGenericService(url: string): Observable<any> {
-    return this.genericDataService.getData(url).pipe((data) => data);
-  }
-
-  onPageChanged(event): void {
-    this.getHateaosDataFromGenericService(event).subscribe((data) => {
-      this.updateDisplayedData(data);
-    });
   }
 }
