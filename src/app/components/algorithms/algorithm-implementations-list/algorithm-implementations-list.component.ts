@@ -54,6 +54,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
     }
     this.pagingInfo.totalPages = implementations.totalPages;
     this.pagingInfo.number = implementations.number;
+    this.pagingInfo.sort = implementations.sort;
   }
 
   onAddImplementation(): void {
@@ -147,9 +148,6 @@ export class AlgorithmImplementationsListComponent implements OnInit {
             ) {
               event.queryParams.page--;
             }
-            if (event.queryParams.sort.length === 0) {
-              event.queryParams.sort = ['name,asc'];
-            }
             event.queryParams.algorithmId = this.algorithm.id;
             this.getImplementations(event.queryParams);
             snackbarMessages.push(
@@ -174,19 +172,8 @@ export class AlgorithmImplementationsListComponent implements OnInit {
     ]);
   }
 
-  onPageChanged(event): void {
-    event.algorithmId = this.algorithm.id;
-    if (event.sort.length === 0) {
-      event.sort = ['name,asc'];
-    }
-    this.getImplementations(event);
-  }
-
   onDatalistConfigChanged(event): void {
     event.algorithmId = this.algorithm.id;
-    if (event.sort.length === 0) {
-      event.sort = ['name,asc'];
-    }
     this.getImplementations(event);
   }
 }

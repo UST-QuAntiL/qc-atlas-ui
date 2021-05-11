@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
-import { PageAlgorithmRelationTypeDto } from 'api-atlas/models/page-algorithm-relation-type-dto';
 import { forkJoin } from 'rxjs';
 import { AlgorithmRelationTypeDto } from 'api-atlas/models/algorithm-relation-type-dto';
 import { GenericDataService } from '../../../util/generic-data.service';
@@ -198,9 +197,5 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
           });
       }
     });
-  }
-
-  onPageChanged(event): void {
-    this.getAlgorithmRelationTypes(event);
   }
 }

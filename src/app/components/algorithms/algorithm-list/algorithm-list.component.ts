@@ -16,7 +16,7 @@ import {
   styleUrls: ['./algorithm-list.component.scss'],
 })
 export class AlgorithmListComponent implements OnInit {
-  algorithms: any[] = [];
+  algorithms: AlgorithmDto[] = [];
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
   pagingInfo: any = {};
@@ -36,7 +36,7 @@ export class AlgorithmListComponent implements OnInit {
   getAlgorithms(params: any): void {
     this.algorithmService.getAlgorithms(params).subscribe(
       (data) => {
-        this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
+        this.prepareAlgorithmData(data);
       },
       () => {
         this.utilService.callSnackBar(
@@ -55,6 +55,7 @@ export class AlgorithmListComponent implements OnInit {
     }
     this.pagingInfo.totalPages = data.totalPages;
     this.pagingInfo.number = data.number;
+    this.pagingInfo.sort = data.sort;
   }
 
   onElementClicked(algorithm: any): void {
@@ -148,9 +149,6 @@ export class AlgorithmListComponent implements OnInit {
             ) {
               event.queryParams.page--;
             }
-            if (event.queryParams.sort.length === 0) {
-              event.queryParams.sort = ['name,asc'];
-            }
             this.getAlgorithms(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
@@ -163,19 +161,5 @@ export class AlgorithmListComponent implements OnInit {
           });
         }
       });
-  }
-
-  onPageChanged(event): void {
-    if (event.sort.length === 0) {
-      event.sort = ['name,asc'];
-    }
-    this.getAlgorithms(event);
-  }
-
-  onDatalistConfigChanged(event): void {
-    if (event.sort.length === 0) {
-      event.sort = ['name,asc'];
-    }
-    this.getAlgorithms(event);
   }
 }

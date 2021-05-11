@@ -10,7 +10,7 @@
                [emptyTableMessage]="'No implementations for this algorithm found'"
                (addElement)="onAddImplementation()"
                (submitDeleteElements)="onDeleteImplementation($event)"
-               (pageChange)="onPageChanged($event)"
+               (pageChange)="onDatalistConfigChanged($event)"
                (datalistConfigChanged)="onDatalistConfigChanged($event)"
                (elementClicked)="onImplementationClicked($event)">
     </app-table>

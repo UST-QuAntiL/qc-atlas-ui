@@ -39,8 +39,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private algorithmRelationTypeService: AlgorithmRelationTypeService,
     private utilService: UtilService,
-    private router: Router,
-    private genericDataService: GenericDataService
+    private router: Router
   ) {}
 
   ngOnInit(): void {}

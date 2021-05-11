@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { forkJoin } from 'rxjs';
-import { GenericDataService } from '../../../util/generic-data.service';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
 import {
   SelectParams,
@@ -31,7 +30,6 @@ export class PublicationListComponent implements OnInit {
 
   constructor(
     private publicationService: PublicationService,
-    private genericDataService: GenericDataService,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -51,21 +49,16 @@ export class PublicationListComponent implements OnInit {
     );
   }
 
-  getPublicationsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.preparePublicationData(data);
-    });
-  }
-
   preparePublicationData(data): void {
     // Read all incoming data
-    if (data._embedded) {
-      this.publications = data._embedded.publications;
+    if (data.content) {
+      this.publications = data.content;
     } else {
       this.publications = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.sort = data.sort;
   }
 
   onElementClicked(publication: any): void {
@@ -153,10 +146,9 @@ export class PublicationListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getPublicationsHateoas(this.pagingInfo._links.prev.href);
-            } else {
-              this.getPublicationsHateoas(this.pagingInfo._links.self.href);
+              event.queryParams.page--;
             }
+            this.getPublications(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
