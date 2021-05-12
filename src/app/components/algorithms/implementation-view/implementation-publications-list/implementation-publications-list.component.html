@@ -11,12 +11,12 @@
       [emptyTableMessage]="'No linked publications found'"
       [pagination]=pagingInfo
       [paginatorConfig]=paginatorConfig
-      (elementClicked)="onElementClicked($event)"
+      (elementClicked)="routeToPublication($event)"
       (urlClicked)="onUrlClicked($event)"
-      (datalistConfigChanged)="onDatalistConfigChanged($event)"
+      (datalistConfigChanged)="getAllLinkedPublications($event)"
       (submitDeleteElements)="unlinkPublications($event)"
       (addElement)="openLinkPublicationDialog()"
-      (pageChange)="onPageChanged($event)">
+      (pageChange)="getAllLinkedPublications($event)">
     </app-table>
   </div>
 </mat-card>

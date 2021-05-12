@@ -15,7 +15,6 @@ import {
   DialogData,
   LinkItemListDialogComponent,
 } from '../../generics/dialogs/link-item-list-dialog.component';
-import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-publications-list',
@@ -58,7 +57,6 @@ export class AlgorithmPublicationsListComponent implements OnInit {
   constructor(
     private algorithmService: AlgorithmService,
     private publicationService: PublicationService,
-    private genericDataService: GenericDataService,
     private router: Router,
     private utilService: UtilService
   ) {}
