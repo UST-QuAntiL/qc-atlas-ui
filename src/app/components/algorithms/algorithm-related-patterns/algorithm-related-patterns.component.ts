@@ -8,12 +8,12 @@ import { PatternControllerService } from 'api-patternpedia/services/pattern-cont
 import { EntityModelPattern } from 'api-patternpedia/models/entity-model-pattern';
 import { EntityModelPatternLanguage } from 'api-patternpedia/models';
 import { forkJoin } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { UrlData } from '../../generics/data-list/data-list.component';
 import { environment as Env } from '../../../../environments/environment';
-import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-related-patterns',
@@ -40,8 +40,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private patternService: PatternControllerService,
     private utilService: UtilService,
-    private dataService: GenericDataService,
-    private genericDataService: GenericDataService
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {}
@@ -65,22 +64,20 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     );
   }
 
-  getPatternRelationsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((relations) => {
-      this.prepareRelations(relations);
-    });
-  }
-
   prepareRelations(relations): void {
-    if (relations._embedded) {
-      this.patternRelations = relations._embedded.patternRelations;
+    if (relations.content) {
+      this.patternRelations = relations.content;
       this.generateTableObjects();
     } else {
       this.patternRelations = [];
       this.tableObjects = [];
     }
-    this.pagingInfo.page = relations.page;
-    this.pagingInfo._links = relations._links;
+    this.pagingInfo.totalPages = relations.totalPages;
+    this.pagingInfo.totalElements = relations.totalElements;
+    this.pagingInfo.number = relations.number;
+    this.pagingInfo.size = relations.size;
+    this.pagingInfo.sort = relations.sort;
+    this.pagingInfo.search = relations.search;
   }
 
   createPatternRelation(patternRelationDto: PatternRelationDto): void {
@@ -91,13 +88,16 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this.getPatternRelationsHateoas(
-            this.utilService.getLastPageAfterCreation(
-              this.pagingInfo._links.self.href,
-              this.pagingInfo,
-              1
-            )
+          const correctPage = this.utilService.getLastPageAfterCreation(
+            this.pagingInfo,
+            1
           );
+          this.getPatternRelations({
+            algorithmId: this.algorithm.id,
+            size: this.pagingInfo.size,
+            page: correctPage,
+            sort: this.pagingInfo.sort,
+          });
           this.utilService.callSnackBar(
             'Pattern relation was successfully created.'
           );
@@ -122,7 +122,12 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this.getPatternRelationsHateoas(this.pagingInfo._links.self.href);
+          this.getPatternRelations({
+            algorithmId: this.algorithm.id,
+            size: this.pagingInfo.size,
+            page: this.pagingInfo.number,
+            sort: this.pagingInfo.sort,
+          });
           this.utilService.callSnackBar(
             'Pattern relation was successfully updated.'
           );
@@ -274,10 +279,10 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
               this.pagingInfo
             )
           ) {
-            this.getPatternRelationsHateoas(this.pagingInfo._links.prev.href);
-          } else {
-            this.getPatternRelationsHateoas(this.pagingInfo._links.self.href);
+            event.queryParams.page--;
           }
+          event.queryParams.algorithmId = this.algorithm.id;
+          this.getPatternRelations(event.queryParams);
           snackbarMessages.push(
             this.utilService.generateFinishingSnackbarMessage(
               successfulUnlinks,
@@ -340,7 +345,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   ): void {
     const languageUrl = JSON.parse(JSON.stringify(pattern._links))
       .patternLanguage.href;
-    this.dataService.getData(languageUrl).subscribe((language) => {
+
+    this.http.get(languageUrl).subscribe((language) => {
       this.tableObjects.push({
         id: relation.id,
         description: relation.description,
@@ -367,6 +373,11 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
       patternRelationType,
       description,
     };
+  }
+
+  onPageChanged(event): void {
+    event.algorithmId = this.algorithm.id;
+    this.getPatternRelations(event);
   }
 }
 
