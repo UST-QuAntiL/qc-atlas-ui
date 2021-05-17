@@ -14,7 +14,6 @@ import {
   DialogData,
   LinkItemListDialogComponent,
 } from '../../generics/dialogs/link-item-list-dialog.component';
-import { GenericDataService } from '../../../util/generic-data.service';
 @Component({
   selector: 'app-publication-algorithms-list',
   templateUrl: './publication-algorithms-list.component.html',
@@ -54,7 +53,6 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   constructor(
     private algorithmService: AlgorithmService,
     private publicationService: PublicationService,
-    private genericDataService: GenericDataService,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -68,58 +66,53 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     return this.algorithmService.getAlgorithms(search).pipe((data) => data);
   }
 
-  getAllLinkedAlgorithms(): void {
+  getAllLinkedAlgorithms(params?: any): void {
     this.linkObject.linkedData = [];
-    this.publicationService
-      .getAlgorithmsOfPublication({ publicationId: this.publication.id })
-      .subscribe(
-        (data) => {
-          if (data.content) {
-            this.linkObject.linkedData = data.content;
-          }
-        },
-        () => {
-          this.utilService.callSnackBar(
-            'Error! Linked algorithms could not be retrieved.'
-          );
+    if (!params) {
+      params = {};
+    }
+    params.publicationId = this.publication.id;
+    this.publicationService.getAlgorithmsOfPublication(params).subscribe(
+      (data) => {
+        if (data.content) {
+          this.linkObject.linkedData = data.content;
         }
-      );
-  }
-
-  getPagedLinkedAlgorithms(params: any): void {
-    this.publicationService
-      .getAlgorithmsOfPublication({
-        publicationId: this.publication.id,
-        page: params.page,
-        size: params.size,
-        sort: params.sort,
-        search: params.sort,
-      })
-      .subscribe((data) => {
         this.updateDisplayedData(data);
-      });
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Linked algorithms could not be retrieved.'
+        );
+      }
+    );
   }
 
   updateDisplayedData(data): void {
     // clear link object data
     this.displayedData = [];
     // If algorithms found
-    if (data._embedded) {
-      this.displayedData = data._embedded.algorithms;
+    if (data.content) {
+      this.displayedData = data.content;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
+    this.pagingInfo.search = data.search;
   }
 
   updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If algorithms found
-    if (data._embedded) {
-      this.linkObject.data = data._embedded.algorithms;
+    if (data.content) {
+      this.linkObject.data = data.content;
     }
-    this.dialogData.pagingInfo.page = data.page;
-    this.dialogData.pagingInfo._links = data._links;
+    this.dialogData.pagingInfo.totalPages = data.totalPages;
+    this.dialogData.pagingInfo.number = data.number;
+    this.dialogData.pagingInfo.size = data.size;
+    this.dialogData.pagingInfo.sort = data.sort;
   }
 
   openLinkAlgorithmDialog(): void {
@@ -140,8 +133,8 @@ export class PublicationAlgorithmsListComponent implements OnInit {
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-        (page: string) => {
-          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+        (page: QueryParams) => {
+          this.getAllAlgorithms(page).subscribe((pageData) => {
             this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
@@ -193,16 +186,15 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       );
     }
     forkJoin(linkTasks).subscribe(() => {
-      this.getHateaosDataFromGenericService(
-        this.utilService.getLastPageAfterCreation(
-          this.pagingInfo._links.self.href,
-          this.pagingInfo,
-          successfulLinks
-        )
-      ).subscribe((data) => {
-        this.updateDisplayedData(data);
+      const correctPage = this.utilService.getLastPageAfterCreation(
+        this.pagingInfo,
+        successfulLinks
+      );
+      this.getAllLinkedAlgorithms({
+        size: this.pagingInfo.size,
+        page: correctPage,
+        sort: this.pagingInfo.sort,
       });
-      this.getAllLinkedAlgorithms();
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
@@ -241,17 +233,16 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
-      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
-        successfulDeletions,
-        this.displayedData.length,
-        this.pagingInfo
-      )
-        ? this.pagingInfo._links.prev.href
-        : this.pagingInfo._links.self.href;
-      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedAlgorithms();
+      if (
+        this.utilService.isLastPageEmptyAfterDeletion(
+          successfulDeletions,
+          this.displayedData.length,
+          this.pagingInfo
+        )
+      ) {
+        event.queryParams.page--;
+      }
+      this.getAllLinkedAlgorithms(event.queryParams);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
@@ -264,25 +255,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     });
   }
 
-  onDatalistConfigChanged(event): void {
-    this.getPagedLinkedAlgorithms(event);
-  }
-
-  onElementClicked(algorithm: AlgorithmDto): void {
-    this.routeToAlgorithm(algorithm);
-  }
-
   routeToAlgorithm(algorithm: AlgorithmDto): void {
     this.router.navigate(['algorithms', algorithm.id]);
-  }
-
-  getHateaosDataFromGenericService(url: string): Observable<any> {
-    return this.genericDataService.getData(url).pipe((data) => data);
-  }
-
-  onPageChanged(event): void {
-    this.getHateaosDataFromGenericService(event).subscribe((data) => {
-      this.updateDisplayedData(data);
-    });
   }
 }

@@ -15,7 +15,6 @@ import {
   LinkItemListDialogComponent,
 } from '../../generics/dialogs/link-item-list-dialog.component';
 import { UtilService } from '../../../util/util.service';
-import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-publication-implementations-list',
@@ -69,8 +68,7 @@ export class PublicationImplementationsListComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private implementationService: ImplementationsService,
     private router: Router,
-    private utilService: UtilService,
-    private genericDataService: GenericDataService
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -84,58 +82,53 @@ export class PublicationImplementationsListComponent implements OnInit {
       .pipe((data) => data);
   }
 
-  getAllLinkedImplementations(): void {
+  getAllLinkedImplementations(params?: any): void {
     this.linkObject.linkedData = [];
-    this.publicationService
-      .getImplementationsOfPublication({ publicationId: this.publication.id })
-      .subscribe(
-        (data) => {
-          if (data.content) {
-            this.linkObject.linkedData = data.content;
-          }
-        },
-        () => {
-          this.utilService.callSnackBar(
-            'Error! Linked implementations could not be retrieved.'
-          );
+    if (!params) {
+      params = {};
+    }
+    params.publicationId = this.publication.id;
+    this.publicationService.getImplementationsOfPublication(params).subscribe(
+      (data) => {
+        if (data.content) {
+          this.linkObject.linkedData = data.content;
         }
-      );
-  }
-
-  getPagedLinkedImplementations(params: any): void {
-    this.publicationService
-      .getImplementationsOfPublication({
-        publicationId: this.publication.id,
-        page: params.page,
-        size: params.size,
-        sort: params.sort,
-        search: params.sort,
-      })
-      .subscribe((data) => {
         this.updateDisplayedData(data);
-      });
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Linked implementations could not be retrieved.'
+        );
+      }
+    );
   }
 
   updateDisplayedData(data): void {
     // clear link object data
     this.displayedData = [];
     // If implementations found
-    if (data._embedded) {
-      this.displayedData = data._embedded.implementations;
+    if (data.content) {
+      this.displayedData = data.content;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
+    this.pagingInfo.search = data.search;
   }
 
   updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If implementations found
-    if (data._embedded) {
-      this.linkObject.data = data._embedded.implementations;
+    if (data.content) {
+      this.linkObject.data = data.content;
     }
-    this.dialogData.pagingInfo.page = data.page;
-    this.dialogData.pagingInfo._links = data._links;
+    this.dialogData.pagingInfo.totalPages = data.totalPages;
+    this.dialogData.pagingInfo.number = data.number;
+    this.dialogData.pagingInfo.size = data.size;
+    this.dialogData.pagingInfo.sort = data.sort;
   }
 
   openLinkImplementationDialog(): void {
@@ -156,8 +149,8 @@ export class PublicationImplementationsListComponent implements OnInit {
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-        (page: string) => {
-          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+        (page: QueryParams) => {
+          this.getAllImplementations(page).subscribe((pageData) => {
             this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
@@ -214,16 +207,15 @@ export class PublicationImplementationsListComponent implements OnInit {
       );
     }
     forkJoin(linkTasks).subscribe(() => {
-      this.getHateaosDataFromGenericService(
-        this.utilService.getLastPageAfterCreation(
-          this.pagingInfo._links.self.href,
-          this.pagingInfo,
-          successfulLinks
-        )
-      ).subscribe((data) => {
-        this.updateDisplayedData(data);
+      const correctPage = this.utilService.getLastPageAfterCreation(
+        this.pagingInfo,
+        successfulLinks
+      );
+      this.getAllLinkedImplementations({
+        size: this.pagingInfo.size,
+        page: correctPage,
+        sort: this.pagingInfo.sort,
       });
-      this.getAllLinkedImplementations();
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
@@ -267,17 +259,16 @@ export class PublicationImplementationsListComponent implements OnInit {
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
-      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
-        successfulDeletions,
-        this.displayedData.length,
-        this.pagingInfo
-      )
-        ? this.pagingInfo._links.prev.href
-        : this.pagingInfo._links.self.href;
-      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedImplementations();
+      if (
+        this.utilService.isLastPageEmptyAfterDeletion(
+          successfulDeletions,
+          this.displayedData.length,
+          this.pagingInfo
+        )
+      ) {
+        event.queryParams.page--;
+      }
+      this.getAllLinkedImplementations(event.queryParams);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
@@ -290,14 +281,6 @@ export class PublicationImplementationsListComponent implements OnInit {
     });
   }
 
-  onDatalistConfigChanged(event): void {
-    this.getPagedLinkedImplementations(event);
-  }
-
-  onElementClicked(implementation: ImplementationDto): void {
-    this.routeToImplementation(implementation);
-  }
-
   routeToImplementation(implementation: ImplementationDto): void {
     this.router.navigate([
       'algorithms',
@@ -305,15 +288,5 @@ export class PublicationImplementationsListComponent implements OnInit {
       'implementations',
       implementation.id,
     ]);
-  }
-
-  getHateaosDataFromGenericService(url: string): Observable<any> {
-    return this.genericDataService.getData(url).pipe((data) => data);
-  }
-
-  onPageChanged(event): void {
-    this.getHateaosDataFromGenericService(event).subscribe((data) => {
-      this.updateDisplayedData(data);
-    });
   }
 }

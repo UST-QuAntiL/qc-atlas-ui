@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import { ApplicationAreaDto } from 'api-atlas/models/application-area-dto';
 import { forkJoin } from 'rxjs';
-import { GenericDataService } from '../../../util/generic-data.service';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
@@ -28,7 +27,6 @@ export class ApplicationAreasListComponent implements OnInit {
 
   constructor(
     private applicationAreasService: ApplicationAreasService,
-    private genericDataService: GenericDataService,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -48,21 +46,18 @@ export class ApplicationAreasListComponent implements OnInit {
     );
   }
 
-  getApplicationAreasHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareApplicationAreaData(data);
-    });
-  }
-
   prepareApplicationAreaData(data): void {
     // Read all incoming data
-    if (data._embedded) {
-      this.applicationAreas = data._embedded.applicationAreas;
+    if (data.content) {
+      this.applicationAreas = data.content;
     } else {
       this.applicationAreas = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
   }
 
   onAddElement(): void {
@@ -84,13 +79,15 @@ export class ApplicationAreasListComponent implements OnInit {
         params.body = applicationAreaDtoDto;
         this.applicationAreasService.createApplicationArea(params).subscribe(
           () => {
-            this.getApplicationAreasHateoas(
-              this.utilService.getLastPageAfterCreation(
-                this.pagingInfo._links.self.href,
-                this.pagingInfo,
-                1
-              )
+            const correctPage = this.utilService.getLastPageAfterCreation(
+              this.pagingInfo,
+              1
             );
+            this.getApplicationAreas({
+              size: this.pagingInfo.size,
+              page: correctPage,
+              sort: this.pagingInfo.sort,
+            });
             this.utilService.callSnackBar(
               'Application area was successfully added.'
             );
@@ -151,10 +148,9 @@ export class ApplicationAreasListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getApplicationAreasHateoas(this.pagingInfo._links.prev.href);
-            } else {
-              this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
+              event.queryParams.page--;
             }
+            this.getApplicationAreas(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
@@ -189,7 +185,11 @@ export class ApplicationAreasListComponent implements OnInit {
         };
         this.applicationAreasService.updateApplicationArea(params).subscribe(
           () => {
-            this.getApplicationAreasHateoas(this.pagingInfo._links.self.href);
+            this.getApplicationAreas({
+              size: this.pagingInfo.size,
+              page: this.pagingInfo.number,
+              sort: this.pagingInfo.sort,
+            });
             this.utilService.callSnackBar(
               'Application area was successfully edited.'
             );
