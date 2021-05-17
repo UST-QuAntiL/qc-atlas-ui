@@ -9,6 +9,7 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-algorithm-list',
@@ -33,7 +34,7 @@ export class AlgorithmListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getAlgorithms(params: any): void {
+  getAlgorithms(params: QueryParams): void {
     this.algorithmService.getAlgorithms(params).subscribe(
       (data) => {
         this.prepareAlgorithmData(data);
@@ -58,7 +59,7 @@ export class AlgorithmListComponent implements OnInit {
     this.pagingInfo.sort = data.sort;
   }
 
-  onElementClicked(algorithm: any): void {
+  onElementClicked(algorithm: AlgorithmDto): void {
     this.router.navigate(['algorithms', algorithm.id]);
   }
 

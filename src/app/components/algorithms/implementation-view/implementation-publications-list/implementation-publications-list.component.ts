@@ -72,6 +72,9 @@ export class ImplementationPublicationsListComponent implements OnInit {
 
   getAllLinkedPublications(params?: any): void {
     this.linkObject.linkedData = [];
+    if (!params) {
+      params = {};
+    }
     params.algorithmId = this.implementation.implementedAlgorithmId;
     params.implementationId = this.implementation.id;
     this.algorithmService.getPublicationsOfImplementation(params).subscribe(

@@ -12,7 +12,6 @@ import {
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { CreateSoftwarePlatformDialogComponent } from '../dialogs/create-software-platform-dialog.component';
-import { GenericDataService } from '../../../../util/generic-data.service';
 import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog.component';
 
 @Component({
@@ -36,7 +35,6 @@ export class SoftwarePlatformListComponent implements OnInit {
     private utilService: UtilService,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private sdksService: SdksService,
-    private genericDataService: GenericDataService,
     private router: Router
   ) {}
 
@@ -55,20 +53,15 @@ export class SoftwarePlatformListComponent implements OnInit {
     );
   }
 
-  getSoftwarePlatformsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareSoftwarePlatformData(data);
-    });
-  }
-
   prepareSoftwarePlatformData(data): void {
-    if (data._embedded) {
-      this.softwarePlatforms = data._embedded.softwarePlatforms;
+    if (data.content) {
+      this.softwarePlatforms = data.content;
     } else {
       this.softwarePlatforms = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.sort = data.sort;
   }
 
   onSoftwarePlatformClicked(softwarePlatform: SoftwarePlatformDto): void {
@@ -175,14 +168,9 @@ export class SoftwarePlatformListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getSoftwarePlatformsHateoas(
-                this.pagingInfo._links.prev.href
-              );
-            } else {
-              this.getSoftwarePlatformsHateoas(
-                this.pagingInfo._links.self.href
-              );
+              deleteParams.queryParams.page--;
             }
+            this.getSoftwarePlatforms(deleteParams.queryParams);
             this.utilService.callSnackBar(
               'Successfully deleted ' +
                 successfulDeletions +
