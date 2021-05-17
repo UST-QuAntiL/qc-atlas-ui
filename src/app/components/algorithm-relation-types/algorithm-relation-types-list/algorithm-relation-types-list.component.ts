@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
 import { forkJoin } from 'rxjs';
 import { AlgorithmRelationTypeDto } from 'api-atlas/models/algorithm-relation-type-dto';
-import { GenericDataService } from '../../../util/generic-data.service';
 import { UtilService } from '../../../util/util.service';
 import {
   ConfirmDialogComponent,
@@ -28,7 +27,6 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
 
   constructor(
     private algorithmRelationTypeService: AlgorithmRelationTypeService,
-    private genericDataService: GenericDataService,
     private utilService: UtilService
   ) {}
 
