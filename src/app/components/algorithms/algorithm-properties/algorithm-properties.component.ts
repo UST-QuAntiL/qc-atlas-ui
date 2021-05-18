@@ -205,7 +205,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     // If linkable algorithms found
     if (problemTypesData) {
       // Search algorithms and filter only those that are not already linked
-      for (const problemType of problemTypesData.problemTypes) {
+      for (const problemType of problemTypesData) {
         if (
           !this.linkedProblemTypes.some(
             (probType) => probType.id === problemType.id
@@ -248,7 +248,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     // If linkable algorithms found
     if (applicationAreasData) {
       // Search algorithms and filter only those that are not already linked
-      for (const applicationArea of applicationAreasData.applicationAreas) {
+      for (const applicationArea of applicationAreasData) {
         if (
           !this.linkedApplicationAreas.some(
             (applArea) => applArea.id === applicationArea.id

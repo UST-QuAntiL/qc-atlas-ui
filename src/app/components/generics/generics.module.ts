@@ -94,6 +94,5 @@ import { LatexEditorDialogComponent } from './dialogs/latex-editor-dialog.compon
     TagsComponent,
     TagsDialogComponent,
   ],
-  providers: [],
 })
 export class GenericsModule {}
