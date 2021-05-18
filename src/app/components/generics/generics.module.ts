@@ -24,7 +24,6 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from '../../app-routing.module';
-import { GenericDataService } from '../../util/generic-data.service';
 import { TextInputComponent } from './property-input/text-input.component';
 import { SelectInputComponent } from './property-input/select-input.component';
 import { CheckboxInputComponent } from './property-input/checkbox-input.component';
@@ -95,6 +94,6 @@ import { LatexEditorDialogComponent } from './dialogs/latex-editor-dialog.compon
     TagsComponent,
     TagsDialogComponent,
   ],
-  providers: [GenericDataService],
+  providers: [],
 })
 export class GenericsModule {}
