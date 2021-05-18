@@ -5,7 +5,6 @@ import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { QueryParams } from '../../generics/data-list/data-list.component';
-import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-execution-environment-search',
@@ -55,7 +54,6 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
-    private genericDataService: GenericDataService,
     private router: Router
   ) {}
 
@@ -69,20 +67,15 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
       });
   }
 
-  getSoftwarePlatformsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareSoftwarePlatformData(data);
-    });
-  }
-
   prepareSoftwarePlatformData(data): void {
-    if (data._embedded) {
-      this.softwarePlatforms = data._embedded.softwarePlatforms;
+    if (data.content) {
+      this.softwarePlatforms = data.content;
     } else {
       this.softwarePlatforms = [];
     }
-    this.pagingInfoSoftwarePlatforms.page = data.page;
-    this.pagingInfoSoftwarePlatforms._links = data._links;
+    this.pagingInfoSoftwarePlatforms.totalPages = data.totalPages;
+    this.pagingInfoSoftwarePlatforms.number = data.number;
+    this.pagingInfoSoftwarePlatforms.sort = data.sort;
   }
 
   onSoftwarePlatformClicked(softwarePlatform: SoftwarePlatformDto): void {
@@ -101,20 +94,15 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
       });
   }
 
-  getCloudServicesHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareCloudServiceData(data);
-    });
-  }
-
   prepareCloudServiceData(data): void {
-    if (data._embedded) {
-      this.cloudServices = data._embedded.cloudServices;
+    if (data.content) {
+      this.cloudServices = data.content;
     } else {
       this.cloudServices = [];
     }
-    this.pagingInfoCloudServices.page = data.page;
-    this.pagingInfoCloudServices._links = data._links;
+    this.pagingInfoCloudServices.totalPages = data.totalPages;
+    this.pagingInfoCloudServices.number = data.number;
+    this.pagingInfoCloudServices.sort = data.sort;
   }
 
   onCloudServiceClicked(cloudService: CloudServiceDto): void {
@@ -133,20 +121,15 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
       });
   }
 
-  getComputeResourcesHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareComputeResourceData(data);
-    });
-  }
-
   prepareComputeResourceData(data): void {
-    if (data._embedded) {
-      this.computeResources = data._embedded.computeResources;
+    if (data.content) {
+      this.computeResources = data.content;
     } else {
       this.computeResources = [];
     }
-    this.pagingInfoComputeResources.page = data.page;
-    this.pagingInfoComputeResources._links = data._links;
+    this.pagingInfoComputeResources.totalPages = data.totalPages;
+    this.pagingInfoComputeResources.number = data.number;
+    this.pagingInfoComputeResources.sort = data.sort;
   }
 
   onComputeResourceClicked(computeResource: ComputeResourceDto): void {

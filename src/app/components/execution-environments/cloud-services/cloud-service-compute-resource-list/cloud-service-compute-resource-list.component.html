@@ -10,11 +10,11 @@
       [emptyTableMessage]="'No linked compute resources found'"
       [pagination]=pagingInfo
       [paginatorConfig]=paginatorConfig
-      (elementClicked)="onElementClicked($event)"
-      (datalistConfigChanged)="onDatalistConfigChanged($event)"
+      (elementClicked)="routeToComputeResource($event)"
+      (datalistConfigChanged)="getAllLinkedComputeResources($event)"
       (submitDeleteElements)="unlinkComputeResources($event)"
       (addElement)="openLinkComputeResourceDialog()"
-      (pageChange)="onPageChanged($event)">
+      (pageChange)="getAllLinkedComputeResources($event)">
     </app-table>
   </div>
 </mat-card>

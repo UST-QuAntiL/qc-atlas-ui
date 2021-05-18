@@ -14,7 +14,6 @@ import {
   DialogData,
   LinkItemListDialogComponent,
 } from '../../../generics/dialogs/link-item-list-dialog.component';
-import { GenericDataService } from '../../../../util/generic-data.service';
 
 @Component({
   selector: 'app-compute-resource-cloud-service-list',
@@ -55,8 +54,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
   constructor(
     private executionEnvironmentService: ExecutionEnvironmentsService,
     private router: Router,
-    private utilService: UtilService,
-    private genericDataService: GenericDataService
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -70,53 +68,55 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
       .pipe((data) => data);
   }
 
-  getAllLinkedCloudServices(): void {
+  getAllLinkedCloudServices(params?: any): void {
     this.linkObject.linkedData = [];
+    if (!params) {
+      params = {};
+    }
+    params.computeResourceId = this.computeResource.id;
     this.executionEnvironmentService
-      .getCloudServicesOfComputeResource({
-        computeResourceId: this.computeResource.id,
-      })
-      .subscribe((data) => {
-        if (data.content) {
-          this.linkObject.linkedData = data.content;
+      .getCloudServicesOfComputeResource(params)
+      .subscribe(
+        (data) => {
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
+          }
+          this.updateDisplayedData(data);
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked cloud services could not be retrieved.'
+          );
         }
-      });
-  }
-
-  getPagedLinkedCloudServices(params: any): void {
-    this.executionEnvironmentService
-      .getCloudServicesOfComputeResource({
-        computeResourceId: this.computeResource.id,
-        page: params.page,
-        size: params.size,
-        sort: params.sort,
-        search: params.sort,
-      })
-      .subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
+      );
   }
 
   updateDisplayedData(data): void {
     // clear link object data
     this.displayedData = [];
     // If cloud services found
-    if (data._embedded) {
-      this.displayedData = data._embedded.cloudServices;
+    if (data.content) {
+      this.displayedData = data.content;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
+    this.pagingInfo.search = data.search;
   }
 
   updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If cloud services found
-    if (data._embedded) {
-      this.linkObject.data = data._embedded.cloudServices;
+    if (data.content) {
+      this.linkObject.data = data.content;
     }
-    this.dialogData.pagingInfo.page = data.page;
-    this.dialogData.pagingInfo._links = data._links;
+    this.dialogData.pagingInfo.totalPages = data.totalPages;
+    this.dialogData.pagingInfo.number = data.number;
+    this.dialogData.pagingInfo.size = data.size;
+    this.dialogData.pagingInfo.sort = data.sort;
   }
 
   openLinkCloudServiceDialog(): void {
@@ -137,8 +137,8 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-        (page: string) => {
-          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+        (page: QueryParams) => {
+          this.getAllCloudServices(page).subscribe((pageData) => {
             this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
@@ -190,16 +190,15 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
       );
     }
     forkJoin(linkTasks).subscribe(() => {
-      this.getHateaosDataFromGenericService(
-        this.utilService.getLastPageAfterCreation(
-          this.pagingInfo._links.self.href,
-          this.pagingInfo,
-          successfulLinks
-        )
-      ).subscribe((data) => {
-        this.updateDisplayedData(data);
+      const correctPage = this.utilService.getLastPageAfterCreation(
+        this.pagingInfo,
+        successfulLinks
+      );
+      this.getAllLinkedCloudServices({
+        size: this.pagingInfo.size,
+        page: correctPage,
+        sort: this.pagingInfo.sort,
       });
-      this.getAllLinkedCloudServices();
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
@@ -240,17 +239,16 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
-      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
-        successfulDeletions,
-        this.displayedData.length,
-        this.pagingInfo
-      )
-        ? this.pagingInfo._links.prev.href
-        : this.pagingInfo._links.self.href;
-      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedCloudServices();
+      if (
+        this.utilService.isLastPageEmptyAfterDeletion(
+          successfulDeletions,
+          this.displayedData.length,
+          this.pagingInfo
+        )
+      ) {
+        event.queryParams.page--;
+      }
+      this.getAllLinkedCloudServices(event.queryParams);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
@@ -263,30 +261,12 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
     });
   }
 
-  onDatalistConfigChanged(event): void {
-    this.getPagedLinkedCloudServices(event);
-  }
-
-  onElementClicked(cloudService: CloudServiceDto): void {
-    this.routeToCloudService(cloudService);
-  }
-
   routeToCloudService(cloudService: CloudServiceDto): void {
     this.router.navigate([
       'execution-environments',
       'cloud-services',
       cloudService.id,
     ]);
-  }
-
-  getHateaosDataFromGenericService(url: string): Observable<any> {
-    return this.genericDataService.getData(url).pipe((data) => data);
-  }
-
-  onPageChanged(event): void {
-    this.getHateaosDataFromGenericService(event).subscribe((data) => {
-      this.updateDisplayedData(data);
-    });
   }
 
   onUrlClicked(urlData: UrlData): void {

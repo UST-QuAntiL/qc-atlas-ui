@@ -11,12 +11,12 @@
       [emptyTableMessage]="'No linked software platforms found'"
       [pagination]=pagingInfo
       [paginatorConfig]=paginatorConfig
-      (elementClicked)="onElementClicked($event)"
+      (elementClicked)="routeToSoftwarePlatform($event)"
       (urlClicked)="onUrlClicked($event)"
-      (datalistConfigChanged)="onDatalistConfigChanged($event)"
+      (datalistConfigChanged)="getAllLinkedSoftwarePlatforms($event)"
       (submitDeleteElements)="unlinkSoftwarePlatforms($event)"
       (addElement)="openLinkSoftwarePlatformDialog()"
-      (pageChange)="onPageChanged($event)">
+      (pageChange)="getAllLinkedSoftwarePlatforms($event)">
     </app-table>
   </div>
 </mat-card>

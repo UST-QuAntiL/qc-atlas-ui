@@ -10,7 +10,6 @@ import {
   UrlData,
 } from '../../../generics/data-list/data-list.component';
 import { CreateCloudServiceDialogComponent } from '../dialogs/create-cloud-service-dialog.component';
-import { GenericDataService } from '../../../../util/generic-data.service';
 import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog.component';
 
 @Component({
@@ -33,7 +32,6 @@ export class CloudServiceListComponent implements OnInit {
   constructor(
     private utilService: UtilService,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
-    private genericDataService: GenericDataService,
     private router: Router
   ) {}
 
@@ -52,20 +50,15 @@ export class CloudServiceListComponent implements OnInit {
     );
   }
 
-  getCloudServicesHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareCloudServiceData(data);
-    });
-  }
-
   prepareCloudServiceData(data): void {
-    if (data._embedded) {
-      this.cloudServices = data._embedded.cloudServices;
+    if (data.content) {
+      this.cloudServices = data.content;
     } else {
       this.cloudServices = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.sort = data.sort;
   }
 
   onCloudServiceClicked(cloudService: CloudServiceDto): void {
@@ -165,10 +158,9 @@ export class CloudServiceListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getCloudServicesHateoas(this.pagingInfo._links.prev.href);
-            } else {
-              this.getCloudServicesHateoas(this.pagingInfo._links.self.href);
+              deleteParams.queryParams.page--;
             }
+            this.getCloudServices(deleteParams.queryParams);
             snackbarMessages.push(
               successfulDeletions,
               deleteParams.elements.length,

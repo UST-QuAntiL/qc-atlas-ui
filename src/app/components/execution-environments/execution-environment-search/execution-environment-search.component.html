@@ -24,7 +24,7 @@
                  [smallTable]="true"
                  (elementClicked)="onSoftwarePlatformClicked($event)"
                  (datalistConfigChanged)="onDatalistConfigChanged($event)"
-                 (pageChange)="getSoftwarePlatformsHateoas($event)">
+                 (pageChange)="getSoftwarePlatforms($event)">
       </app-table>
       <ng-template #noSoftwarePlatforms>
         <h4 class="m-4">No software platforms found that match your search</h4>
@@ -41,7 +41,7 @@
                  [smallTable]="true"
                  (elementClicked)="onCloudServiceClicked($event)"
                  (datalistConfigChanged)="onDatalistConfigChanged($event)"
-                 (pageChange)="getCloudServicesHateoas($event)">
+                 (pageChange)="getCloudServices($event)">
       </app-table>
       <ng-template #noCloudServices class="m-4">
         <h4 class="m-4">No cloud services found that match your search</h4>
@@ -58,7 +58,7 @@
                  [smallTable]="true"
                  (elementClicked)="onComputeResourceClicked($event)"
                  (datalistConfigChanged)="onDatalistConfigChanged($event)"
-                 (pageChange)="getComputeResourcesHateoas($event)">
+                 (pageChange)="getComputeResources($event)">
       </app-table>
       <ng-template #noComputeResources class="m-4">
         <h4 class="m-4">No compute resources found that match your search</h4>
