@@ -6,6 +6,7 @@ import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { forkJoin, Observable } from 'rxjs';
 import { ImplementationsService } from 'api-atlas/services/implementations.service';
+import { PageImplementationDto } from 'api-atlas/models/page-implementation-dto';
 import {
   LinkObject,
   QueryParams,
@@ -76,31 +77,37 @@ export class PublicationImplementationsListComponent implements OnInit {
     this.getAllLinkedImplementations();
   }
 
-  getAllImplementations(search?: QueryParams): Observable<any> {
+  getAllImplementations(
+    search?: QueryParams
+  ): Observable<PageImplementationDto> {
     return this.implementationService
       .getImplementations(search)
       .pipe((data) => data);
   }
 
-  getAllLinkedImplementations(params?: any): void {
+  getAllLinkedImplementations(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
-    if (!params) {
-      params = {};
-    }
-    params.publicationId = this.publication.id;
-    this.publicationService.getImplementationsOfPublication(params).subscribe(
-      (data) => {
-        if (data.content) {
-          this.linkObject.linkedData = data.content;
+    this.publicationService
+      .getImplementationsOfPublication({
+        publicationId: this.publication.id,
+        search: params.search,
+        page: params.page,
+        sort: params.sort,
+        size: params.size,
+      })
+      .subscribe(
+        (data) => {
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
+          }
+          this.updateDisplayedData(data);
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked implementations could not be retrieved.'
+          );
         }
-        this.updateDisplayedData(data);
-      },
-      () => {
-        this.utilService.callSnackBar(
-          'Error! Linked implementations could not be retrieved.'
-        );
-      }
-    );
+      );
   }
 
   updateDisplayedData(data): void {
@@ -211,11 +218,13 @@ export class PublicationImplementationsListComponent implements OnInit {
         this.pagingInfo,
         successfulLinks
       );
-      this.getAllLinkedImplementations({
+      const parameters: QueryParams = {
         size: this.pagingInfo.size,
         page: correctPage,
         sort: this.pagingInfo.sort,
-      });
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedImplementations(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,

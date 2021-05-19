@@ -4,6 +4,7 @@ import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-envir
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { forkJoin, Observable } from 'rxjs';
+import { PageComputeResourceDto } from 'api-atlas/models/page-compute-resource-dto';
 import {
   LinkObject,
   QueryParams,
@@ -60,20 +61,24 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
     this.getAllLinkedComputeResources();
   }
 
-  getAllComputeResources(search?: QueryParams): Observable<any> {
+  getAllComputeResources(
+    search?: QueryParams
+  ): Observable<PageComputeResourceDto> {
     return this.executionEnvironmentService
       .getComputeResources(search)
       .pipe((data) => data);
   }
 
-  getAllLinkedComputeResources(params?: any): void {
+  getAllLinkedComputeResources(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
-    if (!params) {
-      params = {};
-    }
-    params.cloudServiceId = this.cloudService.id;
     this.executionEnvironmentService
-      .getComputeResourcesOfCloudService(params)
+      .getComputeResourcesOfCloudService({
+        cloudServiceId: this.cloudService.id,
+        search: params.search,
+        page: params.page,
+        sort: params.sort,
+        size: params.size,
+      })
       .subscribe(
         (data) => {
           if (data.content) {
@@ -196,11 +201,13 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
         this.pagingInfo,
         successfulLinks
       );
-      this.getAllLinkedComputeResources({
+      const parameters: QueryParams = {
         size: this.pagingInfo.size,
         page: correctPage,
         sort: this.pagingInfo.sort,
-      });
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedComputeResources(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,

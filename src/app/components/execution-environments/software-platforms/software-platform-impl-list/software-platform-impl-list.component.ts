@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import { forkJoin, Observable } from 'rxjs';
+import { PageImplementationDto } from 'api-atlas/models/page-implementation-dto';
 import {
   LinkObject,
   QueryParams,
@@ -74,20 +75,24 @@ export class SoftwarePlatformImplListComponent implements OnInit {
     this.getAllLinkedImplementations();
   }
 
-  getAllImplementations(search?: QueryParams): Observable<any> {
+  getAllImplementations(
+    search?: QueryParams
+  ): Observable<PageImplementationDto> {
     return this.implementationService
       .getImplementations(search)
       .pipe((data) => data);
   }
 
-  getAllLinkedImplementations(params?: any): void {
+  getAllLinkedImplementations(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
-    if (!params) {
-      params = {};
-    }
-    params.softwarePlatformId = this.softwarePlatform.id;
     this.executionEnvironmentService
-      .getImplementationsOfSoftwarePlatform(params)
+      .getImplementationsOfSoftwarePlatform({
+        softwarePlatformId: this.softwarePlatform.id,
+        search: params.search,
+        page: params.page,
+        sort: params.sort,
+        size: params.size,
+      })
       .subscribe(
         (data) => {
           if (data.content) {
@@ -210,12 +215,13 @@ export class SoftwarePlatformImplListComponent implements OnInit {
         this.pagingInfo,
         successfulLinks
       );
-      this.getAllLinkedImplementations({
+      const parameters: QueryParams = {
         size: this.pagingInfo.size,
         page: correctPage,
         sort: this.pagingInfo.sort,
-      });
-      this.getAllLinkedImplementations();
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedImplementations(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,

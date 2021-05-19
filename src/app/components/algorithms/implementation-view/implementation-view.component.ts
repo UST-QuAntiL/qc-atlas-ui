@@ -8,7 +8,6 @@ import { ComputeResourcePropertyDto } from 'api-atlas/models/compute-resource-pr
 import { ImplementationDto, TagDto } from 'api-atlas/models';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import { QueryParams } from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
@@ -104,12 +103,6 @@ export class ImplementationViewComponent implements OnInit {
     if (tabNumber === 0) {
       this.loadGeneral();
     }
-  }
-
-  onDatalistConfigChanged(params: QueryParams): void {
-    this.publicationService.getPublications(params).subscribe((data) => {
-      console.log(data.content);
-    });
   }
 
   onElementClicked(implementation: any): void {

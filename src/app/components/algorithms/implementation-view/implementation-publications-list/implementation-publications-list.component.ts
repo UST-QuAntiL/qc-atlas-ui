@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { forkJoin, Observable } from 'rxjs';
+import { PagePublicationDto } from 'api-atlas/models/page-publication-dto';
 import { UtilService } from '../../../../util/util.service';
 import {
   DialogData,
@@ -66,30 +67,34 @@ export class ImplementationPublicationsListComponent implements OnInit {
     this.getAllLinkedPublications();
   }
 
-  getAllPublications(search?: QueryParams): Observable<any> {
+  getAllPublications(search?: QueryParams): Observable<PagePublicationDto> {
     return this.publicationService.getPublications(search).pipe((data) => data);
   }
 
-  getAllLinkedPublications(params?: any): void {
+  getAllLinkedPublications(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
-    if (!params) {
-      params = {};
-    }
-    params.algorithmId = this.implementation.implementedAlgorithmId;
-    params.implementationId = this.implementation.id;
-    this.algorithmService.getPublicationsOfImplementation(params).subscribe(
-      (data) => {
-        if (data.content) {
-          this.linkObject.linkedData = data.content;
+    this.algorithmService
+      .getPublicationsOfImplementation({
+        algorithmId: this.implementation.implementedAlgorithmId,
+        implementationId: this.implementation.id,
+        search: params.search,
+        page: params.page,
+        sort: params.sort,
+        size: params.size,
+      })
+      .subscribe(
+        (data) => {
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
+          }
+          this.updateDisplayedData(data);
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked publications could not be retrieved.'
+          );
         }
-        this.updateDisplayedData(data);
-      },
-      () => {
-        this.utilService.callSnackBar(
-          'Error! Linked publications could not be retrieved.'
-        );
-      }
-    );
+      );
   }
 
   updateDisplayedData(data): void {
@@ -196,11 +201,13 @@ export class ImplementationPublicationsListComponent implements OnInit {
         this.pagingInfo,
         successfulLinks
       );
-      this.getAllLinkedPublications({
+      const parameters: QueryParams = {
         size: this.pagingInfo.size,
         page: correctPage,
         sort: this.pagingInfo.sort,
-      });
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedPublications(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,

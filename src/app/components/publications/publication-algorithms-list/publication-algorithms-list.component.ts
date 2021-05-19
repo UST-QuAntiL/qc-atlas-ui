@@ -5,6 +5,7 @@ import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { forkJoin, Observable } from 'rxjs';
+import { PageAlgorithmDto } from 'api-atlas/models/page-algorithm-dto';
 import {
   LinkObject,
   QueryParams,
@@ -62,29 +63,33 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     this.getAllLinkedAlgorithms();
   }
 
-  getAllAlgorithms(search?: QueryParams): Observable<any> {
+  getAllAlgorithms(search?: QueryParams): Observable<PageAlgorithmDto> {
     return this.algorithmService.getAlgorithms(search).pipe((data) => data);
   }
 
-  getAllLinkedAlgorithms(params?: any): void {
+  getAllLinkedAlgorithms(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
-    if (!params) {
-      params = {};
-    }
-    params.publicationId = this.publication.id;
-    this.publicationService.getAlgorithmsOfPublication(params).subscribe(
-      (data) => {
-        if (data.content) {
-          this.linkObject.linkedData = data.content;
+    this.publicationService
+      .getAlgorithmsOfPublication({
+        publicationId: this.publication.id,
+        search: params.search,
+        page: params.page,
+        sort: params.sort,
+        size: params.size,
+      })
+      .subscribe(
+        (data) => {
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
+          }
+          this.updateDisplayedData(data);
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked algorithms could not be retrieved.'
+          );
         }
-        this.updateDisplayedData(data);
-      },
-      () => {
-        this.utilService.callSnackBar(
-          'Error! Linked algorithms could not be retrieved.'
-        );
-      }
-    );
+      );
   }
 
   updateDisplayedData(data): void {
@@ -190,11 +195,13 @@ export class PublicationAlgorithmsListComponent implements OnInit {
         this.pagingInfo,
         successfulLinks
       );
-      this.getAllLinkedAlgorithms({
+      const parameters: QueryParams = {
         size: this.pagingInfo.size,
         page: correctPage,
         sort: this.pagingInfo.sort,
-      });
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedAlgorithms(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { forkJoin, Observable } from 'rxjs';
+import { PageSoftwarePlatformDto } from 'api-atlas/models/page-software-platform-dto';
 import {
   LinkObject,
   QueryParams,
@@ -63,20 +64,24 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
     this.getAllLinkedSoftwarePlatforms();
   }
 
-  getAllSoftwarePlatforms(search?: QueryParams): Observable<any> {
+  getAllSoftwarePlatforms(
+    search?: QueryParams
+  ): Observable<PageSoftwarePlatformDto> {
     return this.executionEnvironmentsService
       .getSoftwarePlatforms(search)
       .pipe((data) => data);
   }
 
-  getAllLinkedSoftwarePlatforms(params?: any): void {
+  getAllLinkedSoftwarePlatforms(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
-    if (!params) {
-      params = {};
-    }
-    params.computeResourceId = this.computeResource.id;
     this.executionEnvironmentsService
-      .getSoftwarePlatformsOfComputeResource(params)
+      .getSoftwarePlatformsOfComputeResource({
+        computeResourceId: this.computeResource.id,
+        search: params.search,
+        page: params.page,
+        sort: params.sort,
+        size: params.size,
+      })
       .subscribe(
         (data) => {
           if (data.content) {
@@ -199,11 +204,13 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
         this.pagingInfo,
         successfulLinks
       );
-      this.getAllLinkedSoftwarePlatforms({
+      const parameters: QueryParams = {
         size: this.pagingInfo.size,
         page: correctPage,
         sort: this.pagingInfo.sort,
-      });
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedSoftwarePlatforms(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
