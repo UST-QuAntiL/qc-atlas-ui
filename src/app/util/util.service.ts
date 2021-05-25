@@ -78,34 +78,23 @@ export class UtilService {
   }
 
   /**
-   * This method returns the url to the last page of a table after the creation of the new object.
+   * This method returns the last page of a table after the creation of the new object.
    *
-   * @param currentUrl
    * @param pagingInfo
    * @param createdElements
-   * @return correctUrl
+   * @return correctPage
    */
   public getLastPageAfterCreation(
-    currentUrl: string,
     pagingInfo: any,
     createdElements: number
-  ): string {
-    const url = new URL(currentUrl);
-    if (url.searchParams.get('sort') || url.searchParams.get('search')) {
-      return currentUrl;
-    }
-
+  ): number {
     const totalElementsAfterCreation =
-      pagingInfo.page.totalElements + createdElements;
+      pagingInfo.totalElements + createdElements;
     const lastPageAfterCreation = Math.ceil(
-      totalElementsAfterCreation / pagingInfo.page.size
+      totalElementsAfterCreation / pagingInfo.size
     );
-
     const correctPage = lastPageAfterCreation - 1;
-
-    // Adjust URL with correct page parameter
-    url.searchParams.set('page', correctPage.toString());
-    return url.toString();
+    return correctPage;
   }
 
   /**
@@ -123,8 +112,8 @@ export class UtilService {
   ): boolean {
     return (
       currentAmountOfElements === elementsDeleted &&
-      pagingInfo.page.number !== 0 &&
-      pagingInfo.page.number === pagingInfo.page.totalPages - 1
+      pagingInfo.number !== 0 &&
+      pagingInfo.number === pagingInfo.totalPages - 1
     );
   }
 

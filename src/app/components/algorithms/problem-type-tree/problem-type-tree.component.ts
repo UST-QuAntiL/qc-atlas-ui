@@ -11,11 +11,11 @@ import {
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
-import { EntityModelProblemTypeDto } from 'generated/api-atlas/models/entity-model-problem-type-dto';
+import { ProblemTypeDto } from 'generated/api-atlas/models/problem-type-dto';
 import { LinkObject } from '../../generics/data-list/data-list.component';
 
 export class TreeNode {
-  problemType: EntityModelProblemTypeDto;
+  problemType: ProblemTypeDto;
   parents?: TreeNode[];
   hasParents: boolean;
   isLowestLevelNode: boolean;
@@ -27,15 +27,15 @@ export class TreeNode {
   styleUrls: ['./problem-type-tree.component.scss'],
 })
 export class ProblemTypeTreeComponent implements OnInit, OnChanges {
-  @Output() onAddElement: EventEmitter<
-    EntityModelProblemTypeDto
-  > = new EventEmitter<EntityModelProblemTypeDto>();
-  @Output() onRemoveElement: EventEmitter<
-    EntityModelProblemTypeDto
-  > = new EventEmitter<EntityModelProblemTypeDto>();
-  @Output() onExpandParents: EventEmitter<
-    EntityModelProblemTypeDto
-  > = new EventEmitter<EntityModelProblemTypeDto>();
+  @Output() onAddElement: EventEmitter<ProblemTypeDto> = new EventEmitter<
+    ProblemTypeDto
+  >();
+  @Output() onRemoveElement: EventEmitter<ProblemTypeDto> = new EventEmitter<
+    ProblemTypeDto
+  >();
+  @Output() onExpandParents: EventEmitter<ProblemTypeDto> = new EventEmitter<
+    ProblemTypeDto
+  >();
   @Output() onSearchTextChanged: EventEmitter<string> = new EventEmitter<
     string
   >();

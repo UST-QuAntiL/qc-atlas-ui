@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
-import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
+import { ApplicationAreaDto } from 'api-atlas/models/application-area-dto';
 
 @Component({
   selector: 'app-edit-application-area-dialog',
@@ -16,7 +16,7 @@ import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-app
 })
 export class AddOrEditApplicationAreaDialogComponent implements OnInit {
   applicationAreaFormGroup: FormGroup;
-  existingApplicationAreas: EntityModelApplicationAreaDto[];
+  existingApplicationAreas: ApplicationAreaDto[];
 
   constructor(
     private applicationAreaService: ApplicationAreasService,
@@ -42,8 +42,8 @@ export class AddOrEditApplicationAreaDialogComponent implements OnInit {
     });
 
     this.applicationAreaService.getApplicationAreas().subscribe((types) => {
-      if (types._embedded) {
-        this.existingApplicationAreas = types._embedded.applicationAreas;
+      if (types.content) {
+        this.existingApplicationAreas = types.content;
       } else {
         this.existingApplicationAreas = [];
       }

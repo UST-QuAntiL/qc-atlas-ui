@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
-import { EntityModelAlgorithmRelationTypeDto } from 'api-atlas/models/entity-model-algorithm-relation-type-dto';
 import { forkJoin } from 'rxjs';
-import { GenericDataService } from '../../../util/generic-data.service';
+import { AlgorithmRelationTypeDto } from 'api-atlas/models/algorithm-relation-type-dto';
 import { UtilService } from '../../../util/util.service';
 import {
   ConfirmDialogComponent,
@@ -28,7 +27,6 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
 
   constructor(
     private algorithmRelationTypeService: AlgorithmRelationTypeService,
-    private genericDataService: GenericDataService,
     private utilService: UtilService
   ) {}
 
@@ -42,21 +40,18 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
       });
   }
 
-  getAlgorithmRelationTypesHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareAlgorithmRelationTypeData(data);
-    });
-  }
-
   prepareAlgorithmRelationTypeData(data): void {
     // Read all incoming data
-    if (data._embedded) {
-      this.algorithmRelationTypes = data._embedded.algoRelationTypes;
+    if (data.content) {
+      this.algorithmRelationTypes = data.content;
     } else {
       this.algorithmRelationTypes = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
   }
 
   onAddElement(): void {
@@ -70,7 +65,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const algorithmRelationType: EntityModelAlgorithmRelationTypeDto = {
+        const algorithmRelationType: AlgorithmRelationTypeDto = {
           id: undefined,
           name: dialogResult.name,
         };
@@ -78,18 +73,27 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
         params.body = algorithmRelationType;
         this.algorithmRelationTypeService
           .createAlgorithmRelationType(params)
-          .subscribe(() => {
-            this.getAlgorithmRelationTypesHateoas(
-              this.utilService.getLastPageAfterCreation(
-                this.pagingInfo._links.self.href,
+          .subscribe(
+            () => {
+              const correctPage = this.utilService.getLastPageAfterCreation(
                 this.pagingInfo,
                 1
-              )
-            );
-            this.utilService.callSnackBar(
-              'Successfully added algorithm relation type.'
-            );
-          });
+              );
+              this.getAlgorithmRelationTypes({
+                size: this.pagingInfo.size,
+                page: correctPage,
+                sort: this.pagingInfo.sort,
+              });
+              this.utilService.callSnackBar(
+                'Successfully added algorithm relation type.'
+              );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Algorithm relation type could not be created.'
+              );
+            }
+          );
       }
     });
   }
@@ -140,14 +144,9 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getAlgorithmRelationTypesHateoas(
-                this.pagingInfo._links.prev.href
-              );
-            } else {
-              this.getAlgorithmRelationTypesHateoas(
-                this.pagingInfo._links.self.href
-              );
+              event.queryParams.page--;
             }
+            this.getAlgorithmRelationTypes(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
@@ -173,7 +172,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const updatedAlgorithmRelationType: EntityModelAlgorithmRelationTypeDto = {
+        const updatedAlgorithmRelationType: AlgorithmRelationTypeDto = {
           id: dialogResult.id,
           name: dialogResult.name,
         };
@@ -185,9 +184,11 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
         this.algorithmRelationTypeService
           .updateAlgorithmRelationType(params)
           .subscribe(() => {
-            this.getAlgorithmRelationTypesHateoas(
-              this.pagingInfo._links.self.href
-            );
+            this.getAlgorithmRelationTypes({
+              size: this.pagingInfo.size,
+              page: this.pagingInfo.number,
+              sort: this.pagingInfo.sort,
+            });
             this.utilService.callSnackBar(
               'Successfully edited algorithm relation type.'
             );

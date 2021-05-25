@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
@@ -10,7 +9,6 @@ import {
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
 import { CreateComputeResourceDialogComponent } from '../dialogs/create-compute-resource-dialog.component';
-import { GenericDataService } from '../../../../util/generic-data.service';
 import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog.component';
 
 @Component({
@@ -19,7 +17,7 @@ import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog
   styleUrls: ['./compute-resource-list.component.scss'],
 })
 export class ComputeResourceListComponent implements OnInit {
-  @Input() computeResources: EntityModelComputeResourceDto[];
+  @Input() computeResources: ComputeResourceDto[];
 
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
@@ -32,7 +30,6 @@ export class ComputeResourceListComponent implements OnInit {
   constructor(
     private utilService: UtilService,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
-    private genericDataService: GenericDataService,
     private router: Router
   ) {}
 
@@ -46,25 +43,18 @@ export class ComputeResourceListComponent implements OnInit {
       });
   }
 
-  getComputeResourcesHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareComputeResourceData(data);
-    });
-  }
-
   prepareComputeResourceData(data): void {
-    if (data._embedded) {
-      this.computeResources = data._embedded.computeResources;
+    if (data.content) {
+      this.computeResources = data.content;
     } else {
       this.computeResources = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.sort = data.sort;
   }
 
-  onComputeResourceClicked(
-    computeResource: EntityModelComputeResourceDto
-  ): void {
+  onComputeResourceClicked(computeResource: ComputeResourceDto): void {
     this.router.navigate([
       'execution-environments',
       'compute-resources',
@@ -87,7 +77,7 @@ export class ComputeResourceListComponent implements OnInit {
           this.executionEnvironmentsService
             .createComputeResource({ body: computeResourceDto })
             .subscribe(
-              (computeResource: EntityModelComputeResourceDto) => {
+              (computeResource: ComputeResourceDto) => {
                 this.router.navigate([
                   'execution-environments',
                   'compute-resources',
@@ -154,10 +144,9 @@ export class ComputeResourceListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getComputeResourcesHateoas(this.pagingInfo._links.prev.href);
-            } else {
-              this.getComputeResourcesHateoas(this.pagingInfo._links.self.href);
+              deleteParams.queryParams.page--;
             }
+            this.getComputeResources(deleteParams.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,

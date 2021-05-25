@@ -1,16 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
+import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { forkJoin, Observable } from 'rxjs';
+import { PageSoftwarePlatformDto } from 'api-atlas/models/page-software-platform-dto';
 import {
   LinkObject,
   QueryParams,
   UrlData,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
-import { GenericDataService } from '../../../../util/generic-data.service';
 import {
   DialogData,
   LinkItemListDialogComponent,
@@ -22,7 +22,7 @@ import {
   styleUrls: ['./cloud-service-software-platform-list.component.scss'],
 })
 export class CloudServiceSoftwarePlatformListComponent implements OnInit {
-  @Input() cloudService: EntityModelCloudServiceDto;
+  @Input() cloudService: CloudServiceDto;
 
   variableNames: string[] = ['name', 'link', 'license', 'version'];
   tableColumns: string[] = ['Name', 'Link', 'License', 'Version'];
@@ -56,7 +56,6 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
-    private genericDataService: GenericDataService,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -66,23 +65,30 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
     this.getAllLinkedSoftwarePlatforms();
   }
 
-  getAllSoftwarePlatforms(search?: QueryParams): Observable<any> {
+  getAllSoftwarePlatforms(
+    search?: QueryParams
+  ): Observable<PageSoftwarePlatformDto> {
     return this.executionEnvironmentsService
       .getSoftwarePlatforms(search)
       .pipe((data) => data);
   }
 
-  getAllLinkedSoftwarePlatforms(): void {
+  getAllLinkedSoftwarePlatforms(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
     this.executionEnvironmentsService
       .getSoftwarePlatformsOfCloudService({
         cloudServiceId: this.cloudService.id,
+        search: params.search,
+        page: params.page,
+        sort: params.sort,
+        size: params.size,
       })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.softwarePlatforms;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
+          this.updateDisplayedData(data);
         },
         () => {
           this.utilService.callSnackBar(
@@ -92,40 +98,32 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       );
   }
 
-  getPagedLinkedSoftwarePlatforms(params: any): void {
-    this.executionEnvironmentsService
-      .getSoftwarePlatformsOfCloudService({
-        cloudServiceId: this.cloudService.id,
-        page: params.page,
-        size: params.size,
-        sort: params.sort,
-        search: params.sort,
-      })
-      .subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-  }
-
   updateDisplayedData(data): void {
     // clear link object data
     this.displayedData = [];
     // If software platforms found
-    if (data._embedded) {
-      this.displayedData = data._embedded.softwarePlatforms;
+    if (data.content) {
+      this.displayedData = data.content;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
+    this.pagingInfo.search = data.search;
   }
 
   updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If software platforms found
-    if (data._embedded) {
-      this.linkObject.data = data._embedded.softwarePlatforms;
+    if (data.content) {
+      this.linkObject.data = data.content;
     }
-    this.dialogData.pagingInfo.page = data.page;
-    this.dialogData.pagingInfo._links = data._links;
+    this.dialogData.pagingInfo.totalPages = data.totalPages;
+    this.dialogData.pagingInfo.number = data.number;
+    this.dialogData.pagingInfo.size = data.size;
+    this.dialogData.pagingInfo.sort = data.sort;
   }
 
   openLinkSoftwarePlatformDialog(): void {
@@ -146,8 +144,8 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-        (page: string) => {
-          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+        (page: QueryParams) => {
+          this.getAllSoftwarePlatforms(page).subscribe((pageData) => {
             this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
@@ -203,16 +201,17 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       );
     }
     forkJoin(linkTasks).subscribe(() => {
-      this.getHateaosDataFromGenericService(
-        this.utilService.getLastPageAfterCreation(
-          this.pagingInfo._links.self.href,
-          this.pagingInfo,
-          successfulLinks
-        )
-      ).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedSoftwarePlatforms();
+      const correctPage = this.utilService.getLastPageAfterCreation(
+        this.pagingInfo,
+        successfulLinks
+      );
+      const parameters: QueryParams = {
+        size: this.pagingInfo.size,
+        page: correctPage,
+        sort: this.pagingInfo.sort,
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedSoftwarePlatforms(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
@@ -255,17 +254,16 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
-      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
-        successfulDeletions,
-        this.displayedData.length,
-        this.pagingInfo
-      )
-        ? this.pagingInfo._links.prev.href
-        : this.pagingInfo._links.self.href;
-      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedSoftwarePlatforms();
+      if (
+        this.utilService.isLastPageEmptyAfterDeletion(
+          successfulDeletions,
+          this.displayedData.length,
+          this.pagingInfo
+        )
+      ) {
+        event.queryParams.page--;
+      }
+      this.getAllLinkedSoftwarePlatforms(event.queryParams);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
@@ -276,14 +274,6 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       );
       this.utilService.callSnackBarSequence(snackbarMessages);
     });
-  }
-
-  onDatalistConfigChanged(event): void {
-    this.getPagedLinkedSoftwarePlatforms(event);
-  }
-
-  onElementClicked(softwarePlatform: SoftwarePlatformDto): void {
-    this.routeToSoftwarePlatform(softwarePlatform);
   }
 
   onUrlClicked(urlData: UrlData): void {
@@ -297,15 +287,5 @@ export class CloudServiceSoftwarePlatformListComponent implements OnInit {
       'software-platforms',
       softwarePlatform.id,
     ]);
-  }
-
-  getHateaosDataFromGenericService(url: string): Observable<any> {
-    return this.genericDataService.getData(url).pipe((data) => data);
-  }
-
-  onPageChanged(event): void {
-    this.getHateaosDataFromGenericService(event).subscribe((data) => {
-      this.updateDisplayedData(data);
-    });
   }
 }

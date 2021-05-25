@@ -10,38 +10,30 @@ import { map, filter } from 'rxjs/operators';
 
 import { AlgorithmDto } from '../models/algorithm-dto';
 import { AlgorithmRelationDto } from '../models/algorithm-relation-dto';
-import { AlgorithmRelationTypeDto } from '../models/algorithm-relation-type-dto';
 import { ApplicationAreaDto } from '../models/application-area-dto';
-import { ClassicAlgorithmDto } from '../models/classic-algorithm-dto';
-import { ClassicImplementationDto } from '../models/classic-implementation-dto';
 import { ComputeResourcePropertyDto } from '../models/compute-resource-property-dto';
-import { ComputeResourcePropertyTypeDto } from '../models/compute-resource-property-type-dto';
 import { DiscussionCommentDto } from '../models/discussion-comment-dto';
 import { DiscussionTopicDto } from '../models/discussion-topic-dto';
-import { EntityModelAlgorithmDto } from '../models/entity-model-algorithm-dto';
-import { EntityModelAlgorithmRelationDto } from '../models/entity-model-algorithm-relation-dto';
-import { EntityModelApplicationAreaDto } from '../models/entity-model-application-area-dto';
-import { EntityModelComputeResourcePropertyDto } from '../models/entity-model-compute-resource-property-dto';
-import { EntityModelDiscussionCommentDto } from '../models/entity-model-discussion-comment-dto';
-import { EntityModelDiscussionTopicDto } from '../models/entity-model-discussion-topic-dto';
-import { EntityModelImplementationDto } from '../models/entity-model-implementation-dto';
-import { EntityModelImplementationPackageDto } from '../models/entity-model-implementation-package-dto';
-import { EntityModelPatternRelationDto } from '../models/entity-model-pattern-relation-dto';
-import { EntityModelProblemTypeDto } from '../models/entity-model-problem-type-dto';
-import { EntityModelPublicationDto } from '../models/entity-model-publication-dto';
-import { EntityModelSketchDto } from '../models/entity-model-sketch-dto';
-import { EntityModelSoftwarePlatformDto } from '../models/entity-model-software-platform-dto';
-import { EntityModelTagDto } from '../models/entity-model-tag-dto';
+import { FileDto } from '../models/file-dto';
 import { ImplementationDto } from '../models/implementation-dto';
 import { ImplementationPackageDto } from '../models/implementation-package-dto';
-import { Link } from '../models/link';
-import { PageMetadata } from '../models/page-metadata';
+import { LearningMethodDto } from '../models/learning-method-dto';
+import { PageAlgorithmDto } from '../models/page-algorithm-dto';
+import { PageAlgorithmRelationDto } from '../models/page-algorithm-relation-dto';
+import { PageApplicationAreaDto } from '../models/page-application-area-dto';
+import { PageComputeResourcePropertyDto } from '../models/page-compute-resource-property-dto';
+import { PageDiscussionCommentDto } from '../models/page-discussion-comment-dto';
+import { PageDiscussionTopicDto } from '../models/page-discussion-topic-dto';
+import { PageImplementationDto } from '../models/page-implementation-dto';
+import { PageImplementationPackageDto } from '../models/page-implementation-package-dto';
+import { PageLearningMethodDto } from '../models/page-learning-method-dto';
+import { PagePatternRelationDto } from '../models/page-pattern-relation-dto';
+import { PageProblemTypeDto } from '../models/page-problem-type-dto';
+import { PagePublicationDto } from '../models/page-publication-dto';
+import { PageSoftwarePlatformDto } from '../models/page-software-platform-dto';
 import { PatternRelationDto } from '../models/pattern-relation-dto';
-import { PatternRelationTypeDto } from '../models/pattern-relation-type-dto';
 import { ProblemTypeDto } from '../models/problem-type-dto';
 import { PublicationDto } from '../models/publication-dto';
-import { QuantumAlgorithmDto } from '../models/quantum-algorithm-dto';
-import { QuantumImplementationDto } from '../models/quantum-implementation-dto';
 import { SketchDto } from '../models/sketch-dto';
 import { SoftwarePlatformDto } from '../models/software-platform-dto';
 import { TagDto } from '../models/tag-dto';
@@ -87,12 +79,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageAlgorithmDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetAlgorithmsPath,
@@ -114,10 +101,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageAlgorithmDto>;
         })
       );
   }
@@ -150,22 +134,10 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageAlgorithmDto> {
     return this.getAlgorithms$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { algorithms?: Array<EntityModelAlgorithmDto> };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageAlgorithmDto>) => r.body as PageAlgorithmDto
       )
     );
   }
@@ -185,11 +157,7 @@ export class AlgorithmService extends BaseService {
    */
   createAlgorithm$Response(params: {
     body: AlgorithmDto;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-    >
-  > {
+  }): Observable<StrictHttpResponse<AlgorithmDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateAlgorithmPath,
@@ -208,12 +176,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >;
+          return r as StrictHttpResponse<AlgorithmDto>;
         })
       );
   }
@@ -226,26 +189,9 @@ export class AlgorithmService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createAlgorithm(params: {
-    body: AlgorithmDto;
-  }): Observable<
-    { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-  > {
+  createAlgorithm(params: { body: AlgorithmDto }): Observable<AlgorithmDto> {
     return this.createAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicAlgorithmDto
-            | QuantumAlgorithmDto
-          )
-      )
+      map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
     );
   }
 
@@ -264,11 +210,7 @@ export class AlgorithmService extends BaseService {
    */
   getAlgorithm$Response(params: {
     algorithmId: string;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-    >
-  > {
+  }): Observable<StrictHttpResponse<AlgorithmDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetAlgorithmPath,
@@ -287,12 +229,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >;
+          return r as StrictHttpResponse<AlgorithmDto>;
         })
       );
   }
@@ -305,26 +242,9 @@ export class AlgorithmService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAlgorithm(params: {
-    algorithmId: string;
-  }): Observable<
-    { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-  > {
+  getAlgorithm(params: { algorithmId: string }): Observable<AlgorithmDto> {
     return this.getAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicAlgorithmDto
-            | QuantumAlgorithmDto
-          )
-      )
+      map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
     );
   }
 
@@ -344,11 +264,7 @@ export class AlgorithmService extends BaseService {
   updateAlgorithm$Response(params: {
     algorithmId: string;
     body: AlgorithmDto;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-    >
-  > {
+  }): Observable<StrictHttpResponse<AlgorithmDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateAlgorithmPath,
@@ -369,12 +285,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >;
+          return r as StrictHttpResponse<AlgorithmDto>;
         })
       );
   }
@@ -390,24 +301,9 @@ export class AlgorithmService extends BaseService {
   updateAlgorithm(params: {
     algorithmId: string;
     body: AlgorithmDto;
-  }): Observable<
-    { _links?: Array<Link> } & (ClassicAlgorithmDto | QuantumAlgorithmDto)
-  > {
+  }): Observable<AlgorithmDto> {
     return this.updateAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicAlgorithmDto
-              | QuantumAlgorithmDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicAlgorithmDto
-            | QuantumAlgorithmDto
-          )
-      )
+      map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
     );
   }
 
@@ -502,14 +398,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
-      };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageAlgorithmRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetAlgorithmRelationsOfAlgorithmPath,
@@ -532,12 +421,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageAlgorithmRelationDto>;
         })
       );
   }
@@ -572,26 +456,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { algorithmRelations?: Array<EntityModelAlgorithmRelationDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageAlgorithmRelationDto> {
     return this.getAlgorithmRelationsOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              algorithmRelations?: Array<EntityModelAlgorithmRelationDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageAlgorithmRelationDto>) =>
+          r.body as PageAlgorithmRelationDto
       )
     );
   }
@@ -613,16 +482,7 @@ export class AlgorithmService extends BaseService {
   createAlgorithmRelation$Response(params: {
     algorithmId: string;
     body: AlgorithmRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      sourceAlgorithmId: string;
-      targetAlgorithmId: string;
-      description?: string;
-      algoRelationType: AlgorithmRelationTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<AlgorithmRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateAlgorithmRelationPath,
@@ -643,14 +503,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<AlgorithmRelationDto>;
         })
       );
   }
@@ -666,34 +519,11 @@ export class AlgorithmService extends BaseService {
   createAlgorithmRelation(params: {
     algorithmId: string;
     body: AlgorithmRelationDto;
-  }): Observable<{
-    id: string;
-    sourceAlgorithmId: string;
-    targetAlgorithmId: string;
-    description?: string;
-    algoRelationType: AlgorithmRelationTypeDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<AlgorithmRelationDto> {
     return this.createAlgorithmRelation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<AlgorithmRelationDto>) =>
+          r.body as AlgorithmRelationDto
       )
     );
   }
@@ -715,16 +545,7 @@ export class AlgorithmService extends BaseService {
   getAlgorithmRelation$Response(params: {
     algorithmId: string;
     algorithmRelationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      sourceAlgorithmId: string;
-      targetAlgorithmId: string;
-      description?: string;
-      algoRelationType: AlgorithmRelationTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<AlgorithmRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetAlgorithmRelationPath,
@@ -744,14 +565,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<AlgorithmRelationDto>;
         })
       );
   }
@@ -767,34 +581,11 @@ export class AlgorithmService extends BaseService {
   getAlgorithmRelation(params: {
     algorithmId: string;
     algorithmRelationId: string;
-  }): Observable<{
-    id: string;
-    sourceAlgorithmId: string;
-    targetAlgorithmId: string;
-    description?: string;
-    algoRelationType: AlgorithmRelationTypeDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<AlgorithmRelationDto> {
     return this.getAlgorithmRelation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<AlgorithmRelationDto>) =>
+          r.body as AlgorithmRelationDto
       )
     );
   }
@@ -817,16 +608,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     algorithmRelationId: string;
     body: AlgorithmRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      sourceAlgorithmId: string;
-      targetAlgorithmId: string;
-      description?: string;
-      algoRelationType: AlgorithmRelationTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<AlgorithmRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateAlgorithmRelationPath,
@@ -848,14 +630,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<AlgorithmRelationDto>;
         })
       );
   }
@@ -872,34 +647,11 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     algorithmRelationId: string;
     body: AlgorithmRelationDto;
-  }): Observable<{
-    id: string;
-    sourceAlgorithmId: string;
-    targetAlgorithmId: string;
-    description?: string;
-    algoRelationType: AlgorithmRelationTypeDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<AlgorithmRelationDto> {
     return this.updateAlgorithmRelation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            sourceAlgorithmId: string;
-            targetAlgorithmId: string;
-            description?: string;
-            algoRelationType: AlgorithmRelationTypeDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<AlgorithmRelationDto>) =>
+          r.body as AlgorithmRelationDto
       )
     );
   }
@@ -1001,12 +753,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageApplicationAreaDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetApplicationAreasOfAlgorithmPath,
@@ -1029,12 +776,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageApplicationAreaDto>;
         })
       );
   }
@@ -1069,26 +811,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageApplicationAreaDto> {
     return this.getApplicationAreasOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageApplicationAreaDto>) =>
+          r.body as PageApplicationAreaDto
       )
     );
   }
@@ -1172,9 +899,7 @@ export class AlgorithmService extends BaseService {
   getApplicationAreaOfAlgorithm$Response(params: {
     algorithmId: string;
     applicationAreaId: string;
-  }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
-  > {
+  }): Observable<StrictHttpResponse<ApplicationAreaDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetApplicationAreaOfAlgorithmPath,
@@ -1194,11 +919,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ApplicationAreaDto>;
         })
       );
   }
@@ -1214,16 +935,11 @@ export class AlgorithmService extends BaseService {
   getApplicationAreaOfAlgorithm(params: {
     algorithmId: string;
     applicationAreaId: string;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+  }): Observable<ApplicationAreaDto> {
     return this.getApplicationAreaOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
+        (r: StrictHttpResponse<ApplicationAreaDto>) =>
+          r.body as ApplicationAreaDto
       )
     );
   }
@@ -1325,16 +1041,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        computeResourceProperties?: Array<
-          EntityModelComputeResourcePropertyDto
-        >;
-      };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageComputeResourcePropertyDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetComputeResourcePropertiesOfAlgorithmPath,
@@ -1357,14 +1064,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageComputeResourcePropertyDto>;
         })
       );
   }
@@ -1399,32 +1099,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: {
-      computeResourceProperties?: Array<EntityModelComputeResourcePropertyDto>;
-    };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageComputeResourcePropertyDto> {
     return this.getComputeResourcePropertiesOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageComputeResourcePropertyDto>) =>
+          r.body as PageComputeResourcePropertyDto
       )
     );
   }
@@ -1446,14 +1125,7 @@ export class AlgorithmService extends BaseService {
   createComputeResourcePropertyForAlgorithm$Response(params: {
     algorithmId: string;
     body: ComputeResourcePropertyDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ComputeResourcePropertyDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateComputeResourcePropertyForAlgorithmPath,
@@ -1474,12 +1146,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ComputeResourcePropertyDto>;
         })
       );
   }
@@ -1495,28 +1162,11 @@ export class AlgorithmService extends BaseService {
   createComputeResourcePropertyForAlgorithm(params: {
     algorithmId: string;
     body: ComputeResourcePropertyDto;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ComputeResourcePropertyDto> {
     return this.createComputeResourcePropertyForAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ComputeResourcePropertyDto>) =>
+          r.body as ComputeResourcePropertyDto
       )
     );
   }
@@ -1538,14 +1188,7 @@ export class AlgorithmService extends BaseService {
   getComputeResourcePropertyOfAlgorithm$Response(params: {
     algorithmId: string;
     computeResourcePropertyId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ComputeResourcePropertyDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetComputeResourcePropertyOfAlgorithmPath,
@@ -1569,12 +1212,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ComputeResourcePropertyDto>;
         })
       );
   }
@@ -1590,28 +1228,11 @@ export class AlgorithmService extends BaseService {
   getComputeResourcePropertyOfAlgorithm(params: {
     algorithmId: string;
     computeResourcePropertyId: string;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ComputeResourcePropertyDto> {
     return this.getComputeResourcePropertyOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ComputeResourcePropertyDto>) =>
+          r.body as ComputeResourcePropertyDto
       )
     );
   }
@@ -1634,14 +1255,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     computeResourcePropertyId: string;
     body: ComputeResourcePropertyDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ComputeResourcePropertyDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateComputeResourcePropertyOfAlgorithmPath,
@@ -1667,12 +1281,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ComputeResourcePropertyDto>;
         })
       );
   }
@@ -1689,28 +1298,11 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     computeResourcePropertyId: string;
     body: ComputeResourcePropertyDto;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ComputeResourcePropertyDto> {
     return this.updateComputeResourcePropertyOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ComputeResourcePropertyDto>) =>
+          r.body as ComputeResourcePropertyDto
       )
     );
   }
@@ -1816,12 +1408,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { discussionTopics?: Array<EntityModelDiscussionTopicDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageDiscussionTopicDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetDiscussionTopicsOfAlgorithmPath,
@@ -1844,12 +1431,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageDiscussionTopicDto>;
         })
       );
   }
@@ -1884,26 +1466,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { discussionTopics?: Array<EntityModelDiscussionTopicDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageDiscussionTopicDto> {
     return this.getDiscussionTopicsOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageDiscussionTopicDto>) =>
+          r.body as PageDiscussionTopicDto
       )
     );
   }
@@ -1945,16 +1512,7 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionTopicDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      title: string;
-      description?: string;
-      status: 'OPEN' | 'CLOSED';
-      date: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionTopicDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateDiscussionTopicOfAlgorithmPath,
@@ -1979,14 +1537,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionTopicDto>;
         })
       );
   }
@@ -2022,34 +1573,11 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionTopicDto;
-  }): Observable<{
-    id: string;
-    title: string;
-    description?: string;
-    status: 'OPEN' | 'CLOSED';
-    date: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionTopicDto> {
     return this.createDiscussionTopicOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionTopicDto>) =>
+          r.body as DiscussionTopicDto
       )
     );
   }
@@ -2091,16 +1619,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      title: string;
-      description?: string;
-      status: 'OPEN' | 'CLOSED';
-      date: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionTopicDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetDiscussionTopicOfAlgorithmPath,
@@ -2124,14 +1643,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionTopicDto>;
         })
       );
   }
@@ -2167,34 +1679,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    id: string;
-    title: string;
-    description?: string;
-    status: 'OPEN' | 'CLOSED';
-    date: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionTopicDto> {
     return this.getDiscussionTopicOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionTopicDto>) =>
+          r.body as DiscussionTopicDto
       )
     );
   }
@@ -2237,16 +1726,7 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionTopicDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      title: string;
-      description?: string;
-      status: 'OPEN' | 'CLOSED';
-      date: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionTopicDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateDiscussionTopicOfAlgorithmPath,
@@ -2272,14 +1752,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionTopicDto>;
         })
       );
   }
@@ -2316,34 +1789,11 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionTopicDto;
-  }): Observable<{
-    id: string;
-    title: string;
-    description?: string;
-    status: 'OPEN' | 'CLOSED';
-    date: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionTopicDto> {
     return this.updateDiscussionTopicOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionTopicDto>) =>
+          r.body as DiscussionTopicDto
       )
     );
   }
@@ -2490,14 +1940,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        discussionComments?: Array<EntityModelDiscussionCommentDto>;
-      };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageDiscussionCommentDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetDiscussionCommentsOfDiscussionTopicOfAlgorithmPath,
@@ -2521,12 +1964,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              discussionComments?: Array<EntityModelDiscussionCommentDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageDiscussionCommentDto>;
         })
       );
   }
@@ -2562,28 +2000,13 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { discussionComments?: Array<EntityModelDiscussionCommentDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageDiscussionCommentDto> {
     return this.getDiscussionCommentsOfDiscussionTopicOfAlgorithm$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              discussionComments?: Array<EntityModelDiscussionCommentDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              discussionComments?: Array<EntityModelDiscussionCommentDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageDiscussionCommentDto>) =>
+          r.body as PageDiscussionCommentDto
       )
     );
   }
@@ -2626,15 +2049,7 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionCommentDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      text: string;
-      date: string;
-      replyTo?: DiscussionCommentDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionCommentDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateDiscussionCommentOfDiscussionTopicOfAlgorithmPath,
@@ -2660,13 +2075,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionCommentDto>;
         })
       );
   }
@@ -2703,33 +2112,13 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionCommentDto;
-  }): Observable<{
-    id: string;
-    text: string;
-    date: string;
-    replyTo?: DiscussionCommentDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionCommentDto> {
     return this.createDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionCommentDto>) =>
+          r.body as DiscussionCommentDto
       )
     );
   }
@@ -2772,15 +2161,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      text: string;
-      date: string;
-      replyTo?: DiscussionCommentDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionCommentDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetDiscussionCommentOfDiscussionTopicOfAlgorithmPath,
@@ -2805,13 +2186,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionCommentDto>;
         })
       );
   }
@@ -2848,33 +2223,13 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    id: string;
-    text: string;
-    date: string;
-    replyTo?: DiscussionCommentDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionCommentDto> {
     return this.getDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionCommentDto>) =>
+          r.body as DiscussionCommentDto
       )
     );
   }
@@ -2918,15 +2273,7 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionCommentDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      text: string;
-      date: string;
-      replyTo?: DiscussionCommentDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionCommentDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateDiscussionCommentOfDiscussionTopicOfAlgorithmPath,
@@ -2953,13 +2300,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionCommentDto>;
         })
       );
   }
@@ -2997,33 +2338,13 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionCommentDto;
-  }): Observable<{
-    id: string;
-    text: string;
-    date: string;
-    replyTo?: DiscussionCommentDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionCommentDto> {
     return this.updateDiscussionCommentOfDiscussionTopicOfAlgorithm$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionCommentDto>) =>
+          r.body as DiscussionCommentDto
       )
     );
   }
@@ -3172,12 +2493,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageImplementationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetImplementationsOfAlgorithmPath,
@@ -3200,12 +2516,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageImplementationDto>;
         })
       );
   }
@@ -3240,26 +2551,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageImplementationDto> {
     return this.getImplementationsOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageImplementationDto>) =>
+          r.body as PageImplementationDto
       )
     );
   }
@@ -3281,14 +2577,7 @@ export class AlgorithmService extends BaseService {
   createImplementation$Response(params: {
     algorithmId: string;
     body: ImplementationDto;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
-  > {
+  }): Observable<StrictHttpResponse<ImplementationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateImplementationPath,
@@ -3309,12 +2598,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<ImplementationDto>;
         })
       );
   }
@@ -3330,26 +2614,11 @@ export class AlgorithmService extends BaseService {
   createImplementation(params: {
     algorithmId: string;
     body: ImplementationDto;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<ImplementationDto> {
     return this.createImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+        (r: StrictHttpResponse<ImplementationDto>) =>
+          r.body as ImplementationDto
       )
     );
   }
@@ -3371,14 +2640,7 @@ export class AlgorithmService extends BaseService {
   getImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
-  > {
+  }): Observable<StrictHttpResponse<ImplementationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetImplementationPath,
@@ -3398,12 +2660,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<ImplementationDto>;
         })
       );
   }
@@ -3419,26 +2676,11 @@ export class AlgorithmService extends BaseService {
   getImplementation(params: {
     algorithmId: string;
     implementationId: string;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<ImplementationDto> {
     return this.getImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+        (r: StrictHttpResponse<ImplementationDto>) =>
+          r.body as ImplementationDto
       )
     );
   }
@@ -3461,14 +2703,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     body: ImplementationDto;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
-  > {
+  }): Observable<StrictHttpResponse<ImplementationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateImplementationPath,
@@ -3490,12 +2725,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<ImplementationDto>;
         })
       );
   }
@@ -3512,26 +2742,11 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     body: ImplementationDto;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<ImplementationDto> {
     return this.updateImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+        (r: StrictHttpResponse<ImplementationDto>) =>
+          r.body as ImplementationDto
       )
     );
   }
@@ -3634,16 +2849,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        computeResourceProperties?: Array<
-          EntityModelComputeResourcePropertyDto
-        >;
-      };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageComputeResourcePropertyDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetComputeResourcePropertiesOfImplementationPath,
@@ -3667,14 +2873,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageComputeResourcePropertyDto>;
         })
       );
   }
@@ -3710,34 +2909,13 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: {
-      computeResourceProperties?: Array<EntityModelComputeResourcePropertyDto>;
-    };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageComputeResourcePropertyDto> {
     return this.getComputeResourcePropertiesOfImplementation$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              computeResourceProperties?: Array<
-                EntityModelComputeResourcePropertyDto
-              >;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageComputeResourcePropertyDto>) =>
+          r.body as PageComputeResourcePropertyDto
       )
     );
   }
@@ -3760,14 +2938,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     body: ComputeResourcePropertyDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ComputeResourcePropertyDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateComputeResourcePropertyForImplementationPath,
@@ -3789,12 +2960,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ComputeResourcePropertyDto>;
         })
       );
   }
@@ -3811,30 +2977,13 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     body: ComputeResourcePropertyDto;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ComputeResourcePropertyDto> {
     return this.createComputeResourcePropertyForImplementation$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ComputeResourcePropertyDto>) =>
+          r.body as ComputeResourcePropertyDto
       )
     );
   }
@@ -3857,14 +3006,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ComputeResourcePropertyDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetComputeResourcePropertyOfImplementationPath,
@@ -3889,12 +3031,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ComputeResourcePropertyDto>;
         })
       );
   }
@@ -3911,30 +3048,13 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     computeResourcePropertyId: string;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ComputeResourcePropertyDto> {
     return this.getComputeResourcePropertyOfImplementation$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ComputeResourcePropertyDto>) =>
+          r.body as ComputeResourcePropertyDto
       )
     );
   }
@@ -3958,14 +3078,7 @@ export class AlgorithmService extends BaseService {
     implementationId: string;
     computeResourcePropertyId: string;
     body: ComputeResourcePropertyDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      value?: string;
-      type: ComputeResourcePropertyTypeDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ComputeResourcePropertyDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateComputeResourcePropertyOfImplementationPath,
@@ -3992,12 +3105,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ComputeResourcePropertyDto>;
         })
       );
   }
@@ -4015,30 +3123,13 @@ export class AlgorithmService extends BaseService {
     implementationId: string;
     computeResourcePropertyId: string;
     body: ComputeResourcePropertyDto;
-  }): Observable<{
-    id: string;
-    value?: string;
-    type: ComputeResourcePropertyTypeDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ComputeResourcePropertyDto> {
     return this.updateComputeResourcePropertyOfImplementation$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            value?: string;
-            type: ComputeResourcePropertyTypeDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ComputeResourcePropertyDto>) =>
+          r.body as ComputeResourcePropertyDto
       )
     );
   }
@@ -4148,12 +3239,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { discussionTopics?: Array<EntityModelDiscussionTopicDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageDiscussionTopicDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetDiscussionTopicsOfImplementationPath,
@@ -4177,12 +3263,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageDiscussionTopicDto>;
         })
       );
   }
@@ -4218,26 +3299,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { discussionTopics?: Array<EntityModelDiscussionTopicDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageDiscussionTopicDto> {
     return this.getDiscussionTopicsOfImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              discussionTopics?: Array<EntityModelDiscussionTopicDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageDiscussionTopicDto>) =>
+          r.body as PageDiscussionTopicDto
       )
     );
   }
@@ -4280,16 +3346,7 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionTopicDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      title: string;
-      description?: string;
-      status: 'OPEN' | 'CLOSED';
-      date: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionTopicDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateDiscussionTopicOfImplementationPath,
@@ -4315,14 +3372,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionTopicDto>;
         })
       );
   }
@@ -4359,34 +3409,11 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionTopicDto;
-  }): Observable<{
-    id: string;
-    title: string;
-    description?: string;
-    status: 'OPEN' | 'CLOSED';
-    date: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionTopicDto> {
     return this.createDiscussionTopicOfImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionTopicDto>) =>
+          r.body as DiscussionTopicDto
       )
     );
   }
@@ -4429,16 +3456,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      title: string;
-      description?: string;
-      status: 'OPEN' | 'CLOSED';
-      date: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionTopicDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetDiscussionTopicOfImplementationPath,
@@ -4463,14 +3481,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionTopicDto>;
         })
       );
   }
@@ -4507,34 +3518,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    id: string;
-    title: string;
-    description?: string;
-    status: 'OPEN' | 'CLOSED';
-    date: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionTopicDto> {
     return this.getDiscussionTopicOfImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionTopicDto>) =>
+          r.body as DiscussionTopicDto
       )
     );
   }
@@ -4578,16 +3566,7 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionTopicDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      title: string;
-      description?: string;
-      status: 'OPEN' | 'CLOSED';
-      date: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionTopicDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateDiscussionTopicOfImplementationPath,
@@ -4614,14 +3593,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionTopicDto>;
         })
       );
   }
@@ -4659,34 +3631,11 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionTopicDto;
-  }): Observable<{
-    id: string;
-    title: string;
-    description?: string;
-    status: 'OPEN' | 'CLOSED';
-    date: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionTopicDto> {
     return this.updateDiscussionTopicOfImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            title: string;
-            description?: string;
-            status: 'OPEN' | 'CLOSED';
-            date: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionTopicDto>) =>
+          r.body as DiscussionTopicDto
       )
     );
   }
@@ -4837,14 +3786,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        discussionComments?: Array<EntityModelDiscussionCommentDto>;
-      };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageDiscussionCommentDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetDiscussionCommentsOfDiscussionTopicOfImplementationPath,
@@ -4869,12 +3811,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              discussionComments?: Array<EntityModelDiscussionCommentDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageDiscussionCommentDto>;
         })
       );
   }
@@ -4911,28 +3848,13 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { discussionComments?: Array<EntityModelDiscussionCommentDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageDiscussionCommentDto> {
     return this.getDiscussionCommentsOfDiscussionTopicOfImplementation$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              discussionComments?: Array<EntityModelDiscussionCommentDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              discussionComments?: Array<EntityModelDiscussionCommentDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageDiscussionCommentDto>) =>
+          r.body as PageDiscussionCommentDto
       )
     );
   }
@@ -4976,15 +3898,7 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionCommentDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      text: string;
-      date: string;
-      replyTo?: DiscussionCommentDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionCommentDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateDiscussionCommentOfDiscussionTopicOfImplementationPath,
@@ -5011,13 +3925,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionCommentDto>;
         })
       );
   }
@@ -5055,33 +3963,13 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionCommentDto;
-  }): Observable<{
-    id: string;
-    text: string;
-    date: string;
-    replyTo?: DiscussionCommentDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionCommentDto> {
     return this.createDiscussionCommentOfDiscussionTopicOfImplementation$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionCommentDto>) =>
+          r.body as DiscussionCommentDto
       )
     );
   }
@@ -5125,15 +4013,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      text: string;
-      date: string;
-      replyTo?: DiscussionCommentDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionCommentDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetDiscussionCommentOfDiscussionTopicOfImplementationPath,
@@ -5159,13 +4039,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionCommentDto>;
         })
       );
   }
@@ -5203,33 +4077,13 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    id: string;
-    text: string;
-    date: string;
-    replyTo?: DiscussionCommentDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionCommentDto> {
     return this.getDiscussionCommentOfDiscussionTopicOfImplementation$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionCommentDto>) =>
+          r.body as DiscussionCommentDto
       )
     );
   }
@@ -5274,15 +4128,7 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionCommentDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      text: string;
-      date: string;
-      replyTo?: DiscussionCommentDto;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<DiscussionCommentDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateDiscussionCommentOfDiscussionTopicOfImplementationPath,
@@ -5310,13 +4156,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<DiscussionCommentDto>;
         })
       );
   }
@@ -5355,33 +4195,13 @@ export class AlgorithmService extends BaseService {
      */
     sort?: Array<string>;
     body: DiscussionCommentDto;
-  }): Observable<{
-    id: string;
-    text: string;
-    date: string;
-    replyTo?: DiscussionCommentDto;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<DiscussionCommentDto> {
     return this.updateDiscussionCommentOfDiscussionTopicOfImplementation$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            text: string;
-            date: string;
-            replyTo?: DiscussionCommentDto;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<DiscussionCommentDto>) =>
+          r.body as DiscussionCommentDto
       )
     );
   }
@@ -5534,14 +4354,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        implementationPackages?: Array<EntityModelImplementationPackageDto>;
-      };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageImplementationPackageDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetImplementationPackagesOfImplementationPath,
@@ -5565,14 +4378,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              implementationPackages?: Array<
-                EntityModelImplementationPackageDto
-              >;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageImplementationPackageDto>;
         })
       );
   }
@@ -5608,32 +4414,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: {
-      implementationPackages?: Array<EntityModelImplementationPackageDto>;
-    };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageImplementationPackageDto> {
     return this.getImplementationPackagesOfImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              implementationPackages?: Array<
-                EntityModelImplementationPackageDto
-              >;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              implementationPackages?: Array<
-                EntityModelImplementationPackageDto
-              >;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageImplementationPackageDto>) =>
+          r.body as PageImplementationPackageDto
       )
     );
   }
@@ -5656,15 +4441,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     body: ImplementationPackageDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name?: string;
-      description?: string;
-      packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ImplementationPackageDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateImplementationPackageOfImplementationPath,
@@ -5686,13 +4463,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name?: string;
-            description?: string;
-            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ImplementationPackageDto>;
         })
       );
   }
@@ -5709,33 +4480,13 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     body: ImplementationPackageDto;
-  }): Observable<{
-    id: string;
-    name?: string;
-    description?: string;
-    packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ImplementationPackageDto> {
     return this.createImplementationPackageOfImplementation$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name?: string;
-            description?: string;
-            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name?: string;
-            description?: string;
-            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ImplementationPackageDto>) =>
+          r.body as ImplementationPackageDto
       )
     );
   }
@@ -5758,15 +4509,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     implementationPackageId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name?: string;
-      description?: string;
-      packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ImplementationPackageDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetImplementationPackageOfImplementationPath,
@@ -5787,13 +4530,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name?: string;
-            description?: string;
-            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ImplementationPackageDto>;
         })
       );
   }
@@ -5810,31 +4547,11 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     implementationPackageId: string;
-  }): Observable<{
-    id: string;
-    name?: string;
-    description?: string;
-    packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ImplementationPackageDto> {
     return this.getImplementationPackageOfImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name?: string;
-            description?: string;
-            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name?: string;
-            description?: string;
-            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ImplementationPackageDto>) =>
+          r.body as ImplementationPackageDto
       )
     );
   }
@@ -5858,15 +4575,7 @@ export class AlgorithmService extends BaseService {
     implementationId: string;
     implementationPackageId: string;
     body: ImplementationPackageDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name?: string;
-      description?: string;
-      packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ImplementationPackageDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateImplementationPackageOfImplementationPath,
@@ -5889,13 +4598,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name?: string;
-            description?: string;
-            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ImplementationPackageDto>;
         })
       );
   }
@@ -5913,33 +4616,13 @@ export class AlgorithmService extends BaseService {
     implementationId: string;
     implementationPackageId: string;
     body: ImplementationPackageDto;
-  }): Observable<{
-    id: string;
-    name?: string;
-    description?: string;
-    packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ImplementationPackageDto> {
     return this.updateImplementationPackageOfImplementation$Response(
       params
     ).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name?: string;
-            description?: string;
-            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name?: string;
-            description?: string;
-            packageType: 'FILE' | 'TOSCA' | 'FUNCTION';
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ImplementationPackageDto>) =>
+          r.body as ImplementationPackageDto
       )
     );
   }
@@ -6026,15 +4709,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     implementationPackageId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      name?: string;
-      mimeType?: string;
-      fileURL?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<FileDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetFileOfImplementationPackagePath,
@@ -6055,13 +4730,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            name?: string;
-            mimeType?: string;
-            fileURL?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<FileDto>;
         })
       );
   }
@@ -6078,32 +4747,9 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     implementationPackageId: string;
-  }): Observable<{
-    id?: string;
-    name?: string;
-    mimeType?: string;
-    fileURL?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<FileDto> {
     return this.getFileOfImplementationPackage$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id?: string;
-            name?: string;
-            mimeType?: string;
-            fileURL?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id?: string;
-            name?: string;
-            mimeType?: string;
-            fileURL?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<FileDto>) => r.body as FileDto)
     );
   }
 
@@ -6126,15 +4772,7 @@ export class AlgorithmService extends BaseService {
     implementationId: string;
     implementationPackageId: string;
     body?: { file?: Blob };
-  }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      name?: string;
-      mimeType?: string;
-      fileURL?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<FileDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreateFileForImplementationPackagePath,
@@ -6157,13 +4795,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            name?: string;
-            mimeType?: string;
-            fileURL?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<FileDto>;
         })
       );
   }
@@ -6181,32 +4813,9 @@ export class AlgorithmService extends BaseService {
     implementationId: string;
     implementationPackageId: string;
     body?: { file?: Blob };
-  }): Observable<{
-    id?: string;
-    name?: string;
-    mimeType?: string;
-    fileURL?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<FileDto> {
     return this.createFileForImplementationPackage$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id?: string;
-            name?: string;
-            mimeType?: string;
-            fileURL?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id?: string;
-            name?: string;
-            mimeType?: string;
-            fileURL?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<FileDto>) => r.body as FileDto)
     );
   }
 
@@ -6373,12 +4982,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { publications?: Array<EntityModelPublicationDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PagePublicationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetPublicationsOfImplementationPath,
@@ -6402,10 +5006,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PagePublicationDto>;
         })
       );
   }
@@ -6441,22 +5042,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { publications?: Array<EntityModelPublicationDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PagePublicationDto> {
     return this.getPublicationsOfImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PagePublicationDto>) =>
+          r.body as PagePublicationDto
       )
     );
   }
@@ -6544,16 +5134,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     publicationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      title: string;
-      doi?: string;
-      url?: string;
-      authors: Array<string>;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PublicationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetPublicationOfImplementationPath,
@@ -6574,14 +5155,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<PublicationDto>;
         })
       );
   }
@@ -6598,35 +5172,9 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     publicationId: string;
-  }): Observable<{
-    id: string;
-    title: string;
-    doi?: string;
-    url?: string;
-    authors: Array<string>;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<PublicationDto> {
     return this.getPublicationOfImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<PublicationDto>) => r.body as PublicationDto)
     );
   }
 
@@ -6731,11 +5279,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageSoftwarePlatformDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetSoftwarePlatformsOfImplementationPath,
@@ -6759,11 +5303,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>;
+          return r as StrictHttpResponse<PageSoftwarePlatformDto>;
         })
       );
   }
@@ -6799,23 +5339,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { softwarePlatforms?: Array<EntityModelSoftwarePlatformDto> };
-  }> {
+  }): Observable<PageSoftwarePlatformDto> {
     return this.getSoftwarePlatformsOfImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              softwarePlatforms?: Array<EntityModelSoftwarePlatformDto>;
-            };
-          }
+        (r: StrictHttpResponse<PageSoftwarePlatformDto>) =>
+          r.body as PageSoftwarePlatformDto
       )
     );
   }
@@ -6903,16 +5431,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     softwarePlatformId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      link?: string;
-      licence?: string;
-      version?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<SoftwarePlatformDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetSoftwarePlatformOfImplementationPath,
@@ -6933,14 +5452,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<SoftwarePlatformDto>;
         })
       );
   }
@@ -6957,34 +5469,11 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     implementationId: string;
     softwarePlatformId: string;
-  }): Observable<{
-    id: string;
-    name: string;
-    link?: string;
-    licence?: string;
-    version?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<SoftwarePlatformDto> {
     return this.getSoftwarePlatformOfImplementation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            link?: string;
-            licence?: string;
-            version?: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<SoftwarePlatformDto>) =>
+          r.body as SoftwarePlatformDto
       )
     );
   }
@@ -7070,9 +5559,7 @@ export class AlgorithmService extends BaseService {
   getTagsOfImplementation$Response(params: {
     algorithmId: string;
     implementationId: string;
-  }): Observable<
-    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
-  > {
+  }): Observable<StrictHttpResponse<Array<TagDto>>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetTagsOfImplementationPath,
@@ -7092,9 +5579,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-          }>;
+          return r as StrictHttpResponse<Array<TagDto>>;
         })
       );
   }
@@ -7110,15 +5595,9 @@ export class AlgorithmService extends BaseService {
   getTagsOfImplementation(params: {
     algorithmId: string;
     implementationId: string;
-  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+  }): Observable<Array<TagDto>> {
     return this.getTagsOfImplementation$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-          }>
-        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
-      )
+      map((r: StrictHttpResponse<Array<TagDto>>) => r.body as Array<TagDto>)
     );
   }
 
@@ -7253,6 +5732,294 @@ export class AlgorithmService extends BaseService {
   }
 
   /**
+   * Path part for operation getLearningMethodsOfAlgorithm
+   */
+  static readonly GetLearningMethodsOfAlgorithmPath =
+    '/algorithms/{algorithmId}/learning-methods';
+
+  /**
+   * Retrieve learning method of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getLearningMethodsOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLearningMethodsOfAlgorithm$Response(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<StrictHttpResponse<PageLearningMethodDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetLearningMethodsOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PageLearningMethodDto>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve learning method of an algorithm. If none are found an empty list is returned.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getLearningMethodsOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLearningMethodsOfAlgorithm(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<PageLearningMethodDto> {
+    return this.getLearningMethodsOfAlgorithm$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<PageLearningMethodDto>) =>
+          r.body as PageLearningMethodDto
+      )
+    );
+  }
+
+  /**
+   * Path part for operation linkAlgorithmAndLearningMethod
+   */
+  static readonly LinkAlgorithmAndLearningMethodPath =
+    '/algorithms/{algorithmId}/learning-methods';
+
+  /**
+   * Add a reference to an existing learning method (that was previously created via a POST on e.g. /learning-methods). Only the ID is required in the request body, other attributes will be ignored and not changed.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `linkAlgorithmAndLearningMethod()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  linkAlgorithmAndLearningMethod$Response(params: {
+    algorithmId: string;
+    body: LearningMethodDto;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.LinkAlgorithmAndLearningMethodPath,
+      'post'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Add a reference to an existing learning method (that was previously created via a POST on e.g. /learning-methods). Only the ID is required in the request body, other attributes will be ignored and not changed.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `linkAlgorithmAndLearningMethod$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  linkAlgorithmAndLearningMethod(params: {
+    algorithmId: string;
+    body: LearningMethodDto;
+  }): Observable<void> {
+    return this.linkAlgorithmAndLearningMethod$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getLearningMethodOfAlgorithm
+   */
+  static readonly GetLearningMethodOfAlgorithmPath =
+    '/algorithms/{algorithmId}/learning-methods/{learningMethodId}';
+
+  /**
+   * Retrieve a specific learning method of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getLearningMethodOfAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLearningMethodOfAlgorithm$Response(params: {
+    algorithmId: string;
+    learningMethodId: string;
+  }): Observable<StrictHttpResponse<LearningMethodDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetLearningMethodOfAlgorithmPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('learningMethodId', params.learningMethodId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<LearningMethodDto>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve a specific learning method of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getLearningMethodOfAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLearningMethodOfAlgorithm(params: {
+    algorithmId: string;
+    learningMethodId: string;
+  }): Observable<LearningMethodDto> {
+    return this.getLearningMethodOfAlgorithm$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<LearningMethodDto>) =>
+          r.body as LearningMethodDto
+      )
+    );
+  }
+
+  /**
+   * Path part for operation unlinkAlgorithmAndLearningMethod
+   */
+  static readonly UnlinkAlgorithmAndLearningMethodPath =
+    '/algorithms/{algorithmId}/learning-methods/{learningMethodId}';
+
+  /**
+   * Delete a reference to a learning method of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `unlinkAlgorithmAndLearningMethod()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unlinkAlgorithmAndLearningMethod$Response(params: {
+    algorithmId: string;
+    learningMethodId: string;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.UnlinkAlgorithmAndLearningMethodPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('learningMethodId', params.learningMethodId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete a reference to a learning method of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `unlinkAlgorithmAndLearningMethod$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unlinkAlgorithmAndLearningMethod(params: {
+    algorithmId: string;
+    learningMethodId: string;
+  }): Observable<void> {
+    return this.unlinkAlgorithmAndLearningMethod$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation getPatternRelationsOfAlgorithm
    */
   static readonly GetPatternRelationsOfAlgorithmPath =
@@ -7288,12 +6055,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PagePatternRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetPatternRelationsOfAlgorithmPath,
@@ -7316,12 +6078,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PagePatternRelationDto>;
         })
       );
   }
@@ -7356,26 +6113,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PagePatternRelationDto> {
     return this.getPatternRelationsOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PagePatternRelationDto>) =>
+          r.body as PagePatternRelationDto
       )
     );
   }
@@ -7397,16 +6139,7 @@ export class AlgorithmService extends BaseService {
   createPatternRelationForAlgorithm$Response(params: {
     algorithmId: string;
     body: PatternRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      algorithmId: string;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PatternRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.CreatePatternRelationForAlgorithmPath,
@@ -7427,14 +6160,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<PatternRelationDto>;
         })
       );
   }
@@ -7450,34 +6176,11 @@ export class AlgorithmService extends BaseService {
   createPatternRelationForAlgorithm(params: {
     algorithmId: string;
     body: PatternRelationDto;
-  }): Observable<{
-    id: string;
-    algorithmId: string;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<PatternRelationDto> {
     return this.createPatternRelationForAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<PatternRelationDto>) =>
+          r.body as PatternRelationDto
       )
     );
   }
@@ -7499,16 +6202,7 @@ export class AlgorithmService extends BaseService {
   getPatternRelationOfAlgorithm$Response(params: {
     algorithmId: string;
     patternRelationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      algorithmId: string;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PatternRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetPatternRelationOfAlgorithmPath,
@@ -7528,14 +6222,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<PatternRelationDto>;
         })
       );
   }
@@ -7551,34 +6238,11 @@ export class AlgorithmService extends BaseService {
   getPatternRelationOfAlgorithm(params: {
     algorithmId: string;
     patternRelationId: string;
-  }): Observable<{
-    id: string;
-    algorithmId: string;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<PatternRelationDto> {
     return this.getPatternRelationOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<PatternRelationDto>) =>
+          r.body as PatternRelationDto
       )
     );
   }
@@ -7601,16 +6265,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     patternRelationId: string;
     body: PatternRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      algorithmId: string;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PatternRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdatePatternRelationOfAlgorithmPath,
@@ -7632,14 +6287,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<PatternRelationDto>;
         })
       );
   }
@@ -7656,34 +6304,11 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     patternRelationId: string;
     body: PatternRelationDto;
-  }): Observable<{
-    id: string;
-    algorithmId: string;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<PatternRelationDto> {
     return this.updatePatternRelationOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<PatternRelationDto>) =>
+          r.body as PatternRelationDto
       )
     );
   }
@@ -7785,12 +6410,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageProblemTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetProblemTypesOfAlgorithmPath,
@@ -7813,10 +6433,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageProblemTypeDto>;
         })
       );
   }
@@ -7851,22 +6468,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageProblemTypeDto> {
     return this.getProblemTypesOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageProblemTypeDto>) =>
+          r.body as PageProblemTypeDto
       )
     );
   }
@@ -7950,14 +6556,7 @@ export class AlgorithmService extends BaseService {
   getProblemTypeOfAlgorithm$Response(params: {
     algorithmId: string;
     problemTypeId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      parentProblemType?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ProblemTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetProblemTypeOfAlgorithmPath,
@@ -7977,12 +6576,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ProblemTypeDto>;
         })
       );
   }
@@ -7998,29 +6592,9 @@ export class AlgorithmService extends BaseService {
   getProblemTypeOfAlgorithm(params: {
     algorithmId: string;
     problemTypeId: string;
-  }): Observable<{
-    id: string;
-    name: string;
-    parentProblemType?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ProblemTypeDto> {
     return this.getProblemTypeOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<ProblemTypeDto>) => r.body as ProblemTypeDto)
     );
   }
 
@@ -8121,12 +6695,7 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { publications?: Array<EntityModelPublicationDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PagePublicationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetPublicationsOfAlgorithmPath,
@@ -8149,10 +6718,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PagePublicationDto>;
         })
       );
   }
@@ -8187,22 +6753,11 @@ export class AlgorithmService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { publications?: Array<EntityModelPublicationDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PagePublicationDto> {
     return this.getPublicationsOfAlgorithm$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { publications?: Array<EntityModelPublicationDto> };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PagePublicationDto>) =>
+          r.body as PagePublicationDto
       )
     );
   }
@@ -8286,16 +6841,7 @@ export class AlgorithmService extends BaseService {
   getPublicationOfAlgorithm$Response(params: {
     algorithmId: string;
     publicationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      title: string;
-      doi?: string;
-      url?: string;
-      authors: Array<string>;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PublicationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetPublicationOfAlgorithmPath,
@@ -8315,14 +6861,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<PublicationDto>;
         })
       );
   }
@@ -8338,35 +6877,9 @@ export class AlgorithmService extends BaseService {
   getPublicationOfAlgorithm(params: {
     algorithmId: string;
     publicationId: string;
-  }): Observable<{
-    id: string;
-    title: string;
-    doi?: string;
-    url?: string;
-    authors: Array<string>;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<PublicationDto> {
     return this.getPublicationOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            title: string;
-            doi?: string;
-            url?: string;
-            authors: Array<string>;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<PublicationDto>) => r.body as PublicationDto)
     );
   }
 
@@ -8446,7 +6959,7 @@ export class AlgorithmService extends BaseService {
    */
   getSketches$Response(params: {
     algorithmId: string;
-  }): Observable<StrictHttpResponse<Array<EntityModelSketchDto>>> {
+  }): Observable<StrictHttpResponse<Array<SketchDto>>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetSketchesPath,
@@ -8465,7 +6978,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<Array<EntityModelSketchDto>>;
+          return r as StrictHttpResponse<Array<SketchDto>>;
         })
       );
   }
@@ -8478,13 +6991,10 @@ export class AlgorithmService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getSketches(params: {
-    algorithmId: string;
-  }): Observable<Array<EntityModelSketchDto>> {
+  getSketches(params: { algorithmId: string }): Observable<Array<SketchDto>> {
     return this.getSketches$Response(params).pipe(
       map(
-        (r: StrictHttpResponse<Array<EntityModelSketchDto>>) =>
-          r.body as Array<EntityModelSketchDto>
+        (r: StrictHttpResponse<Array<SketchDto>>) => r.body as Array<SketchDto>
       )
     );
   }
@@ -8507,14 +7017,7 @@ export class AlgorithmService extends BaseService {
     description: string;
     baseURL: string;
     body?: { file?: Blob };
-  }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      imageURL?: string;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<SketchDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UploadSketchPath,
@@ -8537,12 +7040,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            imageURL?: string;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<SketchDto>;
         })
       );
   }
@@ -8560,29 +7058,9 @@ export class AlgorithmService extends BaseService {
     description: string;
     baseURL: string;
     body?: { file?: Blob };
-  }): Observable<{
-    id?: string;
-    imageURL?: string;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<SketchDto> {
     return this.uploadSketch$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id?: string;
-            imageURL?: string;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id?: string;
-            imageURL?: string;
-            description?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<SketchDto>) => r.body as SketchDto)
     );
   }
 
@@ -8603,14 +7081,7 @@ export class AlgorithmService extends BaseService {
   getSketch$Response(params: {
     algorithmId: string;
     sketchId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      imageURL?: string;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<SketchDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetSketchPath,
@@ -8630,12 +7101,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            imageURL?: string;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<SketchDto>;
         })
       );
   }
@@ -8651,29 +7117,9 @@ export class AlgorithmService extends BaseService {
   getSketch(params: {
     algorithmId: string;
     sketchId: string;
-  }): Observable<{
-    id?: string;
-    imageURL?: string;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<SketchDto> {
     return this.getSketch$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id?: string;
-            imageURL?: string;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id?: string;
-            imageURL?: string;
-            description?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<SketchDto>) => r.body as SketchDto)
     );
   }
 
@@ -8695,14 +7141,7 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     sketchId: string;
     body: SketchDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id?: string;
-      imageURL?: string;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<SketchDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.UpdateSketchPath,
@@ -8724,12 +7163,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id?: string;
-            imageURL?: string;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<SketchDto>;
         })
       );
   }
@@ -8746,29 +7180,9 @@ export class AlgorithmService extends BaseService {
     algorithmId: string;
     sketchId: string;
     body: SketchDto;
-  }): Observable<{
-    id?: string;
-    imageURL?: string;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<SketchDto> {
     return this.updateSketch$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id?: string;
-            imageURL?: string;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id?: string;
-            imageURL?: string;
-            description?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<SketchDto>) => r.body as SketchDto)
     );
   }
 
@@ -8907,9 +7321,7 @@ export class AlgorithmService extends BaseService {
    */
   getTagsOfAlgorithm$Response(params: {
     algorithmId: string;
-  }): Observable<
-    StrictHttpResponse<{ _embedded?: { tags?: Array<EntityModelTagDto> } }>
-  > {
+  }): Observable<StrictHttpResponse<Array<TagDto>>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       AlgorithmService.GetTagsOfAlgorithmPath,
@@ -8928,9 +7340,7 @@ export class AlgorithmService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-          }>;
+          return r as StrictHttpResponse<Array<TagDto>>;
         })
       );
   }
@@ -8945,15 +7355,9 @@ export class AlgorithmService extends BaseService {
    */
   getTagsOfAlgorithm(params: {
     algorithmId: string;
-  }): Observable<{ _embedded?: { tags?: Array<EntityModelTagDto> } }> {
+  }): Observable<Array<TagDto>> {
     return this.getTagsOfAlgorithm$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { tags?: Array<EntityModelTagDto> };
-          }>
-        ) => r.body as { _embedded?: { tags?: Array<EntityModelTagDto> } }
-      )
+      map((r: StrictHttpResponse<Array<TagDto>>) => r.body as Array<TagDto>)
     );
   }
 

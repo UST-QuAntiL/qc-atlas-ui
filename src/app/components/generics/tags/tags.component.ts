@@ -47,8 +47,8 @@ export class TagsComponent {
 
   constructor(private dialog: MatDialog, private tagsService: TagService) {
     tagsService.getTags({ search: '', page: 0, size: 20 }).subscribe((next) => {
-      if (next._embedded?.tags) {
-        this.allTags = next._embedded.tags.map((entityModelTag) => ({
+      if (next.content) {
+        this.allTags = next.content.map((entityModelTag) => ({
           value: entityModelTag.value,
           category: entityModelTag.category,
         }));

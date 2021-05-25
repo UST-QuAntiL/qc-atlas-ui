@@ -3,13 +3,13 @@ import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { AlgorithmDto } from 'api-atlas/models';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { GenericDataService } from '../../../util/generic-data.service';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-algorithm-list',
@@ -17,7 +17,7 @@ import {
   styleUrls: ['./algorithm-list.component.scss'],
 })
 export class AlgorithmListComponent implements OnInit {
-  algorithms: any[] = [];
+  algorithms: AlgorithmDto[] = [];
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
   pagingInfo: any = {};
@@ -28,17 +28,16 @@ export class AlgorithmListComponent implements OnInit {
 
   constructor(
     private algorithmService: AlgorithmService,
-    private genericDataService: GenericDataService,
     private router: Router,
     private utilService: UtilService
   ) {}
 
   ngOnInit(): void {}
 
-  getAlgorithms(params: any): void {
+  getAlgorithms(params: QueryParams): void {
     this.algorithmService.getAlgorithms(params).subscribe(
       (data) => {
-        this.prepareAlgorithmData(JSON.parse(JSON.stringify(data)));
+        this.prepareAlgorithmData(data);
       },
       () => {
         this.utilService.callSnackBar(
@@ -48,24 +47,19 @@ export class AlgorithmListComponent implements OnInit {
     );
   }
 
-  getAlgorithmsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareAlgorithmData(data);
-    });
-  }
-
   prepareAlgorithmData(data): void {
     // Read all incoming data
-    if (data._embedded) {
-      this.algorithms = data._embedded.algorithms;
+    if (data.content) {
+      this.algorithms = data.content;
     } else {
       this.algorithms = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.sort = data.sort;
   }
 
-  onElementClicked(algorithm: any): void {
+  onElementClicked(algorithm: AlgorithmDto): void {
     this.router.navigate(['algorithms', algorithm.id]);
   }
 
@@ -154,10 +148,9 @@ export class AlgorithmListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getAlgorithmsHateoas(this.pagingInfo._links.prev.href);
-            } else {
-              this.getAlgorithmsHateoas(this.pagingInfo._links.self.href);
+              event.queryParams.page--;
             }
+            this.getAlgorithms(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
@@ -169,13 +162,5 @@ export class AlgorithmListComponent implements OnInit {
           });
         }
       });
-  }
-
-  onPageChanged(event): void {
-    this.getAlgorithmsHateoas(event);
-  }
-
-  onDatalistConfigChanged(event): void {
-    this.getAlgorithms(event);
   }
 }

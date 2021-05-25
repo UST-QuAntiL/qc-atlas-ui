@@ -11,12 +11,12 @@
       [emptyTableMessage]="'No linked cloud services found'"
       [pagination]=pagingInfo
       [paginatorConfig]=paginatorConfig
-      (elementClicked)="onElementClicked($event)"
+      (elementClicked)="routeToCloudService($event)"
       (urlClicked)="onUrlClicked($event)"
-      (datalistConfigChanged)="onDatalistConfigChanged($event)"
+      (datalistConfigChanged)="getAllLinkedCloudServices($event)"
       (submitDeleteElements)="unlinkCloudServices($event)"
       (addElement)="openLinkCloudServiceDialog()"
-      (pageChange)="onPageChanged($event)">
+      (pageChange)="getAllLinkedCloudServices($event)">
     </app-table>
   </div>
 </mat-card>

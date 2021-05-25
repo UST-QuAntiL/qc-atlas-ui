@@ -8,11 +8,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { ClassicImplementationDto } from '../models/classic-implementation-dto';
-import { EntityModelImplementationDto } from '../models/entity-model-implementation-dto';
-import { Link } from '../models/link';
-import { PageMetadata } from '../models/page-metadata';
-import { QuantumImplementationDto } from '../models/quantum-implementation-dto';
+import { ImplementationDto } from '../models/implementation-dto';
+import { PageImplementationDto } from '../models/page-implementation-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -55,12 +52,7 @@ export class ImplementationsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { implementations?: Array<EntityModelImplementationDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageImplementationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ImplementationsService.GetImplementationsPath,
@@ -82,12 +74,7 @@ export class ImplementationsService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageImplementationDto>;
         })
       );
   }
@@ -120,26 +107,11 @@ export class ImplementationsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { implementations?: Array<EntityModelImplementationDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageImplementationDto> {
     return this.getImplementations$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              implementations?: Array<EntityModelImplementationDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageImplementationDto>) =>
+          r.body as PageImplementationDto
       )
     );
   }
@@ -160,14 +132,7 @@ export class ImplementationsService extends BaseService {
    */
   getImplementation1$Response(params: {
     implementationId: string;
-  }): Observable<
-    StrictHttpResponse<
-      { _links?: Array<Link> } & (
-        | ClassicImplementationDto
-        | QuantumImplementationDto
-      )
-    >
-  > {
+  }): Observable<StrictHttpResponse<ImplementationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ImplementationsService.GetImplementation1Path,
@@ -186,12 +151,7 @@ export class ImplementationsService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >;
+          return r as StrictHttpResponse<ImplementationDto>;
         })
       );
   }
@@ -206,26 +166,11 @@ export class ImplementationsService extends BaseService {
    */
   getImplementation1(params: {
     implementationId: string;
-  }): Observable<
-    { _links?: Array<Link> } & (
-      | ClassicImplementationDto
-      | QuantumImplementationDto
-    )
-  > {
+  }): Observable<ImplementationDto> {
     return this.getImplementation1$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<
-            { _links?: Array<Link> } & (
-              | ClassicImplementationDto
-              | QuantumImplementationDto
-            )
-          >
-        ) =>
-          r.body as { _links?: Array<Link> } & (
-            | ClassicImplementationDto
-            | QuantumImplementationDto
-          )
+        (r: StrictHttpResponse<ImplementationDto>) =>
+          r.body as ImplementationDto
       )
     );
   }

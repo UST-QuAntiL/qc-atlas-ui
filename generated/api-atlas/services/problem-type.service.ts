@@ -8,9 +8,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { EntityModelProblemTypeDto } from '../models/entity-model-problem-type-dto';
-import { Link } from '../models/link';
-import { PageMetadata } from '../models/page-metadata';
+import { PageProblemTypeDto } from '../models/page-problem-type-dto';
 import { ProblemTypeDto } from '../models/problem-type-dto';
 
 @Injectable({
@@ -54,12 +52,7 @@ export class ProblemTypeService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageProblemTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ProblemTypeService.GetProblemTypesPath,
@@ -81,10 +74,7 @@ export class ProblemTypeService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageProblemTypeDto>;
         })
       );
   }
@@ -117,22 +107,11 @@ export class ProblemTypeService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageProblemTypeDto> {
     return this.getProblemTypes$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageProblemTypeDto>) =>
+          r.body as PageProblemTypeDto
       )
     );
   }
@@ -152,14 +131,7 @@ export class ProblemTypeService extends BaseService {
    */
   createProblemType$Response(params: {
     body: ProblemTypeDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      parentProblemType?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ProblemTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ProblemTypeService.CreateProblemTypePath,
@@ -178,12 +150,7 @@ export class ProblemTypeService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ProblemTypeDto>;
         })
       );
   }
@@ -198,29 +165,9 @@ export class ProblemTypeService extends BaseService {
    */
   createProblemType(params: {
     body: ProblemTypeDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    parentProblemType?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ProblemTypeDto> {
     return this.createProblemType$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<ProblemTypeDto>) => r.body as ProblemTypeDto)
     );
   }
 
@@ -239,14 +186,7 @@ export class ProblemTypeService extends BaseService {
    */
   getProblemType$Response(params: {
     problemTypeId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      parentProblemType?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ProblemTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ProblemTypeService.GetProblemTypePath,
@@ -265,12 +205,7 @@ export class ProblemTypeService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ProblemTypeDto>;
         })
       );
   }
@@ -285,29 +220,9 @@ export class ProblemTypeService extends BaseService {
    */
   getProblemType(params: {
     problemTypeId: string;
-  }): Observable<{
-    id: string;
-    name: string;
-    parentProblemType?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ProblemTypeDto> {
     return this.getProblemType$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<ProblemTypeDto>) => r.body as ProblemTypeDto)
     );
   }
 
@@ -327,14 +242,7 @@ export class ProblemTypeService extends BaseService {
   updateProblemType$Response(params: {
     problemTypeId: string;
     body: ProblemTypeDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      parentProblemType?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ProblemTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ProblemTypeService.UpdateProblemTypePath,
@@ -355,12 +263,7 @@ export class ProblemTypeService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ProblemTypeDto>;
         })
       );
   }
@@ -376,29 +279,9 @@ export class ProblemTypeService extends BaseService {
   updateProblemType(params: {
     problemTypeId: string;
     body: ProblemTypeDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    parentProblemType?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ProblemTypeDto> {
     return this.updateProblemType$Response(params).pipe(
-      map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            parentProblemType?: string;
-            _links?: Array<Link>;
-          }
-      )
+      map((r: StrictHttpResponse<ProblemTypeDto>) => r.body as ProblemTypeDto)
     );
   }
 
@@ -493,11 +376,7 @@ export class ProblemTypeService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-    }>
-  > {
+  }): Observable<StrictHttpResponse<Array<ProblemTypeDto>>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ProblemTypeService.GetProblemTypeParentListPath,
@@ -520,9 +399,7 @@ export class ProblemTypeService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-          }>;
+          return r as StrictHttpResponse<Array<ProblemTypeDto>>;
         })
       );
   }
@@ -557,19 +434,11 @@ export class ProblemTypeService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-  }> {
+  }): Observable<Array<ProblemTypeDto>> {
     return this.getProblemTypeParentList$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-          }>
-        ) =>
-          r.body as {
-            _embedded?: { problemTypes?: Array<EntityModelProblemTypeDto> };
-          }
+        (r: StrictHttpResponse<Array<ProblemTypeDto>>) =>
+          r.body as Array<ProblemTypeDto>
       )
     );
   }

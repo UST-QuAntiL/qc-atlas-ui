@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PublicationService } from 'api-atlas/services/publication.service';
-import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
@@ -14,8 +14,8 @@ import { UtilService } from '../../../util/util.service';
 })
 export class PublicationViewComponent implements OnInit {
   testTags: string[] = ['test tag', 'quantum', 'publication'];
-  publication: EntityModelPublicationDto;
-  frontendPublication: EntityModelPublicationDto;
+  publication: PublicationDto;
+  frontendPublication: PublicationDto;
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
   private routeSub: Subscription;
 
@@ -29,11 +29,11 @@ export class PublicationViewComponent implements OnInit {
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ publicationId }) => {
       this.publicationService.getPublication({ publicationId }).subscribe(
-        (publication: EntityModelPublicationDto) => {
+        (publication: PublicationDto) => {
           this.publication = publication;
           this.frontendPublication = JSON.parse(
             JSON.stringify(publication)
-          ) as EntityModelPublicationDto;
+          ) as PublicationDto;
           this.links[0] = {
             heading: this.publication.title,
             subHeading: '',
@@ -49,7 +49,7 @@ export class PublicationViewComponent implements OnInit {
   }
 
   savePublication(
-    updatedPublication: EntityModelPublicationDto,
+    updatedPublication: PublicationDto,
     updateFrontendPublication: boolean
   ): void {
     this.publicationService
@@ -63,7 +63,7 @@ export class PublicationViewComponent implements OnInit {
           if (updateFrontendPublication) {
             this.frontendPublication = JSON.parse(
               JSON.stringify(publication)
-            ) as EntityModelPublicationDto;
+            ) as PublicationDto;
           }
           // live refresh title
           this.links[0] = {

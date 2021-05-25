@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
-import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
+import { ComputeResourcePropertyDto } from 'api-atlas/models/compute-resource-property-dto';
 import { quantumComputationModelOptions } from '../../../../util/options';
 import { UpdateFieldEventService } from '../../../../services/update-field-event.service';
 import { UtilService } from '../../../../util/util.service';
@@ -15,7 +15,7 @@ export class ComputeResourcePropertiesComponent implements OnInit {
   @Input() computeResource: ComputeResourceDto;
   @Input() frontendComputeResource: ComputeResourceDto;
 
-  computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
+  computeResourceProperties: ComputeResourcePropertyDto[] = [];
 
   availableQuantumComputationModelOptions = quantumComputationModelOptions;
 
@@ -38,9 +38,7 @@ export class ComputeResourcePropertiesComponent implements OnInit {
     });
   }
 
-  addComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  addComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.executionEnvironmentService
       .createComputeResourcePropertyForComputeResource({
         computeResourceId: this.computeResource.id,
@@ -61,9 +59,7 @@ export class ComputeResourcePropertiesComponent implements OnInit {
       );
   }
 
-  updateComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  updateComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.executionEnvironmentService
       .updateComputeResourcePropertyOfComputeResource({
         computeResourceId: this.computeResource.id,
@@ -85,9 +81,7 @@ export class ComputeResourcePropertiesComponent implements OnInit {
       );
   }
 
-  deleteComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  deleteComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.executionEnvironmentService
       .deleteComputeResourcePropertyOfComputeResource({
         computeResourceId: this.computeResource.id,
@@ -99,8 +93,7 @@ export class ComputeResourcePropertiesComponent implements OnInit {
             'Compute resource property was successfully deleted.'
           );
           this.computeResourceProperties = this.computeResourceProperties.filter(
-            (elem: EntityModelComputeResourcePropertyDto) =>
-              elem.id !== property.id
+            (elem: ComputeResourcePropertyDto) => elem.id !== property.id
           );
           this.fetchComputeResourceProperties();
         },
@@ -119,9 +112,8 @@ export class ComputeResourcePropertiesComponent implements OnInit {
         size: -1,
       })
       .subscribe((e) => {
-        if (e._embedded != null) {
-          this.computeResourceProperties =
-            e._embedded.computeResourceProperties;
+        if (e.content != null) {
+          this.computeResourceProperties = e.content;
         }
       });
   }

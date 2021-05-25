@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
-import { EntityModelPatternRelationTypeDto } from 'api-atlas/models/entity-model-pattern-relation-type-dto';
+import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
 import { forkJoin } from 'rxjs';
-import { GenericDataService } from '../../../util/generic-data.service';
 import { UtilService } from '../../../util/util.service';
 // eslint-disable-next-line max-len
 import { AddOrEditPatternRelationTypeDialogComponent } from '../dialogs/add-or-edit-pattern-relation-type-dialog/add-or-edit-pattern-relation-type-dialog.component';
@@ -28,7 +27,6 @@ export class PatternRelationTypesListComponent implements OnInit {
 
   constructor(
     private patternRelationTypeService: PatternRelationTypeService,
-    private genericDataService: GenericDataService,
     private utilService: UtilService
   ) {}
 
@@ -47,21 +45,18 @@ export class PatternRelationTypesListComponent implements OnInit {
     );
   }
 
-  getPatternRelationTypesHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.preparePatternRelationTypeData(data);
-    });
-  }
-
   preparePatternRelationTypeData(data): void {
     // Read all incoming data
-    if (data._embedded) {
-      this.patternRelationTypes = data._embedded.patternRelationTypes;
+    if (data.content) {
+      this.patternRelationTypes = data.content;
     } else {
       this.patternRelationTypes = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
   }
 
   onAddElement(): void {
@@ -75,7 +70,7 @@ export class PatternRelationTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const algorithmRelationType: EntityModelPatternRelationTypeDto = {
+        const algorithmRelationType: PatternRelationTypeDto = {
           id: undefined,
           name: dialogResult.name,
         };
@@ -85,13 +80,15 @@ export class PatternRelationTypesListComponent implements OnInit {
           .createPatternRelationType(params)
           .subscribe(
             () => {
-              this.getPatternRelationTypesHateoas(
-                this.utilService.getLastPageAfterCreation(
-                  this.pagingInfo._links.self.href,
-                  this.pagingInfo,
-                  1
-                )
+              const correctPage = this.utilService.getLastPageAfterCreation(
+                this.pagingInfo,
+                1
               );
+              this.getPatternRelationTypes({
+                size: this.pagingInfo.size,
+                page: correctPage,
+                sort: this.pagingInfo.sort,
+              });
               this.utilService.callSnackBar(
                 'Successfully created pattern relation type.'
               );
@@ -152,14 +149,9 @@ export class PatternRelationTypesListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getPatternRelationTypesHateoas(
-                this.pagingInfo._links.prev.href
-              );
-            } else {
-              this.getPatternRelationTypesHateoas(
-                this.pagingInfo._links.self.href
-              );
+              event.queryParams.page--;
             }
+            this.getPatternRelationTypes(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
@@ -185,7 +177,7 @@ export class PatternRelationTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const updatedPatternRelationType: EntityModelPatternRelationTypeDto = {
+        const updatedPatternRelationType: PatternRelationTypeDto = {
           id: dialogResult.id,
           name: dialogResult.name,
         };
@@ -198,9 +190,11 @@ export class PatternRelationTypesListComponent implements OnInit {
           .updatePatternRelationType(params)
           .subscribe(
             () => {
-              this.getPatternRelationTypesHateoas(
-                this.pagingInfo._links.self.href
-              );
+              this.getPatternRelationTypes({
+                size: this.pagingInfo.size,
+                page: this.pagingInfo.number,
+                sort: this.pagingInfo.sort,
+              });
               this.utilService.callSnackBar(
                 'Successfully updated pattern relation type.'
               );

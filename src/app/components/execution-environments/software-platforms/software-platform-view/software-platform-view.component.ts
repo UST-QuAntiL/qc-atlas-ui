@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
+import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
@@ -15,8 +15,8 @@ import { UtilService } from '../../../../util/util.service';
   styleUrls: ['./software-platform-view.component.scss'],
 })
 export class SoftwarePlatformViewComponent implements OnInit {
-  softwarePlatform: EntityModelSoftwarePlatformDto;
-  frontendSoftwarePlatform: EntityModelSoftwarePlatformDto;
+  softwarePlatform: SoftwarePlatformDto;
+  frontendSoftwarePlatform: SoftwarePlatformDto;
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
@@ -36,11 +36,11 @@ export class SoftwarePlatformViewComponent implements OnInit {
       this.executionEnvironmentsService
         .getSoftwarePlatform({ softwarePlatformId: spId })
         .subscribe(
-          (softwarePlatform: EntityModelSoftwarePlatformDto) => {
+          (softwarePlatform: SoftwarePlatformDto) => {
             this.softwarePlatform = softwarePlatform;
             this.frontendSoftwarePlatform = JSON.parse(
               JSON.stringify(softwarePlatform)
-            ) as EntityModelSoftwarePlatformDto;
+            ) as SoftwarePlatformDto;
             this.links[0] = {
               heading: this.softwarePlatform.name,
               subHeading: '',
@@ -66,7 +66,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
   }
 
   savePlatform(
-    updatedPlatform: EntityModelSoftwarePlatformDto,
+    updatedPlatform: SoftwarePlatformDto,
     updateFrontendPlatform: boolean
   ): void {
     this.executionEnvironmentsService
@@ -80,7 +80,7 @@ export class SoftwarePlatformViewComponent implements OnInit {
           if (updateFrontendPlatform) {
             this.frontendSoftwarePlatform = JSON.parse(
               JSON.stringify(sp)
-            ) as EntityModelSoftwarePlatformDto;
+            ) as SoftwarePlatformDto;
           }
           this.utilService.callSnackBar(
             'Successfully updated software platform.'

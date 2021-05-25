@@ -8,11 +8,8 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { EntityModelPatternRelationDto } from '../models/entity-model-pattern-relation-dto';
-import { Link } from '../models/link';
-import { PageMetadata } from '../models/page-metadata';
+import { PagePatternRelationDto } from '../models/page-pattern-relation-dto';
 import { PatternRelationDto } from '../models/pattern-relation-dto';
-import { PatternRelationTypeDto } from '../models/pattern-relation-type-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -55,12 +52,7 @@ export class PatternRelationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PagePatternRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternRelationService.GetPatternRelationsPath,
@@ -82,12 +74,7 @@ export class PatternRelationService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PagePatternRelationDto>;
         })
       );
   }
@@ -120,26 +107,11 @@ export class PatternRelationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { patternRelations?: Array<EntityModelPatternRelationDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PagePatternRelationDto> {
     return this.getPatternRelations$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              patternRelations?: Array<EntityModelPatternRelationDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PagePatternRelationDto>) =>
+          r.body as PagePatternRelationDto
       )
     );
   }
@@ -159,16 +131,7 @@ export class PatternRelationService extends BaseService {
    */
   createPatternRelation$Response(params: {
     body: PatternRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      algorithmId: string;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PatternRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternRelationService.CreatePatternRelationPath,
@@ -187,14 +150,7 @@ export class PatternRelationService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<PatternRelationDto>;
         })
       );
   }
@@ -209,34 +165,11 @@ export class PatternRelationService extends BaseService {
    */
   createPatternRelation(params: {
     body: PatternRelationDto;
-  }): Observable<{
-    id: string;
-    algorithmId: string;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<PatternRelationDto> {
     return this.createPatternRelation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<PatternRelationDto>) =>
+          r.body as PatternRelationDto
       )
     );
   }
@@ -257,16 +190,7 @@ export class PatternRelationService extends BaseService {
    */
   getPatternRelation$Response(params: {
     patternRelationId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      algorithmId: string;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PatternRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternRelationService.GetPatternRelationPath,
@@ -285,14 +209,7 @@ export class PatternRelationService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<PatternRelationDto>;
         })
       );
   }
@@ -307,34 +224,11 @@ export class PatternRelationService extends BaseService {
    */
   getPatternRelation(params: {
     patternRelationId: string;
-  }): Observable<{
-    id: string;
-    algorithmId: string;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<PatternRelationDto> {
     return this.getPatternRelation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<PatternRelationDto>) =>
+          r.body as PatternRelationDto
       )
     );
   }
@@ -356,16 +250,7 @@ export class PatternRelationService extends BaseService {
   updatePatternRelation$Response(params: {
     patternRelationId: string;
     body: PatternRelationDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      algorithmId: string;
-      pattern: string;
-      patternRelationType: PatternRelationTypeDto;
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PatternRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       PatternRelationService.UpdatePatternRelationPath,
@@ -386,14 +271,7 @@ export class PatternRelationService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<PatternRelationDto>;
         })
       );
   }
@@ -409,34 +287,11 @@ export class PatternRelationService extends BaseService {
   updatePatternRelation(params: {
     patternRelationId: string;
     body: PatternRelationDto;
-  }): Observable<{
-    id: string;
-    algorithmId: string;
-    pattern: string;
-    patternRelationType: PatternRelationTypeDto;
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<PatternRelationDto> {
     return this.updatePatternRelation$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            algorithmId: string;
-            pattern: string;
-            patternRelationType: PatternRelationTypeDto;
-            description?: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<PatternRelationDto>) =>
+          r.body as PatternRelationDto
       )
     );
   }

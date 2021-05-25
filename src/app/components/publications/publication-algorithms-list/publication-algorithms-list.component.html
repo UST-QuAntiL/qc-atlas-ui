@@ -10,11 +10,11 @@
       [emptyTableMessage]="'No linked algorithms found'"
       [pagination]=pagingInfo
       [paginatorConfig]=paginatorConfig
-      (elementClicked)="onElementClicked($event)"
-      (datalistConfigChanged)="onDatalistConfigChanged($event)"
+      (elementClicked)="routeToAlgorithm($event)"
+      (datalistConfigChanged)="getAllLinkedAlgorithms($event)"
       (submitDeleteElements)="unlinkAlgorithms($event)"
       (addElement)="openLinkAlgorithmDialog()"
-      (pageChange)="onPageChanged($event)">
+      (pageChange)="getAllLinkedAlgorithms($event)">
     </app-table>
   </div>
 </mat-card>

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
-import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
+import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { forkJoin } from 'rxjs';
-import { GenericDataService } from '../../../util/generic-data.service';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
@@ -28,7 +27,6 @@ export class ProblemTypesListComponent implements OnInit {
 
   constructor(
     private problemTypeService: ProblemTypeService,
-    private genericDataService: GenericDataService,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -48,32 +46,38 @@ export class ProblemTypesListComponent implements OnInit {
     );
   }
 
-  getProblemTypesHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareProblemTypeData(data);
-    });
-  }
-
   prepareProblemTypeData(data): void {
     // Read all incoming data
-    if (data._embedded) {
-      this.problemTypes = data._embedded.problemTypes;
+    if (data.content) {
+      this.problemTypes = data.content;
       this.assignParentProblemTypeNames();
     } else {
       this.problemTypes = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
   }
 
   assignParentProblemTypeNames(): void {
     for (const problemType of this.problemTypes) {
       if (problemType.parentProblemType != null) {
-        for (const parentProblemType of this.problemTypes) {
-          if (problemType.parentProblemType === parentProblemType.id) {
-            problemType.parentProblemTypeName = parentProblemType.name;
-          }
-        }
+        this.problemTypeService
+          .getProblemType({
+            problemTypeId: problemType.parentProblemType,
+          })
+          .subscribe(
+            (parent) => {
+              problemType.parentProblemTypeName = parent.name;
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not receive parent problem type.'
+              );
+            }
+          );
       }
     }
   }
@@ -89,7 +93,7 @@ export class ProblemTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const problemTypeDto: EntityModelProblemTypeDto = {
+        const problemTypeDto: ProblemTypeDto = {
           id: undefined,
           name: dialogResult.name,
         };
@@ -100,13 +104,15 @@ export class ProblemTypesListComponent implements OnInit {
         params.body = problemTypeDto;
         this.problemTypeService.createProblemType(params).subscribe(
           () => {
-            this.getProblemTypesHateoas(
-              this.utilService.getLastPageAfterCreation(
-                this.pagingInfo._links.self.href,
-                this.pagingInfo,
-                1
-              )
+            const correctPage = this.utilService.getLastPageAfterCreation(
+              this.pagingInfo,
+              1
             );
+            this.getProblemTypes({
+              size: this.pagingInfo.size,
+              page: correctPage,
+              sort: this.pagingInfo.sort,
+            });
             this.utilService.callSnackBar('Successfully created problem type.');
           },
           () => {
@@ -164,10 +170,9 @@ export class ProblemTypesListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getProblemTypesHateoas(this.pagingInfo._links.prev.href);
-            } else {
-              this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
+              event.queryParams.page--;
             }
+            this.getProblemTypes(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
@@ -182,7 +187,7 @@ export class ProblemTypesListComponent implements OnInit {
   }
 
   onEditElement(event: any): void {
-    let parentProblemTypeDto: EntityModelProblemTypeDto;
+    let parentProblemTypeDto: ProblemTypeDto;
     for (const problemType of this.problemTypes) {
       if (problemType.id === event.parentProblemType) {
         parentProblemTypeDto = problemType;
@@ -201,7 +206,7 @@ export class ProblemTypesListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       (dialogResult) => {
         if (dialogResult) {
-          const updatedProblemType: EntityModelProblemTypeDto = {
+          const updatedProblemType: ProblemTypeDto = {
             id: dialogResult.id,
             name: dialogResult.name,
             parentProblemType: dialogResult.parentProblemType
@@ -214,7 +219,11 @@ export class ProblemTypesListComponent implements OnInit {
             body: updatedProblemType,
           };
           this.problemTypeService.updateProblemType(params).subscribe(() => {
-            this.getProblemTypesHateoas(this.pagingInfo._links.self.href);
+            this.getProblemTypes({
+              size: this.pagingInfo.size,
+              page: this.pagingInfo.number,
+              sort: this.pagingInfo.sort,
+            });
             this.utilService.callSnackBar('Successfully updated problem type.');
           });
         }

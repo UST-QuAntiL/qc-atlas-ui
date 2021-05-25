@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { EntityModelApplicationAreaDto } from 'api-atlas/models/entity-model-application-area-dto';
+import { ApplicationAreaDto } from 'api-atlas/models/application-area-dto';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
-import { EntityModelProblemTypeDto } from 'api-atlas/models/entity-model-problem-type-dto';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { TagDto } from 'api-atlas/models/tag-dto';
@@ -22,10 +21,10 @@ import { ChangePageGuard } from '../../../services/deactivation-guard';
 export class AlgorithmViewComponent implements OnInit, OnDestroy {
   readonly UiFeatures = UiFeatures;
 
-  algorithm: EntityModelAlgorithmDto;
-  frontendAlgorithm: EntityModelAlgorithmDto;
-  applicationAreas: EntityModelApplicationAreaDto[];
-  problemTypes: EntityModelProblemTypeDto[];
+  algorithm: AlgorithmDto;
+  frontendAlgorithm: AlgorithmDto;
+  applicationAreas: ApplicationAreaDto[];
+  problemTypes: ProblemTypeDto[];
   tags: TagDto[] = [];
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
@@ -44,11 +43,11 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.routeSub = this.route.params.subscribe(({ algoId }) => {
       this.algorithmService.getAlgorithm({ algorithmId: algoId }).subscribe(
-        (algo: EntityModelAlgorithmDto) => {
+        (algo: AlgorithmDto) => {
           this.algorithm = algo;
           this.frontendAlgorithm = JSON.parse(
             JSON.stringify(algo)
-          ) as EntityModelAlgorithmDto;
+          ) as AlgorithmDto;
           let subheading = this.algorithm.computationModel
             .toString()
             .toLowerCase();
@@ -75,7 +74,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   }
 
   saveAlgorithm(
-    updatedAlgorithm: EntityModelAlgorithmDto,
+    updatedAlgorithm: AlgorithmDto,
     updateFrontendAlgorithm: boolean
   ): void {
     this.algorithmService
@@ -89,7 +88,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
           if (updateFrontendAlgorithm) {
             this.frontendAlgorithm = JSON.parse(
               JSON.stringify(algo)
-            ) as EntityModelAlgorithmDto;
+            ) as AlgorithmDto;
           }
           this.links[0] = {
             heading: this.createBreadcrumbHeader(),
@@ -109,8 +108,8 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       .getApplicationAreasOfAlgorithm({ algorithmId: algoId })
       .subscribe(
         (areas) => {
-          if (areas._embedded) {
-            this.applicationAreas = areas._embedded.applicationAreas;
+          if (areas.content) {
+            this.applicationAreas = areas.content;
           } else {
             this.applicationAreas = [];
           }
@@ -127,8 +126,8 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       .getProblemTypesOfAlgorithm({ algorithmId: algoId })
       .subscribe(
         (problems) => {
-          if (problems._embedded) {
-            this.problemTypes = problems._embedded.problemTypes;
+          if (problems.content) {
+            this.problemTypes = problems.content;
           } else {
             this.problemTypes = [];
           }
@@ -174,7 +173,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     this.saveAlgorithm(this.algorithm, false);
   }
 
-  addApplicationArea(applicationArea: EntityModelApplicationAreaDto): void {
+  addApplicationArea(applicationArea: ApplicationAreaDto): void {
     this.algorithmService
       .linkAlgorithmAndApplicationArea({
         algorithmId: this.algorithm.id,
@@ -203,7 +202,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       );
   }
 
-  removeApplicationArea(applicationArea: EntityModelApplicationAreaDto): void {
+  removeApplicationArea(applicationArea: ApplicationAreaDto): void {
     this.algorithmService
       .unlinkAlgorithmAndApplicationArea({
         algorithmId: this.algorithm.id,
@@ -263,7 +262,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       );
   }
 
-  removeProblemTypeFromAlgorithm(problemType: EntityModelProblemTypeDto): void {
+  removeProblemTypeFromAlgorithm(problemType: ProblemTypeDto): void {
     this.algorithmService
       .unlinkAlgorithmAndProblemType({
         algorithmId: this.algorithm.id,
@@ -305,8 +304,8 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     this.algorithmService
       .getTagsOfAlgorithm({ algorithmId: algoId })
       .subscribe((next) => {
-        if (next._embedded?.tags) {
-          this.tags = next._embedded.tags.map((t) => ({
+        if (next) {
+          this.tags = next.map((t) => ({
             value: t.value,
             category: t.category,
           }));

@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { forkJoin, Observable } from 'rxjs';
+import { PageAlgorithmDto } from 'api-atlas/models/page-algorithm-dto';
 import {
   LinkObject,
   QueryParams,
@@ -14,14 +15,13 @@ import {
   DialogData,
   LinkItemListDialogComponent,
 } from '../../generics/dialogs/link-item-list-dialog.component';
-import { GenericDataService } from '../../../util/generic-data.service';
 @Component({
   selector: 'app-publication-algorithms-list',
   templateUrl: './publication-algorithms-list.component.html',
   styleUrls: ['./publication-algorithms-list.component.scss'],
 })
 export class PublicationAlgorithmsListComponent implements OnInit {
-  @Input() publication: EntityModelPublicationDto;
+  @Input() publication: PublicationDto;
   displayedData = [];
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
@@ -54,7 +54,6 @@ export class PublicationAlgorithmsListComponent implements OnInit {
   constructor(
     private algorithmService: AlgorithmService,
     private publicationService: PublicationService,
-    private genericDataService: GenericDataService,
     private router: Router,
     private utilService: UtilService
   ) {}
@@ -64,19 +63,26 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     this.getAllLinkedAlgorithms();
   }
 
-  getAllAlgorithms(search?: QueryParams): Observable<any> {
+  getAllAlgorithms(search?: QueryParams): Observable<PageAlgorithmDto> {
     return this.algorithmService.getAlgorithms(search).pipe((data) => data);
   }
 
-  getAllLinkedAlgorithms(): void {
+  getAllLinkedAlgorithms(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
     this.publicationService
-      .getAlgorithmsOfPublication({ publicationId: this.publication.id })
+      .getAlgorithmsOfPublication({
+        publicationId: this.publication.id,
+        search: params.search,
+        page: params.page,
+        sort: params.sort,
+        size: params.size,
+      })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.algorithms;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
+          this.updateDisplayedData(data);
         },
         () => {
           this.utilService.callSnackBar(
@@ -86,40 +92,32 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       );
   }
 
-  getPagedLinkedAlgorithms(params: any): void {
-    this.publicationService
-      .getAlgorithmsOfPublication({
-        publicationId: this.publication.id,
-        page: params.page,
-        size: params.size,
-        sort: params.sort,
-        search: params.sort,
-      })
-      .subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-  }
-
   updateDisplayedData(data): void {
     // clear link object data
     this.displayedData = [];
     // If algorithms found
-    if (data._embedded) {
-      this.displayedData = data._embedded.algorithms;
+    if (data.content) {
+      this.displayedData = data.content;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
+    this.pagingInfo.search = data.search;
   }
 
   updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If algorithms found
-    if (data._embedded) {
-      this.linkObject.data = data._embedded.algorithms;
+    if (data.content) {
+      this.linkObject.data = data.content;
     }
-    this.dialogData.pagingInfo.page = data.page;
-    this.dialogData.pagingInfo._links = data._links;
+    this.dialogData.pagingInfo.totalPages = data.totalPages;
+    this.dialogData.pagingInfo.number = data.number;
+    this.dialogData.pagingInfo.size = data.size;
+    this.dialogData.pagingInfo.sort = data.sort;
   }
 
   openLinkAlgorithmDialog(): void {
@@ -140,8 +138,8 @@ export class PublicationAlgorithmsListComponent implements OnInit {
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-        (page: string) => {
-          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+        (page: QueryParams) => {
+          this.getAllAlgorithms(page).subscribe((pageData) => {
             this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
@@ -193,16 +191,17 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       );
     }
     forkJoin(linkTasks).subscribe(() => {
-      this.getHateaosDataFromGenericService(
-        this.utilService.getLastPageAfterCreation(
-          this.pagingInfo._links.self.href,
-          this.pagingInfo,
-          successfulLinks
-        )
-      ).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedAlgorithms();
+      const correctPage = this.utilService.getLastPageAfterCreation(
+        this.pagingInfo,
+        successfulLinks
+      );
+      const parameters: QueryParams = {
+        size: this.pagingInfo.size,
+        page: correctPage,
+        sort: this.pagingInfo.sort,
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedAlgorithms(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
@@ -241,17 +240,16 @@ export class PublicationAlgorithmsListComponent implements OnInit {
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
-      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
-        successfulDeletions,
-        this.displayedData.length,
-        this.pagingInfo
-      )
-        ? this.pagingInfo._links.prev.href
-        : this.pagingInfo._links.self.href;
-      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedAlgorithms();
+      if (
+        this.utilService.isLastPageEmptyAfterDeletion(
+          successfulDeletions,
+          this.displayedData.length,
+          this.pagingInfo
+        )
+      ) {
+        event.queryParams.page--;
+      }
+      this.getAllLinkedAlgorithms(event.queryParams);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
@@ -264,25 +262,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     });
   }
 
-  onDatalistConfigChanged(event): void {
-    this.getPagedLinkedAlgorithms(event);
-  }
-
-  onElementClicked(algorithm: AlgorithmDto): void {
-    this.routeToAlgorithm(algorithm);
-  }
-
   routeToAlgorithm(algorithm: AlgorithmDto): void {
     this.router.navigate(['algorithms', algorithm.id]);
-  }
-
-  getHateaosDataFromGenericService(url: string): Observable<any> {
-    return this.genericDataService.getData(url).pipe((data) => data);
-  }
-
-  onPageChanged(event): void {
-    this.getHateaosDataFromGenericService(event).subscribe((data) => {
-      this.updateDisplayedData(data);
-    });
   }
 }

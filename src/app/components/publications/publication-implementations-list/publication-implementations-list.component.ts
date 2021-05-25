@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { forkJoin, Observable } from 'rxjs';
 import { ImplementationsService } from 'api-atlas/services/implementations.service';
+import { PageImplementationDto } from 'api-atlas/models/page-implementation-dto';
 import {
   LinkObject,
   QueryParams,
@@ -15,7 +16,6 @@ import {
   LinkItemListDialogComponent,
 } from '../../generics/dialogs/link-item-list-dialog.component';
 import { UtilService } from '../../../util/util.service';
-import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-publication-implementations-list',
@@ -23,7 +23,7 @@ import { GenericDataService } from '../../../util/generic-data.service';
   styleUrls: ['./publication-implementations-list.component.scss'],
 })
 export class PublicationImplementationsListComponent implements OnInit {
-  @Input() publication: EntityModelPublicationDto;
+  @Input() publication: PublicationDto;
   displayedData = [];
   tableColumns = [
     'Name',
@@ -69,8 +69,7 @@ export class PublicationImplementationsListComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private implementationService: ImplementationsService,
     private router: Router,
-    private utilService: UtilService,
-    private genericDataService: GenericDataService
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -78,21 +77,30 @@ export class PublicationImplementationsListComponent implements OnInit {
     this.getAllLinkedImplementations();
   }
 
-  getAllImplementations(search?: QueryParams): Observable<any> {
+  getAllImplementations(
+    search?: QueryParams
+  ): Observable<PageImplementationDto> {
     return this.implementationService
       .getImplementations(search)
       .pipe((data) => data);
   }
 
-  getAllLinkedImplementations(): void {
+  getAllLinkedImplementations(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
     this.publicationService
-      .getImplementationsOfPublication({ publicationId: this.publication.id })
+      .getImplementationsOfPublication({
+        publicationId: this.publication.id,
+        search: params.search,
+        page: params.page,
+        sort: params.sort,
+        size: params.size,
+      })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.implementations;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
+          this.updateDisplayedData(data);
         },
         () => {
           this.utilService.callSnackBar(
@@ -102,40 +110,32 @@ export class PublicationImplementationsListComponent implements OnInit {
       );
   }
 
-  getPagedLinkedImplementations(params: any): void {
-    this.publicationService
-      .getImplementationsOfPublication({
-        publicationId: this.publication.id,
-        page: params.page,
-        size: params.size,
-        sort: params.sort,
-        search: params.sort,
-      })
-      .subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-  }
-
   updateDisplayedData(data): void {
     // clear link object data
     this.displayedData = [];
     // If implementations found
-    if (data._embedded) {
-      this.displayedData = data._embedded.implementations;
+    if (data.content) {
+      this.displayedData = data.content;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
+    this.pagingInfo.search = data.search;
   }
 
   updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If implementations found
-    if (data._embedded) {
-      this.linkObject.data = data._embedded.implementations;
+    if (data.content) {
+      this.linkObject.data = data.content;
     }
-    this.dialogData.pagingInfo.page = data.page;
-    this.dialogData.pagingInfo._links = data._links;
+    this.dialogData.pagingInfo.totalPages = data.totalPages;
+    this.dialogData.pagingInfo.number = data.number;
+    this.dialogData.pagingInfo.size = data.size;
+    this.dialogData.pagingInfo.sort = data.sort;
   }
 
   openLinkImplementationDialog(): void {
@@ -156,8 +156,8 @@ export class PublicationImplementationsListComponent implements OnInit {
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-        (page: string) => {
-          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+        (page: QueryParams) => {
+          this.getAllImplementations(page).subscribe((pageData) => {
             this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
@@ -214,16 +214,17 @@ export class PublicationImplementationsListComponent implements OnInit {
       );
     }
     forkJoin(linkTasks).subscribe(() => {
-      this.getHateaosDataFromGenericService(
-        this.utilService.getLastPageAfterCreation(
-          this.pagingInfo._links.self.href,
-          this.pagingInfo,
-          successfulLinks
-        )
-      ).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedImplementations();
+      const correctPage = this.utilService.getLastPageAfterCreation(
+        this.pagingInfo,
+        successfulLinks
+      );
+      const parameters: QueryParams = {
+        size: this.pagingInfo.size,
+        page: correctPage,
+        sort: this.pagingInfo.sort,
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedImplementations(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
@@ -267,17 +268,16 @@ export class PublicationImplementationsListComponent implements OnInit {
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
-      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
-        successfulDeletions,
-        this.displayedData.length,
-        this.pagingInfo
-      )
-        ? this.pagingInfo._links.prev.href
-        : this.pagingInfo._links.self.href;
-      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedImplementations();
+      if (
+        this.utilService.isLastPageEmptyAfterDeletion(
+          successfulDeletions,
+          this.displayedData.length,
+          this.pagingInfo
+        )
+      ) {
+        event.queryParams.page--;
+      }
+      this.getAllLinkedImplementations(event.queryParams);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
@@ -290,14 +290,6 @@ export class PublicationImplementationsListComponent implements OnInit {
     });
   }
 
-  onDatalistConfigChanged(event): void {
-    this.getPagedLinkedImplementations(event);
-  }
-
-  onElementClicked(implementation: ImplementationDto): void {
-    this.routeToImplementation(implementation);
-  }
-
   routeToImplementation(implementation: ImplementationDto): void {
     this.router.navigate([
       'algorithms',
@@ -305,15 +297,5 @@ export class PublicationImplementationsListComponent implements OnInit {
       'implementations',
       implementation.id,
     ]);
-  }
-
-  getHateaosDataFromGenericService(url: string): Observable<any> {
-    return this.genericDataService.getData(url).pipe((data) => data);
-  }
-
-  onPageChanged(event): void {
-    this.getHateaosDataFromGenericService(event).subscribe((data) => {
-      this.updateDisplayedData(data);
-    });
   }
 }
