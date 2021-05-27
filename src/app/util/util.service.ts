@@ -215,7 +215,7 @@ export class UtilService {
 
     const urlencoded = new URLSearchParams();
     urlencoded.append('grant_type', 'password');
-    urlencoded.append('client_id', 'admin-cli');
+    urlencoded.append('client_id', 'vue-frontend');
     urlencoded.append('username', name);
     urlencoded.append('password', password);
 
@@ -227,7 +227,7 @@ export class UtilService {
     };
 
     return fetch(
-      'http://localhost:4200/auth/realms/planqk/protocol/openid-connect/token',
+      'https://platform.planqk.de/auth/realms/planqk/protocol/openid-connect/token',
       requestOptions
     )
       .then((response) => response.json())

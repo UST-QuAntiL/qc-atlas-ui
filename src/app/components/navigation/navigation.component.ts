@@ -41,7 +41,7 @@ export class NavigationComponent implements OnInit {
       });
     if (localStorage.getItem('bearerToken')) {
       this.bearerTokenSet = true;
-      this.config.rootUrl = 'http://localhost:4200/qc-catalog';
+      this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
     }
   }
 
@@ -65,8 +65,11 @@ export class NavigationComponent implements OnInit {
               if (bearerToken) {
                 localStorage.setItem('bearerToken', bearerToken);
                 this.bearerTokenSet = true;
-                this.config.rootUrl = 'http://localhost:4200/qc-catalog';
-                this.goToHome();
+                this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
+                this.reloadStartPage();
+                this.utilService.callSnackBar('Successfully logged in.');
+              } else {
+                this.utilService.callSnackBar('Error! Login failed.');
               }
             });
         }
@@ -75,7 +78,14 @@ export class NavigationComponent implements OnInit {
       localStorage.removeItem('bearerToken');
       this.bearerTokenSet = false;
       this.config.rootUrl = 'http://localhost:8080/atlas';
-      this.goToHome();
+      this.reloadStartPage();
+      this.utilService.callSnackBar('Successfully logged out.');
     }
+  }
+
+  reloadStartPage(): void {
+    this.router
+      .navigateByUrl('http://localhost:4200', { skipLocationChange: true })
+      .then(() => this.router.navigate(['/algorithms']));
   }
 }

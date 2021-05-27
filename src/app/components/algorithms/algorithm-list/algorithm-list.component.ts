@@ -25,6 +25,7 @@ export class AlgorithmListComponent implements OnInit {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
+  loading = true;
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -37,9 +38,11 @@ export class AlgorithmListComponent implements OnInit {
   getAlgorithms(params: QueryParams): void {
     this.algorithmService.getAlgorithms(params).subscribe(
       (data) => {
+        this.loading = false;
         this.prepareAlgorithmData(data);
       },
       () => {
+        this.loading = false;
         this.utilService.callSnackBar(
           'Error! Algorithms could not be retrieved.'
         );
