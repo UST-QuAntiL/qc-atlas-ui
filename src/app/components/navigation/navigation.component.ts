@@ -5,10 +5,13 @@ import {
   BreakpointState,
 } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
+import { ApiConfiguration } from 'api-atlas/api-configuration';
 import {
   QcAtlasUiRepositoryConfigurationService,
   UiFeatures,
 } from '../../directives/qc-atlas-ui-repository-configuration.service';
+import { UtilService } from '../../util/util.service';
+import { PlanqkPlatformLoginDialogComponent } from '../dialogs/planqk-platform-login-dialog.component';
 
 @Component({
   selector: 'app-navigation',
@@ -20,11 +23,14 @@ export class NavigationComponent implements OnInit {
 
   title = 'qc-atlas-ui';
   hideNav = false;
+  bearerTokenSet = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router,
-    public configData: QcAtlasUiRepositoryConfigurationService
+    public configData: QcAtlasUiRepositoryConfigurationService,
+    private config: ApiConfiguration,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +39,10 @@ export class NavigationComponent implements OnInit {
       .subscribe((state: BreakpointState) => {
         this.hideNav = state.matches;
       });
+    if (localStorage.getItem('bearerToken')) {
+      this.bearerTokenSet = true;
+      this.config.rootUrl = 'http://localhost:4200/qc-catalog';
+    }
   }
 
   goToHome(): void {
@@ -40,4 +50,32 @@ export class NavigationComponent implements OnInit {
   }
 
   onSettings(): void {}
+
+  login(): void {
+    if (!this.bearerTokenSet) {
+      const dialogRef = this.utilService.createDialog(
+        PlanqkPlatformLoginDialogComponent,
+        { title: 'Login to the PlanQK Platform' }
+      );
+      dialogRef.afterClosed().subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.utilService
+            .loginToPlanqkPlatform(dialogResult.name, dialogResult.password)
+            .then((bearerToken) => {
+              if (bearerToken) {
+                localStorage.setItem('bearerToken', bearerToken);
+                this.bearerTokenSet = true;
+                this.config.rootUrl = 'http://localhost:4200/qc-catalog';
+                this.goToHome();
+              }
+            });
+        }
+      });
+    } else {
+      localStorage.removeItem('bearerToken');
+      this.bearerTokenSet = false;
+      this.config.rootUrl = 'http://localhost:8080/atlas';
+      this.goToHome();
+    }
+  }
 }

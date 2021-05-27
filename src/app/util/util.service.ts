@@ -205,4 +205,33 @@ export class UtilService {
       })
     );
   }
+
+  public loginToPlanqkPlatform(
+    name: string,
+    password: string
+  ): Promise<string | void> {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+
+    const urlencoded = new URLSearchParams();
+    urlencoded.append('grant_type', 'password');
+    urlencoded.append('client_id', 'admin-cli');
+    urlencoded.append('username', name);
+    urlencoded.append('password', password);
+
+    const requestOptions: RequestInit = {
+      method: 'POST',
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: 'follow',
+    };
+
+    return fetch(
+      'http://localhost:4200/auth/realms/planqk/protocol/openid-connect/token',
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => result['access_token'] as string)
+      .catch((error) => console.log('error', error));
+  }
 }

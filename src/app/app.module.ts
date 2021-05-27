@@ -7,7 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -59,6 +59,9 @@ import { ComputeResourcePropertyTypesListComponent } from './components/compute-
 import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './components/compute-resource-property-types/dialogs/add-or-edit-compute-resource-property-type-dialog/add-or-edit-compute-resource-property-type-dialog.component';
 import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module';
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
+import { PlanqkPlatformLoginDialogComponent } from './components/dialogs/planqk-platform-login-dialog.component';
+import { AlgorithmListComponent } from './components/algorithms/algorithm-list/algorithm-list.component';
+import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 
 @NgModule({
   declarations: [
@@ -81,6 +84,7 @@ import { FeatureTogglingComponent } from './components/feature-toggling/feature-
     ComputeResourcePropertyTypesListComponent,
     AddOrEditComputeResourcePropertyTypeDialogComponent,
     FeatureTogglingComponent,
+    PlanqkPlatformLoginDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -128,6 +132,14 @@ import { FeatureTogglingComponent } from './components/feature-toggling/feature-
     MatProgressSpinnerModule,
   ],
   bootstrap: [AppComponent],
-  providers: [UtilService, ChangePageGuard],
+  providers: [
+    UtilService,
+    ChangePageGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
 })
 export class AppModule {}

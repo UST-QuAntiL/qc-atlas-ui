@@ -70,6 +70,16 @@
     <mat-toolbar color="primary">
       <mat-toolbar-row>
         <button
+                class="settings-button"
+                mat-icon-button
+                type="Login"
+                color="accent"
+                (click)="login()"
+        >
+          <mat-icon *ngIf="!bearerTokenSet">account_box</mat-icon>
+          <mat-icon *ngIf="bearerTokenSet">logout</mat-icon>
+        </button>
+        <button
           type="button"
           aria-label="Toggle sidenav"
           class="menu-button"
