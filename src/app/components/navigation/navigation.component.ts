@@ -12,6 +12,7 @@ import {
 } from '../../directives/qc-atlas-ui-repository-configuration.service';
 import { UtilService } from '../../util/util.service';
 import { PlanqkPlatformLoginDialogComponent } from '../dialogs/planqk-platform-login-dialog.component';
+import { PlanqkPlatformLoginService } from '../../services/planqk-platform-login.service';
 
 @Component({
   selector: 'app-navigation',
@@ -30,7 +31,8 @@ export class NavigationComponent implements OnInit {
     private router: Router,
     public configData: QcAtlasUiRepositoryConfigurationService,
     private config: ApiConfiguration,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private planqkPlatformLoginService: PlanqkPlatformLoginService
   ) {}
 
   ngOnInit(): void {
@@ -59,12 +61,13 @@ export class NavigationComponent implements OnInit {
       );
       dialogRef.afterClosed().subscribe((dialogResult) => {
         if (dialogResult) {
-          this.utilService
+          this.planqkPlatformLoginService
             .loginToPlanqkPlatform(dialogResult.name, dialogResult.password)
-            .then((bearerToken) => {
-              if (bearerToken) {
-                localStorage.setItem('bearerToken', bearerToken);
+            .then((tokens) => {
+              if (tokens) {
+                localStorage.setItem('bearerToken', tokens[0]);
                 this.bearerTokenSet = true;
+                localStorage.setItem('refreshToken', tokens[1]);
                 this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
                 this.reloadStartPage();
                 this.utilService.callSnackBar('Successfully logged in.');
@@ -76,6 +79,7 @@ export class NavigationComponent implements OnInit {
       });
     } else {
       localStorage.removeItem('bearerToken');
+      localStorage.removeItem('refreshToken');
       this.bearerTokenSet = false;
       this.config.rootUrl = 'http://localhost:8080/atlas';
       this.reloadStartPage();
