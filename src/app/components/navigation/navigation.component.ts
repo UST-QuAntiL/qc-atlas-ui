@@ -6,6 +6,7 @@ import {
 } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
+import { map, switchMap } from 'rxjs/operators';
 import {
   QcAtlasUiRepositoryConfigurationService,
   UiFeatures,
@@ -63,23 +64,28 @@ export class NavigationComponent implements OnInit {
         if (dialogResult) {
           this.planqkPlatformLoginService
             .loginToPlanqkPlatform(dialogResult.name, dialogResult.password)
-            .then((tokens) => {
-              if (tokens) {
-                localStorage.setItem('bearerToken', tokens[0]);
-                this.bearerTokenSet = true;
-                localStorage.setItem('refreshToken', tokens[1]);
-                this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
-                this.reloadStartPage();
-                this.utilService.callSnackBar('Successfully logged in.');
-              } else {
+            .subscribe(
+              (authResponse) => {
+                if (
+                  authResponse.access_token &&
+                  authResponse.refresh_token &&
+                  localStorage.getItem('bearerToken') &&
+                  localStorage.getItem('refreshToken')
+                ) {
+                  this.bearerTokenSet = true;
+                  this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
+                  this.reloadStartPage();
+                  this.utilService.callSnackBar('Successfully logged in.');
+                }
+              },
+              () => {
                 this.utilService.callSnackBar('Error! Login failed.');
               }
-            });
+            );
         }
       });
     } else {
-      localStorage.removeItem('bearerToken');
-      localStorage.removeItem('refreshToken');
+      this.planqkPlatformLoginService.logoutFromPlanqkPlatform();
       this.bearerTokenSet = false;
       this.config.rootUrl = 'http://localhost:8080/atlas';
       this.reloadStartPage();

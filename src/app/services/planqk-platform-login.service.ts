@@ -1,76 +1,84 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlanqkPlatformLoginService {
-  constructor() {}
+  authenticationUrl =
+    'https://platform.planqk.de/auth/realms/planqk/protocol/openid-connect/token';
+
+  constructor(private http: HttpClient) {}
 
   public loginToPlanqkPlatform(
     name: string,
     password: string
-  ): Promise<string[] | void> {
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+  ): Observable<AuthenticationResponse> {
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 
     const urlencoded = new URLSearchParams();
-    urlencoded.append('grant_type', 'password');
-    urlencoded.append('client_id', 'vue-frontend');
-    urlencoded.append('username', name);
-    urlencoded.append('password', password);
+    urlencoded.set('grant_type', 'password');
+    urlencoded.set('client_id', 'vue-frontend');
+    urlencoded.set('username', name);
+    urlencoded.set('password', password);
 
-    const requestOptions: RequestInit = {
-      method: 'POST',
-      headers: myHeaders,
-      body: urlencoded,
-      redirect: 'follow',
-    };
-
-    return fetch(
-      'https://platform.planqk.de/auth/realms/planqk/protocol/openid-connect/token',
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        if (result['access_token'] && result['refresh_token']) {
-          return [
-            result['access_token'] as string,
-            result['refresh_token'] as string,
-          ];
+    return this.http
+      .post<AuthenticationResponse>(
+        'https://platform.planqk.de/auth/realms/planqk/protocol/openid-connect/token',
+        urlencoded.toString(),
+        {
+          headers,
         }
-      })
-      .catch((error) => console.log('error', error));
+      )
+      .pipe(
+        tap((response) => {
+          localStorage.setItem('bearerToken', response.access_token);
+          localStorage.setItem('refreshToken', response.refresh_token);
+        })
+      )
+      .pipe(map((response) => response));
   }
 
-  public refreshLoginToPlanqkPlatform(): Promise<string[] | void> {
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+  public refreshLoginToPlanqkPlatform(): Observable<AuthenticationResponse> {
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 
     const urlencoded = new URLSearchParams();
-    urlencoded.append('grant_type', 'refresh_token');
-    urlencoded.append('client_id', 'vue-frontend');
-    urlencoded.append('refresh_token', localStorage.getItem('refreshToken'));
+    urlencoded.set('grant_type', 'refresh_token');
+    urlencoded.set('client_id', 'vue-frontend');
+    urlencoded.set('refresh_token', localStorage.getItem('refreshToken'));
 
-    const requestOptions: RequestInit = {
-      method: 'POST',
-      headers: myHeaders,
-      body: urlencoded,
-      redirect: 'follow',
-    };
-
-    return fetch(
-      'https://platform.planqk.de/auth/realms/planqk/protocol/openid-connect/token',
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        if (result['access_token'] && result['refresh_token']) {
-          return [
-            result['access_token'] as string,
-            result['refresh_token'] as string,
-          ];
+    return this.http
+      .post<AuthenticationResponse>(
+        'https://platform.planqk.de/auth/realms/planqk/protocol/openid-connect/token',
+        urlencoded.toString(),
+        {
+          headers,
         }
-      })
-      .catch((error) => console.log('error', error));
+      )
+      .pipe(
+        tap((response) => {
+          localStorage.setItem('bearerToken', response.access_token);
+          localStorage.setItem('refreshToken', response.refresh_token);
+        })
+      )
+      .pipe(map((response) => response));
   }
+
+  public logoutFromPlanqkPlatform(): void {
+    localStorage.removeItem('bearerToken');
+    localStorage.removeItem('refreshToken');
+  }
+}
+
+export interface AuthenticationResponse {
+  access_token: string;
+  expires_in: number;
+  refresh_expires_in: number;
+  refresh_token: string;
+  token_type: string;
+  'not-before-policy': number;
+  session_state: string;
+  scope: string;
 }
