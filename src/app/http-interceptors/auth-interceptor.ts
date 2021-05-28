@@ -13,6 +13,7 @@ import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.se
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private refreshTokenInProgress = false;
+  private rootUrl = 'http://localhost:4200';
   private bearerTokenSubject: BehaviorSubject<string> = new BehaviorSubject<
     string
   >(null);
@@ -34,7 +35,7 @@ export class AuthInterceptor implements HttpInterceptor {
               return this.refreshBearerToken(req, next).pipe(
                 catchError((error) => {
                   this.planqkPlatformLoginService.logoutFromPlanqkPlatform();
-                  window.location.replace('http://localhost:4200');
+                  window.location.replace(this.rootUrl);
                   return throwError(
                     'Request to PlanQK Platform failed!',
                     error
@@ -43,7 +44,7 @@ export class AuthInterceptor implements HttpInterceptor {
               );
             } else {
               this.planqkPlatformLoginService.logoutFromPlanqkPlatform();
-              window.location.replace('http://localhost:4200');
+              window.location.replace(this.rootUrl);
               return throwError('Request to PlanQK Platform failed!', err);
             }
           })

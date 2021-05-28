@@ -60,7 +60,6 @@ import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './component
 import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module';
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
 import { PlanqkPlatformLoginDialogComponent } from './components/dialogs/planqk-platform-login-dialog.component';
-import { AlgorithmListComponent } from './components/algorithms/algorithm-list/algorithm-list.component';
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 
 @NgModule({
