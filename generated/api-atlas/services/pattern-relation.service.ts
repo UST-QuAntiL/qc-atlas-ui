@@ -15,7 +15,10 @@ import { PatternRelationDto } from '../models/pattern-relation-dto';
   providedIn: 'root',
 })
 export class PatternRelationService extends BaseService {
-  constructor(config: ApiConfiguration, http: HttpClient) {
+  constructor(
+    config: ApiConfiguration,
+    http: HttpClient
+  ) {
     super(config, http);
   }
 
@@ -33,6 +36,7 @@ export class PatternRelationService extends BaseService {
    * This method doesn't expect any request body.
    */
   getPatternRelations$Response(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -52,31 +56,27 @@ export class PatternRelationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
+
   }): Observable<StrictHttpResponse<PagePatternRelationDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternRelationService.GetPatternRelationsPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternRelationService.GetPatternRelationsPath, 'get');
     if (params) {
+
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<PagePatternRelationDto>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<PagePatternRelationDto>;
+      })
+    );
   }
 
   /**
@@ -88,6 +88,7 @@ export class PatternRelationService extends BaseService {
    * This method doesn't expect any request body.
    */
   getPatternRelations(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -107,12 +108,11 @@ export class PatternRelationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
+
   }): Observable<PagePatternRelationDto> {
+
     return this.getPatternRelations$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<PagePatternRelationDto>) =>
-          r.body as PagePatternRelationDto
-      )
+      map((r: StrictHttpResponse<PagePatternRelationDto>) => r.body as PagePatternRelationDto)
     );
   }
 
@@ -130,29 +130,24 @@ export class PatternRelationService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createPatternRelation$Response(params: {
-    body: PatternRelationDto;
+      body: PatternRelationDto
   }): Observable<StrictHttpResponse<PatternRelationDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternRelationService.CreatePatternRelationPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternRelationService.CreatePatternRelationPath, 'post');
     if (params) {
+
+
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<PatternRelationDto>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<PatternRelationDto>;
+      })
+    );
   }
 
   /**
@@ -164,21 +159,18 @@ export class PatternRelationService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createPatternRelation(params: {
-    body: PatternRelationDto;
+      body: PatternRelationDto
   }): Observable<PatternRelationDto> {
+
     return this.createPatternRelation$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<PatternRelationDto>) =>
-          r.body as PatternRelationDto
-      )
+      map((r: StrictHttpResponse<PatternRelationDto>) => r.body as PatternRelationDto)
     );
   }
 
   /**
    * Path part for operation getPatternRelation
    */
-  static readonly GetPatternRelationPath =
-    '/pattern-relations/{patternRelationId}';
+  static readonly GetPatternRelationPath = '/pattern-relations/{patternRelationId}';
 
   /**
    * Retrieve a specific relation between a pattern and an algorithm.
@@ -190,28 +182,24 @@ export class PatternRelationService extends BaseService {
    */
   getPatternRelation$Response(params: {
     patternRelationId: string;
+
   }): Observable<StrictHttpResponse<PatternRelationDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternRelationService.GetPatternRelationPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternRelationService.GetPatternRelationPath, 'get');
     if (params) {
+
       rb.path('patternRelationId', params.patternRelationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<PatternRelationDto>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<PatternRelationDto>;
+      })
+    );
   }
 
   /**
@@ -224,20 +212,18 @@ export class PatternRelationService extends BaseService {
    */
   getPatternRelation(params: {
     patternRelationId: string;
+
   }): Observable<PatternRelationDto> {
+
     return this.getPatternRelation$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<PatternRelationDto>) =>
-          r.body as PatternRelationDto
-      )
+      map((r: StrictHttpResponse<PatternRelationDto>) => r.body as PatternRelationDto)
     );
   }
 
   /**
    * Path part for operation updatePatternRelation
    */
-  static readonly UpdatePatternRelationPath =
-    '/pattern-relations/{patternRelationId}';
+  static readonly UpdatePatternRelationPath = '/pattern-relations/{patternRelationId}';
 
   /**
    * Update a relation between a pattern and an algorithm. For the pattern relation type only the ID is required,other pattern relation type attributes will be ignored and not changed.
@@ -249,31 +235,25 @@ export class PatternRelationService extends BaseService {
    */
   updatePatternRelation$Response(params: {
     patternRelationId: string;
-    body: PatternRelationDto;
+      body: PatternRelationDto
   }): Observable<StrictHttpResponse<PatternRelationDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternRelationService.UpdatePatternRelationPath,
-      'put'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternRelationService.UpdatePatternRelationPath, 'put');
     if (params) {
+
       rb.path('patternRelationId', params.patternRelationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<PatternRelationDto>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<PatternRelationDto>;
+      })
+    );
   }
 
   /**
@@ -286,21 +266,18 @@ export class PatternRelationService extends BaseService {
    */
   updatePatternRelation(params: {
     patternRelationId: string;
-    body: PatternRelationDto;
+      body: PatternRelationDto
   }): Observable<PatternRelationDto> {
+
     return this.updatePatternRelation$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<PatternRelationDto>) =>
-          r.body as PatternRelationDto
-      )
+      map((r: StrictHttpResponse<PatternRelationDto>) => r.body as PatternRelationDto)
     );
   }
 
   /**
    * Path part for operation deletePatternRelation
    */
-  static readonly DeletePatternRelationPath =
-    '/pattern-relations/{patternRelationId}';
+  static readonly DeletePatternRelationPath = '/pattern-relations/{patternRelationId}';
 
   /**
    * Delete a specific relation between a pattern and an algorithm. The pattern relation type is not affected by this.
@@ -312,30 +289,24 @@ export class PatternRelationService extends BaseService {
    */
   deletePatternRelation$Response(params: {
     patternRelationId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      PatternRelationService.DeletePatternRelationPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, PatternRelationService.DeletePatternRelationPath, 'delete');
     if (params) {
+
       rb.path('patternRelationId', params.patternRelationId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -348,9 +319,12 @@ export class PatternRelationService extends BaseService {
    */
   deletePatternRelation(params: {
     patternRelationId: string;
+
   }): Observable<void> {
+
     return this.deletePatternRelation$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
+
 }

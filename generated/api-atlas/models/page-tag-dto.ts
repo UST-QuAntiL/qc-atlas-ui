@@ -2,16 +2,4 @@
 import { Pageable } from './pageable';
 import { Sort } from './sort';
 import { TagDto } from './tag-dto';
-export type PageTagDto = {
-  totalPages?: number;
-  totalElements?: number;
-  number?: number;
-  pageable?: Pageable;
-  last?: boolean;
-  numberOfElements?: number;
-  first?: boolean;
-  size?: number;
-  content?: Array<TagDto>;
-  sort?: Sort;
-  empty?: boolean;
-};
+export type PageTagDto = { 'totalPages'?: number, 'totalElements'?: number, 'pageable'?: Pageable, 'first'?: boolean, 'sort'?: Sort, 'number'?: number, 'numberOfElements'?: number, 'last'?: boolean, 'size'?: number, 'content'?: Array<TagDto>, 'empty'?: boolean };

@@ -8,11 +8,11 @@ import { ApplicationAreasService } from 'api-atlas/services/application-areas.se
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { TagDto } from 'api-atlas/models/tag-dto';
+import { RevisionDto } from 'api-atlas/models/revision-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
-import {EntityModelRevisionDto} from "api-atlas/models/entity-model-revision-dto";
 
 @Component({
   selector: 'app-algorithm-view',
@@ -22,7 +22,7 @@ import {EntityModelRevisionDto} from "api-atlas/models/entity-model-revision-dto
 export class AlgorithmViewComponent implements OnInit, OnDestroy {
   readonly UiFeatures = UiFeatures;
 
-  revisions: EntityModelRevisionDto[] = [];
+  revisions: RevisionDto[] = [];
   algorithm: AlgorithmDto;
   frontendAlgorithm: AlgorithmDto;
   applicationAreas: ApplicationAreaDto[];
@@ -314,7 +314,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     return algorithm.acronym ? header + ' (' + algorithm.acronym + ')' : header;
   }
 
-  getRevision(revision: EntityModelRevisionDto): void {
+  getRevision(revision: RevisionDto): void {
     this.algorithmService
       .getAlgorithmRevision({
         algorithmId: this.algorithm.id,
@@ -358,8 +358,8 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
 
   prepareRevisionData(data): void {
     // Read all incoming data
-    if (data._embedded) {
-      this.revisions = data._embedded.revisions;
+    if (data.content) {
+      this.revisions = data.content;
     } else {
       this.revisions = [];
     }

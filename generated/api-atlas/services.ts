@@ -9,5 +9,4 @@ export { PatternRelationService } from './services/pattern-relation.service';
 export { PatternRelationTypeService } from './services/pattern-relation-type.service';
 export { ProblemTypeService } from './services/problem-type.service';
 export { PublicationService } from './services/publication.service';
-export { RootService } from './services/root.service';
 export { TagService } from './services/tag.service';

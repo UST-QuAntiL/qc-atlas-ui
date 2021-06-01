@@ -15,7 +15,10 @@ import { PageApplicationAreaDto } from '../models/page-application-area-dto';
   providedIn: 'root',
 })
 export class ApplicationAreasService extends BaseService {
-  constructor(config: ApiConfiguration, http: HttpClient) {
+  constructor(
+    config: ApiConfiguration,
+    http: HttpClient
+  ) {
     super(config, http);
   }
 
@@ -33,6 +36,7 @@ export class ApplicationAreasService extends BaseService {
    * This method doesn't expect any request body.
    */
   getApplicationAreas$Response(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -52,31 +56,27 @@ export class ApplicationAreasService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
+
   }): Observable<StrictHttpResponse<PageApplicationAreaDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ApplicationAreasService.GetApplicationAreasPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ApplicationAreasService.GetApplicationAreasPath, 'get');
     if (params) {
+
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<PageApplicationAreaDto>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<PageApplicationAreaDto>;
+      })
+    );
   }
 
   /**
@@ -88,6 +88,7 @@ export class ApplicationAreasService extends BaseService {
    * This method doesn't expect any request body.
    */
   getApplicationAreas(params?: {
+
     /**
      * Filter criteria for this query
      */
@@ -107,12 +108,11 @@ export class ApplicationAreasService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
+
   }): Observable<PageApplicationAreaDto> {
+
     return this.getApplicationAreas$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<PageApplicationAreaDto>) =>
-          r.body as PageApplicationAreaDto
-      )
+      map((r: StrictHttpResponse<PageApplicationAreaDto>) => r.body as PageApplicationAreaDto)
     );
   }
 
@@ -130,29 +130,24 @@ export class ApplicationAreasService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createApplicationArea$Response(params: {
-    body: ApplicationAreaDto;
+      body: ApplicationAreaDto
   }): Observable<StrictHttpResponse<ApplicationAreaDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ApplicationAreasService.CreateApplicationAreaPath,
-      'post'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ApplicationAreasService.CreateApplicationAreaPath, 'post');
     if (params) {
+
+
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<ApplicationAreaDto>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ApplicationAreaDto>;
+      })
+    );
   }
 
   /**
@@ -164,21 +159,18 @@ export class ApplicationAreasService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createApplicationArea(params: {
-    body: ApplicationAreaDto;
+      body: ApplicationAreaDto
   }): Observable<ApplicationAreaDto> {
+
     return this.createApplicationArea$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<ApplicationAreaDto>) =>
-          r.body as ApplicationAreaDto
-      )
+      map((r: StrictHttpResponse<ApplicationAreaDto>) => r.body as ApplicationAreaDto)
     );
   }
 
   /**
    * Path part for operation getApplicationArea
    */
-  static readonly GetApplicationAreaPath =
-    '/application-areas/{applicationAreaId}';
+  static readonly GetApplicationAreaPath = '/application-areas/{applicationAreaId}';
 
   /**
    * Retrieve a specific application area and its basic properties.
@@ -190,28 +182,24 @@ export class ApplicationAreasService extends BaseService {
    */
   getApplicationArea$Response(params: {
     applicationAreaId: string;
+
   }): Observable<StrictHttpResponse<ApplicationAreaDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ApplicationAreasService.GetApplicationAreaPath,
-      'get'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ApplicationAreasService.GetApplicationAreaPath, 'get');
     if (params) {
+
       rb.path('applicationAreaId', params.applicationAreaId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<ApplicationAreaDto>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ApplicationAreaDto>;
+      })
+    );
   }
 
   /**
@@ -224,20 +212,18 @@ export class ApplicationAreasService extends BaseService {
    */
   getApplicationArea(params: {
     applicationAreaId: string;
+
   }): Observable<ApplicationAreaDto> {
+
     return this.getApplicationArea$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<ApplicationAreaDto>) =>
-          r.body as ApplicationAreaDto
-      )
+      map((r: StrictHttpResponse<ApplicationAreaDto>) => r.body as ApplicationAreaDto)
     );
   }
 
   /**
    * Path part for operation updateApplicationArea
    */
-  static readonly UpdateApplicationAreaPath =
-    '/application-areas/{applicationAreaId}';
+  static readonly UpdateApplicationAreaPath = '/application-areas/{applicationAreaId}';
 
   /**
    * Update the basic properties of an application area (e.g. name).
@@ -249,31 +235,25 @@ export class ApplicationAreasService extends BaseService {
    */
   updateApplicationArea$Response(params: {
     applicationAreaId: string;
-    body: ApplicationAreaDto;
+      body: ApplicationAreaDto
   }): Observable<StrictHttpResponse<ApplicationAreaDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ApplicationAreasService.UpdateApplicationAreaPath,
-      'put'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ApplicationAreasService.UpdateApplicationAreaPath, 'put');
     if (params) {
+
       rb.path('applicationAreaId', params.applicationAreaId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<ApplicationAreaDto>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/hal+json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<ApplicationAreaDto>;
+      })
+    );
   }
 
   /**
@@ -286,21 +266,18 @@ export class ApplicationAreasService extends BaseService {
    */
   updateApplicationArea(params: {
     applicationAreaId: string;
-    body: ApplicationAreaDto;
+      body: ApplicationAreaDto
   }): Observable<ApplicationAreaDto> {
+
     return this.updateApplicationArea$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<ApplicationAreaDto>) =>
-          r.body as ApplicationAreaDto
-      )
+      map((r: StrictHttpResponse<ApplicationAreaDto>) => r.body as ApplicationAreaDto)
     );
   }
 
   /**
    * Path part for operation deleteApplicationArea
    */
-  static readonly DeleteApplicationAreaPath =
-    '/application-areas/{applicationAreaId}';
+  static readonly DeleteApplicationAreaPath = '/application-areas/{applicationAreaId}';
 
   /**
    * Delete an application area. This removes the application area from all algorithms it is references in.
@@ -312,30 +289,24 @@ export class ApplicationAreasService extends BaseService {
    */
   deleteApplicationArea$Response(params: {
     applicationAreaId: string;
+
   }): Observable<StrictHttpResponse<void>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ApplicationAreasService.DeleteApplicationAreaPath,
-      'delete'
-    );
+
+    const rb = new RequestBuilder(this.rootUrl, ApplicationAreasService.DeleteApplicationAreaPath, 'delete');
     if (params) {
+
       rb.path('applicationAreaId', params.applicationAreaId, {});
+
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
   }
 
   /**
@@ -348,9 +319,12 @@ export class ApplicationAreasService extends BaseService {
    */
   deleteApplicationArea(params: {
     applicationAreaId: string;
+
   }): Observable<void> {
+
     return this.deleteApplicationArea$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
+
 }

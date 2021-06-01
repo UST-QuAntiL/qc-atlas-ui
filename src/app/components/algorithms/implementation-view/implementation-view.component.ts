@@ -6,11 +6,10 @@ import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-envir
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { ComputeResourcePropertyDto } from 'api-atlas/models/compute-resource-property-dto';
 import { ImplementationDto, TagDto } from 'api-atlas/models';
-import { EntityModelRevisionDto } from 'api-atlas/models';
+import { RevisionDto } from 'api-atlas/models';
 import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import { QueryParams } from '../../generics/data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
@@ -28,7 +27,7 @@ export class ImplementationViewComponent implements OnInit {
   algorithm: AlgorithmDto;
   softwarePlatformOptions: Option[];
   tags: TagDto[] = [];
-  revisions: EntityModelRevisionDto[] = [];
+  revisions: RevisionDto[] = [];
 
   tableColumns = ['Name', 'Datatype', 'Description', 'Value'];
   variableNames = ['name', 'datatype', 'description', 'value'];
@@ -263,7 +262,7 @@ export class ImplementationViewComponent implements OnInit {
     this.saveImplementation(this.implementation, false);
   }
 
-  getRevision(revision: EntityModelRevisionDto): void {
+  getRevision(revision: RevisionDto): void {
     this.implementationsService
       .getImplementationRevision({
         implementationId: this.implementation.id,
@@ -310,8 +309,8 @@ export class ImplementationViewComponent implements OnInit {
 
   prepareRevisionData(data): void {
     // Read all incoming data
-    if (data._embedded) {
-      this.revisions = data._embedded.revisions;
+    if (data.content) {
+      this.revisions = data.content;
     } else {
       this.revisions = [];
     }
