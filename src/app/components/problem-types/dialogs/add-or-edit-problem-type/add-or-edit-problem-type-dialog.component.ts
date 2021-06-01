@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
-import { EntityModelProblemTypeDto } from 'api-atlas/models';
+import { ProblemTypeDto } from 'api-atlas/models';
 
 @Component({
   selector: 'app-edit-problem-type-dialog',
@@ -16,7 +16,7 @@ import { EntityModelProblemTypeDto } from 'api-atlas/models';
 })
 export class AddOrEditProblemTypeDialogComponent implements OnInit {
   problemTypeFormGroup: FormGroup;
-  existingProblemTypes: EntityModelProblemTypeDto[] = [];
+  existingProblemTypes: ProblemTypeDto[] = [];
 
   constructor(
     private problemTypeService: ProblemTypeService,
@@ -47,8 +47,8 @@ export class AddOrEditProblemTypeDialogComponent implements OnInit {
     });
 
     this.problemTypeService.getProblemTypes().subscribe((types) => {
-      if (types._embedded) {
-        for (const problemType of types._embedded.problemTypes) {
+      if (types.content) {
+        for (const problemType of types.content) {
           // Don't allow to type to become it's own parent
           if (problemType.id !== this.data.id) {
             this.existingProblemTypes.push(problemType);
@@ -76,14 +76,11 @@ export class AddOrEditProblemTypeDialogComponent implements OnInit {
     return this.problemTypeName.errors?.required;
   }
 
-  compareFn(
-    c1: EntityModelProblemTypeDto,
-    c2: EntityModelProblemTypeDto
-  ): boolean {
+  compareFn(c1: ProblemTypeDto, c2: ProblemTypeDto): boolean {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 
-  generateEmptyProblemType(): EntityModelProblemTypeDto {
+  generateEmptyProblemType(): ProblemTypeDto {
     return { id: undefined, name: '--NONE--' };
   }
 }
@@ -92,5 +89,5 @@ export interface DialogData {
   title: string;
   id: string;
   name: string;
-  parentProblemType?: EntityModelProblemTypeDto;
+  parentProblemType?: ProblemTypeDto;
 }

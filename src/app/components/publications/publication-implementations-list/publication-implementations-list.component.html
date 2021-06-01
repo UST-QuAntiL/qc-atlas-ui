@@ -10,11 +10,11 @@
       [emptyTableMessage]="'No linked implementations found'"
       [pagination]=pagingInfo
       [paginatorConfig]=paginatorConfig
-      (elementClicked)="onElementClicked($event)"
-      (datalistConfigChanged)="onDatalistConfigChanged($event)"
+      (elementClicked)="routeToImplementation($event)"
+      (datalistConfigChanged)="getAllLinkedImplementations($event)"
       (submitDeleteElements)="unlinkImplementations($event)"
       (addElement)="openLinkImplementationDialog()"
-      (pageChange)="onPageChanged($event)">
+      (pageChange)="getAllLinkedImplementations($event)">
     </app-table>
   </div>
 </mat-card>

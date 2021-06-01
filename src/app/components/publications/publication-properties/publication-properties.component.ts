@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publication-dto';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
 
 @Component({
   selector: 'app-publication-properties',
@@ -7,8 +7,8 @@ import { EntityModelPublicationDto } from 'api-atlas/models/entity-model-publica
   styleUrls: ['./publication-properties.component.scss'],
 })
 export class PublicationPropertiesComponent implements OnInit {
-  @Input() publication: EntityModelPublicationDto;
-  @Input() frontendPublication: EntityModelPublicationDto;
+  @Input() publication: PublicationDto;
+  @Input() frontendPublication: PublicationDto;
   @Output() updatePublicationField: EventEmitter<{
     field;
     value;

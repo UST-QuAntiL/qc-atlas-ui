@@ -2,15 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
-import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { PublicationService } from 'api-atlas/services/publication.service';
-import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
-import {
-  EntityModelImplementationDto,
-  EntityModelRevisionDto,
-  TagDto,
-} from 'api-atlas/models';
+import { ComputeResourcePropertyDto } from 'api-atlas/models/compute-resource-property-dto';
+import { ImplementationDto, TagDto } from 'api-atlas/models';
+import { EntityModelRevisionDto } from 'api-atlas/models';
 import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
@@ -46,7 +42,7 @@ export class ImplementationViewComponent implements OnInit {
     { heading: '', subHeading: '' },
     { heading: '', subHeading: '' },
   ];
-  computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
+  computeResourceProperties: ComputeResourcePropertyDto[] = [];
   generalTabVisible = true;
   revisionBadgeHidden = true;
   revisionCounter = 0;
@@ -123,10 +119,6 @@ export class ImplementationViewComponent implements OnInit {
     }
   }
 
-  onDatalistConfigChanged(params: QueryParams): void {
-    this.publicationService.getPublications(params).subscribe((data) => {});
-  }
-
   onElementClicked(implementation: any): void {
     this.router.navigate([
       'algorithms',
@@ -136,9 +128,7 @@ export class ImplementationViewComponent implements OnInit {
     ]);
   }
 
-  updateComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  updateComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.algorithmService
       .updateComputeResourcePropertyOfImplementation({
         algorithmId: this.implementation.implementedAlgorithmId,
@@ -161,9 +151,7 @@ export class ImplementationViewComponent implements OnInit {
       );
   }
 
-  addComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  addComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.algorithmService
       .createComputeResourcePropertyForImplementation({
         algorithmId: this.implementation.implementedAlgorithmId,
@@ -185,9 +173,7 @@ export class ImplementationViewComponent implements OnInit {
       );
   }
 
-  deleteComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  deleteComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.utilService
       .createDialog(ConfirmDialogComponent, {
         title: 'Confirm Deletion',
@@ -209,8 +195,7 @@ export class ImplementationViewComponent implements OnInit {
             .subscribe(
               () => {
                 this.computeResourceProperties = this.computeResourceProperties.filter(
-                  (elem: EntityModelComputeResourcePropertyDto) =>
-                    elem.id !== property.id
+                  (elem: ComputeResourcePropertyDto) => elem.id !== property.id
                 );
                 this.fetchComputeResourceProperties();
                 this.utilService.callSnackBar(
@@ -235,9 +220,8 @@ export class ImplementationViewComponent implements OnInit {
         page: -1,
       })
       .subscribe((e) => {
-        if (e._embedded != null) {
-          this.computeResourceProperties =
-            e._embedded.computeResourceProperties;
+        if (e.content != null) {
+          this.computeResourceProperties = e.content;
         }
       });
   }
@@ -341,7 +325,7 @@ export class ImplementationViewComponent implements OnInit {
   private loadGeneral(): void {
     this.executionEnvironmentsService.getSoftwarePlatforms().subscribe(
       (list) => {
-        const softwarePlatforms = list._embedded?.softwarePlatforms || [];
+        const softwarePlatforms = list.content || [];
         this.softwarePlatformOptions = softwarePlatforms.map((sp) => ({
           label: sp.name,
           value: sp.id,
@@ -382,7 +366,7 @@ export class ImplementationViewComponent implements OnInit {
             this.implementation = impl;
             this.frontendImplementation = JSON.parse(
               JSON.stringify(impl)
-            ) as EntityModelImplementationDto;
+            ) as ImplementationDto;
             this.links[1].heading = this.implementation.name;
             this.fetchComputeResourceProperties();
             this.getTagsForImplementation(algoId, implId);
@@ -405,8 +389,8 @@ export class ImplementationViewComponent implements OnInit {
       })
       .subscribe(
         (next) => {
-          if (next._embedded?.tags) {
-            this.tags = next._embedded.tags.map((t) => ({
+          if (next) {
+            this.tags = next.map((t) => ({
               value: t.value,
               category: t.category,
             }));

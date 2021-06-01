@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EntityModelComputeResourceDto } from 'api-atlas/models/entity-model-compute-resource-dto';
+import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -17,8 +17,8 @@ import { UiFeatures } from '../../../../directives/qc-atlas-ui-repository-config
 })
 export class ComputeResourceViewComponent implements OnInit {
   readonly UiFeatures = UiFeatures;
-  computeResource: EntityModelComputeResourceDto;
-  frontendComputeResource: EntityModelComputeResourceDto;
+  computeResource: ComputeResourceDto;
+  frontendComputeResource: ComputeResourceDto;
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
@@ -38,11 +38,11 @@ export class ComputeResourceViewComponent implements OnInit {
       this.executionEnvironmentsService
         .getComputeResource({ computeResourceId: crId })
         .subscribe(
-          (computeResource: EntityModelComputeResourceDto) => {
+          (computeResource: ComputeResourceDto) => {
             this.computeResource = computeResource;
             this.frontendComputeResource = JSON.parse(
               JSON.stringify(computeResource)
-            ) as EntityModelComputeResourceDto;
+            ) as ComputeResourceDto;
             this.links[0] = {
               heading: this.computeResource.name,
               subHeading: '',
@@ -66,7 +66,7 @@ export class ComputeResourceViewComponent implements OnInit {
   }
 
   saveComputeResource(
-    updatedComputeResource: EntityModelComputeResourceDto,
+    updatedComputeResource: ComputeResourceDto,
     updateFrontendComputeResource: boolean
   ): void {
     this.executionEnvironmentsService
@@ -80,7 +80,7 @@ export class ComputeResourceViewComponent implements OnInit {
           if (updateFrontendComputeResource) {
             this.frontendComputeResource = JSON.parse(
               JSON.stringify(computeRes)
-            ) as EntityModelComputeResourceDto;
+            ) as ComputeResourceDto;
           }
           this.utilService.callSnackBar(
             'Successfully updated compute resource.'

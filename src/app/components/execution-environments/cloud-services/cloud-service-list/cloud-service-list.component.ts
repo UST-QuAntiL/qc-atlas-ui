@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
@@ -11,7 +10,6 @@ import {
   UrlData,
 } from '../../../generics/data-list/data-list.component';
 import { CreateCloudServiceDialogComponent } from '../dialogs/create-cloud-service-dialog.component';
-import { GenericDataService } from '../../../../util/generic-data.service';
 import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog.component';
 
 @Component({
@@ -20,7 +18,7 @@ import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog
   styleUrls: ['./cloud-service-list.component.scss'],
 })
 export class CloudServiceListComponent implements OnInit {
-  @Input() cloudServices: EntityModelCloudServiceDto[];
+  @Input() cloudServices: CloudServiceDto[];
 
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
   variableNames = ['name', 'provider', 'description', 'costModel', 'url'];
@@ -34,7 +32,6 @@ export class CloudServiceListComponent implements OnInit {
   constructor(
     private utilService: UtilService,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
-    private genericDataService: GenericDataService,
     private router: Router
   ) {}
 
@@ -53,23 +50,18 @@ export class CloudServiceListComponent implements OnInit {
     );
   }
 
-  getCloudServicesHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareCloudServiceData(data);
-    });
-  }
-
   prepareCloudServiceData(data): void {
-    if (data._embedded) {
-      this.cloudServices = data._embedded.cloudServices;
+    if (data.content) {
+      this.cloudServices = data.content;
     } else {
       this.cloudServices = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.sort = data.sort;
   }
 
-  onCloudServiceClicked(cloudService: EntityModelCloudServiceDto): void {
+  onCloudServiceClicked(cloudService: CloudServiceDto): void {
     this.router.navigate([
       'execution-environments',
       'cloud-services',
@@ -97,7 +89,7 @@ export class CloudServiceListComponent implements OnInit {
           this.executionEnvironmentsService
             .createCloudService({ body: cloudServiceDto })
             .subscribe(
-              (cloudService: EntityModelCloudServiceDto) => {
+              (cloudService: CloudServiceDto) => {
                 this.router.navigate([
                   'execution-environments',
                   'cloud-services',
@@ -166,10 +158,9 @@ export class CloudServiceListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getCloudServicesHateoas(this.pagingInfo._links.prev.href);
-            } else {
-              this.getCloudServicesHateoas(this.pagingInfo._links.self.href);
+              deleteParams.queryParams.page--;
             }
+            this.getCloudServices(deleteParams.queryParams);
             snackbarMessages.push(
               successfulDeletions,
               deleteParams.elements.length,

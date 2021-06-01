@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
-import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
+import { ComputeResourcePropertyDto } from 'api-atlas/models/compute-resource-property-dto';
 import { EntityModelRevisionDto } from 'api-atlas/models/entity-model-revision-dto';
 
 @Component({
@@ -12,16 +12,16 @@ export class ImplementationPropertiesComponent implements OnInit {
   @Input() implementation: ImplementationDto;
   @Input() frontendImplementation: ImplementationDto;
   @Input()
-  computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
+  computeResourceProperties: ComputeResourcePropertyDto[] = [];
   @Output() addComputeResourceProperty: EventEmitter<
-    EntityModelComputeResourcePropertyDto
-  > = new EventEmitter<EntityModelComputeResourcePropertyDto>();
+    ComputeResourcePropertyDto
+  > = new EventEmitter<ComputeResourcePropertyDto>();
   @Output() deleteComputeResourceProperty: EventEmitter<
-    EntityModelComputeResourcePropertyDto
-  > = new EventEmitter<EntityModelComputeResourcePropertyDto>();
+    ComputeResourcePropertyDto
+  > = new EventEmitter<ComputeResourcePropertyDto>();
   @Output() updateComputeResourceProperty: EventEmitter<
-    EntityModelComputeResourcePropertyDto
-  > = new EventEmitter<EntityModelComputeResourcePropertyDto>();
+    ComputeResourcePropertyDto
+  > = new EventEmitter<ComputeResourcePropertyDto>();
   @Output() updateImplementationField: EventEmitter<{
     field;
     value;
@@ -42,19 +42,13 @@ export class ImplementationPropertiesComponent implements OnInit {
     this.frontendImplementation[field] = value;
   }
 
-  onAddComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  onAddComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.addComputeResourceProperty.emit(property);
   }
-  onDeleteComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  onDeleteComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.deleteComputeResourceProperty.emit(property);
   }
-  onUpdateComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  onUpdateComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.updateComputeResourceProperty.emit(property);
   }
 }

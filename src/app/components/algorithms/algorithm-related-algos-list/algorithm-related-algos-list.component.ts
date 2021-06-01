@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { EntityModelAlgorithmRelationDto } from 'api-atlas/models/entity-model-algorithm-relation-dto';
 import { MatDialog } from '@angular/material/dialog';
 import { AlgorithmRelationDto } from 'api-atlas/models/algorithm-relation-dto';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
@@ -12,7 +10,6 @@ import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../util/util.service';
 import { AddAlgorithmRelationDialogComponent } from '../dialogs/add-algorithm-relation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
-import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-related-algos-list',
@@ -20,10 +17,10 @@ import { GenericDataService } from '../../../util/generic-data.service';
   styleUrls: ['./algorithm-related-algos-list.component.scss'],
 })
 export class AlgorithmRelatedAlgosListComponent implements OnInit {
-  @Input() algorithm: EntityModelAlgorithmDto;
+  @Input() algorithm: AlgorithmDto;
 
   tableObjects: AlgorithmRelationTableObject[];
-  algorithmRelations: EntityModelAlgorithmRelationDto[];
+  algorithmRelations: AlgorithmRelationDto[];
   variableNames: string[] = [
     'targetAlgName',
     'relationTypeName',
@@ -41,8 +38,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     private algorithmService: AlgorithmService,
     private algorithmRelationTypeService: AlgorithmRelationTypeService,
     private utilService: UtilService,
-    private router: Router,
-    private genericDataService: GenericDataService
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -66,22 +62,19 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     );
   }
 
-  getAlgorithmRelationsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((relations) => {
-      this.prepareRelations(relations);
-    });
-  }
-
   prepareRelations(relations): void {
-    if (relations._embedded) {
-      this.algorithmRelations = relations._embedded.algorithmRelations;
+    if (relations.content) {
+      this.algorithmRelations = relations.content;
       this.generateTableObjects();
     } else {
       this.algorithmRelations = [];
       this.tableObjects = [];
     }
-    this.pagingInfo.page = relations.page;
-    this.pagingInfo._links = relations._links;
+    this.pagingInfo.totalPages = relations.totalPages;
+    this.pagingInfo.totalElements = relations.totalElements;
+    this.pagingInfo.number = relations.number;
+    this.pagingInfo.size = relations.size;
+    this.pagingInfo.sort = relations.sort;
   }
 
   createAlgorithmRelation(algorithmRelationDto: AlgorithmRelationDto): void {
@@ -92,13 +85,16 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this.getAlgorithmRelationsHateoas(
-            this.utilService.getLastPageAfterCreation(
-              this.pagingInfo._links.self.href,
-              this.pagingInfo,
-              1
-            )
+          const correctPage = this.utilService.getLastPageAfterCreation(
+            this.pagingInfo,
+            1
           );
+          this.getAlgorithmRelations({
+            algorithmId: this.algorithm.id,
+            size: this.pagingInfo.size,
+            page: correctPage,
+            sort: this.pagingInfo.sort,
+          });
           this.utilService.callSnackBar(
             'Algorithm Relation was successfully created.'
           );
@@ -123,7 +119,12 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this.getAlgorithmRelationsHateoas(this.pagingInfo._links.self.href);
+          this.getAlgorithmRelations({
+            algorithmId: this.algorithm.id,
+            size: this.pagingInfo.size,
+            page: this.pagingInfo.number,
+            sort: this.pagingInfo.sort,
+          });
           this.utilService.callSnackBar(
             'Algorithm Relation was successfully updated.'
           );
@@ -228,14 +229,9 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getAlgorithmRelationsHateoas(
-                this.pagingInfo._links.prev.href
-              );
-            } else {
-              this.getAlgorithmRelationsHateoas(
-                this.pagingInfo._links.self.href
-              );
+              event.queryParams.page--;
             }
+            this.getAlgorithmRelations(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulUnlinks,
@@ -334,6 +330,11 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
           });
         });
     }
+  }
+
+  onPageChanged(event): void {
+    event.algorithmId = this.algorithm.id;
+    this.getAlgorithmRelations(event);
   }
 
   generateRelationDto(

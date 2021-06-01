@@ -9,9 +9,7 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { ComputeResourcePropertyTypeDto } from '../models/compute-resource-property-type-dto';
-import { EntityModelComputeResourcePropertyTypeDto } from '../models/entity-model-compute-resource-property-type-dto';
-import { Link } from '../models/link';
-import { PageMetadata } from '../models/page-metadata';
+import { PageComputeResourcePropertyTypeDto } from '../models/page-compute-resource-property-type-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -55,16 +53,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: {
-        computeResourcePropertyTypes?: Array<
-          EntityModelComputeResourcePropertyTypeDto
-        >;
-      };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageComputeResourcePropertyTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ComputeResourcePropertyTypesService.GetResourcePropertyTypesPath,
@@ -86,14 +75,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              computeResourcePropertyTypes?: Array<
-                EntityModelComputeResourcePropertyTypeDto
-              >;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageComputeResourcePropertyTypeDto>;
         })
       );
   }
@@ -126,34 +108,11 @@ export class ComputeResourcePropertyTypesService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: {
-      computeResourcePropertyTypes?: Array<
-        EntityModelComputeResourcePropertyTypeDto
-      >;
-    };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageComputeResourcePropertyTypeDto> {
     return this.getResourcePropertyTypes$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              computeResourcePropertyTypes?: Array<
-                EntityModelComputeResourcePropertyTypeDto
-              >;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              computeResourcePropertyTypes?: Array<
-                EntityModelComputeResourcePropertyTypeDto
-              >;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageComputeResourcePropertyTypeDto>) =>
+          r.body as PageComputeResourcePropertyTypeDto
       )
     );
   }
@@ -174,15 +133,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    */
   createComputingResourcePropertyType$Response(params: {
     body: ComputeResourcePropertyTypeDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ComputeResourcePropertyTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ComputeResourcePropertyTypesService.CreateComputingResourcePropertyTypePath,
@@ -201,13 +152,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ComputeResourcePropertyTypeDto>;
         })
       );
   }
@@ -222,31 +167,11 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    */
   createComputingResourcePropertyType(params: {
     body: ComputeResourcePropertyTypeDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ComputeResourcePropertyTypeDto> {
     return this.createComputingResourcePropertyType$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-            description?: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ComputeResourcePropertyTypeDto>) =>
+          r.body as ComputeResourcePropertyTypeDto
       )
     );
   }
@@ -267,15 +192,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    */
   getComputingResourcePropertyType$Response(params: {
     computeResourcePropertyTypeId: string;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ComputeResourcePropertyTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ComputeResourcePropertyTypesService.GetComputingResourcePropertyTypePath,
@@ -298,13 +215,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ComputeResourcePropertyTypeDto>;
         })
       );
   }
@@ -319,31 +230,11 @@ export class ComputeResourcePropertyTypesService extends BaseService {
    */
   getComputingResourcePropertyType(params: {
     computeResourcePropertyTypeId: string;
-  }): Observable<{
-    id: string;
-    name: string;
-    datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ComputeResourcePropertyTypeDto> {
     return this.getComputingResourcePropertyType$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-            description?: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ComputeResourcePropertyTypeDto>) =>
+          r.body as ComputeResourcePropertyTypeDto
       )
     );
   }
@@ -365,15 +256,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   updateComputingResourcePropertyType$Response(params: {
     computeResourcePropertyTypeId: string;
     body: ComputeResourcePropertyTypeDto;
-  }): Observable<
-    StrictHttpResponse<{
-      id: string;
-      name: string;
-      datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-      description?: string;
-      _links?: Array<Link>;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<ComputeResourcePropertyTypeDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ComputeResourcePropertyTypesService.UpdateComputingResourcePropertyTypePath,
@@ -398,13 +281,7 @@ export class ComputeResourcePropertyTypesService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-            description?: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ComputeResourcePropertyTypeDto>;
         })
       );
   }
@@ -420,31 +297,11 @@ export class ComputeResourcePropertyTypesService extends BaseService {
   updateComputingResourcePropertyType(params: {
     computeResourcePropertyTypeId: string;
     body: ComputeResourcePropertyTypeDto;
-  }): Observable<{
-    id: string;
-    name: string;
-    datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-    description?: string;
-    _links?: Array<Link>;
-  }> {
+  }): Observable<ComputeResourcePropertyTypeDto> {
     return this.updateComputingResourcePropertyType$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-            description?: string;
-            _links?: Array<Link>;
-          }>
-        ) =>
-          r.body as {
-            id: string;
-            name: string;
-            datatype: 'INTEGER' | 'STRING' | 'FLOAT';
-            description?: string;
-            _links?: Array<Link>;
-          }
+        (r: StrictHttpResponse<ComputeResourcePropertyTypeDto>) =>
+          r.body as ComputeResourcePropertyTypeDto
       )
     );
   }

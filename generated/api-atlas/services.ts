@@ -4,6 +4,7 @@ export { ApplicationAreasService } from './services/application-areas.service';
 export { ComputeResourcePropertyTypesService } from './services/compute-resource-property-types.service';
 export { ExecutionEnvironmentsService } from './services/execution-environments.service';
 export { ImplementationsService } from './services/implementations.service';
+export { LearningMethodsService } from './services/learning-methods.service';
 export { PatternRelationService } from './services/pattern-relation.service';
 export { PatternRelationTypeService } from './services/pattern-relation-type.service';
 export { ProblemTypeService } from './services/problem-type.service';

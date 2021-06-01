@@ -9,9 +9,7 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { ApplicationAreaDto } from '../models/application-area-dto';
-import { EntityModelApplicationAreaDto } from '../models/entity-model-application-area-dto';
-import { Link } from '../models/link';
-import { PageMetadata } from '../models/page-metadata';
+import { PageApplicationAreaDto } from '../models/page-application-area-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -54,12 +52,7 @@ export class ApplicationAreasService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<
-    StrictHttpResponse<{
-      _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
-      page?: PageMetadata;
-    }>
-  > {
+  }): Observable<StrictHttpResponse<PageApplicationAreaDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ApplicationAreasService.GetApplicationAreasPath,
@@ -81,12 +74,7 @@ export class ApplicationAreasService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-            page?: PageMetadata;
-          }>;
+          return r as StrictHttpResponse<PageApplicationAreaDto>;
         })
       );
   }
@@ -119,26 +107,11 @@ export class ApplicationAreasService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<{
-    _embedded?: { applicationAreas?: Array<EntityModelApplicationAreaDto> };
-    page?: PageMetadata;
-  }> {
+  }): Observable<PageApplicationAreaDto> {
     return this.getApplicationAreas$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-            page?: PageMetadata;
-          }>
-        ) =>
-          r.body as {
-            _embedded?: {
-              applicationAreas?: Array<EntityModelApplicationAreaDto>;
-            };
-            page?: PageMetadata;
-          }
+        (r: StrictHttpResponse<PageApplicationAreaDto>) =>
+          r.body as PageApplicationAreaDto
       )
     );
   }
@@ -158,9 +131,7 @@ export class ApplicationAreasService extends BaseService {
    */
   createApplicationArea$Response(params: {
     body: ApplicationAreaDto;
-  }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
-  > {
+  }): Observable<StrictHttpResponse<ApplicationAreaDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ApplicationAreasService.CreateApplicationAreaPath,
@@ -179,11 +150,7 @@ export class ApplicationAreasService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ApplicationAreaDto>;
         })
       );
   }
@@ -198,16 +165,11 @@ export class ApplicationAreasService extends BaseService {
    */
   createApplicationArea(params: {
     body: ApplicationAreaDto;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+  }): Observable<ApplicationAreaDto> {
     return this.createApplicationArea$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
+        (r: StrictHttpResponse<ApplicationAreaDto>) =>
+          r.body as ApplicationAreaDto
       )
     );
   }
@@ -228,9 +190,7 @@ export class ApplicationAreasService extends BaseService {
    */
   getApplicationArea$Response(params: {
     applicationAreaId: string;
-  }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
-  > {
+  }): Observable<StrictHttpResponse<ApplicationAreaDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ApplicationAreasService.GetApplicationAreaPath,
@@ -249,11 +209,7 @@ export class ApplicationAreasService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ApplicationAreaDto>;
         })
       );
   }
@@ -268,16 +224,11 @@ export class ApplicationAreasService extends BaseService {
    */
   getApplicationArea(params: {
     applicationAreaId: string;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+  }): Observable<ApplicationAreaDto> {
     return this.getApplicationArea$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
+        (r: StrictHttpResponse<ApplicationAreaDto>) =>
+          r.body as ApplicationAreaDto
       )
     );
   }
@@ -299,9 +250,7 @@ export class ApplicationAreasService extends BaseService {
   updateApplicationArea$Response(params: {
     applicationAreaId: string;
     body: ApplicationAreaDto;
-  }): Observable<
-    StrictHttpResponse<{ id: string; name: string; _links?: Array<Link> }>
-  > {
+  }): Observable<StrictHttpResponse<ApplicationAreaDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
       ApplicationAreasService.UpdateApplicationAreaPath,
@@ -322,11 +271,7 @@ export class ApplicationAreasService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>;
+          return r as StrictHttpResponse<ApplicationAreaDto>;
         })
       );
   }
@@ -342,16 +287,11 @@ export class ApplicationAreasService extends BaseService {
   updateApplicationArea(params: {
     applicationAreaId: string;
     body: ApplicationAreaDto;
-  }): Observable<{ id: string; name: string; _links?: Array<Link> }> {
+  }): Observable<ApplicationAreaDto> {
     return this.updateApplicationArea$Response(params).pipe(
       map(
-        (
-          r: StrictHttpResponse<{
-            id: string;
-            name: string;
-            _links?: Array<Link>;
-          }>
-        ) => r.body as { id: string; name: string; _links?: Array<Link> }
+        (r: StrictHttpResponse<ApplicationAreaDto>) =>
+          r.body as ApplicationAreaDto
       )
     );
   }

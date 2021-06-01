@@ -1,15 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
+import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { forkJoin, Observable } from 'rxjs';
+import { PageComputeResourceDto } from 'api-atlas/models/page-compute-resource-dto';
 import {
   LinkObject,
   QueryParams,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
-import { GenericDataService } from '../../../../util/generic-data.service';
 import {
   DialogData,
   LinkItemListDialogComponent,
@@ -21,7 +21,7 @@ import {
   styleUrls: ['./cloud-service-compute-resource-list.component.scss'],
 })
 export class CloudServiceComputeResourceListComponent implements OnInit {
-  @Input() cloudService: EntityModelCloudServiceDto;
+  @Input() cloudService: CloudServiceDto;
   displayedData = [];
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
@@ -53,8 +53,7 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
   constructor(
     private executionEnvironmentService: ExecutionEnvironmentsService,
     private router: Router,
-    private utilService: UtilService,
-    private genericDataService: GenericDataService
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -62,59 +61,65 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
     this.getAllLinkedComputeResources();
   }
 
-  getAllComputeResources(search?: QueryParams): Observable<any> {
+  getAllComputeResources(
+    search?: QueryParams
+  ): Observable<PageComputeResourceDto> {
     return this.executionEnvironmentService
       .getComputeResources(search)
       .pipe((data) => data);
   }
 
-  getAllLinkedComputeResources(): void {
+  getAllLinkedComputeResources(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
     this.executionEnvironmentService
       .getComputeResourcesOfCloudService({
         cloudServiceId: this.cloudService.id,
-      })
-      .subscribe((data) => {
-        if (data._embedded) {
-          this.linkObject.linkedData = data._embedded.computeResources;
-        }
-      });
-  }
-
-  getPagedLinkedComputeResources(params: any): void {
-    this.executionEnvironmentService
-      .getComputeResourcesOfCloudService({
-        cloudServiceId: this.cloudService.id,
+        search: params.search,
         page: params.page,
-        size: params.size,
         sort: params.sort,
-        search: params.sort,
+        size: params.size,
       })
-      .subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
+      .subscribe(
+        (data) => {
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
+          }
+          this.updateDisplayedData(data);
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Linked compute resources could not be retrieved.'
+          );
+        }
+      );
   }
 
   updateDisplayedData(data): void {
     // clear link object data
     this.displayedData = [];
     // If compute resources found
-    if (data._embedded) {
-      this.displayedData = data._embedded.computeResources;
+    if (data.content) {
+      this.displayedData = data.content;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
+    this.pagingInfo.search = data.search;
   }
 
   updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If compute resources found
-    if (data._embedded) {
-      this.linkObject.data = data._embedded.computeResources;
+    if (data.content) {
+      this.linkObject.data = data.content;
     }
-    this.dialogData.pagingInfo.page = data.page;
-    this.dialogData.pagingInfo._links = data._links;
+    this.dialogData.pagingInfo.totalPages = data.totalPages;
+    this.dialogData.pagingInfo.number = data.number;
+    this.dialogData.pagingInfo.size = data.size;
+    this.dialogData.pagingInfo.sort = data.sort;
   }
 
   openLinkComputeResourceDialog(): void {
@@ -135,8 +140,8 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-        (page: string) => {
-          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+        (page: QueryParams) => {
+          this.getAllComputeResources(page).subscribe((pageData) => {
             this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
@@ -192,16 +197,17 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
       );
     }
     forkJoin(linkTasks).subscribe(() => {
-      this.getHateaosDataFromGenericService(
-        this.utilService.getLastPageAfterCreation(
-          this.pagingInfo._links.self.href,
-          this.pagingInfo,
-          successfulLinks
-        )
-      ).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedComputeResources();
+      const correctPage = this.utilService.getLastPageAfterCreation(
+        this.pagingInfo,
+        successfulLinks
+      );
+      const parameters: QueryParams = {
+        size: this.pagingInfo.size,
+        page: correctPage,
+        sort: this.pagingInfo.sort,
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedComputeResources(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
@@ -244,17 +250,16 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
-      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
-        successfulDeletions,
-        this.displayedData.length,
-        this.pagingInfo
-      )
-        ? this.pagingInfo._links.prev.href
-        : this.pagingInfo._links.self.href;
-      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedComputeResources();
+      if (
+        this.utilService.isLastPageEmptyAfterDeletion(
+          successfulDeletions,
+          this.displayedData.length,
+          this.pagingInfo
+        )
+      ) {
+        event.queryParams.page--;
+      }
+      this.getAllLinkedComputeResources(event.queryParams);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
@@ -267,29 +272,11 @@ export class CloudServiceComputeResourceListComponent implements OnInit {
     });
   }
 
-  onDatalistConfigChanged(event): void {
-    this.getPagedLinkedComputeResources(event);
-  }
-
-  onElementClicked(computeResource: ComputeResourceDto): void {
-    this.routeToComputeResource(computeResource);
-  }
-
   routeToComputeResource(computeResource: ComputeResourceDto): void {
     this.router.navigate([
       'execution-environments',
       'compute-resources',
       computeResource.id,
     ]);
-  }
-
-  getHateaosDataFromGenericService(url: string): Observable<any> {
-    return this.genericDataService.getData(url).pipe((data) => data);
-  }
-
-  onPageChanged(event): void {
-    this.getHateaosDataFromGenericService(event).subscribe((data) => {
-      this.updateDisplayedData(data);
-    });
   }
 }

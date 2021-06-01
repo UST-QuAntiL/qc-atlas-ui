@@ -1,16 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EntityModelSoftwarePlatformDto } from 'api-atlas/models/entity-model-software-platform-dto';
+import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import { forkJoin, Observable } from 'rxjs';
+import { PageImplementationDto } from 'api-atlas/models/page-implementation-dto';
 import {
   LinkObject,
   QueryParams,
 } from '../../../generics/data-list/data-list.component';
 import { UtilService } from '../../../../util/util.service';
-import { GenericDataService } from '../../../../util/generic-data.service';
 import {
   DialogData,
   LinkItemListDialogComponent,
@@ -22,7 +22,7 @@ import {
   styleUrls: ['./software-platform-impl-list.component.scss'],
 })
 export class SoftwarePlatformImplListComponent implements OnInit {
-  @Input() softwarePlatform: EntityModelSoftwarePlatformDto;
+  @Input() softwarePlatform: SoftwarePlatformDto;
   displayedData = [];
   tableColumns = [
     'Name',
@@ -67,8 +67,7 @@ export class SoftwarePlatformImplListComponent implements OnInit {
     private executionEnvironmentService: ExecutionEnvironmentsService,
     private implementationService: ImplementationsService,
     private router: Router,
-    private utilService: UtilService,
-    private genericDataService: GenericDataService
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -76,23 +75,30 @@ export class SoftwarePlatformImplListComponent implements OnInit {
     this.getAllLinkedImplementations();
   }
 
-  getAllImplementations(search?: QueryParams): Observable<any> {
+  getAllImplementations(
+    search?: QueryParams
+  ): Observable<PageImplementationDto> {
     return this.implementationService
       .getImplementations(search)
       .pipe((data) => data);
   }
 
-  getAllLinkedImplementations(): void {
+  getAllLinkedImplementations(params: QueryParams = {}): void {
     this.linkObject.linkedData = [];
     this.executionEnvironmentService
       .getImplementationsOfSoftwarePlatform({
         softwarePlatformId: this.softwarePlatform.id,
+        search: params.search,
+        page: params.page,
+        sort: params.sort,
+        size: params.size,
       })
       .subscribe(
         (data) => {
-          if (data._embedded) {
-            this.linkObject.linkedData = data._embedded.implementations;
+          if (data.content) {
+            this.linkObject.linkedData = data.content;
           }
+          this.updateDisplayedData(data);
         },
         () => {
           this.utilService.callSnackBar(
@@ -102,40 +108,32 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       );
   }
 
-  getPagedLinkedImplementations(params: any): void {
-    this.executionEnvironmentService
-      .getImplementationsOfSoftwarePlatform({
-        softwarePlatformId: this.softwarePlatform.id,
-        page: params.page,
-        size: params.size,
-        sort: params.sort,
-        search: params.sort,
-      })
-      .subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-  }
-
   updateDisplayedData(data): void {
     // clear link object data
     this.displayedData = [];
     // If implementations found
-    if (data._embedded) {
-      this.displayedData = data._embedded.implementations;
+    if (data.content) {
+      this.displayedData = data.content;
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
+    this.pagingInfo.search = data.search;
   }
 
   updateLinkDialogData(data): void {
     // clear link object data
     this.linkObject.data = [];
     // If implementations found
-    if (data._embedded) {
-      this.linkObject.data = data._embedded.implementations;
+    if (data.content) {
+      this.linkObject.data = data.content;
     }
-    this.dialogData.pagingInfo.page = data.page;
-    this.dialogData.pagingInfo._links = data._links;
+    this.dialogData.pagingInfo.totalPages = data.totalPages;
+    this.dialogData.pagingInfo.number = data.number;
+    this.dialogData.pagingInfo.size = data.size;
+    this.dialogData.pagingInfo.sort = data.sort;
   }
 
   openLinkImplementationDialog(): void {
@@ -156,8 +154,8 @@ export class SoftwarePlatformImplListComponent implements OnInit {
         }
       );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
-        (page: string) => {
-          this.getHateaosDataFromGenericService(page).subscribe((pageData) => {
+        (page: QueryParams) => {
+          this.getAllImplementations(page).subscribe((pageData) => {
             this.updateLinkDialogData(pageData);
             dialogRef.componentInstance.data.linkObject = this.linkObject;
           });
@@ -213,16 +211,17 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       );
     }
     forkJoin(linkTasks).subscribe(() => {
-      this.getHateaosDataFromGenericService(
-        this.utilService.getLastPageAfterCreation(
-          this.pagingInfo._links.self.href,
-          this.pagingInfo,
-          successfulLinks
-        )
-      ).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedImplementations();
+      const correctPage = this.utilService.getLastPageAfterCreation(
+        this.pagingInfo,
+        successfulLinks
+      );
+      const parameters: QueryParams = {
+        size: this.pagingInfo.size,
+        page: correctPage,
+        sort: this.pagingInfo.sort,
+        search: this.pagingInfo.search,
+      };
+      this.getAllLinkedImplementations(parameters);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulLinks,
@@ -265,17 +264,16 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       );
     }
     forkJoin(deletionTasks).subscribe(() => {
-      const pagingInfo = this.utilService.isLastPageEmptyAfterDeletion(
-        successfulDeletions,
-        this.displayedData.length,
-        this.pagingInfo
-      )
-        ? this.pagingInfo._links.prev.href
-        : this.pagingInfo._links.self.href;
-      this.getHateaosDataFromGenericService(pagingInfo).subscribe((data) => {
-        this.updateDisplayedData(data);
-      });
-      this.getAllLinkedImplementations();
+      if (
+        this.utilService.isLastPageEmptyAfterDeletion(
+          successfulDeletions,
+          this.displayedData.length,
+          this.pagingInfo
+        )
+      ) {
+        event.queryParams.page--;
+      }
+      this.getAllLinkedImplementations(event.queryParams);
       snackbarMessages.push(
         this.utilService.generateFinishingSnackbarMessage(
           successfulDeletions,
@@ -288,14 +286,6 @@ export class SoftwarePlatformImplListComponent implements OnInit {
     });
   }
 
-  onDatalistConfigChanged(event): void {
-    this.getPagedLinkedImplementations(event);
-  }
-
-  onElementClicked(implementation: ImplementationDto): void {
-    this.routeToImplementation(implementation);
-  }
-
   routeToImplementation(implementation: ImplementationDto): void {
     this.router.navigate([
       'algorithms',
@@ -303,15 +293,5 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       'implementations',
       implementation.id,
     ]);
-  }
-
-  getHateaosDataFromGenericService(url: string): Observable<any> {
-    return this.genericDataService.getData(url).pipe((data) => data);
-  }
-
-  onPageChanged(event): void {
-    this.getHateaosDataFromGenericService(event).subscribe((data) => {
-      this.updateDisplayedData(data);
-    });
   }
 }

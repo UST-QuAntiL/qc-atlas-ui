@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EntityModelCloudServiceDto } from 'api-atlas/models/entity-model-cloud-service-dto';
+import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -15,8 +15,8 @@ import { UtilService } from '../../../../util/util.service';
   styleUrls: ['./cloud-service-view.component.scss'],
 })
 export class CloudServiceViewComponent implements OnInit {
-  cloudService: EntityModelCloudServiceDto;
-  frontendCloudService: EntityModelCloudServiceDto;
+  cloudService: CloudServiceDto;
+  frontendCloudService: CloudServiceDto;
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
   private routeSub: Subscription;
@@ -35,11 +35,11 @@ export class CloudServiceViewComponent implements OnInit {
       this.executionEnvironmentsService
         .getCloudService({ cloudServiceId: csId })
         .subscribe(
-          (cloudService: EntityModelCloudServiceDto) => {
+          (cloudService: CloudServiceDto) => {
             this.cloudService = cloudService;
             this.frontendCloudService = JSON.parse(
               JSON.stringify(cloudService)
-            ) as EntityModelCloudServiceDto;
+            ) as CloudServiceDto;
             this.links[0] = {
               heading: this.cloudService.name,
               subHeading: '',
@@ -65,7 +65,7 @@ export class CloudServiceViewComponent implements OnInit {
   }
 
   saveCloudService(
-    updatedCloudService: EntityModelCloudServiceDto,
+    updatedCloudService: CloudServiceDto,
     updateFrontendCloudService: boolean
   ): void {
     this.executionEnvironmentsService
@@ -79,7 +79,7 @@ export class CloudServiceViewComponent implements OnInit {
           if (updateFrontendCloudService) {
             this.frontendCloudService = JSON.parse(
               JSON.stringify(cloudSvc)
-            ) as EntityModelCloudServiceDto;
+            ) as CloudServiceDto;
           }
           this.utilService.callSnackBar(
             'Cloud service was successfully updated.'

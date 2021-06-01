@@ -1,6 +1,6 @@
 {
   "name": "qc-atlas-ui",
-  "version": "v2.0.0",
+  "version": "3.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

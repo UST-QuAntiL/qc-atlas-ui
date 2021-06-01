@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ComputeResourcePropertyTypesService } from 'api-atlas/services/compute-resource-property-types.service';
-import { EntityModelComputeResourcePropertyTypeDto } from 'api-atlas/models/entity-model-compute-resource-property-type-dto';
+import { ComputeResourcePropertyTypeDto } from 'api-atlas/models/compute-resource-property-type-dto';
 import { forkJoin } from 'rxjs';
-import { GenericDataService } from '../../../util/generic-data.service';
 import { UtilService } from '../../../util/util.service';
 // eslint-disable-next-line max-len
 import { AddOrEditComputeResourcePropertyTypeDialogComponent } from '../dialogs/add-or-edit-compute-resource-property-type-dialog/add-or-edit-compute-resource-property-type-dialog.component';
@@ -28,7 +27,6 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
 
   constructor(
     private computeResourcePropertyTypeService: ComputeResourcePropertyTypesService,
-    private genericDataService: GenericDataService,
     private utilService: UtilService
   ) {}
 
@@ -42,22 +40,18 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
       });
   }
 
-  getComputeResourcePropertyTypesHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((data) => {
-      this.prepareComputeResourcePropertyTypeData(data);
-    });
-  }
-
   prepareComputeResourcePropertyTypeData(data): void {
     // Read all incoming data
-    if (data._embedded) {
-      this.computeResourcePropertyTypes =
-        data._embedded.computeResourcePropertyTypes;
+    if (data.content) {
+      this.computeResourcePropertyTypes = data.content;
     } else {
       this.computeResourcePropertyTypes = [];
     }
-    this.pagingInfo.page = data.page;
-    this.pagingInfo._links = data._links;
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.totalElements = data.totalElements;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.size = data.size;
+    this.pagingInfo.sort = data.sort;
   }
 
   onAddElement(): void {
@@ -71,7 +65,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const computeResourcePropertyType: EntityModelComputeResourcePropertyTypeDto = {
+        const computeResourcePropertyType: ComputeResourcePropertyTypeDto = {
           id: undefined,
           name: dialogResult.name,
           datatype: dialogResult.datatype,
@@ -83,13 +77,15 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
           .createComputingResourcePropertyType(params)
           .subscribe(
             () => {
-              this.getComputeResourcePropertyTypesHateoas(
-                this.utilService.getLastPageAfterCreation(
-                  this.pagingInfo._links.self.href,
-                  this.pagingInfo,
-                  1
-                )
+              const correctPage = this.utilService.getLastPageAfterCreation(
+                this.pagingInfo,
+                1
               );
+              this.getComputeResourcePropertyTypes({
+                size: this.pagingInfo.size,
+                page: correctPage,
+                sort: this.pagingInfo.sort,
+              });
               this.utilService.callSnackBar(
                 'Compute resource property type was successfully created.'
               );
@@ -150,14 +146,9 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
                 this.pagingInfo
               )
             ) {
-              this.getComputeResourcePropertyTypesHateoas(
-                this.pagingInfo._links.prev.href
-              );
-            } else {
-              this.getComputeResourcePropertyTypesHateoas(
-                this.pagingInfo._links.self.href
-              );
+              event.queryParams.page--;
             }
+            this.getComputeResourcePropertyTypes(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
@@ -185,7 +176,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const updatedComputeResourcePropertyType: EntityModelComputeResourcePropertyTypeDto = {
+        const updatedComputeResourcePropertyType: ComputeResourcePropertyTypeDto = {
           id: dialogResult.id,
           name: dialogResult.name,
           datatype: dialogResult.datatype,
@@ -200,9 +191,11 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
           .updateComputingResourcePropertyType(params)
           .subscribe(
             () => {
-              this.getComputeResourcePropertyTypesHateoas(
-                this.pagingInfo._links.self.href
-              );
+              this.getComputeResourcePropertyTypes({
+                size: this.pagingInfo.size,
+                page: this.pagingInfo.number,
+                sort: this.pagingInfo.sort,
+              });
               this.utilService.callSnackBar(
                 'Compute resource property type was successfully updated.'
               );

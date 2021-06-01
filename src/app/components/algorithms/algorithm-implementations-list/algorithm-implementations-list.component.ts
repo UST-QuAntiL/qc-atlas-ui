@@ -1,14 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
-import { EntityModelImplementationDto } from 'api-atlas/models/entity-model-implementation-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { UtilService } from '../../../util/util.service';
 import { CreateImplementationDialogComponent } from '../dialogs/create-implementation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
-import { GenericDataService } from '../../../util/generic-data.service';
 
 @Component({
   selector: 'app-algorithm-implementations-list',
@@ -16,9 +14,9 @@ import { GenericDataService } from '../../../util/generic-data.service';
   styleUrls: ['./algorithm-implementations-list.component.scss'],
 })
 export class AlgorithmImplementationsListComponent implements OnInit {
-  @Input() algorithm: EntityModelAlgorithmDto;
+  @Input() algorithm: AlgorithmDto;
 
-  implementations: EntityModelImplementationDto[];
+  implementations: ImplementationDto[];
   variableNames: string[] = ['name', 'description', 'dependencies'];
   tableColumns: string[] = ['Name', 'Description', 'Dependencies'];
   pagingInfo: any = {};
@@ -30,8 +28,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   constructor(
     private algorithmService: AlgorithmService,
     private utilService: UtilService,
-    private router: Router,
-    private genericDataService: GenericDataService
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -49,20 +46,15 @@ export class AlgorithmImplementationsListComponent implements OnInit {
     );
   }
 
-  getImplementationsHateoas(url: string): void {
-    this.genericDataService.getData(url).subscribe((relations) => {
-      this.prepareImplementationData(relations);
-    });
-  }
-
   prepareImplementationData(implementations): void {
-    if (implementations._embedded) {
-      this.implementations = implementations._embedded.implementations;
+    if (implementations.content) {
+      this.implementations = implementations.content;
     } else {
       this.implementations = [];
     }
-    this.pagingInfo.page = implementations.page;
-    this.pagingInfo._links = implementations._links;
+    this.pagingInfo.totalPages = implementations.totalPages;
+    this.pagingInfo.number = implementations.number;
+    this.pagingInfo.sort = implementations.sort;
   }
 
   onAddImplementation(): void {
@@ -150,18 +142,18 @@ export class AlgorithmImplementationsListComponent implements OnInit {
             if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
-                event.elements.length,
+                this.implementations.length,
                 this.pagingInfo
               )
             ) {
-              this.getImplementationsHateoas(this.pagingInfo._links.prev.href);
-            } else {
-              this.getImplementationsHateoas(this.pagingInfo._links.self.href);
+              event.queryParams.page--;
             }
+            event.queryParams.algorithmId = this.algorithm.id;
+            this.getImplementations(event.queryParams);
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
-                dialogResult.data.length,
+                event.elements.length,
                 'implementations'
               )
             );
@@ -171,7 +163,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
       });
   }
 
-  onImplementationClicked(implementation: EntityModelImplementationDto): void {
+  onImplementationClicked(implementation: ImplementationDto): void {
     this.router.navigate([
       'algorithms',
       this.algorithm.id,

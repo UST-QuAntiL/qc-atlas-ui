@@ -8,11 +8,11 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { EntityModelAlgorithmDto } from 'api-atlas/models/entity-model-algorithm-dto';
 import {
-  EntityModelApplicationAreaDto,
-  EntityModelComputeResourcePropertyDto,
-  EntityModelProblemTypeDto,
+  AlgorithmDto,
+  ApplicationAreaDto,
+  ComputeResourcePropertyDto,
+  ProblemTypeDto,
 } from 'api-atlas/models';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
@@ -36,26 +36,26 @@ import { UtilService } from '../../../util/util.service';
 })
 export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   @Output() addApplicationArea: EventEmitter<
-    EntityModelApplicationAreaDto
-  > = new EventEmitter<EntityModelApplicationAreaDto>();
+    ApplicationAreaDto
+  > = new EventEmitter<ApplicationAreaDto>();
   @Output() removeApplicationArea: EventEmitter<
-    EntityModelApplicationAreaDto
-  > = new EventEmitter<EntityModelApplicationAreaDto>();
-  @Output() onAddProblemType: EventEmitter<
-    EntityModelProblemTypeDto
-  > = new EventEmitter<EntityModelProblemTypeDto>();
+    ApplicationAreaDto
+  > = new EventEmitter<ApplicationAreaDto>();
+  @Output() onAddProblemType: EventEmitter<ProblemTypeDto> = new EventEmitter<
+    ProblemTypeDto
+  >();
   @Output() onRemoveProblemType: EventEmitter<
-    EntityModelProblemTypeDto
-  > = new EventEmitter<EntityModelProblemTypeDto>();
+    ProblemTypeDto
+  > = new EventEmitter<ProblemTypeDto>();
   @Output() updateAlgorithmField: EventEmitter<{
     field;
     value;
   }> = new EventEmitter<{ field; value }>();
 
-  @Input() algorithm: EntityModelAlgorithmDto;
-  @Input() frontendAlgorithm: EntityModelAlgorithmDto;
-  @Input() linkedProblemTypes: EntityModelProblemTypeDto[];
-  @Input() linkedApplicationAreas: EntityModelApplicationAreaDto[];
+  @Input() algorithm: AlgorithmDto;
+  @Input() frontendAlgorithm: AlgorithmDto;
+  @Input() linkedProblemTypes: ProblemTypeDto[];
+  @Input() linkedApplicationAreas: ApplicationAreaDto[];
 
   @ViewChild('problemTypeTree')
   problemTypeTreeComponent: ProblemTypeTreeComponent;
@@ -71,7 +71,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   availableSketchOptions: Option[] = sketchOptions;
   availableQuantumComputationModelOptions: Option[] = quantumComputationModelOptions;
 
-  computeResourceProperties: EntityModelComputeResourcePropertyDto[] = [];
+  computeResourceProperties: ComputeResourcePropertyDto[] = [];
 
   applicationAreaLinkObject: LinkObject = {
     title: 'Link application area with ',
@@ -127,13 +127,13 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     });
   }
 
-  addParentTreeToProblemType(problemType: EntityModelProblemTypeDto): void {
+  addParentTreeToProblemType(problemType: ProblemTypeDto): void {
     this.problemTypeService
       .getProblemTypeParentList({ problemTypeId: problemType.id })
       .subscribe(
         (parents) => {
-          if (parents._embedded) {
-            const parentProblemTypes = parents._embedded.problemTypes;
+          if (parents) {
+            const parentProblemTypes = parents;
             let parentNodes: TreeNode[] = [];
             if (parentProblemTypes.length > 1) {
               parentNodes = this.buildProblemTypeParentTree(parentProblemTypes);
@@ -160,11 +160,11 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       );
   }
 
-  getParentsForNode(problemType: EntityModelProblemTypeDto): void {
+  getParentsForNode(problemType: ProblemTypeDto): void {
     this.addParentTreeToProblemType(problemType);
   }
 
-  buildProblemTypeParentTree(parents: EntityModelProblemTypeDto[]): TreeNode[] {
+  buildProblemTypeParentTree(parents: ProblemTypeDto[]): TreeNode[] {
     parents.shift();
     const type = parents.pop();
     let parent: TreeNode[] = [
@@ -192,7 +192,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     // Search for unlinked problem types if search-text is not empty
     if (search) {
       this.problemTypeService.getProblemTypes({ search }).subscribe((data) => {
-        this.updateLinkableProblemTypes(data._embedded);
+        this.updateLinkableProblemTypes(data.content);
       });
     } else {
       this.problemTypeLinkObject.data = [];
@@ -205,7 +205,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     // If linkable algorithms found
     if (problemTypesData) {
       // Search algorithms and filter only those that are not already linked
-      for (const problemType of problemTypesData.problemTypes) {
+      for (const problemType of problemTypesData) {
         if (
           !this.linkedProblemTypes.some(
             (probType) => probType.id === problemType.id
@@ -225,9 +225,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     this.frontendAlgorithm[field] = value;
   }
 
-  addApplicationAreaEvent(
-    applicationArea: EntityModelApplicationAreaDto
-  ): void {
+  addApplicationAreaEvent(applicationArea: ApplicationAreaDto): void {
     this.addApplicationArea.emit(applicationArea);
   }
 
@@ -237,7 +235,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       this.applicationAreaService
         .getApplicationAreas({ search })
         .subscribe((data) => {
-          this.updateLinkableApplicationAreas(data._embedded);
+          this.updateLinkableApplicationAreas(data.content);
         });
     } else {
       this.applicationAreaLinkObject.data = [];
@@ -250,7 +248,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     // If linkable algorithms found
     if (applicationAreasData) {
       // Search algorithms and filter only those that are not already linked
-      for (const applicationArea of applicationAreasData.applicationAreas) {
+      for (const applicationArea of applicationAreasData) {
         if (
           !this.linkedApplicationAreas.some(
             (applArea) => applArea.id === applicationArea.id
@@ -266,9 +264,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     this.removeApplicationArea.emit(applicationArea);
   }
 
-  addComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  addComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.algorithmService
       .createComputeResourcePropertyForAlgorithm({
         algorithmId: this.algorithm.id,
@@ -289,9 +285,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       );
   }
 
-  updateComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  updateComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.algorithmService
       .updateComputeResourcePropertyOfAlgorithm({
         algorithmId: this.algorithm.id,
@@ -313,9 +307,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
       );
   }
 
-  deleteComputeResourceProperty(
-    property: EntityModelComputeResourcePropertyDto
-  ): void {
+  deleteComputeResourceProperty(property: ComputeResourcePropertyDto): void {
     this.algorithmService
       .deleteComputeResourcePropertyOfAlgorithm({
         algorithmId: this.algorithm.id,
@@ -327,8 +319,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
             'Compute resource property was successfully deleted.'
           );
           this.computeResourceProperties = this.computeResourceProperties.filter(
-            (elem: EntityModelComputeResourcePropertyDto) =>
-              elem.id !== property.id
+            (elem: ComputeResourcePropertyDto) => elem.id !== property.id
           );
           this.fetchComputeResourceProperties();
         },
@@ -347,9 +338,8 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
         size: -1,
       })
       .subscribe((e) => {
-        if (e._embedded != null) {
-          this.computeResourceProperties =
-            e._embedded.computeResourceProperties;
+        if (e.content != null) {
+          this.computeResourceProperties = e.content;
         }
       });
   }

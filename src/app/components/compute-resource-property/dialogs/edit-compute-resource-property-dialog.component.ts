@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { EntityModelComputeResourcePropertyDto } from 'api-atlas/models/entity-model-compute-resource-property-dto';
+import { ComputeResourcePropertyDto } from 'api-atlas/models/compute-resource-property-dto';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { EntityModelComputeResourcePropertyTypeDto } from 'api-atlas/models/entity-model-compute-resource-property-type-dto';
+import { ComputeResourcePropertyTypeDto } from 'api-atlas/models/compute-resource-property-type-dto';
 import {
   AbstractControl,
   FormControl,
@@ -24,9 +24,9 @@ import { CustomErrorStateMatcher } from '../../generics/property-input/default.e
   styleUrls: ['./edit-compute-resource-property-dialog.component.scss'],
 })
 export class EditComputeResourcePropertyDialogComponent implements OnInit {
-  types: EntityModelComputeResourcePropertyTypeDto[] = [];
+  types: ComputeResourcePropertyTypeDto[] = [];
   matcher = new CustomErrorStateMatcher();
-  filteredTypes: EntityModelComputeResourcePropertyTypeDto[];
+  filteredTypes: ComputeResourcePropertyTypeDto[];
   formGroup: FormGroup = new FormGroup({
     typeName: new FormControl('', Validators.minLength(1)),
     typeDesc: new FormControl(),
@@ -34,7 +34,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     value: new FormControl(''),
   });
 
-  baseElement: EntityModelComputeResourcePropertyDto = {
+  baseElement: ComputeResourcePropertyDto = {
     id: null,
     value: '',
     type: {
@@ -45,7 +45,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     },
   };
 
-  selectedType: EntityModelComputeResourcePropertyTypeDto = null;
+  selectedType: ComputeResourcePropertyTypeDto = null;
 
   get typeName(): string {
     return (this.formGroup.controls.typeName as FormControl).value.toString();
@@ -135,15 +135,15 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
         page: -1,
       })
       .subscribe((e) => {
-        if (e._embedded != null) {
-          this.types = e._embedded.computeResourcePropertyTypes;
+        if (e.content != null) {
+          this.types = e.content;
         }
       });
     this.formGroup.controls.value.setValue('');
     this.validateValueInput();
   }
 
-  onTypeSelect(type: EntityModelComputeResourcePropertyTypeDto): void {
+  onTypeSelect(type: ComputeResourcePropertyTypeDto): void {
     this.selectedType = type;
     this.typeDatatype = type.datatype;
     this.typeDescription = type.description;
@@ -208,7 +208,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     };
   }
 
-  private _filter(value: string): EntityModelComputeResourcePropertyTypeDto[] {
+  private _filter(value: string): ComputeResourcePropertyTypeDto[] {
     const val = value.toLowerCase();
     return this.types.filter(
       (type) =>
@@ -222,6 +222,6 @@ export interface ValidatingOption extends Option {
 }
 
 export interface EditComputeResourcePropertyDialogData {
-  entity: EntityModelComputeResourcePropertyDto;
+  entity: ComputeResourcePropertyDto;
   title: string;
 }
