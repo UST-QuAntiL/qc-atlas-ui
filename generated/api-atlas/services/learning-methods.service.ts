@@ -15,10 +15,7 @@ import { PageLearningMethodDto } from '../models/page-learning-method-dto';
   providedIn: 'root',
 })
 export class LearningMethodsService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -36,7 +33,6 @@ export class LearningMethodsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getLearningMethods$Response(params?: {
-
     /**
      * Filter criteria for this query
      */
@@ -56,27 +52,31 @@ export class LearningMethodsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<PageLearningMethodDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LearningMethodsService.GetLearningMethodsPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      LearningMethodsService.GetLearningMethodsPath,
+      'get'
+    );
     if (params) {
-
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PageLearningMethodDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PageLearningMethodDto>;
+        })
+      );
   }
 
   /**
@@ -88,7 +88,6 @@ export class LearningMethodsService extends BaseService {
    * This method doesn't expect any request body.
    */
   getLearningMethods(params?: {
-
     /**
      * Filter criteria for this query
      */
@@ -108,11 +107,12 @@ export class LearningMethodsService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<PageLearningMethodDto> {
-
     return this.getLearningMethods$Response(params).pipe(
-      map((r: StrictHttpResponse<PageLearningMethodDto>) => r.body as PageLearningMethodDto)
+      map(
+        (r: StrictHttpResponse<PageLearningMethodDto>) =>
+          r.body as PageLearningMethodDto
+      )
     );
   }
 
@@ -130,24 +130,29 @@ export class LearningMethodsService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createLearningMethod$Response(params: {
-      body: LearningMethodDto
+    body: LearningMethodDto;
   }): Observable<StrictHttpResponse<LearningMethodDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LearningMethodsService.CreateLearningMethodPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      LearningMethodsService.CreateLearningMethodPath,
+      'post'
+    );
     if (params) {
-
-
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<LearningMethodDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<LearningMethodDto>;
+        })
+      );
   }
 
   /**
@@ -159,18 +164,21 @@ export class LearningMethodsService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createLearningMethod(params: {
-      body: LearningMethodDto
+    body: LearningMethodDto;
   }): Observable<LearningMethodDto> {
-
     return this.createLearningMethod$Response(params).pipe(
-      map((r: StrictHttpResponse<LearningMethodDto>) => r.body as LearningMethodDto)
+      map(
+        (r: StrictHttpResponse<LearningMethodDto>) =>
+          r.body as LearningMethodDto
+      )
     );
   }
 
   /**
    * Path part for operation getLearningMethod
    */
-  static readonly GetLearningMethodPath = '/learning-methods/{learningMethodId}';
+  static readonly GetLearningMethodPath =
+    '/learning-methods/{learningMethodId}';
 
   /**
    * Retrieve a specific learning method and its basic properties.
@@ -182,24 +190,28 @@ export class LearningMethodsService extends BaseService {
    */
   getLearningMethod$Response(params: {
     learningMethodId: string;
-
   }): Observable<StrictHttpResponse<LearningMethodDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LearningMethodsService.GetLearningMethodPath, 'get');
-    if (params) {
-
-      rb.path('learningMethodId', params.learningMethodId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<LearningMethodDto>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      LearningMethodsService.GetLearningMethodPath,
+      'get'
     );
+    if (params) {
+      rb.path('learningMethodId', params.learningMethodId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<LearningMethodDto>;
+        })
+      );
   }
 
   /**
@@ -212,18 +224,20 @@ export class LearningMethodsService extends BaseService {
    */
   getLearningMethod(params: {
     learningMethodId: string;
-
   }): Observable<LearningMethodDto> {
-
     return this.getLearningMethod$Response(params).pipe(
-      map((r: StrictHttpResponse<LearningMethodDto>) => r.body as LearningMethodDto)
+      map(
+        (r: StrictHttpResponse<LearningMethodDto>) =>
+          r.body as LearningMethodDto
+      )
     );
   }
 
   /**
    * Path part for operation updateLearningMethod
    */
-  static readonly UpdateLearningMethodPath = '/learning-methods/{learningMethodId}';
+  static readonly UpdateLearningMethodPath =
+    '/learning-methods/{learningMethodId}';
 
   /**
    * Update the basic properties of an learning method (e.g. name).
@@ -235,25 +249,31 @@ export class LearningMethodsService extends BaseService {
    */
   updateLearningMethod$Response(params: {
     learningMethodId: string;
-      body: LearningMethodDto
+    body: LearningMethodDto;
   }): Observable<StrictHttpResponse<LearningMethodDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LearningMethodsService.UpdateLearningMethodPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      LearningMethodsService.UpdateLearningMethodPath,
+      'put'
+    );
     if (params) {
-
       rb.path('learningMethodId', params.learningMethodId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<LearningMethodDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<LearningMethodDto>;
+        })
+      );
   }
 
   /**
@@ -266,18 +286,21 @@ export class LearningMethodsService extends BaseService {
    */
   updateLearningMethod(params: {
     learningMethodId: string;
-      body: LearningMethodDto
+    body: LearningMethodDto;
   }): Observable<LearningMethodDto> {
-
     return this.updateLearningMethod$Response(params).pipe(
-      map((r: StrictHttpResponse<LearningMethodDto>) => r.body as LearningMethodDto)
+      map(
+        (r: StrictHttpResponse<LearningMethodDto>) =>
+          r.body as LearningMethodDto
+      )
     );
   }
 
   /**
    * Path part for operation deleteLearningMethod
    */
-  static readonly DeleteLearningMethodPath = '/learning-methods/{learningMethodId}';
+  static readonly DeleteLearningMethodPath =
+    '/learning-methods/{learningMethodId}';
 
   /**
    * Delete a learning method. This removes the learning method from all algorithms it is references in.
@@ -289,24 +312,30 @@ export class LearningMethodsService extends BaseService {
    */
   deleteLearningMethod$Response(params: {
     learningMethodId: string;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LearningMethodsService.DeleteLearningMethodPath, 'delete');
-    if (params) {
-
-      rb.path('learningMethodId', params.learningMethodId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      LearningMethodsService.DeleteLearningMethodPath,
+      'delete'
     );
+    if (params) {
+      rb.path('learningMethodId', params.learningMethodId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -317,14 +346,9 @@ export class LearningMethodsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteLearningMethod(params: {
-    learningMethodId: string;
-
-  }): Observable<void> {
-
+  deleteLearningMethod(params: { learningMethodId: string }): Observable<void> {
     return this.deleteLearningMethod$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
-
 }

@@ -1,2 +1,2 @@
 /* tslint:disable */
-export type RevisionDto = { 'id'?: number, 'creationDate'?: string };
+export type RevisionDto = { id?: number; creationDate?: string };

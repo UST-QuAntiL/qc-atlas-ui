@@ -15,10 +15,7 @@ import { PageAlgorithmRelationTypeDto } from '../models/page-algorithm-relation-
   providedIn: 'root',
 })
 export class AlgorithmRelationTypeService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -36,7 +33,6 @@ export class AlgorithmRelationTypeService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAlgorithmRelationTypes$Response(params?: {
-
     /**
      * Filter criteria for this query
      */
@@ -56,27 +52,31 @@ export class AlgorithmRelationTypeService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<PageAlgorithmRelationTypeDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmRelationTypeService.GetAlgorithmRelationTypesPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmRelationTypeService.GetAlgorithmRelationTypesPath,
+      'get'
+    );
     if (params) {
-
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PageAlgorithmRelationTypeDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PageAlgorithmRelationTypeDto>;
+        })
+      );
   }
 
   /**
@@ -88,7 +88,6 @@ export class AlgorithmRelationTypeService extends BaseService {
    * This method doesn't expect any request body.
    */
   getAlgorithmRelationTypes(params?: {
-
     /**
      * Filter criteria for this query
      */
@@ -108,11 +107,12 @@ export class AlgorithmRelationTypeService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<PageAlgorithmRelationTypeDto> {
-
     return this.getAlgorithmRelationTypes$Response(params).pipe(
-      map((r: StrictHttpResponse<PageAlgorithmRelationTypeDto>) => r.body as PageAlgorithmRelationTypeDto)
+      map(
+        (r: StrictHttpResponse<PageAlgorithmRelationTypeDto>) =>
+          r.body as PageAlgorithmRelationTypeDto
+      )
     );
   }
 
@@ -130,24 +130,29 @@ export class AlgorithmRelationTypeService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createAlgorithmRelationType$Response(params: {
-      body: AlgorithmRelationTypeDto
+    body: AlgorithmRelationTypeDto;
   }): Observable<StrictHttpResponse<AlgorithmRelationTypeDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmRelationTypeService.CreateAlgorithmRelationTypePath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmRelationTypeService.CreateAlgorithmRelationTypePath,
+      'post'
+    );
     if (params) {
-
-
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<AlgorithmRelationTypeDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<AlgorithmRelationTypeDto>;
+        })
+      );
   }
 
   /**
@@ -159,18 +164,21 @@ export class AlgorithmRelationTypeService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createAlgorithmRelationType(params: {
-      body: AlgorithmRelationTypeDto
+    body: AlgorithmRelationTypeDto;
   }): Observable<AlgorithmRelationTypeDto> {
-
     return this.createAlgorithmRelationType$Response(params).pipe(
-      map((r: StrictHttpResponse<AlgorithmRelationTypeDto>) => r.body as AlgorithmRelationTypeDto)
+      map(
+        (r: StrictHttpResponse<AlgorithmRelationTypeDto>) =>
+          r.body as AlgorithmRelationTypeDto
+      )
     );
   }
 
   /**
    * Path part for operation getAlgorithmRelationType
    */
-  static readonly GetAlgorithmRelationTypePath = '/algorithm-relation-types/{algorithmRelationTypeId}';
+  static readonly GetAlgorithmRelationTypePath =
+    '/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
    * Retrieve a specific algorithm relation type and its basic properties.
@@ -182,24 +190,28 @@ export class AlgorithmRelationTypeService extends BaseService {
    */
   getAlgorithmRelationType$Response(params: {
     algorithmRelationTypeId: string;
-
   }): Observable<StrictHttpResponse<AlgorithmRelationTypeDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmRelationTypeService.GetAlgorithmRelationTypePath, 'get');
-    if (params) {
-
-      rb.path('algorithmRelationTypeId', params.algorithmRelationTypeId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<AlgorithmRelationTypeDto>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmRelationTypeService.GetAlgorithmRelationTypePath,
+      'get'
     );
+    if (params) {
+      rb.path('algorithmRelationTypeId', params.algorithmRelationTypeId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<AlgorithmRelationTypeDto>;
+        })
+      );
   }
 
   /**
@@ -212,18 +224,20 @@ export class AlgorithmRelationTypeService extends BaseService {
    */
   getAlgorithmRelationType(params: {
     algorithmRelationTypeId: string;
-
   }): Observable<AlgorithmRelationTypeDto> {
-
     return this.getAlgorithmRelationType$Response(params).pipe(
-      map((r: StrictHttpResponse<AlgorithmRelationTypeDto>) => r.body as AlgorithmRelationTypeDto)
+      map(
+        (r: StrictHttpResponse<AlgorithmRelationTypeDto>) =>
+          r.body as AlgorithmRelationTypeDto
+      )
     );
   }
 
   /**
    * Path part for operation updateAlgorithmRelationType
    */
-  static readonly UpdateAlgorithmRelationTypePath = '/algorithm-relation-types/{algorithmRelationTypeId}';
+  static readonly UpdateAlgorithmRelationTypePath =
+    '/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
    * Update the basic properties of an algorithm relation type (e.g. name).
@@ -235,25 +249,31 @@ export class AlgorithmRelationTypeService extends BaseService {
    */
   updateAlgorithmRelationType$Response(params: {
     algorithmRelationTypeId: string;
-      body: AlgorithmRelationTypeDto
+    body: AlgorithmRelationTypeDto;
   }): Observable<StrictHttpResponse<AlgorithmRelationTypeDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmRelationTypeService.UpdateAlgorithmRelationTypePath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmRelationTypeService.UpdateAlgorithmRelationTypePath,
+      'put'
+    );
     if (params) {
-
       rb.path('algorithmRelationTypeId', params.algorithmRelationTypeId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<AlgorithmRelationTypeDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<AlgorithmRelationTypeDto>;
+        })
+      );
   }
 
   /**
@@ -266,18 +286,21 @@ export class AlgorithmRelationTypeService extends BaseService {
    */
   updateAlgorithmRelationType(params: {
     algorithmRelationTypeId: string;
-      body: AlgorithmRelationTypeDto
+    body: AlgorithmRelationTypeDto;
   }): Observable<AlgorithmRelationTypeDto> {
-
     return this.updateAlgorithmRelationType$Response(params).pipe(
-      map((r: StrictHttpResponse<AlgorithmRelationTypeDto>) => r.body as AlgorithmRelationTypeDto)
+      map(
+        (r: StrictHttpResponse<AlgorithmRelationTypeDto>) =>
+          r.body as AlgorithmRelationTypeDto
+      )
     );
   }
 
   /**
    * Path part for operation deleteAlgorithmRelationType
    */
-  static readonly DeleteAlgorithmRelationTypePath = '/algorithm-relation-types/{algorithmRelationTypeId}';
+  static readonly DeleteAlgorithmRelationTypePath =
+    '/algorithm-relation-types/{algorithmRelationTypeId}';
 
   /**
    * Delete an algorithm relation type.
@@ -289,24 +312,30 @@ export class AlgorithmRelationTypeService extends BaseService {
    */
   deleteAlgorithmRelationType$Response(params: {
     algorithmRelationTypeId: string;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AlgorithmRelationTypeService.DeleteAlgorithmRelationTypePath, 'delete');
-    if (params) {
-
-      rb.path('algorithmRelationTypeId', params.algorithmRelationTypeId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmRelationTypeService.DeleteAlgorithmRelationTypePath,
+      'delete'
     );
+    if (params) {
+      rb.path('algorithmRelationTypeId', params.algorithmRelationTypeId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -319,12 +348,9 @@ export class AlgorithmRelationTypeService extends BaseService {
    */
   deleteAlgorithmRelationType(params: {
     algorithmRelationTypeId: string;
-
   }): Observable<void> {
-
     return this.deleteAlgorithmRelationType$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
-
 }

@@ -23,10 +23,7 @@ import { PublicationDto } from '../models/publication-dto';
   providedIn: 'root',
 })
 export class PublicationService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -44,7 +41,6 @@ export class PublicationService extends BaseService {
    * This method doesn't expect any request body.
    */
   getPublications$Response(params?: {
-
     /**
      * Filter criteria for this query
      */
@@ -64,27 +60,31 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<PagePublicationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetPublicationsPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetPublicationsPath,
+      'get'
+    );
     if (params) {
-
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PagePublicationDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PagePublicationDto>;
+        })
+      );
   }
 
   /**
@@ -96,7 +96,6 @@ export class PublicationService extends BaseService {
    * This method doesn't expect any request body.
    */
   getPublications(params?: {
-
     /**
      * Filter criteria for this query
      */
@@ -116,11 +115,12 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<PagePublicationDto> {
-
     return this.getPublications$Response(params).pipe(
-      map((r: StrictHttpResponse<PagePublicationDto>) => r.body as PagePublicationDto)
+      map(
+        (r: StrictHttpResponse<PagePublicationDto>) =>
+          r.body as PagePublicationDto
+      )
     );
   }
 
@@ -138,24 +138,29 @@ export class PublicationService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createPublication$Response(params: {
-      body: PublicationDto
+    body: PublicationDto;
   }): Observable<StrictHttpResponse<PublicationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.CreatePublicationPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.CreatePublicationPath,
+      'post'
+    );
     if (params) {
-
-
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PublicationDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PublicationDto>;
+        })
+      );
   }
 
   /**
@@ -167,9 +172,8 @@ export class PublicationService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createPublication(params: {
-      body: PublicationDto
+    body: PublicationDto;
   }): Observable<PublicationDto> {
-
     return this.createPublication$Response(params).pipe(
       map((r: StrictHttpResponse<PublicationDto>) => r.body as PublicationDto)
     );
@@ -190,24 +194,28 @@ export class PublicationService extends BaseService {
    */
   getPublication$Response(params: {
     publicationId: string;
-
   }): Observable<StrictHttpResponse<PublicationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetPublicationPath, 'get');
-    if (params) {
-
-      rb.path('publicationId', params.publicationId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PublicationDto>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetPublicationPath,
+      'get'
     );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PublicationDto>;
+        })
+      );
   }
 
   /**
@@ -220,9 +228,7 @@ export class PublicationService extends BaseService {
    */
   getPublication(params: {
     publicationId: string;
-
   }): Observable<PublicationDto> {
-
     return this.getPublication$Response(params).pipe(
       map((r: StrictHttpResponse<PublicationDto>) => r.body as PublicationDto)
     );
@@ -243,25 +249,31 @@ export class PublicationService extends BaseService {
    */
   updatePublication$Response(params: {
     publicationId: string;
-      body: PublicationDto
+    body: PublicationDto;
   }): Observable<StrictHttpResponse<PublicationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.UpdatePublicationPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.UpdatePublicationPath,
+      'put'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PublicationDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PublicationDto>;
+        })
+      );
   }
 
   /**
@@ -274,9 +286,8 @@ export class PublicationService extends BaseService {
    */
   updatePublication(params: {
     publicationId: string;
-      body: PublicationDto
+    body: PublicationDto;
   }): Observable<PublicationDto> {
-
     return this.updatePublication$Response(params).pipe(
       map((r: StrictHttpResponse<PublicationDto>) => r.body as PublicationDto)
     );
@@ -297,24 +308,30 @@ export class PublicationService extends BaseService {
    */
   deletePublication$Response(params: {
     publicationId: string;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.DeletePublicationPath, 'delete');
-    if (params) {
-
-      rb.path('publicationId', params.publicationId, {});
-
-    }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.DeletePublicationPath,
+      'delete'
     );
+    if (params) {
+      rb.path('publicationId', params.publicationId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -325,11 +342,7 @@ export class PublicationService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deletePublication(params: {
-    publicationId: string;
-
-  }): Observable<void> {
-
+  deletePublication(params: { publicationId: string }): Observable<void> {
     return this.deletePublication$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -338,7 +351,8 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation getAlgorithmsOfPublication
    */
-  static readonly GetAlgorithmsOfPublicationPath = '/publications/{publicationId}/algorithms';
+  static readonly GetAlgorithmsOfPublicationPath =
+    '/publications/{publicationId}/algorithms';
 
   /**
    * Retrieve referenced algorithms of an publication. If none are found an empty list is returned.
@@ -370,28 +384,32 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<PageAlgorithmDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetAlgorithmsOfPublicationPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetAlgorithmsOfPublicationPath,
+      'get'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PageAlgorithmDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PageAlgorithmDto>;
+        })
+      );
   }
 
   /**
@@ -424,18 +442,19 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<PageAlgorithmDto> {
-
     return this.getAlgorithmsOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<PageAlgorithmDto>) => r.body as PageAlgorithmDto)
+      map(
+        (r: StrictHttpResponse<PageAlgorithmDto>) => r.body as PageAlgorithmDto
+      )
     );
   }
 
   /**
    * Path part for operation linkPublicationAndAlgorithm
    */
-  static readonly LinkPublicationAndAlgorithmPath = '/publications/{publicationId}/algorithms';
+  static readonly LinkPublicationAndAlgorithmPath =
+    '/publications/{publicationId}/algorithms';
 
   /**
    * Add a reference to an existing algorithm (that was previously created via a POST on e.g. /algorithms). Only the ID is required in the request body, other attributes will be ignored and not changed.
@@ -447,25 +466,33 @@ export class PublicationService extends BaseService {
    */
   linkPublicationAndAlgorithm$Response(params: {
     publicationId: string;
-      body: AlgorithmDto
+    body: AlgorithmDto;
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.LinkPublicationAndAlgorithmPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.LinkPublicationAndAlgorithmPath,
+      'post'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -478,9 +505,8 @@ export class PublicationService extends BaseService {
    */
   linkPublicationAndAlgorithm(params: {
     publicationId: string;
-      body: AlgorithmDto
+    body: AlgorithmDto;
   }): Observable<void> {
-
     return this.linkPublicationAndAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -489,7 +515,8 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation getAlgorithmOfPublication
    */
-  static readonly GetAlgorithmOfPublicationPath = '/publications/{publicationId}/algorithms/{algorithmId}';
+  static readonly GetAlgorithmOfPublicationPath =
+    '/publications/{publicationId}/algorithms/{algorithmId}';
 
   /**
    * Retrieve a specific algorithm of a publication.
@@ -502,25 +529,29 @@ export class PublicationService extends BaseService {
   getAlgorithmOfPublication$Response(params: {
     publicationId: string;
     algorithmId: string;
-
   }): Observable<StrictHttpResponse<AlgorithmDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetAlgorithmOfPublicationPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetAlgorithmOfPublicationPath,
+      'get'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.path('algorithmId', params.algorithmId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<AlgorithmDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<AlgorithmDto>;
+        })
+      );
   }
 
   /**
@@ -534,9 +565,7 @@ export class PublicationService extends BaseService {
   getAlgorithmOfPublication(params: {
     publicationId: string;
     algorithmId: string;
-
   }): Observable<AlgorithmDto> {
-
     return this.getAlgorithmOfPublication$Response(params).pipe(
       map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
     );
@@ -545,7 +574,8 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation unlinkPublicationAndAlgorithm
    */
-  static readonly UnlinkPublicationAndAlgorithmPath = '/publications/{publicationId}/algorithms/{algorithmId}';
+  static readonly UnlinkPublicationAndAlgorithmPath =
+    '/publications/{publicationId}/algorithms/{algorithmId}';
 
   /**
    * Delete a reference to a publication of an algorithm. The reference has to be previously created via a POST on /algorithms/{algorithmId}/publications/{publicationId}).
@@ -558,25 +588,31 @@ export class PublicationService extends BaseService {
   unlinkPublicationAndAlgorithm$Response(params: {
     algorithmId: string;
     publicationId: string;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.UnlinkPublicationAndAlgorithmPath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.UnlinkPublicationAndAlgorithmPath,
+      'delete'
+    );
     if (params) {
-
       rb.path('algorithmId', params.algorithmId, {});
       rb.path('publicationId', params.publicationId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -590,9 +626,7 @@ export class PublicationService extends BaseService {
   unlinkPublicationAndAlgorithm(params: {
     algorithmId: string;
     publicationId: string;
-
   }): Observable<void> {
-
     return this.unlinkPublicationAndAlgorithm$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -601,7 +635,8 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation getDiscussionTopicsOfPublication
    */
-  static readonly GetDiscussionTopicsOfPublicationPath = '/publications/{publicationId}/discussion-topics';
+  static readonly GetDiscussionTopicsOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics';
 
   /**
    * Retrieve discussion topics of a publication. If none are found an empty list is returned.
@@ -633,28 +668,32 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<PageDiscussionTopicDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetDiscussionTopicsOfPublicationPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetDiscussionTopicsOfPublicationPath,
+      'get'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PageDiscussionTopicDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PageDiscussionTopicDto>;
+        })
+      );
   }
 
   /**
@@ -687,18 +726,20 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<PageDiscussionTopicDto> {
-
     return this.getDiscussionTopicsOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<PageDiscussionTopicDto>) => r.body as PageDiscussionTopicDto)
+      map(
+        (r: StrictHttpResponse<PageDiscussionTopicDto>) =>
+          r.body as PageDiscussionTopicDto
+      )
     );
   }
 
   /**
    * Path part for operation createDiscussionTopicOfPublication
    */
-  static readonly CreateDiscussionTopicOfPublicationPath = '/publications/{publicationId}/discussion-topics';
+  static readonly CreateDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics';
 
   /**
    * Create a discussion topic of a publication.
@@ -730,12 +771,14 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-      body: DiscussionTopicDto
+    body: DiscussionTopicDto;
   }): Observable<StrictHttpResponse<DiscussionTopicDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.CreateDiscussionTopicOfPublicationPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.CreateDiscussionTopicOfPublicationPath,
+      'post'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
@@ -744,15 +787,19 @@ export class PublicationService extends BaseService {
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<DiscussionTopicDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<DiscussionTopicDto>;
+        })
+      );
   }
 
   /**
@@ -785,18 +832,21 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-      body: DiscussionTopicDto
+    body: DiscussionTopicDto;
   }): Observable<DiscussionTopicDto> {
-
     return this.createDiscussionTopicOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<DiscussionTopicDto>) => r.body as DiscussionTopicDto)
+      map(
+        (r: StrictHttpResponse<DiscussionTopicDto>) =>
+          r.body as DiscussionTopicDto
+      )
     );
   }
 
   /**
    * Path part for operation getDiscussionTopicOfPublication
    */
-  static readonly GetDiscussionTopicOfPublicationPath = '/publications/{publicationId}/discussion-topics/{topicId}';
+  static readonly GetDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}';
 
   /**
    * Retrieve discussion topic of a publication.
@@ -829,29 +879,33 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<DiscussionTopicDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetDiscussionTopicOfPublicationPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetDiscussionTopicOfPublicationPath,
+      'get'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.path('topicId', params.topicId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<DiscussionTopicDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<DiscussionTopicDto>;
+        })
+      );
   }
 
   /**
@@ -885,18 +939,20 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<DiscussionTopicDto> {
-
     return this.getDiscussionTopicOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<DiscussionTopicDto>) => r.body as DiscussionTopicDto)
+      map(
+        (r: StrictHttpResponse<DiscussionTopicDto>) =>
+          r.body as DiscussionTopicDto
+      )
     );
   }
 
   /**
    * Path part for operation updateDiscussionTopicOfPublication
    */
-  static readonly UpdateDiscussionTopicOfPublicationPath = '/publications/{publicationId}/discussion-topics/{topicId}';
+  static readonly UpdateDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}';
 
   /**
    * Update discussion topic of a publication.
@@ -929,12 +985,14 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-      body: DiscussionTopicDto
+    body: DiscussionTopicDto;
   }): Observable<StrictHttpResponse<DiscussionTopicDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.UpdateDiscussionTopicOfPublicationPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.UpdateDiscussionTopicOfPublicationPath,
+      'put'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.path('topicId', params.topicId, {});
       rb.query('search', params.search, {});
@@ -944,15 +1002,19 @@ export class PublicationService extends BaseService {
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<DiscussionTopicDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<DiscussionTopicDto>;
+        })
+      );
   }
 
   /**
@@ -986,18 +1048,21 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-      body: DiscussionTopicDto
+    body: DiscussionTopicDto;
   }): Observable<DiscussionTopicDto> {
-
     return this.updateDiscussionTopicOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<DiscussionTopicDto>) => r.body as DiscussionTopicDto)
+      map(
+        (r: StrictHttpResponse<DiscussionTopicDto>) =>
+          r.body as DiscussionTopicDto
+      )
     );
   }
 
   /**
    * Path part for operation deleteDiscussionTopicOfPublication
    */
-  static readonly DeleteDiscussionTopicOfPublicationPath = '/publications/{publicationId}/discussion-topics/{topicId}';
+  static readonly DeleteDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}';
 
   /**
    * Delete discussion topic of a publication.
@@ -1030,29 +1095,35 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.DeleteDiscussionTopicOfPublicationPath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.DeleteDiscussionTopicOfPublicationPath,
+      'delete'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.path('topicId', params.topicId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -1086,9 +1157,7 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<void> {
-
     return this.deleteDiscussionTopicOfPublication$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
@@ -1097,7 +1166,8 @@ export class PublicationService extends BaseService {
   /**
    * Path part for operation getDiscussionCommentsOfDiscussionTopicOfPublication
    */
-  static readonly GetDiscussionCommentsOfDiscussionTopicOfPublicationPath = '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments';
+  static readonly GetDiscussionCommentsOfDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments';
 
   /**
    * Retrieve discussion comments of a discussion topic of a publication. If none are found an empty list is returned.
@@ -1130,29 +1200,33 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<PageDiscussionCommentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetDiscussionCommentsOfDiscussionTopicOfPublicationPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetDiscussionCommentsOfDiscussionTopicOfPublicationPath,
+      'get'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.path('topicId', params.topicId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PageDiscussionCommentDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PageDiscussionCommentDto>;
+        })
+      );
   }
 
   /**
@@ -1186,18 +1260,22 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<PageDiscussionCommentDto> {
-
-    return this.getDiscussionCommentsOfDiscussionTopicOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<PageDiscussionCommentDto>) => r.body as PageDiscussionCommentDto)
+    return this.getDiscussionCommentsOfDiscussionTopicOfPublication$Response(
+      params
+    ).pipe(
+      map(
+        (r: StrictHttpResponse<PageDiscussionCommentDto>) =>
+          r.body as PageDiscussionCommentDto
+      )
     );
   }
 
   /**
    * Path part for operation createDiscussionCommentOfDiscussionTopicOfPublication
    */
-  static readonly CreateDiscussionCommentOfDiscussionTopicOfPublicationPath = '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments';
+  static readonly CreateDiscussionCommentOfDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments';
 
   /**
    * Create discussion comment of a discussion topic of a publication.
@@ -1230,12 +1308,14 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-      body: DiscussionCommentDto
+    body: DiscussionCommentDto;
   }): Observable<StrictHttpResponse<DiscussionCommentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.CreateDiscussionCommentOfDiscussionTopicOfPublicationPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.CreateDiscussionCommentOfDiscussionTopicOfPublicationPath,
+      'post'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.path('topicId', params.topicId, {});
       rb.query('search', params.search, {});
@@ -1245,15 +1325,19 @@ export class PublicationService extends BaseService {
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<DiscussionCommentDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<DiscussionCommentDto>;
+        })
+      );
   }
 
   /**
@@ -1287,18 +1371,23 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-      body: DiscussionCommentDto
+    body: DiscussionCommentDto;
   }): Observable<DiscussionCommentDto> {
-
-    return this.createDiscussionCommentOfDiscussionTopicOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<DiscussionCommentDto>) => r.body as DiscussionCommentDto)
+    return this.createDiscussionCommentOfDiscussionTopicOfPublication$Response(
+      params
+    ).pipe(
+      map(
+        (r: StrictHttpResponse<DiscussionCommentDto>) =>
+          r.body as DiscussionCommentDto
+      )
     );
   }
 
   /**
    * Path part for operation getDiscussionCommentOfDiscussionTopicOfPublication
    */
-  static readonly GetDiscussionCommentOfDiscussionTopicOfPublicationPath = '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+  static readonly GetDiscussionCommentOfDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
 
   /**
    * Retrieve discussion comment of a discussion topic of a publication.
@@ -1332,12 +1421,13 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<DiscussionCommentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetDiscussionCommentOfDiscussionTopicOfPublicationPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetDiscussionCommentOfDiscussionTopicOfPublicationPath,
+      'get'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.path('topicId', params.topicId, {});
       rb.path('commentId', params.commentId, {});
@@ -1345,17 +1435,20 @@ export class PublicationService extends BaseService {
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<DiscussionCommentDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<DiscussionCommentDto>;
+        })
+      );
   }
 
   /**
@@ -1390,18 +1483,22 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<DiscussionCommentDto> {
-
-    return this.getDiscussionCommentOfDiscussionTopicOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<DiscussionCommentDto>) => r.body as DiscussionCommentDto)
+    return this.getDiscussionCommentOfDiscussionTopicOfPublication$Response(
+      params
+    ).pipe(
+      map(
+        (r: StrictHttpResponse<DiscussionCommentDto>) =>
+          r.body as DiscussionCommentDto
+      )
     );
   }
 
   /**
    * Path part for operation updateDiscussionCommentOfDiscussionTopicOfPublication
    */
-  static readonly UpdateDiscussionCommentOfDiscussionTopicOfPublicationPath = '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+  static readonly UpdateDiscussionCommentOfDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
 
   /**
    * Update discussion comment of a discussion topic of a publication.
@@ -1435,12 +1532,14 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-      body: DiscussionCommentDto
+    body: DiscussionCommentDto;
   }): Observable<StrictHttpResponse<DiscussionCommentDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.UpdateDiscussionCommentOfDiscussionTopicOfPublicationPath, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.UpdateDiscussionCommentOfDiscussionTopicOfPublicationPath,
+      'put'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.path('topicId', params.topicId, {});
       rb.path('commentId', params.commentId, {});
@@ -1451,15 +1550,19 @@ export class PublicationService extends BaseService {
 
       rb.body(params.body, 'application/json');
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<DiscussionCommentDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<DiscussionCommentDto>;
+        })
+      );
   }
 
   /**
@@ -1494,18 +1597,23 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-      body: DiscussionCommentDto
+    body: DiscussionCommentDto;
   }): Observable<DiscussionCommentDto> {
-
-    return this.updateDiscussionCommentOfDiscussionTopicOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<DiscussionCommentDto>) => r.body as DiscussionCommentDto)
+    return this.updateDiscussionCommentOfDiscussionTopicOfPublication$Response(
+      params
+    ).pipe(
+      map(
+        (r: StrictHttpResponse<DiscussionCommentDto>) =>
+          r.body as DiscussionCommentDto
+      )
     );
   }
 
   /**
    * Path part for operation deleteDiscussionCommentOfDiscussionTopicOfPublication
    */
-  static readonly DeleteDiscussionCommentOfDiscussionTopicOfPublicationPath = '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
+  static readonly DeleteDiscussionCommentOfDiscussionTopicOfPublicationPath =
+    '/publications/{publicationId}/discussion-topics/{topicId}/discussion-comments/{commentId}';
 
   /**
    * Delete discussion comment of a discussion topic of a publication.
@@ -1539,12 +1647,13 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.DeleteDiscussionCommentOfDiscussionTopicOfPublicationPath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.DeleteDiscussionCommentOfDiscussionTopicOfPublicationPath,
+      'delete'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.path('topicId', params.topicId, {});
       rb.path('commentId', params.commentId, {});
@@ -1552,17 +1661,22 @@ export class PublicationService extends BaseService {
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
   }
 
   /**
@@ -1597,18 +1711,17 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<void> {
-
-    return this.deleteDiscussionCommentOfDiscussionTopicOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
-    );
+    return this.deleteDiscussionCommentOfDiscussionTopicOfPublication$Response(
+      params
+    ).pipe(map((r: StrictHttpResponse<void>) => r.body as void));
   }
 
   /**
    * Path part for operation getImplementationsOfPublication
    */
-  static readonly GetImplementationsOfPublicationPath = '/publications/{publicationId}/implementations';
+  static readonly GetImplementationsOfPublicationPath =
+    '/publications/{publicationId}/implementations';
 
   /**
    * Retrieve referenced implementations of an publication. If none are found an empty list is returned.
@@ -1640,28 +1753,32 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<StrictHttpResponse<PageImplementationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetImplementationsOfPublicationPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetImplementationsOfPublicationPath,
+      'get'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.query('search', params.search, {});
       rb.query('page', params.page, {});
       rb.query('size', params.size, {});
       rb.query('sort', params.sort, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PageImplementationDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PageImplementationDto>;
+        })
+      );
   }
 
   /**
@@ -1694,18 +1811,20 @@ export class PublicationService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-
   }): Observable<PageImplementationDto> {
-
     return this.getImplementationsOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<PageImplementationDto>) => r.body as PageImplementationDto)
+      map(
+        (r: StrictHttpResponse<PageImplementationDto>) =>
+          r.body as PageImplementationDto
+      )
     );
   }
 
   /**
    * Path part for operation getImplementationOfPublication
    */
-  static readonly GetImplementationOfPublicationPath = '/publications/{publicationId}/implementations/{implementationId}';
+  static readonly GetImplementationOfPublicationPath =
+    '/publications/{publicationId}/implementations/{implementationId}';
 
   /**
    * Retrieve a specific implementation of a publication.
@@ -1718,25 +1837,29 @@ export class PublicationService extends BaseService {
   getImplementationOfPublication$Response(params: {
     publicationId: string;
     implementationId: string;
-
   }): Observable<StrictHttpResponse<ImplementationDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PublicationService.GetImplementationOfPublicationPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PublicationService.GetImplementationOfPublicationPath,
+      'get'
+    );
     if (params) {
-
       rb.path('publicationId', params.publicationId, {});
       rb.path('implementationId', params.implementationId, {});
-
     }
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/hal+json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<ImplementationDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<ImplementationDto>;
+        })
+      );
   }
 
   /**
@@ -1750,12 +1873,12 @@ export class PublicationService extends BaseService {
   getImplementationOfPublication(params: {
     publicationId: string;
     implementationId: string;
-
   }): Observable<ImplementationDto> {
-
     return this.getImplementationOfPublication$Response(params).pipe(
-      map((r: StrictHttpResponse<ImplementationDto>) => r.body as ImplementationDto)
+      map(
+        (r: StrictHttpResponse<ImplementationDto>) =>
+          r.body as ImplementationDto
+      )
     );
   }
-
 }
