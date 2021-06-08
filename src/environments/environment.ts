@@ -37,7 +37,7 @@ export const environment = {
     window['env']['CONFIG_SERVER_HOST_NAME'] &&
     window['env']['CONFIG_SERVER_PORT']
       ? `http://${window['env']['CONFIG_SERVER_HOST_NAME']}:${window['env']['CONFIG_SERVER_PORT']}/v2/keys`
-      : 'http://localhost:5050/v2/keys',
+      : 'http://localhost:2379/v2/keys',
 };
 
 /*
