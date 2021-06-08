@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ApiConfiguration {
-  rootUrl: string = 'http://localhost:8081/nisq-analyzer';
+  rootUrl: string = 'http://localhost:5010/nisq-analyzer';
 }
 
 /**

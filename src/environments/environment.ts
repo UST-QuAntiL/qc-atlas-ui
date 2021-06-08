@@ -8,36 +8,36 @@ export const environment = {
   API_URL:
     window['env']['QC_ATLAS_HOST_NAME'] && window['env']['QC_ATLAS_PORT']
       ? `http://${window['env']['QC_ATLAS_HOST_NAME']}:${window['env']['QC_ATLAS_PORT']}/atlas`
-      : 'http://localhost:8080/atlas',
+      : 'http://localhost:6626/atlas',
   NISQ_API_URL:
     window['env']['NISQ_ANALYZER_HOST_NAME'] &&
     window['env']['NISQ_ANALYZER_PORT']
       ? `http://${window['env']['NISQ_ANALYZER_HOST_NAME']}:${window['env']['NISQ_ANALYZER_PORT']}/nisq-analyzer`
-      : 'http://localhost:8081/nisq-analyzer',
+      : 'http://localhost:5010/nisq-analyzer',
   PATTERN_ATLAS_API_URL:
     window['env']['PATTERN_ATLAS_HOST_NAME'] &&
     window['env']['PATTERN_ATLAS_PORT']
       ? `http://${window['env']['PATTERN_ATLAS_HOST_NAME']}:${window['env']['PATTERN_ATLAS_PORT']}/patternpedia`
-      : 'http://localhost:8082/patternpedia',
+      : 'http://localhost:1977/patternpedia',
   PATTERN_ATLAS_UI_URL:
     window['env']['PATTERN_ATLAS_HOST_NAME'] &&
     window['env']['PATTERN_ATLAS_PORT']
       ? `http://${window['env']['PATTERN_ATLAS_HOST_NAME']}:${window['env']['PATTERN_ATLAS_UI_PORT']}/patternpedia`
-      : 'http://localhost:4201',
+      : 'http://localhost:1978',
   LATEX_RENDERER_API_URL:
     window['env']['LATEX_RENDERER_HOST_NAME'] &&
     window['env']['LATEX_RENDERER_PORT']
       ? `http://${window['env']['LATEX_RENDERER_HOST_NAME']}:${window['env']['LATEX_RENDERER_PORT']}`
-      : 'http://localhost:8083',
+      : 'http://localhost:5030',
   QPROV_API_URL:
     window['env']['QPROV_HOST_NAME'] && window['env']['QPROV_PORT']
       ? `http://${window['env']['QPROV_HOST_NAME']}:${window['env']['QPROV_PORT']}/qprov`
-      : 'http://localhost:8084/qprov',
+      : 'http://localhost:5020/qprov',
   CONFIG_SEVER_URL:
     window['env']['CONFIG_SERVER_HOST_NAME'] &&
     window['env']['CONFIG_SERVER_PORT']
       ? `http://${window['env']['CONFIG_SERVER_HOST_NAME']}:${window['env']['CONFIG_SERVER_PORT']}/v2/keys`
-      : 'http://localhost:2379/v2/keys',
+      : 'http://localhost:5050/v2/keys',
 };
 
 /*
