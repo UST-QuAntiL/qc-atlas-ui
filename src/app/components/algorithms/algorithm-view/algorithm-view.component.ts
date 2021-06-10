@@ -8,6 +8,7 @@ import { ApplicationAreasService } from 'api-atlas/services/application-areas.se
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { TagDto } from 'api-atlas/models/tag-dto';
+import { RevisionDto } from 'api-atlas/models/revision-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
@@ -21,11 +22,15 @@ import { ChangePageGuard } from '../../../services/deactivation-guard';
 export class AlgorithmViewComponent implements OnInit, OnDestroy {
   readonly UiFeatures = UiFeatures;
 
+  revisions: RevisionDto[] = [];
   algorithm: AlgorithmDto;
   frontendAlgorithm: AlgorithmDto;
   applicationAreas: ApplicationAreaDto[];
   problemTypes: ProblemTypeDto[];
   tags: TagDto[] = [];
+  generalTab = true;
+  revisionBadgeHidden = true;
+  revisionCounter = 0;
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
@@ -53,12 +58,13 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
             .toLowerCase();
           subheading = subheading[0].toUpperCase() + subheading.slice(1);
           this.links[0] = {
-            heading: this.createBreadcrumbHeader(),
+            heading: this.createBreadcrumbHeader(this.algorithm),
             subHeading: subheading + ' Algorithm',
           };
           this.getApplicationAreasForAlgorithm(algoId);
           this.getProblemTypesForAlgorithm(algoId);
           this.getTagsForAlgorithm(algoId);
+          this.fetchRevisions();
         },
         () => {
           this.utilService.callSnackBar(
@@ -69,6 +75,13 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  changeTab(tabNumber: number): void {
+    if (tabNumber === 0) {
+      this.generalTab = true;
+    } else {
+      this.generalTab = false;
+    }
+  }
   ngOnDestroy(): void {
     this.routeSub.unsubscribe();
   }
@@ -91,9 +104,12 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
             ) as AlgorithmDto;
           }
           this.links[0] = {
-            heading: this.createBreadcrumbHeader(),
+            heading: this.createBreadcrumbHeader(this.algorithm),
             subHeading: this.algorithm.computationModel + ' Algorithm',
           };
+          this.revisionCounter++;
+          this.revisionBadgeHidden = false;
+          this.fetchRevisions();
           this.utilService.callSnackBar('Algorithm was successfully updated.');
         },
         (error) => {
@@ -292,12 +308,66 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       );
   }
 
-  createBreadcrumbHeader(): string {
-    const header = this.algorithm.name;
+  createBreadcrumbHeader(algorithm: AlgorithmDto): string {
+    const header = algorithm.name;
 
-    return this.algorithm.acronym
-      ? header + ' (' + this.algorithm.acronym + ')'
-      : header;
+    return algorithm.acronym ? header + ' (' + algorithm.acronym + ')' : header;
+  }
+
+  getRevision(revision: RevisionDto): void {
+    this.algorithmService
+      .getAlgorithmRevision({
+        algorithmId: this.algorithm.id,
+        revisionId: revision.id,
+      })
+      .subscribe(
+        (algorithmRevision) => {
+          this.frontendAlgorithm = algorithmRevision;
+          let subheading = this.frontendAlgorithm.computationModel
+            .toString()
+            .toLowerCase();
+          subheading = subheading[0].toUpperCase() + subheading.slice(1);
+          this.links[0] = {
+            heading: this.createBreadcrumbHeader(this.frontendAlgorithm),
+            subHeading: subheading + ' Algorithm',
+          };
+          this.utilService.callSnackBar(
+            'Algorithm revision ' +
+              revision.id +
+              ' has been loaded successfully.'
+          );
+        },
+        (error) => {
+          console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not load Algorithm revision ' + revision.id
+          );
+        }
+      );
+  }
+
+  fetchRevisions(): void {
+    this.algorithmService
+      .getAlgorithmRevisions({
+        algorithmId: this.algorithm.id,
+      })
+      .subscribe((data) => {
+        this.prepareRevisionData(data);
+      });
+  }
+
+  prepareRevisionData(data): void {
+    // Read all incoming data
+    if (data.content) {
+      this.revisions = data.content;
+    } else {
+      this.revisions = [];
+    }
+  }
+
+  resetRevisionBadge(): void {
+    this.revisionBadgeHidden = true;
+    this.revisionCounter = 0;
   }
 
   private getTagsForAlgorithm(algoId: string): void {

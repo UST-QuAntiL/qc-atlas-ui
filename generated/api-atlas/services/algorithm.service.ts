@@ -30,6 +30,7 @@ import { PageLearningMethodDto } from '../models/page-learning-method-dto';
 import { PagePatternRelationDto } from '../models/page-pattern-relation-dto';
 import { PageProblemTypeDto } from '../models/page-problem-type-dto';
 import { PagePublicationDto } from '../models/page-publication-dto';
+import { PageRevisionDto } from '../models/page-revision-dto';
 import { PageSoftwarePlatformDto } from '../models/page-software-platform-dto';
 import { PatternRelationDto } from '../models/pattern-relation-dto';
 import { ProblemTypeDto } from '../models/problem-type-dto';
@@ -6941,6 +6942,165 @@ export class AlgorithmService extends BaseService {
   }): Observable<void> {
     return this.unlinkAlgorithmAndPublication$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation getAlgorithmRevisions
+   */
+  static readonly GetAlgorithmRevisionsPath =
+    '/algorithms/{algorithmId}/revisions';
+
+  /**
+   * Retrieve all algorithm revisions
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAlgorithmRevisions()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlgorithmRevisions$Response(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<StrictHttpResponse<PageRevisionDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetAlgorithmRevisionsPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PageRevisionDto>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve all algorithm revisions
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAlgorithmRevisions$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlgorithmRevisions(params: {
+    algorithmId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<PageRevisionDto> {
+    return this.getAlgorithmRevisions$Response(params).pipe(
+      map((r: StrictHttpResponse<PageRevisionDto>) => r.body as PageRevisionDto)
+    );
+  }
+
+  /**
+   * Path part for operation getAlgorithmRevision
+   */
+  static readonly GetAlgorithmRevisionPath =
+    '/algorithms/{algorithmId}/revisions/{revisionId}';
+
+  /**
+   * Retrieve a specific revision of an algorithm with its basic properties
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAlgorithmRevision()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlgorithmRevision$Response(params: {
+    algorithmId: string;
+    revisionId: number;
+  }): Observable<StrictHttpResponse<AlgorithmDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AlgorithmService.GetAlgorithmRevisionPath,
+      'get'
+    );
+    if (params) {
+      rb.path('algorithmId', params.algorithmId, {});
+      rb.path('revisionId', params.revisionId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<AlgorithmDto>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve a specific revision of an algorithm with its basic properties
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getAlgorithmRevision$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAlgorithmRevision(params: {
+    algorithmId: string;
+    revisionId: number;
+  }): Observable<AlgorithmDto> {
+    return this.getAlgorithmRevision$Response(params).pipe(
+      map((r: StrictHttpResponse<AlgorithmDto>) => r.body as AlgorithmDto)
     );
   }
 

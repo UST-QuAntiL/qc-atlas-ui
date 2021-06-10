@@ -1,14 +1,14 @@
 /* tslint:disable */
-import { ComputeResourcePropertyDto } from './compute-resource-property-dto';
 import { Pageable } from './pageable';
+import { RevisionDto } from './revision-dto';
 import { Sort } from './sort';
-export type PageComputeResourcePropertyDto = {
+export type PageRevisionDto = {
   totalPages?: number;
   totalElements?: number;
   first?: boolean;
   pageable?: Pageable;
   size?: number;
-  content?: Array<ComputeResourcePropertyDto>;
+  content?: Array<RevisionDto>;
   number?: number;
   sort?: Sort;
   numberOfElements?: number;

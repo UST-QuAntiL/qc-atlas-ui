@@ -5,13 +5,13 @@ import { Sort } from './sort';
 export type PageApplicationAreaDto = {
   totalPages?: number;
   totalElements?: number;
-  number?: number;
-  pageable?: Pageable;
-  last?: boolean;
-  numberOfElements?: number;
   first?: boolean;
+  pageable?: Pageable;
   size?: number;
   content?: Array<ApplicationAreaDto>;
+  number?: number;
   sort?: Sort;
+  numberOfElements?: number;
+  last?: boolean;
   empty?: boolean;
 };

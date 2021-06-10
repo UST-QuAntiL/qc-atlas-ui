@@ -10,6 +10,7 @@ import { map, filter } from 'rxjs/operators';
 
 import { ImplementationDto } from '../models/implementation-dto';
 import { PageImplementationDto } from '../models/page-implementation-dto';
+import { PageRevisionDto } from '../models/page-revision-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -168,6 +169,168 @@ export class ImplementationsService extends BaseService {
     implementationId: string;
   }): Observable<ImplementationDto> {
     return this.getImplementation1$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<ImplementationDto>) =>
+          r.body as ImplementationDto
+      )
+    );
+  }
+
+  /**
+   * Path part for operation getImplementationRevisions
+   */
+  static readonly GetImplementationRevisionsPath =
+    '/implementations/{implementationId}/revisions';
+
+  /**
+   * Retrieve all revisions of an implementation
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementationRevisions()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationRevisions$Response(params: {
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<StrictHttpResponse<PageRevisionDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ImplementationsService.GetImplementationRevisionsPath,
+      'get'
+    );
+    if (params) {
+      rb.path('implementationId', params.implementationId, {});
+      rb.query('search', params.search, {});
+      rb.query('page', params.page, {});
+      rb.query('size', params.size, {});
+      rb.query('sort', params.sort, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<PageRevisionDto>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve all revisions of an implementation
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementationRevisions$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationRevisions(params: {
+    implementationId: string;
+
+    /**
+     * Filter criteria for this query
+     */
+    search?: string;
+
+    /**
+     * Zero-based page index (0..N)
+     */
+    page?: number;
+
+    /**
+     * The size of the page to be returned
+     */
+    size?: number;
+
+    /**
+     * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     */
+    sort?: Array<string>;
+  }): Observable<PageRevisionDto> {
+    return this.getImplementationRevisions$Response(params).pipe(
+      map((r: StrictHttpResponse<PageRevisionDto>) => r.body as PageRevisionDto)
+    );
+  }
+
+  /**
+   * Path part for operation getImplementationRevision
+   */
+  static readonly GetImplementationRevisionPath =
+    '/implementations/{implementationId}/revisions/{revisionId}';
+
+  /**
+   * Retrieve a specific revision of an implementation and its basic properties
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getImplementationRevision()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationRevision$Response(params: {
+    implementationId: string;
+    revisionId: number;
+  }): Observable<StrictHttpResponse<ImplementationDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ImplementationsService.GetImplementationRevisionPath,
+      'get'
+    );
+    if (params) {
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('revisionId', params.revisionId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<ImplementationDto>;
+        })
+      );
+  }
+
+  /**
+   * Retrieve a specific revision of an implementation and its basic properties
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getImplementationRevision$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getImplementationRevision(params: {
+    implementationId: string;
+    revisionId: number;
+  }): Observable<ImplementationDto> {
+    return this.getImplementationRevision$Response(params).pipe(
       map(
         (r: StrictHttpResponse<ImplementationDto>) =>
           r.body as ImplementationDto

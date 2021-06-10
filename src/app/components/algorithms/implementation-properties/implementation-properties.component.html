@@ -6,7 +6,8 @@
           name="Name"
           (onChange)="onPropertyChanged($event,'name')"
           (onSaveChanges)="onChangesSaved($event,'name')"
-          [value]="implementation.name"
+          [value]="frontendImplementation.name"
+          [baseValue]="implementation.name"
           [multiline]="true"
         ></app-text-input>
       </mat-card>
@@ -17,7 +18,8 @@
           name="Description"
           (onChange)="onPropertyChanged($event,'description')"
           (onSaveChanges)="onChangesSaved($event,'description')"
-          [value]="implementation.description"
+          [value]="frontendImplementation.description"
+          [baseValue]="implementation.description"
           [multiline]="true"
         ></app-text-input>
       </mat-card>
@@ -28,7 +30,8 @@
           name="Contributors"
           (onChange)="onPropertyChanged($event,'contributors')"
           (onSaveChanges)="onChangesSaved($event,'contributors')"
-          [value]="implementation.contributors"
+          [value]="frontendImplementation.contributors"
+          [baseValue]="implementation.contributors"
           [multiline]="true"
         ></app-text-input>
       </mat-card>
@@ -42,7 +45,8 @@
           name="Version"
           (onChange)="onPropertyChanged($event,'version')"
           (onSaveChanges)="onChangesSaved($event,'version')"
-          [value]="implementation.version"
+          [value]="frontendImplementation.version"
+          [baseValue]="implementation.version"
           [multiline]="true"
         ></app-text-input>
       </mat-card>
@@ -53,7 +57,8 @@
           name="Dependencies"
           (onChange)="onPropertyChanged($event,'dependencies')"
           (onSaveChanges)="onChangesSaved($event,'dependencies')"
-          [value]="implementation.dependencies"
+          [value]="frontendImplementation.dependencies"
+          [baseValue]="implementation.dependencies"
           [multiline]="true"
         ></app-text-input>
       </mat-card>
@@ -64,7 +69,8 @@
           name="License"
           (onChange)="onPropertyChanged($event,'license')"
           (onSaveChanges)="onChangesSaved($event,'license')"
-          [value]="implementation.license"
+          [value]="frontendImplementation.license"
+          [baseValue]="implementation.license"
           [multiline]="true"
         ></app-text-input>
       </mat-card>
@@ -77,7 +83,8 @@
           name="Input Format"
           (onChange)="onPropertyChanged($event,'inputFormat')"
           (onSaveChanges)="onChangesSaved($event,'inputFormat')"
-          [value]="implementation.inputFormat"
+          [value]="frontendImplementation.inputFormat"
+          [baseValue]="implementation.inputFormat"
         ></app-text-input>
       </mat-card>
     </div>
@@ -87,7 +94,8 @@
           name="Parameter"
           (onChange)="onPropertyChanged($event,'parameter')"
           (onSaveChanges)="onChangesSaved($event,'parameter')"
-          [value]="implementation.parameter"
+          [value]="frontendImplementation.parameter"
+          [baseValue]="implementation.parameter"
         ></app-text-input>
       </mat-card>
     </div>
@@ -97,7 +105,8 @@
           name="Output Format"
           (onChange)="onPropertyChanged($event,'outputFormat')"
           (onSaveChanges)="onChangesSaved($event,'outputFormat')"
-          [value]="implementation.outputFormat"
+          [value]="frontendImplementation.outputFormat"
+          [baseValue]="implementation.outputFormat"
         ></app-text-input>
       </mat-card>
     </div>

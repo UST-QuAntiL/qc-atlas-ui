@@ -6,6 +6,8 @@ import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-envir
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { ComputeResourcePropertyDto } from 'api-atlas/models/compute-resource-property-dto';
 import { ImplementationDto, TagDto } from 'api-atlas/models';
+import { RevisionDto } from 'api-atlas/models';
+import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import { UtilService } from '../../../util/util.service';
@@ -25,6 +27,7 @@ export class ImplementationViewComponent implements OnInit {
   algorithm: AlgorithmDto;
   softwarePlatformOptions: Option[];
   tags: TagDto[] = [];
+  revisions: RevisionDto[] = [];
 
   tableColumns = ['Name', 'Datatype', 'Description', 'Value'];
   variableNames = ['name', 'datatype', 'description', 'value'];
@@ -39,9 +42,13 @@ export class ImplementationViewComponent implements OnInit {
     { heading: '', subHeading: '' },
   ];
   computeResourceProperties: ComputeResourcePropertyDto[] = [];
+  generalTabVisible = true;
+  revisionBadgeHidden = true;
+  revisionCounter = 0;
 
   constructor(
     private algorithmService: AlgorithmService,
+    private implementationsService: ImplementationsService,
     private softwarePlatformService: ExecutionEnvironmentsService,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private publicationService: PublicationService,
@@ -85,6 +92,9 @@ export class ImplementationViewComponent implements OnInit {
             heading: this.implementation.name,
             subHeading: subheading,
           };
+          this.revisionCounter++;
+          this.revisionBadgeHidden = false;
+          this.fetchRevisions();
           this.utilService.callSnackBar(
             'Implementation was successfully updated.'
           );
@@ -102,6 +112,9 @@ export class ImplementationViewComponent implements OnInit {
     // replace with switch case once quantum resource etc works in the backend
     if (tabNumber === 0) {
       this.loadGeneral();
+      this.generalTabVisible = true;
+    } else {
+      this.generalTabVisible = false;
     }
   }
 
@@ -249,6 +262,65 @@ export class ImplementationViewComponent implements OnInit {
     this.saveImplementation(this.implementation, false);
   }
 
+  getRevision(revision: RevisionDto): void {
+    this.implementationsService
+      .getImplementationRevision({
+        implementationId: this.implementation.id,
+        revisionId: revision.id,
+      })
+      .subscribe(
+        (implementationRevision) => {
+          this.frontendImplementation = implementationRevision;
+          let subheading = this.algorithm.computationModel
+            .toString()
+            .toLowerCase();
+          subheading =
+            subheading[0].toUpperCase() +
+            subheading.slice(1) +
+            ' Implementation';
+          this.links[1] = {
+            heading: this.frontendImplementation.name,
+            subHeading: subheading,
+          };
+          this.utilService.callSnackBar(
+            'Implementation revision ' +
+              revision.id +
+              ' has been loaded successfully.'
+          );
+        },
+        (error) => {
+          console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not load Implementation revision ' + revision.id
+          );
+        }
+      );
+  }
+
+  fetchRevisions(): void {
+    this.implementationsService
+      .getImplementationRevisions({
+        implementationId: this.implementation.id,
+      })
+      .subscribe((data) => {
+        this.prepareRevisionData(data);
+      });
+  }
+
+  prepareRevisionData(data): void {
+    // Read all incoming data
+    if (data.content) {
+      this.revisions = data.content;
+    } else {
+      this.revisions = [];
+    }
+  }
+
+  resetRevisionBadge(): void {
+    this.revisionBadgeHidden = true;
+    this.revisionCounter = 0;
+  }
+
   private loadGeneral(): void {
     this.executionEnvironmentsService.getSoftwarePlatforms().subscribe(
       (list) => {
@@ -297,6 +369,7 @@ export class ImplementationViewComponent implements OnInit {
             this.links[1].heading = this.implementation.name;
             this.fetchComputeResourceProperties();
             this.getTagsForImplementation(algoId, implId);
+            this.fetchRevisions();
           },
           () => {
             this.utilService.callSnackBar(
