@@ -9,6 +9,7 @@ import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { TagDto } from 'api-atlas/models/tag-dto';
 import { RevisionDto } from 'api-atlas/models/revision-dto';
+import { ApiConfiguration } from 'api-atlas/api-configuration';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
@@ -31,6 +32,8 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   generalTab = true;
   revisionBadgeHidden = true;
   revisionCounter = 0;
+  // TODO: revisionAvailable is obsolete if the planqk platform supports versioning
+  revisionAvailable = false;
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
@@ -42,6 +45,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     private problemTypeService: ProblemTypeService,
     private route: ActivatedRoute,
     private utilService: UtilService,
+    private config: ApiConfiguration,
     public guard: ChangePageGuard
   ) {}
 
@@ -347,13 +351,19 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   }
 
   fetchRevisions(): void {
-    this.algorithmService
-      .getAlgorithmRevisions({
-        algorithmId: this.algorithm.id,
-      })
-      .subscribe((data) => {
-        this.prepareRevisionData(data);
-      });
+    // TODO: check is obsolete if the planqk platform supports versioning
+    if (this.config.rootUrl.includes('platform.planqk')) {
+      this.revisionAvailable = false;
+    } else {
+      this.algorithmService
+        .getAlgorithmRevisions({
+          algorithmId: this.algorithm.id,
+        })
+        .subscribe((data) => {
+          this.revisionAvailable = true;
+          this.prepareRevisionData(data);
+        });
+    }
   }
 
   prepareRevisionData(data): void {

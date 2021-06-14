@@ -3,6 +3,7 @@
     <div class="col">
       <div class="float-left mx-2">
         <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+        <div *ngIf="revisionAvailable">
           <mat-form-field *ngIf="generalTab" floatLabel="always" [matBadge]="revisionCounter.toString()" matBadgeOverlap="false" matBadgePosition="before" [matBadgeHidden]="revisionBadgeHidden" (click)="resetRevisionBadge()">
             <mat-label>Revision</mat-label>
             <mat-select (selectionChange)="getRevision($event.value)" [placeholder]="revisions[revisions.length - 1]?.creationDate">
@@ -11,6 +12,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+        </div>
       </div>
     </div>
     <div class="col">

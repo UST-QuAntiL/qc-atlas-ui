@@ -8,6 +8,7 @@ import { ComputeResourcePropertyDto } from 'api-atlas/models/compute-resource-pr
 import { ImplementationDto, TagDto } from 'api-atlas/models';
 import { RevisionDto } from 'api-atlas/models';
 import { ImplementationsService } from 'api-atlas/services/implementations.service';
+import { ApiConfiguration } from 'api-atlas/api-configuration';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
 import { UtilService } from '../../../util/util.service';
@@ -45,6 +46,8 @@ export class ImplementationViewComponent implements OnInit {
   generalTabVisible = true;
   revisionBadgeHidden = true;
   revisionCounter = 0;
+  // TODO: revisionAvailable is obsolete if the planqk platform supports versioning
+  revisionAvailable = false;
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -55,6 +58,7 @@ export class ImplementationViewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private utilService: UtilService,
+    private config: ApiConfiguration,
     public guard: ChangePageGuard
   ) {}
 
@@ -298,13 +302,19 @@ export class ImplementationViewComponent implements OnInit {
   }
 
   fetchRevisions(): void {
-    this.implementationsService
-      .getImplementationRevisions({
-        implementationId: this.implementation.id,
-      })
-      .subscribe((data) => {
-        this.prepareRevisionData(data);
-      });
+    // TODO: check is obsolete if the planqk platform supports versioning
+    if (this.config.rootUrl.includes('platform.planqk')) {
+      this.revisionAvailable = false;
+    } else {
+      this.implementationsService
+        .getImplementationRevisions({
+          implementationId: this.implementation.id,
+        })
+        .subscribe((data) => {
+          this.revisionAvailable = true;
+          this.prepareRevisionData(data);
+        });
+    }
   }
 
   prepareRevisionData(data): void {
