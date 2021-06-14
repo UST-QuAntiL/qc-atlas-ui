@@ -1,2 +1,6 @@
 /* tslint:disable */
-export type SelectionRequestDto = { parameters?: {}; algorithmId?: string };
+export type SelectionRequestDto = {
+  parameters?: {};
+  algorithmId?: string;
+  refreshToken?: string;
+};

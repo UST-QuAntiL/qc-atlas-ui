@@ -12,6 +12,7 @@ import { AnalysisResultService } from './services/analysis-result.service';
 import { CompilerAnalysisResultService } from './services/compiler-analysis-result.service';
 import { ExecutionResultService } from './services/execution-result.service';
 import { ImplementationService } from './services/implementation.service';
+import { QpuSelectionResultService } from './services/qpu-selection-result.service';
 import { RootService } from './services/root.service';
 import { SdksService } from './services/sdks.service';
 
@@ -27,6 +28,7 @@ import { SdksService } from './services/sdks.service';
     CompilerAnalysisResultService,
     ExecutionResultService,
     ImplementationService,
+    QpuSelectionResultService,
     RootService,
     SdksService,
     ApiConfiguration,
