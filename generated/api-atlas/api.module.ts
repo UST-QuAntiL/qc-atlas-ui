@@ -19,7 +19,6 @@ import { PatternRelationService } from './services/pattern-relation.service';
 import { PatternRelationTypeService } from './services/pattern-relation-type.service';
 import { ProblemTypeService } from './services/problem-type.service';
 import { PublicationService } from './services/publication.service';
-import { RootService } from './services/root.service';
 import { TagService } from './services/tag.service';
 
 /**
@@ -41,7 +40,6 @@ import { TagService } from './services/tag.service';
     PatternRelationTypeService,
     ProblemTypeService,
     PublicationService,
-    RootService,
     TagService,
     ApiConfiguration,
   ],

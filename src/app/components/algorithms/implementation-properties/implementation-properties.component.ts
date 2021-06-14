@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ComputeResourcePropertyDto } from 'api-atlas/models/compute-resource-property-dto';
+import { RevisionDto } from 'api-atlas/models/revision-dto';
 
 @Component({
   selector: 'app-implementation-properties',
@@ -25,6 +26,10 @@ export class ImplementationPropertiesComponent implements OnInit {
     field;
     value;
   }> = new EventEmitter<{ field; value }>();
+  @Output() onRevisionClicked: EventEmitter<RevisionDto> = new EventEmitter<
+    RevisionDto
+  >();
+
   constructor() {}
 
   ngOnInit(): void {}

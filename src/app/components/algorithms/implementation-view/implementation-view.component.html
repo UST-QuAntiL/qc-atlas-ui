@@ -1,10 +1,20 @@
 <div *ngIf="implementation && algorithm" class="m-2">
-  <div class="row p-2 m-0 align-items-center">
+  <div class="row p-2 m-0">
     <div class="col">
-      <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+      <div class="float-left mx-2">
+        <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+        <mat-form-field *ngIf="generalTabVisible" floatLabel="always" [matBadge]="revisionCounter.toString()" matBadgeOverlap="false" matBadgePosition="before" [matBadgeHidden]="revisionBadgeHidden" (click)="resetRevisionBadge()">
+          <mat-label>Revision</mat-label>
+          <mat-select (selectionChange)="getRevision($event.value)" [placeholder]="revisions[revisions.length - 1]?.creationDate">
+            <mat-option *ngFor="let revision of revisions.slice(0,revisions?.length).reverse()" [value]="revision">
+              {{revision.creationDate}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
     <div class="col">
-      <div class="float-right mx-2">
+      <div class="float-right mx-2 p-3">
         <app-tags-component
           [allowRemoving]="true"
           [tags]="tags"
@@ -25,6 +35,7 @@
         (deleteComputeResourceProperty)="deleteComputeResourceProperty($event)"
         (addComputeResourceProperty)="addComputeResourceProperty($event)"
         (updateComputeResourceProperty)="updateComputeResourceProperty($event)"
+        (onRevisionClicked)="getRevision($event)"
       >
       </app-implementation-properties>
       <button
