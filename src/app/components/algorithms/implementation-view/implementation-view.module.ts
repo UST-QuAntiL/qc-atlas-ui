@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatStepperModule } from '@angular/material/stepper';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../../generics/generics.module';
@@ -32,6 +33,8 @@ import { ImplementationPublicationsListComponent } from './implementation-public
 import { ImplementationSoftwareplatformListComponent } from './implementation-softwareplatform-list/implementation-softwareplatform-list.component';
 import { ImplementationExecutionComponent } from './implementation-execution/implementation-execution.component';
 import { ImplementationExecutionDialogComponent } from './dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
+import { ImplementationNisqAnalyzerQpuSelectionComponent } from './implementation-nisq-analyzer-qpu-selection/implementation-nisq-analyzer-qpu-selection.component';
+import { ImplementationNisqAnalyzerQpuSelectionDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-dialog/implementation-nisq-analyzer-qpu-selection-dialog.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,8 @@ import { ImplementationExecutionDialogComponent } from './dialogs/implementation
     ImplementationSoftwareplatformListComponent,
     ImplementationExecutionComponent,
     ImplementationExecutionDialogComponent,
+    ImplementationNisqAnalyzerQpuSelectionComponent,
+    ImplementationNisqAnalyzerQpuSelectionDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -71,6 +76,7 @@ import { ImplementationExecutionDialogComponent } from './dialogs/implementation
     MatSelectModule,
     QcAtlasUiFeatureToggleModule,
     MatBadgeModule,
+    MatStepperModule,
   ],
 })
 export class ImplementationViewModule {}
