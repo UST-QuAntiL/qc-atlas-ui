@@ -17,7 +17,7 @@
         <br>
         <input type="checkbox" [(ngModel)]="config.features.nisqAnalyzerQpuSelection" id="nisqAnalyzerQpuSelection" name="nisqAnalyzerQpuSelection"
                [checked]="config.features.nisqAnalyzerQpuSelection" (change)="toggleFeature(UiFeatures.NISQ_ANALYZER_QPU_SELECTION, $event)">
-        <label for="nisqAnalyzerCompilerComparison">NISQ Analyzer - QPU Selection</label>
+        <label for="nisqAnalyzerQpuSelection">NISQ Analyzer - QPU Selection</label>
         <br>
         <input type="checkbox" [(ngModel)]="config.features.patternAtlas" id="patternAtlas" name="patternAtlas"
                [checked]="config.features.patternAtlas" (change)="toggleFeature(UiFeatures.PATTERN_ATLAS, $event)">
