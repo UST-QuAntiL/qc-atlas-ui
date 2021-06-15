@@ -19,12 +19,10 @@
                 <table
                         mat-table
                         [dataSource]="analyzerJobs$ | async"
-                        matSort
                         multiTemplateDataRows
-                        (matSortChange)="changeSort($event.active, $event.direction)"
                 >
                     <ng-container matColumnDef="time">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        <th mat-header-cell *matHeaderCellDef>
                             Time
                         </th>
                         <td mat-cell *matCellDef="let element">
@@ -33,7 +31,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="ready">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        <th mat-header-cell *matHeaderCellDef>
                             Readiness
                         </th>
                         <td mat-cell *matCellDef="let element">

@@ -101,14 +101,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
     this.refreshNisqImpl();
   }
 
-  changeSort(active: string, direction: 'asc' | 'desc' | ''): void {
-    if (!active || !direction) {
-      this.sort$.next(undefined);
-    } else {
-      this.sort$.next([`${active},${direction}`]);
-    }
-  }
-
   onAddAnalysis(): void {
     this.refreshNisqImpl();
     let refreshToken = '';
@@ -283,8 +275,4 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         this.queueLengths[analysisResult.qpu] = data.lengthQueue;
       });
   }
-}
-
-export interface TokenArray {
-  [provider: string]: string;
 }
