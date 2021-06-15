@@ -33,7 +33,9 @@ import { ImplementationPublicationsListComponent } from './implementation-public
 import { ImplementationSoftwareplatformListComponent } from './implementation-softwareplatform-list/implementation-softwareplatform-list.component';
 import { ImplementationExecutionComponent } from './implementation-execution/implementation-execution.component';
 import { ImplementationExecutionDialogComponent } from './dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
+// eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionComponent } from './implementation-nisq-analyzer-qpu-selection/implementation-nisq-analyzer-qpu-selection.component';
+// eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-dialog/implementation-nisq-analyzer-qpu-selection-dialog.component';
 
 @NgModule({
