@@ -9,11 +9,15 @@
     <div class="mx-3 mb-2">
         <input type="checkbox" [(ngModel)]="config.features.nisqAnalyzer" id="nisqAnalyzer" name="nisqAnalyzer"
                [checked]="config.features.nisqAnalyzer" (change)="toggleFeature(UiFeatures.NISQ_ANALYZER, $event)">
-        <label for="nisqAnalyzer">NISQ Analyzer</label>
+        <label for="nisqAnalyzer">NISQ Analyzer - Implementation & QPU Selection</label>
         <br>
         <input type="checkbox" [(ngModel)]="config.features.nisqAnalyzerCompilerComparison" id="nisqAnalyzerCompilerComparison" name="nisqAnalyzerCompilerComparison"
                [checked]="config.features.nisqAnalyzerCompilerComparison" (change)="toggleFeature(UiFeatures.NISQ_ANALYZER_COMPILER_COMPARISON, $event)">
         <label for="nisqAnalyzerCompilerComparison">NISQ Analyzer - Compiler Comparison</label>
+        <br>
+        <input type="checkbox" [(ngModel)]="config.features.nisqAnalyzerQpuSelection" id="nisqAnalyzerQpuSelection" name="nisqAnalyzerQpuSelection"
+               [checked]="config.features.nisqAnalyzerQpuSelection" (change)="toggleFeature(UiFeatures.NISQ_ANALYZER_QPU_SELECTION, $event)">
+        <label for="nisqAnalyzerCompilerComparison">NISQ Analyzer - QPU Selection</label>
         <br>
         <input type="checkbox" [(ngModel)]="config.features.patternAtlas" id="patternAtlas" name="patternAtlas"
                [checked]="config.features.patternAtlas" (change)="toggleFeature(UiFeatures.PATTERN_ATLAS, $event)">
