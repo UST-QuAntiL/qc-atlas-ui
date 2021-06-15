@@ -47,7 +47,14 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
   @Input() impl: ImplementationDto;
   @Input() guard: ChangePageGuard;
 
-  analyzeColumns = ['backendName', 'compiler', 'width', 'depth', 'execution'];
+  analyzeColumns = [
+    'backendName',
+    'provider',
+    'compiler',
+    'width',
+    'depth',
+    'execution',
+  ];
   jobColumns = ['time', 'ready'];
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
   analyzerJobs$: Observable<QpuSelectionJobDto[]>;
@@ -116,15 +123,15 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
           if (localStorage.getItem('refreshToken')) {
             refreshToken = localStorage.getItem('refreshToken');
           }
-          const jsonString = JSON.stringify({
-            [dialogResult.vendor]: dialogResult.token,
-          });
+          const providerTokens = {};
+          providerTokens[dialogResult.vendor] = dialogResult.token;
+
           const qpuSelectionDto: QpuSelectionDto = {
             simulatorsAllowed: dialogResult.simulatorAllowed,
             allowedProviders: [dialogResult.vendor],
             circuitLanguage: this.nisqImpl.language,
             circuitUrl: this.nisqImpl.fileLocation,
-            tokens: jsonString,
+            tokens: providerTokens,
             refreshToken,
             circuitName: this.nisqImpl.name,
           };
@@ -134,7 +141,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
               circuitLanguage: this.nisqImpl.language,
               circuitName: this.nisqImpl.name,
               allowedProviders: [dialogResult.vendor],
-              tokens: jsonString,
+              tokens: providerTokens,
               body: qpuSelectionDto,
             })
             .subscribe((job) => {

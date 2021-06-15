@@ -19,8 +19,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class NisqAnalyzerService {
-  ibmqQueueSizeUrl =
-    'https://api.quantum-computing.ibm.com/api/Backends/<backendName>/queue/status?';
+  ibmqQueueSizeUrl = '/api/Backends/<backendName>/queue/status?';
   constructor(
     private algorithmService: AlgorithmService,
     private analysisResultService: AnalysisResultService,
