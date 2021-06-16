@@ -4,6 +4,7 @@
     "qprov": "true",
     "patternAtlas": "true",
     "nisqAnalyzerCompilerComparison": "true",
+    "nisqAnalyzerQpuSelection": "true",
     "showSettings":  "true"
   }
 }

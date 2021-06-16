@@ -4,15 +4,22 @@ import { map, switchMap } from 'rxjs/operators';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AlgorithmDto, ImplementationDto } from 'api-atlas/models';
-import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models';
+import {
+  ImplementationDto as NisqImplementationDto,
+  SdkDto,
+  SdkListDto,
+} from 'api-nisq/models';
 import {
   ImplementationService as NISQImplementationService,
   SdksService,
 } from 'api-nisq/services';
+import { ApiConfiguration } from 'api-atlas/api-configuration';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
 import { parsePrologRule, PrologRule } from '../../../util/MinimalPrologParser';
 import { Option } from '../../generics/property-input/select-input.component';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
+import { PlanqkPlatformService } from '../../../services/planqk-platform.service';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-impl-selection-criteria',
@@ -43,7 +50,10 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
 
   constructor(
     private nisqImplementationService: NISQImplementationService,
-    private readonly sdkService: SdksService
+    private readonly sdkService: SdksService,
+    private config: ApiConfiguration,
+    private planqkPlatformService: PlanqkPlatformService,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -159,21 +169,76 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
   }
 
   private createNisqImplementation(): void {
-    const body: NisqImplementationDto = {
-      name: this.impl.name,
-      implementedAlgorithm: this.algo.id,
-      selectionRule: '',
-      // TODO
-      sdk: 'Qiskit',
-      language: 'OpenQASM',
-      fileLocation: 'http://example.com/',
-    };
-    this.nisqImplementationService
-      .createImplementation({ body })
-      .subscribe((newImpl) => {
-        this.nisqImpl = newImpl;
-        this.oldNisqImpl = cloneDeep(newImpl);
-        this.selection.clear();
-      });
+    let body: NisqImplementationDto;
+    const sdkNameList: string[] = [];
+    const fileIdsList: string[] = [];
+
+    // TODO: currently file handling is different on the platform than in the QC Atlas. Thus, file access API is not generated
+    if (this.config.rootUrl.includes('platform.planqk')) {
+      this.sdkService.getSdks().subscribe(
+        (dto) => {
+          dto.sdkDtos.map((sdk) => sdkNameList.push(sdk.name));
+          // create SDK if not existing in NISQ Analyzer DB
+          if (!sdkNameList.includes(this.impl.technology)) {
+            const sdkDto: SdkDto = {
+              id: null,
+              name: this.impl.technology,
+            };
+            this.sdkService.createSdk({ body: sdkDto }).subscribe();
+          }
+          this.planqkPlatformService
+            .getImplementationFileIdOfPlanqkPlatform(this.algo.id, this.impl.id)
+            .subscribe((files) => {
+              files.content.map((file) => fileIdsList.push(file.id));
+              if (fileIdsList.length > 0) {
+                body = {
+                  name: this.impl.name,
+                  implementedAlgorithm: this.algo.id,
+                  selectionRule: '',
+                  sdk: this.impl.technology,
+                  language: this.impl.version,
+                  fileLocation:
+                    'https://platform.planqk.de/qc-catalog/algorithms/' +
+                    this.algo.id +
+                    '/implementations/' +
+                    this.impl.id +
+                    '/files/' +
+                    // TODO: currently assuming first file is the one to be analyzed and executed
+                    fileIdsList[0] +
+                    '/content',
+                };
+                this.nisqImplementationService
+                  .createImplementation({ body })
+                  .subscribe((newImpl) => {
+                    this.nisqImpl = newImpl;
+                    this.oldNisqImpl = cloneDeep(newImpl);
+                    this.selection.clear();
+                  });
+              }
+            });
+        },
+        () =>
+          this.utilService.callSnackBar(
+            'Error! The NISQ Analyzer cannot process available implementation data.'
+          )
+      );
+    } else {
+      body = {
+        name: this.impl.name,
+        implementedAlgorithm: this.algo.id,
+        selectionRule: '',
+        // TODO
+        sdk: 'Qiskit',
+        language: 'OpenQASM',
+        fileLocation: 'http://example.com/',
+      };
+      this.nisqImplementationService
+        .createImplementation({ body })
+        .subscribe((newImpl) => {
+          this.nisqImpl = newImpl;
+          this.oldNisqImpl = cloneDeep(newImpl);
+          this.selection.clear();
+        });
+    }
   }
 }

@@ -3,14 +3,16 @@
     <div class="col">
       <div class="float-left mx-2">
         <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
-        <mat-form-field *ngIf="generalTabVisible" floatLabel="always" [matBadge]="revisionCounter.toString()" matBadgeOverlap="false" matBadgePosition="before" [matBadgeHidden]="revisionBadgeHidden" (click)="resetRevisionBadge()">
-          <mat-label>Revision</mat-label>
-          <mat-select (selectionChange)="getRevision($event.value)" [placeholder]="revisions[revisions.length - 1]?.creationDate">
-            <mat-option *ngFor="let revision of revisions.slice(0,revisions?.length).reverse()" [value]="revision">
-              {{revision.creationDate}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div *ngIf="revisionAvailable">
+          <mat-form-field *ngIf="generalTabVisible" floatLabel="always" [matBadge]="revisionCounter.toString()" matBadgeOverlap="false" matBadgePosition="before" [matBadgeHidden]="revisionBadgeHidden" (click)="resetRevisionBadge()">
+            <mat-label>Revision</mat-label>
+            <mat-select (selectionChange)="getRevision($event.value)" [placeholder]="revisions[revisions.length - 1]?.creationDate">
+              <mat-option *ngFor="let revision of revisions.slice(0,revisions?.length).reverse()" [value]="revision">
+                {{revision.creationDate}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
     </div>
     <div class="col">
@@ -58,7 +60,7 @@
         [implementation]="implementation"
       ></app-implementation-softwareplatform-list>
     </mat-tab>
-    <mat-tab label="Selection Criteria" *qcAtlasUiShowOnFeature="[UiFeatures.NISQ_ANALYZER_COMPILER_COMPARISON, UiFeatures.NISQ_ANALYZER]">
+    <mat-tab label="Selection Criteria" *qcAtlasUiShowOnFeature="[UiFeatures.NISQ_ANALYZER_COMPILER_COMPARISON, UiFeatures.NISQ_ANALYZER, UiFeatures.NISQ_ANALYZER_QPU_SELECTION]">
       <div class="tab-body p-4">
         <app-impl-selection-criteria
                 [algo]="algorithm"
@@ -74,6 +76,15 @@
                 [impl]="implementation"
                 [guard]="guard"
         ></app-implementation-execution>
+      </div>
+    </mat-tab>
+    <mat-tab label="NISQ Analyzer" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER_QPU_SELECTION">
+      <div class="tab-body p-4">
+        <app-implementation-nisq-analyzer-qpu-selection
+                [algo]="algorithm"
+                [impl]="implementation"
+                [guard]="guard"
+        ></app-implementation-nisq-analyzer-qpu-selection>
       </div>
     </mat-tab>
   </mat-tab-group>

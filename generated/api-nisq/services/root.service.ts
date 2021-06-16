@@ -12,6 +12,8 @@ import { AnalysisJobDto } from '../models/analysis-job-dto';
 import { CompilationJobDto } from '../models/compilation-job-dto';
 import { CompilerSelectionDto } from '../models/compiler-selection-dto';
 import { ParameterListDto } from '../models/parameter-list-dto';
+import { QpuSelectionDto } from '../models/qpu-selection-dto';
+import { QpuSelectionJobDto } from '../models/qpu-selection-job-dto';
 import { RepresentationModel } from '../models/representation-model';
 import { SelectionRequestDto } from '../models/selection-request-dto';
 
@@ -282,6 +284,218 @@ export class RootService extends BaseService {
       map(
         (r: StrictHttpResponse<CompilationJobDto>) =>
           r.body as CompilationJobDto
+      )
+    );
+  }
+
+  /**
+   * Path part for operation selectQpuForCircuitFile1
+   */
+  static readonly SelectQpuForCircuitFile1Path = '/qpu-selection';
+
+  /**
+   * Select the most suitable quantum computer for a quantum circuit loaded from the given URL
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `selectQpuForCircuitFile1$FormData()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  selectQpuForCircuitFile1$FormData$Response(params: {
+    simulatorsAllowed: boolean;
+    allowedProviders: Array<string>;
+    circuitLanguage: string;
+    tokens: {};
+    circuitName?: string;
+    body: { circuit?: Blob };
+  }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      RootService.SelectQpuForCircuitFile1Path,
+      'post'
+    );
+    if (params) {
+      rb.query('simulatorsAllowed', params.simulatorsAllowed, {});
+      rb.query('allowedProviders', params.allowedProviders, {});
+      rb.query('circuitLanguage', params.circuitLanguage, {});
+      rb.query('tokens', params.tokens, {});
+      rb.query('circuitName', params.circuitName, {});
+
+      rb.body(params.body, 'multipart/form-data');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<QpuSelectionJobDto>;
+        })
+      );
+  }
+
+  /**
+   * Select the most suitable quantum computer for a quantum circuit loaded from the given URL
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `selectQpuForCircuitFile1$FormData$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  selectQpuForCircuitFile1$FormData(params: {
+    simulatorsAllowed: boolean;
+    allowedProviders: Array<string>;
+    circuitLanguage: string;
+    tokens: {};
+    circuitName?: string;
+    body: { circuit?: Blob };
+  }): Observable<QpuSelectionJobDto> {
+    return this.selectQpuForCircuitFile1$FormData$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<QpuSelectionJobDto>) =>
+          r.body as QpuSelectionJobDto
+      )
+    );
+  }
+
+  /**
+   * Select the most suitable quantum computer for a quantum circuit loaded from the given URL
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `selectQpuForCircuitFile1$Xml()` instead.
+   *
+   * This method sends `application/xml` and handles request body of type `application/xml`.
+   */
+  selectQpuForCircuitFile1$Xml$Response(params: {
+    simulatorsAllowed: boolean;
+    allowedProviders: Array<string>;
+    circuitLanguage: string;
+    tokens: {};
+    circuitName?: string;
+    body: QpuSelectionDto;
+  }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      RootService.SelectQpuForCircuitFile1Path,
+      'post'
+    );
+    if (params) {
+      rb.query('simulatorsAllowed', params.simulatorsAllowed, {});
+      rb.query('allowedProviders', params.allowedProviders, {});
+      rb.query('circuitLanguage', params.circuitLanguage, {});
+      rb.query('tokens', params.tokens, {});
+      rb.query('circuitName', params.circuitName, {});
+
+      rb.body(params.body, 'application/xml');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<QpuSelectionJobDto>;
+        })
+      );
+  }
+
+  /**
+   * Select the most suitable quantum computer for a quantum circuit loaded from the given URL
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `selectQpuForCircuitFile1$Xml$Response()` instead.
+   *
+   * This method sends `application/xml` and handles request body of type `application/xml`.
+   */
+  selectQpuForCircuitFile1$Xml(params: {
+    simulatorsAllowed: boolean;
+    allowedProviders: Array<string>;
+    circuitLanguage: string;
+    tokens: {};
+    circuitName?: string;
+    body: QpuSelectionDto;
+  }): Observable<QpuSelectionJobDto> {
+    return this.selectQpuForCircuitFile1$Xml$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<QpuSelectionJobDto>) =>
+          r.body as QpuSelectionJobDto
+      )
+    );
+  }
+
+  /**
+   * Select the most suitable quantum computer for a quantum circuit loaded from the given URL
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `selectQpuForCircuitFile1$Json()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  selectQpuForCircuitFile1$Json$Response(params: {
+    simulatorsAllowed: boolean;
+    allowedProviders: Array<string>;
+    circuitLanguage: string;
+    tokens: {};
+    circuitName?: string;
+    body: QpuSelectionDto;
+  }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      RootService.SelectQpuForCircuitFile1Path,
+      'post'
+    );
+    if (params) {
+      rb.query('simulatorsAllowed', params.simulatorsAllowed, {});
+      rb.query('allowedProviders', params.allowedProviders, {});
+      rb.query('circuitLanguage', params.circuitLanguage, {});
+      rb.query('tokens', params.tokens, {});
+      rb.query('circuitName', params.circuitName, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<QpuSelectionJobDto>;
+        })
+      );
+  }
+
+  /**
+   * Select the most suitable quantum computer for a quantum circuit loaded from the given URL
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `selectQpuForCircuitFile1$Json$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  selectQpuForCircuitFile1$Json(params: {
+    simulatorsAllowed: boolean;
+    allowedProviders: Array<string>;
+    circuitLanguage: string;
+    tokens: {};
+    circuitName?: string;
+    body: QpuSelectionDto;
+  }): Observable<QpuSelectionJobDto> {
+    return this.selectQpuForCircuitFile1$Json$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<QpuSelectionJobDto>) =>
+          r.body as QpuSelectionJobDto
       )
     );
   }

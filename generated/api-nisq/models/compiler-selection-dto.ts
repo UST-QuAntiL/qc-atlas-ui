@@ -6,4 +6,5 @@ export type CompilerSelectionDto = {
   circuitName?: string;
   circuitUrl?: string;
   token?: string;
+  refreshToken?: string;
 };
