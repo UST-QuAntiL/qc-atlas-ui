@@ -122,7 +122,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   }
 }
 
-export interface DialogData {
+interface DialogData {
   title: string;
   vendor: string;
   simulatorAllowed: boolean;
