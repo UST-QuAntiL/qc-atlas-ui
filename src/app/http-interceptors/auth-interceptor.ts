@@ -13,7 +13,7 @@ import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.se
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private refreshTokenInProgress = false;
-  private rootUrl = 'http://localhost:4200';
+  private rootUrl = location.origin;
   private bearerTokenSubject: BehaviorSubject<string> = new BehaviorSubject<
     string
   >(null);
