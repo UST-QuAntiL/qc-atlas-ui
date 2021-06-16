@@ -79,6 +79,7 @@
           "options": {
             "proxyConfig": "src/proxy.conf.json",
             "browserTarget": "qc-atlas-ui:build"
+            "port": 4210
           },
           "configurations": {
             "production": {

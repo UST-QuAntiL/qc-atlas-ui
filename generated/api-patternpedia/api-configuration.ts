@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ApiConfiguration {
-  rootUrl: string = 'http://localhost:8082/patternpedia';
+  rootUrl: string = 'http://localhost:1977/patternpedia';
 }
 
 /**
