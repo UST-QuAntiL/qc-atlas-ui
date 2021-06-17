@@ -9,6 +9,7 @@ RUN npm install && npm run build --prod
 
 FROM nginx:alpine
 COPY --from=builder app/dist/* /usr/share/nginx/html
+COPY .docker/nginx_default.conf /etc/nginx/conf.d/default.conf
 
 ENV QC_ATLAS_HOST_NAME localhost
 ENV QC_ATLAS_PORT 6626
