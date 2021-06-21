@@ -1,2 +1,6 @@
 /* tslint:disable */
-export type AlgorithmRelationTypeDto = { id: string; name: string };
+export type AlgorithmRelationTypeDto = {
+  id: string;
+  name: string;
+  inverseTypeName?: string;
+};

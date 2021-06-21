@@ -26,6 +26,12 @@ export class AddOrEditAlgorithmRelationTypeDialogComponent implements OnInit {
     return this.algorithmRelationTypeFormGroup.get('algorithmRelationTypeName');
   }
 
+  get inverseAlgorithmRelationTypeName(): AbstractControl | null {
+    return this.algorithmRelationTypeFormGroup.get(
+      'inverseAlgorithmRelationTypeName'
+    );
+  }
+
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -37,10 +43,18 @@ export class AddOrEditAlgorithmRelationTypeDialogComponent implements OnInit {
         Validators.required,
         Validators.maxLength(255),
       ]),
+      inverseAlgorithmRelationTypeName: new FormControl(
+        this.data.inverseTypeName,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.maxLength(255),
+        ]
+      ),
     });
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.name = this.algorithmRelationTypeName.value;
+      this.data.inverseTypeName = this.inverseAlgorithmRelationTypeName.value;
     });
   }
 
@@ -53,4 +67,5 @@ export interface DialogData {
   title: string;
   id: string;
   name: string;
+  inverseTypeName: string;
 }
