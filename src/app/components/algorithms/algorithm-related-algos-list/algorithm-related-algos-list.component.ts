@@ -231,7 +231,6 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
             ) {
               event.queryParams.page--;
             }
-            debugger;
             this.getAlgorithmRelations({
               algorithmId: this.algorithm.id,
               search: event.queryParams.search,
