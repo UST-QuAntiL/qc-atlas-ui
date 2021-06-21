@@ -331,8 +331,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
             description: relation.description,
             targetAlgName: algorithm.name,
             targetAlgObject: algorithm,
-            relationTypeName: relation.algoRelationType.name,
-            relationTypeObject: relation.algoRelationType,
+            relationTypeName: relation.algorithmRelationType.name,
+            relationTypeObject: relation.algorithmRelationType,
           });
         });
     }
@@ -347,14 +347,14 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     id: string,
     sourceAlgorithm: AlgorithmDto,
     targetAlgorithm: AlgorithmDto,
-    algoRelationType: AlgorithmRelationTypeDto,
+    algorithmRelationType: AlgorithmRelationTypeDto,
     description: string
   ): AlgorithmRelationDto {
     return {
       id,
       sourceAlgorithmId: sourceAlgorithm.id,
       targetAlgorithmId: targetAlgorithm.id,
-      algoRelationType,
+      algorithmRelationType,
       description,
     };
   }

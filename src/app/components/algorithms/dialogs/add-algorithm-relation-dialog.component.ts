@@ -20,14 +20,14 @@ import { AlgorithmRelationTypeDto } from 'api-atlas/models';
 export class AddAlgorithmRelationDialogComponent implements OnInit {
   algorithmRelationForm: FormGroup;
   stateGroups: StateGroup[] = [];
-  algoRelationTypes: AlgorithmRelationTypeDto[] = [];
+  algorithmRelationTypes: AlgorithmRelationTypeDto[] = [];
   linkableAlgorithms: AlgorithmDto[] = [];
   selectedAlgorithm: AlgorithmDto;
   isUpdateDialog = false;
 
   constructor(
     private algorithmService: AlgorithmService,
-    private algoRelationTypeService: AlgorithmRelationTypeService,
+    private algorithmRelationTypeService: AlgorithmRelationTypeService,
     public dialogRef: MatDialogRef<AddAlgorithmRelationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
@@ -60,15 +60,15 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     }
 
     // Init list of available relation types
-    this.algoRelationTypeService
+    this.algorithmRelationTypeService
       .getAlgorithmRelationTypes()
       .subscribe((relationTypes) => {
-        this.algoRelationTypes = relationTypes.content
+        this.algorithmRelationTypes = relationTypes.content
           ? relationTypes.content
           : [];
         this.stateGroups.push({
           optionName: 'Existing Algorithm-Relations',
-          algoRelationTypes: this.algoRelationTypes,
+          algorithmRelationTypes: this.algorithmRelationTypes,
         });
         // Set filtered Types if update-dialog
         if (this.isUpdateDialog) {
@@ -89,7 +89,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   filterTypes(type: string): void {
     this.stateGroups[
       this.stateGroups.length - 1
-    ].algoRelationTypes = this.algoRelationTypes.filter(
+    ].algorithmRelationTypes = this.algorithmRelationTypes.filter(
       (filterType) =>
         filterType.name.toLowerCase().indexOf(type.toLowerCase()) === 0
     );
@@ -106,7 +106,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   }
 
   findObjectByName(name): AlgorithmRelationTypeDto {
-    const foundType = this.algoRelationTypes.find((x) => x.name === name);
+    const foundType = this.algorithmRelationTypes.find((x) => x.name === name);
     return foundType ? foundType : { id: null, name };
   }
 
@@ -200,7 +200,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
     // Filter existing types
     this.filterTypes(searchType.name);
     // Return Type from Input if it exists
-    const existingRelationType = this.algoRelationTypes.find(
+    const existingRelationType = this.algorithmRelationTypes.find(
       (x) => x.name === searchType.name
     );
 
@@ -210,7 +210,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
       if (this.algoTypesNotEmpty() || this.isFirstTypeNew()) {
         this.pushNewRelationType(searchType);
       } else if (!this.isFirstTypeNew()) {
-        this.stateGroups[0].algoRelationTypes[0] = searchType;
+        this.stateGroups[0].algorithmRelationTypes[0] = searchType;
       }
     } else {
       if (!this.isFirstTypeNew()) {
@@ -222,7 +222,7 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   pushNewRelationType(type): void {
     this.stateGroups.unshift({
       optionName: 'New Algorithm-Relation',
-      algoRelationTypes: [type],
+      algorithmRelationTypes: [type],
     });
   }
 
@@ -249,5 +249,5 @@ export interface DialogData {
 
 export interface StateGroup {
   optionName: string;
-  algoRelationTypes: AlgorithmRelationTypeDto[];
+  algorithmRelationTypes: AlgorithmRelationTypeDto[];
 }

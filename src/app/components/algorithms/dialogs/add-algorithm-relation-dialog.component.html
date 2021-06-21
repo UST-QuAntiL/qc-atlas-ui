@@ -35,7 +35,7 @@
       <mat-autocomplete #relationType="matAutocomplete" (optionSelected)="setRelationType($event.option.value)" [displayWith]="displayRelation">
         <mat-optgroup *ngFor="let stateGroup of stateGroups" [label]="stateGroup.optionName">
           <mat-option
-            *ngFor="let type of stateGroup.algoRelationTypes"
+            *ngFor="let type of stateGroup.algorithmRelationTypes"
             [value]="type"
             (click)="setRelationType(type)">
             {{type.name}}
