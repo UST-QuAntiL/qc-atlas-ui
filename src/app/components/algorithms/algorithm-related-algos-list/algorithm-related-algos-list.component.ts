@@ -231,7 +231,13 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
             ) {
               event.queryParams.page--;
             }
-            this.getAlgorithmRelations(event.queryParams);
+            this.getAlgorithmRelations({
+              algorithmId: this.algorithm.id,
+              search: event.queryParams.search,
+              page: event.queryParams.page,
+              size: event.queryParams.size,
+              sort: event.queryParams.sort,
+            });
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulUnlinks,
@@ -325,8 +331,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
             description: relation.description,
             targetAlgName: algorithm.name,
             targetAlgObject: algorithm,
-            relationTypeName: relation.algoRelationType.name,
-            relationTypeObject: relation.algoRelationType,
+            relationTypeName: relation.algorithmRelationType.name,
+            relationTypeObject: relation.algorithmRelationType,
           });
         });
     }
@@ -341,14 +347,14 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     id: string,
     sourceAlgorithm: AlgorithmDto,
     targetAlgorithm: AlgorithmDto,
-    algoRelationType: AlgorithmRelationTypeDto,
+    algorithmRelationType: AlgorithmRelationTypeDto,
     description: string
   ): AlgorithmRelationDto {
     return {
       id,
       sourceAlgorithmId: sourceAlgorithm.id,
       targetAlgorithmId: targetAlgorithm.id,
-      algoRelationType,
+      algorithmRelationType,
       description,
     };
   }

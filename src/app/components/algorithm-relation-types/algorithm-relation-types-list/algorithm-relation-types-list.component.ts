@@ -17,8 +17,8 @@ import { AddOrEditAlgorithmRelationTypeDialogComponent } from '../dialogs/add-or
 })
 export class AlgorithmRelationTypesListComponent implements OnInit {
   algorithmRelationTypes: any[] = [];
-  tableColumns = ['Name'];
-  variableNames = ['name'];
+  tableColumns = ['Name', 'Inverse Type Name'];
+  variableNames = ['name', 'inverseTypeName'];
   pagingInfo: any = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
@@ -68,6 +68,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
         const algorithmRelationType: AlgorithmRelationTypeDto = {
           id: undefined,
           name: dialogResult.name,
+          inverseTypeName: dialogResult.inverseTypeName,
         };
 
         params.body = algorithmRelationType;
@@ -167,6 +168,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
         title: 'Edit algorithm relation type',
         id: event.id,
         name: event.name,
+        inverseTypeName: event.inverseTypeName,
       }
     );
 
@@ -175,6 +177,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
         const updatedAlgorithmRelationType: AlgorithmRelationTypeDto = {
           id: dialogResult.id,
           name: dialogResult.name,
+          inverseTypeName: dialogResult.inverseTypeName,
         };
 
         const params: any = {
