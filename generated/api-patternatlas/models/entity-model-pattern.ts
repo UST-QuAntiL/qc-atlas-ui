@@ -5,6 +5,7 @@ export type EntityModelPattern = {
   uri?: string;
   name?: string;
   iconUrl?: string;
-  content?: {};
+  content: {};
+  renderedContent?: {};
   _links?: Links;
 };

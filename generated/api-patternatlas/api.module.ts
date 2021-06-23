@@ -9,11 +9,21 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { CandidateControllerService } from './services/candidate-controller.service';
+import { ConcreteSolutionEntityControllerService } from './services/concrete-solution-entity-controller.service';
+import { ConcreteSolutionSearchControllerService } from './services/concrete-solution-search-controller.service';
+import { DesignModelControllerService } from './services/design-model-controller.service';
+import { DesignModelEdgeTypeEntityControllerService } from './services/design-model-edge-type-entity-controller.service';
+import { DesignModelEdgeTypeSearchControllerService } from './services/design-model-edge-type-search-controller.service';
+import { DesignModelEntityControllerService } from './services/design-model-entity-controller.service';
+import { DesignModelSearchControllerService } from './services/design-model-search-controller.service';
+import { DiscussionControllerService } from './services/discussion-controller.service';
+import { ImageControllerService } from './services/image-controller.service';
 import { IssueControllerService } from './services/issue-controller.service';
 import { PatternControllerService } from './services/pattern-controller.service';
 import { PatternLanguageControllerService } from './services/pattern-language-controller.service';
 import { PatternRelationDescriptorControllerService } from './services/pattern-relation-descriptor-controller.service';
 import { PatternViewControllerService } from './services/pattern-view-controller.service';
+import { ProfileControllerService } from './services/profile-controller.service';
 import { UserControllerService } from './services/user-controller.service';
 
 /**
@@ -25,11 +35,21 @@ import { UserControllerService } from './services/user-controller.service';
   declarations: [],
   providers: [
     CandidateControllerService,
+    ConcreteSolutionEntityControllerService,
+    ConcreteSolutionSearchControllerService,
+    DesignModelControllerService,
+    DesignModelEdgeTypeEntityControllerService,
+    DesignModelEdgeTypeSearchControllerService,
+    DesignModelEntityControllerService,
+    DesignModelSearchControllerService,
+    DiscussionControllerService,
+    ImageControllerService,
     IssueControllerService,
     PatternControllerService,
     PatternLanguageControllerService,
     PatternRelationDescriptorControllerService,
     PatternViewControllerService,
+    ProfileControllerService,
     UserControllerService,
     ApiConfiguration,
   ],

@@ -392,6 +392,64 @@ export class PatternControllerService extends BaseService {
   }
 
   /**
+   * Path part for operation getPatternRenderedContentOfPattern
+   */
+  static readonly GetPatternRenderedContentOfPatternPath =
+    '/patternLanguages/{patternLanguageId}/patterns/{patternId}/renderedContent';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPatternRenderedContentOfPattern()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPatternRenderedContentOfPattern$Response(params: {
+    patternLanguageId: string;
+    patternId: string;
+  }): Observable<StrictHttpResponse<EntityModelObject>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      PatternControllerService.GetPatternRenderedContentOfPatternPath,
+      'get'
+    );
+    if (params) {
+      rb.path('patternLanguageId', params.patternLanguageId, {});
+      rb.path('patternId', params.patternId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<EntityModelObject>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getPatternRenderedContentOfPattern$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getPatternRenderedContentOfPattern(params: {
+    patternLanguageId: string;
+    patternId: string;
+  }): Observable<EntityModelObject> {
+    return this.getPatternRenderedContentOfPattern$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<EntityModelObject>) =>
+          r.body as EntityModelObject
+      )
+    );
+  }
+
+  /**
    * Path part for operation getPatternsOfPatternView
    */
   static readonly GetPatternsOfPatternViewPath =

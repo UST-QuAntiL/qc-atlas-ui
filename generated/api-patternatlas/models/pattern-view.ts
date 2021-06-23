@@ -4,4 +4,5 @@ export type PatternView = {
   uri?: string;
   name?: string;
   graph?: {};
+  logo?: string;
 };

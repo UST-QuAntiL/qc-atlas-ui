@@ -17,12 +17,12 @@ export const environment = {
   PATTERN_ATLAS_API_URL:
     window['env']['PATTERN_ATLAS_HOST_NAME'] &&
     window['env']['PATTERN_ATLAS_PORT']
-      ? `http://${window['env']['PATTERN_ATLAS_HOST_NAME']}:${window['env']['PATTERN_ATLAS_PORT']}/patternpedia`
-      : 'http://localhost:1977/patternpedia',
+      ? `http://${window['env']['PATTERN_ATLAS_HOST_NAME']}:${window['env']['PATTERN_ATLAS_PORT']}/patternatlas`
+      : 'http://localhost:1977/patternatlas',
   PATTERN_ATLAS_UI_URL:
     window['env']['PATTERN_ATLAS_HOST_NAME'] &&
     window['env']['PATTERN_ATLAS_PORT']
-      ? `http://${window['env']['PATTERN_ATLAS_HOST_NAME']}:${window['env']['PATTERN_ATLAS_UI_PORT']}/patternpedia`
+      ? `http://${window['env']['PATTERN_ATLAS_HOST_NAME']}:${window['env']['PATTERN_ATLAS_UI_PORT']}/patternatlas`
       : 'http://localhost:1978',
   LATEX_RENDERER_API_URL:
     window['env']['LATEX_RENDERER_HOST_NAME'] &&

@@ -1,0 +1,17 @@
+export { CandidateControllerService } from './services/candidate-controller.service';
+export { ConcreteSolutionEntityControllerService } from './services/concrete-solution-entity-controller.service';
+export { ConcreteSolutionSearchControllerService } from './services/concrete-solution-search-controller.service';
+export { DesignModelControllerService } from './services/design-model-controller.service';
+export { DesignModelEdgeTypeEntityControllerService } from './services/design-model-edge-type-entity-controller.service';
+export { DesignModelEdgeTypeSearchControllerService } from './services/design-model-edge-type-search-controller.service';
+export { DesignModelEntityControllerService } from './services/design-model-entity-controller.service';
+export { DesignModelSearchControllerService } from './services/design-model-search-controller.service';
+export { DiscussionControllerService } from './services/discussion-controller.service';
+export { ImageControllerService } from './services/image-controller.service';
+export { IssueControllerService } from './services/issue-controller.service';
+export { PatternControllerService } from './services/pattern-controller.service';
+export { PatternLanguageControllerService } from './services/pattern-language-controller.service';
+export { PatternRelationDescriptorControllerService } from './services/pattern-relation-descriptor-controller.service';
+export { PatternViewControllerService } from './services/pattern-view-controller.service';
+export { ProfileControllerService } from './services/profile-controller.service';
+export { UserControllerService } from './services/user-controller.service';

@@ -5,4 +5,5 @@ export type Pattern = {
   name?: string;
   iconUrl?: string;
   content: {};
+  renderedContent?: {};
 };
