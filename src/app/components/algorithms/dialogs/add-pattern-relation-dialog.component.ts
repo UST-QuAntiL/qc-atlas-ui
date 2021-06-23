@@ -1,17 +1,17 @@
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Component, Inject, OnInit} from '@angular/core';
-import {AlgorithmService} from 'api-atlas/services/algorithm.service';
-import {PatternRelationTypeService} from 'api-atlas/services/pattern-relation-type.service';
-import {PatternRelationTypeDto} from 'api-atlas/models/pattern-relation-type-dto';
-import {PatternLanguage} from 'api-patternatlas/models/pattern-language';
-import {Pattern} from 'api-patternatlas/models/pattern';
-import {PatternLanguageControllerService} from 'api-patternatlas/services/pattern-language-controller.service';
-import {PatternControllerService} from 'api-patternatlas/services/pattern-controller.service';
-import {StepperSelectionEvent} from '@angular/cdk/stepper';
-import {AbstractControl, FormControl, FormGroup} from '@angular/forms';
-import {EntityModelPatternModel} from 'api-patternatlas/models/entity-model-pattern-model';
-import {environment as Env} from '../../../../environments/environment';
-import {UtilService} from '../../../util/util.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
+import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
+import { PatternLanguage } from 'api-patternatlas/models/pattern-language';
+import { Pattern } from 'api-patternatlas/models/pattern';
+import { PatternLanguageControllerService } from 'api-patternatlas/services/pattern-language-controller.service';
+import { PatternControllerService } from 'api-patternatlas/services/pattern-controller.service';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { EntityModelPatternModel } from 'api-patternatlas/models/entity-model-pattern-model';
+import { environment as Env } from '../../../../environments/environment';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-add-pattern-relation-dialog',
