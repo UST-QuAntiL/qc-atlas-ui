@@ -8,7 +8,7 @@ import { PatternControllerService } from 'api-patternatlas/services/pattern-cont
 import { EntityModelPattern } from 'api-patternatlas/models/entity-model-pattern';
 import { EntityModelPatternLanguage } from 'api-patternatlas/models';
 import { forkJoin } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { PatternLanguageControllerService } from 'api-patternatlas/services/pattern-language-controller.service';
 import { AddPatternRelationDialogComponent } from '../dialogs/add-pattern-relation-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
@@ -39,8 +39,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     private patternRelationTypeService: PatternRelationTypeService,
     private algorithmService: AlgorithmService,
     private patternService: PatternControllerService,
-    private utilService: UtilService,
-    private http: HttpClient
+    private patternLanguageService: PatternLanguageControllerService,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {}
@@ -343,21 +343,24 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     relation: PatternRelationDto,
     pattern: EntityModelPattern
   ): void {
-    const languageUrl = JSON.parse(JSON.stringify(pattern._links))
+    const languageUrl: string = JSON.parse(JSON.stringify(pattern._links))
       .patternLanguage.href;
+    const languageId = languageUrl.split('/').pop();
 
-    this.http.get(languageUrl).subscribe((language) => {
-      this.tableObjects.push({
-        id: relation.id,
-        description: relation.description,
-        patternType: relation.patternRelationType.name,
-        pattern: relation.pattern,
-        patternTypeObject: relation.patternRelationType,
-        patternObject: pattern,
-        languageObject: language,
-        patternName: pattern.name,
+    this.patternLanguageService
+      .getPatternLanguageById({ patternLanguageId: languageId })
+      .subscribe((language) => {
+        this.tableObjects.push({
+          id: relation.id,
+          description: relation.description,
+          patternType: relation.patternRelationType.name,
+          pattern: relation.pattern,
+          patternTypeObject: relation.patternRelationType,
+          patternObject: pattern,
+          languageObject: language,
+          patternName: pattern.name,
+        });
       });
-    });
   }
 
   generatePatternRelationDto(
