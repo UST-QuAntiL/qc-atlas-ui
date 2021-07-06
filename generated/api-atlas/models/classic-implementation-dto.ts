@@ -3,7 +3,6 @@ import { ClassicAlgorithmDto } from './classic-algorithm-dto';
 import { SoftwarePlatformDto } from './software-platform-dto';
 export type ClassicImplementationDto = {
   id: string;
-  implementedAlgorithmId?: string;
   name: string;
   inputFormat?: string;
   outputFormat?: string;

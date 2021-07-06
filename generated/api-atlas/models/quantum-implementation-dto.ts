@@ -2,7 +2,6 @@
 import { SoftwarePlatformDto } from './software-platform-dto';
 export type QuantumImplementationDto = {
   id: string;
-  implementedAlgorithmId?: string;
   name: string;
   inputFormat?: string;
   outputFormat?: string;
