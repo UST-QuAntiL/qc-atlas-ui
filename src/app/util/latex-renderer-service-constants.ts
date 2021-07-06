@@ -6,7 +6,11 @@ import { Injectable } from '@angular/core';
 export class LatexRendererServiceConstants {
   latexFormatIndicator = '*LaTeX-packets*';
   public getDefaultLatexPackages(): string[] {
-    return ['\\usepackage{tikz}', '\\usetikzlibrary{quantikz}'];
+    return [
+      '\\usepackage{tikz}',
+      '\\usetikzlibrary{quantikz}',
+      '\\usepackage{adjustbox}',
+    ];
   }
 
   public getDefaultRenderOutput(): string {
