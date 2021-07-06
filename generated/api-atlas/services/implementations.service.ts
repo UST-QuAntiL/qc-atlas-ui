@@ -8,6 +8,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { AlgorithmDto } from '../models/algorithm-dto';
 import { ImplementationDto } from '../models/implementation-dto';
 import { PageImplementationDto } from '../models/page-implementation-dto';
 import { PageRevisionDto } from '../models/page-revision-dto';
@@ -173,6 +174,130 @@ export class ImplementationsService extends BaseService {
         (r: StrictHttpResponse<ImplementationDto>) =>
           r.body as ImplementationDto
       )
+    );
+  }
+
+  /**
+   * Path part for operation linkAlgorithmAndImplementation
+   */
+  static readonly LinkAlgorithmAndImplementationPath =
+    '/implementations/{implementationId}/algorithms';
+
+  /**
+   * Add a reference to an existing implementation (that was previously created via a POST on e.g. /implementations). Only the ID is required in the request body, other attributes will be ignored and not changed.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `linkAlgorithmAndImplementation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  linkAlgorithmAndImplementation$Response(params: {
+    implementationId: string;
+    body: AlgorithmDto;
+  }): Observable<StrictHttpResponse<ImplementationDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ImplementationsService.LinkAlgorithmAndImplementationPath,
+      'post'
+    );
+    if (params) {
+      rb.path('implementationId', params.implementationId, {});
+
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<ImplementationDto>;
+        })
+      );
+  }
+
+  /**
+   * Add a reference to an existing implementation (that was previously created via a POST on e.g. /implementations). Only the ID is required in the request body, other attributes will be ignored and not changed.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `linkAlgorithmAndImplementation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  linkAlgorithmAndImplementation(params: {
+    implementationId: string;
+    body: AlgorithmDto;
+  }): Observable<ImplementationDto> {
+    return this.linkAlgorithmAndImplementation$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<ImplementationDto>) =>
+          r.body as ImplementationDto
+      )
+    );
+  }
+
+  /**
+   * Path part for operation unlinkImplementationAndAlgorithm
+   */
+  static readonly UnlinkImplementationAndAlgorithmPath =
+    '/implementations/{implementationId}/algorithms/{algorithmId}';
+
+  /**
+   * Delete a reference to a implementation of an algorithm.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `unlinkImplementationAndAlgorithm()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unlinkImplementationAndAlgorithm$Response(params: {
+    implementationId: string;
+    algorithmId: string;
+  }): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ImplementationsService.UnlinkImplementationAndAlgorithmPath,
+      'delete'
+    );
+    if (params) {
+      rb.path('implementationId', params.implementationId, {});
+      rb.path('algorithmId', params.algorithmId, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return (r as HttpResponse<any>).clone({
+            body: undefined,
+          }) as StrictHttpResponse<void>;
+        })
+      );
+  }
+
+  /**
+   * Delete a reference to a implementation of an algorithm.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `unlinkImplementationAndAlgorithm$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unlinkImplementationAndAlgorithm(params: {
+    implementationId: string;
+    algorithmId: string;
+  }): Observable<void> {
+    return this.unlinkImplementationAndAlgorithm$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 

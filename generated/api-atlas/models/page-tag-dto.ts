@@ -5,13 +5,13 @@ import { TagDto } from './tag-dto';
 export type PageTagDto = {
   totalPages?: number;
   totalElements?: number;
-  first?: boolean;
   pageable?: Pageable;
-  size?: number;
-  content?: Array<TagDto>;
-  number?: number;
+  first?: boolean;
   sort?: Sort;
+  number?: number;
   numberOfElements?: number;
   last?: boolean;
+  size?: number;
+  content?: Array<TagDto>;
   empty?: boolean;
 };

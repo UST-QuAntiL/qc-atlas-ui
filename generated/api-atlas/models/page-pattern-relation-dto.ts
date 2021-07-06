@@ -5,13 +5,13 @@ import { Sort } from './sort';
 export type PagePatternRelationDto = {
   totalPages?: number;
   totalElements?: number;
-  first?: boolean;
   pageable?: Pageable;
-  size?: number;
-  content?: Array<PatternRelationDto>;
-  number?: number;
+  first?: boolean;
   sort?: Sort;
+  number?: number;
   numberOfElements?: number;
   last?: boolean;
+  size?: number;
+  content?: Array<PatternRelationDto>;
   empty?: boolean;
 };

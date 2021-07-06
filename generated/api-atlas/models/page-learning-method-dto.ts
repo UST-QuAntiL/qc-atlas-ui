@@ -5,13 +5,13 @@ import { Sort } from './sort';
 export type PageLearningMethodDto = {
   totalPages?: number;
   totalElements?: number;
-  first?: boolean;
   pageable?: Pageable;
-  size?: number;
-  content?: Array<LearningMethodDto>;
-  number?: number;
+  first?: boolean;
   sort?: Sort;
+  number?: number;
   numberOfElements?: number;
   last?: boolean;
+  size?: number;
+  content?: Array<LearningMethodDto>;
   empty?: boolean;
 };
