@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTreeModule } from '@angular/material/tree';
-import { CardsModule } from 'angular-bootstrap-md';
+import { CardsModule, MDBBootstrapModule } from 'angular-bootstrap-md';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -32,6 +32,7 @@ import { AlgorithmRelatedAlgosListComponent } from './algorithm-related-algos-li
 import { AlgorithmPropertiesComponent } from './algorithm-properties/algorithm-properties.component';
 import { AlgorithmPublicationsListComponent } from './algorithm-publications-list/algorithm-publications-list.component';
 import { AddAlgorithmDialogComponent } from './dialogs/add-algorithm-dialog.component';
+import { ChoiceImplementationDialogComponent } from './dialogs/choice-implementation-dialog.component';
 import { CreateImplementationDialogComponent } from './dialogs/create-implementation-dialog.component';
 import { ProblemTypeTreeComponent } from './problem-type-tree/problem-type-tree.component';
 import { AlgorithmRelatedPatternsComponent } from './algorithm-related-patterns/algorithm-related-patterns.component';
@@ -51,6 +52,7 @@ import { AddNewAnalysisDialogComponent } from './dialogs/add-new-analysis-dialog
     AlgorithmPublicationsListComponent,
     ProblemTypeTreeComponent,
     AddAlgorithmDialogComponent,
+    ChoiceImplementationDialogComponent,
     CreateImplementationDialogComponent,
     AlgorithmRelatedPatternsComponent,
     AddPatternRelationDialogComponent,
@@ -87,6 +89,7 @@ import { AddNewAnalysisDialogComponent } from './dialogs/add-new-analysis-dialog
     MatSortModule,
     QcAtlasUiFeatureToggleModule,
     MatBadgeModule,
+    MDBBootstrapModule,
   ],
   exports: [
     AlgorithmListComponent,
@@ -97,7 +100,7 @@ import { AddNewAnalysisDialogComponent } from './dialogs/add-new-analysis-dialog
     AlgorithmPublicationsListComponent,
     ProblemTypeTreeComponent,
     AddAlgorithmDialogComponent,
-    CreateImplementationDialogComponent,
+    ChoiceImplementationDialogComponent,
     AddPatternRelationDialogComponent,
     AddAlgorithmRelationDialogComponent,
     ImplementationPropertiesComponent,

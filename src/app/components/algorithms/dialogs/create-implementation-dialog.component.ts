@@ -21,7 +21,7 @@ export class CreateImplementationDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<CreateImplementationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: CreateDialogData,
     public dialog: MatDialog
   ) {}
 
@@ -52,7 +52,7 @@ export class CreateImplementationDialogComponent implements OnInit {
   }
 }
 
-export interface DialogData {
+export interface CreateDialogData {
   title: string;
   name: string;
 }

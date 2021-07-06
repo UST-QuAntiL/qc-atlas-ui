@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { UtilService } from '../../../util/util.service';
-import { CreateImplementationDialogComponent } from '../dialogs/create-implementation-dialog.component';
+import { ChoiceImplementationDialogComponent } from '../dialogs/choice-implementation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
@@ -55,45 +55,6 @@ export class AlgorithmImplementationsListComponent implements OnInit {
     this.pagingInfo.totalPages = implementations.totalPages;
     this.pagingInfo.number = implementations.number;
     this.pagingInfo.sort = implementations.sort;
-  }
-
-  onAddImplementation(): void {
-    this.utilService
-      .createDialog(CreateImplementationDialogComponent, {
-        title: 'Add new implementation for this algorithm',
-      })
-      .afterClosed()
-      .subscribe((dialogResult) => {
-        if (dialogResult) {
-          const implementationDto: ImplementationDto = {
-            id: null,
-            name: dialogResult.name,
-          };
-          this.algorithmService
-            .createImplementation({
-              algorithmId: this.algorithm.id,
-              body: implementationDto,
-            })
-            .subscribe(
-              (data) => {
-                this.router.navigate([
-                  'algorithms',
-                  data.implementedAlgorithmId,
-                  'implementations',
-                  data.id,
-                ]);
-                this.utilService.callSnackBar(
-                  'Implementation was successfully created.'
-                );
-              },
-              () => {
-                this.utilService.callSnackBar(
-                  'Error! Implementation could not be created.'
-                );
-              }
-            );
-        }
-      });
   }
 
   onDeleteImplementation(event): void {
@@ -159,6 +120,46 @@ export class AlgorithmImplementationsListComponent implements OnInit {
             );
             this.utilService.callSnackBarSequence(snackbarMessages);
           });
+        }
+      });
+  }
+
+  onOpenImplementationDialog(): void {
+    this.utilService
+      .createDialog(ChoiceImplementationDialogComponent, {
+        title: 'Create/Link implementation for this algorithm',
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const implementationDto: ImplementationDto = {
+            id: null,
+            name: dialogResult.name,
+          };
+          this.algorithmService
+            .createImplementation({
+              algorithmId: this.algorithm.id,
+              body: implementationDto,
+            })
+            .subscribe(
+              (data) => {
+                console.log(data);
+                this.router.navigate([
+                  'algorithms',
+                  this.algorithm.id,
+                  'implementations',
+                  data.id,
+                ]);
+                this.utilService.callSnackBar(
+                  'Implementation was successfully created.'
+                );
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Implementation could not be created.'
+                );
+              }
+            );
         }
       });
   }
