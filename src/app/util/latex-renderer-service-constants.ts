@@ -13,6 +13,10 @@ export class LatexRendererServiceConstants {
     ];
   }
 
+  public getdefaultvarWidth(): number {
+    return 1.0;
+  }
+
   public getDefaultRenderOutput(): string {
     return 'svg';
   }
@@ -23,7 +27,7 @@ export class LatexRendererServiceConstants {
 
   unpackTextAndPackages(
     packedData = ''
-  ): { latexContent: string; latexPackages: string } {
+  ): { latexContent: string; latexPackages: string; varwidth: number } {
     let content = '';
     const packages: string[] = [];
     if (packedData) {
@@ -33,7 +37,8 @@ export class LatexRendererServiceConstants {
         packages.push(splitData[i]);
       }
     }
-    return { latexContent: content, latexPackages: packages.join('') };
+    // const varwidth = ;
+    return { latexContent: content, latexPackages: packages.join(''), varwidth: this.getdefaultvarWidth() };
   }
 
   public formatLatexPackagesToArray(packages: string): string[] {

@@ -169,13 +169,15 @@ export class UtilService {
     );
     return this.renderLatexContentAndReturnUrlToPdfBlob(
       data.latexContent,
-      data.latexPackages
+      data.latexPackages,
+      data.varwidth
     );
   }
 
   public renderLatexContentAndReturnUrlToPdfBlob(
     latexContent: string,
-    additionalPackages: string
+    additionalPackages: string,
+    varwidth: number
   ): Observable<string> {
     const packages = this.latexRendererServiceConstants.getDefaultLatexPackages();
     if (additionalPackages) {
@@ -188,10 +190,10 @@ export class UtilService {
       }
     }
     const latexBody: LatexContent = {
-      content: this.latexRendererServiceConstants.formatLatexContent(
-        latexContent
-      ),
+      content:
+        this.latexRendererServiceConstants.formatLatexContent(latexContent),
       latexPackages: packages,
+      varwidth: varwidth,
       output: this.latexRendererServiceConstants.getDefaultRenderOutput(),
     };
     return this.latexRendererService.renderLatex({ body: latexBody }).pipe(
