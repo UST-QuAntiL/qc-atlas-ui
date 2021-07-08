@@ -26,7 +26,8 @@ export class LatexRendererServiceConstants {
   }
 
   unpackTextAndPackages(
-    packedData = ''): {
+    packedData = ''
+  ): {
     latexContent: string;
     latexPackages: string;
     varwidth: number;

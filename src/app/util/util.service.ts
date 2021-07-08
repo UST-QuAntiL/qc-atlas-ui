@@ -156,8 +156,8 @@ export class UtilService {
 
   public getUnpackedLatexText(packedData: string): string {
     const data = this.latexRendererServiceConstants.unpackTextAndPackages(
-        packedData
-      );
+      packedData
+    );
     return data.latexContent;
   }
 
@@ -200,8 +200,9 @@ export class UtilService {
     return this.latexRendererService.renderLatex({ body: latexBody }).pipe(
       map((response) => {
         if (response) {
-          const latexBlob =
-            this.latexRendererServiceConstants.createBlobFromRenderedResult(response);
+          const latexBlob = this.latexRendererServiceConstants.createBlobFromRenderedResult(
+              response
+          );
           return URL.createObjectURL(latexBlob);
         }
       })
