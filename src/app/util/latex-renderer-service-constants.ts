@@ -25,7 +25,8 @@ export class LatexRendererServiceConstants {
     return text.concat(this.latexFormatIndicator.concat(packages));
   }
 
-  unpackTextAndPackages(packedData = ''): {
+  unpackTextAndPackages(
+    packedData = ''): {
     latexContent: string;
     latexPackages: string;
     varwidth: number;
