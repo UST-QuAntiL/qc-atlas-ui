@@ -155,18 +155,16 @@ export class UtilService {
   }
 
   public getUnpackedLatexText(packedData: string): string {
-    const data = this.latexRendererServiceConstants.unpackTextAndPackages(
-      packedData
-    );
+    const data =
+      this.latexRendererServiceConstants.unpackTextAndPackages(packedData);
     return data.latexContent;
   }
 
   public renderPackedDataAndReturnUrlToPdfBlob(
     packedData: string
   ): Observable<string> {
-    const data = this.latexRendererServiceConstants.unpackTextAndPackages(
-      packedData
-    );
+    const data =
+      this.latexRendererServiceConstants.unpackTextAndPackages(packedData);
     return this.renderLatexContentAndReturnUrlToPdfBlob(
       data.latexContent,
       data.latexPackages,
@@ -179,7 +177,8 @@ export class UtilService {
     additionalPackages: string,
     varwidth: number
   ): Observable<string> {
-    const packages = this.latexRendererServiceConstants.getDefaultLatexPackages();
+    const packages =
+      this.latexRendererServiceConstants.getDefaultLatexPackages();
     if (additionalPackages) {
       for (const additionalPackage of this.latexRendererServiceConstants.formatLatexPackagesToArray(
         additionalPackages
@@ -193,15 +192,16 @@ export class UtilService {
       content:
         this.latexRendererServiceConstants.formatLatexContent(latexContent),
       latexPackages: packages,
-      varwidth: varwidth,
+      varwidth,
       output: this.latexRendererServiceConstants.getDefaultRenderOutput(),
     };
     return this.latexRendererService.renderLatex({ body: latexBody }).pipe(
       map((response) => {
         if (response) {
-          const latexBlob = this.latexRendererServiceConstants.createBlobFromRenderedResult(
-            response
-          );
+          const latexBlob =
+            this.latexRendererServiceConstants.createBlobFromRenderedResult(
+              response
+            );
           return URL.createObjectURL(latexBlob);
         }
       })

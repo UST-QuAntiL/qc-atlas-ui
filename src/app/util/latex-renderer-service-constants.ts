@@ -25,9 +25,11 @@ export class LatexRendererServiceConstants {
     return text.concat(this.latexFormatIndicator.concat(packages));
   }
 
-  unpackTextAndPackages(
-    packedData = ''
-  ): { latexContent: string; latexPackages: string; varwidth: number } {
+  unpackTextAndPackages(packedData = ''): {
+    latexContent: string;
+    latexPackages: string;
+    varwidth: number;
+  } {
     let content = '';
     const packages: string[] = [];
     if (packedData) {
@@ -37,8 +39,11 @@ export class LatexRendererServiceConstants {
         packages.push(splitData[i]);
       }
     }
-    // const varwidth = ;
-    return { latexContent: content, latexPackages: packages.join(''), varwidth: this.getdefaultvarWidth() };
+    return {
+      latexContent: content,
+      latexPackages: packages.join(''),
+      varwidth: this.getdefaultvarWidth(),
+    };
   }
 
   public formatLatexPackagesToArray(packages: string): string[] {
