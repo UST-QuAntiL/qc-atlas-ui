@@ -201,7 +201,7 @@ export class UtilService {
       map((response) => {
         if (response) {
           const latexBlob = this.latexRendererServiceConstants.createBlobFromRenderedResult(
-              response
+            response
           );
           return URL.createObjectURL(latexBlob);
         }
