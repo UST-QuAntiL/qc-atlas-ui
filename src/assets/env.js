@@ -15,4 +15,5 @@
   window['env']['QPROV_PORT'] = 5020;
   window['env']['PATTERN_ATLAS_PORT'] = 1977;
   window['env']['LATEX_RENDERER_PORT'] = 5030;
+  window['env']['PATTERN_ATLAS_UI_PORT'] = 4200;
 })(this);
