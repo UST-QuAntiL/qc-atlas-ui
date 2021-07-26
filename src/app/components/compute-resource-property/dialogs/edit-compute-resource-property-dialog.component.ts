@@ -216,6 +216,9 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
           type.name.includes(val) || type.description.toLowerCase().includes(val)
       );
     }
+    else{
+      return new Array<ComputeResourcePropertyTypeDto> ()
+    }
   }
 }
 
