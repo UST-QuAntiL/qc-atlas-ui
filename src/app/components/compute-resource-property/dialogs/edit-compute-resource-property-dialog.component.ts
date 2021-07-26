@@ -210,10 +210,11 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
 
   private _filter(value: string): ComputeResourcePropertyTypeDto[] {
     const val = value.toLowerCase();
-    if ( val.length > 0) {
+    if (val.length > 0) {
       return this.types.filter(
         (type) =>
           type.name.includes(val) || type.description.toLowerCase().includes(val)
+          
       );
     } else {
       return new Array<ComputeResourcePropertyTypeDto>();
