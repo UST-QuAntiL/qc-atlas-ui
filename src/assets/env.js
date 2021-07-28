@@ -9,6 +9,7 @@
   window['env']['NISQ_ANALYZER_HOST_NAME'] = 'localhost';
   window['env']['PATTERN_ATLAS_HOST_NAME'] = 'localhost';
   window['env']['LATEX_RENDERER_HOST_NAME'] = 'localhost';
+  window['env']['PATTERN_ATLAS_UI_HOST_NAME'] = 'localhost';
   window['env']['CONFIG_SERVER_PORT'] = 2379;
   window['env']['QC_ATLAS_PORT'] = 6626;
   window['env']['NISQ_ANALYZER_PORT'] = 5010;
