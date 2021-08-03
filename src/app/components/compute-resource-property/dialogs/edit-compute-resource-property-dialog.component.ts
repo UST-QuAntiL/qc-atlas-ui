@@ -213,9 +213,8 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
     if (val.length > 0) {
       return this.types.filter(
         (type) =>
-          type.name.includes(val) ||
-          (type.description != null &&
-            type.description.toLowerCase().includes(val))
+          type.name.toLowerCase().includes(val) ||
+          type.description.toLowerCase().includes(val)
       );
     } else {
       return new Array<ComputeResourcePropertyTypeDto>();
