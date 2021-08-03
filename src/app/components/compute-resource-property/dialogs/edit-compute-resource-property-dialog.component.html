@@ -21,7 +21,7 @@
           (click)="onTypeSelect(type)"
         >
           <span>{{ type.name }} ({{ type.datatype }})</span>
-          <small *ngIf="type.description.length > 0">
+          <small *ngIf="type.description != null && type.description.length > 0">
             {{ type.description }}
           </small>
         </mat-option>
