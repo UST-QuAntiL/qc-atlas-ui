@@ -182,7 +182,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     });
   }
 
-  onUpdateClicked(event: any): void {
+  onUpdateClicked(event: PatternRelationTableObject): void {
     this.utilService
       .createDialog(
         AddPatternRelationDialogComponent,

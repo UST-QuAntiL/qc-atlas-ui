@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
 import { forkJoin } from 'rxjs';
 import { AlgorithmRelationTypeDto } from 'api-atlas/models/algorithm-relation-type-dto';
+import { PageAlgorithmRelationTypeDto } from 'api-atlas/models/page-algorithm-relation-type-dto';
 import { UtilService } from '../../../util/util.service';
 import {
   ConfirmDialogComponent,
@@ -17,9 +18,10 @@ import { AddOrEditAlgorithmRelationTypeDialogComponent } from '../dialogs/add-or
 })
 export class AlgorithmRelationTypesListComponent implements OnInit {
   algorithmRelationTypes: any[] = [];
+  algorithmRelationTypes: AlgorithmRelationTypeDto[] = [];
   tableColumns = ['Name', 'Inverse Type Name'];
   variableNames = ['name', 'inverseTypeName'];
-  pagingInfo: any = {};
+  pagingInfo: PageAlgorithmRelationTypeDto = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -161,7 +163,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
       });
   }
 
-  onEditElement(event: any): void {
+  onEditElement(event: AlgorithmRelationTypeDto): void {
     const dialogRef = this.utilService.createDialog(
       AddOrEditAlgorithmRelationTypeDialogComponent,
       {

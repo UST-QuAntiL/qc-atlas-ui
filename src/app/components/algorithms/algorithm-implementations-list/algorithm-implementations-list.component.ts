@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
+import { PageImplementationDto } from 'api-atlas/models/page-implementation-dto';
+
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
@@ -19,7 +21,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   implementations: ImplementationDto[];
   variableNames: string[] = ['name', 'description', 'dependencies'];
   tableColumns: string[] = ['Name', 'Description', 'Dependencies'];
-  pagingInfo: any = {};
+  pagingInfo: PageImplementationDto = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
