@@ -17,7 +17,6 @@ import { AddOrEditAlgorithmRelationTypeDialogComponent } from '../dialogs/add-or
   styleUrls: ['./algorithm-relation-types-list.component.scss'],
 })
 export class AlgorithmRelationTypesListComponent implements OnInit {
-  algorithmRelationTypes: any[] = [];
   algorithmRelationTypes: AlgorithmRelationTypeDto[] = [];
   tableColumns = ['Name', 'Inverse Type Name'];
   variableNames = ['name', 'inverseTypeName'];
