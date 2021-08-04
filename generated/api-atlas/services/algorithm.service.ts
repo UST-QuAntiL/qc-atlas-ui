@@ -38,6 +38,7 @@ import { PublicationDto } from '../models/publication-dto';
 import { SketchDto } from '../models/sketch-dto';
 import { SoftwarePlatformDto } from '../models/software-platform-dto';
 import { TagDto } from '../models/tag-dto';
+import { Sort } from '../models/sort';
 
 @Injectable({
   providedIn: 'root',
@@ -398,7 +399,7 @@ export class AlgorithmService extends BaseService {
     /**
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
-    sort?: Array<string>;
+    sort?: Sort;
   }): Observable<StrictHttpResponse<PageAlgorithmRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -456,7 +457,7 @@ export class AlgorithmService extends BaseService {
     /**
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
-    sort?: Array<string>;
+    sort?: Sort;
   }): Observable<PageAlgorithmRelationDto> {
     return this.getAlgorithmRelationsOfAlgorithm$Response(params).pipe(
       map(

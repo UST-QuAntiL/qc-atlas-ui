@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import { ApplicationAreaDto } from 'api-atlas/models/application-area-dto';
+import { PageApplicationAreaDto } from 'api-atlas/models/page-application-area-dto';
 import { forkJoin } from 'rxjs';
 import {
   ConfirmDialogComponent,
@@ -16,10 +17,10 @@ import { AddOrEditApplicationAreaDialogComponent } from '../dialogs/add-or-edit-
   styleUrls: ['./application-areas-list.component.scss'],
 })
 export class ApplicationAreasListComponent implements OnInit {
-  applicationAreas: any[] = [];
+  applicationAreas: ApplicationAreaDto[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
-  pagingInfo: any = {};
+  pagingInfo: PageApplicationAreaDto = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -164,7 +165,7 @@ export class ApplicationAreasListComponent implements OnInit {
       });
   }
 
-  onEditElement(event: any): void {
+  onEditElement(event: ApplicationAreaDto): void {
     const dialogRef = this.utilService.createDialog(
       AddOrEditApplicationAreaDialogComponent,
       {

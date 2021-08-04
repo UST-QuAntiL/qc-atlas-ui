@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ComputeResourcePropertyTypesService } from 'api-atlas/services/compute-resource-property-types.service';
 import { ComputeResourcePropertyTypeDto } from 'api-atlas/models/compute-resource-property-type-dto';
+import { PageComputeResourcePropertyTypeDto } from 'api-atlas/models/page-compute-resource-property-type-dto';
 import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../util/util.service';
 // eslint-disable-next-line max-len
@@ -16,10 +17,10 @@ import {
   styleUrls: ['./compute-resource-property-types-list.component.scss'],
 })
 export class ComputeResourcePropertyTypesListComponent implements OnInit {
-  computeResourcePropertyTypes: any[] = [];
+  computeResourcePropertyTypes: ComputeResourcePropertyTypeDto[] = [];
   tableColumns = ['Name', 'Datatype', 'Description'];
   variableNames = ['name', 'datatype', 'description'];
-  pagingInfo: any = {};
+  pagingInfo: PageComputeResourcePropertyTypeDto = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -162,7 +163,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
       });
   }
 
-  onEditElement(event: any): void {
+  onEditElement(event: ComputeResourcePropertyTypeDto): void {
     const dialogRef = this.utilService.createDialog(
       AddOrEditComputeResourcePropertyTypeDialogComponent,
       {

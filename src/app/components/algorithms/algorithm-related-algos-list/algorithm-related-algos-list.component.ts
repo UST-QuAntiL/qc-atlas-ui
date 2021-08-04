@@ -6,6 +6,8 @@ import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
 import { Router } from '@angular/router';
 import { AlgorithmRelationTypeDto } from 'api-atlas/models';
+import { PageAlgorithmRelationDto } from 'api-atlas/models';
+import { Sort } from 'api-atlas/models';
 import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../util/util.service';
 import { AddAlgorithmRelationDialogComponent } from '../dialogs/add-algorithm-relation-dialog.component';
@@ -27,7 +29,8 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     'description',
   ];
   tableColumns: string[] = ['Related Algorithm', 'Relation', 'Description'];
-  pagingInfo: any = {};
+  pagingInfo: PageAlgorithmRelationDto = {};
+
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -48,7 +51,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     search?: string;
     page?: number;
     size?: number;
-    sort?: string[];
+    sort?: Sort;
   }): void {
     this.algorithmService.getAlgorithmRelationsOfAlgorithm(params).subscribe(
       (relations) => {
@@ -63,6 +66,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   prepareRelations(relations): void {
+    console.log(relations);
     if (relations.content) {
       this.algorithmRelations = relations.content;
       this.generateTableObjects();
