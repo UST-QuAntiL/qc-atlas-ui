@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
+import { PageComputeResourceDto } from 'api-atlas/models/page-compute-resource-dto';
 import { forkJoin } from 'rxjs';
 import {
   SelectParams,
@@ -21,7 +22,7 @@ export class ComputeResourceListComponent implements OnInit {
 
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
-  pagingInfo: any = {};
+  pagingInfo: PageComputeResourceDto = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

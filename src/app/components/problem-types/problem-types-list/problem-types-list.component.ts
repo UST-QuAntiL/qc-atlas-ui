@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
+import { PageProblemTypeDto } from 'api-atlas/models/page-problem-type-dto';
 import { forkJoin } from 'rxjs';
 import {
   ConfirmDialogComponent,
@@ -19,7 +20,7 @@ export class ProblemTypesListComponent implements OnInit {
   problemTypes: any[] = [];
   tableColumns = ['Name', 'Parent'];
   variableNames = ['name', 'parentProblemTypeName'];
-  pagingInfo: any = {};
+  pagingInfo: PageProblemTypeDto = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

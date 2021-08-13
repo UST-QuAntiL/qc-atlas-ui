@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
+import { PageSoftwarePlatformDto } from 'api-atlas/models/page-software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -24,7 +25,7 @@ export class SoftwarePlatformListComponent implements OnInit {
 
   tableColumns = ['Name', 'Version', 'Licence', 'Link'];
   variableNames = ['name', 'version', 'licence', 'link'];
-  pagingInfo: any = {};
+  pagingInfo: PageSoftwarePlatformDto = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

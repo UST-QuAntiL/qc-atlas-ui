@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-type.service';
 import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
+import { PagePatternRelationTypeDto } from 'api-atlas/models/page-pattern-relation-type-dto';
 import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../util/util.service';
 // eslint-disable-next-line max-len
@@ -16,10 +17,10 @@ import {
   styleUrls: ['./pattern-relation-types-list.component.scss'],
 })
 export class PatternRelationTypesListComponent implements OnInit {
-  patternRelationTypes: any[] = [];
+  patternRelationTypes: PatternRelationTypeDto[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
-  pagingInfo: any = {};
+  pagingInfo: PagePatternRelationTypeDto = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -165,7 +166,7 @@ export class PatternRelationTypesListComponent implements OnInit {
       });
   }
 
-  onEditElement(event: any): void {
+  onEditElement(event: PatternRelationTypeDto): void {
     const dialogRef = this.utilService.createDialog(
       AddOrEditPatternRelationTypeDialogComponent,
       {

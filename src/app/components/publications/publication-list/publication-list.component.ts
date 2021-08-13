@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { PublicationDto } from 'api-atlas/models/publication-dto';
+import { PagePublicationDto } from 'api-atlas/models/page-publication-dto';
 import { forkJoin } from 'rxjs';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
 import {
@@ -22,7 +23,7 @@ export class PublicationListComponent implements OnInit {
   tableColumns = ['Title', 'URL', 'DOI', 'Authors'];
   variableNames = ['title', 'url', 'doi', 'authors'];
   externalLinkVariables = ['url'];
-  pagingInfo: any = {};
+  pagingInfo: PagePublicationDto = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -61,7 +62,7 @@ export class PublicationListComponent implements OnInit {
     this.pagingInfo.sort = data.sort;
   }
 
-  onElementClicked(publication: any): void {
+  onElementClicked(publication: PublicationDto): void {
     this.router.navigate(['publications', publication.id]);
   }
 

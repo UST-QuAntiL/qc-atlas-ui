@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
+import { PageCloudServiceDto } from 'api-atlas/models/page-cloud-service-dto';
 import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../../util/util.service';
 import {
@@ -22,7 +23,7 @@ export class CloudServiceListComponent implements OnInit {
 
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
   variableNames = ['name', 'provider', 'description', 'costModel', 'url'];
-  pagingInfo: any = {};
+  pagingInfo: PageCloudServiceDto = {};
   paginatorConfig: any = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

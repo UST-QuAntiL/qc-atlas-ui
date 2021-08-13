@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
+import { PageSoftwarePlatformDto } from 'api-atlas/models/page-software-platform-dto';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
+import { PageCloudServiceDto } from 'api-atlas/models/page-cloud-service-dto';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
+import { PageComputeResourceDto } from 'api-atlas/models/page-compute-resource-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { QueryParams } from '../../generics/data-list/data-list.component';
@@ -15,7 +18,7 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
   softwarePlatforms: SoftwarePlatformDto[] = [];
   tableColumnsSoftwarePlatform = ['Name', 'Version', 'Licence', 'Link'];
   variableNamesSoftwarePlatform = ['name', 'version', 'licence', 'link'];
-  pagingInfoSoftwarePlatforms: any = {};
+  pagingInfoSoftwarePlatforms: PageSoftwarePlatformDto = {};
 
   cloudServices: CloudServiceDto[] = [];
   tableColumnsCloudServices = [
@@ -32,7 +35,7 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
     'costModel',
     'URL',
   ];
-  pagingInfoCloudServices: any = {};
+  pagingInfoCloudServices: PageCloudServiceDto = {};
 
   computeResources: ComputeResourceDto[] = [];
   tableColumnsComputeResources = [
@@ -47,7 +50,7 @@ export class ExecutionEnvironmentSearchComponent implements OnInit {
     'technology',
     'quantumComputationModel',
   ];
-  pagingInfoComputeResources: any = {};
+  pagingInfoComputeResources: PageComputeResourceDto = {};
 
   searchText = '';
   hasSearched = false;
