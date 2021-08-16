@@ -31,7 +31,7 @@
           name="Cost Model"
           [value]="cloudService.costModel"
           [multiline]="true"
-          [maxLines]="5"
+          [maxLines]="10"
           (onChange)="onPropertyChanged($event, 'costModel')"
           (onSaveChanges)="onChangesSaved($event, 'costModel')"
         ></app-text-input>
@@ -45,7 +45,7 @@
         <app-text-input
                 name="Description"
                 [multiline]="true"
-                [maxLines]="5"
+                [maxLines]="50"
                 [value]="cloudService.description"
                 (onChange)="onPropertyChanged($event,   'description')"
                 (onSaveChanges)="onChangesSaved($event, 'description')"
