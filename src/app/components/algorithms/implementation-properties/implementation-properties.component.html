@@ -64,6 +64,7 @@
                 (onSaveChanges)="onChangesSaved($event,'dependencies')"
                 [value]="frontendImplementation.dependencies"
                 [baseValue]="implementation.dependencies"
+                [maxLines]="50"
                 [multiline]="true"
         ></app-text-input>
       </mat-card>
@@ -79,6 +80,7 @@
                 (onSaveChanges)="onChangesSaved($event,'description')"
                 [value]="frontendImplementation.description"
                 [baseValue]="implementation.description"
+                [maxLines]="50"
                 [multiline]="true"
         ></app-text-input>
       </mat-card>
@@ -94,6 +96,8 @@
                 (onSaveChanges)="onChangesSaved($event,'inputFormat')"
                 [value]="frontendImplementation.inputFormat"
                 [baseValue]="implementation.inputFormat"
+                [multiline]="true"
+                [maxLines]="10"
         ></app-text-input>
       </mat-card>
     </div>
@@ -108,6 +112,8 @@
                 (onSaveChanges)="onChangesSaved($event,'parameter')"
                 [value]="frontendImplementation.parameter"
                 [baseValue]="implementation.parameter"
+                [multiline]="true"
+                [maxLines]="10"
         ></app-text-input>
       </mat-card>
     </div>
@@ -122,6 +128,8 @@
                 (onSaveChanges)="onChangesSaved($event,'outputFormat')"
                 [value]="frontendImplementation.outputFormat"
                 [baseValue]="implementation.outputFormat"
+                [multiline]="true"
+                [maxLines]="10"
         ></app-text-input>
       </mat-card>
     </div>
