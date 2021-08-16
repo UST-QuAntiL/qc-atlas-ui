@@ -10,7 +10,6 @@
       <mat-select formControlName="computationModel" required>
         <mat-option [value]="'CLASSIC'">Classic</mat-option>
         <mat-option [value]="'QUANTUM'">Quantum</mat-option>
-        <mat-option [value]="'HYBRID'">Hybrid</mat-option>
       </mat-select>
     </mat-form-field>
     <ng-container *ngIf="computationModel.value !== 'CLASSIC'">

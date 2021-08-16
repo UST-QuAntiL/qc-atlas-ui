@@ -1,6 +1,6 @@
 <div class="p-4">
   <div class="row">
-    <div class="col-xl-4 col-lg-12">
+    <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input name="Name"
                         [value]="frontendAlgorithm.name"
@@ -10,7 +10,8 @@
         ></app-text-input>
       </mat-card>
     </div>
-    <div class="col-xl-4 col-lg-12">
+
+    <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input name="Acronym"
                         [value]="frontendAlgorithm.acronym"
@@ -20,94 +21,43 @@
         ></app-text-input>
       </mat-card>
     </div>
+  </div>
+
+  <div class="row" *ngIf="algorithm.computationModel === 'QUANTUM' && frontendAlgorithm.computationModel === 'QUANTUM'">
+    <!-- TODO: finish Sketch -->
     <div class="col-xl-4 col-lg-12">
       <mat-card class="m-2">
-        <app-text-input name="Intent"
-                        [value]="frontendAlgorithm.intent"
-                        [baseValue]="algorithm.intent"
-                        [multiline]="true"
-                        [maxLines]="5"
-                        (onChange)="onPropertyChanged($event, 'intent')"
-                        (onSaveChanges)="onChangesSaved($event, 'intent')"
-        ></app-text-input>
+        <app-select-input name="Quantum computation model"
+                          [value]="algorithm.quantumComputationModel"
+                          [choices]="availableQuantumComputationModelOptions"
+                          (onChange)="onPropertyChanged($event,   'quantumComputationModel')"
+                          (onSaveChanges)="onChangesSaved($event,   'quantumComputationModel')">
+        </app-select-input>
+      </mat-card>
+    </div>
+
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
+        <app-text-input name="Speedup"
+                        [value]="frontendAlgorithm.speedUp"
+                        [baseValue]="algorithm.speedUp"
+                        (onChange)="onPropertyChanged($event, 'speedUp')"
+                        (onSaveChanges)="onChangesSaved($event, 'speedUp')"></app-text-input>
+      </mat-card>
+    </div>
+
+    <div class="col-xl-4 col-lg-12">
+      <mat-card class="m-2">
+        <app-checkbox-input name="NISQ ready"
+                            [value]="frontendAlgorithm.nisqReady"
+                            [baseValue]="algorithm.nisqReady"
+                            (onChange)="onPropertyChanged($event, 'nisqReady')"
+                            (onSaveChanges)="onChangesSaved($event, 'nisqReady')">
+        </app-checkbox-input>
       </mat-card>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
-        <app-text-input name="Input format"
-                        [value]="frontendAlgorithm.inputFormat"
-                        [baseValue]="algorithm.inputFormat"
-                        [multiline]="true"
-                        [maxLines]="5"
-                        (onChange)="onPropertyChanged($event, 'inputFormat')"
-                        (onSaveChanges)="onChangesSaved($event, 'inputFormat')"></app-text-input>
-      </mat-card>
-    </div>
-
-    <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
-        <app-text-input name="Parameters"
-                        [value]="frontendAlgorithm.algoParameter"
-                        [baseValue]="algorithm.inputFormat"
-                        [multiline]="true"
-                        [maxLines]="5"
-                        (onChange)="onPropertyChanged($event, 'algoParameter')"
-                        (onSaveChanges)="onChangesSaved($event, 'algoParameter')"></app-text-input>
-      </mat-card>
-    </div>
-
-    <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
-        <app-text-input name="Output format"
-                        [value]="frontendAlgorithm.outputFormat"
-                        [baseValue]="algorithm.outputFormat"
-                        [multiline]="true"
-                        [maxLines]="5"
-                        (onChange)="onPropertyChanged($event, 'outputFormat')"
-                        (onSaveChanges)="onChangesSaved($event, 'outputFormat')"></app-text-input>
-      </mat-card>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
-        <app-text-input name="Solution"
-                        [value]="frontendAlgorithm.solution"
-                        [baseValue]="algorithm.solution"
-                        [multiline]="true"
-                        [maxLines]="5"
-                        (onChange)="onPropertyChanged($event, 'solution')"
-                        (onSaveChanges)="onChangesSaved($event, 'solution')"></app-text-input>
-      </mat-card>
-    </div>
-
-    <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
-        <app-text-input name="Assumptions"
-                        [value]="frontendAlgorithm.assumptions"
-                        [baseValue]="algorithm.assumptions"
-                        [multiline]="true"
-                        [maxLines]="5"
-                        (onChange)="onPropertyChanged($event, 'assumptions')"
-                        (onSaveChanges)="onChangesSaved($event, 'assumptions')"></app-text-input>
-      </mat-card>
-    </div>
-    <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
-        <app-text-input name="Problem"
-                        [value]="frontendAlgorithm.problem"
-                        [baseValue]="algorithm.problem"
-                        [multiline]="true"
-                        [maxLines]="5"
-                        (onChange)="onPropertyChanged($event, 'problem')"
-                        (onSaveChanges)="onChangesSaved($event, 'problem')"
-        ></app-text-input>
-      </mat-card>
-    </div>
-  </div>
   <div class="row">
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
@@ -137,6 +87,105 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input name="Intent"
+                        [value]="frontendAlgorithm.intent"
+                        [baseValue]="algorithm.intent"
+                        [multiline]="true"
+                        [maxLines]="50"
+                        (onChange)="onPropertyChanged($event, 'intent')"
+                        (onSaveChanges)="onChangesSaved($event, 'intent')"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input name="Problem"
+                        [value]="frontendAlgorithm.problem"
+                        [baseValue]="algorithm.problem"
+                        [multiline]="true"
+                        [maxLines]="50"
+                        (onChange)="onPropertyChanged($event, 'problem')"
+                        (onSaveChanges)="onChangesSaved($event, 'problem')"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input name="Solution"
+                        [value]="frontendAlgorithm.solution"
+                        [baseValue]="algorithm.solution"
+                        [multiline]="true"
+                        [maxLines]="50"
+                        (onChange)="onPropertyChanged($event, 'solution')"
+                        (onSaveChanges)="onChangesSaved($event, 'solution')"></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input name="Input format"
+                        [value]="frontendAlgorithm.inputFormat"
+                        [baseValue]="algorithm.inputFormat"
+                        [multiline]="true"
+                        [maxLines]="10"
+                        (onChange)="onPropertyChanged($event, 'inputFormat')"
+                        (onSaveChanges)="onChangesSaved($event, 'inputFormat')"></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input name="Parameters"
+                        [value]="frontendAlgorithm.algoParameter"
+                        [baseValue]="algorithm.inputFormat"
+                        [multiline]="true"
+                        [maxLines]="10"
+                        (onChange)="onPropertyChanged($event, 'algoParameter')"
+                        (onSaveChanges)="onChangesSaved($event, 'algoParameter')"></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input name="Output format"
+                        [value]="frontendAlgorithm.outputFormat"
+                        [baseValue]="algorithm.outputFormat"
+                        [multiline]="true"
+                        [maxLines]="10"
+                        (onChange)="onPropertyChanged($event, 'outputFormat')"
+                        (onSaveChanges)="onChangesSaved($event, 'outputFormat')"></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input name="Assumptions"
+                        [value]="frontendAlgorithm.assumptions"
+                        [baseValue]="algorithm.assumptions"
+                        [multiline]="true"
+                        [maxLines]="50"
+                        (onChange)="onPropertyChanged($event, 'assumptions')"
+                        (onSaveChanges)="onChangesSaved($event, 'assumptions')"></app-text-input>
+      </mat-card>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-12">
@@ -148,45 +197,6 @@
                                             [resourceProperties]="computeResourceProperties">
         </app-compute-resource-property-list>
       </mat-card>
-    </div>
-  </div>
-
-  <div *ngIf="algorithm.computationModel === 'QUANTUM' && frontendAlgorithm.computationModel === 'QUANTUM'">
-    <div class="row">
-      <div class="col-lg-6 col-sm-12">
-        <mat-card class="m-2">
-          <app-text-input name="Speedup"
-                          [value]="frontendAlgorithm.speedUp"
-                          [baseValue]="algorithm.speedUp"
-                          (onChange)="onPropertyChanged($event, 'speedUp')"
-                          (onSaveChanges)="onChangesSaved($event, 'speedUp')"></app-text-input>
-        </mat-card>
-      </div>
-
-      <div class="col-lg-6 col-sm-12">
-        <mat-card class="m-2">
-          <app-checkbox-input name="NISQ ready"
-                              [value]="frontendAlgorithm.nisqReady"
-                              [baseValue]="algorithm.nisqReady"
-                              (onChange)="onPropertyChanged($event, 'nisqReady')"
-                              (onSaveChanges)="onChangesSaved($event, 'nisqReady')">
-          </app-checkbox-input>
-        </mat-card>
-      </div>
-    </div>
-
-    <!-- TODO: finish Sketch -->
-    <div class="row">
-      <div class="col-lg-6 col-sm-12">
-        <mat-card class="m-2">
-          <app-select-input name="Quantum computation model"
-                            [value]="algorithm.quantumComputationModel"
-                            [choices]="availableQuantumComputationModelOptions"
-                            (onChange)="onPropertyChanged($event,   'quantumComputationModel')"
-                            (onSaveChanges)="onChangesSaved($event,   'quantumComputationModel')">
-          </app-select-input>
-        </mat-card>
-      </div>
     </div>
   </div>
 </div>
