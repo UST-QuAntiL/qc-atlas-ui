@@ -1,6 +1,6 @@
 <div class="p-4">
   <div class="row">
-    <div class="col-lg-4 col-sm-12">
+    <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input
           name="Name"
@@ -12,19 +12,8 @@
         ></app-text-input>
       </mat-card>
     </div>
-    <div class="col-lg-4 col-sm-12">
-      <mat-card class="m-2">
-        <app-text-input
-          name="Description"
-          (onChange)="onPropertyChanged($event,'description')"
-          (onSaveChanges)="onChangesSaved($event,'description')"
-          [value]="frontendImplementation.description"
-          [baseValue]="implementation.description"
-          [multiline]="true"
-        ></app-text-input>
-      </mat-card>
-    </div>
-    <div class="col-lg-4 col-sm-12">
+
+    <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input
           name="Contributors"
@@ -39,7 +28,7 @@
   </div>
 
   <div class="row">
-    <div class="col-lg-4 col-sm-12">
+    <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input
           name="Version"
@@ -51,19 +40,8 @@
         ></app-text-input>
       </mat-card>
     </div>
-    <div class="col-lg-4 col-sm-12">
-      <mat-card class="m-2">
-        <app-text-input
-          name="Dependencies"
-          (onChange)="onPropertyChanged($event,'dependencies')"
-          (onSaveChanges)="onChangesSaved($event,'dependencies')"
-          [value]="frontendImplementation.dependencies"
-          [baseValue]="implementation.dependencies"
-          [multiline]="true"
-        ></app-text-input>
-      </mat-card>
-    </div>
-    <div class="col-lg-4 col-sm-12">
+
+    <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input
           name="License"
@@ -76,41 +54,79 @@
       </mat-card>
     </div>
   </div>
+
   <div class="row">
-    <div class="col-xl-4 col-lg-12">
+    <div class="col-12">
       <mat-card class="m-2">
         <app-text-input
-          name="Input Format"
-          (onChange)="onPropertyChanged($event,'inputFormat')"
-          (onSaveChanges)="onChangesSaved($event,'inputFormat')"
-          [value]="frontendImplementation.inputFormat"
-          [baseValue]="implementation.inputFormat"
-        ></app-text-input>
-      </mat-card>
-    </div>
-    <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
-        <app-text-input
-          name="Parameter"
-          (onChange)="onPropertyChanged($event,'parameter')"
-          (onSaveChanges)="onChangesSaved($event,'parameter')"
-          [value]="frontendImplementation.parameter"
-          [baseValue]="implementation.parameter"
-        ></app-text-input>
-      </mat-card>
-    </div>
-    <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
-        <app-text-input
-          name="Output Format"
-          (onChange)="onPropertyChanged($event,'outputFormat')"
-          (onSaveChanges)="onChangesSaved($event,'outputFormat')"
-          [value]="frontendImplementation.outputFormat"
-          [baseValue]="implementation.outputFormat"
+                name="Dependencies"
+                (onChange)="onPropertyChanged($event,'dependencies')"
+                (onSaveChanges)="onChangesSaved($event,'dependencies')"
+                [value]="frontendImplementation.dependencies"
+                [baseValue]="implementation.dependencies"
+                [multiline]="true"
         ></app-text-input>
       </mat-card>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input
+                name="Description"
+                (onChange)="onPropertyChanged($event,'description')"
+                (onSaveChanges)="onChangesSaved($event,'description')"
+                [value]="frontendImplementation.description"
+                [baseValue]="implementation.description"
+                [multiline]="true"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input
+                name="Input Format"
+                (onChange)="onPropertyChanged($event,'inputFormat')"
+                (onSaveChanges)="onChangesSaved($event,'inputFormat')"
+                [value]="frontendImplementation.inputFormat"
+                [baseValue]="implementation.inputFormat"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input
+                name="Parameter"
+                (onChange)="onPropertyChanged($event,'parameter')"
+                (onSaveChanges)="onChangesSaved($event,'parameter')"
+                [value]="frontendImplementation.parameter"
+                [baseValue]="implementation.parameter"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input
+                name="Output Format"
+                (onChange)="onPropertyChanged($event,'outputFormat')"
+                (onSaveChanges)="onChangesSaved($event,'outputFormat')"
+                [value]="frontendImplementation.outputFormat"
+                [baseValue]="implementation.outputFormat"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-lg-12 col-sm-12">
       <mat-card class="m-2">
