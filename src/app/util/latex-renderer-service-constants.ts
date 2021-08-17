@@ -13,10 +13,6 @@ export class LatexRendererServiceConstants {
     ];
   }
 
-  public getdefaultvarWidth(): number {
-    return 1.0;
-  }
-
   public getDefaultRenderOutput(): string {
     return 'svg';
   }
@@ -26,7 +22,8 @@ export class LatexRendererServiceConstants {
   }
 
   unpackTextAndPackages(
-    packedData = ''
+    packedData = '',
+    varwidth = 1
   ): {
     latexContent: string;
     latexPackages: string;
@@ -44,7 +41,7 @@ export class LatexRendererServiceConstants {
     return {
       latexContent: content,
       latexPackages: packages.join(''),
-      varwidth: this.getdefaultvarWidth(),
+      varwidth,
     };
   }
 

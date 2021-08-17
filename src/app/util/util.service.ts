@@ -162,10 +162,12 @@ export class UtilService {
   }
 
   public renderPackedDataAndReturnUrlToPdfBlob(
-    packedData: string
+    packedData: string,
+    varwidth: number
   ): Observable<string> {
     const data = this.latexRendererServiceConstants.unpackTextAndPackages(
-      packedData
+      packedData,
+      varwidth
     );
     return this.renderLatexContentAndReturnUrlToPdfBlob(
       data.latexContent,

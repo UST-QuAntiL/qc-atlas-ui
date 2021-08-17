@@ -1,11 +1,11 @@
 import {
-  Component,
+  Component, ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
+  SimpleChanges, ViewChild,
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -32,6 +32,8 @@ export class TextInputComponent implements OnInit, OnChanges {
 
   // TODO fix latex-renderer service running in a docker container to leverage the latex feature
   @Input() latexActive = true;
+
+  @ViewChild('renderedLatexField') renderedLatexField;
 
   inputValue: string;
   toggleLatex = false;
@@ -130,7 +132,10 @@ export class TextInputComponent implements OnInit, OnChanges {
 
   private renderLatexContent(latexValue: string): void {
     this.utilService
-      .renderPackedDataAndReturnUrlToPdfBlob(latexValue)
+      .renderPackedDataAndReturnUrlToPdfBlob(
+        latexValue,
+        (this.renderedLatexField.nativeElement.offsetWidth / 2480) * 3.12
+      )
       .subscribe((url) => {
         this.urlToRenderedBlob = this.sanitizer.bypassSecurityTrustUrl(url);
       });
