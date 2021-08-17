@@ -3,19 +3,6 @@
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input
-          name="Description"
-          [multiline]="true"
-          [maxLines]="5"
-          [value]="cloudService.description"
-          (onChange)="onPropertyChanged($event,   'description')"
-          (onSaveChanges)="onChangesSaved($event, 'description')"
-        ></app-text-input>
-      </mat-card>
-    </div>
-
-    <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
-        <app-text-input
           name="Provider"
           [value]="cloudService.provider"
           (onChange)="onPropertyChanged($event, 'provider')"
@@ -23,28 +10,45 @@
         ></app-text-input>
       </mat-card>
     </div>
-  </div>
 
-  <div class="row">
     <div class="col-lg-6 col-sm-12">
       <mat-card class="m-2">
         <app-text-input
-          name="URL"
-          [isLink]="true"
-          [value]="cloudService.url"
-          (onChange)="onPropertyChanged($event, 'url')"
-          (onSaveChanges)="onChangesSaved($event, 'url')"
+                name="URL"
+                [isLink]="true"
+                [value]="cloudService.url"
+                (onChange)="onPropertyChanged($event, 'url')"
+                (onSaveChanges)="onChangesSaved($event, 'url')"
         ></app-text-input>
       </mat-card>
     </div>
+  </div>
 
-    <div class="col-lg-6 col-sm-12">
+  <div class="row">
+    <div class="col-12">
       <mat-card class="m-2">
         <app-text-input
           name="Cost Model"
           [value]="cloudService.costModel"
+          [multiline]="true"
+          [maxLines]="10"
           (onChange)="onPropertyChanged($event, 'costModel')"
           (onSaveChanges)="onChangesSaved($event, 'costModel')"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="m-2">
+        <app-text-input
+                name="Description"
+                [multiline]="true"
+                [maxLines]="50"
+                [value]="cloudService.description"
+                (onChange)="onPropertyChanged($event,   'description')"
+                (onSaveChanges)="onChangesSaved($event, 'description')"
         ></app-text-input>
       </mat-card>
     </div>
