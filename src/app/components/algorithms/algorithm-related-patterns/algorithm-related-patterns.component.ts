@@ -4,6 +4,7 @@ import { PatternRelationTypeService } from 'api-atlas/services/pattern-relation-
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { PatternRelationTypeDto } from 'api-atlas/models/pattern-relation-type-dto';
 import { PatternRelationDto } from 'api-atlas/models';
+import { PagePatternRelationDto } from 'api-atlas/models';
 import { PatternControllerService } from 'api-patternatlas/services/pattern-controller.service';
 import { EntityModelPattern } from 'api-patternatlas/models/entity-model-pattern';
 import { EntityModelPatternLanguage } from 'api-patternatlas/models';
@@ -30,7 +31,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   tableColumns: string[] = ['Pattern', 'Relation Type', 'Description'];
   externalLinkVariables: string[] = ['pattern'];
 
-  pagingInfo: any = {};
+  pagingInfo: PagePatternRelationDto = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
