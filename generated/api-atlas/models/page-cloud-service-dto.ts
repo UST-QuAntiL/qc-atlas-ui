@@ -10,8 +10,9 @@ export type PageCloudServiceDto = {
   size?: number;
   content?: Array<CloudServiceDto>;
   number?: number;
-  sort?: Sort;
+  sort?: string[];
   numberOfElements?: number;
   last?: boolean;
   empty?: boolean;
+  search?: string;
 };

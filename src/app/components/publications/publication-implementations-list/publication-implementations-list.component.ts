@@ -59,7 +59,7 @@ export class PublicationImplementationsListComponent implements OnInit {
       selectedAmount: 10,
     },
   };
-  pagingInfo: any = {};
+  pagingInfo: PageImplementationDto = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

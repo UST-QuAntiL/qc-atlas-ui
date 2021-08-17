@@ -10,8 +10,9 @@ export type PageImplementationDto = {
   size?: number;
   content?: Array<ImplementationDto>;
   number?: number;
-  sort?: Sort;
+  sort?: string[];
   numberOfElements?: number;
   last?: boolean;
   empty?: boolean;
+  search?: string;
 };

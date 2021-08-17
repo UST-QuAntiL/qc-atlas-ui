@@ -10,8 +10,9 @@ export type PagePublicationDto = {
   size?: number;
   content?: Array<PublicationDto>;
   number?: number;
-  sort?: Sort;
+  sort?: string[];
   numberOfElements?: number;
   last?: boolean;
   empty?: boolean;
+  search?: string;
 };

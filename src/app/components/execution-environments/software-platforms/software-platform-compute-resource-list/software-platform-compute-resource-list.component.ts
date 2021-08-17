@@ -45,7 +45,7 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
       selectedAmount: 10,
     },
   };
-  pagingInfo: any = {};
+  pagingInfo: PageComputeResourceDto = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

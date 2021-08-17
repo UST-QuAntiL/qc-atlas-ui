@@ -37,7 +37,7 @@ export class ImplementationSoftwareplatformListComponent implements OnInit {
     data: [],
     linkedData: [],
   };
-  pagingInfo: any = {};
+  pagingInfo: PageSoftwarePlatformDto = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

@@ -47,7 +47,7 @@ export class ComputeResourceCloudServiceListComponent implements OnInit {
       selectedAmount: 10,
     },
   };
-  pagingInfo: any = {};
+  pagingInfo: PageCloudServiceDto = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

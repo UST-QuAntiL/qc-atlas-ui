@@ -10,8 +10,9 @@ export type PageSoftwarePlatformDto = {
   size?: number;
   content?: Array<SoftwarePlatformDto>;
   number?: number;
-  sort?: Sort;
+  sort?: string[];
   numberOfElements?: number;
   last?: boolean;
   empty?: boolean;
+  search?: string;
 };
