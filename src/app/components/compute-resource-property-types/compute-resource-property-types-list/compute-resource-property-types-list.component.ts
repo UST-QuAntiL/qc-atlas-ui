@@ -10,6 +10,7 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
 
 @Component({
   selector: 'app-compute-resource-property-types-list',
@@ -21,7 +22,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
   tableColumns = ['Name', 'Datatype', 'Description'];
   variableNames = ['name', 'datatype', 'description'];
   pagingInfo: PageComputeResourcePropertyTypeDto = {};
-  paginatorConfig: any = {
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };

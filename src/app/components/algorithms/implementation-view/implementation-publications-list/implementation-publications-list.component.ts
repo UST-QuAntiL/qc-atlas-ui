@@ -16,6 +16,7 @@ import {
   QueryParams,
   UrlData,
 } from '../../../generics/data-list/data-list.component';
+import { PaginatorConfig } from '../../../../util/paginatorConfig';
 
 @Component({
   selector: 'app-implementation-publications-list',
@@ -50,7 +51,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
   };
   tableAddAllowed = true;
   pagingInfo: any = {};
-  paginatorConfig: any = {
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };

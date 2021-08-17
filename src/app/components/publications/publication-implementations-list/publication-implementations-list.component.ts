@@ -16,6 +16,7 @@ import {
   LinkItemListDialogComponent,
 } from '../../generics/dialogs/link-item-list-dialog.component';
 import { UtilService } from '../../../util/util.service';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
 
 @Component({
   selector: 'app-publication-implementations-list',
@@ -59,7 +60,7 @@ export class PublicationImplementationsListComponent implements OnInit {
     },
   };
   pagingInfo: any = {};
-  paginatorConfig: any = {
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };

@@ -15,6 +15,7 @@ import {
   DialogData,
   LinkItemListDialogComponent,
 } from '../../../generics/dialogs/link-item-list-dialog.component';
+import { PaginatorConfig } from '../../../../util/paginatorConfig';
 
 @Component({
   selector: 'app-compute-resource-software-platform-list',
@@ -35,7 +36,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
     linkedData: [],
   };
   pagingInfo: any = {};
-  paginatorConfig: any = {
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };

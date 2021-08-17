@@ -10,6 +10,7 @@ import {
 } from '../../generics/dialogs/confirm-dialog.component';
 // eslint-disable-next-line max-len
 import { AddOrEditAlgorithmRelationTypeDialogComponent } from '../dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
 
 @Component({
   selector: 'app-algorithm-relation-types',
@@ -21,7 +22,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
   tableColumns = ['Name', 'Inverse Type Name'];
   variableNames = ['name', 'inverseTypeName'];
   pagingInfo: PageAlgorithmRelationTypeDto = {};
-  paginatorConfig: any = {
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };

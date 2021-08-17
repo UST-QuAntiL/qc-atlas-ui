@@ -10,6 +10,7 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
 
 @Component({
   selector: 'app-pattern-relation-types-list',
@@ -21,7 +22,7 @@ export class PatternRelationTypesListComponent implements OnInit {
   tableColumns = ['Name'];
   variableNames = ['name'];
   pagingInfo: PagePatternRelationTypeDto = {};
-  paginatorConfig: any = {
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };

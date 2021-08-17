@@ -10,6 +10,7 @@ import {
 } from '../../generics/dialogs/confirm-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { AddOrEditProblemTypeDialogComponent } from '../dialogs/add-or-edit-problem-type/add-or-edit-problem-type-dialog.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
 
 @Component({
   selector: 'app-problem-types-list',
@@ -21,7 +22,7 @@ export class ProblemTypesListComponent implements OnInit {
   tableColumns = ['Name', 'Parent'];
   variableNames = ['name', 'parentProblemTypeName'];
   pagingInfo: PageProblemTypeDto = {};
-  paginatorConfig: any = {
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };

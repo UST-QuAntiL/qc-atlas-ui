@@ -11,6 +11,7 @@ import {
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
 import { QueryParams } from '../../generics/data-list/data-list.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
 
 @Component({
   selector: 'app-algorithm-list',
@@ -22,7 +23,7 @@ export class AlgorithmListComponent implements OnInit {
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
   pagingInfo: PageAlgorithmDto = {};
-  paginatorConfig: any = {
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
