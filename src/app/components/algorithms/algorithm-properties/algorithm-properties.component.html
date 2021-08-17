@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="algorithm.computationModel === 'QUANTUM' && frontendAlgorithm.computationModel === 'QUANTUM'">
+  <div class="row" *ngIf="algorithm.computationModel !== 'CLASSIC' && frontendAlgorithm.computationModel !== 'CLASSIC'">
     <div class="col-xl-4 col-lg-12">
       <mat-card class="m-2">
         <app-select-input name="Quantum computation model"
