@@ -135,7 +135,7 @@ export class TextInputComponent implements OnInit, OnChanges {
     this.utilService
       .renderPackedDataAndReturnUrlToPdfBlob(
         latexValue,
-        (this.renderedLatexField.nativeElement.offsetWidth / 2480) * 3.12
+        (this.renderedLatexField.nativeElement.offsetWidth / 2480) * 3
       )
       .subscribe((url) => {
         this.urlToRenderedBlob = this.sanitizer.bypassSecurityTrustUrl(url);
