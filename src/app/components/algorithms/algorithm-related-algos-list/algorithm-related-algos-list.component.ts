@@ -67,7 +67,6 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
   }
 
   prepareRelations(relations): void {
-    console.log(relations);
     if (relations.content) {
       this.algorithmRelations = relations.content;
       this.generateTableObjects();
