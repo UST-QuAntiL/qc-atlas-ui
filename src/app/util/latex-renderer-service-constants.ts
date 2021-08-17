@@ -6,7 +6,11 @@ import { Injectable } from '@angular/core';
 export class LatexRendererServiceConstants {
   latexFormatIndicator = '*LaTeX-packets*';
   public getDefaultLatexPackages(): string[] {
-    return ['\\usepackage{tikz}', '\\usetikzlibrary{quantikz}'];
+    return [
+      '\\usepackage{tikz}',
+      '\\usetikzlibrary{quantikz}',
+      '\\usepackage{adjustbox}',
+    ];
   }
 
   public getDefaultRenderOutput(): string {
@@ -18,8 +22,13 @@ export class LatexRendererServiceConstants {
   }
 
   unpackTextAndPackages(
-    packedData = ''
-  ): { latexContent: string; latexPackages: string } {
+    packedData = '',
+    varwidth = 1
+  ): {
+    latexContent: string;
+    latexPackages: string;
+    varwidth: number;
+  } {
     let content = '';
     const packages: string[] = [];
     if (packedData) {
@@ -29,7 +38,11 @@ export class LatexRendererServiceConstants {
         packages.push(splitData[i]);
       }
     }
-    return { latexContent: content, latexPackages: packages.join('') };
+    return {
+      latexContent: content,
+      latexPackages: packages.join(''),
+      varwidth,
+    };
   }
 
   public formatLatexPackagesToArray(packages: string): string[] {
