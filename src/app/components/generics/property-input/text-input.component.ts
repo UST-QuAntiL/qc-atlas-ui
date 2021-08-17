@@ -1,11 +1,12 @@
 import {
-  Component, ElementRef,
+  Component,
   EventEmitter,
   Input,
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges, ViewChild,
+  SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
