@@ -82,7 +82,7 @@ export class AlgorithmListComponent implements OnInit {
           computationModel: dialogResult.computationModel,
         };
 
-        if (algorithmDto.computationModel === 'QUANTUM') {
+        if (algorithmDto.computationModel !== 'CLASSIC') {
           algorithmDto.quantumComputationModel =
             dialogResult.quantumComputationModel;
         }
