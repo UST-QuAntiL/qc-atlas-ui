@@ -188,7 +188,7 @@ export class ProblemTypesListComponent implements OnInit {
       });
   }
 
-  onEditElement(event: any): void {
+  onEditElement(event: ProblemTypeDto): void {
     let parentProblemTypeDto: ProblemTypeDto;
     for (const problemType of this.problemTypes) {
       if (problemType.id === event.parentProblemType) {
