@@ -339,14 +339,14 @@ export class AddPatternRelationDialogComponent implements OnInit {
     }
   }
 
-  onOpen(languageUri: string, patternUri: string): void {
+  onOpen(languageId: string, patternId: string): void {
     let encodedUri =
       Env.PATTERN_ATLAS_UI_URL +
       '/pattern-languages/' +
-      this.fixedEncodeURIComponent(languageUri);
+      this.fixedEncodeURIComponent(languageId);
 
-    if (patternUri) {
-      encodedUri = encodedUri + '/' + this.fixedEncodeURIComponent(patternUri);
+    if (patternId) {
+      encodedUri = encodedUri + '/' + this.fixedEncodeURIComponent(patternId);
     }
 
     window.open(encodedUri, '_blank');
