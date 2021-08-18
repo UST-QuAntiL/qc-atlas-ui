@@ -16,6 +16,7 @@ import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.co
 import { UrlData } from '../../generics/data-list/data-list.component';
 import { environment as Env } from '../../../../environments/environment';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-algorithm-related-patterns',
@@ -31,7 +32,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   tableColumns: string[] = ['Pattern', 'Relation Type', 'Description'];
   externalLinkVariables: string[] = ['pattern'];
 
-  pagingInfo: any = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

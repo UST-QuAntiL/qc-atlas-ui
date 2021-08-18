@@ -16,6 +16,7 @@ import {
   LinkItemListDialogComponent,
 } from '../../../generics/dialogs/link-item-list-dialog.component';
 import { PaginatorConfig } from '../../../../util/paginatorConfig';
+import { PagingInfo } from '../../../../util/PagingInfo';
 
 @Component({
   selector: 'app-software-platform-impl-list',
@@ -58,7 +59,7 @@ export class SoftwarePlatformImplListComponent implements OnInit {
       selectedAmount: 10,
     },
   };
-  pagingInfo: any = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

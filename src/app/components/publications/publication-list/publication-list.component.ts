@@ -13,6 +13,7 @@ import {
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-publication-list',
@@ -24,7 +25,7 @@ export class PublicationListComponent implements OnInit {
   tableColumns = ['Title', 'URL', 'DOI', 'Authors'];
   variableNames = ['title', 'url', 'doi', 'authors'];
   externalLinkVariables = ['url'];
-  pagingInfo: any = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

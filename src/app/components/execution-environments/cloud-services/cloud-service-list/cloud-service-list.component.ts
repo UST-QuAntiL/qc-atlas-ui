@@ -13,6 +13,7 @@ import {
 import { CreateCloudServiceDialogComponent } from '../dialogs/create-cloud-service-dialog.component';
 import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog.component';
 import { PaginatorConfig } from '../../../../util/paginatorConfig';
+import { PagingInfo } from '../../../../util/PagingInfo';
 
 @Component({
   selector: 'app-cloud-service-list',
@@ -24,7 +25,7 @@ export class CloudServiceListComponent implements OnInit {
 
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
   variableNames = ['name', 'provider', 'description', 'costModel', 'url'];
-  pagingInfo: any = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

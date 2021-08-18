@@ -10,6 +10,7 @@ import { UtilService } from '../../../util/util.service';
 import { CreateImplementationDialogComponent } from '../dialogs/create-implementation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-algorithm-implementations-list',
@@ -22,7 +23,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   implementations: ImplementationDto[];
   variableNames: string[] = ['name', 'description', 'dependencies'];
   tableColumns: string[] = ['Name', 'Description', 'Dependencies'];
-  pagingInfo: any = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

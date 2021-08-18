@@ -17,6 +17,7 @@ import {
   LinkItemListDialogComponent,
 } from '../../generics/dialogs/link-item-list-dialog.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
 @Component({
   selector: 'app-publication-algorithms-list',
   templateUrl: './publication-algorithms-list.component.html',
@@ -47,7 +48,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     },
   };
   tableAddAllowed = true;
-  pagingInfo: any = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

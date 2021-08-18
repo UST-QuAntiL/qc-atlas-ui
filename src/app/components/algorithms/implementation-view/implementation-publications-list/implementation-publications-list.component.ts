@@ -17,6 +17,7 @@ import {
   UrlData,
 } from '../../../generics/data-list/data-list.component';
 import { PaginatorConfig } from '../../../../util/paginatorConfig';
+import { PagingInfo } from '../../../../util/PagingInfo';
 
 @Component({
   selector: 'app-implementation-publications-list',
@@ -50,7 +51,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
     },
   };
   tableAddAllowed = true;
-  pagingInfo: any = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -99,6 +100,7 @@ export class ImplementationPublicationsListComponent implements OnInit {
   }
 
   updateDisplayedData(data): void {
+    console.log(data);
     // clear link object data
     this.displayedData = [];
     // If publications found
