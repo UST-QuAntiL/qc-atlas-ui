@@ -24,7 +24,7 @@ export class PublicationListComponent implements OnInit {
   tableColumns = ['Title', 'URL', 'DOI', 'Authors'];
   variableNames = ['title', 'url', 'doi', 'authors'];
   externalLinkVariables = ['url'];
-  pagingInfo: PagePublicationDto = {};
+  pagingInfo: any = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

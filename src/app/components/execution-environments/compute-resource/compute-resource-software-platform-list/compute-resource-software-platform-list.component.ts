@@ -35,7 +35,7 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
     data: [],
     linkedData: [],
   };
-  pagingInfo: PageSoftwarePlatformDto = {};
+  pagingInfo: any = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

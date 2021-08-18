@@ -10,9 +10,8 @@ export type PageComputeResourceDto = {
   size?: number;
   content?: Array<ComputeResourceDto>;
   number?: number;
-  sort?: string[];
+  sort?: Sort;
   numberOfElements?: number;
   last?: boolean;
   empty?: boolean;
-  search?: string;
 };

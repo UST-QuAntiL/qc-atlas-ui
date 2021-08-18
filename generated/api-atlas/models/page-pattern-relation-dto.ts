@@ -10,9 +10,8 @@ export type PagePatternRelationDto = {
   size?: number;
   content?: Array<PatternRelationDto>;
   number?: number;
-  sort?: string[];
+  sort?: Sort;
   numberOfElements?: number;
   last?: boolean;
   empty?: boolean;
-  search?: string;
 };

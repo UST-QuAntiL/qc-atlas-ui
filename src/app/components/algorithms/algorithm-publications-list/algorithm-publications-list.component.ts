@@ -50,7 +50,7 @@ export class AlgorithmPublicationsListComponent implements OnInit {
     },
   };
   tableAddAllowed = true;
-  pagingInfo: PagePublicationDto = {};
+  pagingInfo: any = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

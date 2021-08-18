@@ -24,7 +24,7 @@ export class CloudServiceListComponent implements OnInit {
 
   tableColumns = ['Name', 'Provider', 'Description', 'CostModel', 'URL'];
   variableNames = ['name', 'provider', 'description', 'costModel', 'url'];
-  pagingInfo: PageCloudServiceDto = {};
+  pagingInfo: any = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

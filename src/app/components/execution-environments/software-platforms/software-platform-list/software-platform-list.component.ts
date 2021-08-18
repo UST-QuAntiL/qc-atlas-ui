@@ -26,7 +26,7 @@ export class SoftwarePlatformListComponent implements OnInit {
 
   tableColumns = ['Name', 'Version', 'Licence', 'Link'];
   variableNames = ['name', 'version', 'licence', 'link'];
-  pagingInfo: PageSoftwarePlatformDto = {};
+  pagingInfo: any = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
