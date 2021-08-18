@@ -399,7 +399,7 @@ export class AlgorithmService extends BaseService {
     /**
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
-    sort?: Sort;
+    sort?: Array<string>;
   }): Observable<StrictHttpResponse<PageAlgorithmRelationDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -457,7 +457,7 @@ export class AlgorithmService extends BaseService {
     /**
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
-    sort?: Sort;
+    sort?: Array<string>;
   }): Observable<PageAlgorithmRelationDto> {
     return this.getAlgorithmRelationsOfAlgorithm$Response(params).pipe(
       map(

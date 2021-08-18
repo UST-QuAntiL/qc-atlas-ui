@@ -13,6 +13,7 @@ import { UtilService } from '../../../util/util.service';
 import { AddAlgorithmRelationDialogComponent } from '../dialogs/add-algorithm-relation-dialog.component';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-algorithm-related-algos-list',
@@ -30,7 +31,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     'description',
   ];
   tableColumns: string[] = ['Related Algorithm', 'Relation', 'Description'];
-  pagingInfo: PageAlgorithmRelationDto = {};
+  pagingInfo: PagingInfo = {};
 
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
@@ -52,7 +53,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     search?: string;
     page?: number;
     size?: number;
-    sort?: Sort;
+    sort?: string[];
   }): void {
     this.algorithmService.getAlgorithmRelationsOfAlgorithm(params).subscribe(
       (relations) => {
