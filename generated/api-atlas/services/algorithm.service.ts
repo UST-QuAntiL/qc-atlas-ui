@@ -38,7 +38,6 @@ import { PublicationDto } from '../models/publication-dto';
 import { SketchDto } from '../models/sketch-dto';
 import { SoftwarePlatformDto } from '../models/software-platform-dto';
 import { TagDto } from '../models/tag-dto';
-import { Sort } from '../models/sort';
 
 @Injectable({
   providedIn: 'root',

@@ -10,7 +10,6 @@ import { map, filter } from 'rxjs/operators';
 
 import { AlgorithmRelationTypeDto } from '../models/algorithm-relation-type-dto';
 import { PageAlgorithmRelationTypeDto } from '../models/page-algorithm-relation-type-dto';
-import { Sort } from '../models/sort';
 
 @Injectable({
   providedIn: 'root',
