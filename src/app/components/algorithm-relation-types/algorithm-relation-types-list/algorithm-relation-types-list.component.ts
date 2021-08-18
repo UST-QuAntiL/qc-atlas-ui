@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
 import { forkJoin } from 'rxjs';
 import { AlgorithmRelationTypeDto } from 'api-atlas/models/algorithm-relation-type-dto';
-import { PageAlgorithmRelationTypeDto } from 'api-atlas/models/page-algorithm-relation-type-dto';
 import { UtilService } from '../../../util/util.service';
 import {
   ConfirmDialogComponent,
@@ -59,7 +58,6 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    // On checking the references params has only body set and then used in line 80
     const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditAlgorithmRelationTypeDialogComponent,
@@ -184,7 +182,6 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
           name: dialogResult.name,
           inverseTypeName: dialogResult.inverseTypeName,
         };
-        // Here these are the params used and and used only here
         const params: any = {
           algorithmRelationTypeId: updatedAlgorithmRelationType.id,
           body: updatedAlgorithmRelationType,
