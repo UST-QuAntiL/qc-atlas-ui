@@ -220,18 +220,21 @@ export class ProblemTypesListComponent implements OnInit {
               ? dialogResult.parentProblemType.id
               : null,
           };
-          const params: any = {
-            problemTypeId: updatedProblemType.id,
-            body: updatedProblemType,
-          };
-          this.problemTypeService.updateProblemType(params).subscribe(() => {
-            this.getProblemTypes({
-              size: this.pagingInfo.size,
-              page: this.pagingInfo.number,
-              sort: this.pagingInfo.sort,
+          this.problemTypeService
+            .updateProblemType({
+              problemTypeId: updatedProblemType.id,
+              body: updatedProblemType,
+            })
+            .subscribe(() => {
+              this.getProblemTypes({
+                size: this.pagingInfo.size,
+                page: this.pagingInfo.number,
+                sort: this.pagingInfo.sort,
+              });
+              this.utilService.callSnackBar(
+                'Successfully updated problem type.'
+              );
             });
-            this.utilService.callSnackBar('Successfully updated problem type.');
-          });
         }
       },
       () => {

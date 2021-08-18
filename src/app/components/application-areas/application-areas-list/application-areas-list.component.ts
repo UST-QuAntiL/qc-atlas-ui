@@ -184,28 +184,28 @@ export class ApplicationAreasListComponent implements OnInit {
           id: event.id,
           name: dialogResult.name,
         };
-        // Here these are the params used and and used only here
-        const params: any = {
-          applicationAreaId: newApplicationAreaDto.id,
-          body: newApplicationAreaDto,
-        };
-        this.applicationAreasService.updateApplicationArea(params).subscribe(
-          () => {
-            this.getApplicationAreas({
-              size: this.pagingInfo.size,
-              page: this.pagingInfo.number,
-              sort: this.pagingInfo.sort,
-            });
-            this.utilService.callSnackBar(
-              'Application area was successfully edited.'
-            );
-          },
-          () => {
-            this.utilService.callSnackBar(
-              'Error! Could not update application area.'
-            );
-          }
-        );
+        this.applicationAreasService
+          .updateApplicationArea({
+            applicationAreaId: newApplicationAreaDto.id,
+            body: newApplicationAreaDto,
+          })
+          .subscribe(
+            () => {
+              this.getApplicationAreas({
+                size: this.pagingInfo.size,
+                page: this.pagingInfo.number,
+                sort: this.pagingInfo.sort,
+              });
+              this.utilService.callSnackBar(
+                'Application area was successfully edited.'
+              );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not update application area.'
+              );
+            }
+          );
       }
     });
   }

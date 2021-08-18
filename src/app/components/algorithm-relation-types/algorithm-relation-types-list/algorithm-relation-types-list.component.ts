@@ -180,12 +180,11 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
           name: dialogResult.name,
           inverseTypeName: dialogResult.inverseTypeName,
         };
-        const params: any = {
-          algorithmRelationTypeId: updatedAlgorithmRelationType.id,
-          body: updatedAlgorithmRelationType,
-        };
         this.algorithmRelationTypeService
-          .updateAlgorithmRelationType(params)
+          .updateAlgorithmRelationType({
+            algorithmRelationTypeId: updatedAlgorithmRelationType.id,
+            body: updatedAlgorithmRelationType,
+          })
           .subscribe(() => {
             this.getAlgorithmRelationTypes({
               size: this.pagingInfo.size,

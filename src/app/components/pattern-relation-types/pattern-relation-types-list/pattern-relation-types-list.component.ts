@@ -183,12 +183,11 @@ export class PatternRelationTypesListComponent implements OnInit {
           id: dialogResult.id,
           name: dialogResult.name,
         };
-        const params: any = {
-          patternRelationTypeId: updatedPatternRelationType.id,
-          body: updatedPatternRelationType,
-        };
         this.patternRelationTypeService
-          .updatePatternRelationType(params)
+          .updatePatternRelationType({
+            patternRelationTypeId: updatedPatternRelationType.id,
+            body: updatedPatternRelationType,
+          })
           .subscribe(
             () => {
               this.getPatternRelationTypes({

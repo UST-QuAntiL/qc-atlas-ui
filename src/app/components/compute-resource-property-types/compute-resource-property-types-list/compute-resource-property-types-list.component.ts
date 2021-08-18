@@ -186,12 +186,12 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
           datatype: dialogResult.datatype,
           description: dialogResult.description,
         };
-        const params: any = {
-          computeResourcePropertyTypeId: updatedComputeResourcePropertyType.id,
-          body: updatedComputeResourcePropertyType,
-        };
         this.computeResourcePropertyTypeService
-          .updateComputingResourcePropertyType(params)
+          .updateComputingResourcePropertyType({
+            computeResourcePropertyTypeId:
+              updatedComputeResourcePropertyType.id,
+            body: updatedComputeResourcePropertyType,
+          })
           .subscribe(
             () => {
               this.getComputeResourcePropertyTypes({
