@@ -11,6 +11,8 @@ import {
 // eslint-disable-next-line max-len
 import { AddOrEditAlgorithmRelationTypeDialogComponent } from '../dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { QueryParams } from '../../generics/data-list/data-list.component';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-algorithm-relation-types',
@@ -21,7 +23,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
   algorithmRelationTypes: AlgorithmRelationTypeDto[] = [];
   tableColumns = ['Name', 'Inverse Type Name'];
   variableNames = ['name', 'inverseTypeName'];
-  pagingInfo: PageAlgorithmRelationTypeDto = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -34,7 +36,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getAlgorithmRelationTypes(params: any): void {
+  getAlgorithmRelationTypes(params: QueryParams): void {
     this.algorithmRelationTypeService
       .getAlgorithmRelationTypes(params)
       .subscribe((data) => {
@@ -57,6 +59,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
+    // On checking the references params has only body set and then used in line 80
     const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditAlgorithmRelationTypeDialogComponent,
@@ -181,7 +184,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
           name: dialogResult.name,
           inverseTypeName: dialogResult.inverseTypeName,
         };
-
+        // Here these are the params used and and used only here
         const params: any = {
           algorithmRelationTypeId: updatedAlgorithmRelationType.id,
           body: updatedAlgorithmRelationType,

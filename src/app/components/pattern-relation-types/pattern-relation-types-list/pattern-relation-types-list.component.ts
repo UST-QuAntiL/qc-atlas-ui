@@ -11,6 +11,8 @@ import {
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-pattern-relation-types-list',
@@ -21,7 +23,7 @@ export class PatternRelationTypesListComponent implements OnInit {
   patternRelationTypes: PatternRelationTypeDto[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
-  pagingInfo: PagePatternRelationTypeDto = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -34,7 +36,7 @@ export class PatternRelationTypesListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getPatternRelationTypes(params: any): void {
+  getPatternRelationTypes(params: QueryParams): void {
     this.patternRelationTypeService.getPatternRelationTypes(params).subscribe(
       (data) => {
         this.preparePatternRelationTypeData(data);

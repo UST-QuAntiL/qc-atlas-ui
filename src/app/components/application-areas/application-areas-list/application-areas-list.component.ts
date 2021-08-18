@@ -11,6 +11,8 @@ import {
 import { UtilService } from '../../../util/util.service';
 import { AddOrEditApplicationAreaDialogComponent } from '../dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { QueryParams } from '../../generics/data-list/data-list.component';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-application-areas-list',
@@ -21,7 +23,7 @@ export class ApplicationAreasListComponent implements OnInit {
   applicationAreas: ApplicationAreaDto[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
-  pagingInfo: PageApplicationAreaDto = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -35,7 +37,7 @@ export class ApplicationAreasListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getApplicationAreas(params: any): void {
+  getApplicationAreas(params: QueryParams): void {
     this.applicationAreasService.getApplicationAreas(params).subscribe(
       (data) => {
         this.prepareApplicationAreaData(data);
@@ -63,6 +65,7 @@ export class ApplicationAreasListComponent implements OnInit {
   }
 
   onAddElement(): void {
+    // On checking the references params has only body set and then used in line 83
     const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditApplicationAreaDialogComponent,
@@ -181,6 +184,7 @@ export class ApplicationAreasListComponent implements OnInit {
           id: event.id,
           name: dialogResult.name,
         };
+        // Here these are the params used and and used only here
         const params: any = {
           applicationAreaId: newApplicationAreaDto.id,
           body: newApplicationAreaDto,

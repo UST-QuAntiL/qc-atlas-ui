@@ -11,6 +11,8 @@ import {
 import { UtilService } from '../../../util/util.service';
 import { AddOrEditProblemTypeDialogComponent } from '../dialogs/add-or-edit-problem-type/add-or-edit-problem-type-dialog.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-problem-types-list',
@@ -21,7 +23,7 @@ export class ProblemTypesListComponent implements OnInit {
   problemTypes: any[] = [];
   tableColumns = ['Name', 'Parent'];
   variableNames = ['name', 'parentProblemTypeName'];
-  pagingInfo: PageProblemTypeDto = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -35,7 +37,7 @@ export class ProblemTypesListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getProblemTypes(params: any): void {
+  getProblemTypes(params: QueryParams): void {
     this.problemTypeService.getProblemTypes(params).subscribe(
       (data) => {
         this.prepareProblemTypeData(data);

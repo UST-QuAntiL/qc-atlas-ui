@@ -11,6 +11,8 @@ import {
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { QueryParams } from '../../generics/data-list/data-list.component';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-compute-resource-property-types-list',
@@ -21,7 +23,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
   computeResourcePropertyTypes: ComputeResourcePropertyTypeDto[] = [];
   tableColumns = ['Name', 'Datatype', 'Description'];
   variableNames = ['name', 'datatype', 'description'];
-  pagingInfo: PageComputeResourcePropertyTypeDto = {};
+  pagingInfo: PagingInfo = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -34,7 +36,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getComputeResourcePropertyTypes(params: any): void {
+  getComputeResourcePropertyTypes(params: QueryParams): void {
     this.computeResourcePropertyTypeService
       .getResourcePropertyTypes(params)
       .subscribe((data) => {
@@ -57,6 +59,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
+    // On checking the references params has only body set and then used in line 80
     const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditComputeResourcePropertyTypeDialogComponent,
@@ -184,7 +187,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
           datatype: dialogResult.datatype,
           description: dialogResult.description,
         };
-
+        // Here these are the params used and and used only here
         const params: any = {
           computeResourcePropertyTypeId: updatedComputeResourcePropertyType.id,
           body: updatedComputeResourcePropertyType,
