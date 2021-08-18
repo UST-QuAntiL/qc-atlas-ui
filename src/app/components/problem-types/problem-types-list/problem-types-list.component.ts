@@ -23,7 +23,7 @@ export class ProblemTypesListComponent implements OnInit {
   problemTypes: any[] = [];
   tableColumns = ['Name', 'Parent'];
   variableNames = ['name', 'parentProblemTypeName'];
-  pagingInfo: PagingInfo = {};
+  pagingInfo: PagingInfo<ProblemTypeDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -87,7 +87,6 @@ export class ProblemTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditProblemTypeDialogComponent,
       {
@@ -105,26 +104,30 @@ export class ProblemTypesListComponent implements OnInit {
           problemTypeDto.parentProblemType = dialogResult.parentProblemType.id;
         }
 
-        params.body = problemTypeDto;
-        this.problemTypeService.createProblemType(params).subscribe(
-          () => {
-            const correctPage = this.utilService.getLastPageAfterCreation(
-              this.pagingInfo,
-              1
-            );
-            this.getProblemTypes({
-              size: this.pagingInfo.size,
-              page: correctPage,
-              sort: this.pagingInfo.sort,
-            });
-            this.utilService.callSnackBar('Successfully created problem type.');
-          },
-          () => {
-            this.utilService.callSnackBar(
-              'Error! Problem type could not be created.'
-            );
-          }
-        );
+        // params.body = problemTypeDto;
+        this.problemTypeService
+          .createProblemType({ body: problemTypeDto })
+          .subscribe(
+            () => {
+              const correctPage = this.utilService.getLastPageAfterCreation(
+                this.pagingInfo,
+                1
+              );
+              this.getProblemTypes({
+                size: this.pagingInfo.size,
+                page: correctPage,
+                sort: this.pagingInfo.sort,
+              });
+              this.utilService.callSnackBar(
+                'Successfully created problem type.'
+              );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Problem type could not be created.'
+              );
+            }
+          );
       }
     });
   }
@@ -217,7 +220,6 @@ export class ProblemTypesListComponent implements OnInit {
               ? dialogResult.parentProblemType.id
               : null,
           };
-
           const params: any = {
             problemTypeId: updatedProblemType.id,
             body: updatedProblemType,

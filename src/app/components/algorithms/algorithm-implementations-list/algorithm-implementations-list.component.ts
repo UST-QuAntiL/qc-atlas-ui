@@ -23,7 +23,7 @@ export class AlgorithmImplementationsListComponent implements OnInit {
   implementations: ImplementationDto[];
   variableNames: string[] = ['name', 'description', 'dependencies'];
   tableColumns: string[] = ['Name', 'Description', 'Dependencies'];
-  pagingInfo: PagingInfo = {};
+  pagingInfo: PagingInfo<ImplementationDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

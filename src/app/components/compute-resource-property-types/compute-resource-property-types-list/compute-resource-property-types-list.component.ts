@@ -23,7 +23,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
   computeResourcePropertyTypes: ComputeResourcePropertyTypeDto[] = [];
   tableColumns = ['Name', 'Datatype', 'Description'];
   variableNames = ['name', 'datatype', 'description'];
-  pagingInfo: PagingInfo = {};
+  pagingInfo: PagingInfo<ComputeResourcePropertyTypeDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -59,8 +59,6 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    // On checking the references params has only body set and then used in line 80
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditComputeResourcePropertyTypeDialogComponent,
       {
@@ -77,9 +75,10 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
           description: dialogResult.description,
         };
 
-        params.body = computeResourcePropertyType;
         this.computeResourcePropertyTypeService
-          .createComputingResourcePropertyType(params)
+          .createComputingResourcePropertyType({
+            body: computeResourcePropertyType,
+          })
           .subscribe(
             () => {
               const correctPage = this.utilService.getLastPageAfterCreation(
@@ -187,7 +186,6 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
           datatype: dialogResult.datatype,
           description: dialogResult.description,
         };
-        // Here these are the params used and and used only here
         const params: any = {
           computeResourcePropertyTypeId: updatedComputeResourcePropertyType.id,
           body: updatedComputeResourcePropertyType,

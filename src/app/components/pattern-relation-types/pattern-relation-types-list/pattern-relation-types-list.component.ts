@@ -23,7 +23,7 @@ export class PatternRelationTypesListComponent implements OnInit {
   patternRelationTypes: PatternRelationTypeDto[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
-  pagingInfo: PagingInfo = {};
+  pagingInfo: PagingInfo<PatternRelationTypeDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -64,7 +64,6 @@ export class PatternRelationTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditPatternRelationTypeDialogComponent,
       {
@@ -79,9 +78,8 @@ export class PatternRelationTypesListComponent implements OnInit {
           name: dialogResult.name,
         };
 
-        params.body = algorithmRelationType;
         this.patternRelationTypeService
-          .createPatternRelationType(params)
+          .createPatternRelationType({ body: algorithmRelationType })
           .subscribe(
             () => {
               const correctPage = this.utilService.getLastPageAfterCreation(
@@ -185,7 +183,6 @@ export class PatternRelationTypesListComponent implements OnInit {
           id: dialogResult.id,
           name: dialogResult.name,
         };
-
         const params: any = {
           patternRelationTypeId: updatedPatternRelationType.id,
           body: updatedPatternRelationType,

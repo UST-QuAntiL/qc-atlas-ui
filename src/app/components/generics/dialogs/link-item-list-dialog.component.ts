@@ -4,6 +4,8 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
 import { LinkObject, QueryParams } from '../data-list/data-list.component';
 
 @Component({
@@ -41,6 +43,6 @@ export interface DialogData {
   variableNames: string[];
   tableColumns: string[];
   pagingInfo?: any;
-  paginatorConfig?: any;
+  paginatorConfig?: PaginatorConfig;
   noButtonText: string;
 }

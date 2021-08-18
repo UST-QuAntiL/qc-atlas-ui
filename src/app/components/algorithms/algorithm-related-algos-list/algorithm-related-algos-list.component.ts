@@ -31,7 +31,7 @@ export class AlgorithmRelatedAlgosListComponent implements OnInit {
     'description',
   ];
   tableColumns: string[] = ['Related Algorithm', 'Relation', 'Description'];
-  pagingInfo: PagingInfo = {};
+  pagingInfo: PagingInfo<AlgorithmRelationDto> = {};
 
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],

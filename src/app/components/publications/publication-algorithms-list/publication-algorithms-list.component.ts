@@ -48,7 +48,7 @@ export class PublicationAlgorithmsListComponent implements OnInit {
     },
   };
   tableAddAllowed = true;
-  pagingInfo: PagingInfo = {};
+  pagingInfo: PagingInfo<AlgorithmDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

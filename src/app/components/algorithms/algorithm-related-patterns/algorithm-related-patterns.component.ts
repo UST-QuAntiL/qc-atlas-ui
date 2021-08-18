@@ -32,7 +32,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   tableColumns: string[] = ['Pattern', 'Relation Type', 'Description'];
   externalLinkVariables: string[] = ['pattern'];
 
-  pagingInfo: PagingInfo = {};
+  pagingInfo: PagingInfo<PatternRelationDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,

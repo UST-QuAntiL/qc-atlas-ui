@@ -23,7 +23,7 @@ export class ApplicationAreasListComponent implements OnInit {
   applicationAreas: ApplicationAreaDto[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
-  pagingInfo: PagingInfo = {};
+  pagingInfo: PagingInfo<ApplicationAreaDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -66,7 +66,6 @@ export class ApplicationAreasListComponent implements OnInit {
 
   onAddElement(): void {
     // On checking the references params has only body set and then used in line 83
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditApplicationAreaDialogComponent,
       {
@@ -76,33 +75,34 @@ export class ApplicationAreasListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const applicationAreaDtoDto: ApplicationAreaDto = {
+        const applicationAreaDto: ApplicationAreaDto = {
           id: dialogResult.id,
           name: dialogResult.name,
         };
 
-        params.body = applicationAreaDtoDto;
-        this.applicationAreasService.createApplicationArea(params).subscribe(
-          () => {
-            const correctPage = this.utilService.getLastPageAfterCreation(
-              this.pagingInfo,
-              1
-            );
-            this.getApplicationAreas({
-              size: this.pagingInfo.size,
-              page: correctPage,
-              sort: this.pagingInfo.sort,
-            });
-            this.utilService.callSnackBar(
-              'Application area was successfully added.'
-            );
-          },
-          () => {
-            this.utilService.callSnackBar(
-              'Error! Could not add application area.'
-            );
-          }
-        );
+        this.applicationAreasService
+          .createApplicationArea({ body: applicationAreaDto })
+          .subscribe(
+            () => {
+              const correctPage = this.utilService.getLastPageAfterCreation(
+                this.pagingInfo,
+                1
+              );
+              this.getApplicationAreas({
+                size: this.pagingInfo.size,
+                page: correctPage,
+                sort: this.pagingInfo.sort,
+              });
+              this.utilService.callSnackBar(
+                'Application area was successfully added.'
+              );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not add application area.'
+              );
+            }
+          );
       }
     });
   }

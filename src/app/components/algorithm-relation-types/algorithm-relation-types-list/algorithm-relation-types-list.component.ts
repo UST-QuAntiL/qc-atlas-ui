@@ -22,7 +22,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
   algorithmRelationTypes: AlgorithmRelationTypeDto[] = [];
   tableColumns = ['Name', 'Inverse Type Name'];
   variableNames = ['name', 'inverseTypeName'];
-  pagingInfo: PagingInfo = {};
+  pagingInfo: PagingInfo<AlgorithmRelationTypeDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -58,7 +58,6 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditAlgorithmRelationTypeDialogComponent,
       {
@@ -74,9 +73,8 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
           inverseTypeName: dialogResult.inverseTypeName,
         };
 
-        params.body = algorithmRelationType;
         this.algorithmRelationTypeService
-          .createAlgorithmRelationType(params)
+          .createAlgorithmRelationType({ body: algorithmRelationType })
           .subscribe(
             () => {
               const correctPage = this.utilService.getLastPageAfterCreation(

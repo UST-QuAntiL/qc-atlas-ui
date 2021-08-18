@@ -24,7 +24,7 @@ export class ComputeResourceListComponent implements OnInit {
 
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
-  pagingInfo: PagingInfo = {};
+  pagingInfo: PagingInfo<ComputeResourceDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
