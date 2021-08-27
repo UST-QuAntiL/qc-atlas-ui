@@ -14,6 +14,7 @@ import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-
 import { UtilService } from '../../../util/util.service';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
+import { CompareVersionDialogComponent } from '../dialogs/compare-version-dialog.component';
 
 @Component({
   selector: 'app-algorithm-view',
@@ -378,6 +379,51 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   resetRevisionBadge(): void {
     this.revisionBadgeHidden = true;
     this.revisionCounter = 0;
+  }
+
+  compareRevision(revision: RevisionDto): void {
+    this.algorithmService
+      .getAlgorithmRevision({
+        algorithmId: this.algorithm.id,
+        revisionId: revision.id,
+      })
+      .subscribe(
+        (algorithmRevision) => {
+          this.comparePropertiesOfVersions(
+            this.frontendAlgorithm,
+            algorithmRevision
+          );
+          this.utilService.callSnackBar(
+            'Algorithm revision ' +
+              revision.id +
+              ' has been fetched successfully for comparison.'
+          );
+        },
+        (error) => {
+          console.log(error);
+          this.utilService.callSnackBar(
+            'Error! Could not fetch Algorithm revision for comparison' +
+              revision.id
+          );
+        }
+      );
+  }
+
+  comparePropertiesOfVersions(
+    currentVersion: AlgorithmDto,
+    compareVersion: AlgorithmDto
+  ): void {
+    const dialogRef = this.utilService.createDialog(
+      CompareVersionDialogComponent,
+      {
+        title: 'Compare Versions',
+        currentVersion,
+        compareVersion,
+      },
+      {
+        width: '500px',
+      }
+    );
   }
 
   private getTagsForAlgorithm(algoId: string): void {
