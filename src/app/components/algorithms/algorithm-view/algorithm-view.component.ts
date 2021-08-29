@@ -381,6 +381,10 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     this.revisionCounter = 0;
   }
 
+  compare(): void {
+    this.compareVersion = true;
+  }
+
   compareRevision(revision: RevisionDto): void {
     this.algorithmService
       .getAlgorithmRevision({
@@ -424,6 +428,9 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         width: '500px',
       }
     );
+    dialogRef.afterClosed().subscribe((result) => {
+      this.compareVersion = false;
+    });
   }
 
   private getTagsForAlgorithm(algoId: string): void {

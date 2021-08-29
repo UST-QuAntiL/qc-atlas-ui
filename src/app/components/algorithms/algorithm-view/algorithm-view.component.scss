@@ -9,8 +9,14 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding-right: 3px;
 }
 
 ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
   background-color: transparent;
+}
+
+.mat-button {
+  background: #e0e0e0;
+  border: none;
 }
