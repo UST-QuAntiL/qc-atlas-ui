@@ -35,6 +35,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   revisionCounter = 0;
   // TODO: revisionAvailable is obsolete if the planqk platform supports versioning
   revisionAvailable = false;
+  compareVersion = false;
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
