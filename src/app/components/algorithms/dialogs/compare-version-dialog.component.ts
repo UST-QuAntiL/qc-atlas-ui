@@ -44,13 +44,21 @@ export class CompareVersionDialogComponent implements OnInit {
     compareVersion: AlgorithmDto
   ): void {
     this.differences = new Array<ComparedData>();
-    this.caluclateAndAddDifference('Name', currentVersion.name, compareVersion.name);
+    this.caluclateAndAddDifference(
+      'Name',
+      currentVersion.name,
+      compareVersion.name
+    );
     this.caluclateAndAddDifference(
       'acronym',
       currentVersion.acronym,
       compareVersion.acronym
     );
-    this.caluclateAndAddDifference('Intent', currentVersion.intent, compareVersion.intent);
+    this.caluclateAndAddDifference(
+      'Intent',
+      currentVersion.intent,
+      compareVersion.intent
+    );
     this.caluclateAndAddDifference(
       'problem',
       currentVersion.problem,
