@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
 import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
-import { PageProblemTypeDto } from 'api-atlas/models/page-problem-type-dto';
 import { forkJoin } from 'rxjs';
 import {
   ConfirmDialogComponent,
