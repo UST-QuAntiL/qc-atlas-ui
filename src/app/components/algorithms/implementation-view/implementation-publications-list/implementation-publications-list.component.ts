@@ -12,11 +12,11 @@ import { UtilService } from '../../../../util/util.service';
 import {
   LinkObject,
   QueryParams,
-  UrlData
+  UrlData,
 } from '../../../generics/data-list/data-list.component';
 import {
   DialogData,
-  LinkItemListDialogComponent
+  LinkItemListDialogComponent,
 } from '../../../generics/dialogs/link-item-list-dialog.component';
 
 @Component({
