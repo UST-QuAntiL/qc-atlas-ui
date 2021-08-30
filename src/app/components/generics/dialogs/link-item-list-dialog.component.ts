@@ -5,7 +5,6 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
-import { PagingInfo } from '../../../util/PagingInfo';
 import { LinkObject, QueryParams } from '../data-list/data-list.component';
 
 @Component({
