@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { AlgorithmDto } from 'api-atlas/models';
-import { PageAlgorithmDto } from 'api-atlas/models';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
