@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PublicationService } from 'api-atlas/services/publication.service';
 import { PublicationDto } from 'api-atlas/models/publication-dto';
-import { PagePublicationDto } from 'api-atlas/models/page-publication-dto';
 import { forkJoin } from 'rxjs';
 import { AddPublicationDialogComponent } from '../dialogs/add-publication-dialog.component';
 import {
