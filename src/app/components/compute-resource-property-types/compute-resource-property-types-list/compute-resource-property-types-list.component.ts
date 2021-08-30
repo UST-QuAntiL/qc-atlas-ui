@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ComputeResourcePropertyTypesService } from 'api-atlas/services/compute-resource-property-types.service';
 import { ComputeResourcePropertyTypeDto } from 'api-atlas/models/compute-resource-property-type-dto';
-import { PageComputeResourcePropertyTypeDto } from 'api-atlas/models/page-compute-resource-property-type-dto';
 import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../util/util.service';
 // eslint-disable-next-line max-len

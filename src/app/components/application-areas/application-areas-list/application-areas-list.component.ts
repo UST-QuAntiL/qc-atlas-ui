@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import { ApplicationAreaDto } from 'api-atlas/models/application-area-dto';
-import { PageApplicationAreaDto } from 'api-atlas/models/page-application-area-dto';
 import { forkJoin } from 'rxjs';
 import {
   ConfirmDialogComponent,
@@ -65,7 +64,6 @@ export class ApplicationAreasListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    // On checking the references params has only body set and then used in line 83
     const dialogRef = this.utilService.createDialog(
       AddOrEditApplicationAreaDialogComponent,
       {

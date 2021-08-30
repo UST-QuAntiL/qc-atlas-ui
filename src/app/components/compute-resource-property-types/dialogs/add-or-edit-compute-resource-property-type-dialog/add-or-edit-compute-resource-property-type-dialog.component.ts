@@ -83,6 +83,6 @@ export interface DialogData {
   title: string;
   id?: string;
   name?: string;
-  datatype?: any;
+  datatype?: string;
   description?: string;
 }

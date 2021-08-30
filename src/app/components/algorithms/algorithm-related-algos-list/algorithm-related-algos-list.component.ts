@@ -6,8 +6,6 @@ import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { AlgorithmRelationTypeService } from 'api-atlas/services/algorithm-relation-type.service';
 import { Router } from '@angular/router';
 import { AlgorithmRelationTypeDto } from 'api-atlas/models';
-import { PageAlgorithmRelationDto } from 'api-atlas/models';
-import { Sort } from 'api-atlas/models';
 import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../util/util.service';
 import { AddAlgorithmRelationDialogComponent } from '../dialogs/add-algorithm-relation-dialog.component';

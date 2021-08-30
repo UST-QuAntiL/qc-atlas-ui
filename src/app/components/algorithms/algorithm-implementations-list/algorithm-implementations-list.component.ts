@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
-import { PageImplementationDto } from 'api-atlas/models/page-implementation-dto';
 
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
