@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { forkJoin, Observable } from 'rxjs';
 import { PageAlgorithmDto } from 'api-atlas/models/page-algorithm-dto';
-import { PagePublicationDto } from 'api-atlas/models/page-publication-dto';
 import {
   LinkObject,
   QueryParams,

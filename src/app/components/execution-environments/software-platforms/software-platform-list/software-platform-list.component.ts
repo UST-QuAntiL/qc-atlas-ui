@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { SoftwarePlatformDto } from 'api-atlas/models/software-platform-dto';
-import { PageSoftwarePlatformDto } from 'api-atlas/models/page-software-platform-dto';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';

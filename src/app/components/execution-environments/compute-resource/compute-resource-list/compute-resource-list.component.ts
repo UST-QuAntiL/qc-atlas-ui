@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
-import { PageComputeResourceDto } from 'api-atlas/models/page-compute-resource-dto';
 import { forkJoin } from 'rxjs';
 import {
   SelectParams,

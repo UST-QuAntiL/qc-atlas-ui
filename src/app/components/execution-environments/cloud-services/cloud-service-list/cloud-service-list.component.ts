@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
 import { Router } from '@angular/router';
 import { CloudServiceDto } from 'api-atlas/models/cloud-service-dto';
-import { PageCloudServiceDto } from 'api-atlas/models/page-cloud-service-dto';
 import { forkJoin } from 'rxjs';
 import { UtilService } from '../../../../util/util.service';
 import {
