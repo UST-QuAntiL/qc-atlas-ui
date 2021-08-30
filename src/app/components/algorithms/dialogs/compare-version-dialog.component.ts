@@ -28,7 +28,7 @@ export class CompareVersionDialogComponent implements OnInit {
     'Current Version',
     'Compared Version',
   ];
-  comparisons: ComparedData[];
+  differences: ComparedData[];
   constructor(
     public dialogRef: MatDialogRef<CompareVersionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -43,40 +43,40 @@ export class CompareVersionDialogComponent implements OnInit {
     currentVersion: AlgorithmDto,
     compareVersion: AlgorithmDto
   ): void {
-    this.comparisons = new Array<ComparedData>();
-    this.compareStrings('Name', currentVersion.name, compareVersion.name);
-    this.compareStrings(
+    this.differences = new Array<ComparedData>();
+    this.caluclateAndAddDifference('Name', currentVersion.name, compareVersion.name);
+    this.caluclateAndAddDifference(
       'acronym',
       currentVersion.acronym,
       compareVersion.acronym
     );
-    this.compareStrings('Intent', currentVersion.intent, compareVersion.intent);
-    this.compareStrings(
+    this.caluclateAndAddDifference('Intent', currentVersion.intent, compareVersion.intent);
+    this.caluclateAndAddDifference(
       'problem',
       currentVersion.problem,
       compareVersion.problem
     );
-    this.compareStrings(
+    this.caluclateAndAddDifference(
       'InputFormat',
       currentVersion.inputFormat,
       compareVersion.inputFormat
     );
-    this.compareStrings(
+    this.caluclateAndAddDifference(
       'Algo Parameter',
       currentVersion.algoParameter,
       compareVersion.algoParameter
     );
-    this.compareStrings(
+    this.caluclateAndAddDifference(
       'Output Format',
       currentVersion.outputFormat,
       compareVersion.outputFormat
     );
-    this.compareStrings(
+    this.caluclateAndAddDifference(
       'Solution',
       currentVersion.solution,
       compareVersion.solution
     );
-    this.compareStrings(
+    this.caluclateAndAddDifference(
       'Assumptions',
       currentVersion.assumptions,
       compareVersion.assumptions
@@ -86,17 +86,17 @@ export class CompareVersionDialogComponent implements OnInit {
       compareVersion.computationModel === 'QUANTUM'
     ) {
       if (currentVersion.nisqReady !== compareVersion.nisqReady) {
-        this.comparisons.push({
+        this.differences.push({
           property: 'Nisq ready',
           currentVersionValue: currentVersion.nisqReady,
           compareVersionValue: compareVersion.nisqReady,
         });
-        this.compareStrings(
+        this.caluclateAndAddDifference(
           'Quantum Computation Model',
           currentVersion.quantumComputationModel,
           compareVersion.quantumComputationModel
         );
-        this.compareStrings(
+        this.caluclateAndAddDifference(
           'Speed Up',
           currentVersion.speedUp,
           compareVersion.speedUp
@@ -105,13 +105,13 @@ export class CompareVersionDialogComponent implements OnInit {
     }
   }
 
-  compareStrings(
+  caluclateAndAddDifference(
     propertyName: string,
     firstValue: string,
     secondValue: string
   ): void {
     if (firstValue !== secondValue) {
-      this.comparisons.push({
+      this.differences.push({
         property: propertyName,
         currentVersionValue: firstValue,
         compareVersionValue: secondValue,
