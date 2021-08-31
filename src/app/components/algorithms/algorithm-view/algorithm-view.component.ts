@@ -404,8 +404,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
               ' has been fetched successfully for comparison.'
           );
         },
-        (error) => {
-          console.log(error);
+        () => {
           this.utilService.callSnackBar(
             'Error! Could not fetch Algorithm revision for comparison' +
               revision.id
