@@ -14,7 +14,7 @@ export type QuantumAlgorithmDto = {
   sketches?: Array<SketchDto>;
   solution?: string;
   assumptions?: string;
-  computationModel: 'QUANTUM';
+  computationModel: 'QUANTUM' | 'HYBRID';
   nisqReady?: boolean;
   quantumComputationModel:
     | 'GATE_BASED'
