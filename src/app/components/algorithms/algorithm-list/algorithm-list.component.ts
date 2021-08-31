@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { AlgorithmDto } from 'api-atlas/models';
+import {
+  AlgorithmDto,
+  ClassicAlgorithmDto,
+  QuantumAlgorithmDto,
+} from 'api-atlas/models';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
@@ -77,15 +81,22 @@ export class AlgorithmListComponent implements OnInit {
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        const algorithmDto: any = {
-          name: dialogResult.name,
-          computationModel: dialogResult.computationModel,
-        };
+      let algorithmDto: QuantumAlgorithmDto | ClassicAlgorithmDto;
 
-        if (algorithmDto.computationModel === 'QUANTUM') {
-          algorithmDto.quantumComputationModel =
-            dialogResult.quantumComputationModel;
+      if (dialogResult) {
+        if (dialogResult.computationModel !== 'CLASSIC') {
+          algorithmDto = {
+            id: null,
+            name: dialogResult.name,
+            computationModel: dialogResult.computationModel,
+            quantumComputationModel: dialogResult.quantumComputationModel,
+          };
+        } else {
+          algorithmDto = {
+            id: null,
+            name: dialogResult.name,
+            computationModel: dialogResult.computationModel,
+          };
         }
 
         this.algorithmService.createAlgorithm({ body: algorithmDto }).subscribe(
