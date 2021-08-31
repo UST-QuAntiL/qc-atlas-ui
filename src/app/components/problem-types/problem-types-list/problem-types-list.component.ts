@@ -19,7 +19,7 @@ import { QueryParams } from '../../generics/data-list/data-list.component';
   styleUrls: ['./problem-types-list.component.scss'],
 })
 export class ProblemTypesListComponent implements OnInit {
-  problemTypes: ProblemType[] = [];
+  problemTypes: any[] = [];
   tableColumns = ['Name', 'Parent'];
   variableNames = ['name', 'parentProblemTypeName'];
   pagingInfo: PagingInfo<ProblemTypeDto> = {};
@@ -243,8 +243,4 @@ export class ProblemTypesListComponent implements OnInit {
       }
     );
   }
-}
-
-export interface ProblemType extends ProblemTypeDto {
-  parentProblemTypeName?: string;
 }
