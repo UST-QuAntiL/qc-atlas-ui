@@ -24,7 +24,6 @@ import { PagingInfo } from '../../../util/PagingInfo';
 })
 export class AlgorithmListComponent implements OnInit {
   algorithms: AlgorithmDto[] = [];
-  algorithmDto: QuantumAlgorithmDto | ClassicAlgorithmDto;
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
   pagingInfo: PagingInfo<AlgorithmDto> = {};
@@ -82,37 +81,37 @@ export class AlgorithmListComponent implements OnInit {
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
+      let algorithmDto: QuantumAlgorithmDto | ClassicAlgorithmDto;
+
       if (dialogResult) {
         if (dialogResult.computationModel !== 'CLASSIC') {
-          this.algorithmDto = {
+          algorithmDto = {
             id: null,
             name: dialogResult.name,
             computationModel: dialogResult.computationModel,
             quantumComputationModel: dialogResult.quantumComputationModel,
           };
         } else {
-          this.algorithmDto = {
+          algorithmDto = {
             id: null,
             name: dialogResult.name,
             computationModel: dialogResult.computationModel,
           };
         }
 
-        this.algorithmService
-          .createAlgorithm({ body: this.algorithmDto })
-          .subscribe(
-            (data) => {
-              this.utilService.callSnackBar(
-                'Algorithm was successfully created.'
-              );
-              this.router.navigate(['algorithms', data.id]);
-            },
-            () => {
-              this.utilService.callSnackBar(
-                'Error! Algorithm could not be created.'
-              );
-            }
-          );
+        this.algorithmService.createAlgorithm({ body: algorithmDto }).subscribe(
+          (data) => {
+            this.utilService.callSnackBar(
+              'Algorithm was successfully created.'
+            );
+            this.router.navigate(['algorithms', data.id]);
+          },
+          () => {
+            this.utilService.callSnackBar(
+              'Error! Algorithm could not be created.'
+            );
+          }
+        );
       }
     });
   }
