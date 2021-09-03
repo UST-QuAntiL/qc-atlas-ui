@@ -12,7 +12,7 @@ import { FormBuilder } from '@angular/forms';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { exhaustMap, first, map, startWith, switchMap } from 'rxjs/operators';
 import { QpuSelectionResultService } from 'api-nisq/services/qpu-selection-result.service';
-import { BehaviorSubject, interval, Observable } from 'rxjs';
+import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
 import { QpuSelectionJobDto } from 'api-nisq/models/qpu-selection-job-dto';
 import { RootService } from 'api-nisq/services/root.service';
 import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/implementation-dto';
@@ -63,7 +63,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
   nisqImpl: NisqImplementationDto;
   analyzerJob: QpuSelectionJobDto;
   jobReady = false;
-  pollingAnalysisJobData: any;
+  pollingAnalysisJobData: Subscription;
   queueLengths = new Map<string, number>();
   executionResultsAvailable = new Map<string, boolean>();
   loadingResults = new Map<string, boolean>();
