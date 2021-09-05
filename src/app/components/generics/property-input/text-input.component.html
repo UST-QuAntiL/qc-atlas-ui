@@ -19,6 +19,7 @@
       (ngModelChange)="inputChanged()"
       matInput
       (keydown.enter)="saveChanges()"
+      [readonly] = "!uiConfig.features.enableEditing"
     />
     <textarea
       *ngIf="multiline"

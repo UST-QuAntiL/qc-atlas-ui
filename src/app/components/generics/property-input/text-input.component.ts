@@ -12,6 +12,11 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { LatexEditorDialogComponent } from '../dialogs/latex-editor-dialog.component';
 import { UtilService } from '../../../util/util.service';
+import {
+  QcAtlasUiConfiguration,
+  QcAtlasUiRepositoryConfigurationService,
+  UiFeatures,
+} from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { DoProvider } from './abstract-value-accessor';
 
 @Component({
@@ -41,10 +46,14 @@ export class TextInputComponent implements OnInit, OnChanges {
   packedLatexValue: string;
   urlToRenderedBlob: SafeUrl;
 
+  readonly UiFeatures = UiFeatures;
+  uiConfig: QcAtlasUiConfiguration;
+
   constructor(
     private utilService: UtilService,
     private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private configService: QcAtlasUiRepositoryConfigurationService
   ) {
     iconRegistry.addSvgIcon(
       'latex',
@@ -82,6 +91,7 @@ export class TextInputComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.uiConfig = this.configService.configuration;
     this.toggleLatex = this.latexActive
       ? this.utilService.isLatexText(this.value)
       : false;

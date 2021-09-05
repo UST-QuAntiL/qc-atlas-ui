@@ -11,6 +11,7 @@ export enum UiFeatures {
   NISQ_ANALYZER_COMPILER_COMPARISON = 'nisqAnalyzerCompilerComparison',
   NISQ_ANALYZER_QPU_SELECTION = 'nisqAnalyzerQpuSelection',
   SHOW_SETTINGS = 'showSettings',
+  ENABLE_EDITING = 'enableEditing',
 }
 
 export interface QcAtlasUiConfiguration {
@@ -21,6 +22,7 @@ export interface QcAtlasUiConfiguration {
     nisqAnalyzerCompilerComparison: boolean;
     nisqAnalyzerQpuSelection: boolean;
     showSettings: boolean;
+    enableEditing: boolean;
   };
 }
 
@@ -46,6 +48,7 @@ const initialValues: QcAtlasUiConfiguration = {
     nisqAnalyzerCompilerComparison: false,
     nisqAnalyzerQpuSelection: false,
     showSettings: false,
+    enableEditing: false,
   },
 };
 
