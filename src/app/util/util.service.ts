@@ -64,6 +64,7 @@ export class UtilService {
     });
   }
 
+  // No usages found
   public getColorOfSelectedButton(selectedEntity: any, id: string): string {
     if (!selectedEntity) {
       return null;
@@ -197,9 +198,7 @@ export class UtilService {
     return this.latexRendererService.renderLatex({ body: latexBody }).pipe(
       map((response) => {
         if (response) {
-          const latexBlob = this.latexRendererServiceConstants.createBlobFromRenderedResult(
-            response
-          );
+          const latexBlob = response;
           return URL.createObjectURL(latexBlob);
         }
       })
