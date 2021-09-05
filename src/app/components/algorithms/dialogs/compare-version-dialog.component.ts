@@ -65,6 +65,11 @@ export class CompareVersionDialogComponent implements OnInit {
       compareVersion.problem
     );
     this.caluclateAndAddDifference(
+      'Solution',
+      currentVersion.solution,
+      compareVersion.solution
+    );
+    this.caluclateAndAddDifference(
       'InputFormat',
       currentVersion.inputFormat,
       compareVersion.inputFormat
@@ -80,18 +85,13 @@ export class CompareVersionDialogComponent implements OnInit {
       compareVersion.outputFormat
     );
     this.caluclateAndAddDifference(
-      'Solution',
-      currentVersion.solution,
-      compareVersion.solution
-    );
-    this.caluclateAndAddDifference(
       'Assumptions',
       currentVersion.assumptions,
       compareVersion.assumptions
     );
     if (
-      currentVersion.computationModel === 'QUANTUM' &&
-      compareVersion.computationModel === 'QUANTUM'
+      currentVersion.computationModel !== 'CLASSIC' &&
+      compareVersion.computationModel !== 'CLASSIC'
     ) {
       if (currentVersion.nisqReady !== compareVersion.nisqReady) {
         this.differences.push({
