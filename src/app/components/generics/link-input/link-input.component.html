@@ -5,7 +5,7 @@
 <mat-form-field appearance="outline" floatLabel="always">
   <mat-label>{{ linkObject.title }}</mat-label>
   <input matInput [matAutocomplete]="auto" [placeholder]="linkObject.subtitle"
-         (input)="onLinkSearchChange()" [(ngModel)]="linkSearchText">
+         (input)="onLinkSearchChange()" [(ngModel)]="linkSearchText" [readonly] = "!uiConfig.features.enableEditing">
   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onLinkElement($event.option.value)">
     <mat-option *ngFor="let linkData of linkObject.data" [value]="linkData">
       <div class="d-flex flex-column">

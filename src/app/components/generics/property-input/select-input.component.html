@@ -1,6 +1,6 @@
 <mat-form-field>
   <mat-label class="input-label">{{ name }}</mat-label>
-  <mat-select [(ngModel)]="inputValue" (ngModelChange)="inputChanged()">
+  <mat-select [(ngModel)]="inputValue" (ngModelChange)="inputChanged()" [disabled] = "!uiConfig.features.enableEditing">
     <mat-option *ngIf="includeEmpty" value="">&#8208; none &#8208;</mat-option>
     <mat-option *ngFor="let opt of choices" [value]="opt.value">{{
       opt.label

@@ -10,7 +10,7 @@
         matSuffix
         mat-icon-button
         aria-label="Add a property"
-        (click)="onAdd()">
+        (click)="onAdd()" [disabled] = "!uiConfig.features.enableEditing">
         <mat-icon>add</mat-icon>
       </button>
     </mat-form-field>

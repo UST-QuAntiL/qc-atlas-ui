@@ -1,6 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LinkObject } from '../data-list/data-list.component';
 import { UtilService } from '../../../util/util.service';
+import {
+  QcAtlasUiConfiguration,
+  QcAtlasUiRepositoryConfigurationService,
+  UiFeatures,
+} from '../../../directives/qc-atlas-ui-repository-configuration.service';
 
 @Component({
   selector: 'app-chip-collection',
@@ -24,10 +29,16 @@ export class ChipCollectionComponent implements OnInit {
 
   inputValue = '';
   inputElements: any[] = [];
+  readonly UiFeatures = UiFeatures;
+  uiConfig: QcAtlasUiConfiguration;
 
-  constructor(public utilService: UtilService) {}
+  constructor(
+    public utilService: UtilService,
+    private configService: QcAtlasUiRepositoryConfigurationService
+  ) {}
 
   ngOnInit(): void {
+    this.uiConfig = this.configService.configuration;
     this.inputElements = this.elements
       ? JSON.parse(JSON.stringify(this.elements))
       : [];

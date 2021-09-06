@@ -31,6 +31,7 @@
       [matAutosizeMinRows]="1"
       [matTextareaAutosize]="true"
       matInput
+      [readonly] = "!uiConfig.features.enableEditing"
     ></textarea>
     <button
       *ngIf="
@@ -67,6 +68,7 @@
       mat-icon-button
       aria-label="Clear"
       (click)="openLatexEditor()"
+      [disabled] = "!uiConfig.features.enableEditing"
     >
       <mat-icon svgIcon="latex" style="background-size: 24px 24px;"></mat-icon>
     </button>

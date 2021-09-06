@@ -1,4 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  QcAtlasUiConfiguration,
+  QcAtlasUiRepositoryConfigurationService,
+  UiFeatures,
+} from '../../../directives/qc-atlas-ui-repository-configuration.service';
 
 @Component({
   selector: 'app-checkbox-input',
@@ -12,6 +17,15 @@ export class CheckboxInputComponent {
   @Input() name = '';
   @Input() value: boolean;
   @Input() baseValue: boolean;
+
+  readonly UiFeatures = UiFeatures;
+  uiConfig: QcAtlasUiConfiguration;
+
+  constructor(private configService: QcAtlasUiRepositoryConfigurationService) {}
+
+  ngOnInit(): void {
+    this.uiConfig = this.configService.configuration;
+  }
 
   toggleValue(): void {
     this.onChange.emit(this.value);
