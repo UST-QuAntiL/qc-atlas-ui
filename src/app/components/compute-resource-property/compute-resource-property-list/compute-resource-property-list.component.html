@@ -40,6 +40,7 @@
       aria-label="Clear"
       *ngIf="isHovered(property.id)"
       (click)="onEdit(property)"
+      [disabled] = "!uiConfig.features.enableEditing"
     >
       <mat-icon>edit</mat-icon>
     </button>
@@ -50,6 +51,7 @@
       aria-label="Clear"
       *ngIf="isHovered(property.id)"
       (click)="onDelete(property)"
+      [disabled] = "!uiConfig.features.enableEditing"
     >
       <mat-icon>delete</mat-icon>
     </button>

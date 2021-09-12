@@ -3,13 +3,13 @@
     <div class="col-12">
       <mat-label class="mr-4">{{ title }}</mat-label>
       <mat-form-field *ngIf="!useToAddLinks" >
-        <input matInput [(ngModel)]="inputValue" matInput (keydown.enter)="addElement()">
+        <input matInput [(ngModel)]="inputValue" matInput (keydown.enter)="addElement()" [readonly]="!uiConfig.features.enableEditing">
         <button *ngIf="!useToAddLinks" (click)="addElement()"
                 mat-button
                 matSuffix
                 mat-icon-button
                 aria-label="Clear" 
-                [disabled]="uiConfig.features.enableEditing">
+                [disabled]="!uiConfig.features.enableEditing">
           <mat-icon>add</mat-icon>
         </button>
         <button *ngIf="!useToAddLinks && !utilService.objectsEqual(inputElements, elements)"
