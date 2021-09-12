@@ -19,7 +19,8 @@
   <button mdbBtn *ngIf="allowAdd" class="control-button add-button btn-sm" type="button"
           color="green"
           outline="true"
-          (click)="onAdd()" mdbWavesEffect>
+          (click)="onAdd()" mdbWavesEffect
+          [disabled] = "!uiConfig.features.enableEditing">
     <span class="material-icons">{{addIcon}}</span>
   </button>
   <!-- Submit-Selected-Button -->

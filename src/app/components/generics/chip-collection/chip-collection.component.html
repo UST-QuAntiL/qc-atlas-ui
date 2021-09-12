@@ -8,7 +8,8 @@
                 mat-button
                 matSuffix
                 mat-icon-button
-                aria-label="Clear">
+                aria-label="Clear" 
+                [disabled]="uiConfig.features.enableEditing">
           <mat-icon>add</mat-icon>
         </button>
         <button *ngIf="!useToAddLinks && !utilService.objectsEqual(inputElements, elements)"
