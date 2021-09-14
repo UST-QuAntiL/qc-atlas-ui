@@ -12,8 +12,8 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <button *ngIf="!compareVersion" mat-button (click)="compare()"> Compare Versions </button>
-          <mat-form-field *ngIf="compareVersion" floatLabel="always" [matBadge]="revisionCounter.toString()" matBadgeOverlap="false" matBadgePosition="before" [matBadgeHidden]="revisionBadgeHidden" (click)="resetRevisionBadge()">
+          <button *ngIf="generalTabVisible && !compareVersion" mat-button (click)="compare()"> Compare Versions </button>
+          <mat-form-field *ngIf="generalTabVisible && compareVersion" floatLabel="always" [matBadge]="revisionCounter.toString()" matBadgeOverlap="false" matBadgePosition="before" [matBadgeHidden]="revisionBadgeHidden" (click)="resetRevisionBadge()">
             <mat-label>Compare with Revision</mat-label>
             <mat-select (selectionChange)="compareRevision($event.value)" [placeholder]="revisions[revisions.length - 1]?.creationDate">
               <mat-option *ngFor="let revision of revisions.slice(0,revisions?.length).reverse()" [value]="revision">
