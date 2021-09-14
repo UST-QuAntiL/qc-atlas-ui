@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
 
 @Component({
   selector: 'app-table',
@@ -20,7 +21,7 @@ export class DataListComponent implements OnInit {
   @Input() allowSearch = false;
   @Input() allowSort = false;
   @Input() pagination: any;
-  @Input() paginatorConfig: any;
+  @Input() paginatorConfig: PaginatorConfig;
   @Input() emptyTableMessage = 'No elements found';
   @Input() smallTable = false;
   @Output() elementClicked = new EventEmitter<any>();

@@ -9,6 +9,9 @@ import {
 } from '../../generics/dialogs/confirm-dialog.component';
 // eslint-disable-next-line max-len
 import { AddOrEditAlgorithmRelationTypeDialogComponent } from '../dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { QueryParams } from '../../generics/data-list/data-list.component';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-algorithm-relation-types',
@@ -16,11 +19,11 @@ import { AddOrEditAlgorithmRelationTypeDialogComponent } from '../dialogs/add-or
   styleUrls: ['./algorithm-relation-types-list.component.scss'],
 })
 export class AlgorithmRelationTypesListComponent implements OnInit {
-  algorithmRelationTypes: any[] = [];
+  algorithmRelationTypes: AlgorithmRelationTypeDto[] = [];
   tableColumns = ['Name', 'Inverse Type Name'];
   variableNames = ['name', 'inverseTypeName'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
+  pagingInfo: PagingInfo<AlgorithmRelationTypeDto> = {};
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
@@ -32,7 +35,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getAlgorithmRelationTypes(params: any): void {
+  getAlgorithmRelationTypes(params: QueryParams): void {
     this.algorithmRelationTypeService
       .getAlgorithmRelationTypes(params)
       .subscribe((data) => {
@@ -55,7 +58,6 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditAlgorithmRelationTypeDialogComponent,
       {
@@ -71,9 +73,8 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
           inverseTypeName: dialogResult.inverseTypeName,
         };
 
-        params.body = algorithmRelationType;
         this.algorithmRelationTypeService
-          .createAlgorithmRelationType(params)
+          .createAlgorithmRelationType({ body: algorithmRelationType })
           .subscribe(
             () => {
               const correctPage = this.utilService.getLastPageAfterCreation(
@@ -161,7 +162,7 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
       });
   }
 
-  onEditElement(event: any): void {
+  onEditElement(event: AlgorithmRelationTypeDto): void {
     const dialogRef = this.utilService.createDialog(
       AddOrEditAlgorithmRelationTypeDialogComponent,
       {
@@ -179,13 +180,11 @@ export class AlgorithmRelationTypesListComponent implements OnInit {
           name: dialogResult.name,
           inverseTypeName: dialogResult.inverseTypeName,
         };
-
-        const params: any = {
-          algorithmRelationTypeId: updatedAlgorithmRelationType.id,
-          body: updatedAlgorithmRelationType,
-        };
         this.algorithmRelationTypeService
-          .updateAlgorithmRelationType(params)
+          .updateAlgorithmRelationType({
+            algorithmRelationTypeId: updatedAlgorithmRelationType.id,
+            body: updatedAlgorithmRelationType,
+          })
           .subscribe(() => {
             this.getAlgorithmRelationTypes({
               size: this.pagingInfo.size,

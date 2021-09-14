@@ -18,11 +18,11 @@ export class PublicationPropertiesComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onPropertyChanged(value: any, field: string): void {
+  onPropertyChanged(value: string, field: string): void {
     this.frontendPublication[field] = value;
   }
 
-  onChangesSaved(value: any, field: string): void {
+  onChangesSaved(value: string, field: string): void {
     this.updatePublicationField.emit({ field, value });
   }
 

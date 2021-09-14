@@ -20,7 +20,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
   constructor(private planqkPlatformLoginService: PlanqkPlatformLoginService) {}
 
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
+  intercept(
+    req: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     if (req.url.toString().includes('qc-catalog')) {
       return next
         .handle(this.addBearerToken(req, localStorage.getItem('bearerToken')))
@@ -54,9 +57,9 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   addBearerToken(
-    request: HttpRequest<any>,
+    request: HttpRequest<unknown>,
     bearerToken: string
-  ): HttpRequest<any> {
+  ): HttpRequest<unknown> {
     if (bearerToken) {
       return request.clone({
         setHeaders: { Authorization: 'Bearer ' + bearerToken },
@@ -66,9 +69,9 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   refreshBearerToken(
-    request: HttpRequest<any>,
+    request: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<unknown>> {
     if (!this.refreshTokenInProgress) {
       this.refreshTokenInProgress = true;
       this.bearerTokenSubject.next(null);

@@ -28,10 +28,10 @@ export class ComputeResourcePropertiesComponent implements OnInit {
   ngOnInit(): void {
     this.fetchComputeResourceProperties();
   }
-  onPropertyChanged(value: any, field: string): void {
+  onPropertyChanged(value: string, field: string): void {
     this.frontendComputeResource[field] = value;
   }
-  onChangesSaved(value: any, field: string): void {
+  onChangesSaved(value: string, field: string): void {
     this.updateFieldService.updateComputeResourceFieldChannel.emit({
       field,
       value,

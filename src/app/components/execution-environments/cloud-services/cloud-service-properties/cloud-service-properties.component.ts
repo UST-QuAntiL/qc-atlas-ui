@@ -20,13 +20,13 @@ export class CloudServicePropertiesComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onChangesSaved(value: any, field: string): void {
+  onChangesSaved(value: string, field: string): void {
     this.updateFieldService.updateCloudServiceFieldChannel.emit({
       field,
       value,
     });
   }
-  onPropertyChanged(value: any, field: string): void {
+  onPropertyChanged(value: string, field: string): void {
     this.frontendCloudService[field] = value;
   }
 }

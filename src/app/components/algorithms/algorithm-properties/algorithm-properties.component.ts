@@ -85,11 +85,6 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     { value: 'CIRCUIT', label: 'Circuit' },
     { value: 'ISING_MODEL', label: 'Ising model' },
   ];
-  quantumComputationModelOptions: Option[] = [
-    { value: 'GATE_BASED', label: 'Gate based' },
-    { value: 'MEASUREMENT_BASED', label: 'Measurement based' },
-    { value: 'QUANTUM_ANNEALING', label: 'Quantum Annealing' },
-  ];
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -217,11 +212,11 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     }
   }
 
-  onChangesSaved(value: any, field: string): void {
+  onChangesSaved(value: string | boolean, field: string): void {
     this.updateAlgorithmField.emit({ field, value });
   }
 
-  onPropertyChanged(value: any, field: string): void {
+  onPropertyChanged(value: string | boolean, field: string): void {
     this.frontendAlgorithm[field] = value;
   }
 
@@ -260,7 +255,7 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
     }
   }
 
-  removeApplicationAreaEvent(applicationArea: any): void {
+  removeApplicationAreaEvent(applicationArea: ApplicationAreaDto): void {
     this.removeApplicationArea.emit(applicationArea);
   }
 
