@@ -46,7 +46,6 @@ export class TextInputComponent implements OnInit, OnChanges {
   packedLatexValue: string;
   urlToRenderedBlob: SafeUrl;
 
-  readonly UiFeatures = UiFeatures;
   uiConfig: QcAtlasUiConfiguration;
 
   constructor(

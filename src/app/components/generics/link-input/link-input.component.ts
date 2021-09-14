@@ -18,7 +18,6 @@ export class LinkInputComponent implements OnInit {
   @Output() disable = new EventEmitter<void>();
   linkSearchText = '';
 
-  readonly UiFeatures = UiFeatures;
   uiConfig: QcAtlasUiConfiguration;
 
   constructor(private configService: QcAtlasUiRepositoryConfigurationService) {}

@@ -28,7 +28,6 @@ export class SelectInputComponent implements OnInit {
 
   inputValue: string;
 
-  readonly UiFeatures = UiFeatures;
   uiConfig: QcAtlasUiConfiguration;
 
   constructor(private configService: QcAtlasUiRepositoryConfigurationService) {}

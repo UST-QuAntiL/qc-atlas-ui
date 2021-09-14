@@ -29,7 +29,6 @@ export class ChipCollectionComponent implements OnInit {
 
   inputValue = '';
   inputElements: any[] = [];
-  readonly UiFeatures = UiFeatures;
   uiConfig: QcAtlasUiConfiguration;
 
   constructor(

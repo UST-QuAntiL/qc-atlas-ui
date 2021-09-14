@@ -36,7 +36,6 @@ export class ComputeResourcePropertyListComponent implements OnInit {
 
   hoveredEntry = '';
 
-  readonly UiFeatures = UiFeatures;
   uiConfig: QcAtlasUiConfiguration;
 
   constructor(

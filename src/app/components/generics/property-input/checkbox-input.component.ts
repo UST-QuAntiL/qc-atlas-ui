@@ -18,7 +18,6 @@ export class CheckboxInputComponent {
   @Input() value: boolean;
   @Input() baseValue: boolean;
 
-  readonly UiFeatures = UiFeatures;
   uiConfig: QcAtlasUiConfiguration;
 
   constructor(private configService: QcAtlasUiRepositoryConfigurationService) {}

@@ -53,7 +53,6 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
 
   inputValue = '';
 
-  readonly UiFeatures = UiFeatures;
   uiConfig: QcAtlasUiConfiguration;
 
   nestedTreeControl: NestedTreeControl<TreeNode> = new NestedTreeControl<

@@ -42,7 +42,6 @@ export class DataListComponent implements OnInit {
   sortActiveElement = '';
   disabledDataEntries: Set<any> = new Set<any>();
 
-  readonly UiFeatures = UiFeatures;
   uiConfig: QcAtlasUiConfiguration;
 
   constructor(private configService: QcAtlasUiRepositoryConfigurationService) {}
