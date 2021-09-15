@@ -9,6 +9,9 @@ import {
 } from '../../generics/dialogs/confirm-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { AddOrEditApplicationAreaDialogComponent } from '../dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { QueryParams } from '../../generics/data-list/data-list.component';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-application-areas-list',
@@ -16,11 +19,11 @@ import { AddOrEditApplicationAreaDialogComponent } from '../dialogs/add-or-edit-
   styleUrls: ['./application-areas-list.component.scss'],
 })
 export class ApplicationAreasListComponent implements OnInit {
-  applicationAreas: any[] = [];
+  applicationAreas: ApplicationAreaDto[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
+  pagingInfo: PagingInfo<ApplicationAreaDto> = {};
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
@@ -33,7 +36,7 @@ export class ApplicationAreasListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getApplicationAreas(params: any): void {
+  getApplicationAreas(params: QueryParams): void {
     this.applicationAreasService.getApplicationAreas(params).subscribe(
       (data) => {
         this.prepareApplicationAreaData(data);
@@ -61,7 +64,6 @@ export class ApplicationAreasListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditApplicationAreaDialogComponent,
       {
@@ -71,33 +73,34 @@ export class ApplicationAreasListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const applicationAreaDtoDto: ApplicationAreaDto = {
+        const applicationAreaDto: ApplicationAreaDto = {
           id: dialogResult.id,
           name: dialogResult.name,
         };
 
-        params.body = applicationAreaDtoDto;
-        this.applicationAreasService.createApplicationArea(params).subscribe(
-          () => {
-            const correctPage = this.utilService.getLastPageAfterCreation(
-              this.pagingInfo,
-              1
-            );
-            this.getApplicationAreas({
-              size: this.pagingInfo.size,
-              page: correctPage,
-              sort: this.pagingInfo.sort,
-            });
-            this.utilService.callSnackBar(
-              'Application area was successfully added.'
-            );
-          },
-          () => {
-            this.utilService.callSnackBar(
-              'Error! Could not add application area.'
-            );
-          }
-        );
+        this.applicationAreasService
+          .createApplicationArea({ body: applicationAreaDto })
+          .subscribe(
+            () => {
+              const correctPage = this.utilService.getLastPageAfterCreation(
+                this.pagingInfo,
+                1
+              );
+              this.getApplicationAreas({
+                size: this.pagingInfo.size,
+                page: correctPage,
+                sort: this.pagingInfo.sort,
+              });
+              this.utilService.callSnackBar(
+                'Application area was successfully added.'
+              );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not add application area.'
+              );
+            }
+          );
       }
     });
   }
@@ -164,7 +167,7 @@ export class ApplicationAreasListComponent implements OnInit {
       });
   }
 
-  onEditElement(event: any): void {
+  onEditElement(event: ApplicationAreaDto): void {
     const dialogRef = this.utilService.createDialog(
       AddOrEditApplicationAreaDialogComponent,
       {
@@ -179,27 +182,28 @@ export class ApplicationAreasListComponent implements OnInit {
           id: event.id,
           name: dialogResult.name,
         };
-        const params: any = {
-          applicationAreaId: newApplicationAreaDto.id,
-          body: newApplicationAreaDto,
-        };
-        this.applicationAreasService.updateApplicationArea(params).subscribe(
-          () => {
-            this.getApplicationAreas({
-              size: this.pagingInfo.size,
-              page: this.pagingInfo.number,
-              sort: this.pagingInfo.sort,
-            });
-            this.utilService.callSnackBar(
-              'Application area was successfully edited.'
-            );
-          },
-          () => {
-            this.utilService.callSnackBar(
-              'Error! Could not update application area.'
-            );
-          }
-        );
+        this.applicationAreasService
+          .updateApplicationArea({
+            applicationAreaId: newApplicationAreaDto.id,
+            body: newApplicationAreaDto,
+          })
+          .subscribe(
+            () => {
+              this.getApplicationAreas({
+                size: this.pagingInfo.size,
+                page: this.pagingInfo.number,
+                sort: this.pagingInfo.sort,
+              });
+              this.utilService.callSnackBar(
+                'Application area was successfully edited.'
+              );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not update application area.'
+              );
+            }
+          );
       }
     });
   }

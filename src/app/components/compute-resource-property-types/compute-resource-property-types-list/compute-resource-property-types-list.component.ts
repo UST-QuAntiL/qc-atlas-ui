@@ -9,6 +9,9 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { QueryParams } from '../../generics/data-list/data-list.component';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-compute-resource-property-types-list',
@@ -16,11 +19,11 @@ import {
   styleUrls: ['./compute-resource-property-types-list.component.scss'],
 })
 export class ComputeResourcePropertyTypesListComponent implements OnInit {
-  computeResourcePropertyTypes: any[] = [];
+  computeResourcePropertyTypes: ComputeResourcePropertyTypeDto[] = [];
   tableColumns = ['Name', 'Datatype', 'Description'];
   variableNames = ['name', 'datatype', 'description'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
+  pagingInfo: PagingInfo<ComputeResourcePropertyTypeDto> = {};
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
@@ -32,7 +35,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getComputeResourcePropertyTypes(params: any): void {
+  getComputeResourcePropertyTypes(params: QueryParams): void {
     this.computeResourcePropertyTypeService
       .getResourcePropertyTypes(params)
       .subscribe((data) => {
@@ -55,7 +58,6 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditComputeResourcePropertyTypeDialogComponent,
       {
@@ -72,9 +74,10 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
           description: dialogResult.description,
         };
 
-        params.body = computeResourcePropertyType;
         this.computeResourcePropertyTypeService
-          .createComputingResourcePropertyType(params)
+          .createComputingResourcePropertyType({
+            body: computeResourcePropertyType,
+          })
           .subscribe(
             () => {
               const correctPage = this.utilService.getLastPageAfterCreation(
@@ -162,7 +165,7 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
       });
   }
 
-  onEditElement(event: any): void {
+  onEditElement(event: ComputeResourcePropertyTypeDto): void {
     const dialogRef = this.utilService.createDialog(
       AddOrEditComputeResourcePropertyTypeDialogComponent,
       {
@@ -182,13 +185,12 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
           datatype: dialogResult.datatype,
           description: dialogResult.description,
         };
-
-        const params: any = {
-          computeResourcePropertyTypeId: updatedComputeResourcePropertyType.id,
-          body: updatedComputeResourcePropertyType,
-        };
         this.computeResourcePropertyTypeService
-          .updateComputingResourcePropertyType(params)
+          .updateComputingResourcePropertyType({
+            computeResourcePropertyTypeId:
+              updatedComputeResourcePropertyType.id,
+            body: updatedComputeResourcePropertyType,
+          })
           .subscribe(
             () => {
               this.getComputeResourcePropertyTypes({

@@ -1,21 +1,23 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { PublicationService } from 'api-atlas/services/publication.service';
 import { Router } from '@angular/router';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
-import { PublicationDto } from 'api-atlas/models/publication-dto';
-import { forkJoin, Observable } from 'rxjs';
 import { PagePublicationDto } from 'api-atlas/models/page-publication-dto';
+import { PublicationDto } from 'api-atlas/models/publication-dto';
+import { AlgorithmService } from 'api-atlas/services/algorithm.service';
+import { PublicationService } from 'api-atlas/services/publication.service';
+import { forkJoin, Observable } from 'rxjs';
+import { PaginatorConfig } from '../../../../util/paginatorConfig';
+import { PagingInfo } from '../../../../util/PagingInfo';
 import { UtilService } from '../../../../util/util.service';
-import {
-  DialogData,
-  LinkItemListDialogComponent,
-} from '../../../generics/dialogs/link-item-list-dialog.component';
 import {
   LinkObject,
   QueryParams,
   UrlData,
 } from '../../../generics/data-list/data-list.component';
+import {
+  DialogData,
+  LinkItemListDialogComponent,
+} from '../../../generics/dialogs/link-item-list-dialog.component';
 
 @Component({
   selector: 'app-implementation-publications-list',
@@ -49,8 +51,8 @@ export class ImplementationPublicationsListComponent implements OnInit {
     },
   };
   tableAddAllowed = true;
-  pagingInfo: any = {};
-  paginatorConfig: any = {
+  pagingInfo: PagingInfo<PublicationDto> = {};
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };

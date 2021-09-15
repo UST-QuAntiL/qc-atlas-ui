@@ -34,11 +34,11 @@ export class ImplementationPropertiesComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onChangesSaved(value: any, field: string): void {
+  onChangesSaved(value: string, field: string): void {
     this.updateImplementationField.emit({ field, value });
   }
 
-  onPropertyChanged(value: any, field: string): void {
+  onPropertyChanged(value: string, field: string): void {
     this.frontendImplementation[field] = value;
   }
 

@@ -62,7 +62,7 @@ export class ChangePageGuard
     return true;
   }
 
-  public objectsEqual(source: any, target: any): boolean {
+  public objectsEqual<T>(source: T, target: T): boolean {
     this.unsavedChanges = deepEqual(source, target);
     return this.unsavedChanges;
   }

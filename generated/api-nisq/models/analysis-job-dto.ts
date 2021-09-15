@@ -6,7 +6,7 @@ export type AnalysisJobDto = {
   id?: string;
   implementedAlgorithm?: string;
   time?: string;
-  inputParameters?: {};
+  inputParameters?: Map<string, string>;
   ready?: boolean;
   _links?: Links;
 };

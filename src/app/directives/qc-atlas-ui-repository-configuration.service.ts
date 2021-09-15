@@ -97,7 +97,7 @@ export class QcAtlasUiRepositoryConfigurationService {
    * @param obj the object to store the parsed values in.
    * @private
    */
-  private parseNode(node: EtcdNode, obj: any): void {
+  private parseNode(node: EtcdNode, obj: QcAtlasUiConfiguration): void {
     const slashIndex = node.key.lastIndexOf('/');
     const key = node.key.substr(slashIndex + 1);
     if (node.nodes) {

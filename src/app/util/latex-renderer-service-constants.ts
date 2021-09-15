@@ -60,7 +60,7 @@ export class LatexRendererServiceConstants {
     return latexRenderText;
   }
 
-  public createBlobFromRenderedResult(renderedData: any): Blob {
+  public createBlobFromRenderedResult(renderedData: Blob): Blob {
     return new Blob([renderedData], {
       type: renderedData.type,
     });

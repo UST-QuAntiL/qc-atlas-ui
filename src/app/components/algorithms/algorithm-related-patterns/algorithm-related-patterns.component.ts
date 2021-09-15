@@ -14,6 +14,8 @@ import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { UrlData } from '../../generics/data-list/data-list.component';
 import { environment as Env } from '../../../../environments/environment';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-algorithm-related-patterns',
@@ -29,8 +31,8 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
   tableColumns: string[] = ['Pattern', 'Relation Type', 'Description'];
   externalLinkVariables: string[] = ['pattern'];
 
-  pagingInfo: any = {};
-  paginatorConfig: any = {
+  pagingInfo: PagingInfo<PatternRelationDto> = {};
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
@@ -182,7 +184,7 @@ export class AlgorithmRelatedPatternsComponent implements OnInit {
     });
   }
 
-  onUpdateClicked(event: any): void {
+  onUpdateClicked(event: PatternRelationTableObject): void {
     this.utilService
       .createDialog(
         AddPatternRelationDialogComponent,

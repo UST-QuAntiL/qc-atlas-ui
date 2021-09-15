@@ -9,6 +9,9 @@ import {
 } from '../../generics/dialogs/confirm-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { AddOrEditProblemTypeDialogComponent } from '../dialogs/add-or-edit-problem-type/add-or-edit-problem-type-dialog.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-problem-types-list',
@@ -16,11 +19,11 @@ import { AddOrEditProblemTypeDialogComponent } from '../dialogs/add-or-edit-prob
   styleUrls: ['./problem-types-list.component.scss'],
 })
 export class ProblemTypesListComponent implements OnInit {
-  problemTypes: any[] = [];
+  problemTypes: ProblemType[] = [];
   tableColumns = ['Name', 'Parent'];
   variableNames = ['name', 'parentProblemTypeName'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
+  pagingInfo: PagingInfo<ProblemTypeDto> = {};
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
@@ -33,7 +36,7 @@ export class ProblemTypesListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getProblemTypes(params: any): void {
+  getProblemTypes(params: QueryParams): void {
     this.problemTypeService.getProblemTypes(params).subscribe(
       (data) => {
         this.prepareProblemTypeData(data);
@@ -83,7 +86,6 @@ export class ProblemTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditProblemTypeDialogComponent,
       {
@@ -101,26 +103,30 @@ export class ProblemTypesListComponent implements OnInit {
           problemTypeDto.parentProblemType = dialogResult.parentProblemType.id;
         }
 
-        params.body = problemTypeDto;
-        this.problemTypeService.createProblemType(params).subscribe(
-          () => {
-            const correctPage = this.utilService.getLastPageAfterCreation(
-              this.pagingInfo,
-              1
-            );
-            this.getProblemTypes({
-              size: this.pagingInfo.size,
-              page: correctPage,
-              sort: this.pagingInfo.sort,
-            });
-            this.utilService.callSnackBar('Successfully created problem type.');
-          },
-          () => {
-            this.utilService.callSnackBar(
-              'Error! Problem type could not be created.'
-            );
-          }
-        );
+        // params.body = problemTypeDto;
+        this.problemTypeService
+          .createProblemType({ body: problemTypeDto })
+          .subscribe(
+            () => {
+              const correctPage = this.utilService.getLastPageAfterCreation(
+                this.pagingInfo,
+                1
+              );
+              this.getProblemTypes({
+                size: this.pagingInfo.size,
+                page: correctPage,
+                sort: this.pagingInfo.sort,
+              });
+              this.utilService.callSnackBar(
+                'Successfully created problem type.'
+              );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Problem type could not be created.'
+              );
+            }
+          );
       }
     });
   }
@@ -186,7 +192,7 @@ export class ProblemTypesListComponent implements OnInit {
       });
   }
 
-  onEditElement(event: any): void {
+  onEditElement(event: ProblemTypeDto): void {
     let parentProblemTypeDto: ProblemTypeDto;
     for (const problemType of this.problemTypes) {
       if (problemType.id === event.parentProblemType) {
@@ -213,19 +219,21 @@ export class ProblemTypesListComponent implements OnInit {
               ? dialogResult.parentProblemType.id
               : null,
           };
-
-          const params: any = {
-            problemTypeId: updatedProblemType.id,
-            body: updatedProblemType,
-          };
-          this.problemTypeService.updateProblemType(params).subscribe(() => {
-            this.getProblemTypes({
-              size: this.pagingInfo.size,
-              page: this.pagingInfo.number,
-              sort: this.pagingInfo.sort,
+          this.problemTypeService
+            .updateProblemType({
+              problemTypeId: updatedProblemType.id,
+              body: updatedProblemType,
+            })
+            .subscribe(() => {
+              this.getProblemTypes({
+                size: this.pagingInfo.size,
+                page: this.pagingInfo.number,
+                sort: this.pagingInfo.sort,
+              });
+              this.utilService.callSnackBar(
+                'Successfully updated problem type.'
+              );
             });
-            this.utilService.callSnackBar('Successfully updated problem type.');
-          });
         }
       },
       () => {
@@ -235,4 +243,8 @@ export class ProblemTypesListComponent implements OnInit {
       }
     );
   }
+}
+
+export interface ProblemType extends ProblemTypeDto {
+  parentProblemTypeName?: string;
 }

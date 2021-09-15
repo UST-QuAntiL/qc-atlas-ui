@@ -36,11 +36,6 @@ export class ImplementationViewComponent implements OnInit {
 
   tableColumns = ['Name', 'Datatype', 'Description', 'Value'];
   variableNames = ['name', 'datatype', 'description', 'value'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
-    amountChoices: [1, 2, 3],
-    selectedAmount: 1,
-  };
 
   links: BreadcrumbLink[] = [
     { heading: '', subHeading: '' },
@@ -125,15 +120,6 @@ export class ImplementationViewComponent implements OnInit {
     } else {
       this.generalTabVisible = false;
     }
-  }
-
-  onElementClicked(implementation: any): void {
-    this.router.navigate([
-      'algorithms',
-      implementation.implementedAlgorithmId,
-      'implementations',
-      implementation.id,
-    ]);
   }
 
   updateComputeResourceProperty(property: ComputeResourcePropertyDto): void {
