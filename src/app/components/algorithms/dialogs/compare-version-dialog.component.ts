@@ -4,13 +4,6 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 
 @Component({
   selector: 'app-compare-version-dialog-component',

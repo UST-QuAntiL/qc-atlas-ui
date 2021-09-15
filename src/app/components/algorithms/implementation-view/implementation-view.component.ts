@@ -371,7 +371,7 @@ export class ImplementationViewComponent implements OnInit {
         width: '500px',
       }
     );
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.compareVersion = false;
     });
   }

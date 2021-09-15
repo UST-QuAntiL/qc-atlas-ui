@@ -434,7 +434,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         width: '500px',
       }
     );
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.compareVersion = false;
     });
   }
