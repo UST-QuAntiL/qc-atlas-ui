@@ -15,6 +15,10 @@ import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
+import {
+  ComparedData,
+  CompareVersionDialogComponent,
+} from '../dialogs/compare-version-dialog.component';
 
 @Component({
   templateUrl: './implementation-view.component.html',
@@ -43,6 +47,7 @@ export class ImplementationViewComponent implements OnInit {
   revisionCounter = 0;
   // TODO: revisionAvailable is obsolete if the planqk platform supports versioning
   revisionAvailable = false;
+  compareVersion = false;
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -315,6 +320,141 @@ export class ImplementationViewComponent implements OnInit {
   resetRevisionBadge(): void {
     this.revisionBadgeHidden = true;
     this.revisionCounter = 0;
+  }
+
+  compare(): void {
+    this.compareVersion = true;
+  }
+
+  compareRevision(revision: RevisionDto): void {
+    this.implementationsService
+      .getImplementationRevision({
+        implementationId: this.implementation.id,
+        revisionId: revision.id,
+      })
+      .subscribe(
+        (implementationRevision) => {
+          this.comparePropertiesOfVersions(
+            this.frontendImplementation,
+            implementationRevision
+          );
+          this.utilService.callSnackBar(
+            'Algorithm revision ' +
+              revision.id +
+              ' has been fetched successfully for comparison.'
+          );
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not fetch Algorithm revision for comparison' +
+              revision.id
+          );
+        }
+      );
+  }
+
+  comparePropertiesOfVersions(
+    currentVersion: ImplementationDto,
+    compareVersion: ImplementationDto
+  ): void {
+    const versionComparision = this.compareVersions(
+      currentVersion,
+      compareVersion
+    );
+    const dialogRef = this.utilService.createDialog(
+      CompareVersionDialogComponent,
+      {
+        title: 'Compare Versions',
+        versionComparision,
+      },
+      {
+        width: '500px',
+      }
+    );
+    dialogRef.afterClosed().subscribe(() => {
+      this.compareVersion = false;
+    });
+  }
+
+  compareVersions(
+    currentVersion: ImplementationDto,
+    compareVersion: ImplementationDto
+  ): ComparedData[] {
+    const differences = new Array<ComparedData>();
+    differences.push(
+      this.caluclateDifference('Name', currentVersion.name, compareVersion.name)
+    );
+    differences.push(
+      this.caluclateDifference(
+        'Contributors',
+        currentVersion.contributors,
+        compareVersion.contributors
+      )
+    );
+    differences.push(
+      this.caluclateDifference(
+        'Version',
+        currentVersion.version,
+        compareVersion.version
+      )
+    );
+    differences.push(
+      this.caluclateDifference(
+        'License',
+        currentVersion.license,
+        compareVersion.license
+      )
+    );
+    differences.push(
+      this.caluclateDifference(
+        'Dependencies',
+        currentVersion.dependencies,
+        compareVersion.dependencies
+      )
+    );
+    differences.push(
+      this.caluclateDifference(
+        'Description',
+        currentVersion.description,
+        compareVersion.description
+      )
+    );
+    differences.push(
+      this.caluclateDifference(
+        'Input Format',
+        currentVersion.inputFormat,
+        compareVersion.inputFormat
+      )
+    );
+    differences.push(
+      this.caluclateDifference(
+        'Output Format',
+        currentVersion.outputFormat,
+        compareVersion.outputFormat
+      )
+    );
+    differences.push(
+      this.caluclateDifference(
+        'Parameter',
+        currentVersion.parameter,
+        compareVersion.parameter
+      )
+    );
+    return differences;
+  }
+
+  caluclateDifference(
+    propertyName: string,
+    firstValue: string,
+    secondValue: string
+  ): ComparedData {
+    if (firstValue !== secondValue) {
+      return {
+        property: propertyName,
+        currentVersionValue: firstValue,
+        compareVersionValue: secondValue,
+      };
+    }
   }
 
   private loadGeneral(): void {
