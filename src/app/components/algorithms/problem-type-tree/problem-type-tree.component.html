@@ -16,7 +16,7 @@
       <button mat-icon-button disabled><mat-icon>expand_more</mat-icon></button>
       {{ node.problemType.name }}
       <button *ngIf="allowDelete && node.isLowestLevelNode" mat-icon-button class="delete-small"
-              (click)="onSingleDelete(node); $event.stopPropagation()" [disabled] = "!uiConfig.features.enableEditing">
+              (click)="onSingleDelete(node); $event.stopPropagation()" [hidden] = "!uiConfig.features.enableEditing">
         <mat-icon>{{deleteIcon}}</mat-icon>
       </button>
     </mat-tree-node>
@@ -30,7 +30,7 @@
         </button>
         {{ node.problemType.name }}
         <button *ngIf="allowDelete && node.isLowestLevelNode" mat-icon-button class="delete-small"
-                (click)="onSingleDelete(node); $event.stopPropagation()" [disabled] = "!uiConfig.features.enableEditing">
+                (click)="onSingleDelete(node); $event.stopPropagation()" [hidden] = "!uiConfig.features.enableEditing">
           <mat-icon>{{deleteIcon}}</mat-icon>
         </button>
       </div>
