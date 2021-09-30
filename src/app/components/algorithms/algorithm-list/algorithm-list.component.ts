@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { AlgorithmDto } from 'api-atlas/models';
+import {
+  AlgorithmDto,
+  ClassicAlgorithmDto,
+  QuantumAlgorithmDto,
+} from 'api-atlas/models';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
@@ -10,6 +14,8 @@ import {
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
 import { QueryParams } from '../../generics/data-list/data-list.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
 
 @Component({
   selector: 'app-algorithm-list',
@@ -20,8 +26,8 @@ export class AlgorithmListComponent implements OnInit {
   algorithms: AlgorithmDto[] = [];
   tableColumns = ['Name', 'Acronym', 'Type', 'Problem'];
   variableNames = ['name', 'acronym', 'computationModel', 'problem'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
+  pagingInfo: PagingInfo<AlgorithmDto> = {};
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
@@ -67,7 +73,6 @@ export class AlgorithmListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddAlgorithmDialogComponent,
       {
@@ -76,20 +81,25 @@ export class AlgorithmListComponent implements OnInit {
     );
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        const algorithmDto: any = {
-          name: dialogResult.name,
-          computationModel: dialogResult.computationModel,
-        };
+      let algorithmDto: QuantumAlgorithmDto | ClassicAlgorithmDto;
 
-        if (algorithmDto.computationModel !== 'CLASSIC') {
-          algorithmDto.quantumComputationModel =
-            dialogResult.quantumComputationModel;
+      if (dialogResult) {
+        if (dialogResult.computationModel !== 'CLASSIC') {
+          algorithmDto = {
+            id: null,
+            name: dialogResult.name,
+            computationModel: dialogResult.computationModel,
+            quantumComputationModel: dialogResult.quantumComputationModel,
+          };
+        } else {
+          algorithmDto = {
+            id: null,
+            name: dialogResult.name,
+            computationModel: dialogResult.computationModel,
+          };
         }
 
-        params.body = algorithmDto as AlgorithmDto;
-
-        this.algorithmService.createAlgorithm(params).subscribe(
+        this.algorithmService.createAlgorithm({ body: algorithmDto }).subscribe(
           (data) => {
             this.utilService.callSnackBar(
               'Algorithm was successfully created.'

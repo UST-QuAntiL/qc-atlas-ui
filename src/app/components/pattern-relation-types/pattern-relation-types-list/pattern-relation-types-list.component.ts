@@ -9,6 +9,9 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
+import { PaginatorConfig } from '../../../util/paginatorConfig';
+import { PagingInfo } from '../../../util/PagingInfo';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-pattern-relation-types-list',
@@ -16,11 +19,11 @@ import {
   styleUrls: ['./pattern-relation-types-list.component.scss'],
 })
 export class PatternRelationTypesListComponent implements OnInit {
-  patternRelationTypes: any[] = [];
+  patternRelationTypes: PatternRelationTypeDto[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
+  pagingInfo: PagingInfo<PatternRelationTypeDto> = {};
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
@@ -32,7 +35,7 @@ export class PatternRelationTypesListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getPatternRelationTypes(params: any): void {
+  getPatternRelationTypes(params: QueryParams): void {
     this.patternRelationTypeService.getPatternRelationTypes(params).subscribe(
       (data) => {
         this.preparePatternRelationTypeData(data);
@@ -60,7 +63,6 @@ export class PatternRelationTypesListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const params: any = {};
     const dialogRef = this.utilService.createDialog(
       AddOrEditPatternRelationTypeDialogComponent,
       {
@@ -75,9 +77,8 @@ export class PatternRelationTypesListComponent implements OnInit {
           name: dialogResult.name,
         };
 
-        params.body = algorithmRelationType;
         this.patternRelationTypeService
-          .createPatternRelationType(params)
+          .createPatternRelationType({ body: algorithmRelationType })
           .subscribe(
             () => {
               const correctPage = this.utilService.getLastPageAfterCreation(
@@ -165,7 +166,7 @@ export class PatternRelationTypesListComponent implements OnInit {
       });
   }
 
-  onEditElement(event: any): void {
+  onEditElement(event: PatternRelationTypeDto): void {
     const dialogRef = this.utilService.createDialog(
       AddOrEditPatternRelationTypeDialogComponent,
       {
@@ -181,13 +182,11 @@ export class PatternRelationTypesListComponent implements OnInit {
           id: dialogResult.id,
           name: dialogResult.name,
         };
-
-        const params: any = {
-          patternRelationTypeId: updatedPatternRelationType.id,
-          body: updatedPatternRelationType,
-        };
         this.patternRelationTypeService
-          .updatePatternRelationType(params)
+          .updatePatternRelationType({
+            patternRelationTypeId: updatedPatternRelationType.id,
+            body: updatedPatternRelationType,
+          })
           .subscribe(
             () => {
               this.getPatternRelationTypes({

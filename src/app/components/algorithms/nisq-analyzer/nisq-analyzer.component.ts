@@ -8,7 +8,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { BehaviorSubject, interval, Observable } from 'rxjs';
+import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
 import { exhaustMap, first, map, startWith, switchMap } from 'rxjs/operators';
 
 import { ExecutionEnvironmentsService } from 'api-atlas/services';
@@ -60,7 +60,7 @@ export class NisqAnalyzerComponent implements OnInit {
   analyzerJob: AnalysisJobDto;
   jobReady = false;
   expandedElement: AnalysisResultDto | null;
-  pollingAnalysisJobData: any;
+  pollingAnalysisJobData: Subscription;
   queueLengths = new Map<string, number>();
   executionResultsAvailable = new Map<string, boolean>();
   loadingResults = new Map<string, boolean>();
@@ -126,11 +126,17 @@ export class NisqAnalyzerComponent implements OnInit {
     return result.join(' ');
   }
 
-  filterInputParams(inputParameters: any): {} {
+  filterInputParams(inputParameters: Map<string, string>): Map<string, string> {
     // Remove token from input parameters, as it is handled separately.
-    inputParameters = Object.assign({}, inputParameters);
-    delete inputParameters.token;
-    return inputParameters;
+    /* copy inputParameters into new Map to create an instance
+              to enable operations on the map, i.e., inputParameters*/
+    const inputParametersCopy = new Map<string, string>();
+    for (const key of Object.keys(inputParameters)) {
+      if (key !== 'token') {
+        inputParametersCopy.set(key, inputParameters[key]);
+      }
+    }
+    return inputParametersCopy;
   }
 
   onAddAnalysis(): void {

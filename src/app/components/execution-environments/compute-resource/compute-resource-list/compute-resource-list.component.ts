@@ -10,6 +10,8 @@ import {
 import { UtilService } from '../../../../util/util.service';
 import { CreateComputeResourceDialogComponent } from '../dialogs/create-compute-resource-dialog.component';
 import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog.component';
+import { PaginatorConfig } from '../../../../util/paginatorConfig';
+import { PagingInfo } from '../../../../util/PagingInfo';
 
 @Component({
   selector: 'app-compute-resource-list',
@@ -21,8 +23,8 @@ export class ComputeResourceListComponent implements OnInit {
 
   tableColumns = ['Name', 'Vendor', 'Technology', 'Quantum Computation Model'];
   variableNames = ['name', 'vendor', 'technology', 'quantumComputationModel'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
+  pagingInfo: PagingInfo<ComputeResourceDto> = {};
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };

@@ -14,6 +14,10 @@ import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-
 import { UtilService } from '../../../util/util.service';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
+import {
+  ComparedData,
+  CompareVersionDialogComponent,
+} from '../dialogs/compare-version-dialog.component';
 
 @Component({
   selector: 'app-algorithm-view',
@@ -34,6 +38,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   revisionCounter = 0;
   // TODO: revisionAvailable is obsolete if the planqk platform supports versioning
   revisionAvailable = false;
+  compareVersion = false;
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
@@ -378,6 +383,171 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
   resetRevisionBadge(): void {
     this.revisionBadgeHidden = true;
     this.revisionCounter = 0;
+  }
+
+  compare(): void {
+    this.compareVersion = true;
+  }
+
+  compareRevision(revision: RevisionDto): void {
+    this.algorithmService
+      .getAlgorithmRevision({
+        algorithmId: this.algorithm.id,
+        revisionId: revision.id,
+      })
+      .subscribe(
+        (algorithmRevision) => {
+          this.comparePropertiesOfVersions(
+            this.frontendAlgorithm,
+            algorithmRevision
+          );
+          this.utilService.callSnackBar(
+            'Algorithm revision ' +
+              revision.id +
+              ' has been fetched successfully for comparison.'
+          );
+        },
+        () => {
+          this.utilService.callSnackBar(
+            'Error! Could not fetch Algorithm revision for comparison' +
+              revision.id
+          );
+        }
+      );
+  }
+
+  comparePropertiesOfVersions(
+    currentVersion: AlgorithmDto,
+    compareVersion: AlgorithmDto
+  ): void {
+    const versionComparision = this.compareVersions(
+      currentVersion,
+      compareVersion
+    );
+    const dialogRef = this.utilService.createDialog(
+      CompareVersionDialogComponent,
+      {
+        title: 'Compare Versions',
+        versionComparision,
+      },
+      {
+        width: '500px',
+      }
+    );
+    dialogRef.afterClosed().subscribe(() => {
+      this.compareVersion = false;
+    });
+  }
+
+  compareVersions(
+    currentVersion: AlgorithmDto,
+    compareVersion: AlgorithmDto
+  ): ComparedData[] {
+    const differences = new Array<ComparedData>();
+    differences.push(
+      this.caluclateAndAddDifference(
+        'Name',
+        currentVersion.name,
+        compareVersion.name
+      )
+    );
+    differences.push(
+      this.caluclateAndAddDifference(
+        'acronym',
+        currentVersion.acronym,
+        compareVersion.acronym
+      )
+    );
+    differences.push(
+      this.caluclateAndAddDifference(
+        'Intent',
+        currentVersion.intent,
+        compareVersion.intent
+      )
+    );
+    differences.push(
+      this.caluclateAndAddDifference(
+        'problem',
+        currentVersion.problem,
+        compareVersion.problem
+      )
+    );
+    differences.push(
+      this.caluclateAndAddDifference(
+        'Solution',
+        currentVersion.solution,
+        compareVersion.solution
+      )
+    );
+    differences.push(
+      this.caluclateAndAddDifference(
+        'InputFormat',
+        currentVersion.inputFormat,
+        compareVersion.inputFormat
+      )
+    );
+    differences.push(
+      this.caluclateAndAddDifference(
+        'Algo Parameter',
+        currentVersion.algoParameter,
+        compareVersion.algoParameter
+      )
+    );
+    differences.push(
+      this.caluclateAndAddDifference(
+        'Output Format',
+        currentVersion.outputFormat,
+        compareVersion.outputFormat
+      )
+    );
+    differences.push(
+      this.caluclateAndAddDifference(
+        'Assumptions',
+        currentVersion.assumptions,
+        compareVersion.assumptions
+      )
+    );
+    if (
+      currentVersion.computationModel !== 'CLASSIC' &&
+      compareVersion.computationModel !== 'CLASSIC'
+    ) {
+      if (currentVersion.nisqReady !== compareVersion.nisqReady) {
+        differences.push({
+          property: 'Nisq ready',
+          currentVersionValue: currentVersion.nisqReady,
+          compareVersionValue: compareVersion.nisqReady,
+        });
+        differences.push(
+          this.caluclateAndAddDifference(
+            'Quantum Computation Model',
+            currentVersion.quantumComputationModel,
+            compareVersion.quantumComputationModel
+          )
+        );
+        differences.push(
+          this.caluclateAndAddDifference(
+            'Speed Up',
+            currentVersion.speedUp,
+            compareVersion.speedUp
+          )
+        );
+      }
+    }
+    return differences;
+  }
+
+  caluclateAndAddDifference(
+    propertyName: string,
+    firstValue: string,
+    secondValue: string
+  ): ComparedData {
+    if (firstValue !== secondValue) {
+      return {
+        property: propertyName,
+        currentVersionValue: firstValue,
+        compareVersionValue: secondValue,
+      };
+    }
   }
 
   private getTagsForAlgorithm(algoId: string): void {

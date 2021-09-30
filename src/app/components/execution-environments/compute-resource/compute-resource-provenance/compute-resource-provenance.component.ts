@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { EntityModelQpuDto } from 'api-qprov/models/entity-model-qpu-dto';
+import { EntityModelQubitDto } from 'api-qprov/models/entity-model-qubit-dto';
+import { EntityModelGateDto } from 'api-qprov/models/entity-model-gate-dto';
 import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
 import { ProviderService } from 'api-qprov/services/provider.service';
 import * as shape from 'd3-shape';
@@ -96,7 +98,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
    * @param result the response from the QProv API with all available providers
    */
   getProviderDtoByName(result): void {
-    if (result === null) {
+    if (result === null || result._embedded == null) {
       console.error('Error while loading provider!');
       return;
     }
@@ -331,7 +333,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
    *
    * @param id the Id of the qubit to return
    */
-  getQubitById(id): any {
+  getQubitById(id): EntityModelQubitDto {
     for (const qubit of this.displayedDataQubits) {
       if (qubit.id === id) {
         return qubit;
@@ -345,7 +347,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
    *
    * @param id the Id of the gate to return
    */
-  getGateById(id): any {
+  getGateById(id): EntityModelGateDto {
     for (const gate of this.displayedDataGates) {
       if (gate.id === id) {
         return gate;

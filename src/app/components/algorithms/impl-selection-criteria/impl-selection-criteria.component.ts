@@ -7,7 +7,6 @@ import { AlgorithmDto, ImplementationDto } from 'api-atlas/models';
 import {
   ImplementationDto as NisqImplementationDto,
   SdkDto,
-  SdkListDto,
 } from 'api-nisq/models';
 import {
   ImplementationService as NISQImplementationService,

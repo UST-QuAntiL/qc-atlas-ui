@@ -13,6 +13,8 @@ import {
 import { UtilService } from '../../../../util/util.service';
 import { CreateSoftwarePlatformDialogComponent } from '../dialogs/create-software-platform-dialog.component';
 import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog.component';
+import { PaginatorConfig } from '../../../../util/paginatorConfig';
+import { PagingInfo } from '../../../../util/PagingInfo';
 
 @Component({
   selector: 'app-software-platform-list',
@@ -24,8 +26,8 @@ export class SoftwarePlatformListComponent implements OnInit {
 
   tableColumns = ['Name', 'Version', 'Licence', 'Link'];
   variableNames = ['name', 'version', 'licence', 'link'];
-  pagingInfo: any = {};
-  paginatorConfig: any = {
+  pagingInfo: PagingInfo<SoftwarePlatformDto> = {};
+  paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
   };
