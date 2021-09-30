@@ -19,18 +19,21 @@
   <button mdbBtn *ngIf="allowAdd" class="control-button add-button btn-sm" type="button"
           color="green"
           outline="true"
-          (click)="onAdd()" mdbWavesEffect>
+          (click)="onAdd()" mdbWavesEffect
+          [hidden] = "!uiConfig.features.enableEditing">
     <span class="material-icons">{{addIcon}}</span>
   </button>
   <!-- Submit-Selected-Button -->
   <button mdbBtn *ngIf="allowDelete && selection.hasValue()" class="control-button delete-button btn-sm"
           type="button" color=red outline="true"
-          (click)="onDeleteSubmitted()" mdbWavesEffect>
+          (click)="onDeleteSubmitted()" mdbWavesEffect
+          [hidden] = "!uiConfig.features.enableEditing">
     <mat-icon>delete</mat-icon>
   </button>
   <button mdbBtn *ngIf="allowLink && selection.hasValue()" class="control-button link-button btn-sm"
           type="button" color=blue outline="true"
-          (click)="onLinkSubmitted()" mdbWavesEffect>
+          (click)="onLinkSubmitted()" mdbWavesEffect
+          [hidden] = "!uiConfig.features.enableEditing">
     <mat-icon>link</mat-icon>
   </button>
 </div>
@@ -48,6 +51,7 @@
                         [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
         </div>
       </th>
+      
       <!-- One column for each needed data variable -->
       <ng-container *ngFor="let column of dataColumns; let i = index">
         <th class="th-lg hide-arrow align-middle table-data" mat-sort-header="{{ variableNames[i] }}"
@@ -56,7 +60,7 @@
           <a>{{ column }}</a>
         </th>
       </ng-container>
-      <th class="align-middle table-actions" *ngIf="allowDelete || allowEdit || allowLink">
+      <th class="align-middle table-actions" *ngIf="uiConfig.features.enableEditing && (allowDelete || allowEdit || allowLink)">
         <a> Actions </a>
       </th>
     </tr>
@@ -81,13 +85,13 @@
           {{ dataEntry[variableName] }}
         </a>
       </td>
-      <td class="table-actions" *ngIf="!dataEntryIsDisabled(dataEntry) && (allowEdit || allowDelete || allowLink)">
+      <td class="table-actions" *ngIf="!dataEntryIsDisabled(dataEntry) && uiConfig.features.enableEditing && (allowEdit || allowDelete || allowLink)">
         <button *ngIf="allowEdit" mat-icon-button [ngClass]="{'mr-1': allowEdit}" class="update-small"
-                (click)="onUpdateClicked(dataEntry); $event.stopPropagation()">
+                (click)="onUpdateClicked(dataEntry); $event.stopPropagation()" >
           <mat-icon>create</mat-icon>
         </button>
         <button *ngIf="allowDelete" mat-icon-button [ngClass]="{'mr-1': allowDelete}" class="delete-small"
-                (click)="onSingleDelete(dataEntry); $event.stopPropagation()">
+                (click)="onSingleDelete(dataEntry); $event.stopPropagation()" >
           <mat-icon>delete</mat-icon>
         </button>
         <button *ngIf="allowLink" mat-icon-button [ngClass]="{'mr-1': allowLink}" class="link-small"

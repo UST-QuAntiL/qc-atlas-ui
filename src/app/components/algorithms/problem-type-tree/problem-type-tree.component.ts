@@ -13,6 +13,11 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
 import { ProblemTypeDto } from 'generated/api-atlas/models/problem-type-dto';
 import { LinkObject } from '../../generics/data-list/data-list.component';
+import {
+  QcAtlasUiConfiguration,
+  QcAtlasUiRepositoryConfigurationService,
+  UiFeatures,
+} from '../../../directives/qc-atlas-ui-repository-configuration.service';
 
 export class TreeNode {
   problemType: ProblemTypeDto;
@@ -48,6 +53,8 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
 
   inputValue = '';
 
+  uiConfig: QcAtlasUiConfiguration;
+
   nestedTreeControl: NestedTreeControl<TreeNode> = new NestedTreeControl<
     TreeNode
   >((node) => node.parents);
@@ -56,9 +63,10 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
   > = new MatTreeNestedDataSource<TreeNode>();
   dataChange: BehaviorSubject<TreeNode[]> = new BehaviorSubject<TreeNode[]>([]);
 
-  constructor() {}
+  constructor(private configService: QcAtlasUiRepositoryConfigurationService) {}
 
   ngOnInit(): void {
+    this.uiConfig = this.configService.configuration;
     this.dataChange.subscribe((data) => (this.nestedDataSource.data = data));
   }
 

@@ -1,4 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  QcAtlasUiConfiguration,
+  QcAtlasUiRepositoryConfigurationService,
+  UiFeatures,
+} from '../../../directives/qc-atlas-ui-repository-configuration.service';
 
 @Component({
   selector: 'app-link-input',
@@ -13,9 +18,13 @@ export class LinkInputComponent implements OnInit {
   @Output() disable = new EventEmitter<void>();
   linkSearchText = '';
 
-  constructor() {}
+  uiConfig: QcAtlasUiConfiguration;
 
-  ngOnInit(): void {}
+  constructor(private configService: QcAtlasUiRepositoryConfigurationService) {}
+
+  ngOnInit(): void {
+    this.uiConfig = this.configService.configuration;
+  }
 
   onLinkElement(element: any): void {
     this.linkElement.emit(element);

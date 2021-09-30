@@ -1,4 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  QcAtlasUiConfiguration,
+  QcAtlasUiRepositoryConfigurationService,
+  UiFeatures,
+} from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { DoProvider } from './abstract-value-accessor';
 
 export interface Option {
@@ -23,6 +28,10 @@ export class SelectInputComponent implements OnInit {
 
   inputValue: string;
 
+  uiConfig: QcAtlasUiConfiguration;
+
+  constructor(private configService: QcAtlasUiRepositoryConfigurationService) {}
+
   saveChanges(): void {
     this.onSaveChanges.emit(this.inputValue);
   }
@@ -36,6 +45,7 @@ export class SelectInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.uiConfig = this.configService.configuration;
     this.inputValue = this.value;
   }
 }

@@ -2,13 +2,14 @@
   <div class="row">
     <div class="col-12">
       <mat-label class="mr-4">{{ title }}</mat-label>
-      <mat-form-field *ngIf="!useToAddLinks">
-        <input matInput [(ngModel)]="inputValue" matInput (keydown.enter)="addElement()">
+      <mat-form-field *ngIf="!useToAddLinks" >
+        <input matInput [(ngModel)]="inputValue" matInput (keydown.enter)="addElement()" [readonly]="!uiConfig.features.enableEditing">
         <button *ngIf="!useToAddLinks" (click)="addElement()"
                 mat-button
                 matSuffix
                 mat-icon-button
-                aria-label="Clear">
+                aria-label="Clear" 
+                [disabled]="!uiConfig.features.enableEditing">
           <mat-icon>add</mat-icon>
         </button>
         <button *ngIf="!useToAddLinks && !utilService.objectsEqual(inputElements, elements)"
@@ -36,9 +37,9 @@
   </mat-chip-list>
   <!-- Check if this duplicate code can be avoided -->
   <mat-chip-list *ngIf="useToAddLinks">
-    <mat-chip *ngFor="let element of elements" [removable]="allowEmpty || (!allowEmpty && elements.length > 1)" (removed)="removeElement(element)">
+    <mat-chip *ngFor="let element of elements" [removable]="uiConfig.features.enableEditing && (allowEmpty || (!allowEmpty && elements.length > 1))" (removed)="removeElement(element)">
       {{ displayVariable ? element[displayVariable] : element }}
-      <mat-icon *ngIf="allowEmpty || (!allowEmpty && elements.length > 1)" matChipRemove>cancel</mat-icon>
+      <mat-icon *ngIf="allowEmpty || (!allowEmpty && elements.length > 1)" matChipRemove >cancel</mat-icon>
     </mat-chip>
   </mat-chip-list>
 </div>

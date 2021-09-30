@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
+import {
+  QcAtlasUiConfiguration,
+  QcAtlasUiRepositoryConfigurationService,
+  UiFeatures,
+} from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
 
 @Component({
@@ -38,7 +43,9 @@ export class DataListComponent implements OnInit {
   sortActiveElement = '';
   disabledDataEntries: Set<any> = new Set<any>();
 
-  constructor() {}
+  uiConfig: QcAtlasUiConfiguration;
+
+  constructor(private configService: QcAtlasUiRepositoryConfigurationService) {}
 
   ngOnInit(): void {
     if (this.pagination) {
@@ -46,6 +53,7 @@ export class DataListComponent implements OnInit {
     }
     this.datalistConfigChanged.emit(this.generateGetParameter());
     this.initializeDataEntryDisabled();
+    this.uiConfig = this.configService.configuration;
   }
 
   isAllSelected(): boolean {

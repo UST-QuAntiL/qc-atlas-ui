@@ -5,6 +5,11 @@ import {
   EditComputeResourcePropertyDialogData,
 } from '../dialogs/edit-compute-resource-property-dialog.component';
 import { UtilService } from '../../../util/util.service';
+import {
+  QcAtlasUiConfiguration,
+  QcAtlasUiRepositoryConfigurationService,
+  UiFeatures,
+} from '../../../directives/qc-atlas-ui-repository-configuration.service';
 
 @Component({
   selector: 'app-compute-resource-property-list',
@@ -31,9 +36,16 @@ export class ComputeResourcePropertyListComponent implements OnInit {
 
   hoveredEntry = '';
 
-  constructor(private utilService: UtilService) {}
+  uiConfig: QcAtlasUiConfiguration;
 
-  ngOnInit(): void {}
+  constructor(
+    private utilService: UtilService,
+    private configService: QcAtlasUiRepositoryConfigurationService
+  ) {}
+
+  ngOnInit(): void {
+    this.uiConfig = this.configService.configuration;
+  }
 
   onAdd(): void {
     this.showEditDialog(

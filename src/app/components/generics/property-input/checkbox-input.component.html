@@ -1,5 +1,5 @@
 <div class="p-2" (keydown.enter)="value !== baseValue && saveChanges()">
-  <mat-checkbox [(ngModel)]="value" (ngModelChange)="toggleValue()" color="primary">
+  <mat-checkbox [(ngModel)]="value" (ngModelChange)="toggleValue()" color="primary" [disabled] = "!uiConfig.features.enableEditing">
     {{ name }}
   </mat-checkbox>
   <button *ngIf="value !== baseValue" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="saveChanges()">

@@ -10,7 +10,7 @@
         matSuffix
         mat-icon-button
         aria-label="Add a property"
-        (click)="onAdd()">
+        (click)="onAdd()" [hidden] = "!uiConfig.features.enableEditing">
         <mat-icon>add</mat-icon>
       </button>
     </mat-form-field>
@@ -40,6 +40,7 @@
       aria-label="Clear"
       *ngIf="isHovered(property.id)"
       (click)="onEdit(property)"
+      [hidden] = "!uiConfig.features.enableEditing"
     >
       <mat-icon>edit</mat-icon>
     </button>
@@ -50,6 +51,7 @@
       aria-label="Clear"
       *ngIf="isHovered(property.id)"
       (click)="onDelete(property)"
+      [hidden] = "!uiConfig.features.enableEditing"
     >
       <mat-icon>delete</mat-icon>
     </button>
