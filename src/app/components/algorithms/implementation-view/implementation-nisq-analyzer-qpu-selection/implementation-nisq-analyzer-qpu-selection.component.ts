@@ -54,6 +54,9 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
     'compiler',
     'width',
     'depth',
+    'multi-qubit-gate-depth',
+    'gate-number',
+    'multi-qubit-gate-number',
     'execution',
   ];
   jobColumns = ['time', 'ready'];
@@ -275,4 +278,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         this.queueLengths[analysisResult.qpu] = data.lengthQueue;
       });
   }
+
+  showQpuProperties(qpu: string): void {}
 }

@@ -111,7 +111,13 @@
                                     Backend Name
                                 </th>
                                 <td class="backend-column" mat-cell *matCellDef="let element">
-                                    <strong>{{ element.qpu }}</strong> (Queue length: {{queueLengths[element.qpu]}})
+                                    <button
+                                            mat-icon-button
+                                            (click)="showQpuProperties(element.qpu)"
+                                    ><i class="fas fa-info-circle"></i>
+                                    </button>
+                                    <strong>{{ element.qpu }}</strong>
+                                    (Queue length: {{queueLengths[element.qpu]}})
                                 </td>
                             </ng-container>
 
@@ -151,9 +157,37 @@
                                 </td>
                             </ng-container>
 
+
+                            <ng-container matColumnDef="multi-qubit-gate-depth">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Multi-Qubit</div><div>Gate Depth</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.analyzedMultiQubitGateDepth }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="gate-number">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Number of</div><div>Gates</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.analyzedNumberOfGates }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="multi-qubit-gate-number">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Number of</div><div>Multi-Qubit Gates</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.analyzedNumberOfMultiQubitGates }}
+                                </td>
+                            </ng-container>
+
                             <ng-container matColumnDef="execution">
-                                <th mat-header-cell *matHeaderCellDef>Execution Result</th>
-                                <td mat-cell *matCellDef="let element">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>Execution Result</th>
+                                <td style="text-align: center" mat-cell *matCellDef="let element">
                                     <div *ngIf="loadingResults[element.id]; else showButtons"
                                          class="mat-spinner-buttons"
                                     >
