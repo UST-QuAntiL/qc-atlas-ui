@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -23,6 +23,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -59,8 +60,30 @@ import { ComputeResourcePropertyTypesListComponent } from './components/compute-
 import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './components/compute-resource-property-types/dialogs/add-or-edit-compute-resource-property-type-dialog/add-or-edit-compute-resource-property-type-dialog.component';
 import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module';
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
-import { PlanqkPlatformLoginDialogComponent } from './components/dialogs/planqk-platform-login-dialog.component';
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
+
+const initializeKeycloak = (keycloak: KeycloakService) => (): Promise<
+  boolean
+> => {
+  console.log('keycloak init');
+  return keycloak
+    .init({
+      config: {
+        url: 'https://platform.planqk.de/auth',
+        realm: 'planqk',
+        clientId: 'vue-frontend',
+      },
+      initOptions: {
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri:
+          window.location.origin + '/assets/silent-check-sso.html',
+      },
+    })
+    .then((retValue) => {
+      console.log('keycloak init finished');
+      return retValue;
+    });
+};
 
 @NgModule({
   declarations: [
@@ -83,7 +106,6 @@ import { AuthInterceptor } from './http-interceptors/auth-interceptor';
     ComputeResourcePropertyTypesListComponent,
     AddOrEditComputeResourcePropertyTypeDialogComponent,
     FeatureTogglingComponent,
-    PlanqkPlatformLoginDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -92,6 +114,7 @@ import { AuthInterceptor } from './http-interceptors/auth-interceptor';
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    KeycloakAngularModule,
     AtlasAPIModule.forRoot({ rootUrl: environment.API_URL }),
     PatternAltasAPIModule.forRoot({
       rootUrl: environment.PATTERN_ATLAS_API_URL,
@@ -138,6 +161,12 @@ import { AuthInterceptor } from './http-interceptors/auth-interceptor';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
     },
   ],
 })

@@ -81,8 +81,8 @@ export class AuthInterceptor implements HttpInterceptor {
         .pipe(
           switchMap((res) => {
             this.refreshTokenInProgress = false;
-            this.bearerTokenSubject.next(res.access_token);
-            return next.handle(this.addBearerToken(request, res.access_token));
+            this.bearerTokenSubject.next(res.accessToken);
+            return next.handle(this.addBearerToken(request, res.accessToken));
           })
         );
     } else {

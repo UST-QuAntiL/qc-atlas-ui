@@ -11,7 +11,6 @@ import {
   UiFeatures,
 } from '../../directives/qc-atlas-ui-repository-configuration.service';
 import { UtilService } from '../../util/util.service';
-import { PlanqkPlatformLoginDialogComponent } from '../dialogs/planqk-platform-login-dialog.component';
 import { PlanqkPlatformLoginService } from '../../services/planqk-platform-login.service';
 
 @Component({
@@ -41,10 +40,28 @@ export class NavigationComponent implements OnInit {
       .subscribe((state: BreakpointState) => {
         this.hideNav = state.matches;
       });
-    if (localStorage.getItem('bearerToken')) {
-      this.bearerTokenSet = true;
-      this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
-    }
+    console.log('navigation component ngOnInit');
+    this.planqkPlatformLoginService
+      .isLoggedIn()
+      .subscribe((loggedIn: boolean) => {
+        console.log(loggedIn ? 'logged in' : 'not logged in');
+        if (loggedIn) {
+          this.planqkPlatformLoginService
+            .getBearerToken()
+            .subscribe((token: string) =>
+              console.log('bearer token: ' + token)
+            );
+          console.log(
+            'refresh token: ' +
+              this.planqkPlatformLoginService.getRefreshToken()
+          );
+
+          this.bearerTokenSet = true;
+          this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
+          this.reloadStartPage();
+          this.utilService.callSnackBar('Successfully logged in.');
+        }
+      });
   }
 
   goToHome(): void {
@@ -54,35 +71,10 @@ export class NavigationComponent implements OnInit {
   onSettings(): void {}
 
   login(): void {
+    console.log('logging in');
+
     if (!this.bearerTokenSet) {
-      const dialogRef = this.utilService.createDialog(
-        PlanqkPlatformLoginDialogComponent,
-        { title: 'Login to the PlanQK Platform' }
-      );
-      dialogRef.afterClosed().subscribe((dialogResult) => {
-        if (dialogResult) {
-          this.planqkPlatformLoginService
-            .loginToPlanqkPlatform(dialogResult.name, dialogResult.password)
-            .subscribe(
-              (authResponse) => {
-                if (
-                  authResponse.access_token &&
-                  authResponse.refresh_token &&
-                  localStorage.getItem('bearerToken') &&
-                  localStorage.getItem('refreshToken')
-                ) {
-                  this.bearerTokenSet = true;
-                  this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
-                  this.reloadStartPage();
-                  this.utilService.callSnackBar('Successfully logged in.');
-                }
-              },
-              () => {
-                this.utilService.callSnackBar('Error! Login failed.');
-              }
-            );
-        }
-      });
+      this.planqkPlatformLoginService.loginToPlanqkPlatform();
     } else {
       this.planqkPlatformLoginService.logoutFromPlanqkPlatform();
       this.bearerTokenSet = false;

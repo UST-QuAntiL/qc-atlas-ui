@@ -1,84 +1,73 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
+import { KeycloakService } from 'keycloak-angular';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlanqkPlatformLoginService {
-  authenticationUrl =
-    'https://platform.planqk.de/auth/realms/planqk/protocol/openid-connect/token';
+  constructor(private readonly keycloak: KeycloakService) {}
 
-  constructor(private http: HttpClient) {}
+  public loginToPlanqkPlatform(): void {
+    console.log('logging in');
+    this.keycloak.login();
+  }
 
-  public loginToPlanqkPlatform(
-    name: string,
-    password: string
-  ): Observable<AuthenticationResponse> {
-    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+  public isLoggedIn(): Observable<boolean> {
+    console.log('check if logged in');
+    return from(this.keycloak.isLoggedIn());
+  }
 
-    const urlencoded = new URLSearchParams();
-    urlencoded.set('grant_type', 'password');
-    urlencoded.set('client_id', 'vue-frontend');
-    urlencoded.set('username', name);
-    urlencoded.set('password', password);
+  public getBearerToken(): Observable<string> {
+    console.log('get bearer token');
+    return from(this.keycloak.getToken());
+  }
 
-    return this.http
-      .post<AuthenticationResponse>(
-        'https://platform.planqk.de/auth/realms/planqk/protocol/openid-connect/token',
-        urlencoded.toString(),
-        {
-          headers,
-        }
-      )
-      .pipe(
-        tap((response) => {
-          localStorage.setItem('bearerToken', response.access_token);
-          localStorage.setItem('refreshToken', response.refresh_token);
-        })
-      )
-      .pipe(map((response) => response));
+  public getRefreshToken(): string {
+    console.log('get refresh token');
+    return this.keycloak.getKeycloakInstance().refreshToken;
   }
 
   public refreshLoginToPlanqkPlatform(): Observable<AuthenticationResponse> {
-    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    console.log('refreshing token');
 
-    const urlencoded = new URLSearchParams();
-    urlencoded.set('grant_type', 'refresh_token');
-    urlencoded.set('client_id', 'vue-frontend');
-    urlencoded.set('refresh_token', localStorage.getItem('refreshToken'));
-
-    return this.http
-      .post<AuthenticationResponse>(
-        'https://platform.planqk.de/auth/realms/planqk/protocol/openid-connect/token',
-        urlencoded.toString(),
-        {
-          headers,
-        }
-      )
+    return from(this.keycloak.updateToken())
       .pipe(
-        tap((response) => {
-          localStorage.setItem('bearerToken', response.access_token);
-          localStorage.setItem('refreshToken', response.refresh_token);
+        tap(() => {
+          localStorage.setItem(
+            'bearerToken',
+            this.keycloak.getKeycloakInstance().token
+          );
+          localStorage.setItem(
+            'refreshToken',
+            this.keycloak.getKeycloakInstance().refreshToken
+          );
+          console.log(
+            'set local storage: bearerToken=' +
+              localStorage.getItem('bearerToken')
+          );
+          console.log(
+            'set local storage: refreshToken=' +
+              localStorage.getItem('refreshToken')
+          );
         })
       )
-      .pipe(map((response) => response));
+      .pipe(
+        map(() => ({
+          accessToken: this.keycloak.getKeycloakInstance().token,
+          refreshToken: this.keycloak.getKeycloakInstance().refreshToken,
+        }))
+      );
   }
 
   public logoutFromPlanqkPlatform(): void {
-    localStorage.removeItem('bearerToken');
-    localStorage.removeItem('refreshToken');
+    console.log('logging out');
+    this.keycloak.logout();
   }
 }
 
 export interface AuthenticationResponse {
-  access_token: string;
-  expires_in: number;
-  refresh_expires_in: number;
-  refresh_token: string;
-  token_type: string;
-  'not-before-policy': number;
-  session_state: string;
-  scope: string;
+  accessToken: string;
+  refreshToken: string;
 }
