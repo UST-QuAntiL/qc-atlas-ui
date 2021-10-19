@@ -78,6 +78,7 @@ const initializeKeycloak = (keycloak: KeycloakService) => (): Promise<
         silentCheckSsoRedirectUri:
           window.location.origin + '/assets/silent-check-sso.html',
       },
+      enableBearerInterceptor: false,
     })
     .then((retValue) => {
       console.log('keycloak init finished');

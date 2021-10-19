@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { map, tap } from 'rxjs/operators';
 import { Observable, from } from 'rxjs';
 import { KeycloakService } from 'keycloak-angular';
 
@@ -29,36 +28,9 @@ export class PlanqkPlatformLoginService {
     return this.keycloak.getKeycloakInstance().refreshToken;
   }
 
-  public refreshLoginToPlanqkPlatform(): Observable<AuthenticationResponse> {
+  public refreshLoginToPlanqkPlatform(): void {
     console.log('refreshing token');
-
-    return from(this.keycloak.updateToken())
-      .pipe(
-        tap(() => {
-          localStorage.setItem(
-            'bearerToken',
-            this.keycloak.getKeycloakInstance().token
-          );
-          localStorage.setItem(
-            'refreshToken',
-            this.keycloak.getKeycloakInstance().refreshToken
-          );
-          console.log(
-            'set local storage: bearerToken=' +
-              localStorage.getItem('bearerToken')
-          );
-          console.log(
-            'set local storage: refreshToken=' +
-              localStorage.getItem('refreshToken')
-          );
-        })
-      )
-      .pipe(
-        map(() => ({
-          accessToken: this.keycloak.getKeycloakInstance().token,
-          refreshToken: this.keycloak.getKeycloakInstance().refreshToken,
-        }))
-      );
+    this.keycloak.updateToken(20);
   }
 
   public logoutFromPlanqkPlatform(): void {

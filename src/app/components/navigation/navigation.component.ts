@@ -60,6 +60,8 @@ export class NavigationComponent implements OnInit {
           this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
           this.reloadStartPage();
           this.utilService.callSnackBar('Successfully logged in.');
+        } else {
+          this.utilService.callSnackBar('Not logged in.');
         }
       });
   }
