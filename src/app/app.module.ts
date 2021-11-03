@@ -61,25 +61,7 @@ import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './component
 import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module';
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
-
-const initializeKeycloak = (keycloak: KeycloakService) => (): Promise<
-  boolean
-> =>
-  keycloak
-    .init({
-      config: {
-        url: 'https://platform.planqk.de/auth',
-        realm: 'planqk',
-        clientId: 'vue-frontend',
-      },
-      initOptions: {
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri:
-          window.location.origin + '/assets/silent-check-sso.html',
-      },
-      enableBearerInterceptor: false,
-    })
-    .then((retValue) => retValue);
+import { initializeKeycloak } from './util/keycloak-init';
 
 @NgModule({
   declarations: [
