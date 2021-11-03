@@ -6,17 +6,11 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { catchError, map, concatAll } from 'rxjs/operators';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { PlanqkPlatformLoginService } from '../services/planqk-platform-login.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  private refreshTokenInProgress = false;
-  private rootUrl = location.origin;
-  private bearerTokenSubject: BehaviorSubject<string> = new BehaviorSubject<
-    string
-  >(null);
-
   constructor(private planqkPlatformLoginService: PlanqkPlatformLoginService) {}
 
   intercept(

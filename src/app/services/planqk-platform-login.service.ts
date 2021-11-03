@@ -24,16 +24,7 @@ export class PlanqkPlatformLoginService {
     return this.keycloak.getKeycloakInstance().refreshToken;
   }
 
-  public refreshLoginToPlanqkPlatform(): void {
-    this.keycloak.updateToken(20);
-  }
-
   public logoutFromPlanqkPlatform(): void {
     this.keycloak.logout();
   }
-}
-
-export interface AuthenticationResponse {
-  accessToken: string;
-  refreshToken: string;
 }
