@@ -47,9 +47,11 @@ export class NavigationComponent implements OnInit {
           this.bearerTokenSet = true;
           this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
           this.reloadStartPage();
-          this.utilService.callSnackBar('Successfully logged in.');
+          this.utilService.callSnackBar(
+            'Successfully logged into the PlanQK platform.'
+          );
         } else {
-          this.utilService.callSnackBar('Not logged in.');
+          this.utilService.callSnackBar('Not logged into the PlanQK platform.');
         }
       });
   }
