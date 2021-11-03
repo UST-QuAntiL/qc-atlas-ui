@@ -64,9 +64,8 @@ import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 
 const initializeKeycloak = (keycloak: KeycloakService) => (): Promise<
   boolean
-> => {
-  console.log('keycloak init');
-  return keycloak
+> =>
+  keycloak
     .init({
       config: {
         url: 'https://platform.planqk.de/auth',
@@ -80,11 +79,7 @@ const initializeKeycloak = (keycloak: KeycloakService) => (): Promise<
       },
       enableBearerInterceptor: false,
     })
-    .then((retValue) => {
-      console.log('keycloak init finished');
-      return retValue;
-    });
-};
+    .then((retValue) => retValue);
 
 @NgModule({
   declarations: [

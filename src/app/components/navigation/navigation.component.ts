@@ -40,22 +40,10 @@ export class NavigationComponent implements OnInit {
       .subscribe((state: BreakpointState) => {
         this.hideNav = state.matches;
       });
-    console.log('navigation component ngOnInit');
     this.planqkPlatformLoginService
       .isLoggedIn()
       .subscribe((loggedIn: boolean) => {
-        console.log(loggedIn ? 'logged in' : 'not logged in');
         if (loggedIn) {
-          this.planqkPlatformLoginService
-            .getBearerToken()
-            .subscribe((token: string) =>
-              console.log('bearer token: ' + token)
-            );
-          console.log(
-            'refresh token: ' +
-              this.planqkPlatformLoginService.getRefreshToken()
-          );
-
           this.bearerTokenSet = true;
           this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
           this.reloadStartPage();
@@ -73,8 +61,6 @@ export class NavigationComponent implements OnInit {
   onSettings(): void {}
 
   login(): void {
-    console.log('logging in');
-
     if (!this.bearerTokenSet) {
       this.planqkPlatformLoginService.loginToPlanqkPlatform();
     } else {
