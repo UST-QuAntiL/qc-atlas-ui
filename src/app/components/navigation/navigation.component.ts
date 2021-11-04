@@ -6,6 +6,7 @@ import {
 } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
+import { Observable, from } from 'rxjs';
 import {
   QcAtlasUiRepositoryConfigurationService,
   UiFeatures,
@@ -64,19 +65,24 @@ export class NavigationComponent implements OnInit {
 
   login(): void {
     if (!this.bearerTokenSet) {
+      // login
       this.planqkPlatformLoginService.loginToPlanqkPlatform();
     } else {
-      this.planqkPlatformLoginService.logoutFromPlanqkPlatform();
+      // logout
       this.bearerTokenSet = false;
       this.config.rootUrl = 'http://localhost:6626/atlas';
-      this.reloadStartPage();
-      this.utilService.callSnackBar('Successfully logged out.');
+      this.reloadStartPage().subscribe(() => {
+        this.planqkPlatformLoginService.logoutFromPlanqkPlatform();
+        this.utilService.callSnackBar('Successfully logged out.');
+      });
     }
   }
 
-  reloadStartPage(): void {
-    this.router
-      .navigateByUrl(location.origin, { skipLocationChange: true })
-      .then(() => this.router.navigate(['/algorithms']));
+  reloadStartPage(): Observable<boolean> {
+    return from(
+      this.router
+        .navigateByUrl(location.origin, { skipLocationChange: true })
+        .then(() => this.router.navigate(['/algorithms']))
+    );
   }
 }
