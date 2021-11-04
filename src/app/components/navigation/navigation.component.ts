@@ -73,7 +73,9 @@ export class NavigationComponent implements OnInit {
       this.config.rootUrl = 'http://localhost:6626/atlas';
       this.reloadStartPage().subscribe(() => {
         this.planqkPlatformLoginService.logoutFromPlanqkPlatform();
-        this.utilService.callSnackBar('Successfully logged out.');
+        this.utilService.callSnackBar(
+          'Successfully logged out of the PlanQK platform.'
+        );
       });
     }
   }
