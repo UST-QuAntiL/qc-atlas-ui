@@ -22,6 +22,7 @@ import {
   QpuSelectionResultDto,
 } from 'api-nisq/models';
 import { HttpClient } from '@angular/common/http';
+import { PlanqkPlatformLoginService } from 'src/app/services/planqk-platform-login.service';
 import { UtilService } from '../../../../util/util.service';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 // eslint-disable-next-line max-len
@@ -79,7 +80,8 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
     private qpuSelectionService: QpuSelectionResultService,
     private nisqAnalyzerRootService: RootService,
     private nisqAnalyzerService: NisqAnalyzerService,
-    private http: HttpClient
+    private http: HttpClient,
+    private planqkService: PlanqkPlatformLoginService
   ) {}
 
   ngOnInit(): void {
@@ -113,9 +115,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         if (dialogResult) {
           this.analyzerJob = undefined;
           this.jobReady = false;
-          if (localStorage.getItem('refreshToken')) {
-            refreshToken = localStorage.getItem('refreshToken');
-          }
+          refreshToken = this.planqkService.getRefreshToken();
           const providerTokens = {};
           providerTokens[dialogResult.vendor] = dialogResult.token;
 
