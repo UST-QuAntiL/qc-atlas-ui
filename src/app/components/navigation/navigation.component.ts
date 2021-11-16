@@ -6,12 +6,12 @@ import {
 } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
+import { Observable, from } from 'rxjs';
 import {
   QcAtlasUiRepositoryConfigurationService,
   UiFeatures,
 } from '../../directives/qc-atlas-ui-repository-configuration.service';
 import { UtilService } from '../../util/util.service';
-import { PlanqkPlatformLoginDialogComponent } from '../dialogs/planqk-platform-login-dialog.component';
 import { PlanqkPlatformLoginService } from '../../services/planqk-platform-login.service';
 
 @Component({
@@ -41,10 +41,20 @@ export class NavigationComponent implements OnInit {
       .subscribe((state: BreakpointState) => {
         this.hideNav = state.matches;
       });
-    if (localStorage.getItem('bearerToken')) {
-      this.bearerTokenSet = true;
-      this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
-    }
+    this.planqkPlatformLoginService
+      .isLoggedIn()
+      .subscribe((loggedIn: boolean) => {
+        if (loggedIn) {
+          this.bearerTokenSet = true;
+          this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
+          this.reloadStartPage();
+          this.utilService.callSnackBar(
+            'Successfully logged into the PlanQK platform.'
+          );
+        } else {
+          this.utilService.callSnackBar('Not logged into the PlanQK platform.');
+        }
+      });
   }
 
   goToHome(): void {
@@ -55,46 +65,26 @@ export class NavigationComponent implements OnInit {
 
   login(): void {
     if (!this.bearerTokenSet) {
-      const dialogRef = this.utilService.createDialog(
-        PlanqkPlatformLoginDialogComponent,
-        { title: 'Login to the PlanQK Platform' }
-      );
-      dialogRef.afterClosed().subscribe((dialogResult) => {
-        if (dialogResult) {
-          this.planqkPlatformLoginService
-            .loginToPlanqkPlatform(dialogResult.name, dialogResult.password)
-            .subscribe(
-              (authResponse) => {
-                if (
-                  authResponse.access_token &&
-                  authResponse.refresh_token &&
-                  localStorage.getItem('bearerToken') &&
-                  localStorage.getItem('refreshToken')
-                ) {
-                  this.bearerTokenSet = true;
-                  this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
-                  this.reloadStartPage();
-                  this.utilService.callSnackBar('Successfully logged in.');
-                }
-              },
-              () => {
-                this.utilService.callSnackBar('Error! Login failed.');
-              }
-            );
-        }
-      });
+      // login
+      this.planqkPlatformLoginService.loginToPlanqkPlatform();
     } else {
-      this.planqkPlatformLoginService.logoutFromPlanqkPlatform();
+      // logout
       this.bearerTokenSet = false;
       this.config.rootUrl = 'http://localhost:6626/atlas';
-      this.reloadStartPage();
-      this.utilService.callSnackBar('Successfully logged out.');
+      this.reloadStartPage().subscribe(() => {
+        this.planqkPlatformLoginService.logoutFromPlanqkPlatform();
+        this.utilService.callSnackBar(
+          'Successfully logged out of the PlanQK platform.'
+        );
+      });
     }
   }
 
-  reloadStartPage(): void {
-    this.router
-      .navigateByUrl(location.origin, { skipLocationChange: true })
-      .then(() => this.router.navigate(['/algorithms']));
+  reloadStartPage(): Observable<boolean> {
+    return from(
+      this.router
+        .navigateByUrl(location.origin, { skipLocationChange: true })
+        .then(() => this.router.navigate(['/algorithms']))
+    );
   }
 }
