@@ -7,9 +7,14 @@ export type CompilerAnalysisResultDto = {
   compiler?: string;
   analyzedDepth?: number;
   analyzedWidth?: number;
-  circuitName?: string;
-  initialCircuit?: string;
-  transpiledCircuit?: string;
+  analyzedTotalNumberOfOperations?: number;
+  analyzedNumberOfSingleQubitGates?: number;
+  analyzedNumberOfMultiQubitGates?: number;
+  analyzedNumberOfMeasurementOperations?: number;
+  analyzedMultiQubitGateDepth?: number;
   time?: string;
+  initialCircuit?: string;
+  circuitName?: string;
+  transpiledCircuit?: string;
   _links?: Links;
 };

@@ -3,6 +3,7 @@ import { QualifiedName } from './qualified-name';
 export type Attribute = {
   value?: {};
   type?: QualifiedName;
+  convertedValue?: {};
   kind?:
     | 'PROV_TYPE'
     | 'PROV_LABEL'
@@ -11,7 +12,6 @@ export type Attribute = {
     | 'PROV_VALUE'
     | 'PROV_KEY'
     | 'OTHER';
-  convertedValue?: {};
   elementName?: QualifiedName;
   valueFromObject?: {};
 };
