@@ -23,6 +23,9 @@ import {
 } from 'api-nisq/models';
 import { HttpClient } from '@angular/common/http';
 import { PlanqkPlatformLoginService } from 'src/app/services/planqk-platform-login.service';
+import { EntityModelQpuDto } from 'api-qprov/models/entity-model-qpu-dto';
+import { ProviderService } from 'api-qprov/services/provider.service';
+import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
 import { UtilService } from '../../../../util/util.service';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 // eslint-disable-next-line max-len
@@ -56,14 +59,25 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
     'width',
     'depth',
     'multi-qubit-gate-depth',
-    'gate-number',
-    'multi-qubit-gate-number',
+    'total-number-of-operations',
+    'number-of-single-qubit-gates',
+    'number-of-multi-qubit-gates',
+    'number-of-measurement-operations',
+    'single-qubit-gate-error',
+    'multi-qubit-gate-error',
+    'single-qubit-gate-time',
+    'multi-qubit-gate-time',
+    'readout-error',
+    't1',
+    't2',
+    'queue-size',
     'execution',
   ];
   jobColumns = ['time', 'ready'];
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
   analyzerJobs$: Observable<QpuSelectionJobDto[]>;
   analyzerResults: QpuSelectionResultDto[] = [];
+  circuitQpuCriteriaAnalysisResults: CircuitQpuCriteriaAnalysisResult[] = [];
   nisqImpl: NisqImplementationDto;
   analyzerJob: QpuSelectionJobDto;
   jobReady = false;
@@ -75,6 +89,8 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
   expandedElementExecResult: ExecutionResultDto | null;
   executedAnalyseResult: QpuSelectionResultDto;
   results?: ExecutionResultDto = undefined;
+  provider?: EntityModelProviderDto;
+  qpu?: EntityModelQpuDto;
 
   constructor(
     private utilService: UtilService,
@@ -83,6 +99,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
     private qpuSelectionService: QpuSelectionResultService,
     private nisqAnalyzerRootService: RootService,
     private nisqAnalyzerService: NisqAnalyzerService,
+    private qprovService: ProviderService,
     private http: HttpClient,
     private planqkService: PlanqkPlatformLoginService
   ) {}
@@ -190,9 +207,58 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         for (const analysisResult of this.analyzerResults) {
           this.showBackendQueueSize(analysisResult);
           this.hasExecutionResult(analysisResult);
+          this.qprovService.getProviders().subscribe((providers) => {
+            for (const providerDto of providers._embedded.providerDtoes) {
+              if (
+                providerDto.name.toLowerCase() ===
+                analysisResult.provider.toLowerCase()
+              ) {
+                this.provider = providerDto;
+                break;
+              }
+            }
+            // search for QPU with given name from the given provider
+            this.qprovService
+              .getQpUs({ providerId: this.provider.id })
+              .subscribe((qpuResult) => {
+                for (const qpuDto of qpuResult._embedded.qpuDtoes) {
+                  if (
+                    qpuDto.name.toLowerCase() ===
+                    analysisResult.qpu.toLowerCase()
+                  ) {
+                    this.qpu = qpuDto;
+                    this.circuitQpuCriteriaAnalysisResults.push({
+                      analysisResult,
+                      qpuProperties: this.qpu,
+                    });
+                    break;
+                  }
+                }
+              });
+          });
         }
       });
     return true;
+  }
+
+  /**
+   * Update the qpu with the resulting dto from the QProv API if available
+   *
+   * @param result the response from the QProv API with all available qpus from the provider
+   */
+  getQpuDtoByProviderAndName(result): void {
+    if (result === null) {
+      console.error('Error while loading QPUs!');
+      return;
+    }
+
+    // search for qpu specified in computeResource
+    for (const qpuDto of result._embedded.qpuDtoes) {
+      if (qpuDto.name.toLowerCase() === this.qpu.name.toLowerCase()) {
+        this.qpu = qpuDto;
+        return;
+      }
+    }
   }
 
   execute(analysisResult: QpuSelectionResultDto): void {
@@ -278,6 +344,9 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         this.queueLengths[analysisResult.qpu] = data.lengthQueue;
       });
   }
+}
 
-  showQpuProperties(qpu: string): void {}
+export interface CircuitQpuCriteriaAnalysisResult {
+  analysisResult: QpuSelectionResultDto;
+  qpuProperties: EntityModelQpuDto;
 }

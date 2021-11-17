@@ -104,20 +104,20 @@
                 >
                     No suitable QPUs found!
                 </div>
-                <ng-container *ngIf="jobReady && analyzerResults && analyzerResults.length !== 0">
-                        <table mat-table [dataSource]="analyzerResults" multiTemplateDataRows>
+                <div
+                        *ngIf="jobReady && circuitQpuCriteriaAnalysisResults && analyzerResults.length !== 0 && circuitQpuCriteriaAnalysisResults.length !== analyzerResults.length"
+                        class="d-flex align-content-center justify-content-center py-5"
+                >
+                    <mat-spinner [diameter]="60"></mat-spinner>
+                </div>
+                <ng-container *ngIf="jobReady && circuitQpuCriteriaAnalysisResults && analyzerResults.length !== 0 && circuitQpuCriteriaAnalysisResults.length === analyzerResults.length">
+                        <table mat-table [dataSource]="circuitQpuCriteriaAnalysisResults" multiTemplateDataRows>
                             <ng-container matColumnDef="backendName">
                                 <th class="backend-column" mat-header-cell *matHeaderCellDef>
                                     Backend Name
                                 </th>
                                 <td class="backend-column" mat-cell *matCellDef="let element">
-                                    <button
-                                            mat-icon-button
-                                            (click)="showQpuProperties(element.qpu)"
-                                    ><i class="fas fa-info-circle"></i>
-                                    </button>
-                                    <strong>{{ element.qpu }}</strong>
-                                    (Queue length: {{queueLengths[element.qpu]}})
+                                    <strong>{{ element.analysisResult.qpu }}</strong>
                                 </td>
                             </ng-container>
 
@@ -126,16 +126,16 @@
                                     Provider
                                 </th>
                                 <td class="value-column" mat-cell *matCellDef="let element">
-                                    {{ element.provider }}
+                                    {{ element.analysisResult.provider }}
                                 </td>
                             </ng-container>
 
                             <ng-container matColumnDef="compiler">
                                 <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                    Compiler
+                                    SDK
                                 </th>
                                 <td class="value-column" mat-cell *matCellDef="let element">
-                                    {{ element.compiler }}
+                                    {{ element.analysisResult.compiler }}
                                 </td>
                             </ng-container>
 
@@ -144,7 +144,7 @@
                                     Width
                                 </th>
                                 <td class="value-column" mat-cell *matCellDef="let element">
-                                    {{ element.analyzedWidth }}
+                                    {{ element.analysisResult.analyzedWidth }}
                                 </td>
                             </ng-container>
 
@@ -153,7 +153,7 @@
                                     Depth
                                 </th>
                                 <td class="value-column" mat-cell *matCellDef="let element">
-                                    {{ element.analyzedDepth }}
+                                    {{ element.analysisResult.analyzedDepth }}
                                 </td>
                             </ng-container>
 
@@ -163,32 +163,122 @@
                                     <div>Multi-Qubit</div><div>Gate Depth</div>
                                 </th>
                                 <td class="value-column" mat-cell *matCellDef="let element">
-                                    {{ element.analyzedMultiQubitGateDepth }}
+                                    {{ element.analysisResult.analyzedMultiQubitGateDepth }}
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="gate-number">
+                            <ng-container matColumnDef="total-number-of-operations">
                                 <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                    <div>Number of</div><div>Gates</div>
+                                    <div>Total Number of</div><div>Operations</div>
                                 </th>
                                 <td class="value-column" mat-cell *matCellDef="let element">
-                                    {{ element.analyzedNumberOfGates }}
+                                    {{ element.analysisResult.analyzedTotalNumberOfOperations }}
                                 </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="multi-qubit-gate-number">
+                            <ng-container matColumnDef="number-of-single-qubit-gates">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Number of</div><div>Single-Qubit Gates</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.analysisResult.analyzedNumberOfSingleQubitGates }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="number-of-multi-qubit-gates">
                                 <th class="value-column" mat-header-cell *matHeaderCellDef>
                                     <div>Number of</div><div>Multi-Qubit Gates</div>
                                 </th>
                                 <td class="value-column" mat-cell *matCellDef="let element">
-                                    {{ element.analyzedNumberOfMultiQubitGates }}
+                                    {{ element.analysisResult.analyzedNumberOfMultiQubitGates }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="number-of-measurement-operations">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Number of</div><div>Measurement Operations</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.analysisResult.analyzedNumberOfMeasurementOperations }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="single-qubit-gate-error">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Avg. Single-Qubit</div><div>Gate Error</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.qpuProperties.avgSingleQubitGateError }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="multi-qubit-gate-error">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Avg. Multi-Qubit</div><div>Gate Error</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.qpuProperties.avgMultiQubitGateError }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="single-qubit-gate-time">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Avg. Single-Qubit</div><div>Gate Time (ms)</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.qpuProperties.avgSingleQubitGateTime }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="multi-qubit-gate-time">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Avg. Multi-Qubit</div><div>Gate Time (ms)</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.qpuProperties.avgMultiQubitGateTime }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="readout-error">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Avg. Readout</div><div>Error</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.qpuProperties.avgReadoutError }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="t1">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Avg. T1 (ns)</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.qpuProperties.avgT1Time }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="t2">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Avg. T2 (ns)</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.qpuProperties.avgT2Time }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="queue-size">
+                                <th class="value-column" mat-header-cell *matHeaderCellDef>
+                                    <div>Queue Size</div>
+                                </th>
+                                <td class="value-column" mat-cell *matCellDef="let element">
+                                    {{ element.qpuProperties.queueSize }}
                                 </td>
                             </ng-container>
 
                             <ng-container matColumnDef="execution">
                                 <th class="value-column" mat-header-cell *matHeaderCellDef>Execution Result</th>
                                 <td style="text-align: center" mat-cell *matCellDef="let element">
-                                    <div *ngIf="loadingResults[element.id]; else showButtons"
+                                    <div *ngIf="loadingResults[element.analysisResult.id]; else showButtons"
                                          class="mat-spinner-buttons"
                                     >
                                         <mat-spinner [diameter]="40"></mat-spinner>
@@ -196,10 +286,10 @@
                                     <ng-template #showButtons>
                                         <button
                                                 mat-raised-button
-                                                *ngIf="executionResultsAvailable[element.id]; else performExecution"
+                                                *ngIf="executionResultsAvailable[element.analysisResult.id]; else performExecution"
                                                 type="button"
                                                 color="accent"
-                                                (click)="showExecutionResult(element)"
+                                                (click)="showExecutionResult(element.analysisResult)"
                                         >
                                             Show result
                                         </button>
@@ -208,7 +298,7 @@
                                                     mat-raised-button
                                                     type="button"
                                                     color="primary"
-                                                    (click)="execute(element)"
+                                                    (click)="execute(element.analysisResult)"
                                             >
                                                 Execute
                                             </button>
@@ -224,12 +314,13 @@
                                         *matCellDef="let element"
                                         [attr.colspan]="analyzeColumns.length"
                                 >
-                                    <div class="element-detail" *ngIf="element == expandedElement">
+                                    <div class="element-detail" *ngIf="element.analysisResult == expandedElement">
                                         <ng-container *ngIf="expandedElementExecResult">
-                                            <div class="p-2">
-                                                <div>Status: {{ expandedElementExecResult.status }}</div>
-                                                <div>Result:</div>
-                                                <code>{{ expandedElementExecResult.result || 'n/a' }}</code>
+                                            <div class="p-2" style="margin-left: auto">
+                                                <div style="text-align: right">Status: {{ expandedElementExecResult.status }}</div>
+                                                <div style="text-align: right">Number of shots: {{ expandedElementExecResult.shots }}</div>
+                                                <div style="text-align: right">Histogram intersection value: <code>{{expandedElementExecResult.histogramIntersectionValue}}</code></div>
+                                                <div style="text-align: right">Result: <code>{{ expandedElementExecResult.result || 'n/a' }}</code></div>
                                             </div>
                                         </ng-container>
                                     </div>
