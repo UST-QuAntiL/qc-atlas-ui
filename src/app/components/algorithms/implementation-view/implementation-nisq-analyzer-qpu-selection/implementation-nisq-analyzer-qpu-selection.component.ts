@@ -82,7 +82,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
   analyzerJob: QpuSelectionJobDto;
   jobReady = false;
   pollingAnalysisJobData: Subscription;
-  queueLengths = new Map<string, number>();
   executionResultsAvailable = new Map<string, boolean>();
   loadingResults = new Map<string, boolean>();
   expandedElement: QpuSelectionResultDto | null;
@@ -205,7 +204,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         this.analyzerResults = jobResult.qpuSelectionResultList;
 
         for (const analysisResult of this.analyzerResults) {
-          this.showBackendQueueSize(analysisResult);
           this.hasExecutionResult(analysisResult);
           this.qprovService.getProviders().subscribe((providers) => {
             for (const providerDto of providers._embedded.providerDtoes) {
@@ -239,26 +237,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         }
       });
     return true;
-  }
-
-  /**
-   * Update the qpu with the resulting dto from the QProv API if available
-   *
-   * @param result the response from the QProv API with all available qpus from the provider
-   */
-  getQpuDtoByProviderAndName(result): void {
-    if (result === null) {
-      console.error('Error while loading QPUs!');
-      return;
-    }
-
-    // search for qpu specified in computeResource
-    for (const qpuDto of result._embedded.qpuDtoes) {
-      if (qpuDto.name.toLowerCase() === this.qpu.name.toLowerCase()) {
-        this.qpu = qpuDto;
-        return;
-      }
-    }
   }
 
   execute(analysisResult: QpuSelectionResultDto): void {
@@ -337,13 +315,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
       });
   }
 
-  showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {
-    this.nisqAnalyzerService
-      .getIBMQBackendState(analysisResult.qpu)
-      .subscribe((data) => {
-        this.queueLengths[analysisResult.qpu] = data.lengthQueue;
-      });
-  }
+  prioritize(): void {}
 }
 
 export interface CircuitQpuCriteriaAnalysisResult {

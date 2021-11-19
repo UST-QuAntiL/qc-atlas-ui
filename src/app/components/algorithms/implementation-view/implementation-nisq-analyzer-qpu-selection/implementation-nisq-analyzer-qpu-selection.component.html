@@ -88,11 +88,20 @@
                 <div class="btn-wrapper">
                     <button
                             mat-raised-button
-                            type="Back"
+                            type="button"
                             color="accent"
                             (click)="stepper.previous()"
                     >
                         Back
+                    </button>
+                    <button *ngIf="jobReady && circuitQpuCriteriaAnalysisResults && analyzerResults.length !== 0
+                    && circuitQpuCriteriaAnalysisResults.length === analyzerResults.length"
+                            mat-raised-button
+                            type="button"
+                            color="primary"
+                            (click)="prioritize()"
+                    >
+                        Prioritize
                     </button>
                 </div>
                 <div *ngIf="analyzerJob">
@@ -105,12 +114,14 @@
                     No suitable QPUs found!
                 </div>
                 <div
-                        *ngIf="jobReady && circuitQpuCriteriaAnalysisResults && analyzerResults.length !== 0 && circuitQpuCriteriaAnalysisResults.length !== analyzerResults.length"
+                        *ngIf="jobReady && circuitQpuCriteriaAnalysisResults && analyzerResults.length !== 0
+                        && circuitQpuCriteriaAnalysisResults.length !== analyzerResults.length"
                         class="d-flex align-content-center justify-content-center py-5"
                 >
                     <mat-spinner [diameter]="60"></mat-spinner>
                 </div>
-                <ng-container *ngIf="jobReady && circuitQpuCriteriaAnalysisResults && analyzerResults.length !== 0 && circuitQpuCriteriaAnalysisResults.length === analyzerResults.length">
+                <ng-container *ngIf="jobReady && circuitQpuCriteriaAnalysisResults && analyzerResults.length !== 0
+                && circuitQpuCriteriaAnalysisResults.length === analyzerResults.length">
                         <table mat-table [dataSource]="circuitQpuCriteriaAnalysisResults" multiTemplateDataRows>
                             <ng-container matColumnDef="backendName">
                                 <th class="backend-column" mat-header-cell *matHeaderCellDef>
