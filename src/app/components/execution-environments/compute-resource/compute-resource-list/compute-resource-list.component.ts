@@ -3,6 +3,8 @@ import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-envir
 import { Router } from '@angular/router';
 import { ComputeResourceDto } from 'api-atlas/models/compute-resource-dto';
 import { forkJoin } from 'rxjs';
+import { ProviderService } from 'generated/api-qprov/services/provider.service';
+import { EntityModelQpuDto } from 'generated/api-qprov/models/entity-model-qpu-dto';
 import {
   SelectParams,
   QueryParams,
@@ -32,10 +34,19 @@ export class ComputeResourceListComponent implements OnInit {
   constructor(
     private utilService: UtilService,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
-    private router: Router
+    private router: Router,
+    private providerService: ProviderService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.executionEnvironmentsService
+      .getComputeResources()
+      .subscribe((data) => {
+        this.providerService.getProviders().subscribe((result) => {
+          this.getListOfProvidersAndQpus(result, data.content);
+        });
+      });
+  }
 
   getComputeResources(params: QueryParams): void {
     this.executionEnvironmentsService
@@ -160,5 +171,77 @@ export class ComputeResourceListComponent implements OnInit {
           });
         }
       });
+  }
+
+  getListOfProvidersAndQpus(result, computeResources): void {
+    if (result === null || result._embedded == null) {
+      console.error('Error while loading provider!');
+      return;
+    } else {
+      result._embedded.providerDtoes.forEach((providerDto) => {
+        this.providerService
+          .getQpUs({ providerId: providerDto.id })
+          .subscribe((res) => {
+            const qpus = res._embedded.qpuDtoes;
+            const vendor = providerDto.name;
+            this.AddAllQpusFromQprov(vendor, qpus, computeResources);
+          });
+      });
+    }
+  }
+
+  AddAllQpusFromQprov(
+    vendor: string,
+    qpus: EntityModelQpuDto[],
+    computeResources: ComputeResourceDto[]
+  ): void {
+    if (computeResources.length > 0) {
+      const relevantVendorQpuNames = computeResources
+        .filter(
+          (computeResource) => computeResource.vendor.trim() === vendor.trim()
+        )
+        .map((each) => each.name);
+      qpus.forEach((element) => {
+        if (!relevantVendorQpuNames.includes(element.name)) {
+          const computeResourceDto: ComputeResourceDto = {
+            id: null,
+            name: element.name,
+            vendor,
+          };
+          this.executionEnvironmentsService
+            .createComputeResource({ body: computeResourceDto })
+            .subscribe(
+              (computeResource: ComputeResourceDto) => {
+                this.getComputeResources({ page: 0, size: 10, sort: Array(0) });
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Could not create compute resource from qprov'
+                );
+              }
+            );
+        }
+      });
+    } else {
+      qpus.forEach((element) => {
+        const computeResourceDto: ComputeResourceDto = {
+          id: null,
+          name: element.name,
+          vendor,
+        };
+        this.executionEnvironmentsService
+          .createComputeResource({ body: computeResourceDto })
+          .subscribe(
+            (computeResource: ComputeResourceDto) => {
+              this.getComputeResources({ page: 0, size: 10, sort: Array(0) });
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not create compute resource from qprov'
+              );
+            }
+          );
+      });
+    }
   }
 }
