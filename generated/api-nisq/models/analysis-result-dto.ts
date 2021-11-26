@@ -13,6 +13,16 @@ export type AnalysisResultDto = {
   analyzedNumberOfMultiQubitGates?: number;
   analyzedNumberOfMeasurementOperations?: number;
   analyzedMultiQubitGateDepth?: number;
+  numberOfQubits?: number;
+  t1?: number;
+  t2?: number;
+  avgReadoutError?: number;
+  avgSingleQubitGateError?: number;
+  avgMultiQubitGateError?: number;
+  avgSingleQubitGateTime?: number;
+  avgMultiQubitGateTime?: number;
+  maxGateTime?: number;
+  simulator?: boolean;
   time?: string;
   implementation?: ImplementationDto;
   inputParameters?: {};
