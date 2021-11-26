@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="prioritizationFrom">
+        <mat-form-field class="input-field">
+            <mat-label>MCDA Method</mat-label>
+            <mat-select formControlName="mcdaMethod" (selectionChange)="onMcdaMethodChanged($event.value)">
+                <mat-option [value]="'topsis'">TOPSIS</mat-option>
+                <mat-option [value]="'promethee-I'">PROMETHEE II</mat-option>
+                <mat-option [value]="'electre-III'">ELECTRE III</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div formArrayName="criteriaAndValues">
+            <div *ngFor="let criterion of criteriaNamesAndValues; let i = index" [formGroupName]="i">
+                <mat-form-field class="input-field">
+                    <mat-label>{{ criterion.name }}</mat-label>
+                    <input
+                            matInput
+                            [placeholder]="criterion.name"
+                            [formControlName]="criterion.name"
+                    />
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="data">Ok
+    </button>
+</div>
+

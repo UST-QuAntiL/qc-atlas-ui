@@ -114,8 +114,15 @@ button-column {
   margin-left: 45px;
 }
 
+.mat-spinner-left {
+  margin-left: 10px;
+}
+
 .impls-required {
   display: flex;
   justify-content: center;
 }
 
+.spinner-wrapper {
+  display: flex;
+}

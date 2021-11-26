@@ -31,6 +31,7 @@ import { ChangePageGuard } from '../../../../services/deactivation-guard';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-dialog/implementation-nisq-analyzer-qpu-selection-dialog.component';
 import { NisqAnalyzerService } from '../../nisq-analyzer/nisq-analyzer.service';
+import { ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
 
 @Component({
   selector: 'app-implementation-nisq-analyzer-qpu-selection',
@@ -77,7 +78,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
   analyzerJobs$: Observable<QpuSelectionJobDto[]>;
   analyzerResults: QpuSelectionResultDto[] = [];
-  circuitQpuCriteriaAnalysisResults: CircuitQpuCriteriaAnalysisResult[] = [];
   nisqImpl: NisqImplementationDto;
   analyzerJob: QpuSelectionJobDto;
   jobReady = false;
@@ -90,6 +90,10 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
   results?: ExecutionResultDto = undefined;
   provider?: EntityModelProviderDto;
   qpu?: EntityModelQpuDto;
+  queueLengths = new Map<string, number>();
+  qpuDataIsUpToDate = new Map<string, true>();
+  qpuCounter = 0;
+  qpuCheckFinished = false;
 
   constructor(
     private utilService: UtilService,
@@ -204,36 +208,9 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         this.analyzerResults = jobResult.qpuSelectionResultList;
 
         for (const analysisResult of this.analyzerResults) {
+          this.showBackendQueueSize(analysisResult);
           this.hasExecutionResult(analysisResult);
-          this.qprovService.getProviders().subscribe((providers) => {
-            for (const providerDto of providers._embedded.providerDtoes) {
-              if (
-                providerDto.name.toLowerCase() ===
-                analysisResult.provider.toLowerCase()
-              ) {
-                this.provider = providerDto;
-                break;
-              }
-            }
-            // search for QPU with given name from the given provider
-            this.qprovService
-              .getQpUs({ providerId: this.provider.id })
-              .subscribe((qpuResult) => {
-                for (const qpuDto of qpuResult._embedded.qpuDtoes) {
-                  if (
-                    qpuDto.name.toLowerCase() ===
-                    analysisResult.qpu.toLowerCase()
-                  ) {
-                    this.qpu = qpuDto;
-                    this.circuitQpuCriteriaAnalysisResults.push({
-                      analysisResult,
-                      qpuProperties: this.qpu,
-                    });
-                    break;
-                  }
-                }
-              });
-          });
+          this.checkIfQpuDataIsOutdated(analysisResult);
         }
       });
     return true;
@@ -315,10 +292,67 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
       });
   }
 
-  prioritize(): void {}
-}
+  prioritize(): void {
+    this.utilService
+      .createDialog(
+        ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
+        {
+          title: 'Prioritize QPU-Selection-Analysis',
+        }
+      )
+      .afterClosed()
+      .subscribe((dialogResult) => {});
+  }
 
-export interface CircuitQpuCriteriaAnalysisResult {
-  analysisResult: QpuSelectionResultDto;
-  qpuProperties: EntityModelQpuDto;
+  showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {
+    this.nisqAnalyzerService
+      .getIBMQBackendState(analysisResult.qpu)
+      .subscribe((data) => {
+        this.queueLengths[analysisResult.qpu] = data.lengthQueue;
+      });
+  }
+
+  checkIfQpuDataIsOutdated(analysisResult: QpuSelectionResultDto): void {
+    this.qprovService.getProviders().subscribe((providers) => {
+      for (const providerDto of providers._embedded.providerDtoes) {
+        if (
+          providerDto.name.toLowerCase() ===
+          analysisResult.provider.toLowerCase()
+        ) {
+          this.provider = providerDto;
+          break;
+        }
+      }
+      // search for QPU with given name from the given provider
+      this.qprovService
+        .getQpUs({ providerId: this.provider.id })
+        .subscribe((qpuResult) => {
+          for (const qpuDto of qpuResult._embedded.qpuDtoes) {
+            if (
+              qpuDto.name.toLowerCase() === analysisResult.qpu.toLowerCase()
+            ) {
+              if (
+                qpuDto.lastCalibrated === null ||
+                Date.parse(analysisResult.time) >=
+                  Date.parse(qpuDto.lastCalibrated)
+              ) {
+                this.qpuDataIsUpToDate[analysisResult.qpu] = true;
+              } else {
+                this.qpuDataIsUpToDate[analysisResult.qpu] = false;
+              }
+              break;
+            }
+          }
+          this.qpuCounter++;
+          if (
+            this.qpuCounter === this.analyzerJob.qpuSelectionResultList.length
+          ) {
+            this.qpuCheckFinished = true;
+            this.qpuCounter = 0;
+          } else {
+            this.qpuCheckFinished = false;
+          }
+        });
+    });
+  }
 }
