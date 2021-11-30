@@ -62,6 +62,7 @@ import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 import { initializeKeycloak } from './util/keycloak-init';
+import { QAIAppModule } from './components/qai-apps/qai-apps.module';
 
 @NgModule({
   declarations: [
@@ -119,6 +120,7 @@ import { initializeKeycloak } from './util/keycloak-init';
     // app modules
     NavigationBreadcrumbModule,
     AlgorithmModule,
+    QAIAppModule,
     PublicationModule,
     ImplementationViewModule,
     GenericsModule,

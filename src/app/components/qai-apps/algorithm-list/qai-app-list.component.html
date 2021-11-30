@@ -1,0 +1,26 @@
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table [data]=qAIApps
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [allowAdd]=true
+               [allowDelete]="true"
+               [allowSearch]=true
+               [allowSort]=true
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
+               [emptyTableMessage]="'No algorithms found'"
+               (elementClicked)="onElementClicked($event)"
+               (addElement)="onAddElement()"
+               (submitDeleteElements)="onDeleteElements($event)"
+               (datalistConfigChanged)="getQAIApps()"
+               (pageChange)="getQAIApps()">
+    </app-table>
+    <div
+            *ngIf="loading"
+            class="d-flex align-content-center justify-content-center"
+    >
+      <mat-spinner></mat-spinner>
+    </div>
+  </div>
+</mat-card>
