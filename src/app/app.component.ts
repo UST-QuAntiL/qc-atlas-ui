@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { QcAtlasUiRepositoryConfigurationService } from './directives/qc-atlas-ui-repository-configuration.service';
 import { UtilService } from './util/util.service';
-import { AtlasQpuUpdateService } from './util/AtlasQpuUpdate.service';
 
 @Component({
   selector: 'app-root',
@@ -15,16 +14,13 @@ export class AppComponent implements OnInit {
 
   constructor(
     private configService: QcAtlasUiRepositoryConfigurationService,
-    private utilService: UtilService,
-    private atlasQpuUpdateService: AtlasQpuUpdateService
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
     this.configService.getConfigurationFromBackend().subscribe(
       () => {
         this.loading = false;
-        console.log('I am called');
-        this.atlasQpuUpdateService.runQpuUpdate();
       },
       (error: HttpErrorResponse) => {
         this.loading = false;

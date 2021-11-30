@@ -12,6 +12,7 @@ import { CreateComputeResourceDialogComponent } from '../dialogs/create-compute-
 import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog.component';
 import { PaginatorConfig } from '../../../../util/paginatorConfig';
 import { PagingInfo } from '../../../../util/PagingInfo';
+import { AtlasQpuUpdateService } from 'src/app/util/AtlasQpuUpdate.service';
 
 @Component({
   selector: 'app-compute-resource-list',
@@ -32,10 +33,13 @@ export class ComputeResourceListComponent implements OnInit {
   constructor(
     private utilService: UtilService,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
-    private router: Router
+    private router: Router,
+    private atlasQpuUpdateService: AtlasQpuUpdateService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.atlasQpuUpdateService.runQpuUpdate();
+  }
 
   getComputeResources(params: QueryParams): void {
     this.executionEnvironmentsService
@@ -102,63 +106,82 @@ export class ComputeResourceListComponent implements OnInit {
   }
 
   onDeleteComputeResources(deleteParams: SelectParams): void {
-    this.utilService
-      .createDialog(ConfirmDialogComponent, {
-        title: 'Confirm Deletion',
-        message:
-          'Are you sure you want to delete the following compute resource(s): ',
-        data: deleteParams.elements,
-        variableName: 'name',
-        yesButtonText: 'yes',
-        noButtonText: 'no',
-      })
-      .afterClosed()
-      .subscribe((dialogResult) => {
-        if (dialogResult) {
-          const deletionTasks = [];
-          const snackbarMessages = [];
-          let successfulDeletions = 0;
-          for (const computeResource of deleteParams.elements) {
-            deletionTasks.push(
-              this.executionEnvironmentsService
-                .deleteComputeResource({
-                  computeResourceId: computeResource.id,
-                })
-                .toPromise()
-                .then(() => {
-                  successfulDeletions++;
-                  snackbarMessages.push(
-                    'Successfully deleted compute resource "' +
-                      computeResource.name +
-                      '".'
-                  );
-                })
-                .catch((errorResponse) =>
-                  snackbarMessages.push(JSON.parse(errorResponse.error).message)
-                )
-            );
-          }
-          forkJoin(deletionTasks).subscribe(() => {
-            if (
-              this.utilService.isLastPageEmptyAfterDeletion(
-                successfulDeletions,
-                this.computeResources.length,
-                this.pagingInfo
-              )
-            ) {
-              deleteParams.queryParams.page--;
+    const deleteAllowed = [];
+    const deleteNotAllowed = [];
+    deleteParams.elements.forEach((element) => {
+      if (element.qprovOrigin === false) {
+        deleteAllowed.push(element);
+      } else {
+        deleteNotAllowed.push(
+          element.name + 'is from qprov, so cannot be deleted'
+        );
+      }
+    });
+    deleteParams.elements = deleteAllowed;
+    if (deleteNotAllowed.length > 0) {
+      this.utilService.callSnackBarSequence(deleteNotAllowed);
+    }
+    if (deleteAllowed.length > 0) {
+      this.utilService
+        .createDialog(ConfirmDialogComponent, {
+          title: 'Confirm Deletion',
+          message:
+            'Are you sure you want to delete the following compute resource(s): ',
+          data: deleteParams.elements,
+          variableName: 'name',
+          yesButtonText: 'yes',
+          noButtonText: 'no',
+        })
+        .afterClosed()
+        .subscribe((dialogResult) => {
+          if (dialogResult) {
+            const deletionTasks = [];
+            const snackbarMessages = [];
+            let successfulDeletions = 0;
+            for (const computeResource of deleteParams.elements) {
+              deletionTasks.push(
+                this.executionEnvironmentsService
+                  .deleteComputeResource({
+                    computeResourceId: computeResource.id,
+                  })
+                  .toPromise()
+                  .then(() => {
+                    successfulDeletions++;
+                    snackbarMessages.push(
+                      'Successfully deleted compute resource "' +
+                        computeResource.name +
+                        '".'
+                    );
+                  })
+                  .catch((errorResponse) =>
+                    snackbarMessages.push(
+                      JSON.parse(errorResponse.error).message
+                    )
+                  )
+              );
             }
-            this.getComputeResources(deleteParams.queryParams);
-            snackbarMessages.push(
-              this.utilService.generateFinishingSnackbarMessage(
-                successfulDeletions,
-                dialogResult.data.length,
-                'compute resources'
-              )
-            );
-            this.utilService.callSnackBarSequence(snackbarMessages);
-          });
-        }
-      });
+            forkJoin(deletionTasks).subscribe(() => {
+              if (
+                this.utilService.isLastPageEmptyAfterDeletion(
+                  successfulDeletions,
+                  this.computeResources.length,
+                  this.pagingInfo
+                )
+              ) {
+                deleteParams.queryParams.page--;
+              }
+              this.getComputeResources(deleteParams.queryParams);
+              snackbarMessages.push(
+                this.utilService.generateFinishingSnackbarMessage(
+                  successfulDeletions,
+                  dialogResult.data.length,
+                  'compute resources'
+                )
+              );
+              this.utilService.callSnackBarSequence(snackbarMessages);
+            });
+          }
+        });
+    }
   }
 }

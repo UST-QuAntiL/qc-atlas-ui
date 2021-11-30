@@ -52,7 +52,9 @@ export class AtlasQpuUpdateService {
     if (computeResources.length > 0) {
       const relevantVendorQpuNames = computeResources
         .filter(
-          (computeResource) => computeResource.vendor.trim() === vendor.trim()
+          (computeResource) =>
+            computeResource.vendor != null &&
+            computeResource.vendor.trim() === vendor.trim()
         )
         .map((each) => each.name);
       qpus.forEach((element) => {
@@ -61,6 +63,7 @@ export class AtlasQpuUpdateService {
             id: null,
             name: element.name,
             vendor,
+            qprovOrigin: true,
           };
           this.executionEnvironmentsService
             .createComputeResource({ body: computeResourceDto })
@@ -82,6 +85,7 @@ export class AtlasQpuUpdateService {
           id: null,
           name: element.name,
           vendor,
+          qprovOrigin: true,
         };
         this.executionEnvironmentsService
           .createComputeResource({ body: computeResourceDto })
