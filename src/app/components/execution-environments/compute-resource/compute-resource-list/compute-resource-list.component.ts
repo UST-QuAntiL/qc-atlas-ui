@@ -12,7 +12,7 @@ import { CreateComputeResourceDialogComponent } from '../dialogs/create-compute-
 import { ConfirmDialogComponent } from '../../../generics/dialogs/confirm-dialog.component';
 import { PaginatorConfig } from '../../../../util/paginatorConfig';
 import { PagingInfo } from '../../../../util/PagingInfo';
-import { AtlasQpuUpdateService } from 'src/app/util/AtlasQpuUpdate.service';
+import { AtlasQpuUpdateService } from '../../../../util/AtlasQpuUpdate.service';
 
 @Component({
   selector: 'app-compute-resource-list',
