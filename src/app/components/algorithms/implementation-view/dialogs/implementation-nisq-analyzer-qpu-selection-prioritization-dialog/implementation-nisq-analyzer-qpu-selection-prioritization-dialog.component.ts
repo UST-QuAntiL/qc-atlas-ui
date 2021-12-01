@@ -33,7 +33,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
     >,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
-    private formBuilder: FormBuilder = new FormBuilder(),
+    private formBuilder: FormBuilder,
     private mcdaService: XmcdaCriteriaService
   ) {}
 
@@ -46,27 +46,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   }
 
   ngOnInit(): void {
-    this.prioritizationFrom = new FormGroup({
-      criteriaAndValues: this.formBuilder.array(
-        this.criteriaNamesAndValues.map((criterion) =>
-          this.formBuilder.group({
-            [criterion.value]: '',
-          })
-        )
-      ),
-      mcdaMethod: new FormControl(this.data.mcdaMethod, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
-    });
-
-    this.mcdaMethod.setValue('topsis');
-    this.onMcdaMethodChanged(this.mcdaMethod.value);
-
-    this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.mcdaMethod = this.mcdaMethod.value;
-      this.data.criteriaAndValues = this.criteriaAndValues.value;
-    });
+    this.onMcdaMethodChanged('topsis');
   }
 
   onNoClick(): void {
@@ -96,6 +76,24 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                   value: realValue,
                 });
               }
+              this.prioritizationFrom = this.formBuilder.group({
+                mcdaMethod: new FormControl(this.data.mcdaMethod, [
+                  // eslint-disable-next-line @typescript-eslint/unbound-method
+                  Validators.required,
+                ]),
+                criteriaAndValues: this.formBuilder.array(
+                  this.criteriaNamesAndValues.map((c) =>
+                    this.formBuilder.group({
+                      [c.name]: [''],
+                    })
+                  )
+                ),
+              });
+              this.mcdaMethod.setValue(mcdaMethod);
+              this.dialogRef.beforeClosed().subscribe(() => {
+                this.data.mcdaMethod = this.mcdaMethod.value;
+                this.data.criteriaAndValues = this.criteriaAndValues.value;
+              });
             });
         });
       });
