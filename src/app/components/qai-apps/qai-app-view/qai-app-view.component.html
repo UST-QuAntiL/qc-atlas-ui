@@ -1,0 +1,58 @@
+<div class="row p-2 m-0">
+  <div class="col">
+    <div class="float-left mx-2">
+      <navigation-breadcrumb [links]="links"></navigation-breadcrumb>
+    </div>
+  </div>
+</div>
+
+<div class="p-4">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input name="Name"
+                        [value]="qaiApp ? qaiApp.name : ''"
+                        [baseValue]="qaiAppFrontend ? qaiAppFrontend.name : ''"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input name="Created at"
+                        [value]="qaiApp ? qaiApp.createdAt : ''"
+                        [baseValue]="qaiAppFrontend ? qaiAppFrontend.createdAt : ''"
+        ></app-text-input>
+      </mat-card>
+    </div>
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input name="Modified at"
+                        [value]="qaiApp ? qaiApp.modifiedAt : ''"
+                        [baseValue]="qaiAppFrontend ? qaiAppFrontend.modifiedAt : ''"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input name="TOSCA name"
+                        [value]="qaiApp ? qaiApp.toscaName : ''"
+                        [baseValue]="qaiAppFrontend ? qaiAppFrontend.toscaName : ''"
+        ></app-text-input>
+      </mat-card>
+    </div>
+    <div class="col-lg-6 col-sm-12">
+      <mat-card class="m-2">
+        <app-text-input name="TOSCA namespace"
+                        [value]="qaiApp ? qaiApp.toscaNamespace : ''"
+                        [baseValue]="qaiAppFrontend ? qaiAppFrontend.toscaNamespace : ''"
+        ></app-text-input>
+      </mat-card>
+    </div>
+  </div>
+</div>

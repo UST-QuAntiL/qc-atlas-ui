@@ -22,7 +22,8 @@ import { PatternRelationTypesListComponent } from './components/pattern-relation
 // eslint-disable-next-line max-len
 import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
-import { QAIAppListComponent } from './components/qai-apps/algorithm-list/qai-app-list.component';
+import { QAIAppListComponent } from './components/qai-apps/qai-apps-list/qai-app-list.component';
+import { QAIAppViewComponent } from './components/qai-apps/qai-app-view/qai-app-view.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -39,6 +40,11 @@ const routes: Routes = [
   {
     path: 'qai-apps',
     component: QAIAppListComponent,
+  },
+  {
+    path: 'qai-apps/:qaiAppId',
+    component: QAIAppViewComponent,
+    canDeactivate: [ChangePageGuard],
   },
   {
     path: 'execution-environments',

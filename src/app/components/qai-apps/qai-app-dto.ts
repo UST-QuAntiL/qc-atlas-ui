@@ -1,5 +1,5 @@
 /* tslint:disable */
-export type QAIAppDto = {
+export interface QAIAppDto {
   id: string;
   name?: string;
   importId?: string;
@@ -10,5 +10,5 @@ export type QAIAppDto = {
   createdAt?: string;
   modifiedBy?: string;
   modifiedAt?: string;
-  accessPermissionOfLoggedInUser?: "VIEWER" | "MAINTAINER" | "OWNER";
-};
+  accessPermissionOfLoggedInUser?: 'VIEWER' | 'MAINTAINER' | 'OWNER';
+}

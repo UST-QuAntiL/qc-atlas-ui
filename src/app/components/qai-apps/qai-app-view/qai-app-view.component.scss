@@ -1,0 +1,18 @@
+@import "theme";
+
+.clickable-chip {
+  cursor: pointer;
+}
+
+.header-container {
+
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: transparent;
+}
+
+.mat-button {
+  background: #e0e0e0;
+  border: none;
+}

@@ -24,11 +24,18 @@ import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/na
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
 import { QcAtlasUiFeatureToggleModule } from '../../directives/feature-toggle.module';
+import { AlgorithmModule } from '../algorithms/algorithm.module';
+import { NisqAnalyzerModule } from '../algorithms/nisq-analyzer/nisq-analyzer.module';
 import { AddAlgorithmDialogComponent } from './dialogs/add-algorithm-dialog.component';
-import { QAIAppListComponent } from './algorithm-list/qai-app-list.component';
+import { QAIAppListComponent } from './qai-apps-list/qai-app-list.component';
+import { QAIAppViewComponent } from './qai-app-view/qai-app-view.component';
 
 @NgModule({
-  declarations: [QAIAppListComponent, AddAlgorithmDialogComponent],
+  declarations: [
+    QAIAppListComponent,
+    AddAlgorithmDialogComponent,
+    QAIAppViewComponent,
+  ],
   imports: [
     MatTabsModule,
     MatChipsModule,
@@ -56,7 +63,13 @@ import { QAIAppListComponent } from './algorithm-list/qai-app-list.component';
     MatSortModule,
     QcAtlasUiFeatureToggleModule,
     MatBadgeModule,
+    AlgorithmModule,
+    NisqAnalyzerModule,
   ],
-  exports: [QAIAppListComponent, AddAlgorithmDialogComponent],
+  exports: [
+    QAIAppListComponent,
+    AddAlgorithmDialogComponent,
+    QAIAppViewComponent,
+  ],
 })
 export class QAIAppModule {}

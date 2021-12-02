@@ -99,11 +99,14 @@ import { CompareVersionDialogComponent } from './dialogs/compare-version-dialog.
     AlgorithmPublicationsListComponent,
     ProblemTypeTreeComponent,
     AddAlgorithmDialogComponent,
-    CreateImplementationDialogComponent,
     CompareVersionDialogComponent,
+    CreateImplementationDialogComponent,
+    AlgorithmRelatedPatternsComponent,
     AddPatternRelationDialogComponent,
     AddAlgorithmRelationDialogComponent,
     ImplementationPropertiesComponent,
+    NisqAnalyzerResultsComponent,
+    AddNewAnalysisDialogComponent,
   ],
 })
 export class AlgorithmModule {}

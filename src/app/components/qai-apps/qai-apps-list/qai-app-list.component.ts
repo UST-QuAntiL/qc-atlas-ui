@@ -6,8 +6,8 @@ import {
 } from 'api-atlas/models';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { QAIAppService } from 'generated/api-atlas/services/qai-apps.service';
-import { QAIAppDto } from 'generated/api-atlas/models/qai-app-dto';
+import { QAIAppService } from 'src/app/components/qai-apps/qai-apps.service';
+import { QAIAppDto } from 'src/app/components/qai-apps/qai-app-dto';
 import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import {
