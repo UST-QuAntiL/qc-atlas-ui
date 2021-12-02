@@ -84,7 +84,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                 criteriaAndValues: this.formBuilder.array(
                   this.criteriaNamesAndValues.map((c) =>
                     this.formBuilder.group({
-                      [c.name]: [''],
+                      [c.name]: [c.value],
                     })
                   )
                 ),

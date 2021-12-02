@@ -238,7 +238,7 @@
                         <ng-container matColumnDef="single-qubit-gate-time">
                             <th class="value-column" mat-header-cell *matHeaderCellDef>
                                 <div>Avg. Single-Qubit</div>
-                                <div>Gate Time (ms)</div>
+                                <div>Gate Time (ns)</div>
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.avgSingleQubitGateTime }}
@@ -248,7 +248,7 @@
                         <ng-container matColumnDef="multi-qubit-gate-time">
                             <th class="value-column" mat-header-cell *matHeaderCellDef>
                                 <div>Avg. Multi-Qubit</div>
-                                <div>Gate Time (ms)</div>
+                                <div>Gate Time (ns)</div>
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.avgMultiQubitGateTime }}
@@ -270,7 +270,7 @@
                                 <div>Avg. T1 (ns)</div>
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
-                                {{ element.t1 }}
+                                {{ element.t1 === 0 ? '-' : element.t1 }}
                             </td>
                         </ng-container>
 
@@ -279,7 +279,7 @@
                                 <div>Avg. T2 (ns)</div>
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
-                                {{ element.t2 }}
+                                {{ element.t2 === 0 ? '-' : element.t2 }}
                             </td>
                         </ng-container>
 
