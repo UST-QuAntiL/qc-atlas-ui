@@ -17,6 +17,9 @@ import { QpuSelectionJobDto } from 'api-nisq/models/qpu-selection-job-dto';
 import { RootService } from 'api-nisq/services/root.service';
 import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/implementation-dto';
 import {
+  CriteriaSet,
+  CriterionValue,
+  Description,
   ExecutionResultDto,
   QpuSelectionDto,
   QpuSelectionResultDto,
@@ -26,6 +29,7 @@ import { PlanqkPlatformLoginService } from 'src/app/services/planqk-platform-log
 import { EntityModelQpuDto } from 'api-qprov/models/entity-model-qpu-dto';
 import { ProviderService } from 'api-qprov/services/provider.service';
 import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
+import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
 import { UtilService } from '../../../../util/util.service';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 // eslint-disable-next-line max-len
@@ -105,7 +109,8 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
     private nisqAnalyzerService: NisqAnalyzerService,
     private qprovService: ProviderService,
     private http: HttpClient,
-    private planqkService: PlanqkPlatformLoginService
+    private planqkService: PlanqkPlatformLoginService,
+    private mcdaService: XmcdaCriteriaService
   ) {}
 
   ngOnInit(): void {
@@ -315,6 +320,33 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
             } else {
               obj.weight = 0;
             }
+          });
+          dialogResult.criteriaAndValues.forEach((obj) => {
+            const criterionValue: CriterionValue = {
+              description: { title: 'points', subTitle: obj.points.toString() },
+              criterionID: obj.id,
+              valueOrValues: [{ real: obj.weight }],
+              mcdaMethod: dialogResult.mcdaMethod,
+            };
+
+            this.mcdaService
+              .updateCriterionValue({
+                methodName: dialogResult.mcdaMethod,
+                criterionId: obj.id,
+                body: criterionValue,
+              })
+              .subscribe(
+                () => {
+                  console.log(criterionValue);
+                },
+                () => {
+                  this.utilService.callSnackBar(
+                    'Error! Could not set weight for criteria "' +
+                      obj.name +
+                      '".'
+                  );
+                }
+              );
           });
         }
       });
