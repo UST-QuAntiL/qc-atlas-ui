@@ -302,7 +302,22 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         }
       )
       .afterClosed()
-      .subscribe((dialogResult) => {});
+      .subscribe((dialogResult) => {
+        let totalSum = 0;
+        if (dialogResult) {
+          // calculate SMART with new assigned points
+          dialogResult.criteriaAndValues.forEach((obj) => {
+            totalSum += obj.points;
+          });
+          dialogResult.criteriaAndValues.forEach((obj) => {
+            if (obj.points !== 0) {
+              obj.weight = obj.points / totalSum;
+            } else {
+              obj.weight = 0;
+            }
+          });
+        }
+      });
   }
 
   showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {
