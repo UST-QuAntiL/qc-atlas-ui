@@ -26,6 +26,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   implements OnInit {
   prioritizationFrom: FormGroup;
   criteriaNamesAndValues: Criterion[] = [];
+  inputChanged = false;
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -55,7 +56,6 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
 
   onMcdaMethodChanged(mcdaMethod: string): void {
     this.criteriaNamesAndValues = [];
-    // get all criteria and save them as key in map
     this.mcdaService
       .getCriterionForMethod({ methodName: mcdaMethod })
       .subscribe((criteriaList) => {
@@ -73,7 +73,10 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                 this.criteriaNamesAndValues.push({
                   id: criterion.id,
                   name: criterion.name,
-                  value: realValue,
+                  weight: realValue,
+                  points: Math.round(
+                    Number(criterionValueModel.description.subTitle)
+                  ),
                 });
               }
               this.prioritizationFrom = this.formBuilder.group({
@@ -84,21 +87,32 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                 criteriaAndValues: this.formBuilder.array(
                   this.criteriaNamesAndValues.map((c) =>
                     this.formBuilder.group({
-                      [c.name]: [c.value],
+                      [c.name]: [c.points],
                     })
-                  )
+                  ),
+                  [Validators.max(100), Validators.min(0)]
                 ),
               });
               this.mcdaMethod.setValue(mcdaMethod);
               this.dialogRef.beforeClosed().subscribe(() => {
                 this.data.mcdaMethod = this.mcdaMethod.value;
-                this.data.criteriaAndValues = this.criteriaAndValues.value;
+                this.criteriaNamesAndValues.forEach((criterionVal) => {
+                  for (const val of this.criteriaAndValues.value) {
+                    if (criterionVal.name === Object.keys(val)[0]) {
+                      criterionVal.points = Number(Object.values(val)[0]);
+                      break;
+                    }
+                  }
+                  this.data.criteriaAndValues = this.criteriaNamesAndValues;
+                });
               });
             });
         });
       });
-    // set the value in the dialog view
-    // SMART method calculation
+  }
+
+  onChangeEvent(): void {
+    this.inputChanged = true;
   }
 }
 
@@ -111,5 +125,6 @@ interface DialogData {
 export interface Criterion {
   id: string;
   name: string;
-  value: number;
+  weight: number;
+  points: number;
 }

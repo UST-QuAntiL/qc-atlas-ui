@@ -10,14 +10,20 @@
                     <mat-option [value]="'electre-III'">ELECTRE III</mat-option>
                 </mat-select>
             </mat-form-field>
+            <p>Assign points between 0 (low importance) and 100 (high importance) in the following to define the weighting of metrics.</p>
             <div formArrayName="criteriaAndValues">
                 <div *ngFor="let criterion of criteriaNamesAndValues; let i = index" [formGroupName]="i">
                     <mat-form-field class="input-field">
                         <mat-label>{{ criterion.name }}</mat-label>
                         <input
                                 matInput
+                                type="number"
+                                min="0"
+                                max="100"
+                                pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0])?"
                                 [placeholder]="criterion.name"
                                 [formControlName]="criterion.name"
+                                (change)="onChangeEvent()"
                         />
                     </mat-form-field>
                 </div>
