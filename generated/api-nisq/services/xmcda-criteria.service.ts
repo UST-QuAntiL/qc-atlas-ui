@@ -506,26 +506,26 @@ export class XmcdaCriteriaService extends BaseService {
   }
 
   /**
-   * Path part for operation selectQpuForCircuitUrl
+   * Path part for operation prioritizeCompiledCircuitsOfJob
    */
-  static readonly SelectQpuForCircuitUrlPath =
+  static readonly PrioritizeCompiledCircuitsOfJobPath =
     '/mcda-methods/{methodName}/prioritize';
 
   /**
    * Run the MCDA method on the NISQ Analyzer job passed as parameter
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `selectQpuForCircuitUrl()` instead.
+   * To access only the response body, use `prioritizeCompiledCircuitsOfJob()` instead.
    *
    * This method doesn't expect any request body.
    */
-  selectQpuForCircuitUrl$Response(params: {
+  prioritizeCompiledCircuitsOfJob$Response(params: {
     methodName: string;
     jobId: string;
   }): Observable<StrictHttpResponse<EntityModelMcdaJob>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      XmcdaCriteriaService.SelectQpuForCircuitUrlPath,
+      XmcdaCriteriaService.PrioritizeCompiledCircuitsOfJobPath,
       'post'
     );
     if (params) {
@@ -551,15 +551,15 @@ export class XmcdaCriteriaService extends BaseService {
    * Run the MCDA method on the NISQ Analyzer job passed as parameter
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `selectQpuForCircuitUrl$Response()` instead.
+   * To access the full response (for headers, for example), `prioritizeCompiledCircuitsOfJob$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  selectQpuForCircuitUrl(params: {
+  prioritizeCompiledCircuitsOfJob(params: {
     methodName: string;
     jobId: string;
   }): Observable<EntityModelMcdaJob> {
-    return this.selectQpuForCircuitUrl$Response(params).pipe(
+    return this.prioritizeCompiledCircuitsOfJob$Response(params).pipe(
       map(
         (r: StrictHttpResponse<EntityModelMcdaJob>) =>
           r.body as EntityModelMcdaJob
