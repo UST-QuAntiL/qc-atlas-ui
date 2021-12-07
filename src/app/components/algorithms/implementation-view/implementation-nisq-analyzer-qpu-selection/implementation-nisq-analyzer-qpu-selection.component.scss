@@ -126,3 +126,9 @@ button-column {
 .spinner-wrapper {
   display: flex;
 }
+
+.spinner-wrapper-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

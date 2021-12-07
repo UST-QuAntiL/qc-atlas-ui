@@ -100,7 +100,11 @@
                             color="primary"
                             (click)="prioritize()"
                     >
-                        Prioritize
+                        <div class="spinner-wrapper-center">
+                            <span>Prioritize</span>
+                            <mat-spinner [diameter]="20" *ngIf="loadingMCDAJob" color="accent"
+                                         class="mat-spinner-left"></mat-spinner>
+                        </div>
                     </button>
                 </div>
                 <div *ngIf="analyzerJob">
