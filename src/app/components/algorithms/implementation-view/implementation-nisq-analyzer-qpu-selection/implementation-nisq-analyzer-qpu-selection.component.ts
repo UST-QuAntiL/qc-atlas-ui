@@ -17,9 +17,8 @@ import { QpuSelectionJobDto } from 'api-nisq/models/qpu-selection-job-dto';
 import { RootService } from 'api-nisq/services/root.service';
 import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/implementation-dto';
 import {
-  CriteriaSet,
   CriterionValue,
-  Description,
+  EntityModelMcdaJob,
   ExecutionResultDto,
   QpuSelectionDto,
   QpuSelectionResultDto,
@@ -99,6 +98,9 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
   qpuDataIsUpToDate = new Map<string, true>();
   qpuCounter = 0;
   qpuCheckFinished = false;
+  prioritizationJob: EntityModelMcdaJob;
+  prioritizationJobReady = false;
+  loadingMCDAJob = false;
 
   constructor(
     private utilService: UtilService,
@@ -310,6 +312,9 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
       .subscribe((dialogResult) => {
         let totalSum = 0;
         if (dialogResult) {
+          this.loadingMCDAJob = true;
+          this.prioritizationJob = undefined;
+          this.prioritizationJobReady = false;
           // calculate SMART with new assigned points
           dialogResult.criteriaAndValues.forEach((obj) => {
             totalSum += obj.points;
@@ -321,6 +326,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
               obj.weight = 0;
             }
           });
+          let numberOfCriterion = 0;
           dialogResult.criteriaAndValues.forEach((obj) => {
             const criterionValue: CriterionValue = {
               description: { title: 'points', subTitle: obj.points.toString() },
@@ -328,7 +334,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
               valueOrValues: [{ real: obj.weight }],
               mcdaMethod: dialogResult.mcdaMethod,
             };
-
             this.mcdaService
               .updateCriterionValue({
                 methodName: dialogResult.mcdaMethod,
@@ -337,13 +342,62 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
               })
               .subscribe(
                 () => {
-                  console.log(criterionValue);
+                  numberOfCriterion++;
+                  if (
+                    numberOfCriterion === dialogResult.criteriaAndValues.length
+                  ) {
+                    this.mcdaService
+                      .prioritizeCompiledCircuitsOfJob({
+                        methodName: dialogResult.mcdaMethod,
+                        jobId: this.analyzerJob.id,
+                      })
+                      .subscribe((job) => {
+                        this.prioritizationJob = job;
+                        this.prioritizationJobReady = job.ready;
+
+                        this.utilService.callSnackBar(
+                          'Successfully created prioritization job "' +
+                            job.id +
+                            '".'
+                        );
+
+                        this.pollingAnalysisJobData = interval(2000)
+                          .pipe(
+                            startWith(0),
+                            switchMap(() =>
+                              this.mcdaService.getPrioritizationJob({
+                                methodName: dialogResult.mcdaMethod,
+                                jobId: this.prioritizationJob.id,
+                              })
+                            )
+                          )
+                          .subscribe(
+                            (jobResult) => {
+                              this.prioritizationJob = jobResult;
+                              this.prioritizationJobReady = jobResult.ready;
+                              if (this.prioritizationJobReady) {
+                                this.loadingMCDAJob = false;
+                                this.ngOnInit();
+                                this.analyzerResults = jobResult.rankedResults;
+                                this.pollingAnalysisJobData.unsubscribe();
+                              }
+                            },
+                            () => {
+                              this.loadingMCDAJob = false;
+                              this.utilService.callSnackBar(
+                                'Error! Could not create prioritization job.'
+                              );
+                            }
+                          );
+                      });
+                  }
                 },
                 () => {
+                  this.loadingMCDAJob = false;
                   this.utilService.callSnackBar(
                     'Error! Could not set weight for criteria "' +
                       obj.name +
-                      '".'
+                      '". Please try again.'
                   );
                 }
               );
