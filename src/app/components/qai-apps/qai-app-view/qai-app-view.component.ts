@@ -34,7 +34,6 @@ export class QAIAppViewComponent implements OnInit, OnDestroy {
     this.routeSub = this.route.params.subscribe(({ qaiAppId }) => {
       this.qaiAppService.getQAIApp({ qaiAppId }).subscribe(
         (qaiApp) => {
-          console.log(qaiApp);
           this.qaiApp = qaiApp;
           this.qaiAppFrontend = JSON.parse(JSON.stringify(qaiApp)) as QAIAppDto; // copy object
           this.links[0] = {

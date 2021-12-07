@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="algorithmForm">
+
+    <mat-form-field class="input-field">
+      <mat-label>Name</mat-label>
+      <input id="name" formControlName="name" matInput required>
+    </mat-form-field>
+
+  </form>
+</div>
+
+<input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+<button mat-raised-button (click)="fileUpload.click()">Select File</button> {{ data.file?.name || 'No file selected' }}
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok
+  </button>
+</div>

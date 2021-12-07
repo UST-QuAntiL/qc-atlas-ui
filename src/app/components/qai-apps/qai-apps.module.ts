@@ -26,14 +26,14 @@ import { ComputeResourcePropertyModule } from '../compute-resource-property/comp
 import { QcAtlasUiFeatureToggleModule } from '../../directives/feature-toggle.module';
 import { AlgorithmModule } from '../algorithms/algorithm.module';
 import { NisqAnalyzerModule } from '../algorithms/nisq-analyzer/nisq-analyzer.module';
-import { AddAlgorithmDialogComponent } from './dialogs/add-algorithm-dialog.component';
+import { AddQAIAppDialogComponent } from './dialogs/add-qai-app-dialog.component';
 import { QAIAppListComponent } from './qai-apps-list/qai-app-list.component';
 import { QAIAppViewComponent } from './qai-app-view/qai-app-view.component';
 
 @NgModule({
   declarations: [
     QAIAppListComponent,
-    AddAlgorithmDialogComponent,
+    AddQAIAppDialogComponent,
     QAIAppViewComponent,
   ],
   imports: [
@@ -66,10 +66,6 @@ import { QAIAppViewComponent } from './qai-app-view/qai-app-view.component';
     AlgorithmModule,
     NisqAnalyzerModule,
   ],
-  exports: [
-    QAIAppListComponent,
-    AddAlgorithmDialogComponent,
-    QAIAppViewComponent,
-  ],
+  exports: [QAIAppListComponent, AddQAIAppDialogComponent, QAIAppViewComponent],
 })
 export class QAIAppModule {}

@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AlgorithmDto,
-  ClassicAlgorithmDto,
-  QuantumAlgorithmDto,
-} from 'api-atlas/models';
+import { AlgorithmDto } from 'api-atlas/models';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { QAIAppService } from 'src/app/components/qai-apps/qai-apps.service';
 import { QAIAppDto } from 'src/app/components/qai-apps/qai-app-dto';
-import { AddAlgorithmDialogComponent } from '../dialogs/add-algorithm-dialog.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import {
+  AddQAIAppDialogComponent,
+  DialogData,
+} from '../dialogs/add-qai-app-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
-import { QueryParams } from '../../generics/data-list/data-list.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
 import { PagingInfo } from '../../../util/PagingInfo';
 
@@ -40,11 +39,7 @@ export class QAIAppListComponent implements OnInit {
     private utilService: UtilService
   ) {}
 
-  ngOnInit(): void {
-    this.qAIAppService.getQAIApps().subscribe((data) => {
-      console.log(data);
-    });
-  }
+  ngOnInit(): void {}
 
   getQAIApps(): void {
     this.qAIAppService.getQAIApps().subscribe(
@@ -55,7 +50,7 @@ export class QAIAppListComponent implements OnInit {
       () => {
         this.loading = false;
         this.utilService.callSnackBar(
-          'Error! Algorithms could not be retrieved.'
+          'Error! QAI apps could not be retrieved.'
         );
       }
     );
@@ -65,47 +60,29 @@ export class QAIAppListComponent implements OnInit {
     this.router.navigate(['qai-apps', qAIApp.id]);
   }
 
-  // TODO: add dialog / page for new qAI app
   onAddElement(): void {
-    const dialogRef = this.utilService.createDialog(
-      AddAlgorithmDialogComponent,
-      {
-        title: 'Add new algorithm',
-      }
-    );
+    const dialogRef = this.utilService.createDialog(AddQAIAppDialogComponent, {
+      title: 'Add new qAI app',
+    });
 
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      let algorithmDto: QuantumAlgorithmDto | ClassicAlgorithmDto;
-
+    dialogRef.afterClosed().subscribe((dialogResult: DialogData) => {
       if (dialogResult) {
-        if (dialogResult.computationModel !== 'CLASSIC') {
-          algorithmDto = {
-            id: null,
-            name: dialogResult.name,
-            computationModel: dialogResult.computationModel,
-            quantumComputationModel: dialogResult.quantumComputationModel,
-          };
-        } else {
-          algorithmDto = {
-            id: null,
-            name: dialogResult.name,
-            computationModel: dialogResult.computationModel,
-          };
-        }
-
-        /* this.algorithmService.createAlgorithm({ body: algorithmDto }).subscribe(
-          (data) => {
-            this.utilService.callSnackBar(
-              'Algorithm was successfully created.'
-            );
-            this.router.navigate(['algorithms', data.id]);
-          },
-          () => {
-            this.utilService.callSnackBar(
-              'Error! Algorithm could not be created.'
-            );
-          }
-        );*/
+        this.qAIAppService
+          .createQAIApp(dialogResult.file, dialogResult.name)
+          .subscribe({
+            next: (data) => {
+              this.utilService.callSnackBar(
+                'qAI app was successfully created.'
+              );
+              this.router.navigate(['qai-apps', data.id]);
+            },
+            error: (error: HttpErrorResponse) => {
+              this.utilService.callSnackBar(
+                'Could not create new qAI app: ' + error.message
+              );
+            },
+            complete: () => {},
+          });
       }
     });
   }

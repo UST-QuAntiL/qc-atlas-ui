@@ -14,6 +14,7 @@ import { QAIAppDto } from './qai-app-dto';
 export class QAIAppService extends BaseService {
   static readonly GetQAIAppsPath = '/tosca/applications';
   static readonly GetQAIAppPath = '/tosca/applications/{qaiAppId}';
+  static readonly CreateQAIApp = '/tosca/applications';
 
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
@@ -89,5 +90,18 @@ export class QAIAppService extends BaseService {
     return this.getQAIApp$Response(params).pipe(
       map((r: StrictHttpResponse<QAIAppDto>) => r.body)
     );
+  }
+
+  createQAIApp(file: File, name: string): Observable<QAIAppDto> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('payload', JSON.stringify({ name }));
+
+    const upload = this.http.post(
+      this.rootUrl + QAIAppService.CreateQAIApp,
+      formData
+    );
+
+    return upload as Observable<QAIAppDto>;
   }
 }
