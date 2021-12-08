@@ -121,9 +121,17 @@
                     No suitable QPUs found!
                 </div>
                 <ng-container *ngIf="jobReady && analyzerResults && analyzerResults.length !== 0">
-                    <table mat-table [dataSource]="analyzerResults" multiTemplateDataRows>
-                        <ng-container matColumnDef="backendName">
-                            <th class="backend-column" mat-header-cell *matHeaderCellDef>
+                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onMatSortChange()" multiTemplateDataRows matSortDisableClear>
+                        <ng-container matColumnDef="rank">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Rank
+                            </th>
+                            <td class="value-column" mat-cell *matCellDef="let element">
+                                {{ rankings[element.id] ? rankings[element.id] : '-'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="qpu">
+                            <th class="backend-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Backend Name
                             </th>
                             <td class="backend-column" mat-cell *matCellDef="let element">
@@ -133,7 +141,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="provider">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Provider
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
@@ -142,7 +150,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="compiler">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 SDK
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
@@ -150,8 +158,8 @@
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="width">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
+                        <ng-container matColumnDef="analyzedWidth">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Width
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
@@ -159,8 +167,8 @@
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="depth">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
+                        <ng-container matColumnDef="analyzedDepth">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Depth
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
@@ -169,100 +177,90 @@
                         </ng-container>
 
 
-                        <ng-container matColumnDef="multi-qubit-gate-depth">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Multi-Qubit</div>
-                                <div>Gate Depth</div>
+                        <ng-container matColumnDef="analyzedMultiQubitGateDepth">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Multi-Qubit Gate Depth
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.analyzedMultiQubitGateDepth }}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="total-number-of-operations">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Total Number of</div>
-                                <div>Operations</div>
+                        <ng-container matColumnDef="analyzedTotalNumberOfOperations">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Total Number of Operations
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.analyzedTotalNumberOfOperations }}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="number-of-single-qubit-gates">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Number of</div>
-                                <div>Single-Qubit Gates</div>
+                        <ng-container matColumnDef="analyzedNumberOfSingleQubitGates">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Number of Single-Qubit Gates
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.analyzedNumberOfSingleQubitGates }}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="number-of-multi-qubit-gates">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Number of</div>
-                                <div>Multi-Qubit Gates</div>
+                        <ng-container matColumnDef="analyzedNumberOfMultiQubitGates">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Number of Multi-Qubit Gates
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.analyzedNumberOfMultiQubitGates }}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="number-of-measurement-operations">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Number of</div>
-                                <div>Measurement Operations</div>
+                        <ng-container matColumnDef="analyzedNumberOfMeasurementOperations">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Number of Measurement Operations
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.analyzedNumberOfMeasurementOperations }}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="single-qubit-gate-error">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Avg. Single-Qubit</div>
-                                <div>Gate Error</div>
+                        <ng-container matColumnDef="avgSingleQubitGateError">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Avg. Single-Qubit Gate Error
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.avgSingleQubitGateError }}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="multi-qubit-gate-error">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Avg. Multi-Qubit</div>
-                                <div>Gate Error</div>
+                        <ng-container matColumnDef="avgMultiQubitGateError">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Avg. Multi-Qubit Gate Error
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.avgMultiQubitGateError }}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="single-qubit-gate-time">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Avg. Single-Qubit</div>
-                                <div>Gate Time (ns)</div>
+                        <ng-container matColumnDef="avgSingleQubitGateTime">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Avg. Single-Qubit Gate Time (ns)
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.avgSingleQubitGateTime }}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="multi-qubit-gate-time">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Avg. Multi-Qubit</div>
-                                <div>Gate Time (ns)</div>
+                        <ng-container matColumnDef="avgMultiQubitGateTime">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Avg. Multi-Qubit Gate Time (ns)
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.avgMultiQubitGateTime }}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="readout-error">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Avg. Readout</div>
-                                <div>Error</div>
+                        <ng-container matColumnDef="avgReadoutError">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Avg. Readout Error
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.avgReadoutError }}
@@ -270,8 +268,8 @@
                         </ng-container>
 
                         <ng-container matColumnDef="t1">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Avg. T1 (ns)</div>
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Avg. T1 (ns)
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.t1 === 0 ? '-' : element.t1 }}
@@ -279,17 +277,17 @@
                         </ng-container>
 
                         <ng-container matColumnDef="t2">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Avg. T2 (ns)</div>
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Avg. T2 (ns)
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ element.t2 === 0 ? '-' : element.t2 }}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="queue-size">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef>
-                                <div>Queue Size</div>
+                        <ng-container matColumnDef="lengthQueue">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Queue Size
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
                                 {{ queueLengths[element.qpu] }}

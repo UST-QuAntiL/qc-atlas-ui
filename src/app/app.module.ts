@@ -24,6 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -130,6 +132,8 @@ import { initializeKeycloak } from './util/keycloak-init';
     MatSelectModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatSortModule,
+    MatTableModule,
   ],
   bootstrap: [AppComponent],
   providers: [

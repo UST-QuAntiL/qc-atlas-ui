@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import {
@@ -9,6 +15,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { FormBuilder } from '@angular/forms';
+import { MatSort } from '@angular/material/sort';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { exhaustMap, first, map, startWith, switchMap } from 'rxjs/operators';
 import { QpuSelectionResultService } from 'api-nisq/services/qpu-selection-result.service';
@@ -29,6 +36,7 @@ import { EntityModelQpuDto } from 'api-qprov/models/entity-model-qpu-dto';
 import { ProviderService } from 'api-qprov/services/provider.service';
 import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
 import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
+import { MatTableDataSource } from '@angular/material/table';
 import { UtilService } from '../../../../util/util.service';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 // eslint-disable-next-line max-len
@@ -52,30 +60,33 @@ import { ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent } f
     ]),
   ],
 })
-export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
+export class ImplementationNisqAnalyzerQpuSelectionComponent
+  implements OnInit, AfterViewInit {
   @Input() algo: AlgorithmDto;
   @Input() impl: ImplementationDto;
   @Input() guard: ChangePageGuard;
+  @ViewChild(MatSort) sort: MatSort;
 
   analyzeColumns = [
-    'backendName',
+    'rank',
+    'qpu',
     'provider',
     'compiler',
-    'width',
-    'depth',
-    'multi-qubit-gate-depth',
-    'total-number-of-operations',
-    'number-of-single-qubit-gates',
-    'number-of-multi-qubit-gates',
-    'number-of-measurement-operations',
-    'single-qubit-gate-error',
-    'multi-qubit-gate-error',
-    'single-qubit-gate-time',
-    'multi-qubit-gate-time',
-    'readout-error',
+    'analyzedWidth',
+    'analyzedDepth',
+    'analyzedMultiQubitGateDepth',
+    'analyzedTotalNumberOfOperations',
+    'analyzedNumberOfSingleQubitGates',
+    'analyzedNumberOfMultiQubitGates',
+    'analyzedNumberOfMeasurementOperations',
+    'avgSingleQubitGateError',
+    'avgMultiQubitGateError',
+    'avgSingleQubitGateTime',
+    'avgMultiQubitGateTime',
+    'avgReadoutError',
     't1',
     't2',
-    'queue-size',
+    'lengthQueue',
     'execution',
   ];
   jobColumns = ['time', 'ready'];
@@ -101,6 +112,8 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
   prioritizationJob: EntityModelMcdaJob;
   prioritizationJobReady = false;
   loadingMCDAJob = false;
+  rankings = new Map<string, number>();
+  dataSource = new MatTableDataSource(this.analyzerResults);
 
   constructor(
     private utilService: UtilService,
@@ -132,6 +145,14 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         )
       );
     this.refreshNisqImpl();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+  }
+
+  onMatSortChange(): void {
+    this.dataSource.sort = this.sort;
   }
 
   onAddAnalysis(): void {
@@ -193,6 +214,9 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
                     if (this.jobReady) {
                       this.ngOnInit();
                       this.analyzerResults = jobResult.qpuSelectionResultList;
+                      this.dataSource = new MatTableDataSource(
+                        this.analyzerResults
+                      );
                       this.pollingAnalysisJobData.unsubscribe();
                     }
                   },
@@ -214,6 +238,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
         this.jobReady = jobResult.ready;
         this.analyzerJob = jobResult;
         this.analyzerResults = jobResult.qpuSelectionResultList;
+        this.dataSource = new MatTableDataSource(this.analyzerResults);
 
         for (const analysisResult of this.analyzerResults) {
           this.showBackendQueueSize(analysisResult);
@@ -377,8 +402,20 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent implements OnInit {
                               this.prioritizationJobReady = jobResult.ready;
                               if (this.prioritizationJobReady) {
                                 this.loadingMCDAJob = false;
-                                this.ngOnInit();
-                                this.analyzerResults = jobResult.rankedResults;
+                                jobResult.rankedResults.forEach(
+                                  (rankedResult) => {
+                                    this.rankings[rankedResult.resultId] =
+                                      rankedResult.position;
+                                  }
+                                );
+                                this.analyzerResults.sort((a, b) =>
+                                  this.rankings[a.id] < this.rankings[b.id]
+                                    ? -1
+                                    : 1
+                                );
+                                this.dataSource = new MatTableDataSource(
+                                  this.analyzerResults
+                                );
                                 this.pollingAnalysisJobData.unsubscribe();
                               }
                             },
