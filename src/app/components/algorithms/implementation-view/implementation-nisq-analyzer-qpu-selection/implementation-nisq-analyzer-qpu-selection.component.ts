@@ -485,7 +485,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
   getScoreOfResult(result: QpuSelectionResultDto): number | string {
     const rankingResult = this.rankings.find((value) => value.id === result.id);
-    if (rankingResult) {
+    if (rankingResult && this.prioritizationJob.method !== 'electre-III') {
       return rankingResult.score;
     } else {
       return '-';
