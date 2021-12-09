@@ -153,6 +153,16 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
   onMatSortChange(): void {
     this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property): string | number => {
+      switch (property) {
+        case 'rank':
+          return this.rankings[item.id];
+        case 'lengthQueue':
+          return this.queueLengths[item.qpu];
+        default:
+          return item[property];
+      }
+    };
   }
 
   onAddAnalysis(): void {
