@@ -127,7 +127,15 @@
                                 Rank
                             </th>
                             <td class="value-column" mat-cell *matCellDef="let element">
-                                {{ rankings[element.id] ? rankings[element.id] : '-'}}
+                                {{ getRankOfResult(element) }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="score">
+                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Score
+                            </th>
+                            <td class="value-column" mat-cell *matCellDef="let element">
+                                {{ getScoreOfResult(element) }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="qpu">

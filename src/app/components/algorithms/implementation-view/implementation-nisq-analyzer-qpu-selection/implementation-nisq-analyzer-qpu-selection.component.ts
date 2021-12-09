@@ -69,6 +69,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
   analyzeColumns = [
     'rank',
+    'score',
     'qpu',
     'provider',
     'compiler',
@@ -112,7 +113,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   prioritizationJob: EntityModelMcdaJob;
   prioritizationJobReady = false;
   loadingMCDAJob = false;
-  rankings = new Map<string, number>();
+  rankings: Ranking[] = [];
   dataSource = new MatTableDataSource(this.analyzerResults);
 
   constructor(
@@ -156,7 +157,15 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
     this.dataSource.sortingDataAccessor = (item, property): string | number => {
       switch (property) {
         case 'rank':
-          return this.rankings[item.id];
+          const rankObject = this.rankings.find(
+            (value) => value.id === item.id
+          );
+          return rankObject.rank;
+        case 'score':
+          const scoreObject = this.rankings.find(
+            (value) => value.id === item.id
+          );
+          return scoreObject.score;
         case 'lengthQueue':
           return this.queueLengths[item.qpu];
         default:
@@ -336,6 +345,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   }
 
   prioritize(): void {
+    this.rankings = [];
     this.utilService
       .createDialog(
         ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
@@ -414,15 +424,26 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
                                 this.loadingMCDAJob = false;
                                 jobResult.rankedResults.forEach(
                                   (rankedResult) => {
-                                    this.rankings[rankedResult.resultId] =
-                                      rankedResult.position;
+                                    this.rankings.push({
+                                      id: rankedResult.resultId,
+                                      rank: rankedResult.position,
+                                      score: rankedResult.score,
+                                    });
                                   }
                                 );
-                                this.analyzerResults.sort((a, b) =>
-                                  this.rankings[a.id] < this.rankings[b.id]
-                                    ? -1
-                                    : 1
-                                );
+                                this.analyzerResults.sort((a, b) => {
+                                  const objA = this.rankings.find(
+                                    (value) => value.id === a.id
+                                  );
+                                  const objB = this.rankings.find(
+                                    (value) => value.id === b.id
+                                  );
+                                  if (objA.rank < objB.rank) {
+                                    return -1;
+                                  } else {
+                                    return 1;
+                                  }
+                                });
                                 this.dataSource = new MatTableDataSource(
                                   this.analyzerResults
                                 );
@@ -451,6 +472,24 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           });
         }
       });
+  }
+
+  getRankOfResult(result: QpuSelectionResultDto): number | string {
+    const rankingResult = this.rankings.find((value) => value.id === result.id);
+    if (rankingResult) {
+      return rankingResult.rank;
+    } else {
+      return '-';
+    }
+  }
+
+  getScoreOfResult(result: QpuSelectionResultDto): number | string {
+    const rankingResult = this.rankings.find((value) => value.id === result.id);
+    if (rankingResult) {
+      return rankingResult.score;
+    } else {
+      return '-';
+    }
   }
 
   showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {
@@ -504,4 +543,10 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
         });
     });
   }
+}
+
+interface Ranking {
+  id: string;
+  rank: number;
+  score: number;
 }
