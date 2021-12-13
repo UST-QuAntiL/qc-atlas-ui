@@ -4,11 +4,7 @@ import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { QAIAppService } from 'src/app/components/qai-apps/qai-apps.service';
 import { QAIAppDto } from 'src/app/components/qai-apps/qai-app-dto';
-import { HttpErrorResponse } from '@angular/common/http';
-import {
-  AddQAIAppDialogComponent,
-  DialogData,
-} from '../dialogs/add-qai-app-dialog.component';
+import { AddQAIAppDialogComponent } from '../dialogs/add-qai-app-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import {
   ConfirmDialogComponent,
@@ -63,27 +59,6 @@ export class QAIAppListComponent implements OnInit {
   onAddElement(): void {
     const dialogRef = this.utilService.createDialog(AddQAIAppDialogComponent, {
       title: 'Add new qAI app',
-    });
-
-    dialogRef.afterClosed().subscribe((dialogResult: DialogData) => {
-      if (dialogResult) {
-        this.qAIAppService
-          .createQAIApp(dialogResult.file, dialogResult.name)
-          .subscribe({
-            next: (data) => {
-              this.utilService.callSnackBar(
-                'qAI app was successfully created.'
-              );
-              this.router.navigate(['qai-apps', data.id]);
-            },
-            error: (error: HttpErrorResponse) => {
-              this.utilService.callSnackBar(
-                'Could not create new qAI app: ' + error.message
-              );
-            },
-            complete: () => {},
-          });
-      }
     });
   }
 

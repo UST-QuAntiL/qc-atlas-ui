@@ -20,6 +20,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatSortModule } from '@angular/material/sort';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
@@ -65,6 +66,7 @@ import { QAIAppViewComponent } from './qai-app-view/qai-app-view.component';
     MatBadgeModule,
     AlgorithmModule,
     NisqAnalyzerModule,
+    MatProgressBarModule,
   ],
   exports: [QAIAppListComponent, AddQAIAppDialogComponent, QAIAppViewComponent],
 })

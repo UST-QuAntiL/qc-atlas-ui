@@ -11,10 +11,13 @@
 </div>
 
 <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
-<button mat-raised-button (click)="fileUpload.click()">Select File</button> {{ data.file?.name || 'No file selected' }}
+<button mat-raised-button (click)="fileUpload.click()" [disabled]="uploadInProgress">Select File</button> {{ selectedFile?.name || 'No file selected' }}
+
+<div class="my-2" *ngIf="uploadInProgress">
+  <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+</div>
 
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok
-  </button>
+  <button mat-button (click)="onCancelClick()">Cancel</button>
+  <button mat-button [disabled]="isRequiredDataMissing()" (click)="onUploadClick()" *ngIf="!uploadInProgress">Upload</button>
 </div>

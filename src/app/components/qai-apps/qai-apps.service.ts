@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BaseService } from '../../../../generated/api-atlas/base-service';
@@ -92,16 +92,20 @@ export class QAIAppService extends BaseService {
     );
   }
 
-  createQAIApp(file: File, name: string): Observable<QAIAppDto> {
+  createQAIApp(file: File, name: string): Observable<HttpEvent<object>> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('payload', JSON.stringify({ name }));
 
     const upload = this.http.post(
       this.rootUrl + QAIAppService.CreateQAIApp,
-      formData
+      formData,
+      {
+        reportProgress: true,
+        observe: 'events',
+      }
     );
 
-    return upload as Observable<QAIAppDto>;
+    return upload as Observable<HttpEvent<object>>;
   }
 }

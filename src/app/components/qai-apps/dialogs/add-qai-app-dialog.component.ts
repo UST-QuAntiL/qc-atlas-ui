@@ -3,13 +3,19 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Input } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { UtilService } from 'src/app/util/util.service';
+import { QAIAppService } from '../qai-apps.service';
+import { QAIAppDto } from '../qai-app-dto';
 
 @Component({
   selector: 'app-add-qai-app-dialog-component',
@@ -18,50 +24,84 @@ import {
 })
 export class AddQAIAppDialogComponent implements OnInit {
   algorithmForm: FormGroup;
+  uploadProgress = 0;
+  uploadSub: Subscription;
+  selectedFile: File;
 
   constructor(
     public dialogRef: MatDialogRef<AddQAIAppDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router,
+    private qAIAppService: QAIAppService,
+    private utilService: UtilService
   ) {}
 
   get name(): AbstractControl | null {
     return this.algorithmForm.get('name');
   }
 
-  onNoClick(): void {
+  onCancelClick(): void {
+    if (this.uploadSub) {
+      this.uploadSub.unsubscribe();
+      this.utilService.callSnackBar('Canceled upload.');
+    }
+
     this.dialogRef.close();
+  }
+
+  onUploadClick(): void {
+    this.algorithmForm.controls['name'].disable();
+    this.dialogRef.disableClose = true;
+
+    this.uploadSub = this.qAIAppService
+      .createQAIApp(this.selectedFile, this.name.value)
+      .subscribe({
+        next: (event) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            this.uploadProgress = Math.round(
+              100 * (event.loaded / event.total)
+            );
+            console.log('new progress', this.uploadProgress);
+          } else if (event.type === HttpEventType.Response) {
+            const qaiApp = event.body as QAIAppDto;
+
+            this.utilService.callSnackBar('qAI app was successfully created.');
+            this.router.navigate(['qai-apps', qaiApp.id]);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          this.utilService.callSnackBar(
+            'Could not create new qAI app: ' + error.message
+          );
+        },
+        complete: () => {},
+      });
   }
 
   ngOnInit(): void {
     this.algorithmForm = new FormGroup({
-      name: new FormControl(this.data.name, [
+      name: new FormControl(null, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
       ]),
     });
-
-    this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.name = this.name.value;
-    });
   }
 
   isRequiredDataMissing(): boolean {
-    return this.name.errors?.required || this.data.file === undefined;
+    return this.name.errors?.required || this.selectedFile === undefined;
   }
 
   onFileSelected(event): void {
     const file: File = event.target.files[0];
 
     if (file) {
-      this.data.file = file;
+      this.selectedFile = file;
     }
   }
 }
 
 export interface DialogData {
   title: string;
-  name: string;
-  file: File;
 }
