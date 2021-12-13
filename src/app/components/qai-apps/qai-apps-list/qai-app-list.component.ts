@@ -79,45 +79,47 @@ export class QAIAppListComponent implements OnInit {
         if (dialogResult) {
           const deletionTasks = [];
           const snackbarMessages = [];
-          // let successfulDeletions = 0;
-          for (const algorithm of event.elements) {
-            /* deletionTasks.push(
-              this.algorithmService
-                .deleteAlgorithm({
-                  algorithmId: algorithm.id,
+          let successfulDeletions = 0;
+
+          for (const qaiApp of event.elements) {
+            deletionTasks.push(
+              this.qAIAppService
+                .deleteQAIApp({
+                  qaiAppId: qaiApp.id,
                 })
                 .toPromise()
                 .then(() => {
                   successfulDeletions++;
                   snackbarMessages.push(
-                    'Successfully deleted algorithm "' + algorithm.name + '".'
+                    'Successfully deleted qAI app "' + qaiApp.name + '".'
                   );
                 })
                 .catch(() => {
                   snackbarMessages.push(
-                    'Could not delete algorithm "' + algorithm.name + '".'
+                    'Could not delete qAI app "' + qaiApp.name + '".'
                   );
                 })
-            );*/
+            );
           }
+
           forkJoin(deletionTasks).subscribe(() => {
-            /* if (
+            if (
               this.utilService.isLastPageEmptyAfterDeletion(
                 successfulDeletions,
-                this.algorithms.length,
+                this.qAIApps.length,
                 this.pagingInfo
               )
             ) {
               event.queryParams.page--;
             }
-            this.getAlgorithms(event.queryParams);
+            this.getQAIApps();
             snackbarMessages.push(
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 event.elements.length,
                 'algorithms'
               )
-            );*/
+            );
             this.utilService.callSnackBarSequence(snackbarMessages);
           });
         }

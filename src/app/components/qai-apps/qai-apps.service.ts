@@ -108,4 +108,20 @@ export class QAIAppService extends BaseService {
 
     return upload as Observable<HttpEvent<object>>;
   }
+
+  deleteQAIApp(params: { qaiAppId: string }): Observable<HttpResponse<null>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      QAIAppService.GetQAIAppPath,
+      'delete'
+    );
+
+    if (params) {
+      rb.path('qaiAppId', params.qaiAppId, {});
+    }
+
+    return this.http
+      .request(rb.build())
+      .pipe(filter((r: any) => r instanceof HttpResponse));
+  }
 }
