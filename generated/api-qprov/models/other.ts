@@ -4,8 +4,8 @@ export type Other = {
   elementName?: QualifiedName;
   value?: {};
   type?: QualifiedName;
-  convertedValue?: {};
   valueFromObject?: {};
+  convertedValue?: {};
   kind?:
     | 'PROV_TYPE'
     | 'PROV_LABEL'

@@ -5,3 +5,4 @@ export { ImplementationService } from './services/implementation.service';
 export { QpuSelectionResultService } from './services/qpu-selection-result.service';
 export { RootService } from './services/root.service';
 export { SdksService } from './services/sdks.service';
+export { XmcdaCriteriaService } from './services/xmcda-criteria.service';

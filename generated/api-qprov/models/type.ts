@@ -3,8 +3,8 @@ import { QualifiedName } from './qualified-name';
 export type Type = {
   value?: {};
   type?: QualifiedName;
-  convertedValue?: {};
   valueFromObject?: {};
+  convertedValue?: {};
   kind?:
     | 'PROV_TYPE'
     | 'PROV_LABEL'

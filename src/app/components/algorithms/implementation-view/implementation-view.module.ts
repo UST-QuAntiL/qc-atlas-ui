@@ -37,6 +37,8 @@ import { ImplementationExecutionDialogComponent } from './dialogs/implementation
 import { ImplementationNisqAnalyzerQpuSelectionComponent } from './implementation-nisq-analyzer-qpu-selection/implementation-nisq-analyzer-qpu-selection.component';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-dialog/implementation-nisq-analyzer-qpu-selection-dialog.component';
+// eslint-disable-next-line max-len
+import { ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,7 @@ import { ImplementationNisqAnalyzerQpuSelectionDialogComponent } from './dialogs
     ImplementationExecutionDialogComponent,
     ImplementationNisqAnalyzerQpuSelectionComponent,
     ImplementationNisqAnalyzerQpuSelectionDialogComponent,
+    ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
   ],
   imports: [
     CommonModule,
