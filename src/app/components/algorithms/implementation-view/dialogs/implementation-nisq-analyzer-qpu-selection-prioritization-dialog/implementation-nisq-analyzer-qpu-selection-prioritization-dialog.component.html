@@ -17,6 +17,7 @@
                         <mat-label>{{ criterion.name }}</mat-label>
                         <input
                                 matInput
+                                required
                                 type="number"
                                 min="0"
                                 max="100"
@@ -25,6 +26,7 @@
                                 [formControlName]="criterion.name"
                                 (change)="onChangeEvent()"
                         />
+                        <mat-error>Please enter a value between 0 and 100</mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -32,7 +34,7 @@
     </div>
     <div mat-dialog-actions>
         <button mat-button (click)="onNoClick()">Cancel</button>
-        <button mat-button [mat-dialog-close]="data">Ok
+        <button mat-button [disabled]="prioritizationFrom.invalid" [mat-dialog-close]="data">Ok
         </button>
     </div>
 </div>

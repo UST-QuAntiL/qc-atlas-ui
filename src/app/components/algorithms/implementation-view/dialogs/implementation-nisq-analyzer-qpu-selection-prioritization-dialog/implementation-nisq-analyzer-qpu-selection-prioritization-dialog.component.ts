@@ -86,8 +86,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                     this.formBuilder.group({
                       [c.name]: [c.points],
                     })
-                  ),
-                  [Validators.max(100), Validators.min(0)]
+                  )
                 ),
               });
               this.mcdaMethod.setValue(mcdaMethod);
