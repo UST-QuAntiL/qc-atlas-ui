@@ -43,7 +43,10 @@ import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { ImplementationNisqAnalyzerQpuSelectionDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-dialog/implementation-nisq-analyzer-qpu-selection-dialog.component';
 import { NisqAnalyzerService } from '../../nisq-analyzer/nisq-analyzer.service';
 // eslint-disable-next-line max-len
-import { ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
+import {
+  DialogData,
+  ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
+} from '../dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
 
 @Component({
   selector: 'app-implementation-nisq-analyzer-qpu-selection',
@@ -405,58 +408,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
                             job.id +
                             '".'
                         );
-
-                        this.pollingAnalysisJobData = interval(2000)
-                          .pipe(
-                            startWith(0),
-                            switchMap(() =>
-                              this.mcdaService.getPrioritizationJob({
-                                methodName: dialogResult.mcdaMethod,
-                                jobId: this.prioritizationJob.id,
-                              })
-                            )
-                          )
-                          .subscribe(
-                            (jobResult) => {
-                              this.prioritizationJob = jobResult;
-                              this.prioritizationJobReady = jobResult.ready;
-                              if (this.prioritizationJobReady) {
-                                this.loadingMCDAJob = false;
-                                jobResult.rankedResults.forEach(
-                                  (rankedResult) => {
-                                    this.rankings.push({
-                                      id: rankedResult.resultId,
-                                      rank: rankedResult.position,
-                                      score: rankedResult.score,
-                                    });
-                                  }
-                                );
-                                this.analyzerResults.sort((a, b) => {
-                                  const objA = this.rankings.find(
-                                    (value) => value.id === a.id
-                                  );
-                                  const objB = this.rankings.find(
-                                    (value) => value.id === b.id
-                                  );
-                                  if (objA.rank < objB.rank) {
-                                    return -1;
-                                  } else {
-                                    return 1;
-                                  }
-                                });
-                                this.dataSource = new MatTableDataSource(
-                                  this.analyzerResults
-                                );
-                                this.pollingAnalysisJobData.unsubscribe();
-                              }
-                            },
-                            () => {
-                              this.loadingMCDAJob = false;
-                              this.utilService.callSnackBar(
-                                'Error! Could not create prioritization job.'
-                              );
-                            }
-                          );
+                        this.pollAnalysisJobData(dialogResult);
                       });
                   }
                 },
@@ -472,6 +424,52 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           });
         }
       });
+  }
+
+  pollAnalysisJobData(dialogResult: DialogData): void {
+    this.pollingAnalysisJobData = interval(2000)
+      .pipe(
+        startWith(0),
+        switchMap(() =>
+          this.mcdaService.getPrioritizationJob({
+            methodName: dialogResult.mcdaMethod,
+            jobId: this.prioritizationJob.id,
+          })
+        )
+      )
+      .subscribe(
+        (jobResult) => {
+          this.prioritizationJob = jobResult;
+          this.prioritizationJobReady = jobResult.ready;
+          if (this.prioritizationJobReady) {
+            this.loadingMCDAJob = false;
+            jobResult.rankedResults.forEach((rankedResult) => {
+              this.rankings.push({
+                id: rankedResult.resultId,
+                rank: rankedResult.position,
+                score: rankedResult.score,
+              });
+            });
+            this.analyzerResults.sort((a, b) => {
+              const objA = this.rankings.find((value) => value.id === a.id);
+              const objB = this.rankings.find((value) => value.id === b.id);
+              if (objA.rank < objB.rank) {
+                return -1;
+              } else {
+                return 1;
+              }
+            });
+            this.dataSource = new MatTableDataSource(this.analyzerResults);
+            this.pollingAnalysisJobData.unsubscribe();
+          }
+        },
+        () => {
+          this.loadingMCDAJob = false;
+          this.utilService.callSnackBar(
+            'Error! Could not create prioritization job.'
+          );
+        }
+      );
   }
 
   getRankOfResult(result: QpuSelectionResultDto): number | string {

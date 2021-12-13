@@ -18,9 +18,6 @@ import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
     'app-implementation-nisq-analyzer-qpu-selection-prioritization-dialog',
   templateUrl:
     './implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component.html',
-  styleUrls: [
-    './implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component.scss',
-  ],
 })
 export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   implements OnInit {
@@ -116,7 +113,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   }
 }
 
-interface DialogData {
+export interface DialogData {
   title: string;
   mcdaMethod: string;
   criteriaAndValues: Criterion[];
