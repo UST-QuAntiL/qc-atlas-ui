@@ -8,4 +8,5 @@ export type ComputeResourceDto = {
     | 'GATE_BASED'
     | 'MEASUREMENT_BASED'
     | 'QUANTUM_ANNEALING';
+  qprovOrigin?: boolean;
 };
