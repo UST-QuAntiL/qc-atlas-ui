@@ -113,7 +113,7 @@ export class ComputeResourceListComponent implements OnInit {
         deleteAllowed.push(element);
       } else {
         deleteNotAllowed.push(
-          element.name + 'is from qprov, so cannot be deleted'
+          element.name + ' is from QProv, so cannot be deleted.'
         );
       }
     });
