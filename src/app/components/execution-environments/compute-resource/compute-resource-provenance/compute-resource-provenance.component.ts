@@ -106,8 +106,10 @@ export class ComputeResourceProvenanceComponent implements OnInit {
     // search for provider specified in computeResource
     for (const providerDto of result._embedded.providerDtoes) {
       if (
+        providerDto.name &&
+        this.computeResource.vendor &&
         providerDto.name.toLowerCase() ===
-        this.computeResource.vendor.toLowerCase()
+          this.computeResource.vendor.toLowerCase()
       ) {
         this.provider = providerDto;
         return;
@@ -164,6 +166,7 @@ export class ComputeResourceProvenanceComponent implements OnInit {
             })
             .subscribe((qubitCharacteristicsResult) => {
               if (
+                qubitCharacteristicsResult._embedded &&
                 qubitCharacteristicsResult._embedded.qubitCharacteristicsDtoes
                   .length > 0
               ) {
