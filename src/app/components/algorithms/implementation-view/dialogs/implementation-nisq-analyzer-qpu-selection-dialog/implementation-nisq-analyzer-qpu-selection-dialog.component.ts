@@ -13,6 +13,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { ProviderService } from 'api-qprov/services/provider.service';
+import { NisqAnalyzerService } from '../../../nisq-analyzer/nisq-analyzer.service';
 
 @Component({
   selector: 'app-implementation-nisq-analyzer-qpu-selection-dialog',
@@ -29,7 +30,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   ready?: boolean;
   isIbmqSelected = true;
   isSimulatorAllowed = false;
-  selectedCompilers: string[] = ['pytket', 'Qiskit'];
+  selectedCompilers: string[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -37,7 +38,8 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     >,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
-    private providerService: ProviderService
+    private providerService: ProviderService,
+    private nisqAnalyzerService: NisqAnalyzerService
   ) {}
 
   get vendor(): AbstractControl | null {
@@ -77,14 +79,13 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     this.vendor.setValue('IBMQ');
     this.onVendorChanged(this.vendor.value);
     this.simulatorAllowed.setValue(false);
-    this.compilers.push(new FormControl('pytket'));
-    this.compilers.push(new FormControl('Qiskit'));
-    console.log(this.compilers.controls);
+    this.setCompilerOptions(this.vendor.value);
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.vendor = this.vendor.value;
       this.data.simulatorAllowed = this.simulatorAllowed.value;
       this.data.token = this.token.value;
+      this.data.selectedCompilers = this.selectedCompilers;
     });
   }
 
@@ -107,9 +108,11 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
           this.ready = true;
           return;
         }
+        this.setCompilerOptions(value);
       });
     } else {
       this.isIbmqSelected = false;
+      this.setCompilerOptions(value);
     }
   }
 
@@ -146,6 +149,20 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   checkIfCompilerSelected(compilerName: string): boolean {
     return this.selectedCompilers.includes(compilerName);
   }
+
+  setCompilerOptions(vendor: string): void {
+    console.log(vendor);
+    this.nisqAnalyzerService
+      .getCompilers(vendor)
+      .subscribe((availableCompilers) => {
+        this.selectedCompilers = availableCompilers;
+        this.compilers.clear();
+        for (const compiler of availableCompilers) {
+          this.compilers.push(new FormControl(compiler));
+        }
+        console.log(this.compilers.controls);
+      });
+  }
 }
 
 interface DialogData {
@@ -153,4 +170,5 @@ interface DialogData {
   vendor: string;
   simulatorAllowed: boolean;
   token: string;
+  selectedCompilers: string[];
 }

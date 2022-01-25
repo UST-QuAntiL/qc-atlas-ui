@@ -187,6 +187,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          console.log(dialogResult.selectedCompilers);
           this.analyzerJob = undefined;
           this.jobReady = false;
           refreshToken = this.planqkService.getRefreshToken();
@@ -210,6 +211,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
               allowedProviders: [dialogResult.vendor],
               tokens: providerTokens,
               body: qpuSelectionDto,
+              compilers: dialogResult.selectedCompilers,
             })
             .subscribe((job) => {
               this.analyzerJob = job;
