@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormControl,
   FormGroup,
   Validators,
@@ -28,6 +29,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   ready?: boolean;
   isIbmqSelected = true;
   isSimulatorAllowed = false;
+  selectedCompilers: string[] = ['pytket', 'Qiskit'];
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -50,6 +52,10 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     return this.qpuSelectionFrom.get('token');
   }
 
+  get compilers(): FormArray {
+    return this.qpuSelectionFrom.get('compilers') as FormArray;
+  }
+
   ngOnInit(): void {
     this.qpuSelectionFrom = new FormGroup({
       vendor: new FormControl(this.data.vendor, [
@@ -65,11 +71,15 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
         Validators.required,
         Validators.maxLength(255),
       ]),
+      compilers: new FormArray([]),
     });
 
     this.vendor.setValue('IBMQ');
     this.onVendorChanged(this.vendor.value);
     this.simulatorAllowed.setValue(false);
+    this.compilers.push(new FormControl('pytket'));
+    this.compilers.push(new FormControl('Qiskit'));
+    console.log(this.compilers.controls);
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.vendor = this.vendor.value;
@@ -119,6 +129,22 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   setSimulatorAllowed(allowed: boolean): void {
     this.isSimulatorAllowed = allowed;
     this.simulatorAllowed.setValue(this.isSimulatorAllowed);
+  }
+
+  updateCompilerSelection(compilerName: string, allowed: boolean): void {
+    console.log(compilerName + ' ' + allowed);
+    if (allowed) {
+      this.selectedCompilers.push(compilerName);
+    } else {
+      this.selectedCompilers = this.selectedCompilers.filter(
+        (item) => item !== compilerName
+      );
+    }
+    console.log(this.selectedCompilers);
+  }
+
+  checkIfCompilerSelected(compilerName: string): boolean {
+    return this.selectedCompilers.includes(compilerName);
   }
 }
 
