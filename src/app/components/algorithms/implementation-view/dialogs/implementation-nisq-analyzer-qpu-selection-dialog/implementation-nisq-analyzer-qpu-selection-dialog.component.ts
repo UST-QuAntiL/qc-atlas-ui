@@ -137,7 +137,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   }
 
   updateCompilerSelection(compilerName: string, allowed: boolean): void {
-    console.log(compilerName + ' ' + allowed);
     if (allowed) {
       this.selectedCompilers.push(compilerName);
     } else {
@@ -146,9 +145,8 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
       );
     }
     if (this.selectedCompilers.length < 1) {
-      this.utilService.callSnackBar('Select atleast  one compiler');
+      this.utilService.callSnackBar('Select at least  one compiler');
     }
-    console.log(this.selectedCompilers);
   }
 
   checkIfCompilerSelected(compilerName: string): boolean {
@@ -164,7 +162,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   }
 
   setCompilerOptions(vendor: string): void {
-    console.log(vendor);
     this.nisqAnalyzerService
       .getCompilers(vendor)
       .subscribe((availableCompilers) => {
@@ -173,7 +170,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
         for (const compiler of availableCompilers) {
           this.compilers.push(new FormControl(compiler));
         }
-        console.log(this.compilers.controls);
       });
   }
 }
