@@ -187,7 +187,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          console.log(dialogResult.selectedCompilers);
           this.analyzerJob = undefined;
           this.jobReady = false;
           refreshToken = this.planqkService.getRefreshToken();
