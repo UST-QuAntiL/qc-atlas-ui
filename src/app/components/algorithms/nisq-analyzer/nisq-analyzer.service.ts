@@ -85,6 +85,10 @@ export class NisqAnalyzerService {
     const url = this.ibmqQueueSizeUrl.replace(/<backendName>/g, backendName);
     return this.http.get<QiskitBackendState>(url);
   }
+
+  getCompilers(provider: string): Observable<string[]> {
+    return this.rootService.getCompilers({ provider });
+  }
 }
 
 interface QiskitBackendState {

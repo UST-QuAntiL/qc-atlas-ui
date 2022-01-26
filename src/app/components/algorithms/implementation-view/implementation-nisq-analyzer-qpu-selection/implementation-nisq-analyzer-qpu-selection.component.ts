@@ -210,6 +210,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
               allowedProviders: [dialogResult.vendor],
               tokens: providerTokens,
               body: qpuSelectionDto,
+              compilers: dialogResult.selectedCompilers,
             })
             .subscribe((job) => {
               this.analyzerJob = job;

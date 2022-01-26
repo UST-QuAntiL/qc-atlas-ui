@@ -308,6 +308,7 @@ export class RootService extends BaseService {
     tokens: {};
     circuitName?: string;
     body: { circuit?: Blob };
+    compilers: string[];
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -320,6 +321,7 @@ export class RootService extends BaseService {
       rb.query('circuitLanguage', params.circuitLanguage, {});
       rb.query('tokens', params.tokens, {});
       rb.query('circuitName', params.circuitName, {});
+      rb.query('compilers', params)
 
       rb.body(params.body, 'multipart/form-data');
     }
@@ -353,6 +355,7 @@ export class RootService extends BaseService {
     tokens: {};
     circuitName?: string;
     body: { circuit?: Blob };
+    compilers: string[];
   }): Observable<QpuSelectionJobDto> {
     return this.selectQpuForCircuitFile1$FormData$Response(params).pipe(
       map(
@@ -377,6 +380,7 @@ export class RootService extends BaseService {
     tokens: {};
     circuitName?: string;
     body: QpuSelectionDto;
+    compilers: string[];
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -389,6 +393,7 @@ export class RootService extends BaseService {
       rb.query('circuitLanguage', params.circuitLanguage, {});
       rb.query('tokens', params.tokens, {});
       rb.query('circuitName', params.circuitName, {});
+      rb.query('compilers', params)
 
       rb.body(params.body, 'application/xml');
     }
@@ -422,6 +427,7 @@ export class RootService extends BaseService {
     tokens: {};
     circuitName?: string;
     body: QpuSelectionDto;
+    compilers: string[];
   }): Observable<QpuSelectionJobDto> {
     return this.selectQpuForCircuitFile1$Xml$Response(params).pipe(
       map(
@@ -446,6 +452,7 @@ export class RootService extends BaseService {
     tokens: {};
     circuitName?: string;
     body: QpuSelectionDto;
+    compilers: string[];
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -458,6 +465,7 @@ export class RootService extends BaseService {
       rb.query('circuitLanguage', params.circuitLanguage, {});
       rb.query('tokens', params.tokens, {});
       rb.query('circuitName', params.circuitName, {});
+      rb.query('compilers', params)
 
       rb.body(params.body, 'application/json');
     }
@@ -491,6 +499,7 @@ export class RootService extends BaseService {
     tokens: {};
     circuitName?: string;
     body: QpuSelectionDto;
+    compilers: string[];
   }): Observable<QpuSelectionJobDto> {
     return this.selectQpuForCircuitFile1$Json$Response(params).pipe(
       map(
@@ -609,4 +618,45 @@ export class RootService extends BaseService {
       )
     );
   }
+
+   /**
+   * Path part for operation getCompilers
+   */
+  static readonly GetCompilersPath = '/compilers'
+
+  getCompilers$Response(params: {
+    provider: string;
+  }): Observable<StrictHttpResponse<string[]>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      RootService.GetCompilersPath,
+      'get'
+    );
+    if (params) {
+      rb.query('provider', params.provider, {});
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<string[]>;
+        })
+      );
+  }
+
+  getCompilers(params: { provider: string; }): Observable<string[]> {
+    console.log("line 645");
+    return this.getCompilers$Response(params).pipe(
+      map(
+        (r: StrictHttpResponse<string[]>) => r.body as string[]
+      )
+    );
+  }
+
 }
