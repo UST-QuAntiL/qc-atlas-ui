@@ -13,6 +13,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { ProviderService } from 'api-qprov/services/provider.service';
+import { UtilService } from 'src/app/util/util.service';
 import { NisqAnalyzerService } from '../../../nisq-analyzer/nisq-analyzer.service';
 
 @Component({
@@ -39,7 +40,8 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
     private providerService: ProviderService,
-    private nisqAnalyzerService: NisqAnalyzerService
+    private nisqAnalyzerService: NisqAnalyzerService,
+    private utilService: UtilService
   ) {}
 
   get vendor(): AbstractControl | null {
@@ -143,11 +145,22 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
         (item) => item !== compilerName
       );
     }
+    if (this.selectedCompilers.length < 1) {
+      this.utilService.callSnackBar('Select atleast  one compiler');
+    }
     console.log(this.selectedCompilers);
   }
 
   checkIfCompilerSelected(compilerName: string): boolean {
     return this.selectedCompilers.includes(compilerName);
+  }
+
+  checkIfCompilersPresent(): boolean {
+    if (this.selectedCompilers.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   setCompilerOptions(vendor: string): void {

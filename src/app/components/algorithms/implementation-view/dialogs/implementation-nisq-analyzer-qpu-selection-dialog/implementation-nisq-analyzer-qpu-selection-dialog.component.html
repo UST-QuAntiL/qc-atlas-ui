@@ -34,7 +34,7 @@
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok
+    <button mat-button [disabled]="isRequiredDataMissing() || ! checkIfCompilersPresent()" [mat-dialog-close]="data">Ok
     </button>
 </div>
 
