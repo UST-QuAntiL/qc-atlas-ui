@@ -3,7 +3,11 @@ import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AlgorithmDto, ImplementationDto } from 'api-atlas/models';
+import {
+  AlgorithmDto,
+  ImplementationDto,
+  SoftwarePlatformDto,
+} from 'api-atlas/models';
 import {
   ImplementationDto as NisqImplementationDto,
   SdkDto,
@@ -13,12 +17,14 @@ import {
   SdksService,
 } from 'api-nisq/services';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
+import { ExecutionEnvironmentsService } from 'generated/api-atlas/services/execution-environments.service';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
 import { parsePrologRule, PrologRule } from '../../../util/MinimalPrologParser';
 import { Option } from '../../generics/property-input/select-input.component';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { PlanqkPlatformService } from '../../../services/planqk-platform.service';
 import { UtilService } from '../../../util/util.service';
+import { CreateSoftwarePlatformDialogComponent } from '../../execution-environments/software-platforms/dialogs/create-software-platform-dialog.component';
 
 @Component({
   selector: 'app-impl-selection-criteria',
@@ -52,7 +58,8 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
     private readonly sdkService: SdksService,
     private config: ApiConfiguration,
     private planqkPlatformService: PlanqkPlatformService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private executionEnvironmentsService: ExecutionEnvironmentsService
   ) {}
 
   ngOnInit(): void {
@@ -165,6 +172,43 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
           });
       },
     });
+  }
+
+  onCreateSoftwarePlatform(): void {
+    this.utilService
+      .createDialog(CreateSoftwarePlatformDialogComponent, {
+        title: 'Create a new software platform',
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const sdkDto: SdkDto = {
+            id: null,
+            name: dialogResult.name,
+          };
+          this.sdkService.createSdk({ body: sdkDto }).subscribe();
+          const softwarePlatformDto: SoftwarePlatformDto = {
+            id: null,
+            name: dialogResult.name,
+          };
+          this.executionEnvironmentsService
+            .createSoftwarePlatform({ body: softwarePlatformDto })
+            .subscribe(
+              (softwarePlatform: SoftwarePlatformDto) => {
+                this.utilService.callSnackBar(
+                  'Successfully created software platform "' +
+                    softwarePlatform.name +
+                    '".'
+                );
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Software platform could not be created.'
+                );
+              }
+            );
+        }
+      });
   }
 
   private createNisqImplementation(): void {
