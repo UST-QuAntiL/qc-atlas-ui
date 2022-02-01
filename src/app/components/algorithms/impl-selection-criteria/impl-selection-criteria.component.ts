@@ -200,6 +200,15 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
                     softwarePlatform.name +
                     '".'
                 );
+                this.sdks$ = this.sdkService.getSdks().pipe(
+                  map((dto) =>
+                    dto.sdkDtos.map((sdk) => ({
+                      label: sdk.name,
+                      value: sdk.name,
+                    }))
+                  )
+                );
+                console.log('sdks refetched');
               },
               () => {
                 this.utilService.callSnackBar(
