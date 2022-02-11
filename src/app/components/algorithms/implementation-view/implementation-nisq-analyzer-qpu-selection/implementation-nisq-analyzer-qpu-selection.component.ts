@@ -344,8 +344,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
       });
   }
 
-  // getExpandedElementDetails(element: QpuSelectionResultDto) {}
-
   refreshNisqImpl(): void {
     this.implementationService
       .getImplementations({ algoId: this.algo.id })
