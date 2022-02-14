@@ -341,23 +341,23 @@
                                     *matCellDef="let element"
                                     [attr.colspan]="analyzeColumns.length"
                             >
-                                <div class="element-detail" *ngIf="element == expandedElement">
-                                    <ng-container *ngIf="expandedElementExecResult">
+                                <div class="element-detail" *ngIf="expandedElementMap.has(element)">
+                                    <ng-container *ngIf="expandedElementMap.get(element)">
                                         <div class="p-2" style="margin-left: auto">
                                             <div style="text-align: right">
-                                                Status: {{ expandedElementExecResult.status }}</div>
+                                                Status: {{ expandedElementMap.get(element).status }}</div>
                                             <div style="text-align: right">Number of
-                                                shots: {{ expandedElementExecResult.shots === 0 ?
-                                                    '-' : expandedElementExecResult.shots}}
+                                                shots: {{ expandedElementMap.get(element).shots === 0 ?
+                                                    '-' : expandedElementMap.get(element).shots}}
                                             </div>
                                             <div style="text-align: right">Histogram intersection value:
                                                 <code>
-                                                    {{expandedElementExecResult.histogramIntersectionValue === 0 ?
-                                                    '-' : expandedElementExecResult.histogramIntersectionValue}}
+                                                    {{expandedElementMap.get(element).histogramIntersectionValue === 0 ?
+                                                    '-' : expandedElementMap.get(element).histogramIntersectionValue}}
                                                 </code>
                                             </div>
                                             <div style="text-align: right">Result:
-                                                <code>{{ expandedElementExecResult.result || 'n/a' }}</code></div>
+                                                <code>{{ expandedElementMap.get(element).result || 'n/a' }}</code></div>
                                         </div>
                                     </ng-container>
                                 </div>

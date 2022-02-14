@@ -104,6 +104,10 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   executionResultsAvailable = new Map<string, boolean>();
   loadingResults = new Map<string, boolean>();
   expandedElement: QpuSelectionResultDto | null;
+  expandedElementMap: Map<QpuSelectionResultDto, ExecutionResultDto> = new Map<
+    QpuSelectionResultDto,
+    ExecutionResultDto
+  >();
   expandedElementExecResult: ExecutionResultDto | null;
   executedAnalyseResult: QpuSelectionResultDto;
   results?: ExecutionResultDto = undefined;
@@ -265,6 +269,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
         for (const analysisResult of this.analyzerResults) {
           this.showBackendQueueSize(analysisResult);
+          setInterval(() => this.showBackendQueueSize(analysisResult), 300000);
           this.hasExecutionResult(analysisResult);
           this.checkIfQpuDataIsOutdated(analysisResult);
         }
@@ -318,7 +323,8 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   }
 
   showExecutionResult(analysisResult: QpuSelectionResultDto): void {
-    if (Object.is(this.expandedElement, analysisResult)) {
+    if (this.expandedElementMap.has(analysisResult)) {
+      this.expandedElementMap.delete(analysisResult);
       this.expandedElement = undefined;
       this.expandedElementExecResult = undefined;
       return;
@@ -332,6 +338,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
         const href = result._links[key].href;
         this.http.get<ExecutionResultDto>(href).subscribe((dto) => {
           this.expandedElement = analysisResult;
+          this.expandedElementMap.set(analysisResult, dto);
           this.expandedElementExecResult = dto;
         });
       });
