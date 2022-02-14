@@ -269,7 +269,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
         for (const analysisResult of this.analyzerResults) {
           this.showBackendQueueSize(analysisResult);
-          setInterval(() => this.showBackendQueueSize(analysisResult), 30000);
+          setInterval(() => this.showBackendQueueSize(analysisResult), 300000);
           this.hasExecutionResult(analysisResult);
           this.checkIfQpuDataIsOutdated(analysisResult);
         }
