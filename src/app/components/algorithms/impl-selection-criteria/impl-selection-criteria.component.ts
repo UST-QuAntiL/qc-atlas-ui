@@ -275,22 +275,31 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
           )
       );
     } else {
-      body = {
-        name: this.impl.name,
-        implementedAlgorithm: this.algo.id,
-        selectionRule: '',
-        // TODO
-        sdk: 'Qiskit',
-        language: 'OpenQASM',
-        fileLocation: 'http://example.com/',
-      };
-      this.nisqImplementationService
-        .createImplementation({ body })
-        .subscribe((newImpl) => {
-          this.nisqImpl = newImpl;
-          this.oldNisqImpl = cloneDeep(newImpl);
-          this.selection.clear();
-        });
+      this.sdkService.getSdks().subscribe((dto) => {
+        if (dto.sdkDtos.filter((sdk) => sdk.name === 'Qiskit').length < 1) {
+          const sdkDto: SdkDto = {
+            id: null,
+            name: 'Qiskit',
+          };
+          this.sdkService.createSdk({ body: sdkDto }).subscribe();
+        }
+        body = {
+          name: this.impl.name,
+          implementedAlgorithm: this.algo.id,
+          selectionRule: '',
+          // TODO
+          sdk: 'Qiskit',
+          language: 'OpenQASM',
+          fileLocation: 'http://example.com/',
+        };
+        this.nisqImplementationService
+          .createImplementation({ body })
+          .subscribe((newImpl) => {
+            this.nisqImpl = newImpl;
+            this.oldNisqImpl = cloneDeep(newImpl);
+            this.selection.clear();
+          });
+      });
     }
   }
 }
