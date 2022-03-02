@@ -208,7 +208,6 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
                     }))
                   )
                 );
-                console.log('sdks refetched');
               },
               () => {
                 this.utilService.callSnackBar(
@@ -276,29 +275,55 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
       );
     } else {
       this.sdkService.getSdks().subscribe((dto) => {
+        let isQiskitAvailable = true;
         if (dto.sdkDtos.filter((sdk) => sdk.name === 'Qiskit').length < 1) {
+          isQiskitAvailable = false;
           const sdkDto: SdkDto = {
             id: null,
             name: 'Qiskit',
           };
-          this.sdkService.createSdk({ body: sdkDto }).subscribe();
+          this.sdkService.createSdk({ body: sdkDto }).subscribe(
+            () => {
+              console.log('Succesfully added default sdk to Nisq Analyser');
+              isQiskitAvailable = true;
+              const softwarePlatformDto: SoftwarePlatformDto = {
+                id: null,
+                name: 'Qiskit',
+              };
+              this.executionEnvironmentsService
+                .createSoftwarePlatform({ body: softwarePlatformDto })
+                .subscribe(
+                  () => {
+                    console.log('Succesfully added default sdk to atlas');
+                  },
+                  () => {
+                    console.log('Failed to add default sdk to atlas');
+                  }
+                );
+            },
+            () => {
+              console.log('Failed to add default sdk to Nisq Analyser');
+            }
+          );
         }
-        body = {
-          name: this.impl.name,
-          implementedAlgorithm: this.algo.id,
-          selectionRule: '',
-          // TODO
-          sdk: 'Qiskit',
-          language: 'OpenQASM',
-          fileLocation: 'http://example.com/',
-        };
-        this.nisqImplementationService
-          .createImplementation({ body })
-          .subscribe((newImpl) => {
-            this.nisqImpl = newImpl;
-            this.oldNisqImpl = cloneDeep(newImpl);
-            this.selection.clear();
-          });
+        if (isQiskitAvailable) {
+          body = {
+            name: this.impl.name,
+            implementedAlgorithm: this.algo.id,
+            selectionRule: '',
+            // TODO
+            sdk: 'Qiskit',
+            language: 'OpenQASM',
+            fileLocation: 'http://example.com/',
+          };
+          this.nisqImplementationService
+            .createImplementation({ body })
+            .subscribe((newImpl) => {
+              this.nisqImpl = newImpl;
+              this.oldNisqImpl = cloneDeep(newImpl);
+              this.selection.clear();
+            });
+        }
       });
     }
   }
