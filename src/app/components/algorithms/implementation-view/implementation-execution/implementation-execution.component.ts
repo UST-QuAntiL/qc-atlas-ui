@@ -2,15 +2,23 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/implementation-dto';
-import { BehaviorSubject, interval, Observable } from 'rxjs';
+import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
 import { CompilerAnalysisResultDto } from 'api-nisq/models/compiler-analysis-result-dto';
 import { CompilationJobDto } from 'api-nisq/models/compilation-job-dto';
-import { exhaustMap, first, map, switchMap, tap } from 'rxjs/operators';
+import {
+  exhaustMap,
+  first,
+  map,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { CompilerAnalysisResultService } from 'api-nisq/services/compiler-analysis-result.service';
 import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
 import { ImplementationService, RootService } from 'api-nisq/services';
 import { CompilerSelectionDto } from 'api-nisq/models';
+import { MatTableDataSource } from '@angular/material/table';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
@@ -43,6 +51,7 @@ export class ImplementationExecutionComponent implements OnInit {
   compilerResults$: Observable<CompilerAnalysisResultDto[]>;
   expandedElement: CompilerAnalysisResultDto | null;
   expandedElementExecResult: ExecutionResultDto | null;
+  pollingAnalysisJobData: Subscription;
 
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
 
@@ -93,6 +102,7 @@ export class ImplementationExecutionComponent implements OnInit {
           this.utilService.callSnackBar(
             'Successfully created execution job "' + results.id + '".'
           );
+          this.ngOnInit();
           if (results.status === 'FAILED' || results.status === 'FINISHED') {
             this.results = results;
           } else {
@@ -106,7 +116,9 @@ export class ImplementationExecutionComponent implements OnInit {
                     value.status === 'FAILED' || value.status === 'FINISHED'
                 )
               )
-              .subscribe((finalResult) => (this.results = finalResult));
+              .subscribe((finalResult) => {
+                this.results = finalResult;
+              });
           }
         },
         () => {
@@ -171,6 +183,7 @@ export class ImplementationExecutionComponent implements OnInit {
                     compilationJob.id +
                     '".'
                 );
+                this.pollAnalysisJobData();
               },
               () => {
                 this.utilService.callSnackBar(
@@ -193,19 +206,21 @@ export class ImplementationExecutionComponent implements OnInit {
       });
   }
 
-  refresh(): void {
-    if (this.latestCompilationJob) {
-      this.compilerResultService
-        .getCompilerAnalysisJob({
-          resId: this.latestCompilationJob.id,
-        })
-        .subscribe((compileJob) => {
-          if (compileJob.ready) {
-            this.ngOnInit();
-          }
-        });
-    } else {
-      this.ngOnInit();
-    }
+  pollAnalysisJobData(): void {
+    this.pollingAnalysisJobData = interval(2000)
+      .pipe(
+        startWith(0),
+        exhaustMap(() =>
+          this.compilerResultService.getCompilerAnalysisJob({
+            resId: this.latestCompilationJob.id,
+          })
+        )
+      )
+      .subscribe((compileJob) => {
+        if (compileJob.ready) {
+          this.pollingAnalysisJobData.unsubscribe();
+          this.ngOnInit();
+        }
+      });
   }
 }
