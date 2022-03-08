@@ -82,5 +82,5 @@ tr.element-row:not(.expanded-row):active {
 }
 
 .not-ready-job-list li::after {
-  content: ", ";
+  content: "; ";
 }
