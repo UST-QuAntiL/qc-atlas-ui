@@ -10,6 +10,10 @@
             >
                 New Compilation
             </button>
+            <h3 *ngIf = "notReadycompilationJobsMap.size > 0"> Jobs running in background : </h3>  
+                <ul class="not-ready-job-list" *ngFor = "let job of notReadycompilationJobsMap | keyvalue">
+                    <li>{{job.key}}</li>
+                  </ul>
         </div>
         <table
                 mat-table

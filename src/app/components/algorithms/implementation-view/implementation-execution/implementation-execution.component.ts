@@ -52,6 +52,7 @@ export class ImplementationExecutionComponent implements OnInit {
   expandedElement: CompilerAnalysisResultDto | null;
   expandedElementExecResult: ExecutionResultDto | null;
   pollingAnalysisJobData: Subscription;
+  notReadycompilationJobsMap: Map<string, CompilationJobDto> = new Map();
 
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
 
@@ -178,6 +179,10 @@ export class ImplementationExecutionComponent implements OnInit {
             .subscribe(
               (compilationJob: CompilationJobDto) => {
                 this.latestCompilationJob = compilationJob;
+                this.notReadycompilationJobsMap.set(
+                  compilationJob.id,
+                  this.latestCompilationJob
+                );
                 this.utilService.callSnackBar(
                   'Successfully created compilation job "' +
                     compilationJob.id +
@@ -218,6 +223,9 @@ export class ImplementationExecutionComponent implements OnInit {
       )
       .subscribe((compileJob) => {
         if (compileJob.ready) {
+          if (this.notReadycompilationJobsMap.has(compileJob.id)) {
+            this.notReadycompilationJobsMap.delete(compileJob.id);
+          }
           this.pollingAnalysisJobData.unsubscribe();
           this.ngOnInit();
         }

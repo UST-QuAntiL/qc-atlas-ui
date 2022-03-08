@@ -70,3 +70,17 @@ tr.element-row:not(.expanded-row):active {
 .mat-raised-button {
   width: 10em;
 }
+
+.not-ready-job-list {
+  display: inline;
+  list-style: none;
+  padding: 0px;
+}
+
+.not-ready-job-list li {
+  display: inline;
+}
+
+.not-ready-job-list li::after {
+  content: ", ";
+}
