@@ -52,7 +52,7 @@ export class ImplementationExecutionComponent implements OnInit {
   expandedElement: CompilerAnalysisResultDto | null;
   expandedElementExecResult: ExecutionResultDto | null;
   pollingAnalysisJobData: Subscription;
-  notReadycompilationJobsMap: Map<string, CompilationJobDto> = new Map();
+  notReadycompilationJobsMap: Map<string, string> = new Map();
 
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
 
@@ -181,7 +181,7 @@ export class ImplementationExecutionComponent implements OnInit {
                 this.latestCompilationJob = compilationJob;
                 this.notReadycompilationJobsMap.set(
                   compilationJob.id,
-                  this.latestCompilationJob
+                  dialogResult.qpu
                 );
                 this.utilService.callSnackBar(
                   'Successfully created compilation job "' +
