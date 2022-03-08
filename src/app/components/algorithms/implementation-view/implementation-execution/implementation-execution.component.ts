@@ -223,10 +223,10 @@ export class ImplementationExecutionComponent implements OnInit {
       )
       .subscribe((compileJob) => {
         if (compileJob.ready) {
+          this.pollingAnalysisJobData.unsubscribe();
           if (this.notReadycompilationJobsMap.has(compileJob.id)) {
             this.notReadycompilationJobsMap.delete(compileJob.id);
           }
-          this.pollingAnalysisJobData.unsubscribe();
           this.ngOnInit();
         }
       });
