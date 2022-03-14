@@ -9,8 +9,16 @@ import { exhaustMap, first, map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { CompilerAnalysisResultService } from 'api-nisq/services/compiler-analysis-result.service';
 import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
-import { ImplementationService, RootService } from 'api-nisq/services';
-import { CompilerSelectionDto } from 'api-nisq/models';
+import {
+  ImplementationService,
+  QpuSelectionResultService,
+  RootService,
+} from 'api-nisq/services';
+import {
+  CompilerSelectionDto,
+  QpuSelectionJobDto,
+  QpuSelectionResultDto,
+} from 'api-nisq/models';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
@@ -32,6 +40,19 @@ export class ImplementationExecutionComponent implements OnInit {
     'compiler',
     'analyzedDepth',
     'analyzedWidth',
+    'analyzedMultiQubitGateDepth',
+    'analyzedTotalNumberOfOperations',
+    'analyzedNumberOfSingleQubitGates',
+    'analyzedNumberOfMultiQubitGates',
+    'analyzedNumberOfMeasurementOperations',
+    'avgSingleQubitGateError',
+    'avgMultiQubitGateError',
+    'avgSingleQubitGateTime',
+    'avgMultiQubitGateTime',
+    'avgReadoutError',
+    't1',
+    't2',
+    'lengthQueue',
     'time',
     'execution',
   ];
@@ -43,6 +64,8 @@ export class ImplementationExecutionComponent implements OnInit {
   compilerResults$: Observable<CompilerAnalysisResultDto[]>;
   expandedElement: CompilerAnalysisResultDto | null;
   expandedElementExecResult: ExecutionResultDto | null;
+  queueLengths = new Map<string, number>();
+  analyzerJobs: QpuSelectionJobDto[];
 
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
 
@@ -52,7 +75,8 @@ export class ImplementationExecutionComponent implements OnInit {
     private utilService: UtilService,
     private rootService: RootService,
     private nisqImplementationService: ImplementationService,
-    private nisqAnalyzerService: NisqAnalyzerService
+    private nisqAnalyzerService: NisqAnalyzerService,
+    private qpuSelectionService: QpuSelectionResultService
   ) {}
 
   ngOnInit(): void {
@@ -191,6 +215,15 @@ export class ImplementationExecutionComponent implements OnInit {
         );
         this.nisqImpl = foundImpl;
       });
+    this.compilerResults$.subscribe((dtoList) => {
+      dtoList.forEach((analysisResult) => {
+        this.nisqAnalyzerService
+          .getIBMQBackendState(analysisResult.qpu)
+          .subscribe((data) => {
+            this.queueLengths[analysisResult.qpu] = data.lengthQueue;
+          });
+      });
+    });
   }
 
   refresh(): void {
