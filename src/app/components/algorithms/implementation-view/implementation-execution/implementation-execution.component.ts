@@ -188,7 +188,7 @@ export class ImplementationExecutionComponent implements OnInit {
                     compilationJob.id +
                     '".'
                 );
-                this.pollAnalysisJobData();
+                this.pollAnalysisJobData(compilationJob.id);
               },
               () => {
                 this.utilService.callSnackBar(
@@ -211,19 +211,19 @@ export class ImplementationExecutionComponent implements OnInit {
       });
   }
 
-  pollAnalysisJobData(): void {
-    this.pollingAnalysisJobData = interval(2000)
+  pollAnalysisJobData(compilationJobId: string): void {
+    const pollingAnalysisJobData = interval(2000)
       .pipe(
         startWith(0),
         exhaustMap(() =>
           this.compilerResultService.getCompilerAnalysisJob({
-            resId: this.latestCompilationJob.id,
+            resId: compilationJobId,
           })
         )
       )
       .subscribe((compileJob) => {
         if (compileJob.ready) {
-          this.pollingAnalysisJobData.unsubscribe();
+          pollingAnalysisJobData.unsubscribe();
           if (this.notReadycompilationJobsMap.has(compileJob.id)) {
             this.notReadycompilationJobsMap.delete(compileJob.id);
           }
