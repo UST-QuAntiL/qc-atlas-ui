@@ -2,10 +2,17 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/implementation-dto';
-import { BehaviorSubject, interval, Observable } from 'rxjs';
+import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
 import { CompilerAnalysisResultDto } from 'api-nisq/models/compiler-analysis-result-dto';
 import { CompilationJobDto } from 'api-nisq/models/compilation-job-dto';
-import { exhaustMap, first, map, switchMap, tap } from 'rxjs/operators';
+import {
+  exhaustMap,
+  first,
+  map,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { CompilerAnalysisResultService } from 'api-nisq/services/compiler-analysis-result.service';
 import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
@@ -14,11 +21,7 @@ import {
   QpuSelectionResultService,
   RootService,
 } from 'api-nisq/services';
-import {
-  CompilerSelectionDto,
-  QpuSelectionJobDto,
-  QpuSelectionResultDto,
-} from 'api-nisq/models';
+import { CompilerSelectionDto, QpuSelectionJobDto } from 'api-nisq/models';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
@@ -66,6 +69,8 @@ export class ImplementationExecutionComponent implements OnInit {
   expandedElementExecResult: ExecutionResultDto | null;
   queueLengths = new Map<string, number>();
   analyzerJobs: QpuSelectionJobDto[];
+  pollingAnalysisJobData: Subscription;
+  notReadycompilationJobsMap: Map<string, string> = new Map();
 
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
 
@@ -117,6 +122,7 @@ export class ImplementationExecutionComponent implements OnInit {
           this.utilService.callSnackBar(
             'Successfully created execution job "' + results.id + '".'
           );
+          this.ngOnInit();
           if (results.status === 'FAILED' || results.status === 'FINISHED') {
             this.results = results;
           } else {
@@ -130,7 +136,9 @@ export class ImplementationExecutionComponent implements OnInit {
                     value.status === 'FAILED' || value.status === 'FINISHED'
                 )
               )
-              .subscribe((finalResult) => (this.results = finalResult));
+              .subscribe((finalResult) => {
+                this.results = finalResult;
+              });
           }
         },
         () => {
@@ -190,11 +198,16 @@ export class ImplementationExecutionComponent implements OnInit {
             .subscribe(
               (compilationJob: CompilationJobDto) => {
                 this.latestCompilationJob = compilationJob;
+                this.notReadycompilationJobsMap.set(
+                  compilationJob.id,
+                  dialogResult.qpu
+                );
                 this.utilService.callSnackBar(
                   'Successfully created compilation job "' +
                     compilationJob.id +
                     '".'
                 );
+                this.pollAnalysisJobData(compilationJob.id);
               },
               () => {
                 this.utilService.callSnackBar(
@@ -226,19 +239,24 @@ export class ImplementationExecutionComponent implements OnInit {
     });
   }
 
-  refresh(): void {
-    if (this.latestCompilationJob) {
-      this.compilerResultService
-        .getCompilerAnalysisJob({
-          resId: this.latestCompilationJob.id,
-        })
-        .subscribe((compileJob) => {
-          if (compileJob.ready) {
-            this.ngOnInit();
+  pollAnalysisJobData(compilationJobId: string): void {
+    const pollingAnalysisJobData = interval(2000)
+      .pipe(
+        startWith(0),
+        exhaustMap(() =>
+          this.compilerResultService.getCompilerAnalysisJob({
+            resId: compilationJobId,
+          })
+        )
+      )
+      .subscribe((compileJob) => {
+        if (compileJob.ready) {
+          pollingAnalysisJobData.unsubscribe();
+          if (this.notReadycompilationJobsMap.has(compileJob.id)) {
+            this.notReadycompilationJobsMap.delete(compileJob.id);
           }
-        });
-    } else {
-      this.ngOnInit();
-    }
+          this.ngOnInit();
+        }
+      });
   }
 }
