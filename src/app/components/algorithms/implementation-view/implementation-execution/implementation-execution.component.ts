@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/implementation-dto';
@@ -22,6 +22,8 @@ import {
   RootService,
 } from 'api-nisq/services';
 import { CompilerSelectionDto, QpuSelectionJobDto } from 'api-nisq/models';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
@@ -36,6 +38,7 @@ export class ImplementationExecutionComponent implements OnInit {
   @Input() algo: AlgorithmDto;
   @Input() impl: ImplementationDto;
   @Input() guard: ChangePageGuard;
+  @ViewChild(MatSort) sort: MatSort;
 
   analyzeColumns = [
     'qpu',
@@ -65,6 +68,7 @@ export class ImplementationExecutionComponent implements OnInit {
   results?: ExecutionResultDto = undefined;
   nisqImpl: NisqImplementationDto;
   compilerResults$: Observable<CompilerAnalysisResultDto[]>;
+  compilerResults: CompilerAnalysisResultDto[] = [];
   expandedElement: CompilerAnalysisResultDto | null;
   expandedElementExecResult: ExecutionResultDto | null;
   queueLengths = new Map<string, number>();
@@ -77,6 +81,7 @@ export class ImplementationExecutionComponent implements OnInit {
   > = new Map<CompilerAnalysisResultDto, ExecutionResultDto>();
 
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
+  dataSource = new MatTableDataSource(this.compilerResults);
 
   constructor(
     private readonly http: HttpClient,
@@ -89,7 +94,7 @@ export class ImplementationExecutionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.compilerResults$ = this.sort$
+    this.sort$
       .pipe(
         switchMap((sort) =>
           this.compilerResultService.getCompilerAnalysisResults({
@@ -104,16 +109,29 @@ export class ImplementationExecutionComponent implements OnInit {
             (compilerResult) => compilerResult.circuitName === this.impl.name
           )
         )
-      );
+      )
+      .subscribe((res) => {
+        this.compilerResults = res;
+        this.dataSource = new MatTableDataSource(this.compilerResults);
+        this.getQueueSizes();
+      });
     this.refreshNisqImpl();
   }
 
-  changeSort(active: string, direction: 'asc' | 'desc' | ''): void {
-    if (!active || !direction) {
-      this.sort$.next(undefined);
-    } else {
-      this.sort$.next([`${active},${direction}`]);
-    }
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+  }
+
+  onMatSortChange(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property): string | number => {
+      switch (property) {
+        case 'lengthQueue':
+          return this.queueLengths[item.qpu];
+        default:
+          return item[property];
+      }
+    };
   }
 
   execute(analysisResult: CompilerAnalysisResultDto): void {
@@ -234,14 +252,15 @@ export class ImplementationExecutionComponent implements OnInit {
         );
         this.nisqImpl = foundImpl;
       });
-    this.compilerResults$.subscribe((dtoList) => {
-      dtoList.forEach((analysisResult) => {
-        this.nisqAnalyzerService
-          .getIBMQBackendState(analysisResult.qpu)
-          .subscribe((data) => {
-            this.queueLengths[analysisResult.qpu] = data.lengthQueue;
-          });
-      });
+  }
+
+  getQueueSizes(): void {
+    this.compilerResults.forEach((analysisResult) => {
+      this.nisqAnalyzerService
+        .getIBMQBackendState(analysisResult.qpu)
+        .subscribe((data) => {
+          this.queueLengths[analysisResult.qpu] = data.lengthQueue;
+        });
     });
   }
 

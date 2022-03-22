@@ -17,10 +17,9 @@
         </div>
         <table
                 mat-table
-                [dataSource]="compilerResults$ | async"
-                matSort
+                [dataSource]="dataSource" matSort (matSortChange)="onMatSortChange()"
                 multiTemplateDataRows
-                (matSortChange)="changeSort($event.active, $event.direction)"
+                matSortDisableClear
         >
             <ng-container matColumnDef="qpu">
                 <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
