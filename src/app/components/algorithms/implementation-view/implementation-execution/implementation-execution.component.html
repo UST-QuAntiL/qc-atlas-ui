@@ -226,11 +226,11 @@
                         *matCellDef="let element"
                         [attr.colspan]="analyzeColumns.length"
                 >
-                    <div class="element-detail" *ngIf="element == expandedElement">
-                        <ng-container *ngIf="expandedElementExecResult">
-                            <div>Status: {{ expandedElementExecResult.status }}</div>
+                    <div class="element-detail" *ngIf="expandedElementMap.has(element)">
+                        <ng-container *ngIf="expandedElementMap.get(element)">
+                            <div>Status: {{ expandedElementMap.get(element).status }}</div>
                             <div>Result:</div>
-                            <code>{{ expandedElementExecResult.result || 'n/a' }}</code>
+                            <code>{{ expandedElementMap.get(element).result || 'n/a' }}</code>
                         </ng-container>
                     </div>
                 </td>

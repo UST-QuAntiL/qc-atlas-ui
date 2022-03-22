@@ -71,6 +71,10 @@ export class ImplementationExecutionComponent implements OnInit {
   analyzerJobs: QpuSelectionJobDto[];
   pollingAnalysisJobData: Subscription;
   notReadycompilationJobsMap: Map<string, string> = new Map();
+  expandedElementMap: Map<
+    CompilerAnalysisResultDto,
+    ExecutionResultDto
+  > = new Map<CompilerAnalysisResultDto, ExecutionResultDto>();
 
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
 
@@ -154,7 +158,8 @@ export class ImplementationExecutionComponent implements OnInit {
   }
 
   showExecutionResult(analysisResult: CompilerAnalysisResultDto): void {
-    if (Object.is(this.expandedElement, analysisResult)) {
+    if (this.expandedElementMap.has(analysisResult)) {
+      this.expandedElementMap.delete(analysisResult);
       this.expandedElement = undefined;
       this.expandedElementExecResult = undefined;
       return;
@@ -166,6 +171,7 @@ export class ImplementationExecutionComponent implements OnInit {
     this.http.get<ExecutionResultDto>(href).subscribe((dto) => {
       this.expandedElement = analysisResult;
       this.expandedElementExecResult = dto;
+      this.expandedElementMap.set(analysisResult, dto);
     });
   }
 
