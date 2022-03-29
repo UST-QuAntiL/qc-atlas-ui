@@ -1,7 +1,7 @@
 <div *ngIf="prioritizationFrom">
     <mat-horizontal-stepper
-            [linear]="true"
-            #stepper="matHorizontalStepper"
+            [linear]="false"
+            #matHorizontalStepper
     >
         <mat-step [editable]="true" label="Preferences">
             <h1 mat-dialog-title>Prioritize Analysis Results</h1>
@@ -53,15 +53,23 @@
                             color="primary"
                             style="text-align:left"
                             class="defineOwnPreferencesButton"
-                            (click)="resetPredefinedPreferences() && stepper.next()"
+                            (click)="resetPredefinedPreferences() && matHorizontalStepper.next()"
                     >
                         Or define individual preferences
                     </button>
                     <div mat-dialog-actions>
                         <button mat-button (click)="onNoClick()">Cancel</button>
-                        <button mat-button [mat-dialog-close]="data"
-                                [disabled]="!shortWaitingTimeEnabled && !stableExecutionResultsEnabled">Ok
-                        </button>
+                        <div *ngIf="shortWaitingTimeEnabled && !stableExecutionResultsEnabled; else learnWeights">
+                            <button mat-button
+                                    [mat-dialog-close]="data"
+                            >Ok
+                            </button>
+                        </div>
+                        <ng-template #learnWeights>
+                            <button mat-button (click)="move(2)"
+                                    [disabled]="!shortWaitingTimeEnabled && !stableExecutionResultsEnabled">Ok
+                            </button>
+                        </ng-template>
                     </div>
                 </form>
             </div>
@@ -102,11 +110,42 @@
                 </form>
             </div>
             <div mat-dialog-actions>
-                <button mat-button (click)="stepper.previous()">Back</button>
+                <button mat-button (click)="matHorizontalStepper.previous()">Back</button>
                 <button mat-button (click)="onNoClick()">Cancel</button>
                 <button mat-button [disabled]="prioritizationFrom.invalid" [mat-dialog-close]="data">Ok
                 </button>
             </div>
+        </mat-step>
+        <mat-step [editable]="true" label="LearnedWeights">
+            <h1 mat-dialog-title>Prioritize Analysis Results based on Learned Weights</h1>
+            <!--            <div mat-dialog-content>-->
+            <!--                                <form [formGroup]="prioritizationFrom">-->
+            <!--                                    <p>Assign points between 0 (low importance) and 100 (high importance) in the following to define the-->
+            <!--                                        weighting of metrics.</p>-->
+            <!--                                                        <div formArrayName="criteriaAndValues">-->
+            <!--                                                            <div *ngFor="let criterion of criteriaNamesAndValues; let i = index" [formGroupName]="i">-->
+            <!--                                                                <mat-form-field class="input-field">-->
+            <!--                                                                    <mat-label>{{ criterion.name }}</mat-label>-->
+            <!--                                                                    <input-->
+            <!--                                                                            matInput-->
+            <!--                                                                            required-->
+            <!--                                                                            type="number"-->
+            <!--                                                                            pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0])?"-->
+            <!--                                                                            [placeholder]="criterion.name"-->
+            <!--                                                                            [formControlName]="criterion.name"-->
+            <!--                                                                            (change)="onChangeEvent()"-->
+            <!--                                                                    />-->
+            <!--                                                                    <mat-error>Please use float numbers as weights</mat-error>-->
+            <!--                                                                </mat-form-field>-->
+            <!--                                                            </div>-->
+            <!--                                                        </div>-->
+            <!--                                </form>-->
+            <!--            </div>-->
+            <!--            <div mat-dialog-actions>-->
+            <!--                <button mat-button (click)="onNoClick()">Cancel</button>-->
+            <!--                <button mat-button [mat-dialog-close]="data">Ok-->
+            <!--                </button>-->
+            <!--            </div>-->
         </mat-step>
     </mat-horizontal-stepper>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -12,6 +12,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector:
@@ -24,6 +25,7 @@ import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
 })
 export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   implements OnInit {
+  @ViewChild('matHorizontalStepper') matHorizontalStepper: MatStepper;
   prioritizationFrom: FormGroup;
   preferenceForm: FormGroup;
   criteriaNamesAndValues: Criterion[] = [];
@@ -174,10 +176,22 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                 this.data.shortWaitingTime = this.shortWaitingTime.value;
                 this.data.stableExecutionResults = this.stableExecutionResults.value;
                 this.criteriaNamesAndValues.forEach((criterionVal) => {
-                  for (const val of this.criteriaAndValues.value) {
-                    if (criterionVal.name === Object.keys(val)[0]) {
-                      criterionVal.points = Number(Object.values(val)[0]);
-                      break;
+                  if (
+                    this.shortWaitingTime.value &&
+                    criterionVal.name === 'queue-size'
+                  ) {
+                    criterionVal.points = 100;
+                  } else if (
+                    this.shortWaitingTime.value &&
+                    criterionVal.name !== 'queue-size'
+                  ) {
+                    criterionVal.points = 0;
+                  } else {
+                    for (const val of this.criteriaAndValues.value) {
+                      if (criterionVal.name === Object.keys(val)[0]) {
+                        criterionVal.points = Number(Object.values(val)[0]);
+                        break;
+                      }
                     }
                   }
                   this.data.criteriaAndValues = this.criteriaNamesAndValues;
@@ -190,6 +204,10 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
 
   onChangeEvent(): void {
     this.inputChanged = true;
+  }
+
+  move(index: number): void {
+    this.matHorizontalStepper.selectedIndex = index;
   }
 }
 
