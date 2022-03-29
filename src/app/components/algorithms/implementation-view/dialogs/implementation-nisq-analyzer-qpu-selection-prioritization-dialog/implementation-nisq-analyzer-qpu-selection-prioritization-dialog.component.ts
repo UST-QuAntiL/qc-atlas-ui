@@ -122,6 +122,12 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
     this.weightLearningMethodPredefinedPreferences = selectedWeightLearningMethod;
   }
 
+  resetPredefinedPreferences(): boolean {
+    this.setWaitingTimeEnabled(false);
+    this.setStableExecutionResultsEnabled(false);
+    return true;
+  }
+
   onMcdaMethodChanged(mcdaMethod: string): void {
     this.criteriaNamesAndValues = [];
     this.mcdaService

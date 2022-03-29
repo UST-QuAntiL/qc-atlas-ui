@@ -53,13 +53,14 @@
                             color="primary"
                             style="text-align:left"
                             class="defineOwnPreferencesButton"
-                            (click)="stepper.next()"
+                            (click)="resetPredefinedPreferences() && stepper.next()"
                     >
                         Or define individual preferences
                     </button>
                     <div mat-dialog-actions>
                         <button mat-button (click)="onNoClick()">Cancel</button>
-                        <button mat-button [mat-dialog-close]="data">Ok
+                        <button mat-button [mat-dialog-close]="data"
+                                [disabled]="!shortWaitingTimeEnabled && !stableExecutionResultsEnabled">Ok
                         </button>
                     </div>
                 </form>
