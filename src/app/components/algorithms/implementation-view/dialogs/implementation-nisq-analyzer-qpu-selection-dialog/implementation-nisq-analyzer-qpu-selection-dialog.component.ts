@@ -80,7 +80,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
 
     this.vendor.setValue('IBMQ');
     this.onVendorChanged(this.vendor.value);
-    this.simulatorAllowed.setValue(false);
+    this.simulatorAllowed.setValue(true);
     this.setCompilerOptions(this.vendor.value);
 
     this.dialogRef.beforeClosed().subscribe(() => {

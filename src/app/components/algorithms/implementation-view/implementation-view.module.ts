@@ -22,6 +22,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../../generics/generics.module';
@@ -82,6 +83,7 @@ import { ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent } f
     QcAtlasUiFeatureToggleModule,
     MatBadgeModule,
     MatStepperModule,
+    MatExpansionModule,
   ],
 })
 export class ImplementationViewModule {}

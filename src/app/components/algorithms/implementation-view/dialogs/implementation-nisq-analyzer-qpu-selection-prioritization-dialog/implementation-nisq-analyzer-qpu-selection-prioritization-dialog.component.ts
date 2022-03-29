@@ -18,12 +18,20 @@ import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
     'app-implementation-nisq-analyzer-qpu-selection-prioritization-dialog',
   templateUrl:
     './implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component.html',
+  styleUrls: [
+    './implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component.css',
+  ],
 })
 export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   implements OnInit {
   prioritizationFrom: FormGroup;
   criteriaNamesAndValues: Criterion[] = [];
   inputChanged = false;
+  shortWaitingTimeEnabled = false;
+  stableExecutionResultsEnabled = false;
+  advancedSettingsOpen: boolean;
+  mcdaMethodPredefinedPreferences: string;
+  weightLearningMethodPredefinedPreferences: string;
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -39,16 +47,46 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
     return this.prioritizationFrom.get('mcdaMethod');
   }
 
+  get weightLearningMethod(): AbstractControl | null {
+    return this.prioritizationFrom.get('weightLearningMethod');
+  }
+
+  get bordaCount(): AbstractControl | null {
+    return this.prioritizationFrom.get('bordaCount');
+  }
+
   get criteriaAndValues(): AbstractControl | null {
     return this.prioritizationFrom.get('criteriaAndValues');
   }
 
   ngOnInit(): void {
+    this.setMcdaMethodPredefinedPreferences('topsis');
+    this.setWeightLearningMethodPredefinedPreferences('cobyla');
     this.onMcdaMethodChanged('topsis');
   }
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  setWaitingTimeEnabled(enabled: boolean): void {
+    this.shortWaitingTimeEnabled = enabled;
+    // this.simulatorAllowed.setValue(this.shortWaitingTimeEnabled);
+  }
+
+  setStableExecutionResultsEnabled(enabled: boolean): void {
+    this.stableExecutionResultsEnabled = enabled;
+    // this.simulatorAllowed.setValue(this.stableExecutionResultsEnabled);
+  }
+
+  setMcdaMethodPredefinedPreferences(selectedMcdaMethod: string): void {
+    this.mcdaMethodPredefinedPreferences = selectedMcdaMethod;
+  }
+
+  setWeightLearningMethodPredefinedPreferences(
+    selectedWeightLearningMethod: string
+  ): void {
+    this.weightLearningMethodPredefinedPreferences = selectedWeightLearningMethod;
   }
 
   onMcdaMethodChanged(mcdaMethod: string): void {
@@ -115,7 +153,9 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
 export interface DialogData {
   title: string;
   mcdaMethod: string;
+  weightLearingMethod: string;
   criteriaAndValues: Criterion[];
+  bordaCount: boolean;
 }
 
 export interface Criterion {

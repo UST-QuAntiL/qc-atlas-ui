@@ -361,7 +361,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
       .createDialog(
         ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
         {
-          title: 'Prioritize QPU-Selection-Analysis',
+          title: 'Prioritize Analysis Results',
         }
       )
       .afterClosed()
@@ -406,6 +406,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
                       .prioritizeCompiledCircuitsOfJob({
                         methodName: dialogResult.mcdaMethod,
                         jobId: this.analyzerJob.id,
+                        useBordaCount: false,
                       })
                       .subscribe((job) => {
                         this.prioritizationJob = job;
