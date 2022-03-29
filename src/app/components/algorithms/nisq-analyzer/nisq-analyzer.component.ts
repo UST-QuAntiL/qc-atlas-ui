@@ -66,7 +66,28 @@ export class NisqAnalyzerComponent implements OnInit {
   loadingResults = new Map<string, boolean>();
 
   // 3) Execution
-  resultBackendColumns = ['backendName', 'width', 'depth'];
+  resultBackendColumns = [
+    'backendName',
+    'provider',
+    'compiler',
+    'width',
+    'depth',
+    'analyzedMultiQubitGateDepth',
+    'analyzedTotalNumberOfOperations',
+    'analyzedNumberOfSingleQubitGates',
+    'analyzedNumberOfMultiQubitGates',
+    'analyzedNumberOfMeasurementOperations',
+    'avgSingleQubitGateError',
+    'avgMultiQubitGateError',
+    'avgSingleQubitGateTime',
+    'avgMultiQubitGateTime',
+    'avgReadoutError',
+    't1',
+    't2',
+    'lengthQueue',
+    'execution',
+  ];
+
   executedAnalyseResult: AnalysisResultDto;
   expandedElementExecResult: ExecutionResultDto | null;
   results?: ExecutionResultDto = undefined;
