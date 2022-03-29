@@ -13,6 +13,9 @@ import {
 } from '@angular/material/dialog';
 import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
 import { MatStepper } from '@angular/material/stepper';
+import { EntityModelMcdaWeightLearningJob } from 'api-nisq/models/entity-model-mcda-weight-learning-job';
+import { interval, Subscription } from 'rxjs';
+import { startWith, switchMap } from 'rxjs/operators';
 
 @Component({
   selector:
@@ -27,14 +30,18 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   implements OnInit {
   @ViewChild('matHorizontalStepper') matHorizontalStepper: MatStepper;
   prioritizationFrom: FormGroup;
+  weightLearningForm: FormGroup;
   preferenceForm: FormGroup;
   criteriaNamesAndValues: Criterion[] = [];
   inputChanged = false;
   shortWaitingTimeEnabled = false;
   stableExecutionResultsEnabled = false;
   advancedSettingsOpen: boolean;
-  mcdaMethodPredefinedPreferences: string;
-  weightLearningMethodPredefinedPreferences: string;
+  mcdaMethodPredefinedPreferences = 'topsis';
+  weightLearningMethodPredefinedPreferences = 'cobyla';
+  weightLearningJob: EntityModelMcdaWeightLearningJob;
+  jobReady: boolean;
+  pollingWeightLearningJobData: Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -168,6 +175,15 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                   )
                 ),
               });
+              this.weightLearningForm = this.formBuilder.group({
+                criteriaAndValues: this.formBuilder.array(
+                  this.criteriaNamesAndValues.map((c) =>
+                    this.formBuilder.group({
+                      [c.name]: [c.weight],
+                    })
+                  )
+                ),
+              });
               this.mcdaMethod.setValue(mcdaMethod);
               this.dialogRef.beforeClosed().subscribe(() => {
                 this.data.mcdaMethod = this.mcdaMethod.value;
@@ -178,14 +194,23 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                 this.criteriaNamesAndValues.forEach((criterionVal) => {
                   if (
                     this.shortWaitingTime.value &&
+                    !this.stableExecutionResults.value &&
                     criterionVal.name === 'queue-size'
                   ) {
                     criterionVal.points = 100;
                   } else if (
                     this.shortWaitingTime.value &&
+                    !this.stableExecutionResults.value &&
                     criterionVal.name !== 'queue-size'
                   ) {
                     criterionVal.points = 0;
+                  } else if (this.stableExecutionResults.value) {
+                    for (const val of this.criteriaAndValues.value) {
+                      if (criterionVal.name === Object.keys(val)[0]) {
+                        criterionVal.weight = Number(Object.values(val)[0]);
+                        break;
+                      }
+                    }
                   } else {
                     for (const val of this.criteriaAndValues.value) {
                       if (criterionVal.name === Object.keys(val)[0]) {
@@ -202,12 +227,45 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
       });
   }
 
+  onLearnWeights(): boolean {
+    this.mcdaService
+      .learnWeightsForCompiledCircuitsOfJob({
+        methodName: this.mcdaMethodPredefinedPreferences,
+        weightLearningMethod: this.weightLearningMethodPredefinedPreferences,
+      })
+      .subscribe((job) => {
+        this.weightLearningJob = job;
+        this.jobReady = job.ready;
+
+        this.pollingWeightLearningJobData = interval(2000)
+          .pipe(
+            startWith(0),
+            switchMap(() =>
+              this.mcdaService.getWeightLearningJob({
+                methodName: this.mcdaMethodPredefinedPreferences,
+                weightLearningMethod: this
+                  .weightLearningMethodPredefinedPreferences,
+                jobId: this.weightLearningJob.id,
+              })
+            )
+          )
+          .subscribe((jobResult) => {
+            this.weightLearningJob = jobResult;
+            this.jobReady = jobResult.ready;
+            if (jobResult.state === 'FINISHED') {
+            }
+          });
+      });
+    return true;
+  }
+
   onChangeEvent(): void {
     this.inputChanged = true;
   }
 
-  move(index: number): void {
+  move(index: number): boolean {
     this.matHorizontalStepper.selectedIndex = index;
+    return true;
   }
 }
 

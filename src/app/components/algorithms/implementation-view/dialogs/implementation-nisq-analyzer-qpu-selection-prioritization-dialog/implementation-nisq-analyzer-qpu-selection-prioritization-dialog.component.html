@@ -66,7 +66,7 @@
                             </button>
                         </div>
                         <ng-template #learnWeights>
-                            <button mat-button (click)="move(2)"
+                            <button mat-button (click)="move(2) && onLearnWeights()"
                                     [disabled]="!shortWaitingTimeEnabled && !stableExecutionResultsEnabled">Ok
                             </button>
                         </ng-template>
@@ -117,35 +117,35 @@
             </div>
         </mat-step>
         <mat-step [editable]="true" label="LearnedWeights">
-            <h1 mat-dialog-title>Prioritize Analysis Results based on Learned Weights</h1>
-            <!--            <div mat-dialog-content>-->
-            <!--                                <form [formGroup]="prioritizationFrom">-->
-            <!--                                    <p>Assign points between 0 (low importance) and 100 (high importance) in the following to define the-->
-            <!--                                        weighting of metrics.</p>-->
-            <!--                                                        <div formArrayName="criteriaAndValues">-->
-            <!--                                                            <div *ngFor="let criterion of criteriaNamesAndValues; let i = index" [formGroupName]="i">-->
-            <!--                                                                <mat-form-field class="input-field">-->
-            <!--                                                                    <mat-label>{{ criterion.name }}</mat-label>-->
-            <!--                                                                    <input-->
-            <!--                                                                            matInput-->
-            <!--                                                                            required-->
-            <!--                                                                            type="number"-->
-            <!--                                                                            pattern="^$|^([0-9]|[1-9][0-9]|[1][0][0])?"-->
-            <!--                                                                            [placeholder]="criterion.name"-->
-            <!--                                                                            [formControlName]="criterion.name"-->
-            <!--                                                                            (change)="onChangeEvent()"-->
-            <!--                                                                    />-->
-            <!--                                                                    <mat-error>Please use float numbers as weights</mat-error>-->
-            <!--                                                                </mat-form-field>-->
-            <!--                                                            </div>-->
-            <!--                                                        </div>-->
-            <!--                                </form>-->
-            <!--            </div>-->
-            <!--            <div mat-dialog-actions>-->
-            <!--                <button mat-button (click)="onNoClick()">Cancel</button>-->
-            <!--                <button mat-button [mat-dialog-close]="data">Ok-->
-            <!--                </button>-->
-            <!--            </div>-->
+            <h1 mat-dialog-title>Learned Weights</h1>
+            <div mat-dialog-content>
+                <form [formGroup]="weightLearningForm">
+                    <p>The learned weights are presented</p>
+                    <div formArrayName="criteriaAndValues">
+                        <div *ngFor="let criterion of criteriaNamesAndValues; let i = index" [formGroupName]="i">
+                            <div *ngIf="criterion.name !== 'queue-size'">
+                                <mat-form-field class="input-field">
+                                    <mat-label>{{ criterion.name }}</mat-label>
+                                    <input
+                                            matInput
+                                            required
+                                            type="number"
+                                            [placeholder]="criterion.name"
+                                            [formControlName]="criterion.name"
+                                            (change)="onChangeEvent()"
+                                    />
+                                    <mat-error>Please use float numbers as weights</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div mat-dialog-actions>
+                <button mat-button (click)="onNoClick()">Cancel</button>
+                <button mat-button [mat-dialog-close]="data">Ok
+                </button>
+            </div>
         </mat-step>
     </mat-horizontal-stepper>
 </div>
