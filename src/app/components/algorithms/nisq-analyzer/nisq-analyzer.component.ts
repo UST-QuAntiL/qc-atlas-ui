@@ -52,21 +52,7 @@ export class NisqAnalyzerComponent implements OnInit {
   sdksEmpty = true;
 
   // 2) Analyze phase
-  analyzeColumns = ['backendName', 'width', 'depth', 'execution'];
-  analyzerResults: AnalysisResultDto[] = [];
-  jobColumns = ['inputParameters', 'time', 'ready'];
-  analyzerJobs$: Observable<AnalysisJobDto[]>;
-  sort$ = new BehaviorSubject<string[] | undefined>(undefined);
-  analyzerJob: AnalysisJobDto;
-  jobReady = false;
-  expandedElement: AnalysisResultDto | null;
-  pollingAnalysisJobData: Subscription;
-  queueLengths = new Map<string, number>();
-  executionResultsAvailable = new Map<string, boolean>();
-  loadingResults = new Map<string, boolean>();
-
-  // 3) Execution
-  resultBackendColumns = [
+  analyzeColumns = [
     'backendName',
     'provider',
     'compiler',
@@ -87,6 +73,20 @@ export class NisqAnalyzerComponent implements OnInit {
     'lengthQueue',
     'execution',
   ];
+  analyzerResults: AnalysisResultDto[] = [];
+  jobColumns = ['inputParameters', 'time', 'ready'];
+  analyzerJobs$: Observable<AnalysisJobDto[]>;
+  sort$ = new BehaviorSubject<string[] | undefined>(undefined);
+  analyzerJob: AnalysisJobDto;
+  jobReady = false;
+  expandedElement: AnalysisResultDto | null;
+  pollingAnalysisJobData: Subscription;
+  queueLengths = new Map<string, number>();
+  executionResultsAvailable = new Map<string, boolean>();
+  loadingResults = new Map<string, boolean>();
+
+  // 3) Execution
+  resultBackendColumns = ['backendName', 'width', 'depth'];
 
   executedAnalyseResult: AnalysisResultDto;
   expandedElementExecResult: ExecutionResultDto | null;
