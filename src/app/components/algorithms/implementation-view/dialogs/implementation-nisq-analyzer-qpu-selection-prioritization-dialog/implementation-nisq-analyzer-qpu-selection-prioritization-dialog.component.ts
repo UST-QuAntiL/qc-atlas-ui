@@ -25,6 +25,7 @@ import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
 export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   implements OnInit {
   prioritizationFrom: FormGroup;
+  preferenceForm: FormGroup;
   criteriaNamesAndValues: Criterion[] = [];
   inputChanged = false;
   shortWaitingTimeEnabled = false;
@@ -43,16 +44,24 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
     private mcdaService: XmcdaCriteriaService
   ) {}
 
-  get mcdaMethod(): AbstractControl | null {
-    return this.prioritizationFrom.get('mcdaMethod');
+  get preferenceMcdaMethod(): AbstractControl | null {
+    return this.preferenceForm.get('preferenceMcdaMethod');
   }
 
   get weightLearningMethod(): AbstractControl | null {
-    return this.prioritizationFrom.get('weightLearningMethod');
+    return this.preferenceForm.get('weightLearningMethod');
   }
 
-  get bordaCount(): AbstractControl | null {
-    return this.prioritizationFrom.get('bordaCount');
+  get shortWaitingTime(): AbstractControl | null {
+    return this.preferenceForm.get('shortWaitingTime');
+  }
+
+  get stableExecutionResults(): AbstractControl | null {
+    return this.preferenceForm.get('stableExecutionResults');
+  }
+
+  get mcdaMethod(): AbstractControl | null {
+    return this.prioritizationFrom.get('mcdaMethod');
   }
 
   get criteriaAndValues(): AbstractControl | null {
@@ -60,8 +69,32 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   }
 
   ngOnInit(): void {
-    this.setMcdaMethodPredefinedPreferences('topsis');
-    this.setWeightLearningMethodPredefinedPreferences('cobyla');
+    this.preferenceForm = new FormGroup({
+      preferenceMcdaMethod: new FormControl(this.data.preferenceMcdaMethod, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+      weightLearningMethod: new FormControl(this.data.weightLearningMethod, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+      shortWaitingTime: new FormControl(this.data.shortWaitingTime, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+      stableExecutionResults: new FormControl(
+        this.data.stableExecutionResults,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]
+      ),
+    });
+    this.preferenceMcdaMethod.setValue('topsis');
+    this.weightLearningMethod.setValue('cobyla');
+    this.stableExecutionResults.setValue(false);
+    this.shortWaitingTime.setValue(false);
+
     this.onMcdaMethodChanged('topsis');
   }
 
@@ -71,12 +104,12 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
 
   setWaitingTimeEnabled(enabled: boolean): void {
     this.shortWaitingTimeEnabled = enabled;
-    // this.simulatorAllowed.setValue(this.shortWaitingTimeEnabled);
+    this.shortWaitingTime.setValue(this.shortWaitingTimeEnabled);
   }
 
   setStableExecutionResultsEnabled(enabled: boolean): void {
     this.stableExecutionResultsEnabled = enabled;
-    // this.simulatorAllowed.setValue(this.stableExecutionResultsEnabled);
+    this.stableExecutionResults.setValue(this.stableExecutionResultsEnabled);
   }
 
   setMcdaMethodPredefinedPreferences(selectedMcdaMethod: string): void {
@@ -130,6 +163,10 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
               this.mcdaMethod.setValue(mcdaMethod);
               this.dialogRef.beforeClosed().subscribe(() => {
                 this.data.mcdaMethod = this.mcdaMethod.value;
+                this.data.preferenceMcdaMethod = this.preferenceMcdaMethod.value;
+                this.data.weightLearningMethod = this.weightLearningMethod.value;
+                this.data.shortWaitingTime = this.shortWaitingTime.value;
+                this.data.stableExecutionResults = this.stableExecutionResults.value;
                 this.criteriaNamesAndValues.forEach((criterionVal) => {
                   for (const val of this.criteriaAndValues.value) {
                     if (criterionVal.name === Object.keys(val)[0]) {
@@ -153,9 +190,11 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
 export interface DialogData {
   title: string;
   mcdaMethod: string;
-  weightLearingMethod: string;
+  preferenceMcdaMethod: string;
+  weightLearningMethod: string;
+  shortWaitingTime: boolean;
+  stableExecutionResults: boolean;
   criteriaAndValues: Criterion[];
-  bordaCount: boolean;
 }
 
 export interface Criterion {

@@ -5,59 +5,64 @@
     >
         <mat-step [editable]="true" label="Preferences">
             <h1 mat-dialog-title>Prioritize Analysis Results</h1>
-            <p><b>Select predefined preferences</b>
-                <mat-checkbox color="primary" [checked]="shortWaitingTimeEnabled"
-                              (change)="setWaitingTimeEnabled($event.checked)">Short waiting time
-                </mat-checkbox>
-                <mat-checkbox color="primary" [checked]="stableExecutionResultsEnabled"
-                              (change)="setStableExecutionResultsEnabled($event.checked)">Stable execution results
-                </mat-checkbox>
-                <mat-expansion-panel *ngIf="shortWaitingTimeEnabled || stableExecutionResultsEnabled"
-                                     (opened)="advancedSettingsOpen = true"
-                                     (closed)="advancedSettingsOpen = false"
-                                     class="advancedSettings">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Advanced settings
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <mat-form-field class="input-field">
-                        <mat-label>MCDA Method</mat-label>
-                        <mat-select formControlName="mcdaMethod"
-                                    (selectionChange)="setMcdaMethodPredefinedPreferences($event.value)">
-                            <mat-option [value]="'topsis'">TOPSIS</mat-option>
-                            <mat-option [value]="'promethee-II'">PROMETHEE II</mat-option>
-                            <mat-option [value]="'electre-III'"
-                                        *ngIf="shortWaitingTimeEnabled && !stableExecutionResultsEnabled">
-                                ELECTRE III
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field class="input-field" *ngIf="stableExecutionResultsEnabled">
-                        <mat-label>Weight Learning Method</mat-label>
-                        <mat-select formControlName="weightLearningMethod"
-                                    (selectionChange)="setWeightLearningMethodPredefinedPreferences($event.value)">
-                            <mat-option [value]="'cobyla'">COBYLA</mat-option>
-                            <mat-option [value]="'evolution-strategy'">Evolution Strategy</mat-option>
-                            <mat-option [value]="'genetic-algorithm'">Genetic Algorithm
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </mat-expansion-panel>
-            </p>
-            <button
-                    mat-button
-                    color="primary"
-                    style="text-align:left"
-                    class="defineOwnPreferencesButton"
-                    (click)="stepper.next()"
-            >
-                Or define individual preferences
-            </button>
-            <div mat-dialog-actions>
-                <button mat-button (click)="onNoClick()">Cancel</button>
-                <button mat-button [mat-dialog-close]="data">Ok
-                </button>
+            <div mat-dialog-content>
+                <form [formGroup]="preferenceForm">
+                    <p><b>Select predefined preferences</b>
+                        <mat-checkbox color="primary" [checked]="shortWaitingTimeEnabled"
+                                      (change)="setWaitingTimeEnabled($event.checked)">Short waiting time
+                        </mat-checkbox>
+                        <mat-checkbox color="primary" [checked]="stableExecutionResultsEnabled"
+                                      (change)="setStableExecutionResultsEnabled($event.checked)">Stable execution
+                            results
+                        </mat-checkbox>
+                        <mat-expansion-panel *ngIf="shortWaitingTimeEnabled || stableExecutionResultsEnabled"
+                                             (opened)="advancedSettingsOpen = true"
+                                             (closed)="advancedSettingsOpen = false"
+                                             class="advancedSettings">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Advanced settings
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <mat-form-field class="input-field">
+                                <mat-label>MCDA Method</mat-label>
+                                <mat-select formControlName="preferenceMcdaMethod"
+                                            (selectionChange)="setMcdaMethodPredefinedPreferences($event.value)">
+                                    <mat-option [value]="'topsis'">TOPSIS</mat-option>
+                                    <mat-option [value]="'promethee-II'">PROMETHEE II</mat-option>
+                                    <mat-option [value]="'electre-III'"
+                                                *ngIf="shortWaitingTimeEnabled && !stableExecutionResultsEnabled">
+                                        ELECTRE III
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="input-field" *ngIf="stableExecutionResultsEnabled">
+                                <mat-label>Weight Learning Method</mat-label>
+                                <mat-select formControlName="weightLearningMethod"
+                                            (selectionChange)="setWeightLearningMethodPredefinedPreferences($event.value)">
+                                    <mat-option [value]="'cobyla'">COBYLA</mat-option>
+                                    <mat-option [value]="'evolution-strategy'">Evolution Strategy</mat-option>
+                                    <mat-option [value]="'genetic-algorithm'">Genetic Algorithm
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </mat-expansion-panel>
+                    </p>
+                    <button
+                            mat-button
+                            color="primary"
+                            style="text-align:left"
+                            class="defineOwnPreferencesButton"
+                            (click)="stepper.next()"
+                    >
+                        Or define individual preferences
+                    </button>
+                    <div mat-dialog-actions>
+                        <button mat-button (click)="onNoClick()">Cancel</button>
+                        <button mat-button [mat-dialog-close]="data">Ok
+                        </button>
+                    </div>
+                </form>
             </div>
         </mat-step>
         <mat-step [editable]="true" label="OwnWeights">
