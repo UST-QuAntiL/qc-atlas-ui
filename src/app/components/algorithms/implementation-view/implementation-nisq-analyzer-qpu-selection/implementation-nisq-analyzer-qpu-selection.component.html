@@ -114,9 +114,17 @@
                     >
                         <div class="spinner-wrapper-center">
                             <span>Analyze Rank Sensitivity</span>
-                            <mat-spinner [diameter]="20" *ngIf="true" color="primary"
+                            <mat-spinner [diameter]="20" *ngIf="waitUntilSensitivityAnalysisIsFinished" color="primary"
                                          class="mat-spinner-left"></mat-spinner>
                         </div>
+                    </button>
+                    <button *ngIf="sensitivityAnalysisJobSuccessful"
+                            mat-raised-button
+                            type="button"
+                            color="accent"
+                            (click)="goToLink(sensitivityAnalysisPlot)"
+                    >
+                        <span>Sensitivity Analysis Results <mat-icon>open_in_new</mat-icon></span>
                     </button>
                 </div>
                 <div *ngIf="analyzerJob">

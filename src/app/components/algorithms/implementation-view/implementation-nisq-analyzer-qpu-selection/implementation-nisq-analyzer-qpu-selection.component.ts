@@ -26,6 +26,7 @@ import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/impl
 import {
   CriterionValue,
   EntityModelMcdaJob,
+  EntityModelMcdaSensitivityAnalysisJob,
   ExecutionResultDto,
   QpuSelectionDto,
   QpuSelectionResultDto,
@@ -126,6 +127,12 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   dataSource = new MatTableDataSource(this.analyzerResults);
   bordaCountEnabled: boolean;
   usedMcdaMethod: string;
+  sensitivityAnalysisJob: EntityModelMcdaSensitivityAnalysisJob;
+  sensitivityAnalysisJobReady = false;
+  pollingSensitivityAnalysisJobReadyData: Subscription;
+  sensitivityAnalysisJobSuccessful = false;
+  waitUntilSensitivityAnalysisIsFinished = false;
+  sensitivityAnalysisPlot: string;
 
   constructor(
     private utilService: UtilService,
@@ -531,16 +538,62 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
         }
       )
       .afterClosed()
-      .subscribe
-      // this.mcdaService.analyzeSensitivityOfCompiledCircuitsOfJob({
-      //   methodName: this.usedMcdaMethod,
-      //   jobId: this.analyzerJob.id,
-      //   stepSize: 0.0,
-      //   upperBound: 0.0,
-      //   lowerBound: 0.0,
-      //   useBordaCount: this.bordaCountEnabled,
-      // })
-      ();
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.mcdaService
+            .analyzeSensitivityOfCompiledCircuitsOfJob({
+              methodName: this.usedMcdaMethod,
+              jobId: this.analyzerJob.id,
+              stepSize: dialogResult.stepSize,
+              upperBound: dialogResult.upperBound,
+              lowerBound: dialogResult.lowerBound,
+              useBordaCount: this.bordaCountEnabled,
+            })
+            .subscribe(
+              (job) => {
+                this.waitUntilSensitivityAnalysisIsFinished = true;
+                this.sensitivityAnalysisJobSuccessful = false;
+                this.sensitivityAnalysisJob = job;
+                this.sensitivityAnalysisJobReady = job.ready;
+                this.utilService.callSnackBar(
+                  'Successfully created sensitivity analysis job "' +
+                    job.id +
+                    '".'
+                );
+
+                this.pollingSensitivityAnalysisJobReadyData = interval(2000)
+                  .pipe(
+                    startWith(0),
+                    switchMap(() =>
+                      this.mcdaService.getSensitivityAnalysisJob({
+                        methodName: this.usedMcdaMethod,
+                        jobId: job.id,
+                      })
+                    )
+                  )
+                  .subscribe((jobResult) => {
+                    this.sensitivityAnalysisJob = jobResult;
+                    this.sensitivityAnalysisJobReady = jobResult.ready;
+                    if (jobResult.state === 'FINISHED') {
+                      this.sensitivityAnalysisJobSuccessful = true;
+                      this.waitUntilSensitivityAnalysisIsFinished = false;
+                      this.sensitivityAnalysisPlot = jobResult.plotFileLocation;
+                      this.pollingSensitivityAnalysisJobReadyData.unsubscribe();
+                    }
+                  });
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Could not start sensitivity analysis.'
+                );
+              }
+            );
+        }
+      });
+  }
+
+  goToLink(url: string) {
+    window.open(url, '_blank');
   }
 
   showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {

@@ -4,15 +4,12 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { ProviderService } from 'api-qprov/services/provider.service';
 import {
   AbstractControl,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { NisqAnalyzerService } from '../../../nisq-analyzer/nisq-analyzer.service';
-import { UtilService } from '../../../../../util/util.service';
 
 @Component({
   selector:
@@ -32,10 +29,7 @@ export class ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComp
       ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent
     >,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public dialog: MatDialog,
-    private providerService: ProviderService,
-    private nisqAnalyzerService: NisqAnalyzerService,
-    private utilService: UtilService
+    public dialog: MatDialog
   ) {}
 
   get stepSize(): AbstractControl | null {
@@ -67,7 +61,7 @@ export class ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComp
     });
 
     this.stepSize.setValue(0.01);
-    this.upperBound.setValue(100);
+    this.upperBound.setValue(500);
     this.lowerBound.setValue(0.001);
 
     this.dialogRef.beforeClosed().subscribe(() => {
