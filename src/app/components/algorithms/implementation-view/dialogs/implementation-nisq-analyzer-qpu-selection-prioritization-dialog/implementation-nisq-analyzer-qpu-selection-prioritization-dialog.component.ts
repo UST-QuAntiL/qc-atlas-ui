@@ -16,6 +16,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { EntityModelMcdaWeightLearningJob } from 'api-nisq/models/entity-model-mcda-weight-learning-job';
 import { interval, Subscription } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
+import { UtilService } from '../../../../../util/util.service';
 
 @Component({
   selector:
@@ -50,7 +51,8 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
     private formBuilder: FormBuilder,
-    private mcdaService: XmcdaCriteriaService
+    private mcdaService: XmcdaCriteriaService,
+    private utilService: UtilService
   ) {}
 
   get preferenceMcdaMethod(): AbstractControl | null {
@@ -270,6 +272,10 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
             if (jobResult.state === 'FINISHED') {
               this.onMcdaMethodChanged(this.mcdaMethodPredefinedPreferences);
               this.pollingWeightLearningJobData.unsubscribe();
+            } else if (jobResult.state === 'FAILED') {
+              this.pollingWeightLearningJobData.unsubscribe();
+              this.utilService.callSnackBar('Error! Could not learn weights.');
+              this.onNoClick();
             }
           });
       });
