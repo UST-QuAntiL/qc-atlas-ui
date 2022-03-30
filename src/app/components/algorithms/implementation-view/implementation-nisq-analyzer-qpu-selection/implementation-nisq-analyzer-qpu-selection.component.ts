@@ -371,19 +371,25 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           this.loadingMCDAJob = true;
           this.prioritizationJob = undefined;
           this.prioritizationJobReady = false;
-          // calculate SMART with new assigned points
-          dialogResult.criteriaAndValues.forEach((obj) => {
-            totalSum += obj.points;
-          });
-          dialogResult.criteriaAndValues.forEach((obj) => {
-            if (obj.points !== 0) {
-              obj.weight = obj.points / totalSum;
-            } else {
-              obj.weight = 0;
-            }
-          });
+          let criteria = dialogResult.criteriaAndValues;
+          if (dialogResult.stableExecutionResults) {
+            criteria = dialogResult.criteriaAndWeightValues;
+          } else {
+            // calculate SMART with new assigned points
+            dialogResult.criteriaAndValues.forEach((obj) => {
+              totalSum += obj.points;
+            });
+            dialogResult.criteriaAndValues.forEach((obj) => {
+              if (obj.points !== 0) {
+                obj.weight = obj.points / totalSum;
+              } else {
+                obj.weight = 0;
+              }
+            });
+          }
+
           let numberOfCriterion = 0;
-          dialogResult.criteriaAndValues.forEach((obj) => {
+          criteria.forEach((obj) => {
             const criterionValue: CriterionValue = {
               description: { title: 'points', subTitle: obj.points.toString() },
               criterionID: obj.id,
@@ -399,9 +405,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
               .subscribe(
                 () => {
                   numberOfCriterion++;
-                  if (
-                    numberOfCriterion === dialogResult.criteriaAndValues.length
-                  ) {
+                  if (numberOfCriterion === criteria.length) {
                     this.mcdaService
                       .prioritizeCompiledCircuitsOfJob({
                         methodName: dialogResult.mcdaMethod,

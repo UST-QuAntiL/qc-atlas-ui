@@ -77,6 +77,10 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
     return this.prioritizationFrom.get('criteriaAndValues');
   }
 
+  get criteriaAndWeightValues(): AbstractControl | null {
+    return this.weightLearningForm.get('criteriaAndValues');
+  }
+
   ngOnInit(): void {
     this.preferenceForm = new FormGroup({
       preferenceMcdaMethod: new FormControl(this.data.preferenceMcdaMethod, [
@@ -205,7 +209,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                   ) {
                     criterionVal.points = 0;
                   } else if (this.stableExecutionResults.value) {
-                    for (const val of this.criteriaAndValues.value) {
+                    for (const val of this.criteriaAndWeightValues.value) {
                       if (criterionVal.name === Object.keys(val)[0]) {
                         criterionVal.weight = Number(Object.values(val)[0]);
                         break;
@@ -219,6 +223,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                       }
                     }
                   }
+                  this.data.criteriaAndWeightValues = this.criteriaNamesAndValues;
                   this.data.criteriaAndValues = this.criteriaNamesAndValues;
                 });
               });
@@ -253,6 +258,8 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
             this.weightLearningJob = jobResult;
             this.jobReady = jobResult.ready;
             if (jobResult.state === 'FINISHED') {
+              this.onMcdaMethodChanged(this.mcdaMethodPredefinedPreferences);
+              this.pollingWeightLearningJobData.unsubscribe();
             }
           });
       });
@@ -277,6 +284,7 @@ export interface DialogData {
   shortWaitingTime: boolean;
   stableExecutionResults: boolean;
   criteriaAndValues: Criterion[];
+  criteriaAndWeightValues: Criterion[];
 }
 
 export interface Criterion {
