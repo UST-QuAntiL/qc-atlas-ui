@@ -211,7 +211,11 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                   } else if (this.stableExecutionResults.value) {
                     for (const val of this.criteriaAndWeightValues.value) {
                       if (criterionVal.name === Object.keys(val)[0]) {
-                        criterionVal.weight = Number(Object.values(val)[0]);
+                        if (criterionVal.name !== 'queue-size') {
+                          criterionVal.weight = Number(Object.values(val)[0]);
+                        } else {
+                          criterionVal.weight = 0.0;
+                        }
                         break;
                       }
                     }
