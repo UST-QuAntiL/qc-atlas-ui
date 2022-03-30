@@ -117,35 +117,43 @@
             </div>
         </mat-step>
         <mat-step [editable]="true" label="LearnedWeights">
-            <h1 mat-dialog-title>Learned Weights</h1>
-            <div mat-dialog-content>
-                <form [formGroup]="weightLearningForm">
-                    <p>The learned weights are presented</p>
-                    <div formArrayName="criteriaAndValues">
-                        <div *ngFor="let criterion of criteriaNamesAndValues; let i = index" [formGroupName]="i">
-                            <div *ngIf="criterion.name !== 'queue-size'">
-                                <mat-form-field class="input-field">
-                                    <mat-label>{{ criterion.name }}</mat-label>
-                                    <input
-                                            matInput
-                                            required
-                                            type="number"
-                                            [placeholder]="criterion.name"
-                                            [formControlName]="criterion.name"
-                                            (change)="onChangeEvent()"
-                                    />
-                                    <mat-error>Please use float numbers as weights</mat-error>
-                                </mat-form-field>
+            <div *ngIf="!jobReady; else finishedLearning">
+                <p>Learning weights to rank based on previous execution results ...</p>
+                <div class="w-100 row d-flex justify-content-center">
+                    <mat-spinner></mat-spinner>
+                </div>
+            </div>
+            <ng-template #finishedLearning>
+                <h1 mat-dialog-title>Learned Weights</h1>
+                <div mat-dialog-content>
+                    <form [formGroup]="weightLearningForm">
+                        <p>The learned weights are presented</p>
+                        <div formArrayName="criteriaAndValues">
+                            <div *ngFor="let criterion of criteriaNamesAndValues; let i = index" [formGroupName]="i">
+                                <div *ngIf="criterion.name !== 'queue-size'">
+                                    <mat-form-field class="input-field">
+                                        <mat-label>{{ criterion.name }}</mat-label>
+                                        <input
+                                                matInput
+                                                required
+                                                type="number"
+                                                [placeholder]="criterion.name"
+                                                [formControlName]="criterion.name"
+                                                (change)="onChangeEvent()"
+                                        />
+                                        <mat-error>Please use float numbers as weights</mat-error>
+                                    </mat-form-field>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <div mat-dialog-actions>
-                <button mat-button (click)="onNoClick()">Cancel</button>
-                <button mat-button [mat-dialog-close]="data">Ok
-                </button>
-            </div>
+                    </form>
+                </div>
+                <div mat-dialog-actions>
+                    <button mat-button (click)="onNoClick()">Cancel</button>
+                    <button mat-button [mat-dialog-close]="data">Ok
+                    </button>
+                </div>
+            </ng-template>
         </mat-step>
     </mat-horizontal-stepper>
 </div>

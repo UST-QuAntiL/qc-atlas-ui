@@ -122,6 +122,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   loadingMCDAJob = false;
   rankings: Ranking[] = [];
   dataSource = new MatTableDataSource(this.analyzerResults);
+  bordaCountEnabled: boolean;
 
   constructor(
     private utilService: UtilService,
@@ -371,6 +372,15 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           this.loadingMCDAJob = true;
           this.prioritizationJob = undefined;
           this.prioritizationJobReady = false;
+          if (
+            dialogResult.stableExecutionResults &&
+            dialogResult.shortWaitingTime
+          ) {
+            this.bordaCountEnabled = true;
+          } else {
+            this.bordaCountEnabled = false;
+          }
+
           let criteria = dialogResult.criteriaAndValues;
           if (dialogResult.stableExecutionResults) {
             criteria = dialogResult.criteriaAndWeightValues;
@@ -410,7 +420,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
                       .prioritizeCompiledCircuitsOfJob({
                         methodName: dialogResult.mcdaMethod,
                         jobId: this.analyzerJob.id,
-                        useBordaCount: false,
+                        useBordaCount: this.bordaCountEnabled,
                       })
                       .subscribe((job) => {
                         this.prioritizationJob = job;
@@ -496,7 +506,11 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
   getScoreOfResult(result: QpuSelectionResultDto): number | string {
     const rankingResult = this.rankings.find((value) => value.id === result.id);
-    if (rankingResult && this.prioritizationJob.method !== 'electre-III') {
+    if (
+      rankingResult &&
+      this.prioritizationJob.method !== 'electre-III' &&
+      !this.bordaCountEnabled
+    ) {
       return rankingResult.score;
     } else {
       return '-';

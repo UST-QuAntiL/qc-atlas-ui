@@ -16,3 +16,8 @@ mat-expansion-panel.advancedSettings {
     margin: 0;
 }
 
+.waitingLearning {
+    justify-content: center;
+    align-items: center;
+}
+
