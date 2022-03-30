@@ -109,22 +109,23 @@
                     <button *ngIf="mcdaJobSuccessful"
                             mat-raised-button
                             type="button"
-                            color="accent"
+                            color="primary"
                             (click)="analyzeSensitivity()"
                     >
                         <div class="spinner-wrapper-center">
                             <span>Analyze Rank Sensitivity</span>
-                            <mat-spinner [diameter]="20" *ngIf="waitUntilSensitivityAnalysisIsFinished" color="primary"
+                            <mat-spinner [diameter]="20" *ngIf="waitUntilSensitivityAnalysisIsFinished" color="accent"
                                          class="mat-spinner-left"></mat-spinner>
                         </div>
                     </button>
                     <button *ngIf="sensitivityAnalysisJobSuccessful"
-                            mat-raised-button
+                            mat-button
                             type="button"
-                            color="accent"
+                            color="primary"
+                            class="sensAnalysisResultsButton"
                             (click)="goToLink(sensitivityAnalysisPlot)"
                     >
-                        <span>Sensitivity Analysis Results <mat-icon>open_in_new</mat-icon></span>
+                        <span>Sensitivity Analysis Results <mat-icon class="link-icon">open_in_new</mat-icon></span>
                     </button>
                 </div>
                 <div *ngIf="analyzerJob">
