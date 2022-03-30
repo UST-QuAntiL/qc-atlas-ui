@@ -106,19 +106,19 @@
                                          class="mat-spinner-left"></mat-spinner>
                         </div>
                     </button>
-                    <button *ngIf="mcdaJobSuccessful"
+                    <button *ngIf="mcdaJobSuccessful && usedMcdaMethod!=='electre-III'"
                             mat-raised-button
                             type="button"
                             color="primary"
                             (click)="analyzeSensitivity()"
                     >
                         <div class="spinner-wrapper-center">
-                            <span>Analyze Rank Sensitivity</span>
+                            <span>Analyze Rank Sensitivity </span>
                             <mat-spinner [diameter]="20" *ngIf="waitUntilSensitivityAnalysisIsFinished" color="accent"
-                                         class="mat-spinner-left"></mat-spinner>
+                                         class="mat-spinner-left" style="margin:0 auto;"></mat-spinner>
                         </div>
                     </button>
-                    <button *ngIf="sensitivityAnalysisJobSuccessful"
+                    <button *ngIf="sensitivityAnalysisJobSuccessful && mcdaJobSuccessful && usedMcdaMethod!=='electre-III'"
                             mat-button
                             type="button"
                             color="primary"
