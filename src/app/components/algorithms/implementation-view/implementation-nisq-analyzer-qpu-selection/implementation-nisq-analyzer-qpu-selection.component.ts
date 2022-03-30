@@ -47,6 +47,7 @@ import {
   DialogData,
   ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
 } from '../dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
+import { ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog.component';
 
 @Component({
   selector: 'app-implementation-nisq-analyzer-qpu-selection',
@@ -120,9 +121,11 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   prioritizationJob: EntityModelMcdaJob;
   prioritizationJobReady = false;
   loadingMCDAJob = false;
+  mcdaJobSuccessful = false;
   rankings: Ranking[] = [];
   dataSource = new MatTableDataSource(this.analyzerResults);
   bordaCountEnabled: boolean;
+  usedMcdaMethod: string;
 
   constructor(
     private utilService: UtilService,
@@ -357,7 +360,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   }
 
   prioritize(): void {
-    this.rankings = [];
     this.utilService
       .createDialog(
         ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
@@ -372,6 +374,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           this.loadingMCDAJob = true;
           this.prioritizationJob = undefined;
           this.prioritizationJobReady = false;
+          this.usedMcdaMethod = dialogResult.mcdaMethod;
           if (
             dialogResult.stableExecutionResults &&
             dialogResult.shortWaitingTime
@@ -397,7 +400,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
               }
             });
           }
-
           let numberOfCriterion = 0;
           criteria.forEach((obj) => {
             const criterionValue: CriterionValue = {
@@ -423,8 +425,10 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
                         useBordaCount: this.bordaCountEnabled,
                       })
                       .subscribe((job) => {
+                        this.rankings = [];
                         this.prioritizationJob = job;
                         this.prioritizationJobReady = job.ready;
+                        this.mcdaJobSuccessful = false;
 
                         this.utilService.callSnackBar(
                           'Successfully created prioritization job "' +
@@ -483,6 +487,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
               }
             });
             this.dataSource = new MatTableDataSource(this.analyzerResults);
+            this.mcdaJobSuccessful = true;
             this.pollingAnalysisJobData.unsubscribe();
           }
         },
@@ -515,6 +520,27 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
     } else {
       return '-';
     }
+  }
+
+  analyzeSensitivity(): void {
+    this.utilService
+      .createDialog(
+        ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent,
+        {
+          title: 'Analyze Sensitivity of Ranking',
+        }
+      )
+      .afterClosed()
+      .subscribe
+      // this.mcdaService.analyzeSensitivityOfCompiledCircuitsOfJob({
+      //   methodName: this.usedMcdaMethod,
+      //   jobId: this.analyzerJob.id,
+      //   stepSize: 0.0,
+      //   upperBound: 0.0,
+      //   lowerBound: 0.0,
+      //   useBordaCount: this.bordaCountEnabled,
+      // })
+      ();
   }
 
   showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {

@@ -122,6 +122,9 @@
                 <div class="w-100 row d-flex justify-content-center">
                     <mat-spinner></mat-spinner>
                 </div>
+                <div mat-dialog-actions>
+                    <button mat-button (click)="onNoClick()">Cancel</button>
+                </div>
             </div>
             <ng-template #finishedLearning>
                 <h1 mat-dialog-title>Learned Weights</h1>

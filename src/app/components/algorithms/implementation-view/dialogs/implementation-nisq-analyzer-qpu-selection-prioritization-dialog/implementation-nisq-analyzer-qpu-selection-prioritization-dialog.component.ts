@@ -83,7 +83,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
 
   ngOnInit(): void {
     this.preferenceForm = new FormGroup({
-      preferenceMcdaMethod: new FormControl(this.data.preferenceMcdaMethod, [
+      preferenceMcdaMethod: new FormControl(this.data.mcdaMethod, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
@@ -190,8 +190,14 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
               });
               this.mcdaMethod.setValue(mcdaMethod);
               this.dialogRef.beforeClosed().subscribe(() => {
-                this.data.mcdaMethod = this.mcdaMethod.value;
-                this.data.preferenceMcdaMethod = this.preferenceMcdaMethod.value;
+                if (
+                  this.shortWaitingTime.value ||
+                  this.stableExecutionResults.value
+                ) {
+                  this.data.mcdaMethod = this.preferenceMcdaMethod.value;
+                } else {
+                  this.data.mcdaMethod = this.mcdaMethod.value;
+                }
                 this.data.weightLearningMethod = this.weightLearningMethod.value;
                 this.data.shortWaitingTime = this.shortWaitingTime.value;
                 this.data.stableExecutionResults = this.stableExecutionResults.value;
@@ -283,7 +289,6 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
 export interface DialogData {
   title: string;
   mcdaMethod: string;
-  preferenceMcdaMethod: string;
   weightLearningMethod: string;
   shortWaitingTime: boolean;
   stableExecutionResults: boolean;
