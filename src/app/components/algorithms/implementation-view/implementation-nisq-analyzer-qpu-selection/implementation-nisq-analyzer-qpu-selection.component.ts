@@ -593,7 +593,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
       });
   }
 
-  goToLink(url: string) {
+  goToLink(url: string): void {
     window.open(url, '_blank');
   }
 
