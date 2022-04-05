@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import {
@@ -23,6 +23,8 @@ import {
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { SdksService } from 'api-nisq/services/sdks.service';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
@@ -44,6 +46,7 @@ import { NisqAnalyzerService } from './nisq-analyzer.service';
 })
 export class NisqAnalyzerComponent implements OnInit {
   @Input() algo: AlgorithmDto;
+  @ViewChild(MatSort) sort: MatSort;
 
   // 1) Selection
   params: ParameterDto[];
@@ -53,7 +56,7 @@ export class NisqAnalyzerComponent implements OnInit {
 
   // 2) Analyze phase
   analyzeColumns = [
-    'backendName',
+    'qpu',
     'provider',
     'compiler',
     'width',
@@ -84,6 +87,9 @@ export class NisqAnalyzerComponent implements OnInit {
   queueLengths = new Map<string, number>();
   executionResultsAvailable = new Map<string, boolean>();
   loadingResults = new Map<string, boolean>();
+  groupedResults: GroupedResults[] = [];
+  dataSource = new MatTableDataSource(this.groupedResults);
+  groupedResults$ = new BehaviorSubject<GroupedResults[]>(this.groupedResults);
 
   // 3) Execution
   resultBackendColumns = ['backendName', 'width', 'depth'];
@@ -126,14 +132,42 @@ export class NisqAnalyzerComponent implements OnInit {
         )
       )
       .pipe(map((dto) => dto.analysisJobList));
+    this.groupedResults$.subscribe((val) =>
+      console.log('subscribed grouped results : ', val)
+    );
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
   }
 
   changeSort(active: string, direction: 'asc' | 'desc' | ''): void {
+    console.log(active, direction);
     if (!active || !direction) {
       this.sort$.next(undefined);
     } else {
       this.sort$.next([`${active},${direction}`]);
     }
+  }
+
+  onMatSortChange(active: string, direction: 'asc' | 'desc' | ''): void {
+    switch (active) {
+      case 'qpu':
+        if (direction === 'desc') {
+          this.groupedResults.map((groupedResult) => {
+            groupedResult.results = groupedResult.results
+              .sort((a, b) => a.qpu.localeCompare(b.qpu))
+              .reverse();
+          });
+        } else {
+          this.groupedResults.map((groupedResult) => {
+            groupedResult.results = groupedResult.results.sort((a, b) =>
+              a.qpu.localeCompare(b.qpu)
+            );
+          });
+        }
+    }
+    this.groupedResults$.next(this.groupedResults);
   }
 
   formatParameters(analysisJob: AnalysisJobDto): string {
@@ -225,7 +259,7 @@ export class NisqAnalyzerComponent implements OnInit {
       this.jobReady = jobResult.ready;
       this.analyzerJob = jobResult;
       this.analyzerResults = jobResult.analysisResultList;
-
+      this.groupResultsByImplementation(this.analyzerResults);
       for (const analysisResult of this.analyzerResults) {
         this.showBackendQueueSize(analysisResult);
         this.hasExecutionResult(analysisResult);
@@ -234,9 +268,7 @@ export class NisqAnalyzerComponent implements OnInit {
     return true;
   }
 
-  groupResultsByImplementation(
-    analysisResults: AnalysisResultDto[]
-  ): GroupedResults[] {
+  groupResultsByImplementation(analysisResults: AnalysisResultDto[]): void {
     const results: GroupedResults[] = [];
 
     for (const analysisResult of analysisResults) {
@@ -252,7 +284,9 @@ export class NisqAnalyzerComponent implements OnInit {
         });
       }
     }
-    return results;
+    this.groupedResults = results;
+    this.groupedResults$.next(this.groupedResults);
+    console.log('Initial grouped results', this.groupedResults);
   }
 
   execute(analysisResult: AnalysisResultDto): void {
