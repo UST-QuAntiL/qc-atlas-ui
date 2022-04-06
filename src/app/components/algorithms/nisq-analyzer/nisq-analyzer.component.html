@@ -88,10 +88,11 @@
             No suitable implementation and/or QPU found!
           </div>
           <ng-container *ngIf="jobReady && analyzerResults && analyzerResults.length !== 0">
-            <div class="p-2 overflow-auto" *ngFor="let result of (groupedResults$ | async)">
-              <h4>Implementation: <strong>{{ result.implementation.name }}</strong></h4>
-              <table mat-table [dataSource]="result.results" matSort multiTemplateDataRows
-              (matSortChange)="onMatSortChange($event.active, $event.direction)">
+            <div class="p-2 overflow-auto" *ngFor="let result of groupedResultsMap | keyvalue">
+              <h4>Implementation: <strong>{{ result.key.name }}</strong></h4>
+              <table mat-table #nisqAnalysisResultTable
+              #nisqAnalysisResultSort="matSort" [dataSource]="result.value" matSort multiTemplateDataRows
+              (matSortChange)="onMatSortChange()">
                 <ng-container matColumnDef="qpu">
                   <th class="backend-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                     Backend Name
