@@ -22,6 +22,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../../generics/generics.module';
@@ -39,6 +40,8 @@ import { ImplementationNisqAnalyzerQpuSelectionComponent } from './implementatio
 import { ImplementationNisqAnalyzerQpuSelectionDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-dialog/implementation-nisq-analyzer-qpu-selection-dialog.component';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
+// eslint-disable-next-line max-len
+import { ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +54,7 @@ import { ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent } f
     ImplementationNisqAnalyzerQpuSelectionComponent,
     ImplementationNisqAnalyzerQpuSelectionDialogComponent,
     ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
+    ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -82,6 +86,7 @@ import { ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent } f
     QcAtlasUiFeatureToggleModule,
     MatBadgeModule,
     MatStepperModule,
+    MatExpansionModule,
   ],
 })
 export class ImplementationViewModule {}
