@@ -81,7 +81,9 @@ tr.element-row:not(.expanded-row):active {
 
 .value-column {
   min-width: 85px;
+  text-align: center;
 }
+
 .not-ready-job-list {
   list-style-type: none;
 }
