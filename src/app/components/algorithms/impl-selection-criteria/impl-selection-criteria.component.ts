@@ -177,7 +177,7 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
   onCreateSoftwarePlatform(): void {
     this.utilService
       .createDialog(CreateSoftwarePlatformDialogComponent, {
-        title: 'Create a new software platform',
+        title: 'Create a new Software Platform',
       })
       .afterClosed()
       .subscribe((dialogResult) => {
@@ -186,35 +186,43 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
             id: null,
             name: dialogResult.name,
           };
-          this.sdkService.createSdk({ body: sdkDto }).subscribe();
-          const softwarePlatformDto: SoftwarePlatformDto = {
-            id: null,
-            name: dialogResult.name,
-          };
-          this.executionEnvironmentsService
-            .createSoftwarePlatform({ body: softwarePlatformDto })
-            .subscribe(
-              (softwarePlatform: SoftwarePlatformDto) => {
-                this.utilService.callSnackBar(
-                  'Successfully created software platform "' +
-                    softwarePlatform.name +
-                    '".'
+          this.sdkService.createSdk({ body: sdkDto }).subscribe(
+            () => {
+              const softwarePlatformDto: SoftwarePlatformDto = {
+                id: null,
+                name: dialogResult.name,
+              };
+              this.executionEnvironmentsService
+                .createSoftwarePlatform({ body: softwarePlatformDto })
+                .subscribe(
+                  (softwarePlatform: SoftwarePlatformDto) => {
+                    this.utilService.callSnackBar(
+                      'Successfully created Software Platform "' +
+                        softwarePlatform.name +
+                        '".'
+                    );
+                    this.sdks$ = this.sdkService.getSdks().pipe(
+                      map((dto) =>
+                        dto.sdkDtos.map((sdk) => ({
+                          label: sdk.name,
+                          value: sdk.name,
+                        }))
+                      )
+                    );
+                  },
+                  () => {
+                    this.utilService.callSnackBar(
+                      'Error! Software platform could not be created in QC-Atlas.'
+                    );
+                  }
                 );
-                this.sdks$ = this.sdkService.getSdks().pipe(
-                  map((dto) =>
-                    dto.sdkDtos.map((sdk) => ({
-                      label: sdk.name,
-                      value: sdk.name,
-                    }))
-                  )
-                );
-              },
-              () => {
-                this.utilService.callSnackBar(
-                  'Error! Software platform could not be created.'
-                );
-              }
-            );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Software platform could not be created in NISQ Analyzer.'
+              );
+            }
+          );
         }
       });
   }
@@ -224,7 +232,8 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
     const sdkNameList: string[] = [];
     const fileIdsList: string[] = [];
 
-    // TODO: currently file handling is different on the platform than in the QC Atlas. Thus, file access API is not generated
+    // TODO: currently file handling is different on the platform than in the QC Atlas. Thus, file access API is
+    // not generated
     if (this.config.rootUrl.includes('platform.planqk')) {
       this.sdkService.getSdks().subscribe(
         (dto) => {
@@ -276,7 +285,10 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
     } else {
       this.sdkService.getSdks().subscribe((dto) => {
         let isQiskitAvailable = true;
-        if (dto.sdkDtos.filter((sdk) => sdk.name === 'Qiskit').length < 1) {
+        if (
+          dto.sdkDtos.filter((sdk) => sdk.name.toLowerCase() === 'qiskit')
+            .length < 1
+        ) {
           isQiskitAvailable = false;
           const sdkDto: SdkDto = {
             id: null,
@@ -284,7 +296,7 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
           };
           this.sdkService.createSdk({ body: sdkDto }).subscribe(
             () => {
-              console.log('Succesfully added default sdk to Nisq Analyser');
+              console.log('Successfully added default SDK to NISQ Analyzer');
               isQiskitAvailable = true;
               const softwarePlatformDto: SoftwarePlatformDto = {
                 id: null,
@@ -294,15 +306,15 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
                 .createSoftwarePlatform({ body: softwarePlatformDto })
                 .subscribe(
                   () => {
-                    console.log('Succesfully added default sdk to atlas');
+                    console.log('Successfully added default SDK to QC-Atlas');
                   },
                   () => {
-                    console.log('Failed to add default sdk to atlas');
+                    console.log('Failed to add default SDK to QC-Atlas');
                   }
                 );
             },
             () => {
-              console.log('Failed to add default sdk to Nisq Analyser');
+              console.log('Failed to add default SDK to NISQ Analyzer');
             }
           );
         }
