@@ -147,7 +147,7 @@ export class NisqAnalyzerComponent implements OnInit {
   filterInputParams(inputParameters: Map<string, string>): Map<string, string> {
     // Remove token from input parameters, as it is handled separately.
     /* copy inputParameters into new Map to create an instance
-                  to enable operations on the map, i.e., inputParameters*/
+                      to enable operations on the map, i.e., inputParameters*/
     const inputParametersCopy = new Map<string, string>();
     for (const key of Object.keys(inputParameters)) {
       if (key !== 'token') {
@@ -253,7 +253,6 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   execute(analysisResult: AnalysisResultDto): void {
-    debugger;
     this.loadingResults[analysisResult.id] = true;
     this.results = undefined;
     this.executedAnalyseResult = analysisResult;
