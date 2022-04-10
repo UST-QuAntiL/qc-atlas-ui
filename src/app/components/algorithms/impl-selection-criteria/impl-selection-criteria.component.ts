@@ -307,9 +307,13 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
                 .subscribe(
                   () => {
                     console.log('Successfully added default SDK to QC-Atlas');
+                    // enable that the mat spinner under Selection Criteria of an
+                    //  implementation disappears and the Input fields appear as soon as the default SDK and the nisqImpl is added and available
+                    this.ngOnInit();
                   },
                   () => {
                     console.log('Failed to add default SDK to QC-Atlas');
+                    // Revoke addition of sdk to nisq analyser
                   }
                 );
             },
