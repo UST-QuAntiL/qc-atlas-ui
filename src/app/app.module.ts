@@ -19,6 +19,7 @@ import { ApiModule as PatternAltasAPIModule } from 'api-patternatlas/api.module'
 import { ApiModule as NisqApiModule } from 'api-nisq/api.module';
 import { ApiModule as LatexRendererAPIModule } from 'api-latex/api.module';
 import { ApiModule as QProvAPIModule } from 'api-qprov/api.module';
+import { ApiModule as LibraryAPIModule } from 'api-library/api.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -48,18 +49,30 @@ import { ProblemTypesListComponent } from './components/problem-types/problem-ty
 import { AddOrEditProblemTypeDialogComponent } from './components/problem-types/dialogs/add-or-edit-problem-type/add-or-edit-problem-type-dialog.component';
 import { ApplicationAreasListComponent } from './components/application-areas/application-areas-list/application-areas-list.component';
 // eslint-disable-next-line max-len
-import { AddOrEditApplicationAreaDialogComponent } from './components/application-areas/dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
+import {
+  AddOrEditApplicationAreaDialogComponent
+} from './components/application-areas/dialogs/add-or-edit-application-area/add-or-edit-application-area-dialog.component';
 // eslint-disable-next-line max-len
-import { AddOrEditAlgorithmRelationTypeDialogComponent } from './components/algorithm-relation-types/dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
+import {
+  AddOrEditAlgorithmRelationTypeDialogComponent
+} from './components/algorithm-relation-types/dialogs/add-or-edit-algorithm-relation-type-dialog/add-or-edit-algorithm-relation-type-dialog.component';
 // eslint-disable-next-line max-len
-import { AlgorithmRelationTypesListComponent } from './components/algorithm-relation-types/algorithm-relation-types-list/algorithm-relation-types-list.component';
+import {
+  AlgorithmRelationTypesListComponent
+} from './components/algorithm-relation-types/algorithm-relation-types-list/algorithm-relation-types-list.component';
 import { PatternRelationTypesListComponent } from './components/pattern-relation-types/pattern-relation-types-list/pattern-relation-types-list.component';
 // eslint-disable-next-line max-len
-import { AddOrEditPatternRelationTypeDialogComponent } from './components/pattern-relation-types/dialogs/add-or-edit-pattern-relation-type-dialog/add-or-edit-pattern-relation-type-dialog.component';
+import {
+  AddOrEditPatternRelationTypeDialogComponent
+} from './components/pattern-relation-types/dialogs/add-or-edit-pattern-relation-type-dialog/add-or-edit-pattern-relation-type-dialog.component';
 // eslint-disable-next-line max-len
-import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
+import {
+  ComputeResourcePropertyTypesListComponent
+} from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
 // eslint-disable-next-line max-len
-import { AddOrEditComputeResourcePropertyTypeDialogComponent } from './components/compute-resource-property-types/dialogs/add-or-edit-compute-resource-property-type-dialog/add-or-edit-compute-resource-property-type-dialog.component';
+import {
+  AddOrEditComputeResourcePropertyTypeDialogComponent
+} from './components/compute-resource-property-types/dialogs/add-or-edit-compute-resource-property-type-dialog/add-or-edit-compute-resource-property-type-dialog.component';
 import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module';
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
@@ -108,6 +121,9 @@ import { LibraryViewComponent } from './components/libraries/library-view/librar
     QProvAPIModule.forRoot({
       rootUrl: environment.QPROV_API_URL,
     }),
+    LibraryAPIModule.forRoot({
+      rootUrl: environment.LIBRARY_API_URL,
+    }),
     AppRoutingModule,
     QcAtlasUiFeatureToggleModule,
     // material modules
@@ -154,4 +170,5 @@ import { LibraryViewComponent } from './components/libraries/library-view/librar
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+}

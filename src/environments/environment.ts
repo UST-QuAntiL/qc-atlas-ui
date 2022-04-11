@@ -38,6 +38,10 @@ export const environment = {
     window['env']['CONFIG_SERVER_PORT']
       ? `http://${window['env']['CONFIG_SERVER_HOST_NAME']}:${window['env']['CONFIG_SERVER_PORT']}/v2/keys`
       : 'http://localhost:2379/v2/keys',
+  LIBRARY_API_URL:
+    window['env']['LIBRARY_HOST_NAME'] && window['env']['LIBRARY_PORT']
+      ? `http://${window['env']['LIBRARY_HOST_NAME']}:${window['env']['LIBRARY_PORT']}`
+      : 'http://localhost:2903',
 };
 
 /*
