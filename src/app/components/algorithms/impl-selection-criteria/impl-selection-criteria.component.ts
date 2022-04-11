@@ -3,7 +3,11 @@ import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AlgorithmDto, ImplementationDto } from 'api-atlas/models';
+import {
+  AlgorithmDto,
+  ImplementationDto,
+  SoftwarePlatformDto,
+} from 'api-atlas/models';
 import {
   ImplementationDto as NisqImplementationDto,
   SdkDto,
@@ -13,12 +17,14 @@ import {
   SdksService,
 } from 'api-nisq/services';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
+import { ExecutionEnvironmentsService } from 'generated/api-atlas/services/execution-environments.service';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
 import { parsePrologRule, PrologRule } from '../../../util/MinimalPrologParser';
 import { Option } from '../../generics/property-input/select-input.component';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { PlanqkPlatformService } from '../../../services/planqk-platform.service';
 import { UtilService } from '../../../util/util.service';
+import { CreateSoftwarePlatformDialogComponent } from '../../execution-environments/software-platforms/dialogs/create-software-platform-dialog.component';
 
 @Component({
   selector: 'app-impl-selection-criteria',
@@ -52,7 +58,8 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
     private readonly sdkService: SdksService,
     private config: ApiConfiguration,
     private planqkPlatformService: PlanqkPlatformService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private executionEnvironmentsService: ExecutionEnvironmentsService
   ) {}
 
   ngOnInit(): void {
@@ -167,12 +174,66 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
     });
   }
 
+  onCreateSoftwarePlatform(): void {
+    this.utilService
+      .createDialog(CreateSoftwarePlatformDialogComponent, {
+        title: 'Create a new Software Platform',
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const sdkDto: SdkDto = {
+            id: null,
+            name: dialogResult.name,
+          };
+          this.sdkService.createSdk({ body: sdkDto }).subscribe(
+            () => {
+              const softwarePlatformDto: SoftwarePlatformDto = {
+                id: null,
+                name: dialogResult.name,
+              };
+              this.executionEnvironmentsService
+                .createSoftwarePlatform({ body: softwarePlatformDto })
+                .subscribe(
+                  (softwarePlatform: SoftwarePlatformDto) => {
+                    this.utilService.callSnackBar(
+                      'Successfully created Software Platform "' +
+                        softwarePlatform.name +
+                        '".'
+                    );
+                    this.sdks$ = this.sdkService.getSdks().pipe(
+                      map((dto) =>
+                        dto.sdkDtos.map((sdk) => ({
+                          label: sdk.name,
+                          value: sdk.name,
+                        }))
+                      )
+                    );
+                  },
+                  () => {
+                    this.utilService.callSnackBar(
+                      'Error! Software platform could not be created in QC-Atlas.'
+                    );
+                  }
+                );
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Software platform could not be created in NISQ Analyzer.'
+              );
+            }
+          );
+        }
+      });
+  }
+
   private createNisqImplementation(): void {
     let body: NisqImplementationDto;
     const sdkNameList: string[] = [];
     const fileIdsList: string[] = [];
 
-    // TODO: currently file handling is different on the platform than in the QC Atlas. Thus, file access API is not generated
+    // TODO: currently file handling is different on the platform than in the QC Atlas. Thus, file access API is
+    // not generated
     if (this.config.rootUrl.includes('platform.planqk')) {
       this.sdkService.getSdks().subscribe(
         (dto) => {
@@ -222,22 +283,64 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
           )
       );
     } else {
-      body = {
-        name: this.impl.name,
-        implementedAlgorithm: this.algo.id,
-        selectionRule: '',
-        // TODO
-        sdk: 'Qiskit',
-        language: 'OpenQASM',
-        fileLocation: 'http://example.com/',
-      };
-      this.nisqImplementationService
-        .createImplementation({ body })
-        .subscribe((newImpl) => {
-          this.nisqImpl = newImpl;
-          this.oldNisqImpl = cloneDeep(newImpl);
-          this.selection.clear();
-        });
+      this.sdkService.getSdks().subscribe((dto) => {
+        let isQiskitAvailable = true;
+        if (
+          dto.sdkDtos.filter((sdk) => sdk.name.toLowerCase() === 'qiskit')
+            .length < 1
+        ) {
+          isQiskitAvailable = false;
+          const sdkDto: SdkDto = {
+            id: null,
+            name: 'Qiskit',
+          };
+          this.sdkService.createSdk({ body: sdkDto }).subscribe(
+            () => {
+              console.log('Successfully added default SDK to NISQ Analyzer');
+              isQiskitAvailable = true;
+              const softwarePlatformDto: SoftwarePlatformDto = {
+                id: null,
+                name: 'Qiskit',
+              };
+              this.executionEnvironmentsService
+                .createSoftwarePlatform({ body: softwarePlatformDto })
+                .subscribe(
+                  () => {
+                    console.log('Successfully added default SDK to QC-Atlas');
+                    // enable that the mat spinner under Selection Criteria of an
+                    //  implementation disappears and the Input fields appear as soon as the default SDK and the nisqImpl is added and available
+                    this.ngOnInit();
+                  },
+                  () => {
+                    console.log('Failed to add default SDK to QC-Atlas');
+                    // Revoke addition of sdk to nisq analyser
+                  }
+                );
+            },
+            () => {
+              console.log('Failed to add default SDK to NISQ Analyzer');
+            }
+          );
+        }
+        if (isQiskitAvailable) {
+          body = {
+            name: this.impl.name,
+            implementedAlgorithm: this.algo.id,
+            selectionRule: '',
+            // TODO
+            sdk: 'Qiskit',
+            language: 'OpenQASM',
+            fileLocation: 'http://example.com/',
+          };
+          this.nisqImplementationService
+            .createImplementation({ body })
+            .subscribe((newImpl) => {
+              this.nisqImpl = newImpl;
+              this.oldNisqImpl = cloneDeep(newImpl);
+              this.selection.clear();
+            });
+        }
+      });
     }
   }
 }
