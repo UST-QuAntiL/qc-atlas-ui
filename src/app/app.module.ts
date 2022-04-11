@@ -64,6 +64,7 @@ import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 import { initializeKeycloak } from './util/keycloak-init';
+import { LibraryViewComponent } from './components/libraries/library-view/library-view.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { initializeKeycloak } from './util/keycloak-init';
     ComputeResourcePropertyTypesListComponent,
     AddOrEditComputeResourcePropertyTypeDialogComponent,
     FeatureTogglingComponent,
+    LibraryViewComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

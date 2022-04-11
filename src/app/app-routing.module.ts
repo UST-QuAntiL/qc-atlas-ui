@@ -22,6 +22,7 @@ import { PatternRelationTypesListComponent } from './components/pattern-relation
 // eslint-disable-next-line max-len
 import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
+import { LibraryViewComponent } from './components/libraries/library-view/library-view.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -77,6 +78,7 @@ const routes: Routes = [
     component: PublicationViewComponent,
     canDeactivate: [ChangePageGuard],
   },
+  { path: 'libraries', component: LibraryViewComponent },
   { path: 'problem-types', component: ProblemTypesListComponent },
   { path: 'application-areas', component: ApplicationAreasListComponent },
   {
