@@ -54,7 +54,7 @@ export class NisqAnalyzerComponent implements OnInit {
 
   // 2) Analyze phase
   analyzeColumns = [
-    'backendName',
+    'qpu',
     'provider',
     'compiler',
     'width',

@@ -88,10 +88,10 @@
             No suitable implementation and/or QPU found!
           </div>
           <ng-container *ngIf="jobReady && analyzerResults && analyzerResults.length !== 0">
-            <div class="p-2 overflow-auto" *ngFor="let result of groupResultsByImplementation(analyzerResults)">
+            <div class="p-2 overflow-auto" *ngFor="let result of groupedResultsMap | keyvalue">
               <h4>Implementation: <strong>{{ result.implementation.name }}</strong></h4>
-              <table mat-table [dataSource]="result.results" multiTemplateDataRows>
-                <ng-container matColumnDef="backendName">
+              <table mat-table [dataSource]="result.value" matSort multiTemplateDataRows>
+                <ng-container matColumnDef="qpu">
                   <th class="backend-column" mat-header-cell *matHeaderCellDef>
                     Backend Name
                   </th>
