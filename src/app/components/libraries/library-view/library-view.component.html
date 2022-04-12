@@ -1,9 +1,9 @@
 <div>
-    <!--    <app-select-input-->
-    <!--            name="SDK"-->
-    <!--            [value]="nisqImpl.sdk"-->
-    <!--            [choices]="libraries$ | async"-->
-    <!--            (onChange)="nisqImpl.sdk = $event"-->
-    <!--            (onSaveChanges)="saveImplementation()"-->
-    <!--    ></app-select-input>-->
+    <app-select-input
+            name="Library"
+            [value]="library"
+            [choices]="libraries$ | async"
+            (onChange)="library = $event"
+            (onSaveChanges)="getLibrary()"
+    ></app-select-input>
 </div>
