@@ -1,4 +1,6 @@
 export { BibEntryDto } from './models/bib-entry-dto';
+export { BibEntry } from './models/bib-entry';
+export { BibEntries } from './models/bib-entries';
 export { LibraryNames } from './models/library-names';
 export { NewLibraryConfiguration } from './models/new-library-configuration';
 export { Study } from './models/study';

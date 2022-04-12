@@ -26,5 +26,12 @@ export class LibraryViewComponent implements OnInit {
     );
   }
 
-  getLibrary(): void {}
+  getLibrary(libraryName: string): void {
+    this.library = libraryName;
+    this.libraryService
+      .getLibraryEntries({ libraryName: this.library })
+      .subscribe((bibentries) => {
+        bibentries.bibEntries.forEach((entry) => console.log(entry));
+      });
+  }
 }

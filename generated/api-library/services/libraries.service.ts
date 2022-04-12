@@ -11,6 +11,7 @@ import { filter, map } from 'rxjs/operators';
 import { BibEntryDto } from '../models/bib-entry-dto';
 import { NewLibraryConfiguration } from '../models/new-library-configuration';
 import { LibraryNames } from 'api-library/models/library-names';
+import { BibEntries } from 'api-library/models/bib-entries';
 
 @Injectable({
     providedIn: 'root',
@@ -134,7 +135,7 @@ export class LibrariesService extends BaseService {
      */
     getLibraryEntries$Response(params: {
         libraryName: string;
-    }): Observable<StrictHttpResponse<void>> {
+    }): Observable<StrictHttpResponse<BibEntries>> {
         const rb = new RequestBuilder(
             this.rootUrl,
             LibrariesService.GetLibraryEntriesPath,
@@ -146,7 +147,7 @@ export class LibrariesService extends BaseService {
         return this.http
             .request(
                 rb.build({
-                    responseType: 'text',
+                    responseType: 'json',
                     accept: '*/*',
                 })
             )
@@ -155,7 +156,7 @@ export class LibrariesService extends BaseService {
                 map((r: HttpResponse<any>) => {
                     return (r as HttpResponse<any>).clone({
                         body: undefined,
-                    }) as StrictHttpResponse<void>;
+                    }) as StrictHttpResponse<BibEntries>;
                 })
             );
     }
@@ -166,9 +167,9 @@ export class LibrariesService extends BaseService {
      *
      * This method doesn't expect any request body.
      */
-    getLibraryEntries(params: { libraryName: string }): Observable<void> {
+    getLibraryEntries(params: { libraryName: string }): Observable<BibEntries> {
         return this.getLibraryEntries$Response(params).pipe(
-            map((r: StrictHttpResponse<void>) => r.body as void)
+            map((r: StrictHttpResponse<BibEntries>) => r.body as BibEntries)
         );
     }
 

@@ -3,7 +3,6 @@
             name="Library"
             [value]="library"
             [choices]="libraries$ | async"
-            (onChange)="library = $event"
-            (onSaveChanges)="getLibrary()"
+            (onChange)="getLibrary($event)"
     ></app-select-input>
 </div>
