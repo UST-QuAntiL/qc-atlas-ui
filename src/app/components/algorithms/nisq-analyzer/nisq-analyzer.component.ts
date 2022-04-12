@@ -14,11 +14,11 @@ import { exhaustMap, first, map, startWith, switchMap } from 'rxjs/operators';
 import { ExecutionEnvironmentsService } from 'api-atlas/services';
 import { AlgorithmDto, CloudServiceDto } from 'api-atlas/models';
 import {
-  AnalysisJobDto,
+  ParameterDto,
   AnalysisResultDto,
   ExecutionResultDto,
   ImplementationDto as NISQImplementationDto,
-  ParameterDto,
+  AnalysisJobDto,
 } from 'api-nisq/models';
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
@@ -85,14 +85,16 @@ export class NisqAnalyzerComponent implements OnInit {
   queueLengths = new Map<string, number>();
   executionResultsAvailable = new Map<string, boolean>();
   loadingResults = new Map<string, boolean>();
-
-  executedAnalyseResult: AnalysisResultDto;
-  expandedElementExecResult: ExecutionResultDto | null;
-  results?: ExecutionResultDto = undefined;
   groupedResultsMap = new Map<
     NISQImplementationDto,
     MatTableDataSource<AnalysisResultDto>
   >();
+
+  // 3) Execution
+  resultBackendColumns = ['backendName', 'width', 'depth'];
+  executedAnalyseResult: AnalysisResultDto;
+  expandedElementExecResult: ExecutionResultDto | null;
+  results?: ExecutionResultDto = undefined;
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
@@ -152,7 +154,7 @@ export class NisqAnalyzerComponent implements OnInit {
   filterInputParams(inputParameters: Map<string, string>): Map<string, string> {
     // Remove token from input parameters, as it is handled separately.
     /* copy inputParameters into new Map to create an instance
-                      to enable operations on the map, i.e., inputParameters*/
+              to enable operations on the map, i.e., inputParameters*/
     const inputParametersCopy = new Map<string, string>();
     for (const key of Object.keys(inputParameters)) {
       if (key !== 'token') {
@@ -258,6 +260,7 @@ export class NisqAnalyzerComponent implements OnInit {
     for (const res of results) {
       if (!resultMap.has(res.implementation)) {
         const temp = new MatTableDataSource(res.results);
+        // temp.sort = this.nisqAnalysisResultSort;
         resultMap.set(res.implementation, temp);
       }
     }
