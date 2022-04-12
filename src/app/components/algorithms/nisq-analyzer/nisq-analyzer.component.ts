@@ -23,6 +23,7 @@ import {
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { SdksService } from 'api-nisq/services/sdks.service';
+import { MatTableDataSource } from '@angular/material/table';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
@@ -88,6 +89,10 @@ export class NisqAnalyzerComponent implements OnInit {
   executedAnalyseResult: AnalysisResultDto;
   expandedElementExecResult: ExecutionResultDto | null;
   results?: ExecutionResultDto = undefined;
+  groupedResultsMap = new Map<
+    NISQImplementationDto,
+    MatTableDataSource<AnalysisResultDto>
+  >();
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
@@ -231,11 +236,12 @@ export class NisqAnalyzerComponent implements OnInit {
     return true;
   }
 
-  groupResultsByImplementation(
-    analysisResults: AnalysisResultDto[]
-  ): GroupedResults[] {
+  groupResultsByImplementation(analysisResults: AnalysisResultDto[]): void {
     const results: GroupedResults[] = [];
-
+    const resultMap = new Map<
+      NISQImplementationDto,
+      MatTableDataSource<AnalysisResultDto>
+    >();
     for (const analysisResult of analysisResults) {
       const group = results.find(
         (res) => res.implementation.id === analysisResult.implementation.id
@@ -249,7 +255,13 @@ export class NisqAnalyzerComponent implements OnInit {
         });
       }
     }
-    return results;
+    for (const res of results) {
+      if (!resultMap.has(res.implementation)) {
+        const temp = new MatTableDataSource(res.results);
+        resultMap.set(res.implementation, temp);
+      }
+    }
+    this.groupedResultsMap = resultMap;
   }
 
   execute(analysisResult: AnalysisResultDto): void {
