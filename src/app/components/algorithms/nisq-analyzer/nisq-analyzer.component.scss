@@ -1,5 +1,17 @@
-table {
+.mat-table {
+  display: block;
   width: 100%;
+  overflow-x: auto;
+}
+
+// table column width helper for mat-tables
+@for $index from 0 through 200 {
+  $size: $index * 2;
+
+  .table-column-#{$size} {
+    // flex: 0 1 #{$size}#{"px"};
+    min-width: #{$size}#{"px"};
+  }
 }
 
 .mat-cell,
@@ -12,6 +24,11 @@ table {
   white-space: nowrap;
   overflow: hidden;
   vertical-align: middle;
+}
+
+.mat-row,
+.mat-header-row {
+  display: table-row;
 }
 
 tr.detail-row {
@@ -59,11 +76,16 @@ tr.element-row:not(.expanded-row):active {
 }
 
 .backend-column {
-  min-width: 300px;
+  min-width: 100px;
 }
 
 .value-column {
-  min-width: 75px;
+  min-width: 85px;
+  text-align: center;
+}
+
+button-column {
+  text-align: center;
 }
 
 .action-column {
@@ -92,13 +114,21 @@ tr.element-row:not(.expanded-row):active {
   margin-left: 45px;
 }
 
+.mat-spinner-left {
+  margin-left: 10px;
+}
+
 .impls-required {
   display: flex;
   justify-content: center;
 }
 
-.value-column {
-  min-width: 85px;
-  text-align: center;
+.spinner-wrapper {
+  display: flex;
 }
 
+.spinner-wrapper-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
