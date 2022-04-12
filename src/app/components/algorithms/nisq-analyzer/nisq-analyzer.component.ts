@@ -229,7 +229,7 @@ export class NisqAnalyzerComponent implements OnInit {
       this.jobReady = jobResult.ready;
       this.analyzerJob = jobResult;
       this.analyzerResults = jobResult.analysisResultList;
-
+      this.groupResultsByImplementation(this.analyzerResults);
       for (const analysisResult of this.analyzerResults) {
         this.showBackendQueueSize(analysisResult);
         this.hasExecutionResult(analysisResult);
