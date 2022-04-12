@@ -1,4 +1,10 @@
 /* tslint:disable */
-import { BibEntry } from 'api-library/models/bib-entry';
 
-export type BibEntryDto = { entry: BibEntry };
+export type BibEntryDto = {
+    author?: string;
+    title?: string;
+    citekey: string;
+    entrytype?: string;
+    date?: string;
+    keywords?: string;
+};
