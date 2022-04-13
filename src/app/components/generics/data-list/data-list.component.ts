@@ -3,7 +3,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
-  UiFeatures,
 } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
 

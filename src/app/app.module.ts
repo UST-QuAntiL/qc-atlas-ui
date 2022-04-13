@@ -27,6 +27,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -140,6 +141,7 @@ import { LibraryViewComponent } from './components/libraries/library-view/librar
     MatProgressSpinnerModule,
     MatSortModule,
     MatTableModule,
+    MatCheckboxModule,
   ],
   bootstrap: [AppComponent],
   providers: [
