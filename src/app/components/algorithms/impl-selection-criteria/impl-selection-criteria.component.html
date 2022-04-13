@@ -17,13 +17,27 @@
         ></app-text-input>
       </div>
       <div class="col-lg-6 col-md-12">
-        <app-select-input
-          name="SDK"
-          [value]="nisqImpl.sdk"
-          [choices]="sdks$ | async"
-          (onChange)="nisqImpl.sdk = $event"
-          (onSaveChanges)="saveImplementation()"
-        ></app-select-input>
+        <div class="row">
+          <div class="sdkselect">
+            <app-select-input
+            name="SDK"
+            [value]="nisqImpl.sdk"
+            [choices]="sdks$ | async"
+            (onChange)="nisqImpl.sdk = $event"
+            (onSaveChanges)="saveImplementation()"
+            ></app-select-input>
+          </div>
+          <div class=" newsdkbutton">
+            <button
+            mat-icon-button
+            aria-label="Add new SDK"
+            (click)="onCreateSoftwarePlatform()"
+            >
+              <mat-icon >add</mat-icon>
+            </button>
+          </div>
+        </div>
+        
       </div>
       <div class="col-lg-6 col-md-12">
         <app-select-input

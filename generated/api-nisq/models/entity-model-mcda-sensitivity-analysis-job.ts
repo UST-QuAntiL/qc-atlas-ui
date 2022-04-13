@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { Links } from './links';
 import { McdaResult } from './mcda-result';
-export type EntityModelMcdaJob = {
+export type EntityModelMcdaSensitivityAnalysisJob = {
   id?: string;
   time?: string;
   ready?: boolean;
@@ -10,6 +10,10 @@ export type EntityModelMcdaJob = {
   useBordaCount?: boolean;
   jobId?: string;
   jobType?: 'ANALYSIS' | 'COMPILATION' | 'QPU_SELECTION' | 'MCDA';
-  rankedResults?: Array<McdaResult>;
+  stepSize?: number;
+  upperBound?: number;
+  lowerBound?: number;
+  plotFileLocation?: string;
+  originalRanking?: Array<McdaResult>;
   _links?: Links;
 };

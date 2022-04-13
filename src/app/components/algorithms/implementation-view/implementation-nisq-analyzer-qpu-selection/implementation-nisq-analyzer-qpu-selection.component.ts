@@ -26,6 +26,7 @@ import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/impl
 import {
   CriterionValue,
   EntityModelMcdaJob,
+  EntityModelMcdaSensitivityAnalysisJob,
   ExecutionResultDto,
   QpuSelectionDto,
   QpuSelectionResultDto,
@@ -47,6 +48,8 @@ import {
   DialogData,
   ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
 } from '../dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
+// eslint-disable-next-line max-len
+import { ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog.component';
 
 @Component({
   selector: 'app-implementation-nisq-analyzer-qpu-selection',
@@ -120,8 +123,17 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   prioritizationJob: EntityModelMcdaJob;
   prioritizationJobReady = false;
   loadingMCDAJob = false;
+  mcdaJobSuccessful = false;
   rankings: Ranking[] = [];
   dataSource = new MatTableDataSource(this.analyzerResults);
+  bordaCountEnabled: boolean;
+  usedMcdaMethod: string;
+  sensitivityAnalysisJob: EntityModelMcdaSensitivityAnalysisJob;
+  sensitivityAnalysisJobReady = false;
+  pollingSensitivityAnalysisJobReadyData: Subscription;
+  sensitivityAnalysisJobSuccessful = false;
+  waitUntilSensitivityAnalysisIsFinished = false;
+  sensitivityAnalysisPlot: string;
 
   constructor(
     private utilService: UtilService,
@@ -356,12 +368,11 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   }
 
   prioritize(): void {
-    this.rankings = [];
     this.utilService
       .createDialog(
         ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
         {
-          title: 'Prioritize QPU-Selection-Analysis',
+          title: 'Prioritize Analysis Results',
         }
       )
       .afterClosed()
@@ -371,19 +382,34 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           this.loadingMCDAJob = true;
           this.prioritizationJob = undefined;
           this.prioritizationJobReady = false;
-          // calculate SMART with new assigned points
-          dialogResult.criteriaAndValues.forEach((obj) => {
-            totalSum += obj.points;
-          });
-          dialogResult.criteriaAndValues.forEach((obj) => {
-            if (obj.points !== 0) {
-              obj.weight = obj.points / totalSum;
-            } else {
-              obj.weight = 0;
-            }
-          });
+          this.usedMcdaMethod = dialogResult.mcdaMethod;
+          if (
+            dialogResult.stableExecutionResults &&
+            dialogResult.shortWaitingTime
+          ) {
+            this.bordaCountEnabled = true;
+          } else {
+            this.bordaCountEnabled = false;
+          }
+
+          let criteria = dialogResult.criteriaAndValues;
+          if (dialogResult.stableExecutionResults) {
+            criteria = dialogResult.criteriaAndWeightValues;
+          } else {
+            // calculate SMART with new assigned points
+            dialogResult.criteriaAndValues.forEach((obj) => {
+              totalSum += obj.points;
+            });
+            dialogResult.criteriaAndValues.forEach((obj) => {
+              if (obj.points !== 0) {
+                obj.weight = obj.points / totalSum;
+              } else {
+                obj.weight = 0;
+              }
+            });
+          }
           let numberOfCriterion = 0;
-          dialogResult.criteriaAndValues.forEach((obj) => {
+          criteria.forEach((obj) => {
             const criterionValue: CriterionValue = {
               description: { title: 'points', subTitle: obj.points.toString() },
               criterionID: obj.id,
@@ -399,17 +425,18 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
               .subscribe(
                 () => {
                   numberOfCriterion++;
-                  if (
-                    numberOfCriterion === dialogResult.criteriaAndValues.length
-                  ) {
+                  if (numberOfCriterion === criteria.length) {
                     this.mcdaService
                       .prioritizeCompiledCircuitsOfJob({
                         methodName: dialogResult.mcdaMethod,
                         jobId: this.analyzerJob.id,
+                        useBordaCount: this.bordaCountEnabled,
                       })
                       .subscribe((job) => {
+                        this.rankings = [];
                         this.prioritizationJob = job;
                         this.prioritizationJobReady = job.ready;
+                        this.mcdaJobSuccessful = false;
 
                         this.utilService.callSnackBar(
                           'Successfully created prioritization job "' +
@@ -468,6 +495,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
               }
             });
             this.dataSource = new MatTableDataSource(this.analyzerResults);
+            this.mcdaJobSuccessful = true;
             this.pollingAnalysisJobData.unsubscribe();
           }
         },
@@ -491,11 +519,82 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
   getScoreOfResult(result: QpuSelectionResultDto): number | string {
     const rankingResult = this.rankings.find((value) => value.id === result.id);
-    if (rankingResult && this.prioritizationJob.method !== 'electre-III') {
+    if (
+      rankingResult &&
+      this.prioritizationJob.method !== 'electre-III' &&
+      !this.bordaCountEnabled
+    ) {
       return rankingResult.score;
     } else {
       return '-';
     }
+  }
+
+  analyzeSensitivity(): void {
+    this.utilService
+      .createDialog(
+        ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent,
+        {
+          title: 'Analyze Sensitivity of Ranking',
+        }
+      )
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.mcdaService
+            .analyzeSensitivityOfCompiledCircuitsOfJob({
+              methodName: this.usedMcdaMethod,
+              jobId: this.analyzerJob.id,
+              stepSize: dialogResult.stepSize,
+              upperBound: dialogResult.upperBound,
+              lowerBound: dialogResult.lowerBound,
+              useBordaCount: this.bordaCountEnabled,
+            })
+            .subscribe(
+              (job) => {
+                this.waitUntilSensitivityAnalysisIsFinished = true;
+                this.sensitivityAnalysisJobSuccessful = false;
+                this.sensitivityAnalysisJob = job;
+                this.sensitivityAnalysisJobReady = job.ready;
+                this.utilService.callSnackBar(
+                  'Successfully created sensitivity analysis job "' +
+                    job.id +
+                    '".'
+                );
+
+                this.pollingSensitivityAnalysisJobReadyData = interval(2000)
+                  .pipe(
+                    startWith(0),
+                    switchMap(() =>
+                      this.mcdaService.getSensitivityAnalysisJob({
+                        methodName: this.usedMcdaMethod,
+                        jobId: job.id,
+                      })
+                    )
+                  )
+                  .subscribe((jobResult) => {
+                    this.sensitivityAnalysisJob = jobResult;
+                    this.sensitivityAnalysisJobReady = jobResult.ready;
+                    if (jobResult.state === 'FINISHED') {
+                      this.sensitivityAnalysisJobSuccessful = true;
+                      this.waitUntilSensitivityAnalysisIsFinished = false;
+                      this.sensitivityAnalysisPlot = jobResult.plotFileLocation;
+                      this.pollingSensitivityAnalysisJobReadyData.unsubscribe();
+                    }
+                  });
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Could not start sensitivity analysis.'
+                );
+              }
+            );
+        }
+      });
+  }
+
+  goToLink(url: string): void {
+    window.open(url, '_blank');
   }
 
   showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {

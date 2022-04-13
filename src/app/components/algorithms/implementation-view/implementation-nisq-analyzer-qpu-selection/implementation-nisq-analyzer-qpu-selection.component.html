@@ -106,6 +106,27 @@
                                          class="mat-spinner-left"></mat-spinner>
                         </div>
                     </button>
+                    <button *ngIf="mcdaJobSuccessful && usedMcdaMethod!=='electre-III'"
+                            mat-raised-button
+                            type="button"
+                            color="primary"
+                            (click)="analyzeSensitivity()"
+                    >
+                        <div class="spinner-wrapper-center">
+                            <span>Analyze Rank Sensitivity</span>
+                            <mat-spinner [diameter]="20" *ngIf="waitUntilSensitivityAnalysisIsFinished" color="accent"
+                                         class="mat-spinner-left" style="margin:0 auto;"></mat-spinner>
+                        </div>
+                    </button>
+                    <button *ngIf="sensitivityAnalysisJobSuccessful && mcdaJobSuccessful && usedMcdaMethod!=='electre-III'"
+                            mat-button
+                            type="button"
+                            color="primary"
+                            class="sensAnalysisResultsButton"
+                            (click)="goToLink(sensitivityAnalysisPlot)"
+                    >
+                        <span>Sensitivity Analysis Results <mat-icon class="link-icon">open_in_new</mat-icon></span>
+                    </button>
                 </div>
                 <div *ngIf="analyzerJob">
                     <h3>QPU Analysis Job from {{ analyzerJob.time }}</h3>
@@ -121,7 +142,8 @@
                     No suitable QPUs found!
                 </div>
                 <ng-container *ngIf="jobReady && analyzerResults && analyzerResults.length !== 0">
-                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onMatSortChange()" multiTemplateDataRows matSortDisableClear>
+                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onMatSortChange()"
+                           multiTemplateDataRows matSortDisableClear>
                         <ng-container matColumnDef="rank">
                             <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Rank
