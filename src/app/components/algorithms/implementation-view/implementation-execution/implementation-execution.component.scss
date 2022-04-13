@@ -12,7 +12,14 @@ table th.mat-header-cell:first-of-type, td.mat-cell:first-of-type {
 }
 
 th.mat-header-cell, td.mat-cell {
-  padding: 10px;
+  word-wrap: initial;
+  display: table-cell;
+  padding: 0px 10px;
+  line-break: unset;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
 }
 
 tr.detail-row {
@@ -33,6 +40,7 @@ tr.element-row:not(.expanded-row):active {
 
 .element-detail {
   overflow: hidden;
+  text-align: right;
 }
 
 .element-diagram {
@@ -70,3 +78,13 @@ tr.element-row:not(.expanded-row):active {
 .mat-raised-button {
   width: 10em;
 }
+
+.value-column {
+  min-width: 85px;
+  text-align: center;
+}
+
+.not-ready-job-list {
+  list-style-type: none;
+}
+

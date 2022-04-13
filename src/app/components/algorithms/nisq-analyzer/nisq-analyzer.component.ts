@@ -23,6 +23,7 @@ import {
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { SdksService } from 'api-nisq/services/sdks.service';
+import { MatTableDataSource } from '@angular/material/table';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
@@ -52,7 +53,27 @@ export class NisqAnalyzerComponent implements OnInit {
   sdksEmpty = true;
 
   // 2) Analyze phase
-  analyzeColumns = ['backendName', 'width', 'depth', 'execution'];
+  analyzeColumns = [
+    'qpu',
+    'provider',
+    'compiler',
+    'width',
+    'depth',
+    'analyzedMultiQubitGateDepth',
+    'analyzedTotalNumberOfOperations',
+    'analyzedNumberOfSingleQubitGates',
+    'analyzedNumberOfMultiQubitGates',
+    'analyzedNumberOfMeasurementOperations',
+    'avgSingleQubitGateError',
+    'avgMultiQubitGateError',
+    'avgSingleQubitGateTime',
+    'avgMultiQubitGateTime',
+    'avgReadoutError',
+    't1',
+    't2',
+    'lengthQueue',
+    'execution',
+  ];
   analyzerResults: AnalysisResultDto[] = [];
   jobColumns = ['inputParameters', 'time', 'ready'];
   analyzerJobs$: Observable<AnalysisJobDto[]>;
@@ -64,6 +85,10 @@ export class NisqAnalyzerComponent implements OnInit {
   queueLengths = new Map<string, number>();
   executionResultsAvailable = new Map<string, boolean>();
   loadingResults = new Map<string, boolean>();
+  groupedResultsMap = new Map<
+    NISQImplementationDto,
+    MatTableDataSource<AnalysisResultDto>
+  >();
 
   // 3) Execution
   resultBackendColumns = ['backendName', 'width', 'depth'];
@@ -204,7 +229,7 @@ export class NisqAnalyzerComponent implements OnInit {
       this.jobReady = jobResult.ready;
       this.analyzerJob = jobResult;
       this.analyzerResults = jobResult.analysisResultList;
-
+      this.groupResultsByImplementation(this.analyzerResults);
       for (const analysisResult of this.analyzerResults) {
         this.showBackendQueueSize(analysisResult);
         this.hasExecutionResult(analysisResult);
@@ -213,11 +238,12 @@ export class NisqAnalyzerComponent implements OnInit {
     return true;
   }
 
-  groupResultsByImplementation(
-    analysisResults: AnalysisResultDto[]
-  ): GroupedResults[] {
+  groupResultsByImplementation(analysisResults: AnalysisResultDto[]): void {
     const results: GroupedResults[] = [];
-
+    const resultMap = new Map<
+      NISQImplementationDto,
+      MatTableDataSource<AnalysisResultDto>
+    >();
     for (const analysisResult of analysisResults) {
       const group = results.find(
         (res) => res.implementation.id === analysisResult.implementation.id
@@ -231,7 +257,14 @@ export class NisqAnalyzerComponent implements OnInit {
         });
       }
     }
-    return results;
+    for (const res of results) {
+      if (!resultMap.has(res.implementation)) {
+        const temp = new MatTableDataSource(res.results);
+        // temp.sort = this.nisqAnalysisResultSort;
+        resultMap.set(res.implementation, temp);
+      }
+    }
+    this.groupedResultsMap = resultMap;
   }
 
   execute(analysisResult: AnalysisResultDto): void {

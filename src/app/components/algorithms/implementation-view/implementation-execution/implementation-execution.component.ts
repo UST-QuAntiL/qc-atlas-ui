@@ -1,16 +1,29 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { ImplementationDto } from 'api-atlas/models/implementation-dto';
 import { ImplementationDto as NisqImplementationDto } from 'api-nisq/models/implementation-dto';
-import { BehaviorSubject, interval, Observable } from 'rxjs';
+import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
 import { CompilerAnalysisResultDto } from 'api-nisq/models/compiler-analysis-result-dto';
 import { CompilationJobDto } from 'api-nisq/models/compilation-job-dto';
-import { exhaustMap, first, map, switchMap, tap } from 'rxjs/operators';
+import {
+  exhaustMap,
+  first,
+  map,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { CompilerAnalysisResultService } from 'api-nisq/services/compiler-analysis-result.service';
 import { ExecutionResultDto } from 'api-nisq/models/execution-result-dto';
-import { ImplementationService, RootService } from 'api-nisq/services';
-import { CompilerSelectionDto } from 'api-nisq/models';
+import {
+  ImplementationService,
+  QpuSelectionResultService,
+  RootService,
+} from 'api-nisq/services';
+import { CompilerSelectionDto, QpuSelectionJobDto } from 'api-nisq/models';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
@@ -25,6 +38,7 @@ export class ImplementationExecutionComponent implements OnInit {
   @Input() algo: AlgorithmDto;
   @Input() impl: ImplementationDto;
   @Input() guard: ChangePageGuard;
+  @ViewChild(MatSort) sort: MatSort;
 
   analyzeColumns = [
     'qpu',
@@ -32,6 +46,19 @@ export class ImplementationExecutionComponent implements OnInit {
     'compiler',
     'analyzedDepth',
     'analyzedWidth',
+    'analyzedMultiQubitGateDepth',
+    'analyzedTotalNumberOfOperations',
+    'analyzedNumberOfSingleQubitGates',
+    'analyzedNumberOfMultiQubitGates',
+    'analyzedNumberOfMeasurementOperations',
+    'avgSingleQubitGateError',
+    'avgMultiQubitGateError',
+    'avgSingleQubitGateTime',
+    'avgMultiQubitGateTime',
+    'avgReadoutError',
+    't1',
+    't2',
+    'lengthQueue',
     'time',
     'execution',
   ];
@@ -41,10 +68,20 @@ export class ImplementationExecutionComponent implements OnInit {
   results?: ExecutionResultDto = undefined;
   nisqImpl: NisqImplementationDto;
   compilerResults$: Observable<CompilerAnalysisResultDto[]>;
+  compilerResults: CompilerAnalysisResultDto[] = [];
   expandedElement: CompilerAnalysisResultDto | null;
   expandedElementExecResult: ExecutionResultDto | null;
+  queueLengths = new Map<string, number>();
+  analyzerJobs: QpuSelectionJobDto[];
+  pollingAnalysisJobData: Subscription;
+  notReadycompilationJobsMap: Map<string, string> = new Map();
+  expandedElementMap: Map<
+    CompilerAnalysisResultDto,
+    ExecutionResultDto
+  > = new Map<CompilerAnalysisResultDto, ExecutionResultDto>();
 
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
+  dataSource = new MatTableDataSource(this.compilerResults);
 
   constructor(
     private readonly http: HttpClient,
@@ -52,11 +89,12 @@ export class ImplementationExecutionComponent implements OnInit {
     private utilService: UtilService,
     private rootService: RootService,
     private nisqImplementationService: ImplementationService,
-    private nisqAnalyzerService: NisqAnalyzerService
+    private nisqAnalyzerService: NisqAnalyzerService,
+    private qpuSelectionService: QpuSelectionResultService
   ) {}
 
   ngOnInit(): void {
-    this.compilerResults$ = this.sort$
+    this.sort$
       .pipe(
         switchMap((sort) =>
           this.compilerResultService.getCompilerAnalysisResults({
@@ -71,16 +109,29 @@ export class ImplementationExecutionComponent implements OnInit {
             (compilerResult) => compilerResult.circuitName === this.impl.name
           )
         )
-      );
+      )
+      .subscribe((res) => {
+        this.compilerResults = res;
+        this.dataSource = new MatTableDataSource(this.compilerResults);
+        this.getQueueSizes();
+      });
     this.refreshNisqImpl();
   }
 
-  changeSort(active: string, direction: 'asc' | 'desc' | ''): void {
-    if (!active || !direction) {
-      this.sort$.next(undefined);
-    } else {
-      this.sort$.next([`${active},${direction}`]);
-    }
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+  }
+
+  onMatSortChange(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property): string | number => {
+      switch (property) {
+        case 'lengthQueue':
+          return this.queueLengths[item.qpu];
+        default:
+          return item[property];
+      }
+    };
   }
 
   execute(analysisResult: CompilerAnalysisResultDto): void {
@@ -93,6 +144,7 @@ export class ImplementationExecutionComponent implements OnInit {
           this.utilService.callSnackBar(
             'Successfully created execution job "' + results.id + '".'
           );
+          this.ngOnInit();
           if (results.status === 'FAILED' || results.status === 'FINISHED') {
             this.results = results;
           } else {
@@ -106,7 +158,9 @@ export class ImplementationExecutionComponent implements OnInit {
                     value.status === 'FAILED' || value.status === 'FINISHED'
                 )
               )
-              .subscribe((finalResult) => (this.results = finalResult));
+              .subscribe((finalResult) => {
+                this.results = finalResult;
+              });
           }
         },
         () => {
@@ -122,7 +176,8 @@ export class ImplementationExecutionComponent implements OnInit {
   }
 
   showExecutionResult(analysisResult: CompilerAnalysisResultDto): void {
-    if (Object.is(this.expandedElement, analysisResult)) {
+    if (this.expandedElementMap.has(analysisResult)) {
+      this.expandedElementMap.delete(analysisResult);
       this.expandedElement = undefined;
       this.expandedElementExecResult = undefined;
       return;
@@ -134,6 +189,7 @@ export class ImplementationExecutionComponent implements OnInit {
     this.http.get<ExecutionResultDto>(href).subscribe((dto) => {
       this.expandedElement = analysisResult;
       this.expandedElementExecResult = dto;
+      this.expandedElementMap.set(analysisResult, dto);
     });
   }
 
@@ -166,11 +222,16 @@ export class ImplementationExecutionComponent implements OnInit {
             .subscribe(
               (compilationJob: CompilationJobDto) => {
                 this.latestCompilationJob = compilationJob;
+                this.notReadycompilationJobsMap.set(
+                  compilationJob.id,
+                  dialogResult.qpu
+                );
                 this.utilService.callSnackBar(
                   'Successfully created compilation job "' +
                     compilationJob.id +
                     '".'
                 );
+                this.pollAnalysisJobData(compilationJob.id);
               },
               () => {
                 this.utilService.callSnackBar(
@@ -193,19 +254,34 @@ export class ImplementationExecutionComponent implements OnInit {
       });
   }
 
-  refresh(): void {
-    if (this.latestCompilationJob) {
-      this.compilerResultService
-        .getCompilerAnalysisJob({
-          resId: this.latestCompilationJob.id,
-        })
-        .subscribe((compileJob) => {
-          if (compileJob.ready) {
-            this.ngOnInit();
-          }
+  getQueueSizes(): void {
+    this.compilerResults.forEach((analysisResult) => {
+      this.nisqAnalyzerService
+        .getIBMQBackendState(analysisResult.qpu)
+        .subscribe((data) => {
+          this.queueLengths[analysisResult.qpu] = data.lengthQueue;
         });
-    } else {
-      this.ngOnInit();
-    }
+    });
+  }
+
+  pollAnalysisJobData(compilationJobId: string): void {
+    const pollingAnalysisJobData = interval(2000)
+      .pipe(
+        startWith(0),
+        exhaustMap(() =>
+          this.compilerResultService.getCompilerAnalysisJob({
+            resId: compilationJobId,
+          })
+        )
+      )
+      .subscribe((compileJob) => {
+        if (compileJob.ready) {
+          pollingAnalysisJobData.unsubscribe();
+          if (this.notReadycompilationJobsMap.has(compileJob.id)) {
+            this.notReadycompilationJobsMap.delete(compileJob.id);
+          }
+          this.ngOnInit();
+        }
+      });
   }
 }
