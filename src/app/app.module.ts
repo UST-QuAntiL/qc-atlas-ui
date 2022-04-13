@@ -67,6 +67,7 @@ import { FeatureTogglingComponent } from './components/feature-toggling/feature-
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 import { initializeKeycloak } from './util/keycloak-init';
 import { LibraryViewComponent } from './components/libraries/library-view/library-view.component';
+import { AddBibentryDialogComponent } from './components/libraries/dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { LibraryViewComponent } from './components/libraries/library-view/librar
     AddOrEditComputeResourcePropertyTypeDialogComponent,
     FeatureTogglingComponent,
     LibraryViewComponent,
+    AddBibentryDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

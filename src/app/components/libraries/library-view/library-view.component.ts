@@ -8,6 +8,9 @@ import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
 } from '../../../directives/qc-atlas-ui-repository-configuration.service';
+import { CreateSoftwarePlatformDialogComponent } from '../../execution-environments/software-platforms/dialogs/create-software-platform-dialog.component';
+import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
+import { UtilService } from '../../../util/util.service';
 
 @Component({
   selector: 'app-library-view',
@@ -40,8 +43,10 @@ export class LibraryViewComponent implements OnInit {
 
   constructor(
     private libraryService: LibrariesService,
-    private configService: QcAtlasUiRepositoryConfigurationService
-  ) {}
+    private configService: QcAtlasUiRepositoryConfigurationService,
+    private utilService: UtilService
+  ) {
+  }
 
   ngOnInit(): void {
     this.uiConfig = this.configService.configuration;
@@ -80,13 +85,25 @@ export class LibraryViewComponent implements OnInit {
     this.selection.clear();
   }
 
-  onAddEntry(): void {}
+  onAddEntry(): void {
+    this.utilService
+      .createDialog(AddBibentryDialogComponent, {
+        title: 'Add a new bib entry',
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        console.log(dialogResult);
+      });
+  }
 
-  onDeleteEntriesSubmitted(): void {}
+  onDeleteEntriesSubmitted(): void {
+  }
 
-  onDeleteElements(event): void {}
+  onDeleteElements(event): void {
+  }
 
-  sortData(event): void {}
+  sortData(event): void {
+  }
 
   isAllSelected(): boolean {
     return (
