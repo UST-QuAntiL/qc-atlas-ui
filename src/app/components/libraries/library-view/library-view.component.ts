@@ -11,6 +11,8 @@ import {
 import { CreateSoftwarePlatformDialogComponent } from '../../execution-environments/software-platforms/dialogs/create-software-platform-dialog.component';
 import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
 import { UtilService } from '../../../util/util.service';
+import { BibEntryDto } from 'api-library/models/bib-entry-dto';
+import { BibEntries, BibEntryPost } from 'api-library/models/bib-entries';
 
 @Component({
   selector: 'app-library-view',
@@ -53,8 +55,8 @@ export class LibraryViewComponent implements OnInit {
     this.libraries$ = this.libraryService.getLibraryNames().pipe(
       map((libraries) =>
         libraries.libraryNames.map((library) => ({
-          label: library,
-          value: library,
+          label: library.substr(0, library.length - 4),
+          value: library.substr(0, library.length - 4),
         }))
       )
     );
@@ -92,7 +94,11 @@ export class LibraryViewComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((dialogResult) => {
-        console.log(dialogResult);
+        const bibEntryDto = dialogResult as BibEntryDto;
+        const bibEntries: BibEntryPost = { entry: bibEntryDto };
+        this.libraryService
+          .addEntryToLibrary({ libraryName: this.library, body: bibEntries })
+          .subscribe(() => this.getLibrary(this.library));
       });
   }
 

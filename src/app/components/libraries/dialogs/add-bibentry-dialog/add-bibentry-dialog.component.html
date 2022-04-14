@@ -1,10 +1,12 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
   <form [formGroup]="bibEntryForm">
-    <mat-form-field class="input-field">
-      <mat-label>Name</mat-label>
-      <input id="name" formControlName="name" matInput required>
-    </mat-form-field>
+    <div *ngFor="let field of fields">
+      <mat-form-field class="input-field">
+        <mat-label>{{ field }}</mat-label>
+        <input [id]="field" [formControlName]="field" matInput required>
+      </mat-form-field>
+    </div>
   </form>
 </div>
 <div mat-dialog-actions>

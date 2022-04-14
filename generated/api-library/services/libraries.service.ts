@@ -11,7 +11,7 @@ import { filter, map } from 'rxjs/operators';
 import { BibEntryDto } from '../models/bib-entry-dto';
 import { NewLibraryConfiguration } from '../models/new-library-configuration';
 import { LibraryNames } from 'api-library/models/library-names';
-import { BibEntries } from 'api-library/models/bib-entries';
+import { BibEntries, BibEntryPost } from 'api-library/models/bib-entries';
 
 @Injectable({
     providedIn: 'root',
@@ -186,7 +186,7 @@ export class LibrariesService extends BaseService {
      */
     addEntryToLibrary$Response(params: {
         libraryName: string;
-        body?: BibEntryDto;
+        body?: BibEntryPost;
     }): Observable<StrictHttpResponse<void>> {
         const rb = new RequestBuilder(
             this.rootUrl,
@@ -223,7 +223,7 @@ export class LibrariesService extends BaseService {
      */
     addEntryToLibrary(params: {
         libraryName: string;
-        body?: BibEntryDto;
+        body?: BibEntryPost;
     }): Observable<void> {
         return this.addEntryToLibrary$Response(params).pipe(
             map((r: StrictHttpResponse<void>) => r.body as void)
