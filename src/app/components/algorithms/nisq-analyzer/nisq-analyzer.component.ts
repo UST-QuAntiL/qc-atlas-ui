@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import {
@@ -25,6 +25,7 @@ import { ImplementationService } from 'api-nisq/services/implementation.service'
 import { SdksService } from 'api-nisq/services/sdks.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { ProviderService } from 'generated/api-qprov/services';
+import { MatSort } from '@angular/material/sort';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
@@ -46,6 +47,7 @@ import { NisqAnalyzerService } from './nisq-analyzer.service';
 })
 export class NisqAnalyzerComponent implements OnInit {
   @Input() algo: AlgorithmDto;
+  @ViewChild('nisqAnalysisResultSort') public nisqAnalysisResultSort: MatSort;
 
   // 1) Selection
   params: ParameterDto[];
@@ -141,11 +143,44 @@ export class NisqAnalyzerComponent implements OnInit {
       .pipe(map((dto) => dto.analysisJobList));
   }
 
+  ngAfterViewInit(): void {
+    for (const entry of this.groupedResultsMap.entries()) {
+      const value = entry[1];
+      value.sort = this.nisqAnalysisResultSort;
+      this.groupedResultsMap.set(entry[0], value);
+    }
+  }
+
   changeSort(active: string, direction: 'asc' | 'desc' | ''): void {
     if (!active || !direction) {
       this.sort$.next(undefined);
     } else {
       this.sort$.next([`${active},${direction}`]);
+    }
+  }
+
+  onMatSortChange(active: string, direction: 'asc' | 'desc' | ''): void {
+    for (const entry of this.groupedResultsMap.entries()) {
+      const value = entry[1];
+      this.nisqAnalysisResultSort.active = active;
+      this.nisqAnalysisResultSort.direction = direction;
+      value.sort = this.nisqAnalysisResultSort;
+      value.sortingDataAccessor = (item, property): string | number => {
+        switch (property) {
+          case 'lengthQueue':
+            return this.queueLengths[item.qpu];
+          default: {
+            if (property === 'width') {
+              property = 'analyzedWidth';
+            }
+            if (property === 'depth') {
+              property = 'analyzedDepth';
+            }
+            return item[property];
+          }
+        }
+      };
+      this.groupedResultsMap.set(entry[0], value);
     }
   }
 

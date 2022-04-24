@@ -95,7 +95,8 @@
           <ng-container *ngIf="jobReady && analyzerResults && analyzerResults.length !== 0">
             <div class="p-2 overflow-auto" *ngFor="let result of groupedResultsMap | keyvalue">
               <h4>Implementation: <strong>{{ result.key.name }}</strong></h4>
-              <table mat-table [dataSource]="result.value" matSort multiTemplateDataRows>
+              <table mat-table [dataSource]="result.value" matSort multiTemplateDataRows
+              (matSortChange)="onMatSortChange($event.active, $event.direction)">
                 <ng-container matColumnDef="qpu">
                   <th class="backend-column" mat-header-cell mat-sort-header *matHeaderCellDef>
                     Backend Name
