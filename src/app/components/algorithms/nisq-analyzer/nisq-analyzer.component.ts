@@ -95,6 +95,10 @@ export class NisqAnalyzerComponent implements OnInit {
   executedAnalyseResult: AnalysisResultDto;
   expandedElementExecResult: ExecutionResultDto | null;
   results?: ExecutionResultDto = undefined;
+  expandedElementMap: Map<AnalysisResultDto, ExecutionResultDto> = new Map<
+    AnalysisResultDto,
+    ExecutionResultDto
+  >();
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
@@ -311,7 +315,8 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   showExecutionResult(analysisResult: AnalysisResultDto): void {
-    if (Object.is(this.expandedElement, analysisResult)) {
+    if (this.expandedElementMap.has(analysisResult)) {
+      this.expandedElementMap.delete(analysisResult);
       this.expandedElement = undefined;
       this.expandedElementExecResult = undefined;
       return;
@@ -326,6 +331,7 @@ export class NisqAnalyzerComponent implements OnInit {
         this.http.get<ExecutionResultDto>(href).subscribe((dto) => {
           this.expandedElement = analysisResult;
           this.expandedElementExecResult = dto;
+          this.expandedElementMap.set(analysisResult, dto);
         });
       });
   }
