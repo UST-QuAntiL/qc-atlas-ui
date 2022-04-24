@@ -24,6 +24,7 @@ import { AnalysisResultService } from 'api-nisq/services/analysis-result.service
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { SdksService } from 'api-nisq/services/sdks.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { ProviderService } from 'generated/api-qprov/services';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
@@ -89,6 +90,9 @@ export class NisqAnalyzerComponent implements OnInit {
     NISQImplementationDto,
     MatTableDataSource<AnalysisResultDto>
   >();
+  qpuDataIsUpToDate = new Map<AnalysisResultDto, boolean>();
+  qpuCounter = 0;
+  qpuCheckFinished = false;
 
   // 3) Execution
   resultBackendColumns = ['backendName', 'width', 'depth'];
@@ -108,7 +112,8 @@ export class NisqAnalyzerComponent implements OnInit {
     private formBuilder: FormBuilder,
     private http: HttpClient,
     private implementationService: ImplementationService,
-    private sdkService: SdksService
+    private sdkService: SdksService,
+    private qprovService: ProviderService
   ) {}
 
   ngOnInit(): void {
@@ -237,6 +242,7 @@ export class NisqAnalyzerComponent implements OnInit {
       for (const analysisResult of this.analyzerResults) {
         this.showBackendQueueSize(analysisResult);
         this.hasExecutionResult(analysisResult);
+        this.checkIfQpuDataIsOutdated(analysisResult);
       }
     });
     return true;
@@ -269,6 +275,49 @@ export class NisqAnalyzerComponent implements OnInit {
       }
     }
     this.groupedResultsMap = resultMap;
+  }
+
+  checkIfQpuDataIsOutdated(analysisResult: AnalysisResultDto): void {
+    let provider = null;
+    this.qprovService.getProviders().subscribe((providers) => {
+      for (const providerDto of providers._embedded.providerDtoes) {
+        if (
+          providerDto.name.toLowerCase() ===
+          analysisResult.provider.toLowerCase()
+        ) {
+          provider = providerDto;
+          break;
+        }
+      }
+      // search for QPU with given name from the given provider
+      this.qprovService
+        .getQpUs({ providerId: provider.id })
+        .subscribe((qpuResult) => {
+          for (const qpuDto of qpuResult._embedded.qpuDtoes) {
+            if (
+              qpuDto.name.toLowerCase() === analysisResult.qpu.toLowerCase()
+            ) {
+              if (
+                qpuDto.lastCalibrated === null ||
+                Date.parse(analysisResult.time) >=
+                  Date.parse(qpuDto.lastCalibrated)
+              ) {
+                this.qpuDataIsUpToDate.set(analysisResult, true);
+              } else {
+                this.qpuDataIsUpToDate.set(analysisResult, false);
+              }
+              break;
+            }
+          }
+          this.qpuCounter++;
+          if (this.qpuCounter === this.analyzerJob.analysisResultList.length) {
+            this.qpuCheckFinished = true;
+            this.qpuCounter = 0;
+          } else {
+            this.qpuCheckFinished = false;
+          }
+        });
+    });
   }
 
   execute(analysisResult: AnalysisResultDto): void {

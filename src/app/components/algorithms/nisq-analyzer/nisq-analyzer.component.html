@@ -81,7 +81,12 @@
                   ) | keyvalue
                 ">
               <h3>Analysis Job from {{ analyzerJob.time }}, Input: {{ resParam.key }} = {{ resParam.value }}</h3>
+              <div *ngIf="!qpuCheckFinished" class="spinner-wrapper">
+                <span><i>Check if QPU data is up-to-date</i></span>
+                <mat-spinner class="mat-spinner-left" [diameter]="20"></mat-spinner>
             </div>
+            </div>
+
           </div>
           <div *ngIf="jobReady && analyzerResults && analyzerResults.length === 0"
             class="d-flex align-content-center justify-content-center py-5">
@@ -97,6 +102,7 @@
                   </th>
                   <td class="backend-column" mat-cell *matCellDef="let element">
                     <strong>{{ element.qpu }}</strong>
+                    <p *ngIf="qpuDataIsUpToDate.get(element) === false" style="color:red;">OUTDATED</p>
                   </td>
                 </ng-container>
 
