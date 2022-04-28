@@ -1,3 +1,6 @@
 /* tslint:disable */
+/* eslint-disable */
 import { Study } from './study';
-export type StudyDto = { studyDefinition?: Study };
+export interface StudyDto {
+  studyDefinition?: Study;
+}

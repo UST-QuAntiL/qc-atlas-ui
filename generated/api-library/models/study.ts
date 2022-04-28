@@ -1,11 +1,12 @@
 /* tslint:disable */
+/* eslint-disable */
 import { StudyDatabase } from './study-database';
 import { StudyQuery } from './study-query';
-export type Study = {
+export interface Study {
   authors?: Array<string>;
-  title?: string;
-  'last-search-date'?: string;
-  'research-questions'?: Array<string>;
-  queries?: Array<StudyQuery>;
   databases?: Array<StudyDatabase>;
-};
+  'last-search-date'?: string;
+  queries?: Array<StudyQuery>;
+  'research-questions'?: Array<string>;
+  title?: string;
+}

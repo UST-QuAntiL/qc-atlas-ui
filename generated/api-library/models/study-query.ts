@@ -1,2 +1,5 @@
 /* tslint:disable */
-export type StudyQuery = { query?: string };
+/* eslint-disable */
+export interface StudyQuery {
+  query?: string;
+}

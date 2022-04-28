@@ -1,4 +1,5 @@
 /* tslint:disable */
+/* eslint-disable */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { BaseService } from '../base-service';
@@ -8,11 +9,15 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class RootService extends BaseService {
-  constructor(config: ApiConfiguration, http: HttpClient) {
+  constructor(
+    config: ApiConfiguration,
+    http: HttpClient
+  ) {
     super(config, http);
   }
 
@@ -27,25 +32,22 @@ export class RootService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getText$Response(params?: {}): Observable<StrictHttpResponse<void>> {
+  getText$Response(params?: {
+  }): Observable<StrictHttpResponse<string>> {
+
     const rb = new RequestBuilder(this.rootUrl, RootService.GetTextPath, 'get');
     if (params) {
     }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'text',
-          accept: '*/*',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return (r as HttpResponse<any>).clone({
-            body: undefined,
-          }) as StrictHttpResponse<void>;
-        })
-      );
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: 'text/html'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<string>;
+      })
+    );
   }
 
   /**
@@ -54,9 +56,12 @@ export class RootService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getText(params?: {}): Observable<void> {
+  getText(params?: {
+  }): Observable<string> {
+
     return this.getText$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+      map((r: StrictHttpResponse<string>) => r.body as string)
     );
   }
+
 }

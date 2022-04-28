@@ -8,11 +8,9 @@ import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
 } from '../../../directives/qc-atlas-ui-repository-configuration.service';
-import { CreateSoftwarePlatformDialogComponent } from '../../execution-environments/software-platforms/dialogs/create-software-platform-dialog.component';
 import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { BibEntryDto } from 'api-library/models/bib-entry-dto';
-import { BibEntries, BibEntryPost } from 'api-library/models/bib-entries';
 
 @Component({
   selector: 'app-library-view',
@@ -32,10 +30,9 @@ export class LibraryViewComponent implements OnInit {
     'Title',
     'Authors',
     'Date',
-    'Entry Type',
-    'Keywords',
+    'Entry Type'
   ];
-  variableNames = ['id', 'title', 'author', 'date', 'entrytype', 'keywords'];
+  variableNames = ['id', 'title', 'author', 'date', 'entrytype'];
   loading = true;
   libraries$: Observable<Option[]>;
   library: string;
@@ -54,7 +51,7 @@ export class LibraryViewComponent implements OnInit {
     this.uiConfig = this.configService.configuration;
     this.libraries$ = this.libraryService.getLibraryNames().pipe(
       map((libraries) =>
-        libraries.libraryNames.map((library) => ({
+        libraries.map((library) => ({
           label: library.substr(0, library.length - 4),
           value: library.substr(0, library.length - 4),
         }))
@@ -70,12 +67,11 @@ export class LibraryViewComponent implements OnInit {
       .subscribe((bibentries) => {
         bibentries.bibEntries.forEach((entry) => {
           this.entries.push({
-            id: entry.citekey,
+            id: entry.citationKey,
             author: entry.author,
             title: entry.title,
-            entrytype: entry.entrytype,
+            entrytype: entry.entryType,
             date: entry.date,
-            keywords: entry.keywords,
           });
         });
         this.loading = false;
@@ -95,9 +91,8 @@ export class LibraryViewComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         const bibEntryDto = dialogResult as BibEntryDto;
-        const bibEntries: BibEntryPost = { entry: bibEntryDto };
         this.libraryService
-          .addEntryToLibrary({ libraryName: this.library, body: bibEntries })
+          .addEntryToLibrary({ libraryName: this.library, body: bibEntryDto })
           .subscribe(() => this.getLibrary(this.library));
       });
   }

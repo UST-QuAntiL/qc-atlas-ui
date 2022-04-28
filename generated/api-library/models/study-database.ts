@@ -1,2 +1,6 @@
 /* tslint:disable */
-export type StudyDatabase = { name?: string; enabled?: boolean };
+/* eslint-disable */
+export interface StudyDatabase {
+  enabled?: boolean;
+  name?: string;
+}

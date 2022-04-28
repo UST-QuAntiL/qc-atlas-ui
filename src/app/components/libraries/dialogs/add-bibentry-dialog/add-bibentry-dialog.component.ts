@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BibEntryDto } from 'api-library/models/bib-entry-dto';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-bibentry-dialog',
@@ -10,7 +9,7 @@ import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 })
 export class AddBibentryDialogComponent implements OnInit {
   bibEntryForm: FormGroup;
-  fields = ['author', 'title', 'citekey', 'entrytype', 'date', 'keywords'];
+  fields = ['author', 'title', 'citationKey', 'entryType', 'date'];
 
   constructor(
     public dialogRef: MatDialogRef<AddBibentryDialogComponent>,
@@ -58,5 +57,3 @@ export interface DialogData {
   title: string;
   name: string;
 }
-
-
