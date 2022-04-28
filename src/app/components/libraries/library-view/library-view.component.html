@@ -5,6 +5,13 @@
             [choices]="libraries$ | async"
             (onChange)="getLibrary($event)"
     ></app-select-input>
+  <button mdbBtn class="control-button add-button btn-sm" type="button"
+          color="green"
+          outline="true"
+          (click)="onAddLibrary()" mdbWavesEffect
+          [hidden]="!uiConfig.features.enableEditing">
+    <span class="material-icons">{{addIcon}}</span>
+  </button>
 </div>
 <mat-card class="m-2">
     <div class="mx-3 mb-2">

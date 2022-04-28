@@ -11,6 +11,8 @@ import {
 import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { BibEntryDto } from 'api-library/models/bib-entry-dto';
+import { AddLibraryDialogComponent } from '../dialogs/add-library-dialog/add-library-dialog.component';
+import { NewLibraryDto } from 'api-library/models';
 
 @Component({
   selector: 'app-library-view',
@@ -49,6 +51,10 @@ export class LibraryViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.uiConfig = this.configService.configuration;
+    this.getLibraryNames();
+  }
+
+  getLibraryNames(): void {
     this.libraries$ = this.libraryService.getLibraryNames().pipe(
       map((libraries) =>
         libraries.map((library) => ({
@@ -153,6 +159,22 @@ export class LibraryViewComponent implements OnInit {
   onSearchChange(): void {
     // this.datalistConfigChanged.emit(this.generateGetParameter());
     this.selection.clear();
+  }
+
+  onAddLibrary() {
+    this.utilService
+      .createDialog(AddLibraryDialogComponent, {
+        title: 'Create new library',
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        const libraryDTO: NewLibraryDto = { libraryName: dialogResult.name };
+        this.libraryService
+          .createNewLibrary({ body: libraryDTO })
+          .subscribe(() => {
+            this.getLibraryNames();
+          });
+      });
   }
 }
 
