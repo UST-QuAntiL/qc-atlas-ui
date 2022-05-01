@@ -1,10 +1,9 @@
-:host {
-  display: inline-block;
-  min-width: 100%;
-}
 
-table {
+
+.mat-table {
+  display: block;
   width: 100%;
+  overflow-x: auto;
 }
 
 table th.mat-header-cell:first-of-type, td.mat-cell:first-of-type {
@@ -21,7 +20,10 @@ th.mat-header-cell, td.mat-cell {
   overflow: hidden;
   vertical-align: middle;
 }
-
+.mat-row,
+.mat-header-row {
+  display: table-row;
+}
 tr.detail-row {
   height: 0;
 }

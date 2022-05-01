@@ -21,7 +21,7 @@
                 multiTemplateDataRows
                 matSortDisableClear
         >
-            <ng-container matColumnDef="qpu">
+            <ng-container matColumnDef="qpu" sticky>
                 <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                     QPU
                 </th>
@@ -30,7 +30,7 @@
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="provider">
+            <ng-container matColumnDef="provider" sticky>
                 <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                     Vendor
                 </th>
@@ -39,7 +39,7 @@
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="compiler">
+            <ng-container matColumnDef="compiler" sticky>
                 <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                     Compiler
                 </th>

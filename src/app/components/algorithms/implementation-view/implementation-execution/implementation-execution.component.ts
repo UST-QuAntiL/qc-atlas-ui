@@ -23,7 +23,7 @@ import {
 } from 'api-nisq/services';
 import { CompilerSelectionDto, QpuSelectionJobDto } from 'api-nisq/models';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
@@ -39,6 +39,7 @@ export class ImplementationExecutionComponent implements OnInit {
   @Input() impl: ImplementationDto;
   @Input() guard: ChangePageGuard;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatTable) table: MatTable<any>;
 
   analyzeColumns = [
     'qpu',
@@ -121,7 +122,11 @@ export class ImplementationExecutionComponent implements OnInit {
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
   }
-
+  ngAfterViewChecked(): void {
+    if (this.table) {
+      this.table.updateStickyColumnStyles();
+    }
+  }
   onMatSortChange(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = (item, property): string | number => {

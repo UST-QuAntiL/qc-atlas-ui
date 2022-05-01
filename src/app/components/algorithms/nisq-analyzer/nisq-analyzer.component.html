@@ -91,7 +91,7 @@
             <div class="p-2 overflow-auto" *ngFor="let result of groupedResultsMap | keyvalue">
               <h4>Implementation: <strong>{{ result.key.name }}</strong></h4>
               <table mat-table [dataSource]="result.value" matSort multiTemplateDataRows>
-                <ng-container matColumnDef="qpu">
+                <ng-container matColumnDef="qpu" sticky>
                   <th class="backend-column" mat-header-cell mat-sort-header *matHeaderCellDef>
                     Backend Name
                   </th>
@@ -100,7 +100,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="provider">
+                <ng-container matColumnDef="provider" sticky>
                   <th class="value-column" mat-header-cell mat-sort-header *matHeaderCellDef>
                     Provider
                   </th>
@@ -109,7 +109,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="compiler">
+                <ng-container matColumnDef="compiler" sticky>
                   <th class="value-column" mat-header-cell mat-sort-header *matHeaderCellDef >
                     SDK
                   </th>
@@ -118,7 +118,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="width">
+                <ng-container matColumnDef="width" >
                   <th class="value-column" mat-header-cell mat-sort-header *matHeaderCellDef>
                     Width
                   </th>
@@ -127,7 +127,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="depth">
+                <ng-container matColumnDef="depth" >
                   <th class="value-column" mat-header-cell mat-sort-header *matHeaderCellDef>
                     Depth
                   </th>
