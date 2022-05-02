@@ -4,7 +4,12 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-add-bibentry-dialog',
@@ -13,7 +18,7 @@ import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class AddBibentryDialogComponent implements OnInit {
   bibEntryForm: FormGroup;
-  fields = ['author', 'title', 'citationKey', 'entryType', 'date'];
+  fields = ['citationKey', 'author', 'title', 'entryType', 'date'];
 
   constructor(
     public dialogRef: MatDialogRef<AddBibentryDialogComponent>,
@@ -38,7 +43,15 @@ export class AddBibentryDialogComponent implements OnInit {
     this.bibEntryForm = this.formBuilder.group(this.fields);
 
     for (const f of this.fields) {
-      this.bibEntryForm.addControl(f, this.formBuilder.control(''));
+      if (f === 'citationKey') {
+        this.bibEntryForm.addControl(
+          f,
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          this.formBuilder.control(this.data.citationKey, [Validators.required])
+        );
+      } else {
+        this.bibEntryForm.addControl(f, this.formBuilder.control(''));
+      }
     }
 
     this.dialogRef.beforeClosed().subscribe(() => {
@@ -59,4 +72,5 @@ export class AddBibentryDialogComponent implements OnInit {
 export interface DialogData {
   title: string;
   name: string;
+  citationKey: string;
 }

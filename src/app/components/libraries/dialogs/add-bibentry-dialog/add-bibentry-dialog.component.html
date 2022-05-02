@@ -1,16 +1,21 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
-  <form [formGroup]="bibEntryForm">
-    <div *ngFor="let field of fields">
-      <mat-form-field class="input-field">
-        <mat-label>{{ field }}</mat-label>
-        <input [id]="field" [formControlName]="field" matInput required>
-      </mat-form-field>
-    </div>
-  </form>
+    <form [formGroup]="bibEntryForm">
+        <div *ngFor="let field of fields">
+            <mat-form-field class="input-field">
+                <mat-label>{{ field }}</mat-label>
+                <input [id]="field" [formControlName]="field" *ngIf="field === 'citationKey'; else nonRequiredFiled"
+                       matInput
+                       required>
+                <ng-template #nonRequiredFiled>
+                    <input [id]="field" [formControlName]="field" matInput>
+                </ng-template>
+            </mat-form-field>
+        </div>
+    </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok
-  </button>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [disabled]="bibEntryForm.invalid" [mat-dialog-close]="data">Ok
+    </button>
 </div>
