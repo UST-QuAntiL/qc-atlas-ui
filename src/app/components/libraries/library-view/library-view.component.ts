@@ -3,6 +3,8 @@ import { LibrariesService } from 'api-library/services/libraries.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
+import { BibEntryDto } from 'api-library/models/bib-entry-dto';
+import { NewLibraryDto } from 'api-library/models';
 import { Option } from '../../generics/property-input/select-input.component';
 import {
   QcAtlasUiConfiguration,
@@ -10,9 +12,7 @@ import {
 } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
 import { UtilService } from '../../../util/util.service';
-import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 import { AddLibraryDialogComponent } from '../dialogs/add-library-dialog/add-library-dialog.component';
-import { NewLibraryDto } from 'api-library/models';
 
 @Component({
   selector: 'app-library-view',
@@ -27,13 +27,7 @@ export class LibraryViewComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   entries: TableEntry[] = [];
   searchText = '';
-  tableColumns = [
-    'Cite Key',
-    'Title',
-    'Authors',
-    'Date',
-    'Entry Type'
-  ];
+  tableColumns = ['Cite Key', 'Title', 'Authors', 'Date', 'Entry Type'];
   variableNames = ['id', 'title', 'author', 'date', 'entrytype'];
   loading = true;
   libraries$: Observable<Option[]>;
@@ -46,8 +40,7 @@ export class LibraryViewComponent implements OnInit {
     private libraryService: LibrariesService,
     private configService: QcAtlasUiRepositoryConfigurationService,
     private utilService: UtilService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.uiConfig = this.configService.configuration;
@@ -103,14 +96,11 @@ export class LibraryViewComponent implements OnInit {
       });
   }
 
-  onDeleteEntriesSubmitted(): void {
-  }
+  onDeleteEntriesSubmitted(): void {}
 
-  onDeleteElements(event): void {
-  }
+  onDeleteElements(event): void {}
 
-  sortData(event): void {
-  }
+  sortData(event): void {}
 
   isAllSelected(): boolean {
     return (

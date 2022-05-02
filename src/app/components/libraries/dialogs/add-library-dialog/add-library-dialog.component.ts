@@ -1,11 +1,20 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-add-library-dialog',
   templateUrl: './add-library-dialog.component.html',
-  styleUrls: ['./add-library-dialog.component.scss']
+  styleUrls: ['./add-library-dialog.component.scss'],
 })
 export class AddLibraryDialogComponent implements OnInit {
   libraryForm: FormGroup;

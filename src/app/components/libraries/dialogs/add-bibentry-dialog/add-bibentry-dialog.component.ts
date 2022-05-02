@@ -1,11 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-bibentry-dialog',
   templateUrl: './add-bibentry-dialog.component.html',
-  styleUrls: ['./add-bibentry-dialog.component.scss']
+  styleUrls: ['./add-bibentry-dialog.component.scss'],
 })
 export class AddBibentryDialogComponent implements OnInit {
   bibEntryForm: FormGroup;
@@ -16,8 +20,7 @@ export class AddBibentryDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
     private formBuilder: FormBuilder
-  ) {
-  }
+  ) {}
 
   get title(): AbstractControl | null {
     return this.bibEntryForm.get('title');
