@@ -23,7 +23,8 @@ import {
 } from 'api-nisq/services';
 import { CompilerSelectionDto, QpuSelectionJobDto } from 'api-nisq/models';
 import { MatSort } from '@angular/material/sort';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { ProviderService } from 'generated/api-qprov/services';
 import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
@@ -80,6 +81,9 @@ export class ImplementationExecutionComponent implements OnInit {
     CompilerAnalysisResultDto,
     ExecutionResultDto
   > = new Map<CompilerAnalysisResultDto, ExecutionResultDto>();
+  qpuDataIsUpToDate = new Map<string, true>();
+  qpuCounter = 0;
+  qpuCheckFinished = false;
 
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
   dataSource = new MatTableDataSource(this.compilerResults);
@@ -91,7 +95,8 @@ export class ImplementationExecutionComponent implements OnInit {
     private rootService: RootService,
     private nisqImplementationService: ImplementationService,
     private nisqAnalyzerService: NisqAnalyzerService,
-    private qpuSelectionService: QpuSelectionResultService
+    private qpuSelectionService: QpuSelectionResultService,
+    private qprovService: ProviderService
   ) {}
 
   ngOnInit(): void {
@@ -115,6 +120,7 @@ export class ImplementationExecutionComponent implements OnInit {
         this.compilerResults = res;
         this.dataSource = new MatTableDataSource(this.compilerResults);
         this.getQueueSizes();
+        this.checkIfQpuDataIsOutdated(this.compilerResults);
       });
     this.refreshNisqImpl();
   }
@@ -178,6 +184,54 @@ export class ImplementationExecutionComponent implements OnInit {
     return !!Object.keys(analysisResult._links).find((key) =>
       key.startsWith('execute-')
     );
+  }
+
+  checkIfQpuDataIsOutdated(
+    compilerAnalysisResults: CompilerAnalysisResultDto[]
+  ): void {
+    compilerAnalysisResults.forEach((compilerAnalysisResult) => {
+      let provider = null;
+      this.qprovService.getProviders().subscribe((providers) => {
+        for (const providerDto of providers._embedded.providerDtoes) {
+          if (
+            providerDto.name.toLowerCase() ===
+            compilerAnalysisResult.provider.toLowerCase()
+          ) {
+            provider = providerDto;
+            break;
+          }
+        }
+        // search for QPU with given name from the given provider
+        this.qprovService
+          .getQpUs({ providerId: provider.id })
+          .subscribe((qpuResult) => {
+            for (const qpuDto of qpuResult._embedded.qpuDtoes) {
+              if (
+                qpuDto.name.toLowerCase() ===
+                compilerAnalysisResult.qpu.toLowerCase()
+              ) {
+                if (
+                  qpuDto.lastCalibrated === null ||
+                  Date.parse(compilerAnalysisResult.time) >=
+                    Date.parse(qpuDto.lastCalibrated)
+                ) {
+                  this.qpuDataIsUpToDate[compilerAnalysisResult.qpu] = true;
+                } else {
+                  this.qpuDataIsUpToDate[compilerAnalysisResult.qpu] = false;
+                }
+                break;
+              }
+            }
+            this.qpuCounter++;
+            if (this.qpuCounter === compilerAnalysisResults.length) {
+              this.qpuCheckFinished = true;
+              this.qpuCounter = 0;
+            } else {
+              this.qpuCheckFinished = false;
+            }
+          });
+      });
+    });
   }
 
   showExecutionResult(analysisResult: CompilerAnalysisResultDto): void {
