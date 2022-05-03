@@ -4,12 +4,8 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 
 @Component({
   selector: 'app-add-bibentry-dialog',
@@ -18,22 +14,38 @@ import {
 })
 export class AddBibentryDialogComponent implements OnInit {
   bibEntryForm: FormGroup;
-  fields = ['citationKey', 'author', 'title', 'entryType', 'date'];
+  fields = [
+    'citationKey',
+    'entryType',
+    'title',
+    'author',
+    'date',
+    'month',
+    'year',
+    'booktitle',
+    'series',
+    'volume',
+    'number',
+    'pages',
+    'chapter',
+    'edition',
+    'publisher',
+    'editor',
+    'journal',
+    'howpublished',
+    'institution',
+    'organization',
+    'school',
+    'address',
+    'note',
+  ];
 
   constructor(
     public dialogRef: MatDialogRef<AddBibentryDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: BibEntryDto,
     public dialog: MatDialog,
     private formBuilder: FormBuilder
   ) {}
-
-  get title(): AbstractControl | null {
-    return this.bibEntryForm.get('title');
-  }
-
-  get citekey(): AbstractControl | null {
-    return this.bibEntryForm.get('citekey');
-  }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -67,10 +79,4 @@ export class AddBibentryDialogComponent implements OnInit {
   isRequiredDataMissing(): boolean {
     return false;
   }
-}
-
-export interface DialogData {
-  title: string;
-  name: string;
-  citationKey: string;
 }
