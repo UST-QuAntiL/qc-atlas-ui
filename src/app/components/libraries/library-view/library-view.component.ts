@@ -1,11 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LibrariesService } from 'api-library/services/libraries.service';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
 import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 import { NewLibraryDto } from 'api-library/models';
-import { Option } from '../../generics/property-input/select-input.component';
 import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
@@ -31,12 +28,13 @@ export class LibraryViewComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   entries: TableEntry[] = [];
   searchText = '';
-  tableColumns = ['Cite Key', 'Title', 'Authors', 'Date', 'Entry Type'];
-  variableNames = ['id', 'title', 'author', 'date', 'entrytype'];
+  tableColumns = ['Cite Key', 'Title', 'Authors', 'Entry Type', 'Date'];
+  variableNames = ['id', 'title', 'author', 'entrytype', 'date'];
   loading = true;
-  libraries$: Observable<Option[]>;
+  libraries$: string[];
   library: string;
   disabledDataEntries: Set<any> = new Set<any>();
+  librariesExist = false;
 
   uiConfig: QcAtlasUiConfiguration;
 
@@ -52,14 +50,19 @@ export class LibraryViewComponent implements OnInit {
   }
 
   getLibraryNames(): void {
-    this.libraries$ = this.libraryService.getLibraryNames().pipe(
-      map((libraries) =>
-        libraries.map((library) => ({
-          label: library.substr(0, library.length - 4),
-          value: library.substr(0, library.length - 4),
-        }))
-      )
-    );
+    this.libraryService.getLibraryNames().subscribe((libraries) => {
+      this.libraries$ = libraries ?? [];
+      if (this.libraries$.length > 0) {
+        this.libraries$ = this.libraries$.map((lib) =>
+          lib.substr(0, lib.length - 4)
+        );
+        this.library = this.libraries$[0];
+        this.getLibrary(this.library);
+        this.librariesExist = true;
+      } else {
+        this.librariesExist = false;
+      }
+    });
   }
 
   getLibrary(libraryName: string): void {
@@ -81,6 +84,32 @@ export class LibraryViewComponent implements OnInit {
       });
   }
 
+  onAddLibrary(): void {
+    this.utilService
+      .createDialog(AddLibraryDialogComponent, {
+        title: 'Create new library',
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        const libraryDTO: NewLibraryDto = { libraryName: dialogResult.name };
+        this.libraryService
+          .createNewLibrary({ body: libraryDTO })
+          .subscribe(() => {
+            this.libraryService.getLibraryNames().subscribe((libraries) => {
+              this.libraries$ = libraries ?? [];
+              this.libraries$ = this.libraries$.map((lib) =>
+                lib.substr(0, lib.length - 4)
+              );
+              this.library = dialogResult.name;
+              this.getLibrary(this.library);
+            });
+            this.utilService.callSnackBar(
+              'Successfully added the library "' + this.library + '".'
+            );
+          });
+      });
+  }
+
   onElementClicked(element): void {
     this.elementClicked.emit(element);
     this.selection.clear();
@@ -96,6 +125,31 @@ export class LibraryViewComponent implements OnInit {
           this.libraryService
             .addEntryToLibrary({ libraryName: this.library, body: bibEntryDto })
             .subscribe(() => this.getLibrary(this.library));
+        }
+      });
+  }
+
+  onDeleteLibrary(): void {
+    const dialogData: ConfirmDialogData = {
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this library?',
+      variableName: 'name',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    };
+    this.utilService
+      .createDialog(ConfirmDialogComponent, dialogData)
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.libraryService
+            .deleteLibrary({ libraryName: this.library })
+            .subscribe(() => {
+              this.getLibraryNames();
+              this.utilService.callSnackBar(
+                'Successfully deleted the library "' + this.library + '".'
+              );
+            });
         }
       });
   }
@@ -180,22 +234,6 @@ export class LibraryViewComponent implements OnInit {
   onSearchChange(): void {
     // this.datalistConfigChanged.emit(this.generateGetParameter());
     this.selection.clear();
-  }
-
-  onAddLibrary() {
-    this.utilService
-      .createDialog(AddLibraryDialogComponent, {
-        title: 'Create new library',
-      })
-      .afterClosed()
-      .subscribe((dialogResult) => {
-        const libraryDTO: NewLibraryDto = { libraryName: dialogResult.name };
-        this.libraryService
-          .createNewLibrary({ body: libraryDTO })
-          .subscribe(() => {
-            this.getLibraryNames();
-          });
-      });
   }
 }
 

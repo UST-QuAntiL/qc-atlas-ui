@@ -1,20 +1,36 @@
-<div>
-    <app-select-input
-            name="Library"
-            [value]="library"
-            [choices]="libraries$ | async"
-            (onChange)="getLibrary($event)"
-    ></app-select-input>
-  <button mdbBtn class="control-button add-button btn-sm" type="button"
-          color="green"
-          outline="true"
-          (click)="onAddLibrary()" mdbWavesEffect
-          [hidden]="!uiConfig.features.enableEditing">
-    <span class="material-icons">{{addIcon}}</span>
-  </button>
-</div>
 <mat-card class="m-2">
     <div class="mx-3 mb-2">
+        <div class="col-12">
+            <div class="md-form m-2">
+                <div class="row">
+                    <mat-form-field class="library-input-field">
+                        <mat-label>Library</mat-label>
+                        <mat-select [(ngModel)]="library" (selectionChange)="getLibrary(library)">
+                            <mat-option *ngFor="let lib of libraries$" [value]="lib">
+                                {{ lib }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="row m-1">
+                        <button mdbBtn class="control-button add-button btn-sm" type="button"
+                                color="green"
+                                outline="true"
+                                (click)="onAddLibrary()" mdbWavesEffect
+                                [hidden]="!uiConfig.features.enableEditing">
+                            <span class="material-icons">{{addIcon}}</span>
+                        </button>
+                    </div>
+                    <div class="row m-1" *ngIf="librariesExist">
+                        <button mdbBtn class="control-button delete-button btn-sm"
+                                type="button" color=red outline="true"
+                                (click)="onDeleteLibrary()" mdbWavesEffect
+                                [hidden]="!uiConfig.features.enableEditing">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Search -->
         <div class="row">
             <div class="col-12">
@@ -72,7 +88,8 @@
 
                     <!-- One column for each needed data variable -->
                     <ng-container *ngFor="let column of tableColumns; let i = index">
-                        <th class="th-lg hide-arrow align-middle table-data" mat-sort-header="{{ variableNames[i] }}"
+                        <th class="th-lg hide-arrow align-middle table-data"
+                            mat-sort-header="{{ variableNames[i] }}"
                             aria-controls="tableSortExample"
                             scope="col">
                             <a>{{ column }}</a>
