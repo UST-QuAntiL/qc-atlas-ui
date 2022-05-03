@@ -13,6 +13,10 @@ import {
 import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { AddLibraryDialogComponent } from '../dialogs/add-library-dialog/add-library-dialog.component';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'app-library-view',
@@ -139,11 +143,38 @@ export class LibraryViewComponent implements OnInit {
   }
 
   onSingleDelete(element): void {
-    // const deleteElement: any[] = [element];
-    // const deleteParams = this.generateSelectParameter();
-    // deleteParams.elements = deleteElement;
-    // this.submitDeleteElements.emit(deleteParams);
-    // this.selection.clear();
+    const dialogData: ConfirmDialogData = {
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete the following entry:',
+      data: [element],
+      variableName: 'id',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    };
+    this.utilService
+      .createDialog(ConfirmDialogComponent, dialogData)
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.libraryService
+            .deleteEntryFromLibrary({
+              citeKey: element.id,
+              libraryName: this.library,
+            })
+            .toPromise()
+            .then(() => {
+              this.utilService.callSnackBar(
+                'Successfully deleted entry "' + element.id + '".'
+              );
+              this.getLibrary(this.library);
+            })
+            .catch(() => {
+              this.utilService.callSnackBar(
+                'Could not delete algorithm "' + element.id + '".'
+              );
+            });
+        }
+      });
   }
 
   onSearchChange(): void {
