@@ -1,10 +1,11 @@
-<h1 mat-dialog-title>Add bibTeX entry</h1>
+<h1 mat-dialog-title>Add a new bibTeX entry</h1>
 <div mat-dialog-content>
     <form [formGroup]="bibEntryForm">
         <div *ngFor="let field of fields">
             <mat-form-field class="input-field">
                 <mat-label>{{ field }}</mat-label>
-                <input [id]="field" [formControlName]="field" *ngIf="field === 'citationKey'; else nonRequiredFiled"
+                <input [id]="field" [formControlName]="field"
+                       *ngIf="field === 'citationKey' || field === 'entryType'; else nonRequiredFiled"
                        matInput
                        required>
                 <ng-template #nonRequiredFiled>

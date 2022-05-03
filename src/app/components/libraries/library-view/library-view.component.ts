@@ -84,15 +84,15 @@ export class LibraryViewComponent implements OnInit {
 
   onAddEntry(): void {
     this.utilService
-      .createDialog(AddBibentryDialogComponent, {
-        title: 'Add a new bib entry',
-      })
+      .createDialog(AddBibentryDialogComponent, {})
       .afterClosed()
       .subscribe((dialogResult) => {
-        const bibEntryDto = dialogResult as BibEntryDto;
-        this.libraryService
-          .addEntryToLibrary({ libraryName: this.library, body: bibEntryDto })
-          .subscribe(() => this.getLibrary(this.library));
+        if (dialogResult) {
+          const bibEntryDto = dialogResult as BibEntryDto;
+          this.libraryService
+            .addEntryToLibrary({ libraryName: this.library, body: bibEntryDto })
+            .subscribe(() => this.getLibrary(this.library));
+        }
       });
   }
 

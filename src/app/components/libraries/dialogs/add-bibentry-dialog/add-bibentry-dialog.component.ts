@@ -61,6 +61,12 @@ export class AddBibentryDialogComponent implements OnInit {
           // eslint-disable-next-line @typescript-eslint/unbound-method
           this.formBuilder.control(this.data.citationKey, [Validators.required])
         );
+      } else if (f === 'entryType') {
+        this.bibEntryForm.addControl(
+          f,
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          this.formBuilder.control(this.data.entryType, [Validators.required])
+        );
       } else {
         this.bibEntryForm.addControl(f, this.formBuilder.control(''));
       }
