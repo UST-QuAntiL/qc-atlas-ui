@@ -92,9 +92,8 @@ export class LibraryViewComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         const libraryDTO: NewLibraryDto = { libraryName: dialogResult.name };
-        this.libraryService
-          .createNewLibrary({ body: libraryDTO })
-          .subscribe(() => {
+        this.libraryService.createNewLibrary({ body: libraryDTO }).subscribe(
+          () => {
             this.libraryService.getLibraryNames().subscribe((libraries) => {
               this.libraries$ = libraries ?? [];
               this.libraries$ = this.libraries$.map((lib) =>
@@ -106,7 +105,13 @@ export class LibraryViewComponent implements OnInit {
             this.utilService.callSnackBar(
               'Successfully added the library "' + this.library + '".'
             );
-          });
+          },
+          () => {
+            this.utilService.callSnackBar(
+              'Error! Library "' + this.library + '" could not be created.'
+            );
+          }
+        );
       });
   }
 
@@ -133,7 +138,6 @@ export class LibraryViewComponent implements OnInit {
     const dialogData: ConfirmDialogData = {
       title: 'Confirm Deletion',
       message: 'Are you sure you want to delete this library?',
-      variableName: 'name',
       yesButtonText: 'yes',
       noButtonText: 'no',
     };
@@ -144,12 +148,19 @@ export class LibraryViewComponent implements OnInit {
         if (dialogResult) {
           this.libraryService
             .deleteLibrary({ libraryName: this.library })
-            .subscribe(() => {
-              this.getLibraryNames();
-              this.utilService.callSnackBar(
-                'Successfully deleted the library "' + this.library + '".'
-              );
-            });
+            .subscribe(
+              () => {
+                this.getLibraryNames();
+                this.utilService.callSnackBar(
+                  'Successfully deleted the library "' + this.library + '".'
+                );
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Library "' + this.library + '" could not be deleted.'
+                );
+              }
+            );
         }
       });
   }
@@ -224,7 +235,7 @@ export class LibraryViewComponent implements OnInit {
             })
             .catch(() => {
               this.utilService.callSnackBar(
-                'Could not delete algorithm "' + element.id + '".'
+                'Could not delete entry "' + element.id + '".'
               );
             });
         }
