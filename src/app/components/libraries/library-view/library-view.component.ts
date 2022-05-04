@@ -100,6 +100,7 @@ export class LibraryViewComponent implements OnInit {
                 lib.substr(0, lib.length - 4)
               );
               this.library = dialogResult.name;
+              this.librariesExist = true;
               this.getLibrary(this.library);
             });
             this.utilService.callSnackBar(
