@@ -14,6 +14,7 @@ import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 })
 export class AddBibentryDialogComponent implements OnInit {
   bibEntryForm: FormGroup;
+  updateDialog = false;
   fields = [
     'citationKey',
     'entryType',
@@ -52,6 +53,11 @@ export class AddBibentryDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.data.title.toLowerCase().includes('update')) {
+      this.updateDialog = true;
+    } else {
+      this.updateDialog = false;
+    }
     this.bibEntryForm = this.formBuilder.group(this.fields);
 
     for (const f of this.fields) {

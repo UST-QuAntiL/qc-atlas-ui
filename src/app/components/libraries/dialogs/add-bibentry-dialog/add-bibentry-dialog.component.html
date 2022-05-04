@@ -5,9 +5,16 @@
             <mat-form-field class="input-field">
                 <mat-label>{{ field }}</mat-label>
                 <input [id]="field" [formControlName]="field"
-                       *ngIf="field === 'citationKey' || field === 'entryType'; else nonRequiredFiled"
+                       *ngIf="field === 'citationKey'; else entryTypeField"
                        matInput
+                       [readonly]="updateDialog"
                        required>
+                <ng-template #entryTypeField>
+                    <input [id]="field" [formControlName]="field"
+                           *ngIf="field === 'entryType'; else nonRequiredFiled"
+                           matInput
+                           required>
+                </ng-template>
                 <ng-template #nonRequiredFiled>
                     <input [id]="field" [formControlName]="field" matInput>
                 </ng-template>
