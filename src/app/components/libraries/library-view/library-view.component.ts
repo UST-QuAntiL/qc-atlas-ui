@@ -171,6 +171,10 @@ export class LibraryViewComponent implements OnInit {
 
   onDeleteElements(event): void {}
 
+  sortData(): void {
+    this.selection.clear();
+  }
+
   isAllSelected(): boolean {
     return (
       this.entries.length ===

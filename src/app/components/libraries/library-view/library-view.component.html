@@ -73,7 +73,7 @@
             </div>
             <!-- Data-Table -->
             <div class="table-responsive">
-                <table id="tableSortExample" mdbTable>
+                <table id="tableSortExample" mdbTable matSort (matSortChange)="sortData()">
                     <!-- Table-Header with the Header-Data -->
                     <thead class="data-header">
                     <tr>
@@ -91,6 +91,7 @@
                             class="th-lg hide-arrow align-middle table-data"
                             [mdbTableSort]="entries"
                             [sortBy]="variableNames[i]"
+                            mat-sort-header="{{ variableNames[i] }}"
                             aria-controls="tableSortExample"
                             scope="col">
                             <a>{{ column }}</a>
