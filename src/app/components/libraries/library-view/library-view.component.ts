@@ -27,10 +27,10 @@ export class LibraryViewComponent implements OnInit {
   @Output() updateClicked = new EventEmitter<any>();
   selection = new SelectionModel<any>(true, []);
   entries: TableEntry[] = [];
+  allEntries: TableEntry[] = [];
   searchText = '';
   tableColumns = ['Cite Key', 'Title', 'Authors', 'Entry Type', 'Date'];
   variableNames = ['id', 'title', 'author', 'entrytype', 'date'];
-  loading = true;
   libraries$: string[];
   library: string;
   disabledDataEntries: Set<any> = new Set<any>();
@@ -67,6 +67,7 @@ export class LibraryViewComponent implements OnInit {
 
   getLibrary(libraryName: string): void {
     this.entries = [];
+    this.allEntries = [];
     this.library = libraryName;
     this.libraryService
       .getLibraryEntries({ libraryName: this.library })
@@ -80,7 +81,7 @@ export class LibraryViewComponent implements OnInit {
             date: entry.date,
           });
         });
-        this.loading = false;
+        this.allEntries = this.entries;
       });
   }
 
@@ -244,7 +245,14 @@ export class LibraryViewComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // this.datalistConfigChanged.emit(this.generateGetParameter());
+    this.entries = this.allEntries;
+    this.entries = this.entries.filter((entry) => {
+      const term = this.searchText.toLowerCase();
+      return (
+        entry.entrytype.toLowerCase().includes(term) ||
+        entry.id.toLowerCase().includes(term)
+      );
+    });
     this.selection.clear();
   }
 }
