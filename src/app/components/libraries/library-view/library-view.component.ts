@@ -250,7 +250,11 @@ export class LibraryViewComponent implements OnInit {
       const term = this.searchText.toLowerCase();
       return (
         entry.entrytype.toLowerCase().includes(term) ||
-        entry.id.toLowerCase().includes(term)
+        entry.id.toLowerCase().includes(term) ||
+        entry.author?.toLowerCase().includes(term) ||
+        entry.keywords?.toLowerCase().includes(term) ||
+        entry.date?.toLowerCase().includes(term) ||
+        entry.title?.toLowerCase().includes(term)
       );
     });
     this.selection.clear();
