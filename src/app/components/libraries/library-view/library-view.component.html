@@ -126,10 +126,10 @@
                         </td>
                         <td class="table-actions"
                             *ngIf="!dataEntryIsDisabled(dataEntry) && uiConfig.features.enableEditing">
-                            <button mat-icon-button [ngClass]="{'mr-1': true}" class="update-small"
-                                    (click)="onUpdateClicked(dataEntry); $event.stopPropagation()">
-                                <mat-icon>create</mat-icon>
-                            </button>
+                            <!--                            <button mat-icon-button [ngClass]="{'mr-1': true}" class="update-small"-->
+                            <!--                                    (click)="onUpdateClicked(dataEntry); $event.stopPropagation()">-->
+                            <!--                                <mat-icon>create</mat-icon>-->
+                            <!--                            </button>-->
                             <button mat-icon-button [ngClass]="{'mr-1': true}"
                                     class="delete-small"
                                     (click)="onSingleDelete(dataEntry); $event.stopPropagation()">

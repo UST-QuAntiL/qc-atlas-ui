@@ -42,7 +42,7 @@ export class AddBibentryDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddBibentryDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: BibEntryDto,
+    @Inject(MAT_DIALOG_DATA) public data: BibEntryDialogData,
     public dialog: MatDialog,
     private formBuilder: FormBuilder
   ) {}
@@ -58,17 +58,24 @@ export class AddBibentryDialogComponent implements OnInit {
       if (f === 'citationKey') {
         this.bibEntryForm.addControl(
           f,
-          // eslint-disable-next-line @typescript-eslint/unbound-method
-          this.formBuilder.control(this.data.citationKey, [Validators.required])
+          this.formBuilder.control(this.data.bibEntry.citationKey, [
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            Validators.required,
+          ])
         );
       } else if (f === 'entryType') {
         this.bibEntryForm.addControl(
           f,
-          // eslint-disable-next-line @typescript-eslint/unbound-method
-          this.formBuilder.control(this.data.entryType, [Validators.required])
+          this.formBuilder.control(this.data.bibEntry.entryType, [
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            Validators.required,
+          ])
         );
       } else {
-        this.bibEntryForm.addControl(f, this.formBuilder.control(''));
+        this.bibEntryForm.addControl(
+          f,
+          this.formBuilder.control(this.data.bibEntry[f])
+        );
       }
     }
 
@@ -76,7 +83,7 @@ export class AddBibentryDialogComponent implements OnInit {
       for (const f of this.fields) {
         const value = this.bibEntryForm.get(f).value;
         if (value !== '') {
-          this.data[f] = value;
+          this.data.bibEntry[f] = value;
         }
       }
     });
@@ -85,4 +92,9 @@ export class AddBibentryDialogComponent implements OnInit {
   isRequiredDataMissing(): boolean {
     return false;
   }
+}
+
+export interface BibEntryDialogData {
+  title: string;
+  bibEntry: BibEntryDto;
 }

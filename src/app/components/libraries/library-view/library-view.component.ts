@@ -120,15 +120,43 @@ export class LibraryViewComponent implements OnInit {
   onElementClicked(element): void {
     this.elementClicked.emit(element);
     this.selection.clear();
+    this.libraryService
+      .getBibEntryMatchingCiteKey({
+        citeKey: element.id,
+        libraryName: this.library,
+      })
+      .subscribe((bibEntry) => {
+        this.utilService
+          .createDialog(AddBibentryDialogComponent, {
+            title: 'Update bibTeX entry',
+            bibEntry,
+          })
+          .afterClosed()
+          .subscribe((dialogResult) => {
+            if (dialogResult.bibEntry) {
+              const bibEntryDto = dialogResult.bibEntry as BibEntryDto;
+              this.libraryService
+                .updateEntry({
+                  citeKey: bibEntryDto.citationKey,
+                  libraryName: this.library,
+                  body: bibEntryDto,
+                })
+                .subscribe(() => this.getLibrary(this.library));
+            }
+          });
+      });
   }
 
   onAddEntry(): void {
     this.utilService
-      .createDialog(AddBibentryDialogComponent, {})
+      .createDialog(AddBibentryDialogComponent, {
+        title: 'Add a new bibTeX entry',
+        bibEntry: {},
+      })
       .afterClosed()
       .subscribe((dialogResult) => {
-        if (dialogResult) {
-          const bibEntryDto = dialogResult as BibEntryDto;
+        if (dialogResult.bibEntry) {
+          const bibEntryDto = dialogResult.bibEntry as BibEntryDto;
           this.libraryService
             .addEntryToLibrary({ libraryName: this.library, body: bibEntryDto })
             .subscribe(() => this.getLibrary(this.library));
