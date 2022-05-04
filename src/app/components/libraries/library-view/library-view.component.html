@@ -73,8 +73,7 @@
             </div>
             <!-- Data-Table -->
             <div class="table-responsive">
-                <table id="tableSortExample" mdbTable matSort
-                       (matSortChange)="sortData($event)">
+                <table id="tableSortExample" mdbTable matSort (matSortChange)="sortData()">
                     <!-- Table-Header with the Header-Data -->
                     <thead class="data-header">
                     <tr>
@@ -88,14 +87,15 @@
                         </th>
 
                         <!-- One column for each needed data variable -->
-                        <ng-container *ngFor="let column of tableColumns; let i = index">
-                            <th class="th-lg hide-arrow align-middle table-data"
-                                mat-sort-header="{{ variableNames[i] }}"
-                                aria-controls="tableSortExample"
-                                scope="col">
-                                <a>{{ column }}</a>
-                            </th>
-                        </ng-container>
+                        <th *ngFor="let column of tableColumns; let i = index"
+                            class="th-lg hide-arrow align-middle table-data"
+                            [mdbTableSort]="entries"
+                            [sortBy]="variableNames[i]"
+                            mat-sort-header="{{ variableNames[i] }}"
+                            aria-controls="tableSortExample"
+                            scope="col">
+                            <a>{{ column }}</a>
+                        </th>
                         <th class="align-middle table-actions"
                             *ngIf="uiConfig.features.enableEditing">
                             <a> Actions </a>
