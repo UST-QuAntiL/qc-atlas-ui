@@ -3,6 +3,7 @@ import { LibrariesService } from 'api-library/services/libraries.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 import { NewLibraryDto } from 'api-library/models';
+import { forkJoin } from 'rxjs';
 import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
@@ -195,9 +196,59 @@ export class LibraryViewComponent implements OnInit {
       });
   }
 
-  onDeleteEntriesSubmitted(): void {}
-
-  onDeleteElements(event): void {}
+  onDeleteEntries(): void {
+    const dialogData: ConfirmDialogData = {
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete the following entries:',
+      data: this.selection.selected,
+      variableName: 'id',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    };
+    this.utilService
+      .createDialog(ConfirmDialogComponent, dialogData)
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const deletionTasks = [];
+          const snackbarMessages = [];
+          let successfulDeletions = 0;
+          this.selection.selected.forEach((element) => {
+            deletionTasks.push(
+              this.libraryService
+                .deleteEntryFromLibrary({
+                  citeKey: element.id,
+                  libraryName: this.library,
+                })
+                .toPromise()
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted entry "' + element.id + '".'
+                  );
+                })
+                .catch(() => {
+                  snackbarMessages.push(
+                    'Could not delete entry "' + element.id + '".'
+                  );
+                })
+            );
+          });
+          forkJoin(deletionTasks).subscribe(() => {
+            this.getLibrary(this.library);
+            this.selection.clear();
+            this.utilService.callSnackBar(
+              'Successfully deleted ' +
+                successfulDeletions +
+                '/' +
+                dialogResult.data.length +
+                ' entries.'
+            );
+            this.utilService.callSnackBarSequence(snackbarMessages);
+          });
+        }
+      });
+  }
 
   sortData(): void {
     this.selection.clear();

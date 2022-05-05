@@ -60,7 +60,7 @@
                 <!-- Submit-Selected-Button -->
                 <button mdbBtn *ngIf="selection.hasValue()" class="control-button delete-button btn-sm"
                         type="button" color=red outline="true"
-                        (click)="onDeleteEntriesSubmitted()" mdbWavesEffect
+                        (click)="onDeleteEntries()" mdbWavesEffect
                         [hidden]="!uiConfig.features.enableEditing">
                     <mat-icon>delete</mat-icon>
                 </button>
