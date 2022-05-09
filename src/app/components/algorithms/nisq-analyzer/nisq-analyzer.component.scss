@@ -76,7 +76,8 @@ tr.element-row:not(.expanded-row):active {
 }
 
 .backend-column {
-  min-width: 100px;
+  min-width: 220px !important;
+  // text-align: center;
 }
 
 .value-column {
