@@ -1,10 +1,9 @@
-:host {
-  display: inline-block;
-  min-width: 100%;
-}
 
-table {
+.mat-table {
+  display: block;
   width: 100%;
+  overflow-x: auto;
+  border-collapse: separate;
 }
 
 table th.mat-header-cell:first-of-type, td.mat-cell:first-of-type {
@@ -20,6 +19,11 @@ th.mat-header-cell, td.mat-cell {
   white-space: nowrap;
   overflow: hidden;
   vertical-align: middle;
+}
+
+.mat-row,
+.mat-header-row {
+  display: table-row;
 }
 
 tr.detail-row {
@@ -86,5 +90,13 @@ tr.element-row:not(.expanded-row):active {
 
 .not-ready-job-list {
   list-style-type: none;
+}
+
+.mat-spinner-left {
+  margin-left: 10px;
+}
+
+.spinner-wrapper {
+  display: flex;
 }
 
