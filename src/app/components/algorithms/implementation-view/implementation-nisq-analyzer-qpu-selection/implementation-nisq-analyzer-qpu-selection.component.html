@@ -94,7 +94,7 @@
                     >
                         Back
                     </button>
-                    <button *ngIf="jobReady && analyzerResults.length !== 0"
+                    <button *ngIf="jobReady && analyzerResults.length !== 0 && !loadingLearnWeights && !learnedWeightsReady"
                             mat-raised-button
                             type="button"
                             color="primary"
@@ -105,6 +105,26 @@
                             <mat-spinner [diameter]="20" *ngIf="loadingMCDAJob" color="accent"
                                          class="mat-spinner-left"></mat-spinner>
                         </div>
+                    </button>
+                    <button *ngIf="jobReady && analyzerResults.length !== 0 && loadingLearnWeights && !learnedWeightsReady"
+                            mat-raised-button
+                            type="button"
+                            color="primary"
+                            (click)="prioritize()"
+                    >
+                        <div class="spinner-wrapper-center">
+                            <span>Learning Weights</span>
+                            <mat-spinner [diameter]="20" color="accent"
+                                         class="mat-spinner-left"></mat-spinner>
+                        </div>
+                    </button>
+                    <button *ngIf="jobReady && analyzerResults.length !== 0 && !loadingLearnWeights && learnedWeightsReady"
+                            mat-raised-button
+                            type="button"
+                            color="warn"
+                            (click)="seeLearnedWeights()"
+                    >
+                        <span>Weights are ready!</span>
                     </button>
                     <button *ngIf="mcdaJobSuccessful && usedMcdaMethod!=='electre-III'"
                             mat-raised-button
