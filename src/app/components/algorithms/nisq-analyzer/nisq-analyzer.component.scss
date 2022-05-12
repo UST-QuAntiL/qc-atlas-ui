@@ -2,6 +2,7 @@
   display: block;
   width: 100%;
   overflow-x: auto;
+  border-collapse: separate;
 }
 
 // table column width helper for mat-tables

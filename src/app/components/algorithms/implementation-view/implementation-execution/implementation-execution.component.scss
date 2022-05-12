@@ -4,6 +4,7 @@
   display: block;
   width: 100%;
   overflow-x: auto;
+  border-collapse: separate;
 }
 
 table th.mat-header-cell:first-of-type, td.mat-cell:first-of-type {
@@ -22,7 +23,7 @@ th.mat-header-cell, td.mat-cell {
 }
 .mat-row,
 .mat-header-row {
-  
+  display: table-row;
 }
 tr.detail-row {
   height: 0;
