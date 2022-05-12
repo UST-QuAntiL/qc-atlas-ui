@@ -40,7 +40,7 @@ export class ImplementationExecutionComponent implements OnInit {
   @Input() impl: ImplementationDto;
   @Input() guard: ChangePageGuard;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<any>;
+  @ViewChild(MatTable) table: MatTable<Element>;
 
   analyzeColumns = [
     'qpu',
