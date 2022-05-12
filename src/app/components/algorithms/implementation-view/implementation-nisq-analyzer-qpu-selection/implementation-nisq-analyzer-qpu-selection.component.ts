@@ -393,7 +393,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           this.usedLearningMethod = dialogResult.weightLearningMethod;
           this.usedShortWaitingTime = dialogResult.shortWaitingTime;
           this.usedStableExecutionResults = dialogResult.stableExecutionResults;
-          debugger;
           if (dialogResult.stableExecutionResults) {
             this.loadingLearnWeights = true;
             this.mcdaService
@@ -461,7 +460,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   }
 
   executePrioritization(dialogResult): void {
-    debugger;
     this.loadingMCDAJob = true;
     this.prioritizationJob = undefined;
     this.prioritizationJobReady = false;
