@@ -76,7 +76,11 @@ tr.element-row:not(.expanded-row):active {
 }
 
 .backend-column {
-  min-width: 200px !important;
+  min-width: 160px !important;
+}
+
+.score-column {
+  min-width: 76px !important;
 }
 
 .value-column {
