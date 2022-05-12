@@ -27,6 +27,7 @@ import {
   CriterionValue,
   EntityModelMcdaJob,
   EntityModelMcdaSensitivityAnalysisJob,
+  EntityModelMcdaWeightLearningJob,
   ExecutionResultDto,
   QpuSelectionDto,
   QpuSelectionResultDto,
@@ -50,6 +51,8 @@ import {
 } from '../dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog.component';
+// eslint-disable-next-line max-len
+import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog.component';
 
 @Component({
   selector: 'app-implementation-nisq-analyzer-qpu-selection',
@@ -128,12 +131,20 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   dataSource = new MatTableDataSource(this.analyzerResults);
   bordaCountEnabled: boolean;
   usedMcdaMethod: string;
+  usedLearningMethod: string;
   sensitivityAnalysisJob: EntityModelMcdaSensitivityAnalysisJob;
   sensitivityAnalysisJobReady = false;
   pollingSensitivityAnalysisJobReadyData: Subscription;
   sensitivityAnalysisJobSuccessful = false;
   waitUntilSensitivityAnalysisIsFinished = false;
   sensitivityAnalysisPlot: string;
+  loadingLearnWeights = false;
+  weightLearningJob: EntityModelMcdaWeightLearningJob;
+  learningJobReady: boolean;
+  pollingWeightLearningJobData: Subscription;
+  learnedWeightsReady = false;
+  usedShortWaitingTime: boolean;
+  usedStableExecutionResults: boolean;
 
   constructor(
     private utilService: UtilService,
@@ -377,88 +388,148 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
       )
       .afterClosed()
       .subscribe((dialogResult) => {
-        let totalSum = 0;
         if (dialogResult) {
-          this.loadingMCDAJob = true;
-          this.prioritizationJob = undefined;
-          this.prioritizationJobReady = false;
+          this.learnedWeightsReady = false;
           this.usedMcdaMethod = dialogResult.mcdaMethod;
-          if (
-            dialogResult.stableExecutionResults &&
-            dialogResult.shortWaitingTime
-          ) {
-            this.bordaCountEnabled = true;
-          } else {
-            this.bordaCountEnabled = false;
-          }
-
-          let criteria = dialogResult.criteriaAndValues;
+          this.usedLearningMethod = dialogResult.weightLearningMethod;
+          this.usedShortWaitingTime = dialogResult.shortWaitingTime;
+          this.usedStableExecutionResults = dialogResult.stableExecutionResults;
           if (dialogResult.stableExecutionResults) {
-            criteria = dialogResult.criteriaAndWeightValues;
-          } else {
-            // calculate SMART with new assigned points
-            dialogResult.criteriaAndValues.forEach((obj) => {
-              totalSum += obj.points;
-            });
-            dialogResult.criteriaAndValues.forEach((obj) => {
-              if (obj.points !== 0) {
-                obj.weight = obj.points / totalSum;
-              } else {
-                obj.weight = 0;
-              }
-            });
-          }
-          let numberOfCriterion = 0;
-          criteria.forEach((obj) => {
-            const criterionValue: CriterionValue = {
-              description: { title: 'points', subTitle: obj.points.toString() },
-              criterionID: obj.id,
-              valueOrValues: [{ real: obj.weight }],
-              mcdaMethod: dialogResult.mcdaMethod,
-            };
+            this.loadingLearnWeights = true;
             this.mcdaService
-              .updateCriterionValue({
-                methodName: dialogResult.mcdaMethod,
-                criterionId: obj.id,
-                body: criterionValue,
+              .learnWeightsForCompiledCircuitsOfJob({
+                methodName: this.usedMcdaMethod,
+                weightLearningMethod: this.usedLearningMethod,
               })
-              .subscribe(
-                () => {
-                  numberOfCriterion++;
-                  if (numberOfCriterion === criteria.length) {
-                    this.mcdaService
-                      .prioritizeCompiledCircuitsOfJob({
-                        methodName: dialogResult.mcdaMethod,
-                        jobId: this.analyzerJob.id,
-                        useBordaCount: this.bordaCountEnabled,
+              .subscribe((job) => {
+                this.weightLearningJob = job;
+                this.learningJobReady = job.ready;
+                this.utilService.callSnackBar(
+                  'Successfully started to learn weights.'
+                );
+                this.pollingWeightLearningJobData = interval(2000)
+                  .pipe(
+                    startWith(0),
+                    switchMap(() =>
+                      this.mcdaService.getWeightLearningJob({
+                        methodName: this.usedMcdaMethod,
+                        weightLearningMethod: this.usedLearningMethod,
+                        jobId: this.weightLearningJob.id,
                       })
-                      .subscribe((job) => {
-                        this.rankings = [];
-                        this.prioritizationJob = job;
-                        this.prioritizationJobReady = job.ready;
-                        this.mcdaJobSuccessful = false;
-
-                        this.utilService.callSnackBar(
-                          'Successfully created prioritization job "' +
-                            job.id +
-                            '".'
-                        );
-                        this.pollAnalysisJobData(dialogResult);
-                      });
-                  }
-                },
-                () => {
-                  this.loadingMCDAJob = false;
-                  this.utilService.callSnackBar(
-                    'Error! Could not set weight for criteria "' +
-                      obj.name +
-                      '". Please try again.'
-                  );
-                }
-              );
-          });
+                    )
+                  )
+                  .subscribe((jobResult) => {
+                    this.weightLearningJob = jobResult;
+                    this.learningJobReady = jobResult.ready;
+                    if (jobResult.state === 'FINISHED') {
+                      this.pollingWeightLearningJobData.unsubscribe();
+                      this.loadingLearnWeights = false;
+                      this.learnedWeightsReady = true;
+                    } else if (jobResult.state === 'FAILED') {
+                      this.pollingWeightLearningJobData.unsubscribe();
+                      this.loadingLearnWeights = false;
+                      this.learnedWeightsReady = false;
+                      this.utilService.callSnackBar(
+                        'Error! Could not learn weights.'
+                      );
+                    }
+                  });
+              });
+          } else {
+            this.executePrioritization(dialogResult);
+          }
         }
       });
+  }
+
+  seeLearnedWeights(): void {
+    this.utilService
+      .createDialog(
+        ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent,
+        {
+          title: 'Learned Weights',
+          mcdaMethod: this.usedMcdaMethod,
+        }
+      )
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.learnedWeightsReady = false;
+          this.executePrioritization(dialogResult);
+        }
+      });
+  }
+
+  executePrioritization(dialogResult): void {
+    this.loadingMCDAJob = true;
+    this.prioritizationJobReady = false;
+    let totalSum = 0;
+    let criteria = dialogResult.criteriaAndValues;
+    this.bordaCountEnabled = !!(
+      this.usedStableExecutionResults && this.usedShortWaitingTime
+    );
+    if (this.usedStableExecutionResults) {
+      criteria = dialogResult.criteriaAndValues;
+    } else {
+      // calculate SMART with new assigned points
+      dialogResult.criteriaAndValues.forEach((obj) => {
+        totalSum += obj.points;
+      });
+      dialogResult.criteriaAndValues.forEach((obj) => {
+        if (obj.points !== 0) {
+          obj.weight = obj.points / totalSum;
+        } else {
+          obj.weight = 0;
+        }
+      });
+    }
+    let numberOfCriterion = 0;
+    criteria.forEach((obj) => {
+      const criterionValue: CriterionValue = {
+        description: { title: 'points', subTitle: obj.points.toString() },
+        criterionID: obj.id,
+        valueOrValues: [{ real: obj.weight }],
+        mcdaMethod: dialogResult.mcdaMethod,
+      };
+      this.mcdaService
+        .updateCriterionValue({
+          methodName: dialogResult.mcdaMethod,
+          criterionId: obj.id,
+          body: criterionValue,
+        })
+        .subscribe(
+          () => {
+            numberOfCriterion++;
+            if (numberOfCriterion === criteria.length) {
+              this.mcdaService
+                .prioritizeCompiledCircuitsOfJob({
+                  methodName: dialogResult.mcdaMethod,
+                  jobId: this.analyzerJob.id,
+                  useBordaCount: this.bordaCountEnabled,
+                })
+                .subscribe((job) => {
+                  this.rankings = [];
+                  this.prioritizationJob = job;
+                  this.prioritizationJobReady = job.ready;
+                  this.mcdaJobSuccessful = false;
+
+                  this.utilService.callSnackBar(
+                    'Successfully created prioritization job "' + job.id + '".'
+                  );
+                  this.pollAnalysisJobData(dialogResult);
+                });
+            }
+          },
+          () => {
+            this.loadingMCDAJob = false;
+            this.utilService.callSnackBar(
+              'Error! Could not set weight for criteria "' +
+                obj.name +
+                '". Please try again.'
+            );
+          }
+        );
+    });
   }
 
   pollAnalysisJobData(dialogResult: DialogData): void {

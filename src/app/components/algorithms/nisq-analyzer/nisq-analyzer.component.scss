@@ -2,6 +2,7 @@
   display: block;
   width: 100%;
   overflow-x: auto;
+  border-collapse: separate;
 }
 
 // table column width helper for mat-tables
@@ -76,7 +77,8 @@ tr.element-row:not(.expanded-row):active {
 }
 
 .backend-column {
-  min-width: 100px;
+  min-width: 220px !important;
+  // text-align: center;
 }
 
 .value-column {

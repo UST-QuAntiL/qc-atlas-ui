@@ -98,7 +98,7 @@
               <table mat-table #nisqAnalysisResultTable
               #nisqAnalysisResultSort="matSort" [dataSource]="result.value" matSort multiTemplateDataRows
               (matSortChange)="onMatSortChange($event.active, $event.direction)">
-                <ng-container matColumnDef="qpu">
+                <ng-container matColumnDef="qpu" sticky>
                   <th class="backend-column" mat-header-cell mat-sort-header *matHeaderCellDef>
                     Backend Name
                   </th>
@@ -108,7 +108,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="provider">
+                <ng-container matColumnDef="provider" sticky>
                   <th class="value-column" mat-header-cell mat-sort-header *matHeaderCellDef>
                     Provider
                   </th>
@@ -117,7 +117,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="compiler">
+                <ng-container matColumnDef="compiler" sticky>
                   <th class="value-column" mat-header-cell mat-sort-header *matHeaderCellDef >
                     SDK
                   </th>
@@ -126,7 +126,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="width">
+                <ng-container matColumnDef="width" >
                   <th class="value-column" mat-header-cell mat-sort-header *matHeaderCellDef>
                     Width
                   </th>
@@ -135,7 +135,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="depth">
+                <ng-container matColumnDef="depth" >
                   <th class="value-column" mat-header-cell mat-sort-header *matHeaderCellDef>
                     Depth
                   </th>

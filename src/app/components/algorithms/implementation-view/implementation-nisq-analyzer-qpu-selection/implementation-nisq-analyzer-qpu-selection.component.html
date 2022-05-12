@@ -94,7 +94,7 @@
                     >
                         Back
                     </button>
-                    <button *ngIf="jobReady && analyzerResults.length !== 0"
+                    <button *ngIf="jobReady && analyzerResults.length !== 0 && !loadingLearnWeights && !learnedWeightsReady"
                             mat-raised-button
                             type="button"
                             color="primary"
@@ -105,6 +105,26 @@
                             <mat-spinner [diameter]="20" *ngIf="loadingMCDAJob" color="accent"
                                          class="mat-spinner-left"></mat-spinner>
                         </div>
+                    </button>
+                    <button *ngIf="jobReady && analyzerResults.length !== 0 && loadingLearnWeights && !learnedWeightsReady"
+                            mat-raised-button
+                            type="button"
+                            color="primary"
+                            (click)="prioritize()"
+                    >
+                        <div class="spinner-wrapper-center">
+                            <span>Learning Weights</span>
+                            <mat-spinner [diameter]="20" color="accent"
+                                         class="mat-spinner-left"></mat-spinner>
+                        </div>
+                    </button>
+                    <button *ngIf="jobReady && analyzerResults.length !== 0 && !loadingLearnWeights && learnedWeightsReady"
+                            mat-raised-button
+                            type="button"
+                            color="warn"
+                            (click)="seeLearnedWeights()"
+                    >
+                        <span>Continue Prioritization</span>
                     </button>
                     <button *ngIf="mcdaJobSuccessful && usedMcdaMethod!=='electre-III'"
                             mat-raised-button
@@ -144,7 +164,7 @@
                 <ng-container *ngIf="jobReady && analyzerResults && analyzerResults.length !== 0">
                     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onMatSortChange()"
                            multiTemplateDataRows matSortDisableClear>
-                        <ng-container matColumnDef="rank">
+                        <ng-container matColumnDef="rank" sticky>
                             <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Rank
                             </th>
@@ -152,15 +172,15 @@
                                 {{ getRankOfResult(element) }}
                             </td>
                         </ng-container>
-                        <ng-container matColumnDef="score">
-                            <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
+                        <ng-container matColumnDef="score" sticky>
+                            <th class="score-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Score
                             </th>
-                            <td class="value-column" mat-cell *matCellDef="let element">
+                            <td class="score-column" mat-cell *matCellDef="let element">
                                 {{ getScoreOfResult(element) }}
                             </td>
                         </ng-container>
-                        <ng-container matColumnDef="qpu">
+                        <ng-container matColumnDef="qpu" sticky>
                             <th class="backend-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Backend Name
                             </th>
@@ -170,7 +190,7 @@
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="provider">
+                        <ng-container matColumnDef="provider" sticky>
                             <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Provider
                             </th>
@@ -179,7 +199,7 @@
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="compiler">
+                        <ng-container matColumnDef="compiler" sticky>
                             <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 SDK
                             </th>

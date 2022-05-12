@@ -10,10 +10,11 @@
             >
                 New Compilation
             </button>
-            <div *ngIf="!qpuCheckFinished" class="spinner-wrapper">
+            <div *ngIf=" compilerResults.length > 0 && !qpuCheckFinished" class="spinner-wrapper">
                 <span><i>Check if QPU data is up-to-date</i></span>
                 <mat-spinner class="mat-spinner-left" [diameter]="20"></mat-spinner>
             </div>
+
             <h3 *ngIf = "notReadycompilationJobsMap.size > 0"> Jobs running in background : </h3>  
                 <ul class="not-ready-job-list" *ngFor = "let job of notReadycompilationJobsMap | keyvalue">
                     <li> JobID: {{job.key}}, Backend name: {{job.value}}</li>
@@ -25,7 +26,7 @@
                 multiTemplateDataRows
                 matSortDisableClear
         >
-            <ng-container matColumnDef="qpu">
+            <ng-container matColumnDef="qpu" sticky>
                 <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                     QPU
                 </th>
@@ -35,7 +36,7 @@
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="provider">
+            <ng-container matColumnDef="provider" sticky>
                 <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                     Vendor
                 </th>
@@ -44,7 +45,7 @@
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="compiler">
+            <ng-container matColumnDef="compiler" sticky>
                 <th class="value-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                     Compiler
                 </th>
