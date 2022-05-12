@@ -10,10 +10,11 @@
             >
                 New Compilation
             </button>
-            <div *ngIf="!qpuCheckFinished" class="spinner-wrapper">
+            <div *ngIf=" compilerResults.length > 0 && !qpuCheckFinished" class="spinner-wrapper">
                 <span><i>Check if QPU data is up-to-date</i></span>
                 <mat-spinner class="mat-spinner-left" [diameter]="20"></mat-spinner>
             </div>
+
             <h3 *ngIf = "notReadycompilationJobsMap.size > 0"> Jobs running in background : </h3>  
                 <ul class="not-ready-job-list" *ngFor = "let job of notReadycompilationJobsMap | keyvalue">
                     <li> JobID: {{job.key}}, Backend name: {{job.value}}</li>
