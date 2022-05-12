@@ -51,6 +51,7 @@ import {
 } from '../dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog.component';
+// eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog.component';
 
 @Component({
@@ -461,7 +462,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
   executePrioritization(dialogResult): void {
     this.loadingMCDAJob = true;
-    this.prioritizationJob = undefined;
     this.prioritizationJobReady = false;
     let totalSum = 0;
     let criteria = dialogResult.criteriaAndValues;
