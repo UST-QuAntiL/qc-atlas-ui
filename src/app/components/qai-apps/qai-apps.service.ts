@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpEvent, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BaseService } from '../../../../generated/api-atlas/base-service';
@@ -7,6 +7,8 @@ import { ApiConfiguration } from '../../../../generated/api-atlas/api-configurat
 import { StrictHttpResponse } from '../../../../generated/api-atlas/strict-http-response';
 import { RequestBuilder } from '../../../../generated/api-atlas/request-builder';
 import { QAIAppDto } from './qai-app-dto';
+import { PageQAIAppDto } from './page-qai-apps-dto';
+import { query } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +30,9 @@ export class QAIAppService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getQAIApps$Response(): Observable<StrictHttpResponse<QAIAppDto[]>> {
+  getQAIApps$Response(): Observable<
+    StrictHttpResponse<QAIAppDto[] | PageQAIAppDto>
+  > {
     const rb = new RequestBuilder(
       this.rootUrl,
       QAIAppService.GetQAIAppsPath,
@@ -56,7 +60,7 @@ export class QAIAppService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getQAIApps(): Observable<QAIAppDto[]> {
+  getQAIApps(): Observable<QAIAppDto[] | PageQAIAppDto> {
     return this.getQAIApps$Response().pipe(
       map((r: StrictHttpResponse<QAIAppDto[]>) => r.body)
     );
@@ -95,7 +99,6 @@ export class QAIAppService extends BaseService {
   createQAIApp(file: File, name: string): Observable<HttpEvent<object>> {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('payload', JSON.stringify({ name }));
 
     const upload = this.http.post(
       this.rootUrl + QAIAppService.CreateQAIApp,
@@ -103,6 +106,7 @@ export class QAIAppService extends BaseService {
       {
         reportProgress: true,
         observe: 'events',
+        params: { payload: name },
       }
     );
 

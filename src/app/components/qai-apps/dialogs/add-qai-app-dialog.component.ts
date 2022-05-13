@@ -27,6 +27,7 @@ export class AddQAIAppDialogComponent implements OnInit {
   uploadProgress = 0;
   uploadSub: Subscription;
   selectedFile: File;
+  uploadInProgress = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddQAIAppDialogComponent>,
@@ -53,6 +54,7 @@ export class AddQAIAppDialogComponent implements OnInit {
   onUploadClick(): void {
     this.algorithmForm.controls['name'].disable();
     this.dialogRef.disableClose = true;
+    this.uploadInProgress = true;
 
     this.uploadSub = this.qAIAppService
       .createQAIApp(this.selectedFile, this.name.value)
@@ -68,6 +70,7 @@ export class AddQAIAppDialogComponent implements OnInit {
 
             this.utilService.callSnackBar('qAI app was successfully created.');
             this.router.navigate(['qai-apps', qaiApp.id]);
+            this.dialogRef.close();
           }
         },
         error: (error: HttpErrorResponse) => {
@@ -75,7 +78,9 @@ export class AddQAIAppDialogComponent implements OnInit {
             'Could not create new qAI app: ' + error.message
           );
         },
-        complete: () => {},
+        complete: () => {
+          this.uploadInProgress = false;
+        },
       });
   }
 

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AlgorithmDto } from 'api-atlas/models';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { QAIAppService } from 'src/app/components/qai-apps/qai-apps.service';
@@ -22,7 +21,7 @@ export class QAIAppListComponent implements OnInit {
   qAIApps: QAIAppDto[] = [];
   tableColumns = ['Name'];
   variableNames = ['name'];
-  pagingInfo: PagingInfo<AlgorithmDto> = {};
+  pagingInfo: PagingInfo<QAIAppDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
     selectedAmount: 10,
@@ -41,7 +40,7 @@ export class QAIAppListComponent implements OnInit {
     this.qAIAppService.getQAIApps().subscribe(
       (data) => {
         this.loading = false;
-        this.qAIApps = data;
+        this.prepareQAIAppData(data);
       },
       () => {
         this.loading = false;
@@ -50,6 +49,17 @@ export class QAIAppListComponent implements OnInit {
         );
       }
     );
+  }
+
+  prepareQAIAppData(data): void {
+    if (data.content) {
+      this.qAIApps = data.content;
+      this.pagingInfo.totalPages = data.totalPages;
+      this.pagingInfo.number = data.number;
+      this.pagingInfo.sort = data.sort;
+    } else {
+      this.qAIApps = data;
+    }
   }
 
   onElementClicked(qAIApp: QAIAppDto): void {
@@ -66,7 +76,7 @@ export class QAIAppListComponent implements OnInit {
   onDeleteElements(event): void {
     const dialogData: ConfirmDialogData = {
       title: 'Confirm Deletion',
-      message: 'Are you sure you want to delete the following algorithm(s):',
+      message: 'Are you sure you want to delete the following qAI app(s):',
       data: event.elements,
       variableName: 'name',
       yesButtonText: 'yes',
@@ -117,7 +127,7 @@ export class QAIAppListComponent implements OnInit {
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 event.elements.length,
-                'algorithms'
+                'qAI apps'
               )
             );
             this.utilService.callSnackBarSequence(snackbarMessages);
