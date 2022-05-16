@@ -69,6 +69,8 @@ import { initializeKeycloak } from './util/keycloak-init';
 import { LibraryViewComponent } from './components/libraries/library-view/library-view.component';
 import { AddBibentryDialogComponent } from './components/libraries/dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
 import { AddLibraryDialogComponent } from './components/libraries/dialogs/add-library-dialog/add-library-dialog.component';
+import { SlrViewComponent } from './components/libraries/slr-view/slr-view.component';
+import { AddSlrDialogComponent } from './components/libraries/dialogs/add-slr-dialog/add-slr-dialog.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +96,8 @@ import { AddLibraryDialogComponent } from './components/libraries/dialogs/add-li
     LibraryViewComponent,
     AddBibentryDialogComponent,
     AddLibraryDialogComponent,
+    SlrViewComponent,
+    AddSlrDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

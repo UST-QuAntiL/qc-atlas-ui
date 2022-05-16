@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>{{this.data.title}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="studyForm">
+    <mat-form-field class="input-field">
+      <input id="title" formControlName="title" placeholder="Title" matInput>
+    </mat-form-field>
+    <div formArrayName="authors">
+      <div *ngFor="let employee of authors().controls; let authorIndex=index">
+        <div [formGroupName]="authorIndex" class="row">
+          <div class="col-md-6">
+            <mat-form-field class="input-field">
+              <input formControlName="name" matInput [placeholder]="'Author ' + (authorIndex + 1)">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <button mat-button (click)="removeAuthor(authorIndex)">
+              Delete
+            </button>
+          </div>
+
+
+        </div>
+      </div>
+      <button mat-button (click)="addAuthor()">Add author</button>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [disabled]="studyForm.invalid" [mat-dialog-close]="data">Ok
+  </button>
+</div>
+

@@ -23,6 +23,7 @@ import { PatternRelationTypesListComponent } from './components/pattern-relation
 import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
 import { LibraryViewComponent } from './components/libraries/library-view/library-view.component';
+import { SlrViewComponent } from './components/libraries/slr-view/slr-view.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -79,6 +80,7 @@ const routes: Routes = [
     canDeactivate: [ChangePageGuard],
   },
   { path: 'libraries', component: LibraryViewComponent },
+  { path: 'slr', component: SlrViewComponent },
   { path: 'problem-types', component: ProblemTypesListComponent },
   { path: 'application-areas', component: ApplicationAreasListComponent },
   {
