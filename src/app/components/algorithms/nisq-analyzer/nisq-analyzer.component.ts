@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import {
@@ -23,6 +23,9 @@ import {
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { SdksService } from 'api-nisq/services/sdks.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { ProviderService } from 'generated/api-qprov/services';
+import { MatSort } from '@angular/material/sort';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
@@ -44,6 +47,7 @@ import { NisqAnalyzerService } from './nisq-analyzer.service';
 })
 export class NisqAnalyzerComponent implements OnInit {
   @Input() algo: AlgorithmDto;
+  @ViewChild('nisqAnalysisResultSort') public nisqAnalysisResultSort: MatSort;
 
   // 1) Selection
   params: ParameterDto[];
@@ -52,7 +56,27 @@ export class NisqAnalyzerComponent implements OnInit {
   sdksEmpty = true;
 
   // 2) Analyze phase
-  analyzeColumns = ['backendName', 'width', 'depth', 'execution'];
+  analyzeColumns = [
+    'qpu',
+    'provider',
+    'compiler',
+    'width',
+    'depth',
+    'analyzedMultiQubitGateDepth',
+    'analyzedTotalNumberOfOperations',
+    'analyzedNumberOfSingleQubitGates',
+    'analyzedNumberOfMultiQubitGates',
+    'analyzedNumberOfMeasurementOperations',
+    'avgSingleQubitGateError',
+    'avgMultiQubitGateError',
+    'avgSingleQubitGateTime',
+    'avgMultiQubitGateTime',
+    'avgReadoutError',
+    't1',
+    't2',
+    'lengthQueue',
+    'execution',
+  ];
   analyzerResults: AnalysisResultDto[] = [];
   jobColumns = ['inputParameters', 'time', 'ready'];
   analyzerJobs$: Observable<AnalysisJobDto[]>;
@@ -64,12 +88,23 @@ export class NisqAnalyzerComponent implements OnInit {
   queueLengths = new Map<string, number>();
   executionResultsAvailable = new Map<string, boolean>();
   loadingResults = new Map<string, boolean>();
+  groupedResultsMap = new Map<
+    NISQImplementationDto,
+    MatTableDataSource<AnalysisResultDto>
+  >();
+  qpuDataIsUpToDate = new Map<AnalysisResultDto, boolean>();
+  qpuCounter = 0;
+  qpuCheckFinished = false;
 
   // 3) Execution
   resultBackendColumns = ['backendName', 'width', 'depth'];
   executedAnalyseResult: AnalysisResultDto;
   expandedElementExecResult: ExecutionResultDto | null;
   results?: ExecutionResultDto = undefined;
+  expandedElementMap: Map<AnalysisResultDto, ExecutionResultDto> = new Map<
+    AnalysisResultDto,
+    ExecutionResultDto
+  >();
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
@@ -79,7 +114,8 @@ export class NisqAnalyzerComponent implements OnInit {
     private formBuilder: FormBuilder,
     private http: HttpClient,
     private implementationService: ImplementationService,
-    private sdkService: SdksService
+    private sdkService: SdksService,
+    private qprovService: ProviderService
   ) {}
 
   ngOnInit(): void {
@@ -107,11 +143,44 @@ export class NisqAnalyzerComponent implements OnInit {
       .pipe(map((dto) => dto.analysisJobList));
   }
 
+  ngAfterViewInit(): void {
+    for (const entry of this.groupedResultsMap.entries()) {
+      const value = entry[1];
+      value.sort = this.nisqAnalysisResultSort;
+      this.groupedResultsMap.set(entry[0], value);
+    }
+  }
+
   changeSort(active: string, direction: 'asc' | 'desc' | ''): void {
     if (!active || !direction) {
       this.sort$.next(undefined);
     } else {
       this.sort$.next([`${active},${direction}`]);
+    }
+  }
+
+  onMatSortChange(active: string, direction: 'asc' | 'desc' | ''): void {
+    for (const entry of this.groupedResultsMap.entries()) {
+      const value = entry[1];
+      this.nisqAnalysisResultSort.active = active;
+      this.nisqAnalysisResultSort.direction = direction;
+      value.sort = this.nisqAnalysisResultSort;
+      value.sortingDataAccessor = (item, property): string | number => {
+        switch (property) {
+          case 'lengthQueue':
+            return this.queueLengths[item.qpu];
+          default: {
+            if (property === 'width') {
+              property = 'analyzedWidth';
+            }
+            if (property === 'depth') {
+              property = 'analyzedDepth';
+            }
+            return item[property];
+          }
+        }
+      };
+      this.groupedResultsMap.set(entry[0], value);
     }
   }
 
@@ -204,20 +273,22 @@ export class NisqAnalyzerComponent implements OnInit {
       this.jobReady = jobResult.ready;
       this.analyzerJob = jobResult;
       this.analyzerResults = jobResult.analysisResultList;
-
+      this.groupResultsByImplementation(this.analyzerResults);
       for (const analysisResult of this.analyzerResults) {
         this.showBackendQueueSize(analysisResult);
         this.hasExecutionResult(analysisResult);
+        this.checkIfQpuDataIsOutdated(analysisResult);
       }
     });
     return true;
   }
 
-  groupResultsByImplementation(
-    analysisResults: AnalysisResultDto[]
-  ): GroupedResults[] {
+  groupResultsByImplementation(analysisResults: AnalysisResultDto[]): void {
     const results: GroupedResults[] = [];
-
+    const resultMap = new Map<
+      NISQImplementationDto,
+      MatTableDataSource<AnalysisResultDto>
+    >();
     for (const analysisResult of analysisResults) {
       const group = results.find(
         (res) => res.implementation.id === analysisResult.implementation.id
@@ -231,7 +302,57 @@ export class NisqAnalyzerComponent implements OnInit {
         });
       }
     }
-    return results;
+    for (const res of results) {
+      if (!resultMap.has(res.implementation)) {
+        const temp = new MatTableDataSource(res.results);
+        // temp.sort = this.nisqAnalysisResultSort;
+        resultMap.set(res.implementation, temp);
+      }
+    }
+    this.groupedResultsMap = resultMap;
+  }
+
+  checkIfQpuDataIsOutdated(analysisResult: AnalysisResultDto): void {
+    let provider = null;
+    this.qprovService.getProviders().subscribe((providers) => {
+      for (const providerDto of providers._embedded.providerDtoes) {
+        if (
+          providerDto.name.toLowerCase() ===
+          analysisResult.provider.toLowerCase()
+        ) {
+          provider = providerDto;
+          break;
+        }
+      }
+      // search for QPU with given name from the given provider
+      this.qprovService
+        .getQpUs({ providerId: provider.id })
+        .subscribe((qpuResult) => {
+          for (const qpuDto of qpuResult._embedded.qpuDtoes) {
+            if (
+              qpuDto.name.toLowerCase() === analysisResult.qpu.toLowerCase()
+            ) {
+              if (
+                qpuDto.lastCalibrated === null ||
+                Date.parse(analysisResult.time) >=
+                  Date.parse(qpuDto.lastCalibrated)
+              ) {
+                this.qpuDataIsUpToDate.set(analysisResult, true);
+              } else {
+                this.qpuDataIsUpToDate.set(analysisResult, false);
+              }
+              break;
+            }
+          }
+          this.qpuCounter++;
+          if (this.qpuCounter === this.analyzerJob.analysisResultList.length) {
+            this.qpuCheckFinished = true;
+            this.qpuCounter = 0;
+          } else {
+            this.qpuCheckFinished = false;
+          }
+        });
+    });
   }
 
   execute(analysisResult: AnalysisResultDto): void {
@@ -278,7 +399,8 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   showExecutionResult(analysisResult: AnalysisResultDto): void {
-    if (Object.is(this.expandedElement, analysisResult)) {
+    if (this.expandedElementMap.has(analysisResult)) {
+      this.expandedElementMap.delete(analysisResult);
       this.expandedElement = undefined;
       this.expandedElementExecResult = undefined;
       return;
@@ -293,6 +415,7 @@ export class NisqAnalyzerComponent implements OnInit {
         this.http.get<ExecutionResultDto>(href).subscribe((dto) => {
           this.expandedElement = analysisResult;
           this.expandedElementExecResult = dto;
+          this.expandedElementMap.set(analysisResult, dto);
         });
       });
   }

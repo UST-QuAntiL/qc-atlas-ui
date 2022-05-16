@@ -15,6 +15,7 @@ import { ImplementationService } from './services/implementation.service';
 import { QpuSelectionResultService } from './services/qpu-selection-result.service';
 import { RootService } from './services/root.service';
 import { SdksService } from './services/sdks.service';
+import { XmcdaCriteriaService } from './services/xmcda-criteria.service';
 
 /**
  * Module that provides all services and configuration.
@@ -31,6 +32,7 @@ import { SdksService } from './services/sdks.service';
     QpuSelectionResultService,
     RootService,
     SdksService,
+    XmcdaCriteriaService,
     ApiConfiguration,
   ],
 })

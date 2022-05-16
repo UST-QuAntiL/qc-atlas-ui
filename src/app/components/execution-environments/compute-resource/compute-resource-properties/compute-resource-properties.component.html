@@ -4,7 +4,7 @@
       <mat-card class="m-2">
         <app-text-input
           name="Vendor"
-          [value]="computeResource.vendor"
+          [value]="computeResource.vendor ? computeResource.vendor : ''"
           (onChange)="onPropertyChanged($event,   'vendor')"
           (onSaveChanges)="onChangesSaved($event, 'vendor')">
         </app-text-input>

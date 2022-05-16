@@ -10,6 +10,12 @@ export type EntityModelQpuDto = {
   queueSize?: number;
   numberOfQubits?: number;
   avgT1Time?: number;
+  avgT2Time?: number;
+  avgReadoutError?: number;
+  avgMultiQubitGateError?: number;
+  avgSingleQubitGateError?: number;
+  avgMultiQubitGateTime?: number;
+  avgSingleQubitGateTime?: number;
   maxGateTime?: number;
   simulator?: boolean;
   _links?: Links;
