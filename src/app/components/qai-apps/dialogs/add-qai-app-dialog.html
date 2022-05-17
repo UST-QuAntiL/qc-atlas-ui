@@ -18,6 +18,6 @@
 </div>
 
 <div mat-dialog-actions>
-  <button mat-button (click)="onCancelClick()">Cancel</button>
+  <button mat-button (click)="onCancelClick()" *ngIf="!uploadInProgress">Cancel</button>
   <button mat-button [disabled]="isRequiredDataMissing()" (click)="onUploadClick()" *ngIf="!uploadInProgress">Upload</button>
 </div>
