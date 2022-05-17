@@ -425,6 +425,9 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
                       this.pollingWeightLearningJobData.unsubscribe();
                       this.loadingLearnWeights = false;
                       this.learnedWeightsReady = true;
+                      this.utilService.callSnackBar(
+                        'Learned weights are ready.'
+                      );
                     } else if (jobResult.state === 'FAILED') {
                       this.pollingWeightLearningJobData.unsubscribe();
                       this.loadingLearnWeights = false;
