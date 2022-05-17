@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { StudyDto } from 'api-library/models/study-dto';
+import { Study } from 'api-library/models/study';
 
 @Component({
   selector: 'app-add-slr-dialog',
@@ -31,6 +32,40 @@ export class AddSlrDialogComponent implements OnInit {
     this.addQuery();
     this.addResearchQuestion();
     this.addDatabase();
+
+    this.dialogRef.beforeClosed().subscribe(() => {
+      const newStudy: Study = {};
+      newStudy.title = this.studyForm.get('title').value;
+      newStudy.authors = [];
+      this.authors().controls.forEach((item, index) => {
+        const value = item.value['name'];
+        if (value !== '') {
+          newStudy.authors.push(value);
+        }
+      });
+      newStudy['research-questions'] = [];
+      this.researchQuestions().controls.forEach((item, index) => {
+        const value = item.value['question'];
+        if (value !== '') {
+          newStudy['research-questions'].push(value);
+        }
+      });
+      newStudy.queries = [];
+      this.queries().controls.forEach((item, index) => {
+        const value = item.value['query'];
+        if (value !== '') {
+          newStudy.queries.push(item.value);
+        }
+      });
+      newStudy.databases = [];
+      this.databases().controls.forEach((item, index) => {
+        const value = item.value['name'];
+        if (value !== '') {
+          newStudy.databases.push(item.value);
+        }
+      });
+      this.data.study = { studyDefinition: newStudy };
+    });
   }
 
   authors(): FormArray {
@@ -106,10 +141,8 @@ export class AddSlrDialogComponent implements OnInit {
     this.databases().push(this.newDatabase());
   }
 
-
-
-  onNoClick() {
-
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }
 

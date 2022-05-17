@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { QcAtlasUiConfiguration, QcAtlasUiRepositoryConfigurationService } from '../../../directives/qc-atlas-ui-repository-configuration.service';
-import { LibrariesService } from 'api-library/services/libraries.service';
 import { UtilService } from '../../../util/util.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SystematicLiteratureReviewService } from 'api-library/services/systematic-literature-review.service';
@@ -54,7 +53,7 @@ export class SlrViewComponent implements OnInit {
     });
   }
 
-  getSLR(slrName: string) {
+  getSLR(slrName: string): void {
     this.entries = [];
     this.allEntries = [];
     this.slr = slrName;
@@ -74,12 +73,19 @@ export class SlrViewComponent implements OnInit {
       });
   }
 
-  onAddSLR() {
+  onAddSLR(): void {
     this.utilService
-      .createDialog(AddSlrDialogComponent, { title: 'Create new study' })
+      .createDialog(AddSlrDialogComponent, {
+        title: 'Create new study',
+        study: {},
+      })
       .afterClosed()
       .subscribe((dialogResult) => {
+        if (!dialogResult) {
+          return;
+        }
         const studyDTO: StudyDto = dialogResult.study;
+        console.log(studyDTO);
         this.slrService.createStudy({ body: studyDTO }).subscribe(
           () => {
             this.slrService.getStudyNames().subscribe((studies) => {
@@ -89,31 +95,35 @@ export class SlrViewComponent implements OnInit {
               this.getSLR(this.slr);
             });
             this.utilService.callSnackBar(
-              'Successfully added the library "' + this.slr + '".'
+              'Successfully added the library "' +
+                studyDTO.studyDefinition.title +
+                '".'
             );
           },
           () => {
             this.utilService.callSnackBar(
-              'Error! Library "' + this.slr + '" could not be created.'
+              'Error! Library "' +
+                studyDTO.studyDefinition.title +
+                '" could not be created.'
             );
           }
         );
       });
   }
 
-  onDeleteSLR() {
+  onDeleteSLR(): void {
 
   }
 
-  onSearchChange() {
+  onSearchChange(): void {
 
   }
 
-  onDeleteEntries() {
+  onDeleteEntries(): void {
 
   }
 
-  sortData() {
+  sortData(): void {
 
   }
 

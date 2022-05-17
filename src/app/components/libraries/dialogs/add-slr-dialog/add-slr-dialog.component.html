@@ -63,7 +63,7 @@
       </div>
     </mat-card>
     <mat-card class="m-2">
-      <div formArrayName="databeses">
+      <div formArrayName="databases">
         <mat-label>Databases:</mat-label>
         <div *ngFor="let db of databases().controls; let dbIndex=index">
           <div [formGroupName]="dbIndex">
