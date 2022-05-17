@@ -23,8 +23,14 @@ export class AddSlrDialogComponent implements OnInit {
     this.studyForm = this.formBuilder.group({
       title: '',
       authors: this.formBuilder.array([]),
+      researchQuestions: this.formBuilder.array([]),
+      queries: this.formBuilder.array([]),
+      databases: this.formBuilder.array([]),
     });
     this.addAuthor();
+    this.addQuery();
+    this.addResearchQuestion();
+    this.addDatabase();
   }
 
   authors(): FormArray {
@@ -43,6 +49,61 @@ export class AddSlrDialogComponent implements OnInit {
 
   addAuthor(): void {
     this.authors().push(this.newAuthor());
+  }
+
+  researchQuestions(): FormArray {
+    return this.studyForm.get('researchQuestions') as FormArray;
+  }
+
+  removeResearchQuestion(rqIndex: number): void {
+    this.researchQuestions().removeAt(rqIndex);
+  }
+
+  newResearchQuestion(): FormGroup {
+    return this.formBuilder.group({
+      question: '',
+    });
+  }
+
+  addResearchQuestion(): void {
+    this.researchQuestions().push(this.newResearchQuestion());
+  }
+
+  queries(): FormArray {
+    return this.studyForm.get('queries') as FormArray;
+  }
+
+  removeQuery(queryIndex: number): void {
+    this.queries().removeAt(queryIndex);
+  }
+
+  newQuery(): FormGroup {
+    return this.formBuilder.group({
+      query: '',
+    });
+  }
+
+  addQuery(): void {
+    this.queries().push(this.newQuery());
+  }
+
+  databases(): FormArray {
+    return this.studyForm.get('databases') as FormArray;
+  }
+
+  removeDatabase(dbIndex: number): void {
+    this.databases().removeAt(dbIndex);
+  }
+
+  newDatabase(): FormGroup {
+    return this.formBuilder.group({
+      name: '',
+      enabled: true,
+    });
+  }
+
+  addDatabase(): void {
+    this.databases().push(this.newDatabase());
   }
 
 
