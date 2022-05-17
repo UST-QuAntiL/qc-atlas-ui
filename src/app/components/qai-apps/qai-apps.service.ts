@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpEvent, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BaseService } from '../../../../generated/api-atlas/base-service';
@@ -8,7 +8,6 @@ import { StrictHttpResponse } from '../../../../generated/api-atlas/strict-http-
 import { RequestBuilder } from '../../../../generated/api-atlas/request-builder';
 import { QAIAppDto } from './qai-app-dto';
 import { PageQAIAppDto } from './page-qai-apps-dto';
-import { query } from '@angular/animations';
 
 @Injectable({
   providedIn: 'root',

@@ -67,7 +67,7 @@ export class QAIAppListComponent implements OnInit {
   }
 
   onAddElement(): void {
-    const dialogRef = this.utilService.createDialog(AddQAIAppDialogComponent, {
+    this.utilService.createDialog(AddQAIAppDialogComponent, {
       title: 'Add new qAI app',
     });
   }
