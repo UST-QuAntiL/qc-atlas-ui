@@ -15,10 +15,7 @@ import { Library } from '../models/library';
   providedIn: 'root',
 })
 export class AllLibrariesService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -33,22 +30,28 @@ export class AllLibrariesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllEntries$Response(params?: {
-  }): Observable<StrictHttpResponse<Library>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AllLibrariesService.GetAllEntriesPath, 'get');
+  getAllEntries$Response(params?: {}): Observable<StrictHttpResponse<Library>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      AllLibrariesService.GetAllEntriesPath,
+      'get'
+    );
     if (params) {
     }
 
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Library>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<Library>;
+        })
+      );
   }
 
   /**
@@ -57,12 +60,9 @@ export class AllLibrariesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllEntries(params?: {
-  }): Observable<Library> {
-
+  getAllEntries(params?: {}): Observable<Library> {
     return this.getAllEntries$Response(params).pipe(
       map((r: StrictHttpResponse<Library>) => r.body as Library)
     );
   }
-
 }

@@ -18,10 +18,7 @@ import { StudyDto } from '../models/study-dto';
   providedIn: 'root',
 })
 export class SystematicLiteratureReviewService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -39,21 +36,28 @@ export class SystematicLiteratureReviewService extends BaseService {
   getCrawlStatus$Response(params: {
     studyName: string;
   }): Observable<StrictHttpResponse<CrawlStatus>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.GetCrawlStatusPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.GetCrawlStatusPath,
+      'get'
+    );
     if (params) {
       rb.path('studyName', params.studyName, {});
     }
 
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<CrawlStatus>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<CrawlStatus>;
+        })
+      );
   }
 
   /**
@@ -62,10 +66,7 @@ export class SystematicLiteratureReviewService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getCrawlStatus(params: {
-    studyName: string;
-  }): Observable<CrawlStatus> {
-
+  getCrawlStatus(params: { studyName: string }): Observable<CrawlStatus> {
     return this.getCrawlStatus$Response(params).pipe(
       map((r: StrictHttpResponse<CrawlStatus>) => r.body as CrawlStatus)
     );
@@ -80,38 +81,44 @@ export class SystematicLiteratureReviewService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `crawlStudy()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `text/plain` and handles request body of type `text/plain`.
    */
   crawlStudy$Response(params: {
     studyName: string;
+    body?: string;
   }): Observable<StrictHttpResponse<any>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.CrawlStudyPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.CrawlStudyPath,
+      'post'
+    );
     if (params) {
       rb.path('studyName', params.studyName, {});
+      rb.body(params.body, 'text/plain');
     }
 
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<any>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<any>;
+        })
+      );
   }
 
   /**
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `crawlStudy$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `text/plain` and handles request body of type `text/plain`.
    */
-  crawlStudy(params: {
-    studyName: string;
-  }): Observable<any> {
-
+  crawlStudy(params: { studyName: string; body?: string }): Observable<any> {
     return this.crawlStudy$Response(params).pipe(
       map((r: StrictHttpResponse<any>) => r.body as any)
     );
@@ -128,22 +135,30 @@ export class SystematicLiteratureReviewService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getStudyNames$Response(params?: {
-  }): Observable<StrictHttpResponse<Array<string>>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.GetStudyNamesPath, 'get');
+  getStudyNames$Response(params?: {}): Observable<
+    StrictHttpResponse<Array<string>>
+  > {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.GetStudyNamesPath,
+      'get'
+    );
     if (params) {
     }
 
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<string>>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<Array<string>>;
+        })
+      );
   }
 
   /**
@@ -152,9 +167,7 @@ export class SystematicLiteratureReviewService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getStudyNames(params?: {
-  }): Observable<Array<string>> {
-
+  getStudyNames(params?: {}): Observable<Array<string>> {
     return this.getStudyNames$Response(params).pipe(
       map((r: StrictHttpResponse<Array<string>>) => r.body as Array<string>)
     );
@@ -172,23 +185,30 @@ export class SystematicLiteratureReviewService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createStudy$Response(params?: {
-    body?: StudyDto
+    body?: StudyDto;
   }): Observable<StrictHttpResponse<any>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.CreateStudyPath, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.CreateStudyPath,
+      'post'
+    );
     if (params) {
       rb.body(params.body, 'application/json');
     }
 
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<any>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<any>;
+        })
+      );
   }
 
   /**
@@ -197,10 +217,7 @@ export class SystematicLiteratureReviewService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  createStudy(params?: {
-    body?: StudyDto
-  }): Observable<any> {
-
+  createStudy(params?: { body?: StudyDto }): Observable<any> {
     return this.createStudy$Response(params).pipe(
       map((r: StrictHttpResponse<any>) => r.body as any)
     );
@@ -220,21 +237,28 @@ export class SystematicLiteratureReviewService extends BaseService {
   deleteStudy$Response(params: {
     studyName: string;
   }): Observable<StrictHttpResponse<any>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.DeleteStudyPath, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.DeleteStudyPath,
+      'delete'
+    );
     if (params) {
       rb.path('studyName', params.studyName, {});
     }
 
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<any>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<any>;
+        })
+      );
   }
 
   /**
@@ -243,10 +267,7 @@ export class SystematicLiteratureReviewService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteStudy(params: {
-    studyName: string;
-  }): Observable<any> {
-
+  deleteStudy(params: { studyName: string }): Observable<any> {
     return this.deleteStudy$Response(params).pipe(
       map((r: StrictHttpResponse<any>) => r.body as any)
     );
@@ -255,7 +276,8 @@ export class SystematicLiteratureReviewService extends BaseService {
   /**
    * Path part for operation getStudyDefinition
    */
-  static readonly GetStudyDefinitionPath = '/studies/{studyName}/studyDefinition';
+  static readonly GetStudyDefinitionPath =
+    '/studies/{studyName}/studyDefinition';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -266,21 +288,28 @@ export class SystematicLiteratureReviewService extends BaseService {
   getStudyDefinition$Response(params: {
     studyName: string;
   }): Observable<StrictHttpResponse<StudyDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.GetStudyDefinitionPath, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.GetStudyDefinitionPath,
+      'get'
+    );
     if (params) {
       rb.path('studyName', params.studyName, {});
     }
 
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<StudyDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<StudyDto>;
+        })
+      );
   }
 
   /**
@@ -289,10 +318,7 @@ export class SystematicLiteratureReviewService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getStudyDefinition(params: {
-    studyName: string;
-  }): Observable<StudyDto> {
-
+  getStudyDefinition(params: { studyName: string }): Observable<StudyDto> {
     return this.getStudyDefinition$Response(params).pipe(
       map((r: StrictHttpResponse<StudyDto>) => r.body as StudyDto)
     );
@@ -312,21 +338,28 @@ export class SystematicLiteratureReviewService extends BaseService {
   getLibraryEntries1$Response(params: {
     studyName: string;
   }): Observable<StrictHttpResponse<Library>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.GetLibraryEntries1Path, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.GetLibraryEntries1Path,
+      'get'
+    );
     if (params) {
       rb.path('studyName', params.studyName, {});
     }
 
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Library>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<Library>;
+        })
+      );
   }
 
   /**
@@ -335,10 +368,7 @@ export class SystematicLiteratureReviewService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getLibraryEntries1(params: {
-    studyName: string;
-  }): Observable<Library> {
-
+  getLibraryEntries1(params: { studyName: string }): Observable<Library> {
     return this.getLibraryEntries1$Response(params).pipe(
       map((r: StrictHttpResponse<Library>) => r.body as Library)
     );
@@ -357,24 +387,31 @@ export class SystematicLiteratureReviewService extends BaseService {
    */
   addEntryToLibrary1$Response(params: {
     studyName: string;
-    body?: BibEntryDto
+    body?: BibEntryDto;
   }): Observable<StrictHttpResponse<any>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.AddEntryToLibrary1Path, 'post');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.AddEntryToLibrary1Path,
+      'post'
+    );
     if (params) {
       rb.path('studyName', params.studyName, {});
       rb.body(params.body, 'application/json');
     }
 
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<any>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<any>;
+        })
+      );
   }
 
   /**
@@ -385,9 +422,8 @@ export class SystematicLiteratureReviewService extends BaseService {
    */
   addEntryToLibrary1(params: {
     studyName: string;
-    body?: BibEntryDto
+    body?: BibEntryDto;
   }): Observable<any> {
-
     return this.addEntryToLibrary1$Response(params).pipe(
       map((r: StrictHttpResponse<any>) => r.body as any)
     );
@@ -407,21 +443,28 @@ export class SystematicLiteratureReviewService extends BaseService {
   deleteLibrary1$Response(params: {
     studyName: string;
   }): Observable<StrictHttpResponse<any>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.DeleteLibrary1Path, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.DeleteLibrary1Path,
+      'delete'
+    );
     if (params) {
       rb.path('studyName', params.studyName, {});
     }
 
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<any>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<any>;
+        })
+      );
   }
 
   /**
@@ -430,60 +473,64 @@ export class SystematicLiteratureReviewService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteLibrary1(params: {
-    studyName: string;
-  }): Observable<any> {
-
+  deleteLibrary1(params: { studyName: string }): Observable<any> {
     return this.deleteLibrary1$Response(params).pipe(
       map((r: StrictHttpResponse<any>) => r.body as any)
     );
   }
 
   /**
-   * Path part for operation getBibEntryMatchingCiteKey1
+   * Path part for operation getBibEntryMatchingCiteKey2
    */
-  static readonly GetBibEntryMatchingCiteKey1Path = '/studies/{studyName}/results/{citeKey}';
+  static readonly GetBibEntryMatchingCiteKey2Path =
+    '/studies/{studyName}/results/{citeKey}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getBibEntryMatchingCiteKey1()` instead.
+   * To access only the response body, use `getBibEntryMatchingCiteKey2()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getBibEntryMatchingCiteKey1$Response(params: {
+  getBibEntryMatchingCiteKey2$Response(params: {
     citeKey: string;
     studyName: string;
   }): Observable<StrictHttpResponse<BibEntryDto>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.GetBibEntryMatchingCiteKey1Path, 'get');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.GetBibEntryMatchingCiteKey2Path,
+      'get'
+    );
     if (params) {
       rb.path('citeKey', params.citeKey, {});
       rb.path('studyName', params.studyName, {});
     }
 
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<BibEntryDto>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<BibEntryDto>;
+        })
+      );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getBibEntryMatchingCiteKey1$Response()` instead.
+   * To access the full response (for headers, for example), `getBibEntryMatchingCiteKey2$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getBibEntryMatchingCiteKey1(params: {
+  getBibEntryMatchingCiteKey2(params: {
     citeKey: string;
     studyName: string;
   }): Observable<BibEntryDto> {
-
-    return this.getBibEntryMatchingCiteKey1$Response(params).pipe(
+    return this.getBibEntryMatchingCiteKey2$Response(params).pipe(
       map((r: StrictHttpResponse<BibEntryDto>) => r.body as BibEntryDto)
     );
   }
@@ -502,25 +549,32 @@ export class SystematicLiteratureReviewService extends BaseService {
   updateEntry1$Response(params: {
     citeKey: string;
     studyName: string;
-    body?: BibEntryDto
+    body?: BibEntryDto;
   }): Observable<StrictHttpResponse<any>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.UpdateEntry1Path, 'put');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.UpdateEntry1Path,
+      'put'
+    );
     if (params) {
       rb.path('citeKey', params.citeKey, {});
       rb.path('studyName', params.studyName, {});
       rb.body(params.body, 'application/json');
     }
 
-    return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<any>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'blob',
+          accept: '*/*',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<any>;
+        })
+      );
   }
 
   /**
@@ -532,9 +586,8 @@ export class SystematicLiteratureReviewService extends BaseService {
   updateEntry1(params: {
     citeKey: string;
     studyName: string;
-    body?: BibEntryDto
+    body?: BibEntryDto;
   }): Observable<any> {
-
     return this.updateEntry1$Response(params).pipe(
       map((r: StrictHttpResponse<any>) => r.body as any)
     );
@@ -543,7 +596,8 @@ export class SystematicLiteratureReviewService extends BaseService {
   /**
    * Path part for operation deleteEntryFromLibrary1
    */
-  static readonly DeleteEntryFromLibrary1Path = '/studies/{studyName}/results/{citeKey}';
+  static readonly DeleteEntryFromLibrary1Path =
+    '/studies/{studyName}/results/{citeKey}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -555,22 +609,29 @@ export class SystematicLiteratureReviewService extends BaseService {
     citeKey: string;
     studyName: string;
   }): Observable<StrictHttpResponse<any>> {
-
-    const rb = new RequestBuilder(this.rootUrl, SystematicLiteratureReviewService.DeleteEntryFromLibrary1Path, 'delete');
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.DeleteEntryFromLibrary1Path,
+      'delete'
+    );
     if (params) {
       rb.path('citeKey', params.citeKey, {});
       rb.path('studyName', params.studyName, {});
     }
 
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<any>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<any>;
+        })
+      );
   }
 
   /**
@@ -583,10 +644,117 @@ export class SystematicLiteratureReviewService extends BaseService {
     citeKey: string;
     studyName: string;
   }): Observable<any> {
-
     return this.deleteEntryFromLibrary1$Response(params).pipe(
       map((r: StrictHttpResponse<any>) => r.body as any)
     );
   }
 
+  /**
+   * Path part for operation getBibEntryMatchingCiteKey3
+   */
+  static readonly GetBibEntryMatchingCiteKey3Path =
+    '/studies/{studyName}/results/{citeKey}/{cslStyle}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getBibEntryMatchingCiteKey3()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getBibEntryMatchingCiteKey3$Response(params: {
+    citeKey: string;
+    cslStyle: string;
+    studyName: string;
+  }): Observable<StrictHttpResponse<string>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.GetBibEntryMatchingCiteKey3Path,
+      'get'
+    );
+    if (params) {
+      rb.path('citeKey', params.citeKey, {});
+      rb.path('cslStyle', params.cslStyle, {});
+      rb.path('studyName', params.studyName, {});
+    }
+
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: 'text/html',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<string>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getBibEntryMatchingCiteKey3$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getBibEntryMatchingCiteKey3(params: {
+    citeKey: string;
+    cslStyle: string;
+    studyName: string;
+  }): Observable<string> {
+    return this.getBibEntryMatchingCiteKey3$Response(params).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
+   * Path part for operation getCslStyles1
+   */
+  static readonly GetCslStyles1Path = '/studies/{studyName}/results/styles';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCslStyles1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCslStyles1$Response(params: {
+    studyName: string;
+  }): Observable<StrictHttpResponse<Array<string>>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      SystematicLiteratureReviewService.GetCslStyles1Path,
+      'get'
+    );
+    if (params) {
+      rb.path('studyName', params.studyName, {});
+    }
+
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<Array<string>>;
+        })
+      );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `getCslStyles1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCslStyles1(params: { studyName: string }): Observable<Array<string>> {
+    return this.getCslStyles1$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<string>>) => r.body as Array<string>)
+    );
+  }
 }

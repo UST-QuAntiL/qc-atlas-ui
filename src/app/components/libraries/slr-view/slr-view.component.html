@@ -28,6 +28,14 @@
               <mat-icon>delete</mat-icon>
             </button>
           </div>
+          <div class="row m-1" *ngIf="slrsExist">
+            <button mdbBtn class="control-button crawl-button btn-sm"
+                    type="button" color=yellow outline="true"
+                    (click)="onCrawlSLR()" mdbWavesEffect
+                    [hidden]="!uiConfig.features.enableEditing">
+              <mat-icon>find_replace</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
     </div>

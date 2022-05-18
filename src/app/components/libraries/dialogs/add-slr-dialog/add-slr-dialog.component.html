@@ -14,7 +14,7 @@
             <mat-form-field>
               <input matInput type="text" formControlName="name" [placeholder]="'Author ' + (authorIndex + 1)">
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeAuthor(authorIndex)" [disabled]="authors().length<2">
+            <button mat-icon-button color="warn" (click)="removeAuthor(authorIndex)" [hidden]="authors().length<2">
               <mat-icon>delete</mat-icon>
             </button>
             <button mat-icon-button  (click)="addAuthor()" [hidden]="authorIndex + 1 < authors().length">
@@ -34,7 +34,7 @@
                      [placeholder]="'Research question ' + (rqIndex + 1)">
             </mat-form-field>
             <button mat-icon-button color="warn" (click)="removeResearchQuestion(rqIndex)"
-                    [disabled]="researchQuestions().length<2">
+                    [hidden]="researchQuestions().length<2">
               <mat-icon>delete</mat-icon>
             </button>
             <button mat-icon-button  (click)="addResearchQuestion()" [hidden]="rqIndex + 1 < researchQuestions().length">
@@ -52,7 +52,7 @@
             <mat-form-field>
               <input matInput type="text" formControlName="query" [placeholder]="'Query ' + (queryIndex + 1)">
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeQuery(queryIndex)" [disabled]="queries().length<2">
+            <button mat-icon-button color="warn" (click)="removeQuery(queryIndex)" [hidden]="queries().length<2">
               <mat-icon>delete</mat-icon>
             </button>
             <button mat-icon-button  (click)="addQuery()" [hidden]="queryIndex + 1 < queries().length">
@@ -70,7 +70,7 @@
             <mat-form-field>
               <input matInput type="text" formControlName="name" [placeholder]="'DB ' + (dbIndex + 1)">
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeDatabase(dbIndex)" [disabled]="databases().length<2">
+            <button mat-icon-button color="warn" (click)="removeDatabase(dbIndex)" [hidden]="databases().length<2">
               <mat-icon>delete</mat-icon>
             </button>
             <button mat-icon-button  (click)="addDatabase()" [hidden]="dbIndex + 1 < databases().length">

@@ -57,20 +57,29 @@ export class SlrViewComponent implements OnInit {
     this.entries = [];
     this.allEntries = [];
     this.slr = slrName;
-    this.slrService
-      .getLibraryEntries1({ studyName: this.slr })
-      .subscribe((bibentries) => {
-        bibentries.bibEntries.forEach((entry) => {
-          this.entries.push({
-            id: entry.citationKey,
-            author: entry.author,
-            title: entry.title,
-            entrytype: entry.entryType,
-            date: entry.date,
-          });
-        });
-        this.allEntries = this.entries;
-      });
+    this.slrService.getStudyDefinition({ studyName: slrName }).subscribe((study) => {
+        if (!study.studyDefinition['last-search-date']) {
+          this.utilService.callSnackBar(
+            'Study "' + this.slr + '" has not yet been crawled.'
+          );
+        } else {
+          this.slrService
+            .getLibraryEntries1({ studyName: this.slr })
+            .subscribe((bibentries) => {
+              bibentries.bibEntries.forEach((entry) => {
+                this.entries.push({
+                  id: entry.citationKey,
+                  author: entry.author,
+                  title: entry.title,
+                  entrytype: entry.entryType,
+                  date: entry.date,
+                });
+              });
+              this.allEntries = this.entries;
+            });
+        }
+      }
+    );
   }
 
   onAddSLR(): void {
@@ -96,15 +105,15 @@ export class SlrViewComponent implements OnInit {
             });
             this.utilService.callSnackBar(
               'Successfully added the library "' +
-                studyDTO.studyDefinition.title +
-                '".'
+              studyDTO.studyDefinition.title +
+              '".'
             );
           },
           () => {
             this.utilService.callSnackBar(
               'Error! Library "' +
-                studyDTO.studyDefinition.title +
-                '" could not be created.'
+              studyDTO.studyDefinition.title +
+              '" could not be created.'
             );
           }
         );
@@ -149,6 +158,14 @@ export class SlrViewComponent implements OnInit {
 
   onSingleDelete(dataEntry: TableEntry) {
 
+  }
+
+  onCrawlSLR(): void {
+    this.slrService
+      .crawlStudy({ studyName: this.slr, body: '' })
+      .subscribe(() => {
+        this.getSLR(this.slr);
+      });
   }
 }
 

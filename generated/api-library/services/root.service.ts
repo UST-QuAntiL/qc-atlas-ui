@@ -9,15 +9,11 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class RootService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
@@ -32,22 +28,24 @@ export class RootService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getText$Response(params?: {
-  }): Observable<StrictHttpResponse<string>> {
-
+  getText$Response(params?: {}): Observable<StrictHttpResponse<string>> {
     const rb = new RequestBuilder(this.rootUrl, RootService.GetTextPath, 'get');
     if (params) {
     }
 
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/html'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<string>;
-      })
-    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'text',
+          accept: 'text/html',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<string>;
+        })
+      );
   }
 
   /**
@@ -56,12 +54,9 @@ export class RootService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getText(params?: {
-  }): Observable<string> {
-
+  getText(params?: {}): Observable<string> {
     return this.getText$Response(params).pipe(
       map((r: StrictHttpResponse<string>) => r.body as string)
     );
   }
-
 }
