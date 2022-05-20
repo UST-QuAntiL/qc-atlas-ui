@@ -1,28 +1,43 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { StudyDto } from 'api-library/models/study-dto';
 import { Study } from 'api-library/models/study';
 
 @Component({
   selector: 'app-add-slr-dialog',
   templateUrl: './add-slr-dialog.component.html',
-  styleUrls: ['./add-slr-dialog.component.scss']
+  styleUrls: ['./add-slr-dialog.component.scss'],
 })
 export class AddSlrDialogComponent implements OnInit {
   studyForm: FormGroup;
+  databasesList = ['ArXiv', 'IEEEXplore'];
 
   constructor(
     public dialogRef: MatDialogRef<AddSlrDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SLRDialogData,
     public dialog: MatDialog,
     private formBuilder: FormBuilder
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.studyForm = this.formBuilder.group({
-      title: '',
+      title: new FormControl('', [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
       authors: this.formBuilder.array([]),
       researchQuestions: this.formBuilder.array([]),
       queries: this.formBuilder.array([]),
@@ -68,6 +83,10 @@ export class AddSlrDialogComponent implements OnInit {
     });
   }
 
+  get title(): AbstractControl | null {
+    return this.studyForm.get('title');
+  }
+
   authors(): FormArray {
     return this.studyForm.get('authors') as FormArray;
   }
@@ -78,7 +97,11 @@ export class AddSlrDialogComponent implements OnInit {
 
   newAuthor(): FormGroup {
     return this.formBuilder.group({
-      name: '',
+      name: new FormControl('', [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
     });
   }
 
@@ -114,7 +137,11 @@ export class AddSlrDialogComponent implements OnInit {
 
   newQuery(): FormGroup {
     return this.formBuilder.group({
-      query: '',
+      query: new FormControl('', [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
     });
   }
 

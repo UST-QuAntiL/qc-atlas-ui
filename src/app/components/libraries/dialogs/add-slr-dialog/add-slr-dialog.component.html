@@ -3,7 +3,7 @@
   <form [formGroup]="studyForm">
     <mat-card class="m-2">
       <mat-form-field class="input-field">
-        <input id="title" formControlName="title" placeholder="Title" matInput>
+        <input id="title" formControlName="title" placeholder="Title" matInput required>
       </mat-form-field>
     </mat-card>
     <mat-card class="m-2">
@@ -66,9 +66,13 @@
       <div formArrayName="databases">
         <mat-label>Databases:</mat-label>
         <div *ngFor="let db of databases().controls; let dbIndex=index">
-          <div [formGroupName]="dbIndex">
+          <div>
             <mat-form-field>
-              <input matInput type="text" formControlName="name" [placeholder]="'DB ' + (dbIndex + 1)">
+              <mat-select [formControlName]="dbIndex">
+                <mat-option *ngFor="let db of databasesList" [value]="{name: db, enabled: true}">
+                  {{ db }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
             <button mat-icon-button color="warn" (click)="removeDatabase(dbIndex)" [hidden]="databases().length<2">
               <mat-icon>delete</mat-icon>
