@@ -343,8 +343,10 @@ export class AnalysisResultService extends BaseService {
    */
   executeAnalysisResult$Response(params: {
     resId: string;
+    token: string;
     body?: ExecuteAnalysisResultRequestDto;
   }): Observable<StrictHttpResponse<ExecutionResultDto>> {
+    console.log('second last blah ',params.token);
     const rb = new RequestBuilder(
       this.rootUrl,
       AnalysisResultService.ExecuteAnalysisResultPath,
@@ -352,9 +354,10 @@ export class AnalysisResultService extends BaseService {
     );
     if (params) {
       rb.path('resId', params.resId, {});
-
+      rb.query('token', params.token, {});
       rb.body(params.body, 'application/json');
     }
+    console.log('last blah',rb);
     return this.http
       .request(
         rb.build({
@@ -380,8 +383,10 @@ export class AnalysisResultService extends BaseService {
    */
   executeAnalysisResult(params: {
     resId: string;
+    token: string;
     body?: ExecuteAnalysisResultRequestDto;
   }): Observable<ExecutionResultDto> {
+    console.log('blah result service', params.token);
     return this.executeAnalysisResult$Response(params).pipe(
       map(
         (r: StrictHttpResponse<ExecutionResultDto>) =>

@@ -44,15 +44,21 @@ export class NisqAnalyzerService {
     return this.analysisResultService.getAnalysisJob({ resId });
   }
 
-  execute(resId: string): Observable<ExecutionResultDto> {
+  execute(resId: string, token: string): Observable<ExecutionResultDto> {
+    console.log('blah service');
     return this.analysisResultService.executeAnalysisResult({
       resId,
+      token,
     });
   }
 
-  executeCompilationResult(resId: string): Observable<ExecutionResultDto> {
+  executeCompilationResult(
+    resId: string,
+    token: string
+  ): Observable<ExecutionResultDto> {
     return this.compilerAnalysisResult.executeCompilationResult({
       resId,
+      token,
     });
   }
 

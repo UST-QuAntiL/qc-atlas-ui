@@ -1,0 +1,63 @@
+import { Component, Inject, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog,
+} from '@angular/material/dialog';
+import { EntityModelProviderDto } from 'generated/api-qprov/models';
+import { ProviderService } from 'generated/api-qprov/services';
+
+@Component({
+  selector: 'app-implementation-token-dialog',
+  templateUrl: './implementation-token-dialog.component.html',
+  styleUrls: ['./implementation-token-dialog.component.scss'],
+})
+export class ImplementationTokenDialogComponent implements OnInit {
+  implementationExecutionForm: FormGroup;
+
+  constructor(
+    public dialogRef: MatDialogRef<ImplementationTokenDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    public dialog: MatDialog,
+    private providerService: ProviderService
+  ) {}
+
+  get token(): AbstractControl | null {
+    return this.implementationExecutionForm.get('token');
+  }
+
+  ngOnInit(): void {
+    this.implementationExecutionForm = new FormGroup({
+      token: new FormControl(this.data.token, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
+    });
+    this.dialogRef.beforeClosed().subscribe(() => {
+      this.data.token =
+        '8ff3f477cc4d09641bef492827ff3b6aa471691e124f1576c32223b0bdf1cf833297df1974fbdb472de67fc7b6c13bda8ed39764a2c46e1cb64507e6ec0bf900';
+    });
+  }
+
+  isRequiredDataMissing(): boolean {
+    return this.token.errors?.required;
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
+export interface DialogData {
+  title: string;
+  vendor: string;
+  qpu: string;
+  token: string;
+}

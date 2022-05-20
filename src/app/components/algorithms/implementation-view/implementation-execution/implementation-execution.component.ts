@@ -29,6 +29,7 @@ import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
 import { NisqAnalyzerService } from '../../nisq-analyzer/nisq-analyzer.service';
+import { ImplementationTokenDialogComponent } from '../dialogs/implementation-token-dialog/implementation-token-dialog.component';
 
 @Component({
   selector: 'app-implementation-execution',
@@ -141,38 +142,51 @@ export class ImplementationExecutionComponent implements OnInit {
   }
 
   execute(analysisResult: CompilerAnalysisResultDto): void {
-    this.results = undefined;
-    this.executedCompilationResult = analysisResult;
-    this.nisqAnalyzerService
-      .executeCompilationResult(analysisResult.id)
-      .subscribe(
-        (results) => {
-          this.utilService.callSnackBar(
-            'Successfully created execution job "' + results.id + '".'
+    this.utilService
+      .createDialog(ImplementationTokenDialogComponent, {
+        title: 'Enter the token for the Vendor : ' + analysisResult.provider,
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        const token = dialogResult.token;
+        this.results = undefined;
+        this.executedCompilationResult = analysisResult;
+        this.nisqAnalyzerService
+          .executeCompilationResult(analysisResult.id, token)
+          .subscribe(
+            (results) => {
+              this.utilService.callSnackBar(
+                'Successfully created execution job "' + results.id + '".'
+              );
+              this.ngOnInit();
+              if (
+                results.status === 'FAILED' ||
+                results.status === 'FINISHED'
+              ) {
+                this.results = results;
+              } else {
+                interval(1000)
+                  .pipe(
+                    exhaustMap(() =>
+                      this.http.get<ExecutionResultDto>(
+                        results._links['self'].href
+                      )
+                    ),
+                    first(
+                      (value) =>
+                        value.status === 'FAILED' || value.status === 'FINISHED'
+                    )
+                  )
+                  .subscribe((finalResult) => {
+                    this.results = finalResult;
+                  });
+              }
+            },
+            () => {
+              this.utilService.callSnackBar('Error! Could not execute.');
+            }
           );
-          this.ngOnInit();
-          if (results.status === 'FAILED' || results.status === 'FINISHED') {
-            this.results = results;
-          } else {
-            interval(1000)
-              .pipe(
-                exhaustMap(() =>
-                  this.http.get<ExecutionResultDto>(results._links['self'].href)
-                ),
-                first(
-                  (value) =>
-                    value.status === 'FAILED' || value.status === 'FINISHED'
-                )
-              )
-              .subscribe((finalResult) => {
-                this.results = finalResult;
-              });
-          }
-        },
-        () => {
-          this.utilService.callSnackBar('Error! Could not execute.');
-        }
-      );
+      });
   }
 
   hasExecutionResult(analysisResult: CompilerAnalysisResultDto): boolean {
