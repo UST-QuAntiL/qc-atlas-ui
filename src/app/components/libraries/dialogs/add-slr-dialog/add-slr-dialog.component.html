@@ -65,11 +65,11 @@
     <mat-card class="m-2">
       <div formArrayName="databases">
         <mat-label>Databases:</mat-label>
-        <div *ngFor="let db of databases().controls; let dbIndex=index">
-          <div>
+        <div *ngFor="let db_controls of databases().controls; let dbIndex=index">
+          <div [formGroupName]="dbIndex">
             <mat-form-field>
-              <mat-select [formControlName]="dbIndex">
-                <mat-option *ngFor="let db of databasesList" [value]="{name: db, enabled: true}">
+              <mat-select formControlName="name">
+                <mat-option *ngFor="let db of databasesList" [value]="db">
                   {{ db }}
                 </mat-option>
               </mat-select>
