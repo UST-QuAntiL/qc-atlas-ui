@@ -98,6 +98,7 @@ export class QAIAppService extends BaseService {
   createQAIApp(file: File, name: string): Observable<HttpEvent<object>> {
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('payload', JSON.stringify({ name }));
 
     const upload = this.http.post(
       this.rootUrl + QAIAppService.CreateQAIApp,
@@ -105,7 +106,6 @@ export class QAIAppService extends BaseService {
       {
         reportProgress: true,
         observe: 'events',
-        params: { payload: name },
       }
     );
 
