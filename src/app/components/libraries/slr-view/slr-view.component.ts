@@ -1,15 +1,24 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { QcAtlasUiConfiguration, QcAtlasUiRepositoryConfigurationService } from '../../../directives/qc-atlas-ui-repository-configuration.service';
-import { UtilService } from '../../../util/util.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SystematicLiteratureReviewService } from 'api-library/services/systematic-literature-review.service';
-import { AddSlrDialogComponent } from '../dialogs/add-slr-dialog/add-slr-dialog.component';
 import { StudyDto } from 'api-library/models/study-dto';
+import { interval, timer } from 'rxjs';
+import { startWith, switchMap, takeUntil } from 'rxjs/operators';
+import {
+  QcAtlasUiConfiguration,
+  QcAtlasUiRepositoryConfigurationService,
+} from '../../../directives/qc-atlas-ui-repository-configuration.service';
+import { UtilService } from '../../../util/util.service';
+import { AddSlrDialogComponent } from '../dialogs/add-slr-dialog/add-slr-dialog.component';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../generics/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'app-slr-view',
   templateUrl: './slr-view.component.html',
-  styleUrls: ['./slr-view.component.scss']
+  styleUrls: ['./slr-view.component.scss'],
 })
 export class SlrViewComponent implements OnInit {
   @Input() addIcon = 'playlist_add';
@@ -32,8 +41,7 @@ export class SlrViewComponent implements OnInit {
     private slrService: SystematicLiteratureReviewService,
     private configService: QcAtlasUiRepositoryConfigurationService,
     private utilService: UtilService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.uiConfig = this.configService.configuration;
@@ -57,7 +65,9 @@ export class SlrViewComponent implements OnInit {
     this.entries = [];
     this.allEntries = [];
     this.slr = slrName;
-    this.slrService.getStudyDefinition({ studyName: slrName }).subscribe((study) => {
+    this.slrService
+      .getStudyDefinition({ studyName: slrName })
+      .subscribe((study) => {
         if (!study.studyDefinition['last-search-date']) {
           this.utilService.callSnackBar(
             'Study "' + this.slr + '" has not yet been crawled.'
@@ -78,8 +88,7 @@ export class SlrViewComponent implements OnInit {
               this.allEntries = this.entries;
             });
         }
-      }
-    );
+      });
   }
 
   onAddSLR(): void {
@@ -104,16 +113,16 @@ export class SlrViewComponent implements OnInit {
               this.getSLR(this.slr);
             });
             this.utilService.callSnackBar(
-              'Successfully added the library "' +
-              studyDTO.studyDefinition.title +
-              '".'
+              'Successfully added the study "' +
+                studyDTO.studyDefinition.title +
+                '".'
             );
           },
           () => {
             this.utilService.callSnackBar(
-              'Error! Library "' +
-              studyDTO.studyDefinition.title +
-              '" could not be created.'
+              'Error! Study "' +
+                studyDTO.studyDefinition.title +
+                '" could not be created.'
             );
           }
         );
@@ -121,20 +130,39 @@ export class SlrViewComponent implements OnInit {
   }
 
   onDeleteSLR(): void {
-
+    const dialogData: ConfirmDialogData = {
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this study?',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    };
+    this.utilService
+      .createDialog(ConfirmDialogComponent, dialogData)
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.slrService.deleteStudy({ studyName: this.slr }).subscribe(
+            () => {
+              this.utilService.callSnackBar(
+                'Successfully deleted the study "' + this.slr + '".'
+              );
+              this.getSLRNames();
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Study "' + this.slr + '" could not be deleted.'
+              );
+            }
+          );
+        }
+      });
   }
 
-  onSearchChange(): void {
+  onSearchChange(): void {}
 
-  }
+  onDeleteEntries(): void {}
 
-  onDeleteEntries(): void {
-
-  }
-
-  sortData(): void {
-
-  }
+  sortData(): void {}
 
   masterToggle() {
     return null;
@@ -156,15 +184,26 @@ export class SlrViewComponent implements OnInit {
     return false;
   }
 
-  onSingleDelete(dataEntry: TableEntry) {
-
-  }
+  onSingleDelete(dataEntry: TableEntry) {}
 
   onCrawlSLR(): void {
     this.slrService
       .crawlStudy({ studyName: this.slr, body: '' })
       .subscribe(() => {
-        this.getSLR(this.slr);
+        const pollSubscription = interval(500)
+          .pipe(
+            startWith(0),
+            switchMap(() =>
+              this.slrService.getCrawlStatus({ studyName: this.slr })
+            )
+          )
+          .subscribe((res) => {
+            console.log(res.currentlyCrawling);
+            if (!res.currentlyCrawling) {
+              pollSubscription.unsubscribe();
+              this.getSLR(this.slr);
+            }
+          });
       });
   }
 }
