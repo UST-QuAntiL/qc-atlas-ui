@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SystematicLiteratureReviewService } from 'api-library/services/systematic-literature-review.service';
 import { StudyDto } from 'api-library/models/study-dto';
-import { interval, timer } from 'rxjs';
-import { startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { interval, Observable } from 'rxjs';
+import { startWith, switchMap } from 'rxjs/operators';
 import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
@@ -14,6 +14,7 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
+import { Study } from 'api-library/models/study';
 
 @Component({
   selector: 'app-slr-view',
@@ -27,6 +28,7 @@ export class SlrViewComponent implements OnInit {
   @Output() updateClicked = new EventEmitter<any>();
   slr: string;
   slrs$: string[];
+  study: Study;
 
   uiConfig: QcAtlasUiConfiguration;
   slrsExist: boolean;
@@ -52,8 +54,7 @@ export class SlrViewComponent implements OnInit {
     this.slrService.getStudyNames().subscribe((studies) => {
       this.slrs$ = studies ?? [];
       if (this.slrs$.length > 0) {
-        this.slr = this.slrs$[0];
-        this.getSLR(this.slr);
+        this.onSLRChanged(this.slrs$[0]);
         this.slrsExist = true;
       } else {
         this.slrsExist = false;
@@ -61,34 +62,37 @@ export class SlrViewComponent implements OnInit {
     });
   }
 
-  getSLR(slrName: string): void {
-    this.entries = [];
-    this.allEntries = [];
-    this.slr = slrName;
+  getSlr(slrName: string): Observable<StudyDto> {
+    return this.slrService.getStudyDefinition({ studyName: slrName });
+  }
+
+  fillSlrTable(): void {
     this.slrService
-      .getStudyDefinition({ studyName: slrName })
-      .subscribe((study) => {
-        if (!study.studyDefinition['last-search-date']) {
-          this.utilService.callSnackBar(
-            'Study "' + this.slr + '" has not yet been crawled.'
-          );
-        } else {
-          this.slrService
-            .getLibraryEntries1({ studyName: this.slr })
-            .subscribe((bibentries) => {
-              bibentries.bibEntries.forEach((entry) => {
-                this.entries.push({
-                  id: entry.citationKey,
-                  author: entry.author,
-                  title: entry.title,
-                  entrytype: entry.entryType,
-                  date: entry.date,
-                });
-              });
-              this.allEntries = this.entries;
-            });
-        }
+      .getLibraryEntries1({ studyName: this.slr })
+      .subscribe((bibentries) => {
+        bibentries.bibEntries.forEach((entry) => {
+          this.entries.push({
+            id: entry.citationKey,
+            author: entry.author,
+            title: entry.title,
+            entrytype: entry.entryType,
+            date: entry.date,
+          });
+        });
+        this.allEntries = this.entries;
       });
+  }
+
+  onSLRChanged(slrName: string): void {
+    this.slr = slrName;
+    this.getSlr(slrName).subscribe((study) => {
+      this.study = study.studyDefinition;
+      this.entries = [];
+      this.allEntries = [];
+      if (study.studyDefinition['last-search-date']) {
+        this.fillSlrTable();
+      }
+    });
   }
 
   onAddSLR(): void {
@@ -110,7 +114,7 @@ export class SlrViewComponent implements OnInit {
               this.slrs$ = studies ?? [];
               this.slr = dialogResult.study.studyDefinition.title;
               this.slrsExist = true;
-              this.getSLR(this.slr);
+              this.fillSlrTable();
             });
             this.utilService.callSnackBar(
               'Successfully added the study "' +
@@ -187,9 +191,11 @@ export class SlrViewComponent implements OnInit {
   onSingleDelete(dataEntry: TableEntry) {}
 
   onCrawlSLR(): void {
-    this.slrService
-      .crawlStudy({ studyName: this.slr, body: '' })
-      .subscribe(() => {
+    this.slrService.crawlStudy({ studyName: this.slr, body: '' }).subscribe(
+      () => {
+        this.utilService.callSnackBar(
+          'Started crawling for study "' + this.slr + '".'
+        );
         const pollSubscription = interval(500)
           .pipe(
             startWith(0),
@@ -201,10 +207,16 @@ export class SlrViewComponent implements OnInit {
             console.log(res.currentlyCrawling);
             if (!res.currentlyCrawling) {
               pollSubscription.unsubscribe();
-              this.getSLR(this.slr);
+              this.fillSlrTable();
             }
           });
-      });
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Study "' + this.slr + '" could not be crawled.'
+        );
+      }
+    );
   }
 }
 

@@ -14,10 +14,10 @@
             <mat-form-field>
               <input matInput type="text" formControlName="name" [placeholder]="'Author ' + (authorIndex + 1)">
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeAuthor(authorIndex)" [hidden]="authors().length<2">
+            <button mat-icon-button type="button" color="warn" (click)="removeAuthor(authorIndex)" [hidden]="authors().length<2">
               <mat-icon>delete</mat-icon>
             </button>
-            <button mat-icon-button  (click)="addAuthor()" [hidden]="authorIndex + 1 < authors().length">
+            <button mat-icon-button type="button" (click)="addAuthor()" [hidden]="authorIndex + 1 < authors().length">
               <mat-icon [ngStyle]="{'color':'green'}">add_circle</mat-icon>
             </button>
           </div>
@@ -33,11 +33,11 @@
               <input matInput type="text" formControlName="question"
                      [placeholder]="'Research question ' + (rqIndex + 1)">
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeResearchQuestion(rqIndex)"
+            <button mat-icon-button type="button" color="warn" (click)="removeResearchQuestion(rqIndex)"
                     [hidden]="researchQuestions().length<2">
               <mat-icon>delete</mat-icon>
             </button>
-            <button mat-icon-button  (click)="addResearchQuestion()" [hidden]="rqIndex + 1 < researchQuestions().length">
+            <button mat-icon-button type="button" (click)="addResearchQuestion()" [hidden]="rqIndex + 1 < researchQuestions().length">
               <mat-icon [ngStyle]="{'color':'green'}">add_circle</mat-icon>
             </button>
           </div>
@@ -52,10 +52,10 @@
             <mat-form-field>
               <input matInput type="text" formControlName="query" [placeholder]="'Query ' + (queryIndex + 1)">
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeQuery(queryIndex)" [hidden]="queries().length<2">
+            <button mat-icon-button type="button" color="warn" (click)="removeQuery(queryIndex)" [hidden]="queries().length<2">
               <mat-icon>delete</mat-icon>
             </button>
-            <button mat-icon-button  (click)="addQuery()" [hidden]="queryIndex + 1 < queries().length">
+            <button mat-icon-button type="button" (click)="addQuery()" [hidden]="queryIndex + 1 < queries().length">
               <mat-icon [ngStyle]="{'color':'green'}">add_circle</mat-icon>
             </button>
           </div>
@@ -74,10 +74,10 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeDatabase(dbIndex)" [hidden]="databases().length<2">
+            <button mat-icon-button type="button" color="warn" (click)="removeDatabase(dbIndex)" [hidden]="databases().length<2">
               <mat-icon>delete</mat-icon>
             </button>
-            <button mat-icon-button  (click)="addDatabase()" [hidden]="dbIndex + 1 < databases().length">
+            <button mat-icon-button type="button" (click)="addDatabase()" [hidden]="dbIndex + 1 < databases().length">
               <mat-icon [ngStyle]="{'color':'green'}">add_circle</mat-icon>
             </button>
           </div>
