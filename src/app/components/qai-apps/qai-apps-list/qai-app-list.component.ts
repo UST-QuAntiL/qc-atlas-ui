@@ -15,7 +15,6 @@ import { PagingInfo } from '../../../util/PagingInfo';
 @Component({
   selector: 'app-qai-app-list',
   templateUrl: './qai-app-list.component.html',
-  styleUrls: ['./qai-app-list.component.scss'],
 })
 export class QAIAppListComponent implements OnInit {
   qAIApps: QAIAppDto[] = [];

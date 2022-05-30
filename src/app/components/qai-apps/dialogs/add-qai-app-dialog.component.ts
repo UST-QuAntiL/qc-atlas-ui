@@ -64,7 +64,6 @@ export class AddQAIAppDialogComponent implements OnInit {
             this.uploadProgress = Math.round(
               100 * (event.loaded / event.total)
             );
-            console.log('new progress', this.uploadProgress);
           } else if (event.type === HttpEventType.Response) {
             const qaiApp = event.body as QAIAppDto;
 

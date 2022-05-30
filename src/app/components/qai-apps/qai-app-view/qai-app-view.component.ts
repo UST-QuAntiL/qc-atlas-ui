@@ -12,7 +12,6 @@ import { QAIAppDto } from '../qai-app-dto';
 @Component({
   selector: 'app-qai-app-view',
   templateUrl: './qai-app-view.component.html',
-  styleUrls: ['./qai-app-view.component.scss'],
 })
 export class QAIAppViewComponent implements OnInit, OnDestroy {
   readonly UiFeatures = UiFeatures;
