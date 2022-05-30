@@ -112,9 +112,8 @@ export class SlrViewComponent implements OnInit {
           () => {
             this.slrService.getStudyNames().subscribe((studies) => {
               this.slrs$ = studies ?? [];
-              this.slr = dialogResult.study.studyDefinition.title;
+              this.onSLRChanged(dialogResult.study.studyDefinition.title);
               this.slrsExist = true;
-              this.fillSlrTable();
             });
             this.utilService.callSnackBar(
               'Successfully added the study "' +
