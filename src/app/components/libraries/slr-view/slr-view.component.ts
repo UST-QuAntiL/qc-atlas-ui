@@ -4,6 +4,7 @@ import { SystematicLiteratureReviewService } from 'api-library/services/systemat
 import { StudyDto } from 'api-library/models/study-dto';
 import { interval, Observable } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
+import { Study } from 'api-library/models/study';
 import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
@@ -14,7 +15,6 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
-import { Study } from 'api-library/models/study';
 
 @Component({
   selector: 'app-slr-view',

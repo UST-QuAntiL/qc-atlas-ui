@@ -39,14 +39,15 @@
         </div>
       </div>
     </div>
+    <div *ngIf="slrsExist">
     <mat-tab-group>
       <mat-tab label="Study definition">
-        <div *ngIf="slrsExist">
+
         <app-slr-properties [study]="study"></app-slr-properties>
-        </div>
+
       </mat-tab>
       <mat-tab label="Results">
-        <div *ngIf="slrsExist">
+
           <!-- Search -->
           <div class="row">
             <div class="col-12">
@@ -160,8 +161,9 @@
               </tbody>
             </table>
           </div>
-        </div>
+
       </mat-tab>
     </mat-tab-group>
+    </div>
   </div>
 </mat-card>

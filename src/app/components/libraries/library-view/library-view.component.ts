@@ -1,22 +1,17 @@
 import {
   AfterViewInit,
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { LibrariesService } from 'api-library/services/libraries.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 import { NewLibraryDto } from 'api-library/models';
-import { forkJoin } from 'rxjs';
 import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
 } from '../../../directives/qc-atlas-ui-repository-configuration.service';
-import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
 import { UtilService } from '../../../util/util.service';
 import { AddLibraryDialogComponent } from '../dialogs/add-library-dialog/add-library-dialog.component';
 import {
@@ -138,5 +133,4 @@ export class LibraryViewComponent implements OnInit, AfterViewInit {
     this.libraryTable.getLibrary(library);
     this.library = library;
   }
-
 }
