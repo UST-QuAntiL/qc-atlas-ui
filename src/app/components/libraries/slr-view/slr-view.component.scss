@@ -175,3 +175,28 @@ a.table-url:hover {
 .library-input-field {
   width: 20%;
 }
+
+.spinner-wrapper {
+  display: flex;
+}
+
+
+.mat-spinner-buttons {
+  margin-left: 45px;
+}
+
+.mat-spinner-left {
+  margin-left: 10px;
+}
+
+
+.spinner-wrapper {
+  display: flex;
+}
+
+.spinner-wrapper-center {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+

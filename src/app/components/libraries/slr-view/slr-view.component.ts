@@ -3,7 +3,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { SystematicLiteratureReviewService } from 'api-library/services/systematic-literature-review.service';
 import { StudyDto } from 'api-library/models/study-dto';
 import { interval, Observable } from 'rxjs';
-import { startWith, switchMap } from 'rxjs/operators';
+import { finalize, startWith, switchMap } from 'rxjs/operators';
 import { Study } from 'api-library/models/study';
 import {
   QcAtlasUiConfiguration,
@@ -38,6 +38,7 @@ export class SlrViewComponent implements OnInit {
   variableNames = ['id', 'title', 'author', 'entrytype', 'date'];
   entries: TableEntry[] = [];
   allEntries: TableEntry[] = [];
+  crawlingFinished = true;
 
   constructor(
     private slrService: SystematicLiteratureReviewService,
@@ -95,6 +96,12 @@ export class SlrViewComponent implements OnInit {
     });
   }
 
+  updateStudy(): void {
+    this.getSlr(this.slr).subscribe((study) => {
+      this.study = study.studyDefinition;
+    });
+  }
+
   onAddSLR(): void {
     this.utilService
       .createDialog(AddSlrDialogComponent, {
@@ -114,6 +121,7 @@ export class SlrViewComponent implements OnInit {
               this.slrs$ = studies ?? [];
               this.onSLRChanged(dialogResult.study.studyDefinition.title);
               this.slrsExist = true;
+              this.onCrawlSLR();
             });
             this.utilService.callSnackBar(
               'Successfully added the study "' +
@@ -192,11 +200,13 @@ export class SlrViewComponent implements OnInit {
   onCrawlSLR(): void {
     this.slrService.crawlStudy({ studyName: this.slr, body: '' }).subscribe(
       () => {
+        this.crawlingFinished = false;
         this.utilService.callSnackBar(
           'Started crawling for study "' + this.slr + '".'
         );
         const pollSubscription = interval(500)
           .pipe(
+            finalize(() => (this.crawlingFinished = true)),
             startWith(0),
             switchMap(() =>
               this.slrService.getCrawlStatus({ studyName: this.slr })
@@ -207,6 +217,7 @@ export class SlrViewComponent implements OnInit {
             if (!res.currentlyCrawling) {
               pollSubscription.unsubscribe();
               this.fillSlrTable();
+              this.updateStudy();
             }
           });
       },
