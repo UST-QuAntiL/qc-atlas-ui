@@ -37,7 +37,9 @@ export class ImplementationTokenDialogComponent implements OnInit {
         Validators.maxLength(255),
       ]),
     });
-    this.dialogRef.beforeClosed().subscribe(() => {});
+    this.dialogRef.beforeClosed().subscribe(() => {
+      this.data.token = this.token.value;
+    });
   }
 
   isRequiredDataMissing(): boolean {

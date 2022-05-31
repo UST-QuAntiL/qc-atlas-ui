@@ -8,6 +8,7 @@ import {
 } from 'api-nisq/services';
 import {
   AnalysisJobDto,
+  ExecuteAnalysisResultRequestDto,
   ExecutionResultDto,
   ParameterDto,
   SelectionRequestDto,
@@ -44,10 +45,13 @@ export class NisqAnalyzerService {
     return this.analysisResultService.getAnalysisJob({ resId });
   }
 
-  execute(resId: string, token: string): Observable<ExecutionResultDto> {
+  execute(
+    resId: string,
+    body: ExecuteAnalysisResultRequestDto
+  ): Observable<ExecutionResultDto> {
     return this.analysisResultService.executeAnalysisResult({
       resId,
-      token,
+      body,
     });
   }
 

@@ -275,7 +275,7 @@ export class CompilerAnalysisResultService extends BaseService {
     );
     if (params) {
       rb.path('resId', params.resId, {});
-      rb.query('token', params.token)
+      rb.query('token', params.token, {});
     }
     return this.http
       .request(

@@ -19,6 +19,7 @@ import {
   ExecutionResultDto,
   ImplementationDto as NISQImplementationDto,
   AnalysisJobDto,
+  ExecuteAnalysisResultRequestDto,
 } from 'api-nisq/models';
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
@@ -106,6 +107,10 @@ export class NisqAnalyzerComponent implements OnInit {
     AnalysisResultDto,
     ExecutionResultDto
   >();
+  executeAnalysisResultRequestDto: ExecuteAnalysisResultRequestDto = {
+    refreshToken: '',
+    token: '',
+  };
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
@@ -366,35 +371,43 @@ export class NisqAnalyzerComponent implements OnInit {
         this.loadingResults[analysisResult.id] = true;
         this.results = undefined;
         this.executedAnalyseResult = analysisResult;
-        const token = dialogResult.token;
-        this.nisqAnalyzerService.execute(analysisResult.id, token).subscribe(
-          (results) => {
-            if (results.status === 'FAILED' || results.status === 'FINISHED') {
-              this.results = results;
-            } else {
-              interval(1000)
-                .pipe(
-                  exhaustMap(() =>
-                    this.http.get<ExecutionResultDto>(
-                      results._links['self'].href
+        this.executeAnalysisResultRequestDto.token = dialogResult.token;
+        console.log(this.executeAnalysisResultRequestDto);
+        this.nisqAnalyzerService
+          .execute(analysisResult.id, this.executeAnalysisResultRequestDto)
+          .subscribe(
+            (results) => {
+              if (
+                results.status === 'FAILED' ||
+                results.status === 'FINISHED'
+              ) {
+                this.results = results;
+              } else {
+                interval(1000)
+                  .pipe(
+                    exhaustMap(() =>
+                      this.http.get<ExecutionResultDto>(
+                        results._links['self'].href
+                      )
+                    ),
+                    first(
+                      (value) =>
+                        value.status === 'FAILED' || value.status === 'FINISHED'
                     )
-                  ),
-                  first(
-                    (value) =>
-                      value.status === 'FAILED' || value.status === 'FINISHED'
                   )
-                )
-                .subscribe((finalResult) => (this.results = finalResult));
+                  .subscribe((finalResult) => (this.results = finalResult));
+              }
+              this.utilService.callSnackBar(
+                'Successfully started execution "' + results.id + '".'
+              );
+              this.hasExecutionResult(analysisResult);
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not start execution.'
+              );
             }
-            this.utilService.callSnackBar(
-              'Successfully started execution "' + results.id + '".'
-            );
-            this.hasExecutionResult(analysisResult);
-          },
-          () => {
-            this.utilService.callSnackBar('Error! Could not start execution.');
-          }
-        );
+          );
       });
   }
 
