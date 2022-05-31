@@ -10,7 +10,6 @@ import {
   MAT_DIALOG_DATA,
   MatDialog,
 } from '@angular/material/dialog';
-import { ProviderService } from 'generated/api-qprov/services';
 
 @Component({
   selector: 'app-implementation-token-dialog',
@@ -23,7 +22,8 @@ export class ImplementationTokenDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ImplementationTokenDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public dialog: MatDialog  ) {}
+    public dialog: MatDialog
+  ) {}
 
   get token(): AbstractControl | null {
     return this.implementationExecutionForm.get('token');
@@ -50,8 +50,5 @@ export class ImplementationTokenDialogComponent implements OnInit {
 }
 
 export interface DialogData {
-  title: string;
-  vendor: string;
-  qpu: string;
   token: string;
 }
