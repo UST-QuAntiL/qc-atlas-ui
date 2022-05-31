@@ -346,7 +346,6 @@ export class AnalysisResultService extends BaseService {
     token: string;
     body?: ExecuteAnalysisResultRequestDto;
   }): Observable<StrictHttpResponse<ExecutionResultDto>> {
-    console.log('second last blah ',params.token);
     const rb = new RequestBuilder(
       this.rootUrl,
       AnalysisResultService.ExecuteAnalysisResultPath,
@@ -357,7 +356,6 @@ export class AnalysisResultService extends BaseService {
       rb.query('token', params.token, {});
       rb.body(params.body, 'application/json');
     }
-    console.log('last blah',rb);
     return this.http
       .request(
         rb.build({

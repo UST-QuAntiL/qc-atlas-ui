@@ -10,7 +10,6 @@ import {
   MAT_DIALOG_DATA,
   MatDialog,
 } from '@angular/material/dialog';
-import { EntityModelProviderDto } from 'generated/api-qprov/models';
 import { ProviderService } from 'generated/api-qprov/services';
 
 @Component({
@@ -40,10 +39,7 @@ export class ImplementationTokenDialogComponent implements OnInit {
         Validators.maxLength(255),
       ]),
     });
-    this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.token =
-        '8ff3f477cc4d09641bef492827ff3b6aa471691e124f1576c32223b0bdf1cf833297df1974fbdb472de67fc7b6c13bda8ed39764a2c46e1cb64507e6ec0bf900';
-    });
+    this.dialogRef.beforeClosed().subscribe(() => {});
   }
 
   isRequiredDataMissing(): boolean {

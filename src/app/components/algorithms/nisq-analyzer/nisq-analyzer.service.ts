@@ -45,7 +45,6 @@ export class NisqAnalyzerService {
   }
 
   execute(resId: string, token: string): Observable<ExecutionResultDto> {
-    console.log('blah service');
     return this.analysisResultService.executeAnalysisResult({
       resId,
       token,
