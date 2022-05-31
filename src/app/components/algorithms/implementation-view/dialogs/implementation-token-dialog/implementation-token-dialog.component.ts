@@ -50,5 +50,6 @@ export class ImplementationTokenDialogComponent implements OnInit {
 }
 
 export interface DialogData {
+  title: string;
   token: string;
 }
