@@ -23,9 +23,7 @@ export class ImplementationTokenDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ImplementationTokenDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public dialog: MatDialog,
-    private providerService: ProviderService
-  ) {}
+    public dialog: MatDialog  ) {}
 
   get token(): AbstractControl | null {
     return this.implementationExecutionForm.get('token');
