@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { forkJoin } from 'rxjs';
-import { LibrariesService } from 'api-library/services/libraries.service';
 import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 import {
   ConfirmDialogComponent,
@@ -13,6 +12,7 @@ import {
 } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { UtilService } from '../../../util/util.service';
 import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
+import { LibraryAndStudyService } from '../library-and-study.service';
 
 @Component({
   selector: 'app-library-table',
@@ -22,6 +22,7 @@ import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-b
 export class LibraryTableComponent implements OnInit {
   @Input() addIcon = 'playlist_add';
   @Input() emptyTableMessage = 'No elements found';
+  @Input() serviceType = 'library';
   @Input() showTable = false;
   @Output() elementClicked = new EventEmitter<any>();
   @Output() updateClicked = new EventEmitter<any>();
@@ -36,7 +37,7 @@ export class LibraryTableComponent implements OnInit {
   uiConfig: QcAtlasUiConfiguration;
 
   constructor(
-    private libraryService: LibrariesService,
+    private libraryService: LibraryAndStudyService,
     private configService: QcAtlasUiRepositoryConfigurationService,
     private utilService: UtilService
   ) {}
@@ -50,7 +51,7 @@ export class LibraryTableComponent implements OnInit {
     this.allEntries = [];
     this.library = libraryName;
     this.libraryService
-      .getLibraryEntries({ libraryName: this.library })
+      .getLibraryEntries(this.serviceType, this.library)
       .subscribe((bibentries) => {
         bibentries.bibEntries.forEach((entry) => {
           this.entries.push({
@@ -76,7 +77,7 @@ export class LibraryTableComponent implements OnInit {
         if (dialogResult.bibEntry) {
           const bibEntryDto = dialogResult.bibEntry as BibEntryDto;
           this.libraryService
-            .addEntryToLibrary({ libraryName: this.library, body: bibEntryDto })
+            .addEntryToLibrary(this.serviceType, this.library, bibEntryDto)
             .subscribe(() => this.getLibrary(this.library));
         }
       });
@@ -86,10 +87,7 @@ export class LibraryTableComponent implements OnInit {
     this.elementClicked.emit(element);
     this.selection.clear();
     this.libraryService
-      .getBibEntryMatchingCiteKey({
-        citeKey: element.id,
-        libraryName: this.library,
-      })
+      .getBibEntryMatchingCiteKey(this.serviceType, element.id, this.library)
       .subscribe((bibEntry) => {
         this.utilService
           .createDialog(AddBibentryDialogComponent, {
@@ -101,11 +99,12 @@ export class LibraryTableComponent implements OnInit {
             if (dialogResult.bibEntry) {
               const bibEntryDto = dialogResult.bibEntry as BibEntryDto;
               this.libraryService
-                .updateEntry({
-                  citeKey: bibEntryDto.citationKey,
-                  libraryName: this.library,
-                  body: bibEntryDto,
-                })
+                .updateEntry(
+                  this.serviceType,
+                  bibEntryDto.citationKey,
+                  this.library,
+                  bibEntryDto
+                )
                 .subscribe(() => this.getLibrary(this.library));
             }
           });
@@ -132,10 +131,11 @@ export class LibraryTableComponent implements OnInit {
           this.selection.selected.forEach((element) => {
             deletionTasks.push(
               this.libraryService
-                .deleteEntryFromLibrary({
-                  citeKey: element.id,
-                  libraryName: this.library,
-                })
+                .deleteEntryFromLibrary(
+                  this.serviceType,
+                  element.id,
+                  this.library
+                )
                 .toPromise()
                 .then(() => {
                   successfulDeletions++;
@@ -221,10 +221,7 @@ export class LibraryTableComponent implements OnInit {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           this.libraryService
-            .deleteEntryFromLibrary({
-              citeKey: element.id,
-              libraryName: this.library,
-            })
+            .deleteEntryFromLibrary(this.serviceType, element.id, this.library)
             .toPromise()
             .then(() => {
               this.utilService.callSnackBar(
