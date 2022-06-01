@@ -22,7 +22,27 @@ import { Study } from 'api-library/models/study';
 })
 export class AddSlrDialogComponent implements OnInit {
   studyForm: FormGroup;
-  databasesList = ['ArXiv', 'IEEEXplore'];
+  databasesList = [
+    'ACM Portal',
+    'ArXiv',
+    'CiteSheerX',
+    'Collection of Computer Science Bibliographies',
+    'Crossref',
+    'DBLP',
+    'DOAB',
+    'DOAJ',
+    'GVK',
+    'IEEEXplore',
+    'INSPIRE',
+    'MathSciNet',
+    'Medline/PubMed',
+    'ResearchGate',
+    'SAO/NASA ADS',
+    'SearchAll',
+    'SemanticScholar',
+    'Springer',
+    'zbMATH',
+  ];
 
   constructor(
     public dialogRef: MatDialogRef<AddSlrDialogComponent>,
