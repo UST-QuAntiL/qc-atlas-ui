@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SystematicLiteratureReviewService } from 'api-library/services/systematic-literature-review.service';
 import { StudyDto } from 'api-library/models/study-dto';
-import { interval, Observable } from 'rxjs';
+import { forkJoin, interval, Observable } from 'rxjs';
 import { finalize, startWith, switchMap } from 'rxjs/operators';
 import { Study } from 'api-library/models/study';
+import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
@@ -15,6 +16,7 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
+import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
 
 @Component({
   selector: 'app-slr-view',
@@ -38,6 +40,7 @@ export class SlrViewComponent implements OnInit {
   variableNames = ['id', 'title', 'author', 'entrytype', 'date'];
   entries: TableEntry[] = [];
   allEntries: TableEntry[] = [];
+  disabledDataEntries: Set<any> = new Set<any>();
   crawlingFinished = true;
 
   constructor(
@@ -169,33 +172,175 @@ export class SlrViewComponent implements OnInit {
       });
   }
 
-  onSearchChange(): void {}
-
-  onDeleteEntries(): void {}
-
-  sortData(): void {}
-
-  masterToggle() {
-    return null;
+  onSearchChange(): void {
+    this.entries = this.allEntries;
+    this.entries = this.entries.filter((entry) => {
+      const term = this.searchText.toLowerCase();
+      return (
+        entry.entrytype.toLowerCase().includes(term) ||
+        entry.id.toLowerCase().includes(term) ||
+        entry.author?.toLowerCase().includes(term) ||
+        entry.keywords?.toLowerCase().includes(term) ||
+        entry.date?.toLowerCase().includes(term) ||
+        entry.title?.toLowerCase().includes(term)
+      );
+    });
+    this.selection.clear();
   }
 
-  isAllSelected() {
-    return false;
+  onDeleteEntries(): void {
+    const dialogData: ConfirmDialogData = {
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete the following entries:',
+      data: this.selection.selected,
+      variableName: 'id',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    };
+    this.utilService
+      .createDialog(ConfirmDialogComponent, dialogData)
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          const deletionTasks = [];
+          const snackbarMessages = [];
+          let successfulDeletions = 0;
+          this.selection.selected.forEach((element) => {
+            deletionTasks.push(
+              this.slrService
+                .deleteEntryFromLibrary1({
+                  citeKey: element.id,
+                  studyName: this.slr,
+                })
+                .toPromise()
+                .then(() => {
+                  successfulDeletions++;
+                  snackbarMessages.push(
+                    'Successfully deleted entry "' + element.id + '".'
+                  );
+                })
+                .catch(() => {
+                  snackbarMessages.push(
+                    'Could not delete entry "' + element.id + '".'
+                  );
+                })
+            );
+          });
+          forkJoin(deletionTasks).subscribe(() => {
+            this.onSLRChanged(this.slr);
+            this.selection.clear();
+            this.utilService.callSnackBar(
+              'Successfully deleted ' +
+                successfulDeletions +
+                '/' +
+                dialogResult.data.length +
+                ' entries.'
+            );
+            this.utilService.callSnackBarSequence(snackbarMessages);
+          });
+        }
+      });
   }
 
-  dataEntryIsDisabled(dataEntry: TableEntry) {
-    return false;
+  sortData(): void {
+    this.selection.clear();
   }
 
-  rowToggle(dataEntry: TableEntry) {
-    return null;
+  // Toggle all check boxes
+  masterToggle(): void {
+    const isAllSelected = this.isAllSelected();
+    this.entries.forEach((element) => {
+      if (!this.dataEntryIsDisabled(element)) {
+        this.changeSelection(element, !isAllSelected);
+      }
+    });
   }
 
-  onElementClicked(dataEntry: TableEntry) {
-    return false;
+  isAllSelected(): boolean {
+    return (
+      this.entries.length ===
+      this.selection.selected.length + this.disabledDataEntries.size
+    );
   }
 
-  onSingleDelete(dataEntry: TableEntry) {}
+  dataEntryIsDisabled(dataEntry: any): boolean {
+    return this.disabledDataEntries.has(dataEntry.id);
+  }
+
+  rowToggle(row: any): void {
+    this.changeSelection(row, !this.selection.isSelected(row));
+  }
+
+  changeSelection(row: any, select: boolean): void {
+    if (select !== this.selection.isSelected(row)) {
+      this.selection.toggle(row);
+    }
+  }
+
+  onElementClicked(element): void {
+    this.elementClicked.emit(element);
+    this.selection.clear();
+    this.slrService
+      .getBibEntryMatchingCiteKey2({
+        citeKey: element.id,
+        studyName: this.slr,
+      })
+      .subscribe((bibEntry) => {
+        this.utilService
+          .createDialog(AddBibentryDialogComponent, {
+            title: 'Update bibTeX entry',
+            bibEntry,
+          })
+          .afterClosed()
+          .subscribe((dialogResult) => {
+            if (dialogResult.bibEntry) {
+              const bibEntryDto = dialogResult.bibEntry as BibEntryDto;
+              this.slrService
+                .updateEntry1({
+                  citeKey: bibEntryDto.citationKey,
+                  studyName: this.slr,
+                  body: bibEntryDto,
+                })
+                .subscribe(() => this.onSLRChanged(this.slr));
+            }
+          });
+      });
+  }
+
+  onSingleDelete(element): void {
+    const dialogData: ConfirmDialogData = {
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete the following entry:',
+      data: [element],
+      variableName: 'id',
+      yesButtonText: 'yes',
+      noButtonText: 'no',
+    };
+    this.utilService
+      .createDialog(ConfirmDialogComponent, dialogData)
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.slrService
+            .deleteEntryFromLibrary1({
+              citeKey: element.id,
+              studyName: this.slr,
+            })
+            .toPromise()
+            .then(() => {
+              this.utilService.callSnackBar(
+                'Successfully deleted entry "' + element.id + '".'
+              );
+              this.onCrawlSLR();
+            })
+            .catch(() => {
+              this.utilService.callSnackBar(
+                'Could not delete entry "' + element.id + '".'
+              );
+            });
+        }
+      });
+  }
 
   onCrawlSLR(): void {
     this.slrService.crawlStudy({ studyName: this.slr, body: '' }).subscribe(
