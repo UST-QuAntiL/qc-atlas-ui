@@ -16,7 +16,12 @@
                            required>
                 </ng-template>
                 <ng-template #nonRequiredFiled>
-                    <input [id]="field" [formControlName]="field" matInput>
+                    <textarea [id]="field" [formControlName]="field"
+                           matInput
+                           cdkTextareaAutosize
+                           cdkAutosizeMinRows="1"
+                           cdkAutosizeMaxRows="5">
+                    </textarea>
                 </ng-template>
             </mat-form-field>
         </div>
