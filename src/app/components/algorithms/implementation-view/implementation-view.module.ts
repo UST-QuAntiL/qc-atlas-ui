@@ -42,6 +42,7 @@ import { ImplementationNisqAnalyzerQpuSelectionDialogComponent } from './dialogs
 import { ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog.component';
+import { ImplementationTokenDialogComponent } from './dialogs/implementation-token-dialog/implementation-token-dialog.component';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog.component';
 
@@ -57,6 +58,7 @@ import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } f
     ImplementationNisqAnalyzerQpuSelectionDialogComponent,
     ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
     ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent,
+    ImplementationTokenDialogComponent,
     ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent,
   ],
   imports: [

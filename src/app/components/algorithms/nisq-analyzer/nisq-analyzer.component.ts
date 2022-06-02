@@ -19,6 +19,7 @@ import {
   ExecutionResultDto,
   ImplementationDto as NISQImplementationDto,
   AnalysisJobDto,
+  ExecuteAnalysisResultRequestDto,
 } from 'api-nisq/models';
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
@@ -28,6 +29,7 @@ import { ProviderService } from 'generated/api-qprov/services';
 import { MatSort } from '@angular/material/sort';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
+import { ImplementationTokenDialogComponent } from '../implementation-view/dialogs/implementation-token-dialog/implementation-token-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
 
 @Component({
@@ -105,6 +107,10 @@ export class NisqAnalyzerComponent implements OnInit {
     AnalysisResultDto,
     ExecutionResultDto
   >();
+  executeAnalysisResultRequestDto: ExecuteAnalysisResultRequestDto = {
+    refreshToken: '',
+    token: '',
+  };
 
   constructor(
     private executionEnvironmentsService: ExecutionEnvironmentsService,
@@ -209,6 +215,7 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   onAddAnalysis(): void {
+    let token = ' ';
     this.utilService
       .createDialog(AddNewAnalysisDialogComponent, {
         title: 'Start Analysis',
@@ -217,10 +224,13 @@ export class NisqAnalyzerComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          if (dialogResult.token) {
+            token = dialogResult.token;
+          }
           // Merge a list of parameter objects into a single parameter object.
           const analyzeParams = Object.assign.apply(undefined, [
             {
-              token: dialogResult.token,
+              token,
             },
             ...dialogResult.params,
           ]);
@@ -356,35 +366,56 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   execute(analysisResult: AnalysisResultDto): void {
-    this.loadingResults[analysisResult.id] = true;
-    this.results = undefined;
-    this.executedAnalyseResult = analysisResult;
-    this.nisqAnalyzerService.execute(analysisResult.id).subscribe(
-      (results) => {
-        if (results.status === 'FAILED' || results.status === 'FINISHED') {
-          this.results = results;
-        } else {
-          interval(1000)
-            .pipe(
-              exhaustMap(() =>
-                this.http.get<ExecutionResultDto>(results._links['self'].href)
-              ),
-              first(
-                (value) =>
-                  value.status === 'FAILED' || value.status === 'FINISHED'
-              )
-            )
-            .subscribe((finalResult) => (this.results = finalResult));
+    let token = ' ';
+    this.utilService
+      .createDialog(ImplementationTokenDialogComponent, {
+        title: 'Enter the token for the Vendor : ' + analysisResult.provider,
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        this.loadingResults[analysisResult.id] = true;
+        this.results = undefined;
+        this.executedAnalyseResult = analysisResult;
+        if (dialogResult.token) {
+          token = dialogResult.token;
         }
-        this.utilService.callSnackBar(
-          'Successfully started execution "' + results.id + '".'
-        );
-        this.hasExecutionResult(analysisResult);
-      },
-      () => {
-        this.utilService.callSnackBar('Error! Could not start execution.');
-      }
-    );
+        this.executeAnalysisResultRequestDto.token = token;
+        this.nisqAnalyzerService
+          .execute(analysisResult.id, this.executeAnalysisResultRequestDto)
+          .subscribe(
+            (results) => {
+              if (
+                results.status === 'FAILED' ||
+                results.status === 'FINISHED'
+              ) {
+                this.results = results;
+              } else {
+                interval(1000)
+                  .pipe(
+                    exhaustMap(() =>
+                      this.http.get<ExecutionResultDto>(
+                        results._links['self'].href
+                      )
+                    ),
+                    first(
+                      (value) =>
+                        value.status === 'FAILED' || value.status === 'FINISHED'
+                    )
+                  )
+                  .subscribe((finalResult) => (this.results = finalResult));
+              }
+              this.utilService.callSnackBar(
+                'Successfully started execution "' + results.id + '".'
+              );
+              this.hasExecutionResult(analysisResult);
+            },
+            () => {
+              this.utilService.callSnackBar(
+                'Error! Could not start execution.'
+              );
+            }
+          );
+      });
   }
 
   hasExecutionResult(analysisResult: AnalysisResultDto): void {

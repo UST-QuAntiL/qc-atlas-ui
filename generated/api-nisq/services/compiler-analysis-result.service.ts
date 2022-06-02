@@ -266,6 +266,7 @@ export class CompilerAnalysisResultService extends BaseService {
    */
   executeCompilationResult$Response(params: {
     resId: string;
+    token: string;
   }): Observable<StrictHttpResponse<ExecutionResultDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -274,6 +275,7 @@ export class CompilerAnalysisResultService extends BaseService {
     );
     if (params) {
       rb.path('resId', params.resId, {});
+      rb.query('token', params.token, {});
     }
     return this.http
       .request(
@@ -300,6 +302,7 @@ export class CompilerAnalysisResultService extends BaseService {
    */
   executeCompilationResult(params: {
     resId: string;
+    token: string;
   }): Observable<ExecutionResultDto> {
     return this.executeCompilationResult$Response(params).pipe(
       map(

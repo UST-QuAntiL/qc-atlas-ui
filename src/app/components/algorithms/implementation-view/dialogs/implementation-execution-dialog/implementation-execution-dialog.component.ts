@@ -55,11 +55,7 @@ export class ImplementationExecutionDialogComponent implements OnInit {
         Validators.required,
         Validators.maxLength(255),
       ]),
-      token: new FormControl(this.data.token, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-        Validators.maxLength(255),
-      ]),
+      token: new FormControl(this.data.token),
     });
 
     this.vendor.setValue('IBMQ');
@@ -79,7 +75,6 @@ export class ImplementationExecutionDialogComponent implements OnInit {
   isRequiredDataMissing(): boolean {
     return this.vendor.errors?.required;
     return this.qpu.errors?.required;
-    return this.token.errors?.required;
   }
 
   onVendorChanged(value: string): void {
