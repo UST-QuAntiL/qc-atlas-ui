@@ -18,7 +18,6 @@ import { Study } from 'api-library/models/study';
 @Component({
   selector: 'app-add-slr-dialog',
   templateUrl: './add-slr-dialog.component.html',
-  styleUrls: ['./add-slr-dialog.component.scss'],
 })
 export class AddSlrDialogComponent implements OnInit {
   studyForm: FormGroup;

@@ -4,7 +4,6 @@ import { Study } from 'api-library/models/study';
 @Component({
   selector: 'app-slr-properties',
   templateUrl: './slr-properties.component.html',
-  styleUrls: ['./slr-properties.component.scss'],
 })
 export class SlrPropertiesComponent implements OnInit {
   @Input() study: Study;
