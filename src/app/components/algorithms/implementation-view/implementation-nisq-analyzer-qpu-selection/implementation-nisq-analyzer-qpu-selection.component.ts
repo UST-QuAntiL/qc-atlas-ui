@@ -162,13 +162,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
   ngOnInit(): void {
     this.analyzerJobs$ = this.sort$
-      .pipe(
-        switchMap((sort) =>
-          this.qpuSelectionService.getQpuSelectionJobs({
-            sort,
-          })
-        )
-      )
+      .pipe(switchMap(() => this.qpuSelectionService.getQpuSelectionJobs({})))
       .pipe(
         map((dto) =>
           dto.qpuSelectionJobList.filter(
@@ -219,7 +213,11 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           this.jobReady = false;
           refreshToken = this.planqkService.getRefreshToken();
           const providerTokens = {};
-          providerTokens[dialogResult.vendor] = dialogResult.token;
+          if (dialogResult.token) {
+            providerTokens[dialogResult.vendor] = dialogResult.token;
+          } else {
+            providerTokens[dialogResult.vendor] = ' ';
+          }
 
           const qpuSelectionDto: QpuSelectionDto = {
             simulatorsAllowed: dialogResult.simulatorAllowed,
@@ -302,13 +300,16 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   }
 
   execute(analysisResult: QpuSelectionResultDto): void {
+    let token = ' ';
     this.utilService
       .createDialog(ImplementationTokenDialogComponent, {
         title: 'Enter the token for the Vendor : ' + analysisResult.provider,
       })
       .afterClosed()
       .subscribe((dialogResult) => {
-        const token = dialogResult.token;
+        if (dialogResult.token) {
+          token = dialogResult.token;
+        }
         this.loadingResults[analysisResult.id] = true;
         this.results = undefined;
         this.executedAnalyseResult = analysisResult;

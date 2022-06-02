@@ -31,19 +31,11 @@ export class ImplementationTokenDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.implementationExecutionForm = new FormGroup({
-      token: new FormControl(this.data.token, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-        Validators.maxLength(255),
-      ]),
+      token: new FormControl(this.data.token),
     });
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.token = this.token.value;
     });
-  }
-
-  isRequiredDataMissing(): boolean {
-    return this.token.errors?.required;
   }
 
   onNoClick(): void {

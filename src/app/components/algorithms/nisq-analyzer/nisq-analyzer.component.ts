@@ -215,6 +215,7 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   onAddAnalysis(): void {
+    let token = ' ';
     this.utilService
       .createDialog(AddNewAnalysisDialogComponent, {
         title: 'Start Analysis',
@@ -223,10 +224,13 @@ export class NisqAnalyzerComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          if (dialogResult.token) {
+            token = dialogResult.token;
+          }
           // Merge a list of parameter objects into a single parameter object.
           const analyzeParams = Object.assign.apply(undefined, [
             {
-              token: dialogResult.token,
+              token,
             },
             ...dialogResult.params,
           ]);
@@ -362,6 +366,7 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   execute(analysisResult: AnalysisResultDto): void {
+    let token = ' ';
     this.utilService
       .createDialog(ImplementationTokenDialogComponent, {
         title: 'Enter the token for the Vendor : ' + analysisResult.provider,
@@ -371,8 +376,10 @@ export class NisqAnalyzerComponent implements OnInit {
         this.loadingResults[analysisResult.id] = true;
         this.results = undefined;
         this.executedAnalyseResult = analysisResult;
-        this.executeAnalysisResultRequestDto.token = dialogResult.token;
-        console.log(this.executeAnalysisResultRequestDto);
+        if (dialogResult.token) {
+          token = dialogResult.token;
+        }
+        this.executeAnalysisResultRequestDto.token = token;
         this.nisqAnalyzerService
           .execute(analysisResult.id, this.executeAnalysisResultRequestDto)
           .subscribe(

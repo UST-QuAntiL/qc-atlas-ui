@@ -147,13 +147,16 @@ export class ImplementationExecutionComponent implements OnInit {
   }
 
   execute(analysisResult: CompilerAnalysisResultDto): void {
+    let token = ' ';
     this.utilService
       .createDialog(ImplementationTokenDialogComponent, {
         title: 'Enter the token for the Vendor : ' + analysisResult.provider,
       })
       .afterClosed()
       .subscribe((dialogResult) => {
-        const token = dialogResult.token;
+        if (dialogResult.token) {
+          token = dialogResult.token;
+        }
         this.results = undefined;
         this.executedCompilationResult = analysisResult;
         this.nisqAnalyzerService
@@ -267,6 +270,7 @@ export class ImplementationExecutionComponent implements OnInit {
   }
 
   onAddElement(): void {
+    let token = ' ';
     this.refreshNisqImpl();
     this.utilService
       .createDialog(ImplementationExecutionDialogComponent, {
@@ -275,13 +279,16 @@ export class ImplementationExecutionComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          if (dialogResult.token) {
+            token = dialogResult.token;
+          }
           const compilerSelectionDto: CompilerSelectionDto = {
             providerName: dialogResult.vendor,
             circuitLanguage: this.nisqImpl.language,
             circuitName: this.nisqImpl.name,
             qpuName: dialogResult.qpu,
             circuitUrl: this.nisqImpl.fileLocation,
-            token: dialogResult.token,
+            token,
           };
           this.rootService
             .selectCompilerForFile1$Json({
@@ -289,7 +296,7 @@ export class ImplementationExecutionComponent implements OnInit {
               circuitLanguage: this.nisqImpl.language,
               circuitName: this.nisqImpl.name,
               qpuName: dialogResult.qpu,
-              token: dialogResult.token,
+              token,
               body: compilerSelectionDto,
             })
             .subscribe(
