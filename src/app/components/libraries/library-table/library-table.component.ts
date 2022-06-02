@@ -12,7 +12,10 @@ import {
 } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { UtilService } from '../../../util/util.service';
 import { AddBibentryDialogComponent } from '../dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
-import { LibraryAndStudyService } from '../library-and-study.service';
+import {
+  LibraryAndStudyService,
+  ServiceType,
+} from '../library-and-study.service';
 
 @Component({
   selector: 'app-library-table',
@@ -22,7 +25,7 @@ import { LibraryAndStudyService } from '../library-and-study.service';
 export class LibraryTableComponent implements OnInit {
   @Input() addIcon = 'playlist_add';
   @Input() emptyTableMessage = 'No elements found';
-  @Input() serviceType = 'library';
+  @Input() serviceType = ServiceType.LIBRARY;
   @Input() showTable = false;
   @Output() elementClicked = new EventEmitter<any>();
   @Output() updateClicked = new EventEmitter<any>();

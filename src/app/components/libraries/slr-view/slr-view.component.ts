@@ -22,6 +22,7 @@ import {
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
 import { LibraryTableComponent } from '../library-table/library-table.component';
+import { ServiceType } from '../library-and-study.service';
 
 @Component({
   selector: 'app-slr-view',
@@ -41,6 +42,7 @@ export class SlrViewComponent implements OnInit {
   uiConfig: QcAtlasUiConfiguration;
   slrsExist: boolean;
   crawlingFinished = true;
+  serviceType = ServiceType.STUDY;
 
   constructor(
     private slrService: SystematicLiteratureReviewService,
@@ -173,6 +175,9 @@ export class SlrViewComponent implements OnInit {
               pollSubscription.unsubscribe();
               this.libraryTable.getLibrary(this.slr);
               this.updateStudy();
+              this.utilService.callSnackBar(
+                'Crawling for study "' + this.slr + '" is finished.'
+              );
             }
           });
       },
