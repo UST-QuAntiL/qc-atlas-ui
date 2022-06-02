@@ -8,9 +8,8 @@ describe('SlrPropertiesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SlrPropertiesComponent ]
-    })
-    .compileComponents();
+      declarations: [SlrPropertiesComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -28,6 +28,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTabsModule } from '@angular/material/tabs';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -71,7 +72,6 @@ import { AddBibentryDialogComponent } from './components/libraries/dialogs/add-b
 import { AddLibraryDialogComponent } from './components/libraries/dialogs/add-library-dialog/add-library-dialog.component';
 import { SlrViewComponent } from './components/libraries/slr-view/slr-view.component';
 import { AddSlrDialogComponent } from './components/libraries/dialogs/add-slr-dialog/add-slr-dialog.component';
-import { MatTabsModule } from '@angular/material/tabs';
 import { SlrPropertiesComponent } from './components/libraries/slr-properties/slr-properties.component';
 import { LibraryTableComponent } from './components/libraries/library-table/library-table.component';
 
@@ -104,59 +104,59 @@ import { LibraryTableComponent } from './components/libraries/library-table/libr
     SlrPropertiesComponent,
     LibraryTableComponent,
   ],
-    imports: [
-        MDBBootstrapModule.forRoot(),
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        KeycloakAngularModule,
-        AtlasAPIModule.forRoot({ rootUrl: environment.API_URL }),
-        PatternAltasAPIModule.forRoot({
-            rootUrl: environment.PATTERN_ATLAS_API_URL,
-        }),
-        NisqApiModule.forRoot({ rootUrl: environment.NISQ_API_URL }),
-        LatexRendererAPIModule.forRoot({
-            rootUrl: environment.LATEX_RENDERER_API_URL,
-        }),
-        QProvAPIModule.forRoot({
-            rootUrl: environment.QPROV_API_URL,
-        }),
-        LibraryAPIModule.forRoot({
-            rootUrl: environment.LIBRARY_API_URL,
-        }),
-        AppRoutingModule,
-        QcAtlasUiFeatureToggleModule,
-        // material modules
-        MatSidenavModule,
-        MatToolbarModule,
-        MatListModule,
-        MatIconModule,
-        MatFormFieldModule,
-        MatDialogModule,
-        MatSnackBarModule,
-        MatDialogModule,
-        MatButtonModule,
-        // app modules
-        NavigationBreadcrumbModule,
-        AlgorithmModule,
-        PublicationModule,
-        ImplementationViewModule,
-        GenericsModule,
-        ComputeResourcePropertyModule,
-        ExecutionEnvironmentsModule,
-        ServicesModule,
-        MatCardModule,
-        MatAutocompleteModule,
-        MatSelectModule,
-        MatInputModule,
-        MatProgressSpinnerModule,
-        MatSortModule,
-        MatTableModule,
-        MatCheckboxModule,
-        MatTabsModule,
-    ],
+  imports: [
+    MDBBootstrapModule.forRoot(),
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    KeycloakAngularModule,
+    AtlasAPIModule.forRoot({ rootUrl: environment.API_URL }),
+    PatternAltasAPIModule.forRoot({
+      rootUrl: environment.PATTERN_ATLAS_API_URL,
+    }),
+    NisqApiModule.forRoot({ rootUrl: environment.NISQ_API_URL }),
+    LatexRendererAPIModule.forRoot({
+      rootUrl: environment.LATEX_RENDERER_API_URL,
+    }),
+    QProvAPIModule.forRoot({
+      rootUrl: environment.QPROV_API_URL,
+    }),
+    LibraryAPIModule.forRoot({
+      rootUrl: environment.LIBRARY_API_URL,
+    }),
+    AppRoutingModule,
+    QcAtlasUiFeatureToggleModule,
+    // material modules
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatButtonModule,
+    // app modules
+    NavigationBreadcrumbModule,
+    AlgorithmModule,
+    PublicationModule,
+    ImplementationViewModule,
+    GenericsModule,
+    ComputeResourcePropertyModule,
+    ExecutionEnvironmentsModule,
+    ServicesModule,
+    MatCardModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatSortModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatTabsModule,
+  ],
   bootstrap: [AppComponent],
   providers: [
     UtilService,
