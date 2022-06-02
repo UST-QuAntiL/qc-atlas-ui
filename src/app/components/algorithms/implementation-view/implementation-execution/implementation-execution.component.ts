@@ -29,6 +29,7 @@ import { ChangePageGuard } from '../../../../services/deactivation-guard';
 import { UtilService } from '../../../../util/util.service';
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
 import { NisqAnalyzerService } from '../../nisq-analyzer/nisq-analyzer.service';
+import { ImplementationTokenDialogComponent } from '../dialogs/implementation-token-dialog/implementation-token-dialog.component';
 
 @Component({
   selector: 'app-implementation-execution',
@@ -146,38 +147,54 @@ export class ImplementationExecutionComponent implements OnInit {
   }
 
   execute(analysisResult: CompilerAnalysisResultDto): void {
-    this.results = undefined;
-    this.executedCompilationResult = analysisResult;
-    this.nisqAnalyzerService
-      .executeCompilationResult(analysisResult.id)
-      .subscribe(
-        (results) => {
-          this.utilService.callSnackBar(
-            'Successfully created execution job "' + results.id + '".'
-          );
-          this.ngOnInit();
-          if (results.status === 'FAILED' || results.status === 'FINISHED') {
-            this.results = results;
-          } else {
-            interval(1000)
-              .pipe(
-                exhaustMap(() =>
-                  this.http.get<ExecutionResultDto>(results._links['self'].href)
-                ),
-                first(
-                  (value) =>
-                    value.status === 'FAILED' || value.status === 'FINISHED'
-                )
-              )
-              .subscribe((finalResult) => {
-                this.results = finalResult;
-              });
-          }
-        },
-        () => {
-          this.utilService.callSnackBar('Error! Could not execute.');
+    let token = ' ';
+    this.utilService
+      .createDialog(ImplementationTokenDialogComponent, {
+        title: 'Enter the token for the Vendor : ' + analysisResult.provider,
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult.token) {
+          token = dialogResult.token;
         }
-      );
+        this.results = undefined;
+        this.executedCompilationResult = analysisResult;
+        this.nisqAnalyzerService
+          .executeCompilationResult(analysisResult.id, token)
+          .subscribe(
+            (results) => {
+              this.utilService.callSnackBar(
+                'Successfully created execution job "' + results.id + '".'
+              );
+              this.ngOnInit();
+              if (
+                results.status === 'FAILED' ||
+                results.status === 'FINISHED'
+              ) {
+                this.results = results;
+              } else {
+                interval(1000)
+                  .pipe(
+                    exhaustMap(() =>
+                      this.http.get<ExecutionResultDto>(
+                        results._links['self'].href
+                      )
+                    ),
+                    first(
+                      (value) =>
+                        value.status === 'FAILED' || value.status === 'FINISHED'
+                    )
+                  )
+                  .subscribe((finalResult) => {
+                    this.results = finalResult;
+                  });
+              }
+            },
+            () => {
+              this.utilService.callSnackBar('Error! Could not execute.');
+            }
+          );
+      });
   }
 
   hasExecutionResult(analysisResult: CompilerAnalysisResultDto): boolean {
@@ -253,6 +270,7 @@ export class ImplementationExecutionComponent implements OnInit {
   }
 
   onAddElement(): void {
+    let token = ' ';
     this.refreshNisqImpl();
     this.utilService
       .createDialog(ImplementationExecutionDialogComponent, {
@@ -261,13 +279,16 @@ export class ImplementationExecutionComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          if (dialogResult.token) {
+            token = dialogResult.token;
+          }
           const compilerSelectionDto: CompilerSelectionDto = {
             providerName: dialogResult.vendor,
             circuitLanguage: this.nisqImpl.language,
             circuitName: this.nisqImpl.name,
             qpuName: dialogResult.qpu,
             circuitUrl: this.nisqImpl.fileLocation,
-            token: dialogResult.token,
+            token,
           };
           this.rootService
             .selectCompilerForFile1$Json({
@@ -275,7 +296,7 @@ export class ImplementationExecutionComponent implements OnInit {
               circuitLanguage: this.nisqImpl.language,
               circuitName: this.nisqImpl.name,
               qpuName: dialogResult.qpu,
-              token: dialogResult.token,
+              token,
               body: compilerSelectionDto,
             })
             .subscribe(

@@ -70,10 +70,7 @@ export class AddNewAnalysisDialogComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         shotCount: [''],
         // eslint-disable-next-line @typescript-eslint/unbound-method
-        token: new FormControl(this.data.token, [
-          // eslint-disable-next-line @typescript-eslint/unbound-method
-          Validators.required,
-        ]),
+        token: new FormControl(this.data.token),
       });
 
       this.dialogRef.beforeClosed().subscribe(() => {
