@@ -10,7 +10,6 @@ import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 @Component({
   selector: 'app-add-bibentry-dialog',
   templateUrl: './add-bibentry-dialog.component.html',
-  styleUrls: ['./add-bibentry-dialog.component.scss'],
 })
 export class AddBibentryDialogComponent implements OnInit {
   bibEntryForm: FormGroup;

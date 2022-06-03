@@ -14,7 +14,6 @@ import {
 @Component({
   selector: 'app-add-library-dialog',
   templateUrl: './add-library-dialog.component.html',
-  styleUrls: ['./add-library-dialog.component.scss'],
 })
 export class AddLibraryDialogComponent implements OnInit {
   libraryForm: FormGroup;
