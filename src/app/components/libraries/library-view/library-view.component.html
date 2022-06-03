@@ -1,0 +1,36 @@
+<mat-card class="m-2">
+    <div class="mx-3 mb-2">
+        <div class="col-12">
+            <div class="md-form m-2">
+                <div class="row">
+                    <mat-form-field class="library-input-field">
+                        <mat-label>Library</mat-label>
+                        <mat-select [(ngModel)]="library" (selectionChange)="changeLibrary(library)">
+                            <mat-option *ngFor="let lib of libraries$" [value]="lib">
+                                {{ lib }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="row m-1">
+                        <button mdbBtn class="control-button add-button btn-sm" type="button"
+                                color="green"
+                                outline="true"
+                                (click)="onAddLibrary()" mdbWavesEffect
+                                [hidden]="!uiConfig.features.enableEditing">
+                            <span class="material-icons">{{addIcon}}</span>
+                        </button>
+                    </div>
+                    <div class="row m-1" *ngIf="librariesExist">
+                        <button mdbBtn class="control-button delete-button btn-sm"
+                                type="button" color=red outline="true"
+                                (click)="onDeleteLibrary()" mdbWavesEffect
+                                [hidden]="!uiConfig.features.enableEditing">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <app-library-table [showTable]="this.librariesExist"></app-library-table>
+    </div>
+</mat-card>

@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>{{this.data.title}}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="bibEntryForm">
+        <div *ngFor="let field of fields">
+            <mat-form-field class="input-field">
+                <mat-label>{{ field }}</mat-label>
+                <input [id]="field" [formControlName]="field"
+                       *ngIf="field === 'citationKey'; else entryTypeField"
+                       matInput
+                       [readonly]="updateDialog"
+                       required>
+                <ng-template #entryTypeField>
+                    <input [id]="field" [formControlName]="field"
+                           *ngIf="field === 'entryType'; else nonRequiredFiled"
+                           matInput
+                           required>
+                </ng-template>
+                <ng-template #nonRequiredFiled>
+                    <textarea [id]="field" [formControlName]="field"
+                           matInput
+                           cdkTextareaAutosize
+                           cdkAutosizeMinRows="1"
+                           cdkAutosizeMaxRows="5">
+                    </textarea>
+                </ng-template>
+            </mat-form-field>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [disabled]="bibEntryForm.invalid" [mat-dialog-close]="data">Ok
+    </button>
+</div>

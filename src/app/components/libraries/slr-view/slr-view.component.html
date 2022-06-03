@@ -1,0 +1,61 @@
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+    <div class="col-12">
+      <div class="md-form m-2">
+        <div class="row">
+          <mat-form-field class="slr-input-field">
+            <mat-label>Study</mat-label>
+            <mat-select [(ngModel)]="slr" (selectionChange)="onSLRChanged(slr)">
+              <mat-option *ngFor="let lib of slrs$" [value]="lib">
+                {{ lib }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="row m-1">
+            <button mdbBtn class="control-button add-button btn-sm" type="button"
+                    color="green"
+                    outline="true"
+                    (click)="onAddSLR()" mdbWavesEffect
+                    [hidden]="!uiConfig.features.enableEditing">
+              <span class="material-icons">{{addIcon}}</span>
+            </button>
+          </div>
+          <div class="row m-1" *ngIf="slrsExist">
+            <button mdbBtn class="control-button delete-button btn-sm"
+                    type="button" color=red outline="true"
+                    (click)="onDeleteSLR()" mdbWavesEffect
+                    [hidden]="!uiConfig.features.enableEditing">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <div class="row m-1" *ngIf="slrsExist">
+            <button mdbBtn class="control-button crawl-button btn-sm"
+                    type="button" color=yellow outline="true"
+                    (click)="onCrawlSLR()" mdbWavesEffect
+                    [hidden]="!uiConfig.features.enableEditing">
+              <mat-icon>find_replace</mat-icon>
+            </button>
+          </div>
+          <div class="row m-1" *ngIf="!crawlingFinished">
+            <div class="spinner-wrapper-center">
+              <span><i>Crawling</i></span>
+              <mat-spinner class="mat-spinner-left" [diameter]="30"></mat-spinner>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="slrsExist">
+    <mat-tab-group>
+      <mat-tab label="Study definition">
+
+        <app-slr-properties [study]="study"></app-slr-properties>
+
+      </mat-tab>
+      <mat-tab label="Results">
+        <app-library-table [serviceType]="serviceType" [showTable]="this.slrsExist"></app-library-table>
+      </mat-tab>
+    </mat-tab-group>
+    </div>
+  </div>
+</mat-card>
