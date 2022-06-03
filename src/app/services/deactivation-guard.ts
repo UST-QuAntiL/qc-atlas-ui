@@ -38,7 +38,7 @@ export class ChangePageGuard
       | SoftwarePlatformViewComponent
   ) {
     const leavePage = new Subject<boolean>();
-    if (!this.unsavedChanges) {
+    if (this.unsavedChanges) {
       const dialogData: ConfirmDialogData = {
         title: 'Confirm Page Change',
         message:
@@ -63,7 +63,7 @@ export class ChangePageGuard
   }
 
   public objectsEqual<T>(source: T, target: T): boolean {
-    this.unsavedChanges = deepEqual(source, target);
+    this.unsavedChanges = !deepEqual(source, target);
     return this.unsavedChanges;
   }
 }

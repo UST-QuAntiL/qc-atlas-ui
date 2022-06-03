@@ -67,6 +67,7 @@ import { QcAtlasUiFeatureToggleModule } from './directives/feature-toggle.module
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 import { initializeKeycloak } from './util/keycloak-init';
+import { QAIAppModule } from './components/qai-apps/qai-apps.module';
 import { LibraryViewComponent } from './components/libraries/library-view/library-view.component';
 import { AddBibentryDialogComponent } from './components/libraries/dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
 import { AddLibraryDialogComponent } from './components/libraries/dialogs/add-library-dialog/add-library-dialog.component';
@@ -141,6 +142,7 @@ import { LibraryTableComponent } from './components/libraries/library-table/libr
     // app modules
     NavigationBreadcrumbModule,
     AlgorithmModule,
+    QAIAppModule,
     PublicationModule,
     ImplementationViewModule,
     GenericsModule,
