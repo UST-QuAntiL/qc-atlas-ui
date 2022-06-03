@@ -1,0 +1,173 @@
+@import "theme";
+
+.table-select {
+  //min-width: 50px;
+  width: 100px;
+}
+
+.table-data {
+  min-width: 250px;
+}
+
+.table-actions {
+  min-width: 100px;
+}
+
+.table-container {
+  position: relative;
+}
+
+.control-button:hover {
+  color: white !important;
+}
+
+.delete-button:hover {
+  background-color: red !important;
+}
+
+.add-button:hover {
+  background-color: green !important;
+}
+
+.link-button:hover {
+  background-color: blue !important;
+}
+
+.config-button:hover {
+  background-color: mat-color($qc-atlas-ui-primary) !important;
+}
+
+.center-checkbox {
+  text-align: right;
+}
+
+.crop {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 50px;
+}
+
+mat-grid-list {
+  position: relative;
+}
+
+.data-header {
+  background-color: mat-color($qc-atlas-ui-primary);
+  font-weight: bold !important;
+  color: white !important;
+}
+
+.data-element {
+  transition: all .2s ease-in-out;
+}
+
+.data-element:hover {
+  background-color: mat-color($qc-atlas-ui-accent);
+  cursor: pointer;
+}
+
+.page-control {
+  display: flex;
+}
+
+::ng-deep .hide-arrow .mat-sort-header-arrow {
+  color: white;
+}
+
+.control-disabled {
+  background-color: grey !important;
+  cursor: default;
+}
+
+.current-page {
+  cursor: default !important;
+  font-weight: bold !important;
+  font-size: 18px !important;
+  pointer-events: none !important;
+  color: mat-color($qc-atlas-ui-primary) !important;
+}
+
+.mat-icon.enabled {
+  color: mat-color($qc-atlas-ui-primary);
+  transition: all .1s ease-in-out;
+  pointer-events: auto !important;
+}
+
+.mat-icon.disabled {
+  color: grey;
+  pointer-events: none !important;
+}
+
+.mat-icon.enabled:hover {
+  color: white;
+  transform: scale(1.75, 1.75);
+}
+
+.page-button:hover {
+  background-color: mat-color($qc-atlas-ui-primary) !important;
+}
+
+.no-events {
+  pointer-events: none !important;
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.center-text {
+  text-align: center;
+}
+
+.delete-small {
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  outline: none !important;
+}
+
+.delete-small:hover {
+  color: red;
+}
+
+.link-small {
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  outline: none !important;
+}
+
+.link-small:hover {
+  color: blue;
+}
+
+.update-small {
+  outline: none;
+}
+
+.update-small:hover {
+  color: orange;
+}
+
+a.table-url {
+  color: dodgerblue;
+}
+
+a.table-url:hover {
+  text-decoration: underline;
+  color: mat-color($qc-atlas-ui-primary);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.library-input-field {
+  width: 20%;
+}

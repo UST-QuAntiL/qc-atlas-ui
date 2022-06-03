@@ -70,11 +70,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      token: new FormControl(this.data.token, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-        Validators.maxLength(255),
-      ]),
+      token: new FormControl(this.data.token),
       compilers: new FormArray([]),
     });
 
@@ -97,7 +93,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
 
   isRequiredDataMissing(): boolean {
     return this.vendor.errors?.required;
-    return this.token.errors?.required;
   }
 
   onVendorChanged(value: string): void {

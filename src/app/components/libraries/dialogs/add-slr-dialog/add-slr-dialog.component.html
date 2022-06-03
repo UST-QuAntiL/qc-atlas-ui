@@ -1,0 +1,95 @@
+<h1 mat-dialog-title>{{this.data.title}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="studyForm">
+    <mat-card class="m-2">
+      <mat-form-field class="input-field">
+        <input id="title" formControlName="title" placeholder="Title" matInput required>
+      </mat-form-field>
+    </mat-card>
+    <mat-card class="m-2">
+      <div formArrayName="authors">
+        <mat-label>Authors:</mat-label>
+        <div *ngFor="let author of authors().controls; let authorIndex=index">
+          <div [formGroupName]="authorIndex">
+            <mat-form-field>
+              <input matInput type="text" formControlName="name" [placeholder]="'Author ' + (authorIndex + 1)">
+            </mat-form-field>
+            <button mat-icon-button type="button" color="warn" (click)="removeAuthor(authorIndex)" [hidden]="authors().length<2">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button type="button" (click)="addAuthor()" [hidden]="authorIndex + 1 < authors().length">
+              <mat-icon [ngStyle]="{'color':'green'}">add_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+    <mat-card class="m-2">
+      <div formArrayName="researchQuestions">
+        <mat-label>Research questions:</mat-label>
+        <div *ngFor="let rq of researchQuestions().controls; let rqIndex=index">
+          <div [formGroupName]="rqIndex">
+            <mat-form-field>
+              <input matInput type="text" formControlName="question"
+                     [placeholder]="'Research question ' + (rqIndex + 1)">
+            </mat-form-field>
+            <button mat-icon-button type="button" color="warn" (click)="removeResearchQuestion(rqIndex)"
+                    [hidden]="researchQuestions().length<2">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button type="button" (click)="addResearchQuestion()" [hidden]="rqIndex + 1 < researchQuestions().length">
+              <mat-icon [ngStyle]="{'color':'green'}">add_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+    <mat-card class="m-2">
+      <div formArrayName="queries">
+        <mat-label>Queries:</mat-label>
+        <div *ngFor="let query of queries().controls; let queryIndex=index">
+          <div [formGroupName]="queryIndex">
+            <mat-form-field>
+              <input matInput type="text" formControlName="query" [placeholder]="'Query ' + (queryIndex + 1)">
+            </mat-form-field>
+            <button mat-icon-button type="button" color="warn" (click)="removeQuery(queryIndex)" [hidden]="queries().length<2">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button type="button" (click)="addQuery()" [hidden]="queryIndex + 1 < queries().length">
+              <mat-icon [ngStyle]="{'color':'green'}">add_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+    <mat-card class="m-2">
+      <div formArrayName="databases">
+        <mat-label>Databases:</mat-label>
+        <div *ngFor="let db_controls of databases().controls; let dbIndex=index">
+          <div [formGroupName]="dbIndex">
+            <mat-form-field>
+              <mat-select formControlName="name">
+                <mat-option *ngFor="let db of databasesList" [value]="db">
+                  {{ db }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-icon-button type="button" color="warn" (click)="removeDatabase(dbIndex)" [hidden]="databases().length<2">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button type="button" (click)="addDatabase()" [hidden]="dbIndex + 1 < databases().length">
+              <mat-icon [ngStyle]="{'color':'green'}">add_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [disabled]="studyForm.invalid" [mat-dialog-close]="data">Ok
+  </button>
+</div>
+

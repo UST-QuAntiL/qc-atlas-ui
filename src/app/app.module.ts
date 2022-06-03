@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -19,6 +19,7 @@ import { ApiModule as PatternAltasAPIModule } from 'api-patternatlas/api.module'
 import { ApiModule as NisqApiModule } from 'api-nisq/api.module';
 import { ApiModule as LatexRendererAPIModule } from 'api-latex/api.module';
 import { ApiModule as QProvAPIModule } from 'api-qprov/api.module';
+import { ApiModule as LibraryAPIModule } from 'api-library/api.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -26,6 +27,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTabsModule } from '@angular/material/tabs';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -65,6 +68,13 @@ import { FeatureTogglingComponent } from './components/feature-toggling/feature-
 import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 import { initializeKeycloak } from './util/keycloak-init';
 import { QAIAppModule } from './components/qai-apps/qai-apps.module';
+import { LibraryViewComponent } from './components/libraries/library-view/library-view.component';
+import { AddBibentryDialogComponent } from './components/libraries/dialogs/add-bibentry-dialog/add-bibentry-dialog.component';
+import { AddLibraryDialogComponent } from './components/libraries/dialogs/add-library-dialog/add-library-dialog.component';
+import { SlrViewComponent } from './components/libraries/slr-view/slr-view.component';
+import { AddSlrDialogComponent } from './components/libraries/dialogs/add-slr-dialog/add-slr-dialog.component';
+import { SlrPropertiesComponent } from './components/libraries/slr-properties/slr-properties.component';
+import { LibraryTableComponent } from './components/libraries/library-table/library-table.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +97,13 @@ import { QAIAppModule } from './components/qai-apps/qai-apps.module';
     ComputeResourcePropertyTypesListComponent,
     AddOrEditComputeResourcePropertyTypeDialogComponent,
     FeatureTogglingComponent,
+    LibraryViewComponent,
+    AddBibentryDialogComponent,
+    AddLibraryDialogComponent,
+    SlrViewComponent,
+    AddSlrDialogComponent,
+    SlrPropertiesComponent,
+    LibraryTableComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -106,6 +123,9 @@ import { QAIAppModule } from './components/qai-apps/qai-apps.module';
     }),
     QProvAPIModule.forRoot({
       rootUrl: environment.QPROV_API_URL,
+    }),
+    LibraryAPIModule.forRoot({
+      rootUrl: environment.LIBRARY_API_URL,
     }),
     AppRoutingModule,
     QcAtlasUiFeatureToggleModule,
@@ -136,6 +156,8 @@ import { QAIAppModule } from './components/qai-apps/qai-apps.module';
     MatProgressSpinnerModule,
     MatSortModule,
     MatTableModule,
+    MatCheckboxModule,
+    MatTabsModule,
   ],
   bootstrap: [AppComponent],
   providers: [
