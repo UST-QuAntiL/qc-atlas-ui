@@ -242,6 +242,10 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     this.metaOptimizerInDialog = metaOptimizer;
   }
 
+  setMaxNumberOfCompiledCircuits(maxNumber: number): void {
+    this.maxNumberOfCompiledCircuitsDialog = maxNumber;
+  }
+
   formatLabel(value: number): number | string {
     if (value >= 0) {
       return Math.round(value) + ':' + Math.round(100 - value);

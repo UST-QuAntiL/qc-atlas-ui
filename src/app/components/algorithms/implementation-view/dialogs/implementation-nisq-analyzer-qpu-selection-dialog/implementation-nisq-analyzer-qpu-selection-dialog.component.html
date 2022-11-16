@@ -70,7 +70,9 @@
                     step="10"
                     min="0"
                     max="100"
-                    aria-label="units">
+                    aria-label="units"
+                    (change)="setQueueImportanceRatio($event)"
+            >
             </mat-slider>
             <span class="aligned-with-slider">Stable Results</span>
         </div>
