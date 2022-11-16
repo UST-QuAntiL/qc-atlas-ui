@@ -538,11 +538,13 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
                 useBordaCount: this.bordaCountEnabled,
                 bordaCountWeights: mapOfPreferences,
               };
+              debugger;
               this.mcdaService
                 .prioritizeCompiledCircuitsOfJob({
                   methodName: dialogResult.mcdaMethod,
                   jobId: this.analyzerJob.id,
                   useBordaCount: this.bordaCountEnabled,
+                  body: bodyForPrio,
                 })
                 .subscribe((job) => {
                   this.rankings = [];

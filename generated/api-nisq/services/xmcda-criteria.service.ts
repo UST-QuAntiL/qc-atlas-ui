@@ -520,12 +520,13 @@ export class XmcdaCriteriaService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `prioritizeCompiledCircuitsOfJob()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   prioritizeCompiledCircuitsOfJob$Response(params: {
     methodName: string;
     jobId: string;
     useBordaCount: boolean;
+    body: {};
   }): Observable<StrictHttpResponse<EntityModelMcdaJob>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -536,6 +537,8 @@ export class XmcdaCriteriaService extends BaseService {
       rb.path('methodName', params.methodName, {});
       rb.query('jobId', params.jobId, {});
       rb.query('useBordaCount', params.useBordaCount, {});
+
+      rb.body(params.body, 'application/json');
     }
     return this.http
       .request(
@@ -558,12 +561,13 @@ export class XmcdaCriteriaService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `prioritizeCompiledCircuitsOfJob$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   prioritizeCompiledCircuitsOfJob(params: {
     methodName: string;
     jobId: string;
     useBordaCount: boolean;
+    body: {};
   }): Observable<EntityModelMcdaJob> {
     return this.prioritizeCompiledCircuitsOfJob$Response(params).pipe(
       map(
@@ -585,7 +589,7 @@ export class XmcdaCriteriaService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `analyzeSensitivityOfCompiledCircuitsOfJob()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   analyzeSensitivityOfCompiledCircuitsOfJob$Response(params: {
     methodName: string;
@@ -594,6 +598,7 @@ export class XmcdaCriteriaService extends BaseService {
     upperBound: number;
     lowerBound: number;
     useBordaCount: boolean;
+    body: {};
   }): Observable<StrictHttpResponse<EntityModelMcdaSensitivityAnalysisJob>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -607,6 +612,8 @@ export class XmcdaCriteriaService extends BaseService {
       rb.query('upperBound', params.upperBound, {});
       rb.query('lowerBound', params.lowerBound, {});
       rb.query('useBordaCount', params.useBordaCount, {});
+
+      rb.body(params.body, 'application/json');
     }
     return this.http
       .request(
@@ -629,7 +636,7 @@ export class XmcdaCriteriaService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `analyzeSensitivityOfCompiledCircuitsOfJob$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   analyzeSensitivityOfCompiledCircuitsOfJob(params: {
     methodName: string;
@@ -638,6 +645,7 @@ export class XmcdaCriteriaService extends BaseService {
     upperBound: number;
     lowerBound: number;
     useBordaCount: boolean;
+    body: {};
   }): Observable<EntityModelMcdaSensitivityAnalysisJob> {
     return this.analyzeSensitivityOfCompiledCircuitsOfJob$Response(params).pipe(
       map(
