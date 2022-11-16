@@ -131,6 +131,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   rankings: Ranking[] = [];
   dataSource = new MatTableDataSource(this.analyzerResults);
   bordaCountEnabled: boolean;
+  queueImportanceRatio: number;
   usedMcdaMethod: string;
   usedLearningMethod: string;
   sensitivityAnalysisJob: EntityModelMcdaSensitivityAnalysisJob;
@@ -416,6 +417,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           this.usedLearningMethod = dialogResult.weightLearningMethod;
           this.usedShortWaitingTime = dialogResult.shortWaitingTime;
           this.usedStableExecutionResults = dialogResult.stableExecutionResults;
+          this.queueImportanceRatio = dialogResult.queueImportanceRatio;
           if (dialogResult.stableExecutionResults) {
             this.loadingLearnWeights = true;
             this.mcdaService
@@ -526,6 +528,16 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           () => {
             numberOfCriterion++;
             if (numberOfCriterion === criteria.length) {
+              const mapOfPreferences = new Map<string, number>([
+                ['queue-size', this.queueImportanceRatio],
+                ['result_precision', 1 - this.queueImportanceRatio],
+              ]);
+              const bodyForPrio: BodyForPrio = {
+                methodName: dialogResult.mcdaMethod,
+                jobId: this.analyzerJob.id,
+                useBordaCount: this.bordaCountEnabled,
+                bordaCountWeights: mapOfPreferences,
+              };
               this.mcdaService
                 .prioritizeCompiledCircuitsOfJob({
                   methodName: dialogResult.mcdaMethod,
@@ -637,6 +649,19 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
+          const mapOfPreferences = new Map<string, number>([
+            ['queue-size', this.queueImportanceRatio],
+            ['result_precision', 1 - this.queueImportanceRatio],
+          ]);
+          const bodyForSens: BodyForSens = {
+            methodName: dialogResult.mcdaMethod,
+            jobId: this.analyzerJob.id,
+            stepSize: dialogResult.stepSize,
+            upperBound: dialogResult.upperBound,
+            lowerBound: dialogResult.lowerBound,
+            useBordaCount: this.bordaCountEnabled,
+            bordaCountWeights: mapOfPreferences,
+          };
           this.mcdaService
             .analyzeSensitivityOfCompiledCircuitsOfJob({
               methodName: this.usedMcdaMethod,
@@ -645,6 +670,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
               upperBound: dialogResult.upperBound,
               lowerBound: dialogResult.lowerBound,
               useBordaCount: this.bordaCountEnabled,
+              body: bodyForSens,
             })
             .subscribe(
               (job) => {
@@ -750,4 +776,21 @@ interface Ranking {
   id: string;
   rank: number;
   score: number;
+}
+
+interface BodyForPrio {
+  methodName: string;
+  jobId: string;
+  useBordaCount: boolean;
+  bordaCountWeights: Map<string, number>;
+}
+
+interface BodyForSens {
+  methodName: string;
+  jobId: string;
+  stepSize: number;
+  upperBound: number;
+  lowerBound: number;
+  useBordaCount: boolean;
+  bordaCountWeights: Map<string, number>;
 }
