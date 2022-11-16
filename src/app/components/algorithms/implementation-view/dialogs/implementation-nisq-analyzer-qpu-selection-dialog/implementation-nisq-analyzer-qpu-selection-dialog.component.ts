@@ -39,6 +39,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   advancedSettingsOpen: boolean;
   queueImportanceRatioDialog = 0;
   inputChanged = false;
+  maxNumberOfCompiledCircuitsDialog = 5;
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -93,17 +94,14 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      simulatorAllowed: new FormControl(this.data.simulatorAllowed, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
       token: new FormControl(this.data.token),
       compilers: new FormArray([]),
       maxNumberOfCompiledCircuits: new FormControl(
         this.data.maxNumberOfCompiledCircuits,
         [
           // eslint-disable-next-line @typescript-eslint/unbound-method
-          Validators.required,
+          Validators.min(1),
+          Validators.max(50),
         ]
       ),
       predictionAlgorithm: new FormControl(this.data.predictionAlgorithm, [
@@ -136,11 +134,18 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     this.setCompilerOptions(this.vendor.value);
     this.predictionAlgorithm.setValue('extra_trees_regressor');
     this.metaOptimizer.setValue('ada_boost_regressor');
+    this.maxNumberOfCompiledCircuits.setValue(5);
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.vendor = this.vendor.value;
       this.data.token = this.token.value;
       this.data.selectedCompilers = this.selectedCompilers;
+      this.data.maxNumberOfCompiledCircuits = this.maxNumberOfCompiledCircuitsDialog;
+      this.data.metaOptimizer = this.metaOptimizerInDialog;
+      this.data.predictionAlgorithm = this.predictionAlgorithmInDialog;
+      this.data.queueImportanceRatio = this.queueImportanceRatioDialog;
+      this.data.shortWaitingTime = this.shortWaitingTimeEnabled;
+      this.data.stableExecutionResults = this.stableExecutionResultsEnabled;
     });
   }
 
@@ -255,7 +260,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
 interface DialogData {
   title: string;
   vendor: string;
-  simulatorAllowed: boolean;
   token: string;
   selectedCompilers: string[];
   predictionAlgorithm: string;
