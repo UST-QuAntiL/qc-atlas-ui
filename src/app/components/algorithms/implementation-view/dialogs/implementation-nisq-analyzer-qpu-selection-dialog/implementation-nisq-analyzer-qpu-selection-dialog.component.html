@@ -87,6 +87,7 @@
                     [placeholder]="'Maximum number'"
                     formControlName="maxNumberOfCompiledCircuits"
                     [ngModel]="maxNumberOfCompiledCircuitsDialog"
+                    (ngModelChange)="setMaxNumberOfCompiledCircuits($event)"
             />
             <mat-error>Please enter a value between 0 and 50</mat-error>
         </mat-form-field>
