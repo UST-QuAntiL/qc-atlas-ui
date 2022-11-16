@@ -220,17 +220,23 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           }
 
           const qpuSelectionDto: QpuSelectionDto = {
-            simulatorsAllowed: dialogResult.simulatorAllowed,
             allowedProviders: [dialogResult.vendor],
             circuitLanguage: this.nisqImpl.language,
             circuitUrl: this.nisqImpl.fileLocation,
             tokens: providerTokens,
             refreshToken,
             circuitName: this.nisqImpl.name,
+            preciseResultsPreference: dialogResult.preciseResultsPreference,
+            shortWaitingTimesPreference:
+              dialogResult.shortWaitingTimesPreference,
+            queueImportanceRatio: dialogResult.queueImportanceRatio,
+            maxNumberOfCompiledCircuits:
+              dialogResult.maxNumberOfCompiledCircuits,
+            predictionAlgorithm: dialogResult.predictionAlgorithm,
+            metaOptimizer: dialogResult.metaOptimizer,
           };
           this.nisqAnalyzerRootService
             .selectQpuForCircuitFile1$Json({
-              simulatorsAllowed: dialogResult.simulatorAllowed,
               circuitLanguage: this.nisqImpl.language,
               circuitName: this.nisqImpl.name,
               allowedProviders: [dialogResult.vendor],

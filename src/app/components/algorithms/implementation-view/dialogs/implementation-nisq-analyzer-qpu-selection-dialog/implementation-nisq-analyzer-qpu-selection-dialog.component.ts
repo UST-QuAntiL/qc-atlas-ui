@@ -30,8 +30,15 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   provider?: EntityModelProviderDto;
   ready?: boolean;
   isIbmqSelected = true;
-  isSimulatorAllowed = false;
   selectedCompilers: string[] = [];
+
+  shortWaitingTimeEnabled = false;
+  stableExecutionResultsEnabled = false;
+  predictionAlgorithmInDialog = 'extra_trees_regressor';
+  metaOptimizerInDialog = 'ada_boost_regressor';
+  advancedSettingsOpen: boolean;
+  queueImportanceRatioDialog = 0;
+  inputChanged = false;
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -48,16 +55,36 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     return this.qpuSelectionFrom.get('vendor');
   }
 
-  get simulatorAllowed(): AbstractControl | null {
-    return this.qpuSelectionFrom.get('simulatorAllowed');
-  }
-
   get token(): AbstractControl | null {
     return this.qpuSelectionFrom.get('token');
   }
 
   get compilers(): FormArray {
     return this.qpuSelectionFrom.get('compilers') as FormArray;
+  }
+
+  get shortWaitingTime(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('shortWaitingTime');
+  }
+
+  get stableExecutionResults(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('stableExecutionResults');
+  }
+
+  get predictionAlgorithm(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('predictionAlgorithm');
+  }
+
+  get metaOptimizer(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('metaOptimizer');
+  }
+
+  get maxNumberOfCompiledCircuits(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('maxNumberOfCompiledCircuits');
+  }
+
+  get queueImportanceRatio(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('queueImportanceRatio');
   }
 
   ngOnInit(): void {
@@ -72,16 +99,46 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
       ]),
       token: new FormControl(this.data.token),
       compilers: new FormArray([]),
+      maxNumberOfCompiledCircuits: new FormControl(
+        this.data.maxNumberOfCompiledCircuits,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]
+      ),
+      predictionAlgorithm: new FormControl(this.data.predictionAlgorithm, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+      metaOptimizer: new FormControl(this.data.metaOptimizer, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+      queueImportanceRatio: new FormControl(this.data.queueImportanceRatio, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+      shortWaitingTime: new FormControl(this.data.shortWaitingTime, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
+      stableExecutionResults: new FormControl(
+        this.data.stableExecutionResults,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]
+      ),
     });
 
     this.vendor.setValue('IBMQ');
     this.onVendorChanged(this.vendor.value);
-    this.simulatorAllowed.setValue(true);
     this.setCompilerOptions(this.vendor.value);
+    this.predictionAlgorithm.setValue('extra_trees_regressor');
+    this.metaOptimizer.setValue('ada_boost_regressor');
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.vendor = this.vendor.value;
-      this.data.simulatorAllowed = this.simulatorAllowed.value;
       this.data.token = this.token.value;
       this.data.selectedCompilers = this.selectedCompilers;
     });
@@ -126,11 +183,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     }
   }
 
-  setSimulatorAllowed(allowed: boolean): void {
-    this.isSimulatorAllowed = allowed;
-    this.simulatorAllowed.setValue(this.isSimulatorAllowed);
-  }
-
   updateCompilerSelection(compilerName: string, allowed: boolean): void {
     if (allowed) {
       this.selectedCompilers.push(compilerName);
@@ -167,6 +219,37 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
         }
       });
   }
+
+  setWaitingTimeEnabled(enabled: boolean): void {
+    this.shortWaitingTimeEnabled = enabled;
+    this.shortWaitingTime.setValue(this.shortWaitingTimeEnabled);
+  }
+
+  setStableExecutionResultsEnabled(enabled: boolean): void {
+    this.stableExecutionResultsEnabled = enabled;
+    this.stableExecutionResults.setValue(this.stableExecutionResultsEnabled);
+  }
+
+  setPredictionAlgorithm(predictionAlgorithm: string): void {
+    this.predictionAlgorithmInDialog = predictionAlgorithm;
+  }
+
+  setMetaOptimizer(metaOptimizer: string): void {
+    this.metaOptimizerInDialog = metaOptimizer;
+  }
+
+  formatLabel(value: number): number | string {
+    if (value >= 0) {
+      return Math.round(value) + ':' + Math.round(100 - value);
+    }
+    this.queueImportanceRatioDialog = value;
+
+    return value;
+  }
+
+  onChangeEvent(): void {
+    this.inputChanged = true;
+  }
 }
 
 interface DialogData {
@@ -175,4 +258,10 @@ interface DialogData {
   simulatorAllowed: boolean;
   token: string;
   selectedCompilers: string[];
+  predictionAlgorithm: string;
+  metaOptimizer: string;
+  queueImportanceRatio: number;
+  maxNumberOfCompiledCircuits: number;
+  stableExecutionResults: boolean;
+  shortWaitingTime: boolean;
 }

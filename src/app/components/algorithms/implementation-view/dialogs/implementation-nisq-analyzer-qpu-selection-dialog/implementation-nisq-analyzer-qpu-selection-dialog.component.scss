@@ -1,3 +1,18 @@
 ::ng-deep .mat-checkbox-label {
     padding-right: 10px;
  }
+
+.aligned-with-slider{
+  position: relative;
+  margin-top: 5px;
+  margin-left: 5px; /* optional */
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+}
+
+.lift-slider{
+  bottom: 7px;
+}

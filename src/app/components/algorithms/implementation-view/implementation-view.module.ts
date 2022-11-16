@@ -23,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSliderModule } from '@angular/material/slider';
 import { ComputeResourcePropertyModule } from '../../compute-resource-property/compute-resource-property.module';
 import { NavigationBreadcrumbModule } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../../generics/generics.module';
@@ -92,6 +93,7 @@ import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } f
     MatBadgeModule,
     MatStepperModule,
     MatExpansionModule,
+    MatSliderModule,
   ],
 })
 export class ImplementationViewModule {}
