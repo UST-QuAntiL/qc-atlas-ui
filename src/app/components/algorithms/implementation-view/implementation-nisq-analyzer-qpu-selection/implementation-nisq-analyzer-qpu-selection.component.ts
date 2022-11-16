@@ -538,7 +538,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
                 useBordaCount: this.bordaCountEnabled,
                 bordaCountWeights: mapOfPreferences,
               };
-              debugger;
               this.mcdaService
                 .prioritizeCompiledCircuitsOfJob({
                   methodName: dialogResult.mcdaMethod,
