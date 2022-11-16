@@ -101,7 +101,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
         [
           // eslint-disable-next-line @typescript-eslint/unbound-method
           Validators.min(1),
-          Validators.max(50),
         ]
       ),
       predictionAlgorithm: new FormControl(this.data.predictionAlgorithm, [
@@ -135,6 +134,8 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     this.predictionAlgorithm.setValue('extra_trees_regressor');
     this.metaOptimizer.setValue('ada_boost_regressor');
     this.maxNumberOfCompiledCircuits.setValue(5);
+    this.stableExecutionResults.setValue(false);
+    this.shortWaitingTime.setValue(false);
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.vendor = this.vendor.value;
@@ -227,12 +228,10 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
 
   setWaitingTimeEnabled(enabled: boolean): void {
     this.shortWaitingTimeEnabled = enabled;
-    this.shortWaitingTime.setValue(this.shortWaitingTimeEnabled);
   }
 
   setStableExecutionResultsEnabled(enabled: boolean): void {
     this.stableExecutionResultsEnabled = enabled;
-    this.stableExecutionResults.setValue(this.stableExecutionResultsEnabled);
   }
 
   setPredictionAlgorithm(predictionAlgorithm: string): void {

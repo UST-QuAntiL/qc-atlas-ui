@@ -76,7 +76,7 @@
         </div>
 
 
-        <mat-form-field class="input-field">
+        <mat-form-field class="input-field" *ngIf="shortWaitingTimeEnabled || stableExecutionResultsEnabled">
             <mat-label>Maximum number of compilation results:</mat-label>
             <input
                     matInput

@@ -226,9 +226,8 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
             tokens: providerTokens,
             refreshToken,
             circuitName: this.nisqImpl.name,
-            preciseResultsPreference: dialogResult.preciseResultsPreference,
-            shortWaitingTimesPreference:
-              dialogResult.shortWaitingTimesPreference,
+            preciseResultsPreference: dialogResult.stableExecutionResults,
+            shortWaitingTimesPreference: dialogResult.shortWaitingTime,
             queueImportanceRatio: dialogResult.queueImportanceRatio,
             maxNumberOfCompiledCircuits:
               dialogResult.maxNumberOfCompiledCircuits,
