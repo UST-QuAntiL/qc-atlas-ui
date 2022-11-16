@@ -246,12 +246,14 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     this.maxNumberOfCompiledCircuitsDialog = maxNumber;
   }
 
+  setQueueImportanceRatio(event): void {
+    this.queueImportanceRatioDialog = event.value / 100;
+  }
+
   formatLabel(value: number): number | string {
     if (value >= 0) {
       return Math.round(value) + ':' + Math.round(100 - value);
     }
-    this.queueImportanceRatioDialog = value;
-
     return value;
   }
 
