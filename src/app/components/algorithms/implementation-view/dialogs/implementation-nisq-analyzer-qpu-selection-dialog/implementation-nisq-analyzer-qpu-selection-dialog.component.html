@@ -84,10 +84,9 @@
                     matInput
                     type="number"
                     min="1"
-                    max="50"
                     [placeholder]="'Maximum number'"
-                    formControl="maxNumberOfCompiledCircuits"
-                    (change)="onChangeEvent()"
+                    formControlName="maxNumberOfCompiledCircuits"
+                    [ngModel]="maxNumberOfCompiledCircuitsDialog"
             />
             <mat-error>Please enter a value between 0 and 50</mat-error>
         </mat-form-field>

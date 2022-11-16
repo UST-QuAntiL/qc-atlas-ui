@@ -100,7 +100,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
         this.data.maxNumberOfCompiledCircuits,
         [
           // eslint-disable-next-line @typescript-eslint/unbound-method
-          Validators.min(1),
+          Validators.required,
         ]
       ),
       predictionAlgorithm: new FormControl(this.data.predictionAlgorithm, [
@@ -242,8 +242,8 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     this.metaOptimizerInDialog = metaOptimizer;
   }
 
-  setMaxNumberOfCompiledCircuits(maxNumber: number): void {
-    this.maxNumberOfCompiledCircuitsDialog = maxNumber;
+  setMaxNumberOfCompiledCircuits(event): void {
+    this.maxNumberOfCompiledCircuitsDialog = event;
   }
 
   setQueueImportanceRatio(event): void {
@@ -255,10 +255,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
       return Math.round(value) + ':' + Math.round(100 - value);
     }
     return value;
-  }
-
-  onChangeEvent(): void {
-    this.inputChanged = true;
   }
 }
 
