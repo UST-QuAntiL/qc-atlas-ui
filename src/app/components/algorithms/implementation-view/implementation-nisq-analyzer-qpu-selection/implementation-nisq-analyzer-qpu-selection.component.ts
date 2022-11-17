@@ -98,6 +98,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
     't1',
     't2',
     'lengthQueue',
+    'estimatedHistogramIntersectionValue',
     'execution',
   ];
   jobColumns = ['time', 'ready'];
