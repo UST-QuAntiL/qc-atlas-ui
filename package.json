@@ -14,6 +14,7 @@
     "gen-nisq": "ng-openapi-gen --input http://localhost:5010/nisq-analyzer/v3/api-docs -o generated/api-nisq",
     "gen-latex": "ng-openapi-gen --input http://localhost:5030/v3/api-docs -o generated/api-latex",
     "gen-qprov": "ng-openapi-gen --input http://localhost:5020/qprov/v3/api-docs -o generated/api-qprov",
+    "gen-library": "ng-openapi-gen --input http://localhost:2903/openapi -o generated/api-library",
     "postgen": "prettier generated/ --write",
     "e2e": "ng e2e"
   },

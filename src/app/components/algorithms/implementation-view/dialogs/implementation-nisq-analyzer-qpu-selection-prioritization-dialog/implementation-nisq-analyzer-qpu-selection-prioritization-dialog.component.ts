@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
   templateUrl:
     './implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component.html',
   styleUrls: [
-    './implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component.css',
+    './implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component.scss',
   ],
 })
 export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
@@ -37,6 +37,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   mcdaMethodPredefinedPreferences = 'topsis';
   weightLearningMethodPredefinedPreferences = 'cobyla';
   pollingWeightLearningJobData: Subscription;
+  queueImportanceRatioDialog = 0;
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -93,6 +94,10 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
           Validators.required,
         ]
       ),
+      queueImportanceRatio: new FormControl(this.data.queueImportanceRatio, [
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        Validators.required,
+      ]),
     });
     this.preferenceMcdaMethod.setValue('topsis');
     this.weightLearningMethod.setValue('cobyla');
@@ -183,6 +188,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                 this.data.weightLearningMethod = this.weightLearningMethod.value;
                 this.data.shortWaitingTime = this.shortWaitingTime.value;
                 this.data.stableExecutionResults = this.stableExecutionResults.value;
+                this.data.queueImportanceRatio = this.queueImportanceRatioDialog;
                 this.criteriaNamesAndValues.forEach((criterionVal) => {
                   if (
                     this.shortWaitingTime.value &&
@@ -220,6 +226,17 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
     this.matHorizontalStepper.selectedIndex = index;
     return true;
   }
+
+  setQueueImportanceRatio(event): void {
+    this.queueImportanceRatioDialog = event.value / 100;
+  }
+
+  formatLabel(value: number): number | string {
+    if (value >= 0) {
+      return Math.round(value) + ':' + Math.round(100 - value);
+    }
+    return value;
+  }
 }
 
 export interface DialogData {
@@ -228,6 +245,7 @@ export interface DialogData {
   weightLearningMethod: string;
   shortWaitingTime: boolean;
   stableExecutionResults: boolean;
+  queueImportanceRatio: number;
   criteriaAndValues: Criterion[];
 }
 

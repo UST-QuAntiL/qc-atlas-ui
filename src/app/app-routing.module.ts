@@ -22,6 +22,10 @@ import { PatternRelationTypesListComponent } from './components/pattern-relation
 // eslint-disable-next-line max-len
 import { ComputeResourcePropertyTypesListComponent } from './components/compute-resource-property-types/compute-resource-property-types-list/compute-resource-property-types-list.component';
 import { FeatureTogglingComponent } from './components/feature-toggling/feature-toggling.component';
+import { QAIAppListComponent } from './components/qai-apps/qai-apps-list/qai-app-list.component';
+import { QAIAppViewComponent } from './components/qai-apps/qai-app-view/qai-app-view.component';
+import { LibraryViewComponent } from './components/libraries/library-view/library-view.component';
+import { SlrViewComponent } from './components/libraries/slr-view/slr-view.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -33,6 +37,15 @@ const routes: Routes = [
   {
     path: 'algorithms/:algoId/implementations/:implId',
     component: ImplementationViewComponent,
+    canDeactivate: [ChangePageGuard],
+  },
+  {
+    path: 'qai-apps',
+    component: QAIAppListComponent,
+  },
+  {
+    path: 'qai-apps/:qaiAppId',
+    component: QAIAppViewComponent,
     canDeactivate: [ChangePageGuard],
   },
   {
@@ -77,6 +90,8 @@ const routes: Routes = [
     component: PublicationViewComponent,
     canDeactivate: [ChangePageGuard],
   },
+  { path: 'libraries', component: LibraryViewComponent },
+  { path: 'slr', component: SlrViewComponent },
   { path: 'problem-types', component: ProblemTypesListComponent },
   { path: 'application-areas', component: ApplicationAreasListComponent },
   {
