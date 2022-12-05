@@ -38,8 +38,8 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   metaOptimizerInDialog = 'ada_boost_regressor';
   advancedSettingsOpen: boolean;
   queueImportanceRatioDialog = 0;
-  inputChanged = false;
   maxNumberOfCompiledCircuitsDialog = 5;
+  disableDefiningMaximumNumberOfCircuits = false;
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -232,6 +232,15 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
 
   setStableExecutionResultsEnabled(enabled: boolean): void {
     this.stableExecutionResultsEnabled = enabled;
+  }
+
+  setMaximumNumberofCompilationResultsSelected(enabled: boolean): void {
+    this.disableDefiningMaximumNumberOfCircuits = enabled;
+    if (enabled) {
+      this.maxNumberOfCompiledCircuitsDialog = 0;
+    } else {
+      this.maxNumberOfCompiledCircuitsDialog = 5;
+    }
   }
 
   setPredictionAlgorithm(predictionAlgorithm: string): void {
