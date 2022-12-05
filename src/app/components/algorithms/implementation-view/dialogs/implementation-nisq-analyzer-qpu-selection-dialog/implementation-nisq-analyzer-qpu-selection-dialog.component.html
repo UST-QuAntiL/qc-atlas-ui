@@ -86,7 +86,7 @@
                             matInput
                             type="number"
                             min="1"
-                            [placeholder]="'Maximum number'"
+                            [placeholder]="'Maximum number of compilation results'"
                             formControlName="maxNumberOfCompiledCircuits"
                             [ngModel]="maxNumberOfCompiledCircuitsDialog"
                             (ngModelChange)="setMaxNumberOfCompiledCircuits($event)"
@@ -95,7 +95,7 @@
                 </mat-form-field>
             </div>
             <mat-checkbox color="primary" [checked]="disableDefiningMaximumNumberOfCircuits"
-                          (change)="setMaximumNumberofCompilationResultsSelected($event.checked)">Or compute all possible compilation results
+                          (change)="setMaximumNumberofCompilationResultsSelected($event.checked)">Or compute <b>all</b> possible compilation results
             </mat-checkbox>
         </div>
 
