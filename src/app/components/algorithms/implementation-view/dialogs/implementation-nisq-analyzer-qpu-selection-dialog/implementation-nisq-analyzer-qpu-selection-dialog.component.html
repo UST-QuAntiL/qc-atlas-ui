@@ -78,20 +78,26 @@
         </div>
 
 
-        <mat-form-field class="input-field" *ngIf="shortWaitingTimeEnabled || stableExecutionResultsEnabled">
-            <mat-label>Maximum number of compilation results:</mat-label>
-            <input
-                    matInput
-                    type="number"
-                    min="1"
-                    [placeholder]="'Maximum number'"
-                    formControlName="maxNumberOfCompiledCircuits"
-                    [ngModel]="maxNumberOfCompiledCircuitsDialog"
-                    (ngModelChange)="setMaxNumberOfCompiledCircuits($event)"
-            />
-            <mat-error>Please enter a value between 0 and 50</mat-error>
-        </mat-form-field>
-
+        <div *ngIf="shortWaitingTimeEnabled || stableExecutionResultsEnabled">
+            <span>Select the number of compilation results:</span><br>
+            <div *ngIf="!disableDefiningMaximumNumberOfCircuits">
+                <mat-form-field class="input-field">
+                    <input
+                            matInput
+                            type="number"
+                            min="1"
+                            [placeholder]="'Maximum number'"
+                            formControlName="maxNumberOfCompiledCircuits"
+                            [ngModel]="maxNumberOfCompiledCircuitsDialog"
+                            (ngModelChange)="setMaxNumberOfCompiledCircuits($event)"
+                            [disabled]="disableDefiningMaximumNumberOfCircuits"
+                    />
+                </mat-form-field>
+            </div>
+            <mat-checkbox color="primary" [checked]="disableDefiningMaximumNumberOfCircuits"
+                          (change)="setMaximumNumberofCompilationResultsSelected($event.checked)">Or compute all possible compilation results
+            </mat-checkbox>
+        </div>
 
         <br>
         <mat-label>Select SDKs to be used for compilation:</mat-label>
