@@ -25,7 +25,7 @@ export class ChangePageGuard
       | ComputeResourceViewComponent
       | SoftwarePlatformViewComponent
     > {
-  unsavedChanges = false;
+  savedChanges = false;
   constructor(private _router: Router, private utilService: UtilService) {}
 
   canDeactivate(
@@ -38,7 +38,7 @@ export class ChangePageGuard
       | SoftwarePlatformViewComponent
   ) {
     const leavePage = new Subject<boolean>();
-    if (this.unsavedChanges) {
+    if (!this.savedChanges) {
       const dialogData: ConfirmDialogData = {
         title: 'Confirm Page Change',
         message:
@@ -63,7 +63,7 @@ export class ChangePageGuard
   }
 
   public objectsEqual<T>(source: T, target: T): boolean {
-    this.unsavedChanges = !deepEqual(source, target);
-    return this.unsavedChanges;
+    this.savedChanges = deepEqual(source, target);
+    return this.savedChanges;
   }
 }
