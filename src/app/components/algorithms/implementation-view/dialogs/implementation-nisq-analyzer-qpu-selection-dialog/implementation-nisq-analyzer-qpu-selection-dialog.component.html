@@ -5,7 +5,9 @@
             <mat-label>Vendor</mat-label>
             <mat-select formControlName="vendor" (selectionChange)="onVendorChanged($event.value)" required>
                 <mat-option [value]="'IBMQ'">IBMQ</mat-option>
-                <mat-option [value]="'Cirq-Google'">Cirq-Google</mat-option>
+                <mat-option [value]="'Google-Cirq'">Google Cirq</mat-option>
+                <mat-option [value]="'Amazon-AWS'">Amazon AWS</mat-option>
+                <mat-option [value]="'Microsoft-Azure'">Microsoft Azure</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field class="input-field">

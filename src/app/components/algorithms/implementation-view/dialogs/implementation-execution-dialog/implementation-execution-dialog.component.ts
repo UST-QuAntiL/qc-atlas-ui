@@ -78,9 +78,10 @@ export class ImplementationExecutionDialogComponent implements OnInit {
   }
 
   onVendorChanged(value: string): void {
+    console.error('This code is ran');
     this.qpuArray = [];
     this.isSupportedSelected = true;
-    if (value === 'IBMQ' || value === 'Cirq-Google') {
+    if (value === 'IBMQ' || value === 'Google-Cirq'|| value === 'Amazon-AWS'|| value === 'Microsoft-Azure') {
       this.providerService.getProviders().subscribe((result) => {
         this.getProviderDtoByName(result, value);
         if (!this.provider) {

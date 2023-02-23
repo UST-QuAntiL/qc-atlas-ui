@@ -51,8 +51,10 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
     { value: 'OpenQASM', label: 'OpenQASM' },
     { value: 'Quil', label: 'Quil' },
     { value: 'PyQuil', label: 'PyQuil' },
+    { value: 'cirq', label: 'Cirq' },
     { value: 'cirq-json', label: 'Cirq-Json' },
-    { value: 'braket', label: 'Braket-IR' },
+    { value: 'braket', label: 'Braket' },
+    { value: 'braket-ir', label: 'Braket-IR' },
     { value: 'qsharp', label: 'Q#' },
   ];
 
