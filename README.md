@@ -44,6 +44,18 @@ Please make sure to run `npm run postgen` to reformat the files before commiting
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
+## Trouble Shooting
+
+When encountering 
+```
+ERROR in ./node_modules/js-sha256/src/sha256.js
+Module not found: Error: Recursion in resolving
+```
+go to ./node_modules/js-sha256/src/sha256.js and comment out the line
+```
+var AMD = typeof define === 'function' && define.amd;
+```
+
 ## Acknowledgements
 
 Current development is supported by the [Federal Ministry for Economic Affairs and Energy] as part of the [PlanQK] project (01MK20005N) and the DFG’s Excellence Initiative project [SimTech] (EXC 2075 - 390740016).
