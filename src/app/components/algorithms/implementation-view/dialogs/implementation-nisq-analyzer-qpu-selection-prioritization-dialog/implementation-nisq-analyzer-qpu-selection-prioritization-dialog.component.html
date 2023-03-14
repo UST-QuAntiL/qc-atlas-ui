@@ -12,7 +12,7 @@
                                       (change)="setWaitingTimeEnabled($event.checked)">Short waiting time
                         </mat-checkbox>
                         <mat-checkbox color="primary" [checked]="stableExecutionResultsEnabled"
-                                      (change)="setStableExecutionResultsEnabled($event.checked)">Stable execution
+                                      (change)="setStableExecutionResultsEnabled($event.checked)">Precise execution
                             results
                         </mat-checkbox>
                         <mat-expansion-panel *ngIf="shortWaitingTimeEnabled || stableExecutionResultsEnabled"
@@ -68,7 +68,7 @@
                                 (change)="setQueueImportanceRatio($event)"
                         >
                         </mat-slider>
-                        <span class="aligned-with-slider">Stable Results</span>
+                        <span class="aligned-with-slider">Precise Results</span>
                     </div>
                     <button
                             mat-button
