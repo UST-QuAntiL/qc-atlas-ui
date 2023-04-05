@@ -34,7 +34,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push latest QC Atlas UI
-        if: ${{ steps.vars.outputs.tag == 'master' }}
         uses: docker/build-push-action@v4
         with:
           context: .
