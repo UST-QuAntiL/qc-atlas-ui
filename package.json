@@ -22,7 +22,7 @@
   "dependencies": {
     "@angular-devkit/schematics": "^10.2.4",
     "@angular/animations": "^10.2.5",
-    "@angular/cdk": "^9.2.4",
+    "@angular/cdk": "^10.2.7",
     "@angular/common": "~10.2.5",
     "@angular/compiler": "~10.2.5",
     "@angular/core": "^10.2.5",
@@ -34,7 +34,7 @@
     "@angular/router": "~10.2.5",
     "@fortawesome/fontawesome-free": "^5.13.1",
     "@swimlane/ngx-graph": "^7.1.2",
-    "angular-bootstrap-md": "^9.3.1",
+    "angular-bootstrap-md": "^10.1.1",
     "animate.css": "^4.1.0",
     "chart.js": "^2.5.0",
     "deep-equal": "^2.0.3",
