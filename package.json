@@ -34,7 +34,7 @@
     "@angular/router": "~11.2.14",
     "@fortawesome/fontawesome-free": "^5.13.1",
     "@swimlane/ngx-graph": "^7.1.2",
-    "angular-bootstrap-md": "^10.1.1",
+    "angular-bootstrap-md": "^12.2.0",
     "animate.css": "^4.1.0",
     "chart.js": "^2.5.0",
     "deep-equal": "^2.0.3",
