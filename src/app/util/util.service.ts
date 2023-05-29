@@ -9,6 +9,8 @@ import { map } from 'rxjs/operators';
 import { MissingEntityDialogComponent } from '../components/dialogs/missing-entity-dialog.component';
 import { LatexRendererServiceConstants } from './latex-renderer-service-constants';
 
+type BlobPart = BufferSource | Blob | string;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -204,7 +206,10 @@ export class UtilService {
       map((response) => {
         if (response) {
           const latexBlob = response;
-          return URL.createObjectURL(latexBlob);
+          let blobs:BlobPart[];
+          latexBlob.forEach(value => blobs.push(value));
+          let blob:Blob = new Blob(blobs);
+          return URL.createObjectURL(blob);
         }
       })
     );

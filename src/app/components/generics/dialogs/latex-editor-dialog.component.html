@@ -12,9 +12,10 @@
       <textarea
         class="content-container"
         [(ngModel)]="latexPackages"
-        [matAutosizeMaxRows]="3"
-        [matAutosizeMinRows]="2"
-        [matTextareaAutosize]="true"
+        cdkAutosizeMaxRows="3"
+        cdkAutosizeMinRows="2"
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
         placeholder="everything which goes before '\begin{document}'"
         matInput
       ></textarea>
@@ -26,9 +27,10 @@
       <textarea
         class="content-container"
         [(ngModel)]="inputText"
-        [matAutosizeMaxRows]="5"
-        [matAutosizeMinRows]="2"
-        [matTextareaAutosize]="true"
+        cdkAutosizeMaxRows="3"
+        cdkAutosizeMinRows="2"
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
         placeholder="everything which goes between '\begin{document}' and '\end{document}'"
         matInput
       ></textarea>
