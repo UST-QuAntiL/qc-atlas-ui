@@ -6,8 +6,8 @@ import {
 } from '@angular/material/dialog';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 
@@ -22,7 +22,7 @@ import {
 })
 export class ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent
   implements OnInit {
-  sensitivityAnalysisForm: FormGroup;
+  sensitivityAnalysisForm: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -45,16 +45,16 @@ export class ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComp
   }
 
   ngOnInit(): void {
-    this.sensitivityAnalysisForm = new FormGroup({
-      stepSize: new FormControl(this.data.stepSize, [
+    this.sensitivityAnalysisForm = new UntypedFormGroup({
+      stepSize: new UntypedFormControl(this.data.stepSize, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      upperBound: new FormControl(this.data.upperBound, [
+      upperBound: new UntypedFormControl(this.data.upperBound, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      lowerBound: new FormControl(this.data.lowerBound, [
+      lowerBound: new UntypedFormControl(this.data.lowerBound, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),

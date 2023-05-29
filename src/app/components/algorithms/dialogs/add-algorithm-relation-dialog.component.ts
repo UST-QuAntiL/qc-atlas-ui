@@ -6,8 +6,8 @@ import { AlgorithmRelationDto } from 'api-atlas/models/algorithm-relation-dto';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { AlgorithmRelationTypeDto } from 'api-atlas/models';
@@ -18,7 +18,7 @@ import { AlgorithmRelationTypeDto } from 'api-atlas/models';
   styleUrls: ['./add-algorithm-relation-dialog.component.scss'],
 })
 export class AddAlgorithmRelationDialogComponent implements OnInit {
-  algorithmRelationForm: FormGroup;
+  algorithmRelationForm: UntypedFormGroup;
   stateGroups: StateGroup[] = [];
   algorithmRelationTypes: AlgorithmRelationTypeDto[] = [];
   linkableAlgorithms: AlgorithmDto[] = [];
@@ -33,16 +33,16 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.algorithmRelationForm = new FormGroup({
-      description: new FormControl(this.data.description, [
+    this.algorithmRelationForm = new UntypedFormGroup({
+      description: new UntypedFormControl(this.data.description, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      relationType: new FormControl(this.data.relationType, [
+      relationType: new UntypedFormControl(this.data.relationType, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      targetAlg: new FormControl(
+      targetAlg: new UntypedFormControl(
         { value: this.data.targetAlg, disabled: this.data.disableAlg },
         // eslint-disable-next-line @typescript-eslint/unbound-method
         [Validators.required]

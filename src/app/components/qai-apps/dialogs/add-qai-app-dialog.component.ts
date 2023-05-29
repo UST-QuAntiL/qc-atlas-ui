@@ -6,8 +6,8 @@ import {
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -23,7 +23,7 @@ import { QAIAppDto } from '../qai-app-dto';
   templateUrl: 'add-qai-app-dialog.html',
 })
 export class AddQAIAppDialogComponent implements OnInit {
-  algorithmForm: FormGroup;
+  algorithmForm: UntypedFormGroup;
   uploadProgress = 0;
   uploadSub: Subscription;
   selectedFile: File;
@@ -84,8 +84,8 @@ export class AddQAIAppDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.algorithmForm = new FormGroup({
-      name: new FormControl(null, [
+    this.algorithmForm = new UntypedFormGroup({
+      name: new UntypedFormControl(null, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),

@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import {
@@ -27,8 +27,8 @@ import { Subscription } from 'rxjs';
 export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   implements OnInit {
   @ViewChild('matHorizontalStepper') matHorizontalStepper: MatStepper;
-  prioritizationFrom: FormGroup;
-  preferenceForm: FormGroup;
+  prioritizationFrom: UntypedFormGroup;
+  preferenceForm: UntypedFormGroup;
   criteriaNamesAndValues: Criterion[] = [];
   inputChanged = false;
   shortWaitingTimeEnabled = false;
@@ -45,7 +45,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
     >,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private mcdaService: XmcdaCriteriaService
   ) {}
 
@@ -74,27 +74,27 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   }
 
   ngOnInit(): void {
-    this.preferenceForm = new FormGroup({
-      preferenceMcdaMethod: new FormControl(this.data.mcdaMethod, [
+    this.preferenceForm = new UntypedFormGroup({
+      preferenceMcdaMethod: new UntypedFormControl(this.data.mcdaMethod, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      weightLearningMethod: new FormControl(this.data.weightLearningMethod, [
+      weightLearningMethod: new UntypedFormControl(this.data.weightLearningMethod, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      shortWaitingTime: new FormControl(this.data.shortWaitingTime, [
+      shortWaitingTime: new UntypedFormControl(this.data.shortWaitingTime, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      stableExecutionResults: new FormControl(
+      stableExecutionResults: new UntypedFormControl(
         this.data.stableExecutionResults,
         [
           // eslint-disable-next-line @typescript-eslint/unbound-method
           Validators.required,
         ]
       ),
-      queueImportanceRatio: new FormControl(this.data.queueImportanceRatio, [
+      queueImportanceRatio: new UntypedFormControl(this.data.queueImportanceRatio, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
@@ -163,7 +163,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                 });
               }
               this.prioritizationFrom = this.formBuilder.group({
-                mcdaMethod: new FormControl(this.data.mcdaMethod, [
+                mcdaMethod: new UntypedFormControl(this.data.mcdaMethod, [
                   // eslint-disable-next-line @typescript-eslint/unbound-method
                   Validators.required,
                 ]),

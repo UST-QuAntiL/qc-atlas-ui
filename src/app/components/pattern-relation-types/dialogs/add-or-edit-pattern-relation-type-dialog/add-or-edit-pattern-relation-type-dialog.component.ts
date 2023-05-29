@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -15,7 +15,7 @@ import { DialogData } from '../../../algorithm-relation-types/dialogs/add-or-edi
   styleUrls: ['./add-or-edit-pattern-relation-type-dialog.component.scss'],
 })
 export class AddOrEditPatternRelationTypeDialogComponent implements OnInit {
-  patternRelationTypeFormGroup: FormGroup;
+  patternRelationTypeFormGroup: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<AddOrEditPatternRelationTypeDialogComponent>,
@@ -31,8 +31,8 @@ export class AddOrEditPatternRelationTypeDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.patternRelationTypeFormGroup = new FormGroup({
-      patternRelationTypeName: new FormControl(this.data.name, [
+    this.patternRelationTypeFormGroup = new UntypedFormGroup({
+      patternRelationTypeName: new UntypedFormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),

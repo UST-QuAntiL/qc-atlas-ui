@@ -6,10 +6,10 @@ import {
 } from '@angular/material/dialog';
 import {
   AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { StudyDto } from 'api-library/models/study-dto';
@@ -20,7 +20,7 @@ import { Study } from 'api-library/models/study';
   templateUrl: './add-slr-dialog.component.html',
 })
 export class AddSlrDialogComponent implements OnInit {
-  studyForm: FormGroup;
+  studyForm: UntypedFormGroup;
   databasesList = [
     'ACM Portal',
     'ArXiv',
@@ -47,12 +47,12 @@ export class AddSlrDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AddSlrDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SLRDialogData,
     public dialog: MatDialog,
-    private formBuilder: FormBuilder
+    private formBuilder: UntypedFormBuilder
   ) {}
 
   ngOnInit(): void {
     this.studyForm = this.formBuilder.group({
-      title: new FormControl('', [
+      title: new UntypedFormControl('', [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
@@ -106,17 +106,17 @@ export class AddSlrDialogComponent implements OnInit {
     return this.studyForm.get('title');
   }
 
-  authors(): FormArray {
-    return this.studyForm.get('authors') as FormArray;
+  authors(): UntypedFormArray {
+    return this.studyForm.get('authors') as UntypedFormArray;
   }
 
   removeAuthor(authorIndex: number): void {
     this.authors().removeAt(authorIndex);
   }
 
-  newAuthor(): FormGroup {
+  newAuthor(): UntypedFormGroup {
     return this.formBuilder.group({
-      name: new FormControl('', [
+      name: new UntypedFormControl('', [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
@@ -128,15 +128,15 @@ export class AddSlrDialogComponent implements OnInit {
     this.authors().push(this.newAuthor());
   }
 
-  researchQuestions(): FormArray {
-    return this.studyForm.get('researchQuestions') as FormArray;
+  researchQuestions(): UntypedFormArray {
+    return this.studyForm.get('researchQuestions') as UntypedFormArray;
   }
 
   removeResearchQuestion(rqIndex: number): void {
     this.researchQuestions().removeAt(rqIndex);
   }
 
-  newResearchQuestion(): FormGroup {
+  newResearchQuestion(): UntypedFormGroup {
     return this.formBuilder.group({
       question: '',
     });
@@ -146,17 +146,17 @@ export class AddSlrDialogComponent implements OnInit {
     this.researchQuestions().push(this.newResearchQuestion());
   }
 
-  queries(): FormArray {
-    return this.studyForm.get('queries') as FormArray;
+  queries(): UntypedFormArray {
+    return this.studyForm.get('queries') as UntypedFormArray;
   }
 
   removeQuery(queryIndex: number): void {
     this.queries().removeAt(queryIndex);
   }
 
-  newQuery(): FormGroup {
+  newQuery(): UntypedFormGroup {
     return this.formBuilder.group({
-      query: new FormControl('', [
+      query: new UntypedFormControl('', [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
@@ -168,15 +168,15 @@ export class AddSlrDialogComponent implements OnInit {
     this.queries().push(this.newQuery());
   }
 
-  databases(): FormArray {
-    return this.studyForm.get('databases') as FormArray;
+  databases(): UntypedFormArray {
+    return this.studyForm.get('databases') as UntypedFormArray;
   }
 
   removeDatabase(dbIndex: number): void {
     this.databases().removeAt(dbIndex);
   }
 
-  newDatabase(): FormGroup {
+  newDatabase(): UntypedFormGroup {
     return this.formBuilder.group({
       name: '',
       enabled: true,

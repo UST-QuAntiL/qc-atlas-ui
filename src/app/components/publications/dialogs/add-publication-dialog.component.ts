@@ -6,9 +6,9 @@ import {
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormArray,
-  FormControl,
-  FormGroup,
+  UntypedFormArray,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 
@@ -18,8 +18,8 @@ import {
   styleUrls: ['add-publication-dialog.scss'],
 })
 export class AddPublicationDialogComponent implements OnInit {
-  publicationForm: FormGroup;
-  authorsForm = new FormArray([]);
+  publicationForm: UntypedFormGroup;
+  authorsForm = new UntypedFormArray([]);
 
   constructor(
     public dialogRef: MatDialogRef<AddPublicationDialogComponent>,
@@ -33,7 +33,7 @@ export class AddPublicationDialogComponent implements OnInit {
 
   addItem(): void {
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    this.authorsForm.push(new FormControl('', Validators.required));
+    this.authorsForm.push(new UntypedFormControl('', Validators.required));
   }
 
   get publicationTitle(): AbstractControl {
@@ -46,8 +46,8 @@ export class AddPublicationDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.addItem();
-    this.publicationForm = new FormGroup({
-      publicationTitle: new FormControl(this.data.publicationTitle, [
+    this.publicationForm = new UntypedFormGroup({
+      publicationTitle: new UntypedFormControl(this.data.publicationTitle, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),

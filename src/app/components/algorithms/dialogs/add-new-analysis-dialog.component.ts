@@ -6,9 +6,9 @@ import {
 } from '@angular/material/dialog';
 import {
   AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { ParameterDto } from 'api-nisq/models/parameter-dto';
@@ -22,7 +22,7 @@ import { NisqAnalyzerService } from '../nisq-analyzer/nisq-analyzer.service';
   styleUrls: ['./add-new-analysis-dialog.component.scss'],
 })
 export class AddNewAnalysisDialogComponent implements OnInit {
-  addNewAnalysisForm: FormGroup;
+  addNewAnalysisForm: UntypedFormGroup;
   cloudServices: CloudServiceDto[];
   parameters: ParameterDto[];
 
@@ -30,7 +30,7 @@ export class AddNewAnalysisDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AddNewAnalysisDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private executionEnvironmentsService: ExecutionEnvironmentsService,
     private nisqAnalyzerService: NisqAnalyzerService
   ) {}
@@ -63,14 +63,14 @@ export class AddNewAnalysisDialogComponent implements OnInit {
             })
           )
         ),
-        cloudService: new FormControl(this.data.cloudService, [
+        cloudService: new UntypedFormControl(this.data.cloudService, [
           // eslint-disable-next-line @typescript-eslint/unbound-method
           Validators.required,
         ]),
         // eslint-disable-next-line @typescript-eslint/unbound-method
         shotCount: [''],
         // eslint-disable-next-line @typescript-eslint/unbound-method
-        token: new FormControl(this.data.token),
+        token: new UntypedFormControl(this.data.token),
       });
 
       this.dialogRef.beforeClosed().subscribe(() => {

@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import {
@@ -17,7 +17,7 @@ import {
   styleUrls: ['./create-cloud-service-dialog.component.scss'],
 })
 export class CreateCloudServiceDialogComponent implements OnInit {
-  cloudServiceForm: FormGroup;
+  cloudServiceForm: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<CreateCloudServiceDialogComponent>,
@@ -34,8 +34,8 @@ export class CreateCloudServiceDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cloudServiceForm = new FormGroup({
-      name: new FormControl(this.data.name, [
+    this.cloudServiceForm = new UntypedFormGroup({
+      name: new UntypedFormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),

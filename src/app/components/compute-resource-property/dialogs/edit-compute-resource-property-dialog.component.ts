@@ -8,8 +8,8 @@ import {
 import { ComputeResourcePropertyTypeDto } from 'api-atlas/models/compute-resource-property-type-dto';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   ValidationErrors,
   ValidatorFn,
   Validators,
@@ -27,11 +27,11 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   types: ComputeResourcePropertyTypeDto[] = [];
   matcher = new CustomErrorStateMatcher();
   filteredTypes: ComputeResourcePropertyTypeDto[];
-  formGroup: FormGroup = new FormGroup({
-    typeName: new FormControl('', Validators.minLength(1)),
-    typeDesc: new FormControl(),
-    typeDatatype: new FormControl('FLOAT'),
-    value: new FormControl(''),
+  formGroup: UntypedFormGroup = new UntypedFormGroup({
+    typeName: new UntypedFormControl('', Validators.minLength(1)),
+    typeDesc: new UntypedFormControl(),
+    typeDatatype: new UntypedFormControl('FLOAT'),
+    value: new UntypedFormControl(''),
   });
 
   baseElement: ComputeResourcePropertyDto = {
@@ -48,38 +48,38 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   selectedType: ComputeResourcePropertyTypeDto = null;
 
   get typeName(): string {
-    return (this.formGroup.controls.typeName as FormControl).value.toString();
+    return (this.formGroup.controls.typeName as UntypedFormControl).value.toString();
   }
 
   set typeName(name: string) {
-    (this.formGroup.controls.typeName as FormControl).setValue(name);
+    (this.formGroup.controls.typeName as UntypedFormControl).setValue(name);
   }
 
   get typeDescription(): string {
-    return (this.formGroup.controls.typeDesc as FormControl).value.toString();
+    return (this.formGroup.controls.typeDesc as UntypedFormControl).value.toString();
   }
 
   set typeDescription(desc: string) {
-    (this.formGroup.controls.typeDesc as FormControl).setValue(desc);
+    (this.formGroup.controls.typeDesc as UntypedFormControl).setValue(desc);
   }
 
   get typeDatatype(): 'INTEGER' | 'STRING' | 'FLOAT' {
     return (this.formGroup.controls
-      .typeDatatype as FormControl).value.toString();
+      .typeDatatype as UntypedFormControl).value.toString();
   }
 
   set typeDatatype(type: 'INTEGER' | 'STRING' | 'FLOAT') {
-    const datatypeControl = this.formGroup.controls.typeDatatype as FormControl;
+    const datatypeControl = this.formGroup.controls.typeDatatype as UntypedFormControl;
     datatypeControl.setValue(type);
     datatypeControl.setValidators(null);
   }
 
   get propertyValue(): string {
-    return (this.formGroup.controls.value as FormControl).value.toString();
+    return (this.formGroup.controls.value as UntypedFormControl).value.toString();
   }
 
   set propertyValue(value: string) {
-    (this.formGroup.controls.value as FormControl).setValue(value);
+    (this.formGroup.controls.value as UntypedFormControl).setValue(value);
   }
 
   valueInputInvalid = true;
@@ -166,7 +166,7 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
 
   validateValueInput(): void {
     this.valueInputInvalid = (this.formGroup.controls
-      .value as FormControl).invalid;
+      .value as UntypedFormControl).invalid;
   }
 
   onSubmit(): void {

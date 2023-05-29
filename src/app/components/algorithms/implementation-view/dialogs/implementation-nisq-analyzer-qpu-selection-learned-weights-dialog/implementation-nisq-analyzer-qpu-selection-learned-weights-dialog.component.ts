@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -20,7 +20,7 @@ import { Criterion } from '../implementation-nisq-analyzer-qpu-selection-priorit
 })
 export class ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent
   implements OnInit {
-  weightLearningForm: FormGroup;
+  weightLearningForm: UntypedFormGroup;
   criteriaNamesAndValues: Criterion[] = [];
   inputChanged = false;
 
@@ -30,7 +30,7 @@ export class ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent
     >,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private mcdaService: XmcdaCriteriaService
   ) {}
 

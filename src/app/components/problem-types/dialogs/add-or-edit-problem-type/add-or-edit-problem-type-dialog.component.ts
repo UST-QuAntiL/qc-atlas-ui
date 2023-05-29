@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -15,7 +15,7 @@ import { ProblemTypeDto } from 'api-atlas/models';
   styleUrls: ['./add-or-edit-problem-type-dialog.component.scss'],
 })
 export class AddOrEditProblemTypeDialogComponent implements OnInit {
-  problemTypeFormGroup: FormGroup;
+  problemTypeFormGroup: UntypedFormGroup;
   existingProblemTypes: ProblemTypeDto[] = [];
 
   constructor(
@@ -37,13 +37,13 @@ export class AddOrEditProblemTypeDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.problemTypeFormGroup = new FormGroup({
-      problemTypeName: new FormControl(this.data.name, [
+    this.problemTypeFormGroup = new UntypedFormGroup({
+      problemTypeName: new UntypedFormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
       ]),
-      parentProblemType: new FormControl(this.data.parentProblemType),
+      parentProblemType: new UntypedFormControl(this.data.parentProblemType),
     });
 
     this.problemTypeService.getProblemTypes().subscribe((types) => {

@@ -4,7 +4,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 
 @Component({
@@ -12,7 +12,7 @@ import { BibEntryDto } from 'api-library/models/bib-entry-dto';
   templateUrl: './add-bibentry-dialog.component.html',
 })
 export class AddBibentryDialogComponent implements OnInit {
-  bibEntryForm: FormGroup;
+  bibEntryForm: UntypedFormGroup;
   updateDialog = false;
   fields = [
     'citationKey',
@@ -44,7 +44,7 @@ export class AddBibentryDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AddBibentryDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: BibEntryDialogData,
     public dialog: MatDialog,
-    private formBuilder: FormBuilder
+    private formBuilder: UntypedFormBuilder
   ) {}
 
   onNoClick(): void {

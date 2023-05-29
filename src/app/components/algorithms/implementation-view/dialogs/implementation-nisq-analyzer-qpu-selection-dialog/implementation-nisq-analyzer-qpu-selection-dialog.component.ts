@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormArray,
-  FormControl,
-  FormGroup,
+  UntypedFormArray,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
@@ -26,7 +26,7 @@ import { NisqAnalyzerService } from '../../../nisq-analyzer/nisq-analyzer.servic
 })
 export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   implements OnInit {
-  qpuSelectionFrom: FormGroup;
+  qpuSelectionFrom: UntypedFormGroup;
   provider?: EntityModelProviderDto;
   ready?: boolean;
   isIbmqSelected = true;
@@ -60,8 +60,8 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     return this.qpuSelectionFrom.get('token');
   }
 
-  get compilers(): FormArray {
-    return this.qpuSelectionFrom.get('compilers') as FormArray;
+  get compilers(): UntypedFormArray {
+    return this.qpuSelectionFrom.get('compilers') as UntypedFormArray;
   }
 
   get shortWaitingTime(): AbstractControl | null {
@@ -89,37 +89,37 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   }
 
   ngOnInit(): void {
-    this.qpuSelectionFrom = new FormGroup({
-      vendor: new FormControl(this.data.vendor, [
+    this.qpuSelectionFrom = new UntypedFormGroup({
+      vendor: new UntypedFormControl(this.data.vendor, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      token: new FormControl(this.data.token),
-      compilers: new FormArray([]),
-      maxNumberOfCompiledCircuits: new FormControl(
+      token: new UntypedFormControl(this.data.token),
+      compilers: new UntypedFormArray([]),
+      maxNumberOfCompiledCircuits: new UntypedFormControl(
         this.data.maxNumberOfCompiledCircuits,
         [
           // eslint-disable-next-line @typescript-eslint/unbound-method
           Validators.required,
         ]
       ),
-      predictionAlgorithm: new FormControl(this.data.predictionAlgorithm, [
+      predictionAlgorithm: new UntypedFormControl(this.data.predictionAlgorithm, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      metaOptimizer: new FormControl(this.data.metaOptimizer, [
+      metaOptimizer: new UntypedFormControl(this.data.metaOptimizer, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      queueImportanceRatio: new FormControl(this.data.queueImportanceRatio, [
+      queueImportanceRatio: new UntypedFormControl(this.data.queueImportanceRatio, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      shortWaitingTime: new FormControl(this.data.shortWaitingTime, [
+      shortWaitingTime: new UntypedFormControl(this.data.shortWaitingTime, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      stableExecutionResults: new FormControl(
+      stableExecutionResults: new UntypedFormControl(
         this.data.stableExecutionResults,
         [
           // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -221,7 +221,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
         this.selectedCompilers = availableCompilers;
         this.compilers.clear();
         for (const compiler of availableCompilers) {
-          this.compilers.push(new FormControl(compiler));
+          this.compilers.push(new UntypedFormControl(compiler));
         }
       });
   }

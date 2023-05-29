@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import {
@@ -17,7 +17,7 @@ import {
   styleUrls: ['./create-compute-resource-dialog.component.scss'],
 })
 export class CreateComputeResourceDialogComponent implements OnInit {
-  computeResourceForm: FormGroup;
+  computeResourceForm: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<CreateComputeResourceDialogComponent>,
@@ -34,8 +34,8 @@ export class CreateComputeResourceDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.computeResourceForm = new FormGroup({
-      name: new FormControl(this.data.name, [
+    this.computeResourceForm = new UntypedFormGroup({
+      name: new UntypedFormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),

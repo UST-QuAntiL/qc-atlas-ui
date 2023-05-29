@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import {
   animate,
   state,
@@ -117,7 +117,7 @@ export class NisqAnalyzerComponent implements OnInit {
     private analysisResultService: AnalysisResultService,
     private nisqAnalyzerService: NisqAnalyzerService,
     private utilService: UtilService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private http: HttpClient,
     private implementationService: ImplementationService,
     private sdkService: SdksService,

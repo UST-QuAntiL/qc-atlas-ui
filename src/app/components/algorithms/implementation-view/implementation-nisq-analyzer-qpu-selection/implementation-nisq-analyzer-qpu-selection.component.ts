@@ -14,7 +14,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { exhaustMap, first, map, startWith, switchMap } from 'rxjs/operators';
@@ -151,7 +151,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
   constructor(
     private utilService: UtilService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private implementationService: ImplementationService,
     private qpuSelectionService: QpuSelectionResultService,
     private nisqAnalyzerRootService: RootService,

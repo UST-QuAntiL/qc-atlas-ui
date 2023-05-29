@@ -8,7 +8,7 @@ import { Pattern } from 'api-patternatlas/models/pattern';
 import { PatternLanguageControllerService } from 'api-patternatlas/services/pattern-language-controller.service';
 import { PatternControllerService } from 'api-patternatlas/services/pattern-controller.service';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { EntityModelPatternModel } from 'api-patternatlas/models/entity-model-pattern-model';
 import { environment as Env } from '../../../../environments/environment';
 import { UtilService } from '../../../util/util.service';
@@ -38,7 +38,7 @@ export class AddPatternRelationDialogComponent implements OnInit {
   relationTypeGroups: StateGroup[] = [];
   relationTypes: PatternRelationTypeDto[] = [];
   selectedRelationType: PatternRelationTypeDto = undefined;
-  relationTypeForm: FormGroup;
+  relationTypeForm: UntypedFormGroup;
 
   // Loading fields
   arePatternLanguagesLoaded = false;
@@ -58,8 +58,8 @@ export class AddPatternRelationDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.relationTypeForm = new FormGroup({
-      relationType: new FormControl(this.data.patternRelationType),
+    this.relationTypeForm = new UntypedFormGroup({
+      relationType: new UntypedFormControl(this.data.patternRelationType),
     });
 
     // Pre-Select values for update

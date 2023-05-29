@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -13,11 +13,11 @@ import { TagDto } from 'api-atlas/models';
   styleUrls: ['./tags-dialog.component.scss'],
 })
 export class TagsDialogComponent {
-  formGroup = new FormGroup({
+  formGroup = new UntypedFormGroup({
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    value: new FormControl('', Validators.required),
+    value: new UntypedFormControl('', Validators.required),
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    category: new FormControl('', Validators.required),
+    category: new UntypedFormControl('', Validators.required),
   });
 
   selectedCategory: string;
