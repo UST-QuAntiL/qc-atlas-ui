@@ -5,18 +5,15 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import {MatInputModule} from '@angular/material/input';
 import { RenderLatexControllerService } from 'api-latex/services/render-latex-controller.service';
 import { UtilService } from '../../../util/util.service';
 import { LatexRendererServiceConstants } from '../../../util/latex-renderer-service-constants';
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { CdkTextareaAutosize, TextFieldModule } from "@angular/cdk/text-field";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 
 @Component({
   selector: 'app-latex-editor-dialog',
   templateUrl: './latex-editor-dialog.component.html',
   styleUrls: ['./latex-editor-dialog.component.scss'],
-  imports: [MatFormFieldModule, MatInputModule, TextFieldModule],
 })
 export class LatexEditorDialogComponent implements OnInit {
   inputText = '';

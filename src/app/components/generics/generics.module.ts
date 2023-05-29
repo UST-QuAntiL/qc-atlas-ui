@@ -36,6 +36,8 @@ import { PrologValidator } from './prolog.validator';
 import { TagsComponent } from './tags/tags.component';
 import { TagsDialogComponent } from './tags/dialog/tags-dialog.component';
 import { LatexEditorDialogComponent } from './dialogs/latex-editor-dialog.component';
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { TextFieldModule } from "@angular/cdk/text-field";
 
 @NgModule({
   declarations: [
@@ -78,6 +80,8 @@ import { LatexEditorDialogComponent } from './dialogs/latex-editor-dialog.compon
     MatTooltipModule,
     PdfViewerModule,
     MatSlideToggleModule,
+    MatFormFieldModule,
+    TextFieldModule,
   ],
   exports: [
     TextInputComponent,
