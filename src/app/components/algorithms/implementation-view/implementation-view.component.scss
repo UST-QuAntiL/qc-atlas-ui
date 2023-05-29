@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "theme";
 
 .header-container {
@@ -19,5 +20,5 @@
 }
 
 .current-rev-option {
-  background-color: mat-color($qc-atlas-ui-accent);
+  background-color: mat.get-color-from-palette($qc-atlas-ui-accent);
 }

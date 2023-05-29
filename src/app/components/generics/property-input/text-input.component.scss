@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "theme";
 
 .edit-icon {
@@ -15,7 +16,7 @@
       color: dodgerblue;
     }
     .mat-input-element:hover {
-      color: mat-color($qc-atlas-ui-primary);
+      color: mat.get-color-from-palette($qc-atlas-ui-primary);
       cursor: pointer;
       text-decoration: underline;
     }

@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "theme";
 
 .dot {
@@ -62,7 +63,7 @@ div::-webkit-scrollbar-track {
 }
 
 div::-webkit-scrollbar-thumb {
-  background-color: mat-color($qc-atlas-ui-primary);
+  background-color: mat.get-color-from-palette($qc-atlas-ui-primary);
   border-radius: 10px;
   height: 2px;
 }
