@@ -39,7 +39,7 @@
     "chart.js": "^2.5.0",
     "deep-equal": "^2.0.3",
     "font-awesome": "^4.7.0",
-    "keycloak-angular": "7.3",
+    "keycloak-angular": "8.4.0",
     "keycloak-js": "^10.0.2",
     "ng2-pdf-viewer": "^6.3.2",
     "rxjs": "~6.5.4",
