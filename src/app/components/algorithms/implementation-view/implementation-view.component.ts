@@ -11,10 +11,10 @@ import { ImplementationsService } from 'api-atlas/services/implementations.servi
 import { ApiConfiguration } from 'api-atlas/api-configuration';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import { UtilService } from '../../../util/util.service';
+import { UtilService } from "app/util/util.service";
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
-import { ChangePageGuard } from '../../../services/deactivation-guard';
-import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
+import { ChangePageGuard } from "app/services/deactivation-guard";
+import { UiFeatures } from "app/directives/qc-atlas-ui-repository-configuration.service";
 import {
   ComparedData,
   CompareVersionDialogComponent,

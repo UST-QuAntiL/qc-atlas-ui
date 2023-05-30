@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { QAIAppService } from 'src/app/components/qai-apps/qai-apps.service';
-import { QAIAppDto } from 'src/app/components/qai-apps/qai-app-dto';
+import { QAIAppService } from 'app/components/qai-apps/qai-apps.service';
+import { QAIAppDto } from 'app/components/qai-apps/qai-app-dto';
 import { AddQAIAppDialogComponent } from '../dialogs/add-qai-app-dialog.component';
-import { UtilService } from '../../../util/util.service';
+import { UtilService } from "app/util/util.service";
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
-import { PaginatorConfig } from '../../../util/paginatorConfig';
-import { PagingInfo } from '../../../util/PagingInfo';
+import { PaginatorConfig } from "app/util/paginatorConfig";
+import { PagingInfo } from "app/util/PagingInfo";
 
 @Component({
   selector: 'app-qai-app-list',

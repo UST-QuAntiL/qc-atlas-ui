@@ -24,9 +24,9 @@ import {
 import { CompilerSelectionDto, QpuSelectionJobDto } from 'api-nisq/models';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { ProviderService } from 'generated/api-qprov/services';
-import { ChangePageGuard } from '../../../../services/deactivation-guard';
-import { UtilService } from '../../../../util/util.service';
+import { ProviderService } from "api-qprov/services/provider.service";
+import { ChangePageGuard } from "app/services/deactivation-guard";
+import { UtilService } from "app/util/util.service";
 import { ImplementationExecutionDialogComponent } from '../dialogs/implementation-execution-dialog/implementation-execution-dialog.component';
 import { NisqAnalyzerService } from '../../nisq-analyzer/nisq-analyzer.service';
 import { ImplementationTokenDialogComponent } from '../dialogs/implementation-token-dialog/implementation-token-dialog.component';

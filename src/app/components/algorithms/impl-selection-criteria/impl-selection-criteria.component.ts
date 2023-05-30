@@ -17,13 +17,13 @@ import {
   SdksService,
 } from 'api-nisq/services';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
-import { ExecutionEnvironmentsService } from 'generated/api-atlas/services/execution-environments.service';
-import { ChangePageGuard } from '../../../services/deactivation-guard';
-import { parsePrologRule, PrologRule } from '../../../util/MinimalPrologParser';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
+import { ChangePageGuard } from "app/services/deactivation-guard";
+import { parsePrologRule, PrologRule } from "app/util/MinimalPrologParser";
 import { Option } from '../../generics/property-input/select-input.component';
-import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
-import { PlanqkPlatformService } from '../../../services/planqk-platform.service';
-import { UtilService } from '../../../util/util.service';
+import { UiFeatures } from "app/directives/qc-atlas-ui-repository-configuration.service";
+import { PlanqkPlatformService } from "app/services/planqk-platform.service";
+import { UtilService } from "app/util/util.service";
 import { CreateSoftwarePlatformDialogComponent } from '../../execution-environments/software-platforms/dialogs/create-software-platform-dialog.component';
 
 @Component({

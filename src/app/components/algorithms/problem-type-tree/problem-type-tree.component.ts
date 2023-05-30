@@ -11,13 +11,13 @@ import {
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
-import { ProblemTypeDto } from 'generated/api-atlas/models/problem-type-dto';
+import { ProblemTypeDto } from "api-atlas/models/problem-type-dto";
 import { LinkObject } from '../../generics/data-list/data-list.component';
 import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
   UiFeatures,
-} from '../../../directives/qc-atlas-ui-repository-configuration.service';
+} from "app/directives/qc-atlas-ui-repository-configuration.service";
 
 export class TreeNode {
   problemType: ProblemTypeDto;

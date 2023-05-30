@@ -13,7 +13,7 @@ import {
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { UtilService } from 'src/app/util/util.service';
+import { UtilService } from "app/util/util.service";
 import { QAIAppService } from '../qai-apps.service';
 import { QAIAppDto } from '../qai-app-dto';
 

@@ -13,7 +13,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { ProviderService } from 'api-qprov/services/provider.service';
-import { UtilService } from 'src/app/util/util.service';
+import { UtilService } from "app/util/util.service";
 import { NisqAnalyzerService } from '../../../nisq-analyzer/nisq-analyzer.service';
 
 @Component({

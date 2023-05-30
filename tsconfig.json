@@ -21,11 +21,11 @@
     ],
     "paths": {
       "*": [
-        "*",
-        "generated/*"
+        "node_modules/*",
+        "generated/*",
+        "src/*"
       ]
-    },
-    "useDefineForClassFields": false
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

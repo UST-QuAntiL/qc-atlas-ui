@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ComputeResourceDto } from 'generated/api-atlas/models';
-import { ExecutionEnvironmentsService } from 'generated/api-atlas/services';
-import { EntityModelQpuDto } from 'generated/api-qprov/models';
-import { ProviderService } from 'generated/api-qprov/services/provider.service';
+import { ComputeResourceDto } from 'api-atlas/models';
+import { ExecutionEnvironmentsService } from 'api-atlas/services';
+import { EntityModelQpuDto } from 'api-qprov/models';
+import { ProviderService } from 'api-qprov/services/provider.service';
 import { UtilService } from './util.service';
 
 @Injectable({

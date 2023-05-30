@@ -25,7 +25,7 @@ import { AnalysisResultService } from 'api-nisq/services/analysis-result.service
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { SdksService } from 'api-nisq/services/sdks.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { ProviderService } from 'generated/api-qprov/services';
+import { ProviderService } from "api-qprov/services/provider.service";
 import { MatSort } from '@angular/material/sort';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
