@@ -11,9 +11,9 @@ import { TagDto } from 'api-atlas/models/tag-dto';
 import { RevisionDto } from 'api-atlas/models/revision-dto';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
-import { UtilService } from '../../../util/util.service';
-import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
-import { ChangePageGuard } from '../../../services/deactivation-guard';
+import { UtilService } from "app/util/util.service";
+import { UiFeatures } from "app/directives/qc-atlas-ui-repository-configuration.service";
+import { ChangePageGuard } from "app/services/deactivation-guard";
 import {
   ComparedData,
   CompareVersionDialogComponent,
