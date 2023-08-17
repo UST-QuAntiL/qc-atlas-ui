@@ -1,16 +1,16 @@
 
-.mat-table {
+.mat-mdc-table {
   display: block;
   width: 100%;
   overflow-x: auto;
   border-collapse: separate;
 }
 
-table th.mat-header-cell:first-of-type, td.mat-cell:first-of-type {
+table th.mat-mdc-header-cell:first-of-type, td.mat-mdc-cell:first-of-type {
   padding-left: 0;
 }
 
-th.mat-header-cell, td.mat-cell {
+th.mat-mdc-header-cell, td.mat-mdc-cell {
   word-wrap: initial;
   display: table-cell;
   padding: 0px 10px;
@@ -21,8 +21,8 @@ th.mat-header-cell, td.mat-cell {
   vertical-align: middle;
 }
 
-.mat-row,
-.mat-header-row {
+.mat-mdc-row,
+.mat-mdc-header-row {
   display: table-row;
 }
 
@@ -79,7 +79,7 @@ tr.element-row:not(.expanded-row):active {
   width: 15em;
 }
 
-.mat-raised-button {
+.mat-mdc-raised-button {
   width: 10em;
 }
 

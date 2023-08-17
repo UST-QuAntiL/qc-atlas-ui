@@ -1,7 +1,7 @@
 <div class="p-4">
   <div class="row">
     <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
           name="Vendor"
           [value]="computeResource.vendor ? computeResource.vendor : ''"
@@ -12,7 +12,7 @@
     </div>
 
     <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
           name="Technology"
           [value]="computeResource.technology"
@@ -23,7 +23,7 @@
     </div>
 
     <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-select-input
           name="Quantum computation model"
           [value]="computeResource.quantumComputationModel"
@@ -37,7 +37,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-compute-resource-property-list
           (addProperty)="addComputeResourceProperty($event)"
           (updateProperty)="updateComputeResourceProperty($event)"

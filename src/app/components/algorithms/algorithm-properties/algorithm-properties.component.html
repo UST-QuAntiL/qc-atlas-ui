@@ -1,7 +1,7 @@
 <div class="p-4">
   <div class="row">
     <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Name"
                         [value]="frontendAlgorithm.name"
                         [baseValue]="algorithm.name"
@@ -12,7 +12,7 @@
     </div>
 
     <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Acronym"
                         [value]="frontendAlgorithm.acronym"
                         [baseValue]="algorithm.acronym"
@@ -25,7 +25,7 @@
 
   <div class="row" *ngIf="algorithm.computationModel !== 'CLASSIC' && frontendAlgorithm.computationModel !== 'CLASSIC'">
     <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-select-input name="Quantum computation model"
                           [value]="algorithm.quantumComputationModel"
                           [choices]="availableQuantumComputationModelOptions"
@@ -36,7 +36,7 @@
     </div>
 
     <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Speedup"
                         [value]="frontendAlgorithm.speedUp"
                         [baseValue]="algorithm.speedUp"
@@ -46,7 +46,7 @@
     </div>
 
     <div class="col-xl-4 col-lg-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-checkbox-input name="NISQ ready"
                             [value]="frontendAlgorithm.nisqReady"
                             [baseValue]="algorithm.nisqReady"
@@ -59,7 +59,7 @@
 
   <div class="row">
     <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-problem-type-tree #problemTypeTree
                                [title]='"Problem types"'
                                [treeData]="problemTypeTreeData"
@@ -73,7 +73,7 @@
     </div>
 
     <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-chip-collection [title]="'Application areas'"
                              [elements]="linkedApplicationAreas"
                              [displayVariable]="'name'"
@@ -88,7 +88,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Intent"
                         [value]="frontendAlgorithm.intent"
                         [baseValue]="algorithm.intent"
@@ -103,7 +103,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Problem"
                         [value]="frontendAlgorithm.problem"
                         [baseValue]="algorithm.problem"
@@ -118,7 +118,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Solution"
                         [value]="frontendAlgorithm.solution"
                         [baseValue]="algorithm.solution"
@@ -132,7 +132,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Input format"
                         [value]="frontendAlgorithm.inputFormat"
                         [baseValue]="algorithm.inputFormat"
@@ -146,7 +146,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Parameters"
                         [value]="frontendAlgorithm.algoParameter"
                         [baseValue]="algorithm.inputFormat"
@@ -160,7 +160,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Output format"
                         [value]="frontendAlgorithm.outputFormat"
                         [baseValue]="algorithm.outputFormat"
@@ -174,7 +174,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Assumptions"
                         [value]="frontendAlgorithm.assumptions"
                         [baseValue]="algorithm.assumptions"
@@ -188,7 +188,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-compute-resource-property-list (addProperty)="addComputeResourceProperty($event)"
                                             (updateProperty)="updateComputeResourceProperty($event)"
                                             (deleteProperty)="deleteComputeResourceProperty($event)"

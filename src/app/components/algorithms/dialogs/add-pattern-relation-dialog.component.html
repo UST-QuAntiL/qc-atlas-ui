@@ -14,6 +14,7 @@
       <div class="content-list">
         <ng-container *ngFor="let language of filteredPatternLanguages">
           <mat-card
+            appearance="outlined"
             [class]="{'content-selected': (selectedPatternLanguage && language.id === selectedPatternLanguage.id)}"
             class="content"
             (click)="onLanguageClick(language)">
@@ -51,7 +52,7 @@
       </mat-form-field>
       <div class="content-list">
         <ng-container *ngFor="let pattern of filteredPatterns">
-          <mat-card [class]="{'content-selected': (selectedPattern && pattern.id === selectedPattern.id)}"
+          <mat-card appearance="outlined" [class]="{'content-selected': (selectedPattern && pattern.id === selectedPattern.id)}"
                     class="content"
                     (click)="onPatternClick(pattern)">
             <div class="d-block h-100">

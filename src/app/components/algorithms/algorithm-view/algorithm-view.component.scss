@@ -8,11 +8,12 @@
 
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
   background-color: transparent;
 }
 
-.mat-button {
+.mat-mdc-button {
   background: #e0e0e0;
   border: none;
 }

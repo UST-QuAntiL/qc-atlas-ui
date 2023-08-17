@@ -60,19 +60,18 @@
         <br>
         <div *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled" class="center">
             <span class="aligned-with-slider">Short Waiting</span>
+            <!-- TODO: The 'tickInterval' property no longer exists -->
             <mat-slider
                     color="primary"
                     formControlName="queueImportanceRatio"
                     class="lift-slider"
                     thumbLabel
                     [displayWith]="formatLabel"
-                    tickInterval="10"
                     step="10"
                     min="0"
                     max="100"
                     aria-label="units"
-                    (change)="setQueueImportanceRatio($event)"
-            >
+             #ngSlider><input matSliderThumb (change)="setQueueImportanceRatio({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" />
             </mat-slider>
             <span class="aligned-with-slider">Precise Results</span>
         </div>

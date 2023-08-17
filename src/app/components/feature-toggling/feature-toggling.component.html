@@ -5,7 +5,7 @@
 
 </div>
 <div class="p-4">
-<mat-card class="m-2">
+<mat-card appearance="outlined" class="m-2">
     <div class="mx-3 mb-2">
         <input type="checkbox" [(ngModel)]="config.features.nisqAnalyzer" id="nisqAnalyzer" name="nisqAnalyzer"
                [checked]="config.features.nisqAnalyzer" (change)="toggleFeature(UiFeatures.NISQ_ANALYZER, $event)">

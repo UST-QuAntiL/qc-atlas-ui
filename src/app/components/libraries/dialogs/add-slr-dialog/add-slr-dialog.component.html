@@ -1,12 +1,12 @@
 <h1 mat-dialog-title>{{this.data.title}}</h1>
 <div mat-dialog-content>
   <form [formGroup]="studyForm">
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
       <mat-form-field class="input-field">
         <input id="title" formControlName="title" placeholder="Title" matInput required>
       </mat-form-field>
     </mat-card>
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
       <div formArrayName="authors">
         <mat-label>Authors:</mat-label>
         <div *ngFor="let author of authors().controls; let authorIndex=index">
@@ -24,7 +24,7 @@
         </div>
       </div>
     </mat-card>
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
       <div formArrayName="researchQuestions">
         <mat-label>Research questions:</mat-label>
         <div *ngFor="let rq of researchQuestions().controls; let rqIndex=index">
@@ -44,7 +44,7 @@
         </div>
       </div>
     </mat-card>
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
       <div formArrayName="queries">
         <mat-label>Queries:</mat-label>
         <div *ngFor="let query of queries().controls; let queryIndex=index">
@@ -62,7 +62,7 @@
         </div>
       </div>
     </mat-card>
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
       <div formArrayName="databases">
         <mat-label>Databases:</mat-label>
         <div *ngFor="let db_controls of databases().controls; let dbIndex=index">

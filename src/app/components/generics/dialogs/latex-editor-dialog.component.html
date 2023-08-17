@@ -1,12 +1,12 @@
 <mat-dialog-content class="dialog-container">
   <h1 mat-dialog-title id="title">{{ data.title }}</h1>
-  <mat-card class="card-container">
+  <mat-card appearance="outlined" class="card-container">
     <div>Default LaTeX packages:</div>
     <div *ngFor="let defaultPackage of defaultLatexPackages">
       <mat-label style="font-weight: bold;">{{ defaultPackage }}</mat-label>
     </div>
   </mat-card>
-  <mat-card class="card-container">
+  <mat-card appearance="outlined" class="card-container">
     <mat-form-field class="content-container">
       <mat-label class="input-label">Additional LaTeX packages</mat-label>
       <textarea
@@ -21,7 +21,7 @@
       ></textarea>
     </mat-form-field>
   </mat-card>
-  <mat-card class="card-container">
+  <mat-card appearance="outlined" class="card-container">
     <mat-form-field class="content-container">
       <mat-label class="input-label">LaTeX content</mat-label>
       <textarea
@@ -36,7 +36,7 @@
       ></textarea>
     </mat-form-field>
   </mat-card>
-  <mat-card class="card-container">
+  <mat-card appearance="outlined" class="card-container">
     <mat-label class="input-label">Rendered result</mat-label>
     <img
       *ngIf="urlToRenderedBlob"
@@ -44,7 +44,7 @@
       style="display: block;"
     />
   </mat-card>
-  <mat-card class="card-container">
+  <mat-card appearance="outlined" class="card-container">
     <button
       color="red"
       outline="true"

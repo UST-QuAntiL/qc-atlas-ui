@@ -6,7 +6,7 @@
   <mat-spinner></mat-spinner>
 </div>
 <div *ngIf="nisqImpl">
-  <mat-card class="m-4">
+  <mat-card appearance="outlined" class="m-4">
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <app-text-input
@@ -76,7 +76,7 @@
   </div>
   <div *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
     <div *ngFor="let param of nisqImpl.inputParameters.parameters; let i = index">
-      <mat-card class="m-4">
+      <mat-card appearance="outlined" class="m-4">
         <div class="row">
           <div class="col-md-1 col-sm-2 col-2 text-center align-self-center">
             <mat-checkbox
@@ -135,7 +135,7 @@
   <div class="header-container" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
     <h4>Prolog Rules</h4>
   </div>
-  <mat-card class="m-4" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
+  <mat-card appearance="outlined" class="m-4" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
     <div class="row">
       <div class="col-12">
         <app-prolog-input

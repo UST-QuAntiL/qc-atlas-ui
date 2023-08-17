@@ -1,7 +1,7 @@
 <div class="p-4">
   <div class="row">
     <div class="col-lg-4 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="Title"
                         [value]="publication.title"
                         (onChange)="onPropertyChanged($event, 'title')"
@@ -9,7 +9,7 @@
       </mat-card>
     </div>
     <div class="col-lg-4 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="DOI"
                         [value]="publication.doi"
                         (onChange)="onPropertyChanged($event, 'doi')"
@@ -18,7 +18,7 @@
     </div>
 
     <div class="col-lg-4 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input name="URL"
                         [value]="publication.url"
                         [isLink]=true
@@ -30,7 +30,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-chip-collection [title]="'Authors'"
                              [elements]="publication.authors"
                              [allowEmpty]=false
