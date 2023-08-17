@@ -24,7 +24,7 @@
         Publications
       </a>
       <a mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.show()"
+         (click)="literatureComponentsCollapse.toggle(); executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide();"
          [routerLink]="'./libraries'" routerLinkActive="routerLinkActive">
         Libraries
         <mat-icon
@@ -36,7 +36,7 @@
           <span class="pl-3">Systematic Literature Review</span>
         </a>
       </div>
-      <a (click)="executionEnvironmentCollapseContent.show(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
+      <a (click)="executionEnvironmentCollapseContent.toggle(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
          mat-list-item
          [routerLink]="'./execution-environments/search'"
          routerLinkActive="routerLinkActive">
@@ -59,7 +59,7 @@
         </a>
       </div>
       <a mat-list-item
-         (click)="minorComponentsCollapse.show(); executionEnvironmentCollapseContent.hide(); literatureComponentsCollapse.hide()">
+         (click)="minorComponentsCollapse.toggle(); executionEnvironmentCollapseContent.hide(); literatureComponentsCollapse.hide();">
         Manage Components
         <mat-icon
             class="collapse-arrow-icon">{{ minorComponentsCollapse.isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
