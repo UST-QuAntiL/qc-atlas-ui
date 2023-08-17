@@ -23,7 +23,8 @@ import { Criterion } from '../implementation-nisq-analyzer-qpu-selection-priorit
   ],
 })
 export class ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent
-  implements OnInit {
+  implements OnInit
+{
   weightLearningForm: UntypedFormGroup;
   criteriaNamesAndValues: Criterion[] = [];
   inputChanged = false;

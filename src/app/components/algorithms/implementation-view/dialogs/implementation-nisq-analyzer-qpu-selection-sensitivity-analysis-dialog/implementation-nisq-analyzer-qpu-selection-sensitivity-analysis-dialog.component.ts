@@ -21,7 +21,8 @@ import {
   ],
 })
 export class ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent
-  implements OnInit {
+  implements OnInit
+{
   sensitivityAnalysisForm: UntypedFormGroup;
 
   constructor(

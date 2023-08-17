@@ -16,10 +16,12 @@ import { LatexRendererServiceConstants } from '../../../util/latex-renderer-serv
   styleUrls: ['./latex-editor-dialog.component.scss'],
 })
 export class LatexEditorDialogComponent implements OnInit {
+  @ViewChild('autosize') autosize: CdkTextareaAutosize;
   inputText = '';
   latexPackages = '';
   varwidth = 1;
   defaultLatexPackages = [];
+
   urlToRenderedBlob: SafeUrl;
 
   constructor(
@@ -31,8 +33,6 @@ export class LatexEditorDialogComponent implements OnInit {
     private utilService: UtilService,
     private latexRendererServiceConstants: LatexRendererServiceConstants
   ) {}
-
-  @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
   ngOnInit(): void {
     this.defaultLatexPackages =
