@@ -25,7 +25,8 @@ import { Subscription } from 'rxjs';
   ],
 })
 export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
-  implements OnInit {
+  implements OnInit
+{
   @ViewChild('matHorizontalStepper') matHorizontalStepper: MatStepper;
   prioritizationFrom: UntypedFormGroup;
   preferenceForm: UntypedFormGroup;
@@ -40,9 +41,7 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   queueImportanceRatioDialog = 0;
 
   constructor(
-    public dialogRef: MatDialogRef<
-      ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
-    >,
+    public dialogRef: MatDialogRef<ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
     private formBuilder: UntypedFormBuilder,
@@ -79,10 +78,13 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      weightLearningMethod: new UntypedFormControl(this.data.weightLearningMethod, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
+      weightLearningMethod: new UntypedFormControl(
+        this.data.weightLearningMethod,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]
+      ),
       shortWaitingTime: new UntypedFormControl(this.data.shortWaitingTime, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
@@ -94,10 +96,13 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
           Validators.required,
         ]
       ),
-      queueImportanceRatio: new UntypedFormControl(this.data.queueImportanceRatio, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
+      queueImportanceRatio: new UntypedFormControl(
+        this.data.queueImportanceRatio,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]
+      ),
     });
     this.preferenceMcdaMethod.setValue('topsis');
     this.weightLearningMethod.setValue('cobyla');
@@ -128,7 +133,8 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
   setWeightLearningMethodPredefinedPreferences(
     selectedWeightLearningMethod: string
   ): void {
-    this.weightLearningMethodPredefinedPreferences = selectedWeightLearningMethod;
+    this.weightLearningMethodPredefinedPreferences =
+      selectedWeightLearningMethod;
   }
 
   resetPredefinedPreferences(): boolean {
@@ -185,10 +191,13 @@ export class ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent
                 } else {
                   this.data.mcdaMethod = this.mcdaMethod.value;
                 }
-                this.data.weightLearningMethod = this.weightLearningMethod.value;
+                this.data.weightLearningMethod =
+                  this.weightLearningMethod.value;
                 this.data.shortWaitingTime = this.shortWaitingTime.value;
-                this.data.stableExecutionResults = this.stableExecutionResults.value;
-                this.data.queueImportanceRatio = this.queueImportanceRatioDialog;
+                this.data.stableExecutionResults =
+                  this.stableExecutionResults.value;
+                this.data.queueImportanceRatio =
+                  this.queueImportanceRatioDialog;
                 this.criteriaNamesAndValues.forEach((criterionVal) => {
                   if (
                     this.shortWaitingTime.value &&

@@ -4,7 +4,11 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { BibEntryDto } from 'api-library/models/bib-entry-dto';
 
 @Component({

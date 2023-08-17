@@ -13,9 +13,8 @@ export interface BreadcrumbLink {
 })
 export class NavigationBreadcrumbComponent implements OnInit {
   @Output() onSaveChanges: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onClickLink: EventEmitter<BreadcrumbLink> = new EventEmitter<
-    BreadcrumbLink
-  >();
+  @Output() onClickLink: EventEmitter<BreadcrumbLink> =
+    new EventEmitter<BreadcrumbLink>();
   @Input() links: BreadcrumbLink[] = [];
   isBeingEdited = false;
 

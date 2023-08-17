@@ -3,14 +3,14 @@ import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { QAIAppService } from 'app/components/qai-apps/qai-apps.service';
 import { QAIAppDto } from 'app/components/qai-apps/qai-app-dto';
-import { AddQAIAppDialogComponent } from '../dialogs/add-qai-app-dialog.component';
-import { UtilService } from "app/util/util.service";
+import { UtilService } from 'app/util/util.service';
+import { PaginatorConfig } from 'app/util/paginatorConfig';
+import { PagingInfo } from 'app/util/PagingInfo';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
 } from '../../generics/dialogs/confirm-dialog.component';
-import { PaginatorConfig } from "app/util/paginatorConfig";
-import { PagingInfo } from "app/util/PagingInfo";
+import { AddQAIAppDialogComponent } from '../dialogs/add-qai-app-dialog.component';
 
 @Component({
   selector: 'app-qai-app-list',

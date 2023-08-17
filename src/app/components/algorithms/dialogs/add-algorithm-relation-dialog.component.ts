@@ -87,12 +87,11 @@ export class AddAlgorithmRelationDialogComponent implements OnInit {
   }
 
   filterTypes(type: string): void {
-    this.stateGroups[
-      this.stateGroups.length - 1
-    ].algorithmRelationTypes = this.algorithmRelationTypes.filter(
-      (filterType) =>
-        filterType.name.toLowerCase().indexOf(type.toLowerCase()) === 0
-    );
+    this.stateGroups[this.stateGroups.length - 1].algorithmRelationTypes =
+      this.algorithmRelationTypes.filter(
+        (filterType) =>
+          filterType.name.toLowerCase().indexOf(type.toLowerCase()) === 0
+      );
   }
 
   generateRelationType(type): AlgorithmRelationTypeDto {

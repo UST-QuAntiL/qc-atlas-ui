@@ -23,6 +23,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import { AppRoutingModule } from '../../app-routing.module';
 import { TextInputComponent } from './property-input/text-input.component';
 import { SelectInputComponent } from './property-input/select-input.component';
@@ -36,8 +38,6 @@ import { PrologValidator } from './prolog.validator';
 import { TagsComponent } from './tags/tags.component';
 import { TagsDialogComponent } from './tags/dialog/tags-dialog.component';
 import { LatexEditorDialogComponent } from './dialogs/latex-editor-dialog.component';
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { TextFieldModule } from "@angular/cdk/text-field";
 
 @NgModule({
   declarations: [

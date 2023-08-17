@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from "@angular/core";
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import {
   MAT_DIALOG_DATA,
@@ -6,9 +6,9 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { RenderLatexControllerService } from 'api-latex/services/render-latex-controller.service';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { UtilService } from '../../../util/util.service';
 import { LatexRendererServiceConstants } from '../../../util/latex-renderer-service-constants';
-import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 
 @Component({
   selector: 'app-latex-editor-dialog',
@@ -35,11 +35,13 @@ export class LatexEditorDialogComponent implements OnInit {
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
   ngOnInit(): void {
-    this.defaultLatexPackages = this.latexRendererServiceConstants.getDefaultLatexPackages();
+    this.defaultLatexPackages =
+      this.latexRendererServiceConstants.getDefaultLatexPackages();
     if (this.data.packedLatexValue) {
-      const inputData = this.latexRendererServiceConstants.unpackTextAndPackages(
-        this.data.packedLatexValue
-      );
+      const inputData =
+        this.latexRendererServiceConstants.unpackTextAndPackages(
+          this.data.packedLatexValue
+        );
       this.inputText = inputData.latexContent;
       this.latexPackages = inputData.latexPackages;
       this.varwidth = inputData.varwidth;

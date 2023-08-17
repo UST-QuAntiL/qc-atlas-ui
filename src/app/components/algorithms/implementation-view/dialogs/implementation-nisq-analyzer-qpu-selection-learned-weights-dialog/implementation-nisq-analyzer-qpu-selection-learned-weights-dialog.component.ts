@@ -1,5 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AbstractControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -25,9 +29,7 @@ export class ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent
   inputChanged = false;
 
   constructor(
-    public dialogRef: MatDialogRef<
-      ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent
-    >,
+    public dialogRef: MatDialogRef<ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
     private formBuilder: UntypedFormBuilder,

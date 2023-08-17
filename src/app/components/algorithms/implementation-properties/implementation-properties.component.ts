@@ -13,22 +13,21 @@ export class ImplementationPropertiesComponent implements OnInit {
   @Input() frontendImplementation: ImplementationDto;
   @Input()
   computeResourceProperties: ComputeResourcePropertyDto[] = [];
-  @Output() addComputeResourceProperty: EventEmitter<
-    ComputeResourcePropertyDto
-  > = new EventEmitter<ComputeResourcePropertyDto>();
-  @Output() deleteComputeResourceProperty: EventEmitter<
-    ComputeResourcePropertyDto
-  > = new EventEmitter<ComputeResourcePropertyDto>();
-  @Output() updateComputeResourceProperty: EventEmitter<
-    ComputeResourcePropertyDto
-  > = new EventEmitter<ComputeResourcePropertyDto>();
+  @Output()
+  addComputeResourceProperty: EventEmitter<ComputeResourcePropertyDto> =
+    new EventEmitter<ComputeResourcePropertyDto>();
+  @Output()
+  deleteComputeResourceProperty: EventEmitter<ComputeResourcePropertyDto> =
+    new EventEmitter<ComputeResourcePropertyDto>();
+  @Output()
+  updateComputeResourceProperty: EventEmitter<ComputeResourcePropertyDto> =
+    new EventEmitter<ComputeResourcePropertyDto>();
   @Output() updateImplementationField: EventEmitter<{
     field;
     value;
   }> = new EventEmitter<{ field; value }>();
-  @Output() onRevisionClicked: EventEmitter<RevisionDto> = new EventEmitter<
-    RevisionDto
-  >();
+  @Output() onRevisionClicked: EventEmitter<RevisionDto> =
+    new EventEmitter<RevisionDto>();
 
   constructor() {}
 

@@ -136,14 +136,15 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
         1000,
         700
       );
-      const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
-        (search: QueryParams) => {
-          this.getAllSoftwarePlatforms(search).subscribe((updatedData) => {
-            this.updateLinkDialogData(updatedData);
-            dialogRef.componentInstance.data.linkObject = this.linkObject;
-          });
-        }
-      );
+      const searchTextSub =
+        dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+          (search: QueryParams) => {
+            this.getAllSoftwarePlatforms(search).subscribe((updatedData) => {
+              this.updateLinkDialogData(updatedData);
+              dialogRef.componentInstance.data.linkObject = this.linkObject;
+            });
+          }
+        );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
         (page: QueryParams) => {
           this.getAllSoftwarePlatforms(page).subscribe((pageData) => {
@@ -152,12 +153,13 @@ export class ComputeResourceSoftwarePlatformListComponent implements OnInit {
           });
         }
       );
-      const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
-        (element: SoftwarePlatformDto) => {
-          this.routeToSoftwarePlatform(element);
-          dialogRef.close();
-        }
-      );
+      const elementClickedSub =
+        dialogRef.componentInstance.onElementClicked.subscribe(
+          (element: SoftwarePlatformDto) => {
+            this.routeToSoftwarePlatform(element);
+            dialogRef.close();
+          }
+        );
 
       dialogRef.afterClosed().subscribe((dialogResult) => {
         searchTextSub.unsubscribe();

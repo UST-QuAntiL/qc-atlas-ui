@@ -16,9 +16,7 @@ export class AddOrEditAlgorithmRelationTypeDialogComponent implements OnInit {
   algorithmRelationTypeFormGroup: UntypedFormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<
-      AddOrEditAlgorithmRelationTypeDialogComponent
-    >,
+    public dialogRef: MatDialogRef<AddOrEditAlgorithmRelationTypeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
 

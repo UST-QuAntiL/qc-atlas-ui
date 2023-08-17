@@ -25,9 +25,7 @@ export class ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComp
   sensitivityAnalysisForm: UntypedFormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<
-      ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent
-    >,
+    public dialogRef: MatDialogRef<ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog
   ) {}

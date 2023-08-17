@@ -48,7 +48,9 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   selectedType: ComputeResourcePropertyTypeDto = null;
 
   get typeName(): string {
-    return (this.formGroup.controls.typeName as UntypedFormControl).value.toString();
+    return (
+      this.formGroup.controls.typeName as UntypedFormControl
+    ).value.toString();
   }
 
   set typeName(name: string) {
@@ -56,7 +58,9 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   }
 
   get typeDescription(): string {
-    return (this.formGroup.controls.typeDesc as UntypedFormControl).value.toString();
+    return (
+      this.formGroup.controls.typeDesc as UntypedFormControl
+    ).value.toString();
   }
 
   set typeDescription(desc: string) {
@@ -64,18 +68,22 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   }
 
   get typeDatatype(): 'INTEGER' | 'STRING' | 'FLOAT' {
-    return (this.formGroup.controls
-      .typeDatatype as UntypedFormControl).value.toString();
+    return (
+      this.formGroup.controls.typeDatatype as UntypedFormControl
+    ).value.toString();
   }
 
   set typeDatatype(type: 'INTEGER' | 'STRING' | 'FLOAT') {
-    const datatypeControl = this.formGroup.controls.typeDatatype as UntypedFormControl;
+    const datatypeControl = this.formGroup.controls
+      .typeDatatype as UntypedFormControl;
     datatypeControl.setValue(type);
     datatypeControl.setValidators(null);
   }
 
   get propertyValue(): string {
-    return (this.formGroup.controls.value as UntypedFormControl).value.toString();
+    return (
+      this.formGroup.controls.value as UntypedFormControl
+    ).value.toString();
   }
 
   set propertyValue(value: string) {
@@ -165,8 +173,9 @@ export class EditComputeResourcePropertyDialogComponent implements OnInit {
   }
 
   validateValueInput(): void {
-    this.valueInputInvalid = (this.formGroup.controls
-      .value as UntypedFormControl).invalid;
+    this.valueInputInvalid = (
+      this.formGroup.controls.value as UntypedFormControl
+    ).invalid;
   }
 
   onSubmit(): void {

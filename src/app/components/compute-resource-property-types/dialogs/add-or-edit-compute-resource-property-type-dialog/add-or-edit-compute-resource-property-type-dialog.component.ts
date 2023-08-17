@@ -16,13 +16,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   ],
 })
 export class AddOrEditComputeResourcePropertyTypeDialogComponent
-  implements OnInit {
+  implements OnInit
+{
   computeResourcePropertyTypeFormGroup: UntypedFormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<
-      AddOrEditComputeResourcePropertyTypeDialogComponent
-    >,
+    public dialogRef: MatDialogRef<AddOrEditComputeResourcePropertyTypeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
 
@@ -55,10 +54,13 @@ export class AddOrEditComputeResourcePropertyTypeDialogComponent
         Validators.required,
         Validators.maxLength(255),
       ]),
-      computeResourcePropertyTypeDataType: new UntypedFormControl(this.data.datatype, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
+      computeResourcePropertyTypeDataType: new UntypedFormControl(
+        this.data.datatype,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]
+      ),
       computeResourcePropertyTypeDescription: new UntypedFormControl(
         this.data.description
       ),

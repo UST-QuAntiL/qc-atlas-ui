@@ -22,17 +22,14 @@ export class ComputeResourcePropertyListComponent implements OnInit {
   resourceProperties: ComputeResourcePropertyDto[] = [];
 
   @Output()
-  addProperty: EventEmitter<ComputeResourcePropertyDto> = new EventEmitter<
-    ComputeResourcePropertyDto
-  >();
+  addProperty: EventEmitter<ComputeResourcePropertyDto> =
+    new EventEmitter<ComputeResourcePropertyDto>();
   @Output()
-  deleteProperty: EventEmitter<ComputeResourcePropertyDto> = new EventEmitter<
-    ComputeResourcePropertyDto
-  >();
+  deleteProperty: EventEmitter<ComputeResourcePropertyDto> =
+    new EventEmitter<ComputeResourcePropertyDto>();
   @Output()
-  updateProperty: EventEmitter<ComputeResourcePropertyDto> = new EventEmitter<
-    ComputeResourcePropertyDto
-  >();
+  updateProperty: EventEmitter<ComputeResourcePropertyDto> =
+    new EventEmitter<ComputeResourcePropertyDto>();
 
   hoveredEntry = '';
 

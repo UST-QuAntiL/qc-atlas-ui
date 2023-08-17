@@ -13,7 +13,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { ProviderService } from 'api-qprov/services/provider.service';
-import { UtilService } from "app/util/util.service";
+import { UtilService } from 'app/util/util.service';
 import { NisqAnalyzerService } from '../../../nisq-analyzer/nisq-analyzer.service';
 
 @Component({
@@ -25,7 +25,8 @@ import { NisqAnalyzerService } from '../../../nisq-analyzer/nisq-analyzer.servic
   ],
 })
 export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
-  implements OnInit {
+  implements OnInit
+{
   qpuSelectionFrom: UntypedFormGroup;
   provider?: EntityModelProviderDto;
   ready?: boolean;
@@ -42,9 +43,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   disableDefiningMaximumNumberOfCircuits = false;
 
   constructor(
-    public dialogRef: MatDialogRef<
-      ImplementationNisqAnalyzerQpuSelectionDialogComponent
-    >,
+    public dialogRef: MatDialogRef<ImplementationNisqAnalyzerQpuSelectionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
     private providerService: ProviderService,
@@ -103,18 +102,24 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
           Validators.required,
         ]
       ),
-      predictionAlgorithm: new UntypedFormControl(this.data.predictionAlgorithm, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
+      predictionAlgorithm: new UntypedFormControl(
+        this.data.predictionAlgorithm,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]
+      ),
       metaOptimizer: new UntypedFormControl(this.data.metaOptimizer, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      queueImportanceRatio: new UntypedFormControl(this.data.queueImportanceRatio, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
+      queueImportanceRatio: new UntypedFormControl(
+        this.data.queueImportanceRatio,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]
+      ),
       shortWaitingTime: new UntypedFormControl(this.data.shortWaitingTime, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
@@ -141,7 +146,8 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
       this.data.vendor = this.vendor.value;
       this.data.token = this.token.value;
       this.data.selectedCompilers = this.selectedCompilers;
-      this.data.maxNumberOfCompiledCircuits = this.maxNumberOfCompiledCircuitsDialog;
+      this.data.maxNumberOfCompiledCircuits =
+        this.maxNumberOfCompiledCircuitsDialog;
       this.data.metaOptimizer = this.metaOptimizerInDialog;
       this.data.predictionAlgorithm = this.predictionAlgorithmInDialog;
       this.data.queueImportanceRatio = this.queueImportanceRatioDialog;

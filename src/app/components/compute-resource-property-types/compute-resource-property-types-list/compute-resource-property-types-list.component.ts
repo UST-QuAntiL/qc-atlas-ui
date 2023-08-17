@@ -179,12 +179,13 @@ export class ComputeResourcePropertyTypesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        const updatedComputeResourcePropertyType: ComputeResourcePropertyTypeDto = {
-          id: dialogResult.id,
-          name: dialogResult.name,
-          datatype: dialogResult.datatype,
-          description: dialogResult.description,
-        };
+        const updatedComputeResourcePropertyType: ComputeResourcePropertyTypeDto =
+          {
+            id: dialogResult.id,
+            name: dialogResult.name,
+            datatype: dialogResult.datatype,
+            description: dialogResult.description,
+          };
         this.computeResourcePropertyTypeService
           .updateComputingResourcePropertyType({
             computeResourcePropertyTypeId:
