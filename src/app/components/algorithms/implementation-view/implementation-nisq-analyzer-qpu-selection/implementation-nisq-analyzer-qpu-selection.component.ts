@@ -227,6 +227,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
             circuitUrl: this.nisqImpl.fileLocation,
             tokens: providerTokens,
             refreshToken,
+            compilers: dialogResult.selectedCompilers,
             circuitName: this.nisqImpl.name,
             preciseResultsPreference: dialogResult.stableExecutionResults,
             shortWaitingTimesPreference: dialogResult.shortWaitingTime,
@@ -243,7 +244,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
               allowedProviders: [dialogResult.vendor],
               tokens: providerTokens,
               body: qpuSelectionDto,
-              compilers: dialogResult.selectedCompilers,
             })
             .subscribe((job) => {
               this.analyzerJob = job;

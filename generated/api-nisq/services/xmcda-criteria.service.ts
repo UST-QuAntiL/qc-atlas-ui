@@ -74,9 +74,7 @@ export class XmcdaCriteriaService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getSupportedPrioritizationMethods(params?: {}): Observable<
-    McdaMethodListDto
-  > {
+  getSupportedPrioritizationMethods(params?: {}): Observable<McdaMethodListDto> {
     return this.getSupportedPrioritizationMethods$Response(params).pipe(
       map(
         (r: StrictHttpResponse<McdaMethodListDto>) =>
@@ -690,9 +688,7 @@ export class XmcdaCriteriaService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<
-            CollectionModelEntityModelMcdaSensitivityAnalysisJob
-          >;
+          return r as StrictHttpResponse<CollectionModelEntityModelMcdaSensitivityAnalysisJob>;
         })
       );
   }
@@ -711,9 +707,7 @@ export class XmcdaCriteriaService extends BaseService {
     return this.getSensitivityAnalysisJobs$Response(params).pipe(
       map(
         (
-          r: StrictHttpResponse<
-            CollectionModelEntityModelMcdaSensitivityAnalysisJob
-          >
+          r: StrictHttpResponse<CollectionModelEntityModelMcdaSensitivityAnalysisJob>
         ) => r.body as CollectionModelEntityModelMcdaSensitivityAnalysisJob
       )
     );
