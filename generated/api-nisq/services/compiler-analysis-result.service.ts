@@ -68,9 +68,7 @@ export class CompilerAnalysisResultService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getCompilerAnalysisResults(params?: {}): Observable<
-    CompilerAnalysisResultListDto
-  > {
+  getCompilerAnalysisResults(params?: {}): Observable<CompilerAnalysisResultListDto> {
     return this.getCompilerAnalysisResults$Response(params).pipe(
       map(
         (r: StrictHttpResponse<CompilerAnalysisResultListDto>) =>
