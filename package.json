@@ -43,6 +43,7 @@
     "keycloak-angular": "7.3",
     "keycloak-js": "^10.0.2",
     "ng2-pdf-viewer": "^6.3.2",
+    "npm": "^8.19.4",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

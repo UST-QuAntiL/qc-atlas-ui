@@ -1,95 +1,99 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport
-    [attr.role]="hideNav ? 'dialog' : 'navigation'"
-    [mode]="hideNav ? 'over' : 'side'"
-    [opened]="hideNav === false">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="hideNav ? 'dialog' : 'navigation'"
+    [mode]="hideNav ? 'over' : 'side'" [opened]="hideNav === false">
     <mat-toolbar color="primary">
       <img (click)="goToHome()" src="../assets/logo.png" class="logo-img">
       <span (click)="goToHome()">QC Atlas</span>
     </mat-toolbar>
     <mat-nav-list>
       <a mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         [routerLink]="'./algorithms'" routerLinkActive="routerLinkActive">
+        (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
+        [routerLink]="'./algorithms'" routerLinkActive="routerLinkActive">
         Algorithms
       </a>
       <a mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         [routerLink]="'./qai-apps'" routerLinkActive="routerLinkActive">
+        (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
+        [routerLink]="'./qai-apps'" routerLinkActive="routerLinkActive">
         qAI Apps
       </a>
       <a mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         [routerLink]="'./publications'" routerLinkActive="routerLinkActive">
+        (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
+        [routerLink]="'./qunicorn-service'" routerLinkActive="routerLinkActive">
+        Qunicorn Service
+      </a>
+      <a mat-list-item
+        (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
+        [routerLink]="'./publications'" routerLinkActive="routerLinkActive">
         Publications
       </a>
       <a mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.show()"
-         [routerLink]="'./libraries'" routerLinkActive="routerLinkActive">
+        (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.show()"
+        [routerLink]="'./libraries'" routerLinkActive="routerLinkActive">
         Libraries
-        <mat-icon
-            class="collapse-arrow-icon">{{ literatureComponentsCollapse.isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
+        <mat-icon class="collapse-arrow-icon">{{ literatureComponentsCollapse.isCollapsed ? 'keyboard_arrow_down' :
+          'keyboard_arrow_up' }}</mat-icon>
       </a>
       <div mat-list-item mdbCollapse #literatureComponentsCollapse="bs-collapse">
-        <a class="sub-tab" mat-list-item [routerLink]="'./slr'"
-           routerLinkActive="routerLinkActive">
+        <a class="sub-tab" mat-list-item [routerLink]="'./slr'" routerLinkActive="routerLinkActive">
           <span class="pl-3">Systematic Literature Review</span>
         </a>
       </div>
       <a (click)="executionEnvironmentCollapseContent.show(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         mat-list-item
-         [routerLink]="'./execution-environments/search'"
-         routerLinkActive="routerLinkActive">
+        mat-list-item [routerLink]="'./execution-environments/search'" routerLinkActive="routerLinkActive">
         Execution Environments
-        <mat-icon
-            class="collapse-arrow-icon">{{ executionEnvironmentCollapseContent.isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
+        <mat-icon class="collapse-arrow-icon">{{ executionEnvironmentCollapseContent.isCollapsed ? 'keyboard_arrow_down'
+          : 'keyboard_arrow_up' }}</mat-icon>
       </a>
       <div mat-list-item mdbCollapse #executionEnvironmentCollapseContent="bs-collapse">
         <a class="sub-tab" mat-list-item [routerLink]="'./execution-environments/software-platforms'"
-           routerLinkActive="routerLinkActive">
+          routerLinkActive="routerLinkActive">
           <span class="pl-3">Software Platforms</span>
         </a>
         <a class="sub-tab" mat-list-item [routerLink]="'./execution-environments/cloud-services'"
-           routerLinkActive="routerLinkActive">
+          routerLinkActive="routerLinkActive">
           <span class="pl-3">Cloud Services</span>
         </a>
         <a class="sub-tab" mat-list-item [routerLink]="'./execution-environments/compute-resources'"
-           routerLinkActive="routerLinkActive">
+          routerLinkActive="routerLinkActive">
           <span class="pl-3">Compute Resources</span>
+        </a>
+        <a class="sub-tab" mat-list-item [routerLink]="'./execution-environments/compute-resources'"
+          routerLinkActive="routerLinkActive">
+          <span class="pl-3">Compute Resources</span>
+        </a>
+        <a class="sub-tab" mat-list-item [href]="'http://localhost:5005/'" target="_blank">
+          <span class="pl-3">Qunicorn</span>
         </a>
       </div>
       <a mat-list-item
-         (click)="minorComponentsCollapse.show(); executionEnvironmentCollapseContent.hide(); literatureComponentsCollapse.hide()">
+        (click)="minorComponentsCollapse.show(); executionEnvironmentCollapseContent.hide(); literatureComponentsCollapse.hide()">
         Manage Components
-        <mat-icon
-            class="collapse-arrow-icon">{{ minorComponentsCollapse.isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
+        <mat-icon class="collapse-arrow-icon">{{ minorComponentsCollapse.isCollapsed ? 'keyboard_arrow_down' :
+          'keyboard_arrow_up' }}</mat-icon>
       </a>
       <div mat-list-item mdbCollapse #minorComponentsCollapse="bs-collapse">
-        <a class="sub-tab" mat-list-item [routerLink]="'./problem-types'"
-           routerLinkActive="routerLinkActive">
+        <a class="sub-tab" mat-list-item [routerLink]="'./problem-types'" routerLinkActive="routerLinkActive">
           <span class="pl-3">Problem Types</span>
         </a>
-        <a class="sub-tab" mat-list-item [routerLink]="'./application-areas'"
-           routerLinkActive="routerLinkActive">
+        <a class="sub-tab" mat-list-item [routerLink]="'./application-areas'" routerLinkActive="routerLinkActive">
           <span class="pl-3">Application Areas</span>
         </a>
         <a class="sub-tab" mat-list-item [routerLink]="'./algorithm-relation-types'"
-           routerLinkActive="routerLinkActive">
+          routerLinkActive="routerLinkActive">
           <span class="pl-3">Algorithm Relation Types</span>
         </a>
-        <a *ngIf="configData.configuration.features.patternAtlas" class="sub-tab" mat-list-item [routerLink]="'./pattern-relation-types'"
-           routerLinkActive="routerLinkActive">
+        <a *ngIf="configData.configuration.features.patternAtlas" class="sub-tab" mat-list-item
+          [routerLink]="'./pattern-relation-types'" routerLinkActive="routerLinkActive">
           <span class="pl-3" *ngIf="configData.configuration.features.patternAtlas">Pattern Relation Types</span>
         </a>
         <a class="sub-tab" mat-list-item [routerLink]="'./compute-resource-property-types'"
-           routerLinkActive="routerLinkActive">
+          routerLinkActive="routerLinkActive">
           <span class="pl-3">Compute Resource Property Types</span>
         </a>
       </div>
-      <a *ngIf="configData.configuration.features.showSettings"
-         mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         [routerLink]="'./feature-toggling'" routerLinkActive="routerLinkActive">
+      <a *ngIf="configData.configuration.features.showSettings" mat-list-item
+        (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
+        [routerLink]="'./feature-toggling'" routerLinkActive="routerLinkActive">
         Settings
       </a>
     </mat-nav-list>
@@ -97,22 +101,11 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <button
-                class="settings-button"
-                mat-icon-button
-                type="Login"
-                color="accent"
-                (click)="login()"
-        >
+        <button class="settings-button" mat-icon-button type="Login" color="accent" (click)="login()">
           <mat-icon *ngIf="!bearerTokenSet">account_box</mat-icon>
           <mat-icon *ngIf="bearerTokenSet">logout</mat-icon>
         </button>
-        <button
-          type="button"
-          aria-label="Toggle sidenav"
-          class="menu-button"
-          mat-icon-button
-          (click)="drawer.toggle()"
+        <button type="button" aria-label="Toggle sidenav" class="menu-button" mat-icon-button (click)="drawer.toggle()"
           *ngIf="hideNav">
           <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
         </button>
@@ -120,4 +113,5 @@
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
+
 </mat-sidenav-container>

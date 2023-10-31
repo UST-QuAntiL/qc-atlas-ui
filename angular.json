@@ -137,5 +137,8 @@
         }
       }
     }},
-  "defaultProject": "qc-atlas-ui"
+  "defaultProject": "qc-atlas-ui",
+  "cli": {
+    "analytics": false
+  }
 }

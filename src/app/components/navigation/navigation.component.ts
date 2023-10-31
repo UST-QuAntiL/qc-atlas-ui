@@ -13,6 +13,7 @@ import {
 } from '../../directives/qc-atlas-ui-repository-configuration.service';
 import { UtilService } from '../../util/util.service';
 import { PlanqkPlatformLoginService } from '../../services/planqk-platform-login.service';
+import { OnDemandComponent } from '../on-demand-execution/ondemand.component';
 
 @Component({
   selector: 'app-navigation',
@@ -33,7 +34,7 @@ export class NavigationComponent implements OnInit {
     private config: ApiConfiguration,
     private utilService: UtilService,
     private planqkPlatformLoginService: PlanqkPlatformLoginService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.breakpointObserver
@@ -61,7 +62,7 @@ export class NavigationComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  onSettings(): void {}
+  onSettings(): void { }
 
   login(): void {
     if (!this.bearerTokenSet) {

@@ -75,6 +75,10 @@ import { SlrViewComponent } from './components/libraries/slr-view/slr-view.compo
 import { AddSlrDialogComponent } from './components/libraries/dialogs/add-slr-dialog/add-slr-dialog.component';
 import { SlrPropertiesComponent } from './components/libraries/slr-properties/slr-properties.component';
 import { LibraryTableComponent } from './components/libraries/library-table/library-table.component';
+import { OnDemandComponent } from './components/on-demand-execution/ondemand.component';
+import { QunicornAppComponent } from './components/qunicorn-service/qunicorn-view/qunicorn-service.component';
+import { QunicornAppModule } from './components/qunicorn-service/qunicorn.apps.module';
+
 
 @NgModule({
   declarations: [
@@ -104,6 +108,7 @@ import { LibraryTableComponent } from './components/libraries/library-table/libr
     AddSlrDialogComponent,
     SlrPropertiesComponent,
     LibraryTableComponent,
+    OnDemandComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -143,6 +148,7 @@ import { LibraryTableComponent } from './components/libraries/library-table/libr
     NavigationBreadcrumbModule,
     AlgorithmModule,
     QAIAppModule,
+    QunicornAppModule,
     PublicationModule,
     ImplementationViewModule,
     GenericsModule,
@@ -176,4 +182,4 @@ import { LibraryTableComponent } from './components/libraries/library-table/libr
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

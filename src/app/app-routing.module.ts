@@ -26,6 +26,7 @@ import { QAIAppListComponent } from './components/qai-apps/qai-apps-list/qai-app
 import { QAIAppViewComponent } from './components/qai-apps/qai-app-view/qai-app-view.component';
 import { LibraryViewComponent } from './components/libraries/library-view/library-view.component';
 import { SlrViewComponent } from './components/libraries/slr-view/slr-view.component';
+import { QunicornAppComponent } from './components/qunicorn-service/qunicorn-view/qunicorn-service.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -42,6 +43,10 @@ const routes: Routes = [
   {
     path: 'qai-apps',
     component: QAIAppListComponent,
+  },
+  {
+    path: 'qunicorn-service',
+    component: QunicornAppComponent,
   },
   {
     path: 'qai-apps/:qaiAppId',
@@ -120,4 +125,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [ChangePageGuard],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

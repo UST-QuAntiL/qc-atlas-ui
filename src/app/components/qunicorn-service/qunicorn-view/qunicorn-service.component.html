@@ -1,0 +1,37 @@
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+
+    <!-- Qunicorn Picture-->
+    <div>
+      <img class="image" src="../../../../assets/qunicorn_quadratic_png.png" alt="Qunicorn Service" />
+    </div>
+
+    <button (click)="getJobs()">Get Jobs</button>
+    <div class="response-frame">
+      <pre>{{ response }}</pre>
+    </div>
+
+    <button (click)="submitDeployment()">Submit Definitions</button>
+    <div class="response-frame">
+      <pre>{{ deploymentResponse }}</pre>
+    </div>
+
+    <button (click)="getDeployments()">Get Deployments</button>
+    <div class="response-frame">
+      <pre>{{ getDeploymentResponse }}</pre>
+    </div>
+
+    <button (click)="invokeJob()">Invoke Job</button>
+    <div class="response-frame">
+      <pre>{{ jobResponse }}</pre>
+    </div>
+
+    <button (click)="getResults()">Get Results</button>
+    <div class="response-frame">
+      <pre>{{ result }}</pre>
+    </div>
+
+    <!-- <app-ondemand></app-ondemand> -->
+
+  </div>
+</mat-card>
