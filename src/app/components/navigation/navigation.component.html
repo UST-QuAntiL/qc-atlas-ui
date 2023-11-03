@@ -10,19 +10,6 @@
     <mat-nav-list>
       <a mat-list-item
          (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         [routerLink]="'./patterns'" routerLinkActive="routerLinkActive">
-         Patterns
-      </a>
-      <!-- local maschine Winery Link-->
-      <a mat-list-item [href]="'http://localhost:8080/#/servicetemplates'" target="_blank">
-        Winery
-      </a>
-      <!-- Documentation Link-->
-      <a mat-list-item [href]="'https://aldekal.de/bloqcat-framework/'" target="_blank">
-        Documentation
-      </a>
-      <a mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
          [routerLink]="'./algorithms'" routerLinkActive="routerLinkActive">
          Algorithms
       </a>
@@ -104,6 +91,22 @@
          (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
          [routerLink]="'./feature-toggling'" routerLinkActive="routerLinkActive">
         Settings
+      </a>
+      <!-- local maschine Winery Link-->
+      <a mat-list-item [href]="'http://localhost:8080/#/servicetemplates'" target="_blank">
+        Patterns
+      </a>
+      <!-- local maschine Winery Link-->
+      <a mat-list-item [href]="'http://localhost:1978'" target="_blank">
+        Pattern Atlas
+      </a>
+      <!-- local maschine Winery Link-->
+      <a mat-list-item [href]="'http://localhost:8080/#/servicetemplates'" target="_blank">
+        Winery
+      </a>
+      <!-- Documentation Link-->
+      <a mat-list-item [href]="'https://aldekal.de/bloqcat-framework/'" target="_blank">
+        Documentation
       </a>
     </mat-nav-list>
   </mat-sidenav>
