@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AlgorithmDto } from 'api-atlas/models/algorithm-dto';
 import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { ApplicationAreaDto } from 'api-atlas/models/application-area-dto';
 import { ApplicationAreasService } from 'api-atlas/services/application-areas.service';
 import { ProblemTypeService } from 'api-atlas/services/problem-type.service';
@@ -10,6 +10,7 @@ import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { TagDto } from 'api-atlas/models/tag-dto';
 import { RevisionDto } from 'api-atlas/models/revision-dto';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
@@ -43,7 +44,9 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
-  private routeSub: Subscription;
+  private dataSubscription: Subscription;
+
+  private configuredApiUrl: string;
 
   constructor(
     private algorithmService: AlgorithmService,
@@ -53,49 +56,61 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     private utilService: UtilService,
     private config: ApiConfiguration,
     public guard: ChangePageGuard,
-    private planqkPlatformLoginService: PlanqkPlatformLoginService,
+    private planqkPlatformLoginService: PlanqkPlatformLoginService
   ) {}
 
   ngOnInit(): void {
-	this.planqkPlatformLoginService
+    this.dataSubscription = this.planqkPlatformLoginService
       .isLoggedIn()
-      .subscribe((loggedIn: boolean) => {
-		if (loggedIn) {
-          this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
-        } else {
-        }
-		this.loadAlgorithm();
-      });
+      .pipe(
+        mergeMap((loggedIn) => {
+          if (loggedIn) {
+            // Try planqk
+            this.configuredApiUrl = this.config.rootUrl;
+            this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
+          }
+          return this.loadAlgorithm();
+        }),
+        catchError((err) => {
+          // Not available on PlanQK: Try on qc-atlas api
+          this.config.rootUrl = this.configuredApiUrl;
+          return this.loadAlgorithm();
+        }),
+        catchError((err) => {
+          this.utilService.callSnackBar(
+            'Error! Algorithm could not be retrieved.'
+          );
+          return of();
+        })
+      )
+      .subscribe();
   }
-  
-  loadAlgorithm() {
-	  this.routeSub = this.route.params.subscribe(({ algoId }) => {
-		  this.algorithmService.getAlgorithm({ algorithmId: algoId }).subscribe(
-			(algo: AlgorithmDto) => {
-			  this.algorithm = algo;
-			  this.frontendAlgorithm = JSON.parse(
-				JSON.stringify(algo)
-			  ) as AlgorithmDto;
-			  let subheading = this.algorithm.computationModel
-				.toString()
-				.toLowerCase();
-			  subheading = subheading[0].toUpperCase() + subheading.slice(1);
-			  this.links[0] = {
-				heading: this.createBreadcrumbHeader(this.algorithm),
-				subHeading: subheading + ' Algorithm',
-			  };
-			  this.getApplicationAreasForAlgorithm(algoId);
-			  this.getProblemTypesForAlgorithm(algoId);
-			  this.getTagsForAlgorithm(algoId);
-			  this.fetchRevisions();
-			},
-			() => {
-			  this.utilService.callSnackBar(
-				'Error! Algorithm could not be retrieved.'
-			  );
-			}
-		  );
-		});
+
+  loadAlgorithm(): Observable<void> {
+    return this.route.params.pipe(
+      mergeMap(({ algoId }) =>
+        this.algorithmService.getAlgorithm({ algorithmId: algoId })
+      ),
+      map((algo: AlgorithmDto) => {
+        const algoId = algo.id;
+        this.algorithm = algo;
+        this.frontendAlgorithm = JSON.parse(
+          JSON.stringify(algo)
+        ) as AlgorithmDto;
+        let subheading = this.algorithm.computationModel
+          .toString()
+          .toLowerCase();
+        subheading = subheading[0].toUpperCase() + subheading.slice(1);
+        this.links[0] = {
+          heading: this.createBreadcrumbHeader(this.algorithm),
+          subHeading: subheading + ' Algorithm',
+        };
+        this.getApplicationAreasForAlgorithm(algoId);
+        this.getProblemTypesForAlgorithm(algoId);
+        this.getTagsForAlgorithm(algoId);
+        this.fetchRevisions();
+      })
+    );
   }
 
   changeTab(tabNumber: number): void {
@@ -105,8 +120,9 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
       this.generalTab = false;
     }
   }
+
   ngOnDestroy(): void {
-    this.routeSub.unsubscribe();
+    this.dataSubscription?.unsubscribe();
   }
 
   saveAlgorithm(
