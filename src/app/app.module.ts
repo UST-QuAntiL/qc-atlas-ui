@@ -162,7 +162,7 @@ import { LibraryTableComponent } from './components/libraries/library-table/libr
   bootstrap: [AppComponent],
   providers: [
     UtilService,
-    //ChangePageGuard,
+    ChangePageGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

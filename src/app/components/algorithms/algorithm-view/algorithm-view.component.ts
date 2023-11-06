@@ -71,12 +71,12 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
           }
           return this.loadAlgorithm();
         }),
-        catchError((err) => {
+        catchError(() => {
           // Not available on PlanQK: Try on qc-atlas api
           this.config.rootUrl = this.configuredApiUrl;
           return this.loadAlgorithm();
         }),
-        catchError((err) => {
+        catchError(() => {
           this.utilService.callSnackBar(
             'Error! Algorithm could not be retrieved.'
           );

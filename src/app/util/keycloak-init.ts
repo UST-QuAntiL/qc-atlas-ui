@@ -11,11 +11,11 @@ export const initializeKeycloak = (keycloak: KeycloakService) => (): Promise<
         clientId: 'planqk-login',
       },
       initOptions: {
-	    onLoad: 'check-sso',
+        onLoad: 'check-sso',
         checkLoginIframe: false,
-		enableLogging: true,
+        enableLogging: true,
       },
       enableBearerInterceptor: false,
-	  loadUserProfileAtStartUp: true,
+      loadUserProfileAtStartUp: true,
     })
     .then((retValue) => retValue);
