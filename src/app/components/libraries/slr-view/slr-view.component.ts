@@ -35,7 +35,7 @@ export class SlrViewComponent implements OnInit {
   @Output() elementClicked = new EventEmitter<any>();
   @Output() updateClicked = new EventEmitter<any>();
   @ViewChild(LibraryTableComponent)
-  private libraryTable!: LibraryTableComponent;
+  libraryTable!: LibraryTableComponent;
   slr: string;
   slrs$: string[];
   study: Study;

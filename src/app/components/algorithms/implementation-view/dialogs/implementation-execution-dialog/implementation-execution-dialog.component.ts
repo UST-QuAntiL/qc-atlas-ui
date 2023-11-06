@@ -6,8 +6,8 @@ import {
 } from '@angular/material/dialog';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { ProviderService } from 'api-qprov/services/provider.service';
@@ -19,7 +19,7 @@ import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-d
   styleUrls: ['./implementation-execution-dialog.component.scss'],
 })
 export class ImplementationExecutionDialogComponent implements OnInit {
-  implementationExecutionForm: FormGroup;
+  implementationExecutionForm: UntypedFormGroup;
   provider?: EntityModelProviderDto;
   ready?: boolean;
   qpuArray: string[];
@@ -45,17 +45,17 @@ export class ImplementationExecutionDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.implementationExecutionForm = new FormGroup({
-      vendor: new FormControl(this.data.vendor, [
+    this.implementationExecutionForm = new UntypedFormGroup({
+      vendor: new UntypedFormControl(this.data.vendor, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      qpu: new FormControl(this.data.qpu, [
+      qpu: new UntypedFormControl(this.data.qpu, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
       ]),
-      token: new FormControl(this.data.token),
+      token: new UntypedFormControl(this.data.token),
     });
 
     this.vendor.setValue('IBMQ');

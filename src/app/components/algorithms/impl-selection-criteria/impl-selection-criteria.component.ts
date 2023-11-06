@@ -17,13 +17,13 @@ import {
   SdksService,
 } from 'api-nisq/services';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
-import { ExecutionEnvironmentsService } from 'generated/api-atlas/services/execution-environments.service';
-import { ChangePageGuard } from '../../../services/deactivation-guard';
-import { parsePrologRule, PrologRule } from '../../../util/MinimalPrologParser';
+import { ExecutionEnvironmentsService } from 'api-atlas/services/execution-environments.service';
+import { ChangePageGuard } from 'app/services/deactivation-guard';
+import { parsePrologRule, PrologRule } from 'app/util/MinimalPrologParser';
+import { UiFeatures } from 'app/directives/qc-atlas-ui-repository-configuration.service';
+import { PlanqkPlatformService } from 'app/services/planqk-platform.service';
+import { UtilService } from 'app/util/util.service';
 import { Option } from '../../generics/property-input/select-input.component';
-import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
-import { PlanqkPlatformService } from '../../../services/planqk-platform.service';
-import { UtilService } from '../../../util/util.service';
 import { CreateSoftwarePlatformDialogComponent } from '../../execution-environments/software-platforms/dialogs/create-software-platform-dialog.component';
 
 @Component({
@@ -103,9 +103,10 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
   }
 
   deleteMany(): void {
-    this.nisqImpl.inputParameters.parameters = this.nisqImpl.inputParameters.parameters.filter(
-      (_, index) => !this.selection.isSelected(index)
-    );
+    this.nisqImpl.inputParameters.parameters =
+      this.nisqImpl.inputParameters.parameters.filter(
+        (_, index) => !this.selection.isSelected(index)
+      );
     this.selection.clear();
   }
 
@@ -141,12 +142,11 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
     );
 
     // Build chained observables. Deleting needs to come first so re-creating them later will succeed.
-    const allRemovedParams$ = this.nisqImplementationService.deleteInputParameters(
-      {
+    const allRemovedParams$ =
+      this.nisqImplementationService.deleteInputParameters({
         implId: this.nisqImpl.id,
         body: removedParams.map((param) => param.name),
-      }
-    );
+      });
     const allAddedParams$ = allRemovedParams$.pipe(
       switchMap(() =>
         forkJoin(

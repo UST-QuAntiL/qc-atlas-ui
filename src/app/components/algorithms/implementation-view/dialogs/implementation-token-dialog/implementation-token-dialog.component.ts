@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import {
@@ -17,7 +17,7 @@ import {
   styleUrls: ['./implementation-token-dialog.component.scss'],
 })
 export class ImplementationTokenDialogComponent implements OnInit {
-  implementationExecutionForm: FormGroup;
+  implementationExecutionForm: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<ImplementationTokenDialogComponent>,
@@ -30,8 +30,8 @@ export class ImplementationTokenDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.implementationExecutionForm = new FormGroup({
-      token: new FormControl(this.data.token),
+    this.implementationExecutionForm = new UntypedFormGroup({
+      token: new UntypedFormControl(this.data.token),
     });
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.token = this.token.value;

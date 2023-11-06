@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import {
@@ -17,7 +17,7 @@ import {
   styleUrls: ['./create-software-platform-dialog.component.scss'],
 })
 export class CreateSoftwarePlatformDialogComponent implements OnInit {
-  softwarePlatformForm: FormGroup;
+  softwarePlatformForm: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<CreateSoftwarePlatformDialogComponent>,
@@ -34,8 +34,8 @@ export class CreateSoftwarePlatformDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.softwarePlatformForm = new FormGroup({
-      name: new FormControl(this.data.name, [
+    this.softwarePlatformForm = new UntypedFormGroup({
+      name: new UntypedFormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),

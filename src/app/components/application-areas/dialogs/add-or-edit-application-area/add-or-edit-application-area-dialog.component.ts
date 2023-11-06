@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -15,7 +15,7 @@ import { ApplicationAreaDto } from 'api-atlas/models/application-area-dto';
   styleUrls: ['./add-or-edit-application-area-dialog.component.scss'],
 })
 export class AddOrEditApplicationAreaDialogComponent implements OnInit {
-  applicationAreaFormGroup: FormGroup;
+  applicationAreaFormGroup: UntypedFormGroup;
   existingApplicationAreas: ApplicationAreaDto[];
 
   constructor(
@@ -33,8 +33,8 @@ export class AddOrEditApplicationAreaDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.applicationAreaFormGroup = new FormGroup({
-      applicationAreaName: new FormControl(this.data.name, [
+    this.applicationAreaFormGroup = new UntypedFormGroup({
+      applicationAreaName: new UntypedFormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),

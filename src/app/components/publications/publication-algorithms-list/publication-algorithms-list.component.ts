@@ -131,14 +131,15 @@ export class PublicationAlgorithmsListComponent implements OnInit {
         1000,
         700
       );
-      const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
-        (search: QueryParams) => {
-          this.getAllAlgorithms(search).subscribe((updatedData) => {
-            this.updateLinkDialogData(updatedData);
-            dialogRef.componentInstance.data.linkObject = this.linkObject;
-          });
-        }
-      );
+      const searchTextSub =
+        dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+          (search: QueryParams) => {
+            this.getAllAlgorithms(search).subscribe((updatedData) => {
+              this.updateLinkDialogData(updatedData);
+              dialogRef.componentInstance.data.linkObject = this.linkObject;
+            });
+          }
+        );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
         (page: QueryParams) => {
           this.getAllAlgorithms(page).subscribe((pageData) => {
@@ -147,12 +148,13 @@ export class PublicationAlgorithmsListComponent implements OnInit {
           });
         }
       );
-      const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
-        (element: AlgorithmDto) => {
-          this.routeToAlgorithm(element);
-          dialogRef.close();
-        }
-      );
+      const elementClickedSub =
+        dialogRef.componentInstance.onElementClicked.subscribe(
+          (element: AlgorithmDto) => {
+            this.routeToAlgorithm(element);
+            dialogRef.close();
+          }
+        );
 
       dialogRef.afterClosed().subscribe((dialogResult) => {
         searchTextSub.unsubscribe();

@@ -24,7 +24,8 @@ export class ChangePageGuard
       | CloudServiceViewComponent
       | ComputeResourceViewComponent
       | SoftwarePlatformViewComponent
-    > {
+    >
+{
   savedChanges = false;
   constructor(private _router: Router, private utilService: UtilService) {}
 

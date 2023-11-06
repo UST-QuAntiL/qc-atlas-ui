@@ -17,9 +17,8 @@ export class ChipCollectionComponent implements OnInit {
   @Output() onLinkElement: EventEmitter<any> = new EventEmitter<any>();
   @Output() onElementsChanged: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSaveChanges: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onSearchTextChanged: EventEmitter<string> = new EventEmitter<
-    string
-  >();
+  @Output() onSearchTextChanged: EventEmitter<string> =
+    new EventEmitter<string>();
   @Input() title = '';
   @Input() elements: any[] = [];
   @Input() displayVariable = '';

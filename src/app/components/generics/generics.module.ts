@@ -23,6 +23,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import { AppRoutingModule } from '../../app-routing.module';
 import { TextInputComponent } from './property-input/text-input.component';
 import { SelectInputComponent } from './property-input/select-input.component';
@@ -78,6 +80,8 @@ import { LatexEditorDialogComponent } from './dialogs/latex-editor-dialog.compon
     MatTooltipModule,
     PdfViewerModule,
     MatSlideToggleModule,
+    MatFormFieldModule,
+    TextFieldModule,
   ],
   exports: [
     TextInputComponent,

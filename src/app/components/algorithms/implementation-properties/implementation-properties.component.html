@@ -1,7 +1,7 @@
 <div class="p-4">
   <div class="row">
     <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
           name="Name"
           (onChange)="onPropertyChanged($event,'name')"
@@ -13,7 +13,7 @@
     </div>
 
     <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
           name="Contributors"
           (onChange)="onPropertyChanged($event,'contributors')"
@@ -27,7 +27,7 @@
 
   <div class="row">
     <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
           name="Version"
           (onChange)="onPropertyChanged($event,'version')"
@@ -39,7 +39,7 @@
     </div>
 
     <div class="col-lg-6 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
           name="License"
           (onChange)="onPropertyChanged($event,'license')"
@@ -53,7 +53,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
                 name="Dependencies"
                 (onChange)="onPropertyChanged($event,'dependencies')"
@@ -69,7 +69,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
                 name="Description"
                 (onChange)="onPropertyChanged($event,'description')"
@@ -85,7 +85,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
                 name="Input Format"
                 (onChange)="onPropertyChanged($event,'inputFormat')"
@@ -101,7 +101,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
                 name="Parameter"
                 (onChange)="onPropertyChanged($event,'parameter')"
@@ -117,7 +117,7 @@
 
   <div class="row">
     <div class="col-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-text-input
                 name="Output Format"
                 (onChange)="onPropertyChanged($event,'outputFormat')"
@@ -133,7 +133,7 @@
 
   <div class="row">
     <div class="col-lg-12 col-sm-12">
-      <mat-card class="m-2">
+      <mat-card appearance="outlined" class="m-2">
         <app-compute-resource-property-list (addProperty)="onAddComputeResourceProperty($event)"
                                             (updateProperty)="onUpdateComputeResourceProperty($event)"
                                             (deleteProperty)="onDeleteComputeResourceProperty($event)"

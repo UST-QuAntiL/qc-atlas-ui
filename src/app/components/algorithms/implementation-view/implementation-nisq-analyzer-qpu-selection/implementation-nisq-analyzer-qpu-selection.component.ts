@@ -14,7 +14,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
 import { exhaustMap, first, map, startWith, switchMap } from 'rxjs/operators';
@@ -33,14 +33,14 @@ import {
   QpuSelectionResultDto,
 } from 'api-nisq/models';
 import { HttpClient } from '@angular/common/http';
-import { PlanqkPlatformLoginService } from 'src/app/services/planqk-platform-login.service';
+import { PlanqkPlatformLoginService } from 'app/services/planqk-platform-login.service';
 import { EntityModelQpuDto } from 'api-qprov/models/entity-model-qpu-dto';
 import { ProviderService } from 'api-qprov/services/provider.service';
 import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
 import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { UtilService } from '../../../../util/util.service';
-import { ChangePageGuard } from '../../../../services/deactivation-guard';
+import { UtilService } from 'app/util/util.service';
+import { ChangePageGuard } from 'app/services/deactivation-guard';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionDialogComponent } from '../dialogs/implementation-nisq-analyzer-qpu-selection-dialog/implementation-nisq-analyzer-qpu-selection-dialog.component';
 import { NisqAnalyzerService } from '../../nisq-analyzer/nisq-analyzer.service';
@@ -71,7 +71,8 @@ import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } f
   ],
 })
 export class ImplementationNisqAnalyzerQpuSelectionComponent
-  implements OnInit, AfterViewInit {
+  implements OnInit, AfterViewInit
+{
   @Input() algo: AlgorithmDto;
   @Input() impl: ImplementationDto;
   @Input() guard: ChangePageGuard;
@@ -151,7 +152,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
   constructor(
     private utilService: UtilService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private implementationService: ImplementationService,
     private qpuSelectionService: QpuSelectionResultService,
     private nisqAnalyzerRootService: RootService,

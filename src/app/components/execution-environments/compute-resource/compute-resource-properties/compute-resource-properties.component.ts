@@ -92,9 +92,10 @@ export class ComputeResourcePropertiesComponent implements OnInit {
           this.utilService.callSnackBar(
             'Compute resource property was successfully deleted.'
           );
-          this.computeResourceProperties = this.computeResourceProperties.filter(
-            (elem: ComputeResourcePropertyDto) => elem.id !== property.id
-          );
+          this.computeResourceProperties =
+            this.computeResourceProperties.filter(
+              (elem: ComputeResourcePropertyDto) => elem.id !== property.id
+            );
           this.fetchComputeResourceProperties();
         },
         () => {

@@ -5,29 +5,23 @@ import { FieldUpdate } from '../util/FieldUpdate';
   providedIn: 'root',
 })
 export class UpdateFieldEventService {
-  updateAlgorithmFieldChannel: EventEmitter<FieldUpdate> = new EventEmitter<
-    FieldUpdate
-  >();
+  updateAlgorithmFieldChannel: EventEmitter<FieldUpdate> =
+    new EventEmitter<FieldUpdate>();
 
-  updateImplementationFieldChannel: EventEmitter<
-    FieldUpdate
-  > = new EventEmitter<FieldUpdate>();
+  updateImplementationFieldChannel: EventEmitter<FieldUpdate> =
+    new EventEmitter<FieldUpdate>();
 
-  updatePublicationFieldChannel: EventEmitter<FieldUpdate> = new EventEmitter<
-    FieldUpdate
-  >();
+  updatePublicationFieldChannel: EventEmitter<FieldUpdate> =
+    new EventEmitter<FieldUpdate>();
 
-  updateSoftwarePlatformFieldChannel: EventEmitter<
-    FieldUpdate
-  > = new EventEmitter<FieldUpdate>();
+  updateSoftwarePlatformFieldChannel: EventEmitter<FieldUpdate> =
+    new EventEmitter<FieldUpdate>();
 
-  updateCloudServiceFieldChannel: EventEmitter<FieldUpdate> = new EventEmitter<
-    FieldUpdate
-  >();
+  updateCloudServiceFieldChannel: EventEmitter<FieldUpdate> =
+    new EventEmitter<FieldUpdate>();
 
-  updateComputeResourceFieldChannel: EventEmitter<
-    FieldUpdate
-  > = new EventEmitter<FieldUpdate>();
+  updateComputeResourceFieldChannel: EventEmitter<FieldUpdate> =
+    new EventEmitter<FieldUpdate>();
 
   constructor() {}
 }

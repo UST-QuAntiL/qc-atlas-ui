@@ -35,18 +35,14 @@ import { UtilService } from '../../../util/util.service';
   styleUrls: ['./algorithm-properties.component.scss'],
 })
 export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
-  @Output() addApplicationArea: EventEmitter<
-    ApplicationAreaDto
-  > = new EventEmitter<ApplicationAreaDto>();
-  @Output() removeApplicationArea: EventEmitter<
-    ApplicationAreaDto
-  > = new EventEmitter<ApplicationAreaDto>();
-  @Output() onAddProblemType: EventEmitter<ProblemTypeDto> = new EventEmitter<
-    ProblemTypeDto
-  >();
-  @Output() onRemoveProblemType: EventEmitter<
-    ProblemTypeDto
-  > = new EventEmitter<ProblemTypeDto>();
+  @Output() addApplicationArea: EventEmitter<ApplicationAreaDto> =
+    new EventEmitter<ApplicationAreaDto>();
+  @Output() removeApplicationArea: EventEmitter<ApplicationAreaDto> =
+    new EventEmitter<ApplicationAreaDto>();
+  @Output() onAddProblemType: EventEmitter<ProblemTypeDto> =
+    new EventEmitter<ProblemTypeDto>();
+  @Output() onRemoveProblemType: EventEmitter<ProblemTypeDto> =
+    new EventEmitter<ProblemTypeDto>();
   @Output() updateAlgorithmField: EventEmitter<{
     field;
     value;
@@ -69,7 +65,8 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
   };
 
   availableSketchOptions: Option[] = sketchOptions;
-  availableQuantumComputationModelOptions: Option[] = quantumComputationModelOptions;
+  availableQuantumComputationModelOptions: Option[] =
+    quantumComputationModelOptions;
 
   computeResourceProperties: ComputeResourcePropertyDto[] = [];
 
@@ -313,9 +310,10 @@ export class AlgorithmPropertiesComponent implements OnInit, OnChanges {
           this.utilService.callSnackBar(
             'Compute resource property was successfully deleted.'
           );
-          this.computeResourceProperties = this.computeResourceProperties.filter(
-            (elem: ComputeResourcePropertyDto) => elem.id !== property.id
-          );
+          this.computeResourceProperties =
+            this.computeResourceProperties.filter(
+              (elem: ComputeResourcePropertyDto) => elem.id !== property.id
+            );
           this.fetchComputeResourceProperties();
         },
         () => {

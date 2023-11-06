@@ -1,18 +1,19 @@
+@use '@angular/material' as mat;
 @import "theme";
 
 .step-button:enabled {
   border-width: 2px;
-  border-color: mat-color($qc-atlas-ui-primary);
-  color: mat-color($qc-atlas-ui-primary);
+  border-color: mat.get-color-from-palette($qc-atlas-ui-primary);
+  color: mat.get-color-from-palette($qc-atlas-ui-primary);
   font-weight: bold;
 }
 
 .step-button:enabled mat-icon {
-  color: mat-color($qc-atlas-ui-primary);
+  color: mat.get-color-from-palette($qc-atlas-ui-primary);
 }
 
 .step-button:hover {
-  background-color: mat-color($qc-atlas-ui-primary);
+  background-color: mat.get-color-from-palette($qc-atlas-ui-primary);
   color: white;
   font-weight: bold;
 }
@@ -47,16 +48,16 @@
 }
 
 .content:hover {
-  box-shadow: 0 0 10px mat-color($qc-atlas-ui-primary);
+  box-shadow: 0 0 10px mat.get-color-from-palette($qc-atlas-ui-primary);
   cursor: pointer;
 }
 
 .content-selected {
-  box-shadow: 0 0 10px mat-color($qc-atlas-ui-primary) inset !important;
+  box-shadow: 0 0 10px mat.get-color-from-palette($qc-atlas-ui-primary) inset !important;
 }
 
 .url-icon:hover {
-  color: mat-color($qc-atlas-ui-primary);
+  color: mat.get-color-from-palette($qc-atlas-ui-primary);
   transform: scale(1.05);
 }
 

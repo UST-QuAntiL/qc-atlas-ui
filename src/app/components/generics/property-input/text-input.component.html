@@ -27,9 +27,10 @@
       [pattern]="pattern"
       (ngModelChange)="inputChanged()"
       [disabled]="toggleLatex"
-      [matAutosizeMaxRows]="maxLines"
-      [matAutosizeMinRows]="1"
-      [matTextareaAutosize]="true"
+      cdkAutosizeMaxRows="maxLines"
+      cdkAutosizeMinRows="1"
+      cdkTextareaAutosize
+      #autosize="cdkTextareaAutosize"
       matInput
       [readonly] = "!uiConfig.features.enableEditing"
     ></textarea>

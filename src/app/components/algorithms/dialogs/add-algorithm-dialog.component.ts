@@ -6,8 +6,8 @@ import {
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 
@@ -16,7 +16,7 @@ import {
   templateUrl: 'add-algorithm-dialog.html',
 })
 export class AddAlgorithmDialogComponent implements OnInit {
-  algorithmForm: FormGroup;
+  algorithmForm: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<AddAlgorithmDialogComponent>,
@@ -39,17 +39,17 @@ export class AddAlgorithmDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.algorithmForm = new FormGroup({
-      name: new FormControl(this.data.name, [
+    this.algorithmForm = new UntypedFormGroup({
+      name: new UntypedFormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
       ]),
-      computationModel: new FormControl(this.data.computationModel, [
+      computationModel: new UntypedFormControl(this.data.computationModel, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
       ]),
-      quantumComputationModel: new FormControl(
+      quantumComputationModel: new UntypedFormControl(
         this.data.quantumComputationModel,
         [
           // eslint-disable-next-line @typescript-eslint/unbound-method

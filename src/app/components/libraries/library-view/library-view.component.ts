@@ -29,7 +29,7 @@ export class LibraryViewComponent implements OnInit, AfterViewInit {
   @Input() addIcon = 'playlist_add';
   @Input() emptyTableMessage = 'No elements found';
   @ViewChild(LibraryTableComponent)
-  private libraryTable!: LibraryTableComponent;
+  libraryTable!: LibraryTableComponent;
   selection = new SelectionModel<any>(true, []);
   libraries$: string[];
   library: string;

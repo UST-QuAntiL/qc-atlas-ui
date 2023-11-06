@@ -8,7 +8,7 @@
                 mat-button
                 matSuffix
                 mat-icon-button
-                aria-label="Clear" 
+                aria-label="Clear"
                 [disabled]="!uiConfig.features.enableEditing">
           <mat-icon>add</mat-icon>
         </button>
@@ -29,17 +29,17 @@
       </app-link-input>
     </div>
   </div>
-  <mat-chip-list *ngIf="!useToAddLinks">
-    <mat-chip *ngFor="let element of inputElements" [removable]="allowEmpty || (!allowEmpty && inputElements.length > 1)" (removed)="removeElement(element)">
+  <mat-chip-listbox *ngIf="!useToAddLinks">
+    <mat-chip-option *ngFor="let element of inputElements" [removable]="allowEmpty || (!allowEmpty && inputElements.length > 1)" (removed)="removeElement(element)">
       {{ displayVariable ? element[displayVariable] : element }}
       <mat-icon *ngIf="allowEmpty || (!allowEmpty && inputElements.length > 1)" matChipRemove>cancel</mat-icon>
-    </mat-chip>
-  </mat-chip-list>
+    </mat-chip-option>
+  </mat-chip-listbox>
   <!-- Check if this duplicate code can be avoided -->
-  <mat-chip-list *ngIf="useToAddLinks">
-    <mat-chip *ngFor="let element of elements" [removable]="uiConfig.features.enableEditing && (allowEmpty || (!allowEmpty && elements.length > 1))" (removed)="removeElement(element)">
+  <mat-chip-listbox *ngIf="useToAddLinks">
+    <mat-chip-option *ngFor="let element of elements" [removable]="uiConfig.features.enableEditing && (allowEmpty || (!allowEmpty && elements.length > 1))" (removed)="removeElement(element)">
       {{ displayVariable ? element[displayVariable] : element }}
       <mat-icon *ngIf="allowEmpty || (!allowEmpty && elements.length > 1)" matChipRemove >cancel</mat-icon>
-    </mat-chip>
-  </mat-chip-list>
+    </mat-chip-option>
+  </mat-chip-listbox>
 </div>

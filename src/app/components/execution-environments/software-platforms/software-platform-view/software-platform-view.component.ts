@@ -54,11 +54,12 @@ export class SoftwarePlatformViewComponent implements OnInit {
         );
     });
 
-    this.fieldUpdateSubscription = this.updateFieldService.updateSoftwarePlatformFieldChannel.subscribe(
-      (fieldUpdate: FieldUpdate) => {
-        this.updateSoftwarePlatformField(fieldUpdate);
-      }
-    );
+    this.fieldUpdateSubscription =
+      this.updateFieldService.updateSoftwarePlatformFieldChannel.subscribe(
+        (fieldUpdate: FieldUpdate) => {
+          this.updateSoftwarePlatformField(fieldUpdate);
+        }
+      );
   }
 
   ngOnDestroy(): void {

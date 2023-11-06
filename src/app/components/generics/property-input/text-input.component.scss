@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 @import "theme";
 
 .edit-icon {
@@ -10,12 +11,12 @@
 }
 
 ::ng-deep .url-input {
-  .mat-form-field {
-    .mat-input-element {
+  .mat-mdc-form-field {
+    .mat-mdc-input-element {
       color: dodgerblue;
     }
-    .mat-input-element:hover {
-      color: mat-color($qc-atlas-ui-primary);
+    .mat-mdc-input-element:hover {
+      color: mat.get-color-from-palette($qc-atlas-ui-primary);
       cursor: pointer;
       text-decoration: underline;
     }
@@ -27,7 +28,7 @@ mat-form-field {
   line-height: normal;
 }
 
-textarea.mat-input-element {
+textarea.mat-mdc-input-element {
   padding: 0;
   margin: 0;
 }

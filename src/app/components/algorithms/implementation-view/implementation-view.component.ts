@@ -9,12 +9,12 @@ import { ImplementationDto, TagDto } from 'api-atlas/models';
 import { RevisionDto } from 'api-atlas/models';
 import { ImplementationsService } from 'api-atlas/services/implementations.service';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
+import { UtilService } from 'app/util/util.service';
+import { ChangePageGuard } from 'app/services/deactivation-guard';
+import { UiFeatures } from 'app/directives/qc-atlas-ui-repository-configuration.service';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { Option } from '../../generics/property-input/select-input.component';
-import { UtilService } from '../../../util/util.service';
 import { ConfirmDialogComponent } from '../../generics/dialogs/confirm-dialog.component';
-import { ChangePageGuard } from '../../../services/deactivation-guard';
-import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import {
   ComparedData,
   CompareVersionDialogComponent,
@@ -188,9 +188,11 @@ export class ImplementationViewComponent implements OnInit {
             })
             .subscribe(
               () => {
-                this.computeResourceProperties = this.computeResourceProperties.filter(
-                  (elem: ComputeResourcePropertyDto) => elem.id !== property.id
-                );
+                this.computeResourceProperties =
+                  this.computeResourceProperties.filter(
+                    (elem: ComputeResourcePropertyDto) =>
+                      elem.id !== property.id
+                  );
                 this.fetchComputeResourceProperties();
                 this.utilService.callSnackBar(
                   'Compute resource property was successfully deleted.'

@@ -133,14 +133,15 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
         1000,
         700
       );
-      const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
-        (search: QueryParams) => {
-          this.getAllComputeResources(search).subscribe((updatedData) => {
-            this.updateLinkDialogData(updatedData);
-            dialogRef.componentInstance.data.linkObject = this.linkObject;
-          });
-        }
-      );
+      const searchTextSub =
+        dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+          (search: QueryParams) => {
+            this.getAllComputeResources(search).subscribe((updatedData) => {
+              this.updateLinkDialogData(updatedData);
+              dialogRef.componentInstance.data.linkObject = this.linkObject;
+            });
+          }
+        );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
         (page: QueryParams) => {
           this.getAllComputeResources(page).subscribe((pageData) => {
@@ -149,12 +150,13 @@ export class SoftwarePlatformComputeResourceListComponent implements OnInit {
           });
         }
       );
-      const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
-        (element: ComputeResourceDto) => {
-          this.routeToComputeResource(element);
-          dialogRef.close();
-        }
-      );
+      const elementClickedSub =
+        dialogRef.componentInstance.onElementClicked.subscribe(
+          (element: ComputeResourceDto) => {
+            this.routeToComputeResource(element);
+            dialogRef.close();
+          }
+        );
 
       dialogRef.afterClosed().subscribe((dialogResult) => {
         searchTextSub.unsubscribe();

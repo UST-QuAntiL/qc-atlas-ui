@@ -1,40 +1,40 @@
 <div class="p-4">
 
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
         <mat-card-title>Title</mat-card-title>
         <mat-card-content>{{getProperty('title')}}</mat-card-content>
     </mat-card>
 
 
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
         <mat-card-title>Authors</mat-card-title>
         <div *ngFor="let author of getArrayProperty('authors'); let authorIndex=index">
             <mat-card-content>{{author}}</mat-card-content>
         </div>
     </mat-card>
 
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
         <mat-card-title>Research questions</mat-card-title>
         <div *ngFor="let rq of getArrayProperty('research-questions'); let rqIndex=index">
             <mat-card-content>{{rq}}</mat-card-content>
         </div>
     </mat-card>
 
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
         <mat-card-title>Queries</mat-card-title>
         <div *ngFor="let query of getArrayProperty('queries'); let queryIndex=index">
             <mat-card-content>{{query.query}}</mat-card-content>
         </div>
     </mat-card>
 
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
         <mat-card-title>Databases</mat-card-title>
         <div *ngFor="let db of getArrayProperty('databases'); let dbIndex=index">
             <mat-card-content>{{db.name}}</mat-card-content>
         </div>
     </mat-card>
 
-    <mat-card class="m-2">
+    <mat-card appearance="outlined" class="m-2">
         <mat-card-title>Last search date</mat-card-title>
         <mat-card-content>{{getProperty('last-search-date')}}</mat-card-content>
     </mat-card>

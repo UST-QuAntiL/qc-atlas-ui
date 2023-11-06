@@ -8,7 +8,6 @@ import { NavigationBreadcrumbComponent } from './navigation-breadcrumb.component
 @NgModule({
   declarations: [NavigationBreadcrumbComponent],
   imports: [CommonModule, RouterModule, MatIconModule, MatRippleModule],
-  entryComponents: [],
   exports: [NavigationBreadcrumbComponent],
 })
 export class NavigationBreadcrumbModule {}

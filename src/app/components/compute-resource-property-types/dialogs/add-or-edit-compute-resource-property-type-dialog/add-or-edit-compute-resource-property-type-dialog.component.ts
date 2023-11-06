@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -16,13 +16,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   ],
 })
 export class AddOrEditComputeResourcePropertyTypeDialogComponent
-  implements OnInit {
-  computeResourcePropertyTypeFormGroup: FormGroup;
+  implements OnInit
+{
+  computeResourcePropertyTypeFormGroup: UntypedFormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<
-      AddOrEditComputeResourcePropertyTypeDialogComponent
-    >,
+    public dialogRef: MatDialogRef<AddOrEditComputeResourcePropertyTypeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
 
@@ -49,17 +48,20 @@ export class AddOrEditComputeResourcePropertyTypeDialogComponent
   }
 
   ngOnInit(): void {
-    this.computeResourcePropertyTypeFormGroup = new FormGroup({
-      computeResourcePropertyTypeName: new FormControl(this.data.name, [
+    this.computeResourcePropertyTypeFormGroup = new UntypedFormGroup({
+      computeResourcePropertyTypeName: new UntypedFormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
       ]),
-      computeResourcePropertyTypeDataType: new FormControl(this.data.datatype, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
-      computeResourcePropertyTypeDescription: new FormControl(
+      computeResourcePropertyTypeDataType: new UntypedFormControl(
+        this.data.datatype,
+        [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]
+      ),
+      computeResourcePropertyTypeDescription: new UntypedFormControl(
         this.data.description
       ),
     });

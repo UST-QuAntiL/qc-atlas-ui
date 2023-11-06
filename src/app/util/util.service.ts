@@ -9,6 +9,8 @@ import { map } from 'rxjs/operators';
 import { MissingEntityDialogComponent } from '../components/dialogs/missing-entity-dialog.component';
 import { LatexRendererServiceConstants } from './latex-renderer-service-constants';
 
+type BlobPart = BufferSource | Blob | string;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -156,9 +158,8 @@ export class UtilService {
   }
 
   public getUnpackedLatexText(packedData: string): string {
-    const data = this.latexRendererServiceConstants.unpackTextAndPackages(
-      packedData
-    );
+    const data =
+      this.latexRendererServiceConstants.unpackTextAndPackages(packedData);
     return data.latexContent;
   }
 
@@ -182,7 +183,8 @@ export class UtilService {
     additionalPackages: string,
     varwidth: number
   ): Observable<string> {
-    const packages = this.latexRendererServiceConstants.getDefaultLatexPackages();
+    const packages =
+      this.latexRendererServiceConstants.getDefaultLatexPackages();
     if (additionalPackages) {
       for (const additionalPackage of this.latexRendererServiceConstants.formatLatexPackagesToArray(
         additionalPackages
@@ -193,9 +195,8 @@ export class UtilService {
       }
     }
     const latexBody: LatexContent = {
-      content: this.latexRendererServiceConstants.formatLatexContent(
-        latexContent
-      ),
+      content:
+        this.latexRendererServiceConstants.formatLatexContent(latexContent),
       latexPackages: packages,
       varwidth,
       output: this.latexRendererServiceConstants.getDefaultRenderOutput(),
@@ -204,7 +205,10 @@ export class UtilService {
       map((response) => {
         if (response) {
           const latexBlob = response;
-          return URL.createObjectURL(latexBlob);
+          let blobs: BlobPart[];
+          latexBlob.forEach((value) => blobs.push(value));
+          const blob: Blob = new Blob(blobs);
+          return URL.createObjectURL(blob);
         }
       })
     );

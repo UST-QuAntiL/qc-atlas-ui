@@ -11,13 +11,13 @@ import {
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
-import { ProblemTypeDto } from 'generated/api-atlas/models/problem-type-dto';
-import { LinkObject } from '../../generics/data-list/data-list.component';
+import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import {
   QcAtlasUiConfiguration,
   QcAtlasUiRepositoryConfigurationService,
   UiFeatures,
-} from '../../../directives/qc-atlas-ui-repository-configuration.service';
+} from 'app/directives/qc-atlas-ui-repository-configuration.service';
+import { LinkObject } from '../../generics/data-list/data-list.component';
 
 export class TreeNode {
   problemType: ProblemTypeDto;
@@ -32,18 +32,14 @@ export class TreeNode {
   styleUrls: ['./problem-type-tree.component.scss'],
 })
 export class ProblemTypeTreeComponent implements OnInit, OnChanges {
-  @Output() onAddElement: EventEmitter<ProblemTypeDto> = new EventEmitter<
-    ProblemTypeDto
-  >();
-  @Output() onRemoveElement: EventEmitter<ProblemTypeDto> = new EventEmitter<
-    ProblemTypeDto
-  >();
-  @Output() onExpandParents: EventEmitter<ProblemTypeDto> = new EventEmitter<
-    ProblemTypeDto
-  >();
-  @Output() onSearchTextChanged: EventEmitter<string> = new EventEmitter<
-    string
-  >();
+  @Output() onAddElement: EventEmitter<ProblemTypeDto> =
+    new EventEmitter<ProblemTypeDto>();
+  @Output() onRemoveElement: EventEmitter<ProblemTypeDto> =
+    new EventEmitter<ProblemTypeDto>();
+  @Output() onExpandParents: EventEmitter<ProblemTypeDto> =
+    new EventEmitter<ProblemTypeDto>();
+  @Output() onSearchTextChanged: EventEmitter<string> =
+    new EventEmitter<string>();
 
   @Input() title = '';
   @Input() treeData: TreeNode[];
@@ -55,12 +51,10 @@ export class ProblemTypeTreeComponent implements OnInit, OnChanges {
 
   uiConfig: QcAtlasUiConfiguration;
 
-  nestedTreeControl: NestedTreeControl<TreeNode> = new NestedTreeControl<
-    TreeNode
-  >((node) => node.parents);
-  nestedDataSource: MatTreeNestedDataSource<
-    TreeNode
-  > = new MatTreeNestedDataSource<TreeNode>();
+  nestedTreeControl: NestedTreeControl<TreeNode> =
+    new NestedTreeControl<TreeNode>((node) => node.parents);
+  nestedDataSource: MatTreeNestedDataSource<TreeNode> =
+    new MatTreeNestedDataSource<TreeNode>();
   dataChange: BehaviorSubject<TreeNode[]> = new BehaviorSubject<TreeNode[]>([]);
 
   constructor(private configService: QcAtlasUiRepositoryConfigurationService) {}

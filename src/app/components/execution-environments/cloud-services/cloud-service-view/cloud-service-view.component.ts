@@ -53,11 +53,12 @@ export class CloudServiceViewComponent implements OnInit {
         );
     });
 
-    this.fieldUpdateSubscription = this.updateFieldService.updateCloudServiceFieldChannel.subscribe(
-      (fieldUpdate: FieldUpdate) => {
-        this.updateCloudServiceField(fieldUpdate);
-      }
-    );
+    this.fieldUpdateSubscription =
+      this.updateFieldService.updateCloudServiceFieldChannel.subscribe(
+        (fieldUpdate: FieldUpdate) => {
+          this.updateCloudServiceField(fieldUpdate);
+        }
+      );
   }
 
   ngOnDestroy(): void {

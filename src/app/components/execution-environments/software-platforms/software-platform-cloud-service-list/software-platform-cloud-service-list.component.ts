@@ -133,14 +133,15 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
         1000,
         700
       );
-      const searchTextSub = dialogRef.componentInstance.onDataListConfigChanged.subscribe(
-        (search: QueryParams) => {
-          this.getAllCloudServices(search).subscribe((updatedData) => {
-            this.updateLinkDialogData(updatedData);
-            dialogRef.componentInstance.data.linkObject = this.linkObject;
-          });
-        }
-      );
+      const searchTextSub =
+        dialogRef.componentInstance.onDataListConfigChanged.subscribe(
+          (search: QueryParams) => {
+            this.getAllCloudServices(search).subscribe((updatedData) => {
+              this.updateLinkDialogData(updatedData);
+              dialogRef.componentInstance.data.linkObject = this.linkObject;
+            });
+          }
+        );
       const pagingSub = dialogRef.componentInstance.onPageChanged.subscribe(
         (page: QueryParams) => {
           this.getAllCloudServices(page).subscribe((pageData) => {
@@ -149,12 +150,13 @@ export class SoftwarePlatformCloudServiceListComponent implements OnInit {
           });
         }
       );
-      const elementClickedSub = dialogRef.componentInstance.onElementClicked.subscribe(
-        (element: CloudServiceDto) => {
-          this.routeToCloudService(element);
-          dialogRef.close();
-        }
-      );
+      const elementClickedSub =
+        dialogRef.componentInstance.onElementClicked.subscribe(
+          (element: CloudServiceDto) => {
+            this.routeToCloudService(element);
+            dialogRef.close();
+          }
+        );
 
       dialogRef.afterClosed().subscribe((dialogResult) => {
         searchTextSub.unsubscribe();

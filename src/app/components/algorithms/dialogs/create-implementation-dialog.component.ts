@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import {
@@ -17,7 +17,7 @@ import {
   styleUrls: ['./create-implementation-dialog.component.scss'],
 })
 export class CreateImplementationDialogComponent implements OnInit {
-  implementationForm: FormGroup;
+  implementationForm: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<CreateImplementationDialogComponent>,
@@ -34,8 +34,8 @@ export class CreateImplementationDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.implementationForm = new FormGroup({
-      name: new FormControl(this.data.name, [
+    this.implementationForm = new UntypedFormGroup({
+      name: new UntypedFormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),

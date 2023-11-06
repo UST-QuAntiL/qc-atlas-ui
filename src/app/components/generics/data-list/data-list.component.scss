@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 @import "theme";
 
 .table-select {
@@ -34,7 +35,7 @@
 }
 
 .config-button:hover {
-  background-color: mat-color($qc-atlas-ui-primary) !important;
+  background-color: mat.get-color-from-palette($qc-atlas-ui-primary) !important;
 }
 
 .center-checkbox {
@@ -53,7 +54,7 @@ mat-grid-list {
 }
 
 .data-header {
-  background-color: mat-color($qc-atlas-ui-primary);
+  background-color: mat.get-color-from-palette($qc-atlas-ui-primary);
   font-weight: bold !important;
   color: white !important;
 }
@@ -63,7 +64,7 @@ mat-grid-list {
 }
 
 .data-element:hover {
-  background-color: mat-color($qc-atlas-ui-accent);
+  background-color: mat.get-color-from-palette($qc-atlas-ui-accent);
   cursor: pointer;
 }
 
@@ -85,11 +86,11 @@ mat-grid-list {
   font-weight: bold !important;
   font-size: 18px !important;
   pointer-events: none !important;
-  color: mat-color($qc-atlas-ui-primary) !important;
+  color: mat.get-color-from-palette($qc-atlas-ui-primary) !important;
 }
 
 .mat-icon.enabled {
-  color: mat-color($qc-atlas-ui-primary);
+  color: mat.get-color-from-palette($qc-atlas-ui-primary);
   transition: all .1s ease-in-out;
   pointer-events: auto !important;
 }
@@ -105,7 +106,7 @@ mat-grid-list {
 }
 
 .page-button:hover {
-  background-color: mat-color($qc-atlas-ui-primary) !important;
+  background-color: mat.get-color-from-palette($qc-atlas-ui-primary) !important;
 }
 
 .no-events {
@@ -162,7 +163,7 @@ a.table-url {
 
 a.table-url:hover {
   text-decoration: underline;
-  color: mat-color($qc-atlas-ui-primary);
+  color: mat.get-color-from-palette($qc-atlas-ui-primary);
   cursor: pointer;
   text-decoration: underline;
 }

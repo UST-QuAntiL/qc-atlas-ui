@@ -54,11 +54,12 @@ export class ComputeResourceViewComponent implements OnInit {
         );
     });
 
-    this.fieldUpdateSubscription = this.updateFieldService.updateComputeResourceFieldChannel.subscribe(
-      (fieldUpdate: FieldUpdate) => {
-        this.updateComputeResourceField(fieldUpdate);
-      }
-    );
+    this.fieldUpdateSubscription =
+      this.updateFieldService.updateComputeResourceFieldChannel.subscribe(
+        (fieldUpdate: FieldUpdate) => {
+          this.updateComputeResourceField(fieldUpdate);
+        }
+      );
   }
 
   ngOnDestroy(): void {

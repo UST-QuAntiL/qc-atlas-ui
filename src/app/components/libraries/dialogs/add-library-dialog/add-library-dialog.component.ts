@@ -6,8 +6,8 @@ import {
 } from '@angular/material/dialog';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 
@@ -16,7 +16,7 @@ import {
   templateUrl: './add-library-dialog.component.html',
 })
 export class AddLibraryDialogComponent implements OnInit {
-  libraryForm: FormGroup;
+  libraryForm: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<AddLibraryDialogComponent>,
@@ -33,8 +33,8 @@ export class AddLibraryDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.libraryForm = new FormGroup({
-      name: new FormControl(this.data.name, [
+    this.libraryForm = new UntypedFormGroup({
+      name: new UntypedFormControl(this.data.name, [
         // eslint-disable-next-line @typescript-eslint/unbound-method
         Validators.required,
         Validators.maxLength(255),
