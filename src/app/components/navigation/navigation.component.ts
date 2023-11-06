@@ -46,6 +46,7 @@ export class NavigationComponent implements OnInit {
       .subscribe((loggedIn: boolean) => {
         if (loggedIn) {
           this.bearerTokenSet = true;
+          this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
           this.utilService.callSnackBar(
             'Successfully logged into the PlanQK platform.'
           );
