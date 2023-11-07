@@ -10,7 +10,7 @@ import { ProblemTypeDto } from 'api-atlas/models/problem-type-dto';
 import { TagDto } from 'api-atlas/models/tag-dto';
 import { RevisionDto } from 'api-atlas/models/revision-dto';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, take } from 'rxjs/operators';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { UtilService } from '../../../util/util.service';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
@@ -44,7 +44,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
-  private dataSubscription: Subscription|null = null;
+  private dataSubscription: Subscription | null = null;
 
   private configuredApiUrl: string;
 
@@ -63,6 +63,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
     this.dataSubscription = this.planqkPlatformLoginService
       .isLoggedIn()
       .pipe(
+        take(1),
         mergeMap((loggedIn) => {
           if (loggedIn) {
             // Try planqk
@@ -83,15 +84,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
           return of();
         })
       )
-      .subscribe();
-  }
-
-  loadAlgorithm(): Observable<void> {
-    return this.route.params.pipe(
-      mergeMap(({ algoId }) =>
-        this.algorithmService.getAlgorithm({ algorithmId: algoId })
-      ),
-      map((algo: AlgorithmDto) => {
+      .subscribe((algo: AlgorithmDto) => {
         const algoId = algo.id;
         this.algorithm = algo;
         this.frontendAlgorithm = JSON.parse(
@@ -109,7 +102,14 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
         this.getProblemTypesForAlgorithm(algoId);
         this.getTagsForAlgorithm(algoId);
         this.fetchRevisions();
-      })
+      });
+  }
+
+  loadAlgorithm(): Observable<AlgorithmDto> {
+    return this.route.params.pipe(
+      mergeMap(({ algoId }) =>
+        this.algorithmService.getAlgorithm({ algorithmId: algoId })
+      )
     );
   }
 
