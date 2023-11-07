@@ -25,7 +25,7 @@ export class PlanqkPlatformLoginService {
   }
 
   public logoutFromPlanqkPlatform(): void {
-    /* This is a (bad) workaround for the issue with logging out from PlanQK -
+    /* FIXME: This is a (bad) workaround for the issue with logging out from PlanQK -
      * it should be changed back to keycloak.logout as soon as the Angular
      * update was performed.
      */
