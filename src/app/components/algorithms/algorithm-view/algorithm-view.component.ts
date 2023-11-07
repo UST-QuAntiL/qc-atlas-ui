@@ -44,7 +44,7 @@ export class AlgorithmViewComponent implements OnInit, OnDestroy {
 
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
 
-  private dataSubscription: Subscription;
+  private dataSubscription: Subscription|null = null;
 
   private configuredApiUrl: string;
 
