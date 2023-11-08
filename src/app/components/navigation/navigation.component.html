@@ -92,8 +92,10 @@
          [routerLink]="'./feature-toggling'" routerLinkActive="routerLinkActive">
         Settings
       </a>
-      <!-- local maschine Winery Link-->
-      <a mat-list-item [href]="'http://localhost:1978/pattern-languages/af7780d5-1f97-4536-8da7-4194b093ab1d'" target="_blank">
+      <!-- QC Pattern Pull from Pattern Atlas-->
+      <a mat-list-item
+        (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
+        [routerLink]="'./patterns'" routerLinkActive="routerLinkActive">
         Patterns
       </a>
       <!-- local maschine Winery Link-->

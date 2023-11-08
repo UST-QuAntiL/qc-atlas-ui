@@ -1,0 +1,20 @@
+<mat-card class="m-2">
+  <div class="mx-3 mb-2">
+    <app-table [data]=patterns
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [externalLinkVariables]=externalLinkVariables
+               [allowAdd]=false
+               [allowDelete]="false"
+               [allowSearch]=true
+               [allowSort]=true
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
+               [emptyTableMessage]="'No patterns found'"
+               (elementClicked)="onElementClicked($event)"
+               (urlClicked)="onUrlClicked($event)"
+               (datalistConfigChanged)="getPatterns($event)"
+               (pageChange)="getPatterns($event)">
+    </app-table>
+  </div>
+</mat-card>

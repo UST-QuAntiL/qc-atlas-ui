@@ -75,6 +75,7 @@ import { SlrViewComponent } from './components/libraries/slr-view/slr-view.compo
 import { AddSlrDialogComponent } from './components/libraries/dialogs/add-slr-dialog/add-slr-dialog.component';
 import { SlrPropertiesComponent } from './components/libraries/slr-properties/slr-properties.component';
 import { LibraryTableComponent } from './components/libraries/library-table/library-table.component';
+import { PatternModule } from './components/patterns/pattern.module';
 
 @NgModule({
   declarations: [
@@ -144,6 +145,7 @@ import { LibraryTableComponent } from './components/libraries/library-table/libr
     AlgorithmModule,
     QAIAppModule,
     PublicationModule,
+    PatternModule,
     ImplementationViewModule,
     GenericsModule,
     ComputeResourcePropertyModule,

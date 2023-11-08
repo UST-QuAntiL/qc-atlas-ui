@@ -13,6 +13,7 @@ import {
 } from '../../directives/qc-atlas-ui-repository-configuration.service';
 import { UtilService } from '../../util/util.service';
 import { PlanqkPlatformLoginService } from '../../services/planqk-platform-login.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-navigation',
@@ -27,6 +28,7 @@ export class NavigationComponent implements OnInit {
   bearerTokenSet = false;
 
   constructor(
+    private http: HttpClient,
     private breakpointObserver: BreakpointObserver,
     private router: Router,
     public configData: QcAtlasUiRepositoryConfigurationService,
@@ -86,5 +88,21 @@ export class NavigationComponent implements OnInit {
         .navigateByUrl(location.origin, { skipLocationChange: true })
         .then(() => this.router.navigate(['/algorithms']))
     );
+  }
+
+  fetchQCPatterns(): void {
+    this.http
+      .get<any>(
+        'http://localhost:1977/patternatlas/patternLanguages/af7780d5-1f97-4536-8da7-4194b093ab1d/patterns'
+      )
+      .subscribe({
+        next: (patterns) => {
+          console.log(patterns);
+          // Handle the received patterns here
+        },
+        error: (error) => {
+          console.error('There was an error!', error);
+        }
+      });
   }
 }
