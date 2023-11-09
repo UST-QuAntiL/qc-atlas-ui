@@ -15,6 +15,9 @@ export class QunicornAppComponent implements OnInit {
   variableNames = ['name'];
   loading = true;
 
+  userInput: string = '';
+  deploymentID: number = 3;
+
   constructor(
     private router: Router,
     private utilService: UtilService,
@@ -33,7 +36,7 @@ export class QunicornAppComponent implements OnInit {
 
 
   getJobs() {
-    this.http.get('http://localhost:8080/jobs/', { headers: { accept: 'application/json' } })
+    this.http.get('http://localhost:5005/jobs/', { headers: { accept: 'application/json' } })
       .subscribe((data: any) => {
         this.response = JSON.stringify(data);
       }, (error: any) => {
@@ -50,14 +53,15 @@ export class QunicornAppComponent implements OnInit {
     const requestBody = {
       programs: [
         {
-          quantumCircuit: "OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1];\nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n (Note: if you have qrisp/qiskit as your assembler language add 'circuit =' to the beginning of your quantumCircuit string)",
+          // quantumCircuit: "OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1];\nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n (Note: if you have qrisp/qiskit as your assembler language add 'circuit =' to the beginning of your quantumCircuit string)",
+          quantumCircuit: this.userInput,
           assemblerLanguage: "QASM2"
         }
       ],
       name: "SeQuenC-UseCase"
     };
 
-    this.http.post('http://localhost:8080/deployments/', requestBody, { headers: headers })
+    this.http.post('http://localhost:5005/deployments/', requestBody, { headers: headers })
       .subscribe((data: any) => {
         this.deploymentResponse = JSON.stringify(data, null, 2);
       }, (error: any) => {
@@ -66,7 +70,7 @@ export class QunicornAppComponent implements OnInit {
   }
 
   getDeployments() {
-    this.http.get('http://localhost:8080/deployments/', { headers: { accept: 'application/json' } })
+    this.http.get('http://localhost:5005/deployments/', { headers: { accept: 'application/json' } })
       .subscribe((data: any) => {
         this.getDeploymentResponse = JSON.stringify(data);
       }, (error: any) => {
@@ -84,13 +88,13 @@ export class QunicornAppComponent implements OnInit {
       providerName: "IBM",
       deviceName: "aer_simulator",
       shots: 4000,
-      parameters: [0],
+      // parameters: [0],
       token: "",
       type: "RUNNER",
-      deploymentId: 1
+      deploymentId: 3,
     };
 
-    this.http.post('http://localhost:8080/jobs/', requestBody, { headers: headers })
+    this.http.post('http://localhost:5005/jobs/', requestBody, { headers: headers })
       .subscribe((data: any) => {
         this.jobResponse = JSON.stringify(data, null, 2);
       }, (error: any) => {
@@ -99,7 +103,7 @@ export class QunicornAppComponent implements OnInit {
   }
 
   getResults() {
-    this.http.get('http://localhost:8080/jobs/3/', { headers: { accept: 'application/json' } })
+    this.http.get('http://localhost:5005/jobs/3/', { headers: { accept: 'application/json' } })
       .subscribe((data: any) => {
         this.result = JSON.stringify(data, null, 2);
       }, (error: any) => {
