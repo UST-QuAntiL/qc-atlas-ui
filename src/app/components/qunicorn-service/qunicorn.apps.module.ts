@@ -29,10 +29,13 @@ import { AlgorithmModule } from '../algorithms/algorithm.module';
 import { NisqAnalyzerModule } from '../algorithms/nisq-analyzer/nisq-analyzer.module';
 import { QunicornAppComponent } from './qunicorn-view/qunicorn-service.component';
 import { OnDemandComponent } from '../on-demand-execution/ondemand.component';
+import { HistogramPlotComponent } from './histogram-plot/histogram-plot.component';
+ 
 
 @NgModule({
     declarations: [
         QunicornAppComponent,
+        HistogramPlotComponent,
     ],
     imports: [
         MatTabsModule,
@@ -65,6 +68,6 @@ import { OnDemandComponent } from '../on-demand-execution/ondemand.component';
         NisqAnalyzerModule,
         MatProgressBarModule,
     ],
-    exports: [QunicornAppComponent],
+    exports: [QunicornAppComponent,HistogramPlotComponent],
 })
 export class QunicornAppModule { }

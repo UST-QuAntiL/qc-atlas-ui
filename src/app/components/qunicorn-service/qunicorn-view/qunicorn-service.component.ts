@@ -110,7 +110,4 @@ export class QunicornAppComponent implements OnInit {
         this.result = 'Error occurred while making the request.';
       });
   }
-
-
-
 }

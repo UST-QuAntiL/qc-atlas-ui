@@ -4,6 +4,9 @@
     margin-top: 20px;
     border-radius: 5px;
     background-color: #f9f9f9;
+    margin: auto;
+    max-width: 50%;
+    justify-content: center;
 }
 
 pre {
@@ -27,7 +30,8 @@ pre {
     /* Centers the items vertically */
     justify-content: center;
     background-color: #f9f9f9;
-    max-width: 600px;
+    max-width: 1000px;
+    margin: 0 auto;
     /* Adjust the width as needed */
 }
 
@@ -41,6 +45,8 @@ input {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    margin: auto;
+    max-width: 1000px;
 }
 
 button {
@@ -50,4 +56,7 @@ button {
     background-color: #4CAF50;
     color: white;
     cursor: pointer;
+    margin: auto;
+    justify-content: center;
+    text-align: center;
 }

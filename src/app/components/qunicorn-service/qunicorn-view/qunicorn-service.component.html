@@ -6,46 +6,56 @@
       <img class="image" src="../../../../assets/qunicorn_quadratic_png.png" alt="Qunicorn Service" />
     </div>
 
-    <div class="input-frame">
-      <form (ngSubmit)="submitDeployment()">
-        <input [(ngModel)]="userInput" name="userInput"
-          placeholder='OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1];\nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];' />
-        <button mat-flat-button color="primary" type="submit">Submit Deployment Definitions</button>
-      </form>
-    </div>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+      <mat-tab label="Submit Deployment">
+        <div class="input-frame">
+          <form (ngSubmit)="submitDeployment()">
+            <input style="width: 100%; height: auto;" [(ngModel)]="userInput" name="userInput"
+              placeholder='OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1];\nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];' />
+            <button mat-flat-button color="primary" type="submit">Submit Deployment Definitions</button>
+          </form>
+        </div>
 
-    <!-- <button mat-flat-button color="primary" (click)="submitDeployment()">Submit Definitions</button> -->
-    <div class="response-frame">
-      <pre>{{ deploymentResponse }}</pre>
-    </div>
-
-    <button mat-flat-button color="primary" (click)="getDeployments()">Get Deployments</button>
-    <div class="response-frame">
-      <pre>{{ getDeploymentResponse }}</pre>
-    </div>
+         <!-- <button mat-flat-button color="primary" (click)="submitDeployment()">Submit Definitions</button> -->
+        <div class="response-frame">
+          <pre>{{ deploymentResponse }}</pre>
+        </div>
 
 
-    <div class="input-frame">
-      <form (ngSubmit)="invokeJob()">
-        <input [(ngModel)]="deploymentID" name="deploymentID" placeholder=3 />
-        <button mat-flat-button color="primary" type="submit">Invoke Job</button>
-      </form>
-    </div>
+        <div class="response-frame">
+          <button mat-flat-button color="primary" (click)="getDeployments()">Get Deployments</button>
+          <pre>{{ getDeploymentResponse }}</pre>
+        </div>
 
-    <button mat-flat-button color="primary" (click)="invokeJob()">Invoke Job</button>
-    <div class="response-frame">
-      <pre>{{ jobResponse }}</pre>
-    </div>
 
-    <button mat-flat-button color="primary" (click)="getJobs()">Get Jobs</button>
-    <div class="response-frame">
-      <pre>{{ response }}</pre>
-    </div>
+      </mat-tab>
+      <mat-tab label="Invoke Job">
+        <div class="input-frame">
+          <form (ngSubmit)="invokeJob()">
+            <input [(ngModel)]="deploymentID" name="deploymentID" placeholder=3 />
+            <button mat-flat-button color="primary" type="submit">Invoke Job</button>
+          </form>
+        </div>
+    
+        <div class="response-frame">
+          <pre>{{ jobResponse }}</pre>
+        </div>
 
-    <button mat-flat-button color="primary" (click)="getResults()">Get Results</button>
-    <div class="response-frame">
-      <pre>{{ result }}</pre>
-    </div>
+        <div class="response-frame">
+          <button mat-flat-button color="primary" (click)="getJobs()">Get Jobs</button>
+          <pre>{{ response }}</pre>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Get Results">
+        <button id="Results" color="primary" (click)="getResults()">Get Results</button>
+        <app-histogram-plot [counts]="{'1': 10, '0': 100}"></app-histogram-plot>
+        <div class="response-frame">
+          <pre>{{ result }}</pre>
+        </div>
+        <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+      </mat-tab>
+    </mat-tab-group>
 
     <!-- <app-ondemand></app-ondemand> -->
 
