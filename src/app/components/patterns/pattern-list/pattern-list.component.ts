@@ -19,8 +19,8 @@ import { PagingInfo } from '../../../util/PagingInfo';
 })
 export class PatternListComponent implements OnInit {
   patterns: PatternDto[] = [];
-  tableColumns = ['Pattern'];
-  variableNames = ['name'];
+  tableColumns = ['Pattern', 'URL', 'Pattern Language'];
+  variableNames = ['name', '_links.self', 'patternLanguageName'];
   externalLinkVariables = ['url'];
   pagingInfo: PagingInfo<PatternDto> = {};
   paginatorConfig: PaginatorConfig = {

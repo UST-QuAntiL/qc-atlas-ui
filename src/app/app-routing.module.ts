@@ -27,6 +27,7 @@ import { QAIAppViewComponent } from './components/qai-apps/qai-app-view/qai-app-
 import { LibraryViewComponent } from './components/libraries/library-view/library-view.component';
 import { SlrViewComponent } from './components/libraries/slr-view/slr-view.component';
 import { PatternListComponent } from './components/patterns/pattern-list/pattern-list.component';
+import { PatternViewComponent } from './components/patterns/pattern-view/pattern-view.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -91,6 +92,10 @@ const routes: Routes = [
     path: 'publications/:publicationId',
     component: PublicationViewComponent,
     canDeactivate: [ChangePageGuard],
+  },
+  {
+    path: 'patterns/:patternId',
+    component: PatternViewComponent,
   },
   { path: 'libraries', component: LibraryViewComponent },
   { path: 'slr', component: SlrViewComponent },

@@ -13,15 +13,15 @@ import { PatternDto } from '../models/pattern-dto';
 @Injectable({
   providedIn: 'root',
 })
-export class PatternService extends BaseService {
+export class ConcreteSolutionService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
-    this.rootUrl = 'http://localhost:1977/patternatlas';
   }
 
   
   /**
    * Path part for operation getPatterns
+   * TODO: ENDPOINT IS NOT YET IMPLEMENTED
    */
   static readonly GetPatternsPath = '/patternLanguages/af7780d5-1f97-4536-8da7-4194b093ab1d/patterns';
 
@@ -56,7 +56,7 @@ export class PatternService extends BaseService {
   }): Observable<StrictHttpResponse<PagePatternDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternService.GetPatternsPath,
+      ConcreteSolutionService.GetPatternsPath,
       'get'
     );
     if (params) {
@@ -136,7 +136,7 @@ export class PatternService extends BaseService {
   }): Observable<StrictHttpResponse<PatternDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
-      PatternService.GetPatternPath,
+      ConcreteSolutionService.GetPatternPath,
       'get'
     );
     if (params) {

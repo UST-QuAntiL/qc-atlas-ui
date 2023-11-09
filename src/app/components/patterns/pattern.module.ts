@@ -18,9 +18,14 @@ import { GenericsModule } from '../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { PatternListComponent } from './pattern-list/pattern-list.component';
 import { PatternViewComponent } from './pattern-view/pattern-view.component';
+import { PatternPropertiesComponent } from './pattern-properties/pattern-properties.component';
 
 @NgModule({
-  declarations: [PatternListComponent, PatternViewComponent],
+  declarations: [
+    PatternListComponent,
+    PatternViewComponent,
+    PatternPropertiesComponent,
+  ],
   imports: [
     MDBBootstrapModule.forRoot(),
     CommonModule,
