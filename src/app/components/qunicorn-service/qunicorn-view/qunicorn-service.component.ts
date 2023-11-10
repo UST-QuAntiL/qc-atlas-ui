@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UtilService } from '../../../util/util.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import * as Chart from 'chart.js';
 
 import { OnDemandComponent } from '../../on-demand-execution/ondemand.component';
 
@@ -33,6 +34,10 @@ export class QunicornAppComponent implements OnInit {
   getDeploymentResponse: any;
   deviceResponse: any;
   result: any;
+  counts: any;
+  probabilities: any;
+  resultcounts: any;
+  histogramChart: any;
 
 
   getJobs() {
@@ -104,10 +109,28 @@ export class QunicornAppComponent implements OnInit {
 
   getResults() {
     this.http.get('http://localhost:5005/jobs/3/', { headers: { accept: 'application/json' } })
-      .subscribe((data: any) => {
-        this.result = JSON.stringify(data, null, 2);
-      }, (error: any) => {
-        this.result = 'Error occurred while making the request.';
-      });
+      .subscribe(
+        (data: any) => {
+          this.result = data;
+          this.extractCountsAndProbabilities();
+
+        },
+        (error: any) => {
+          this.result = 'Error occurred while making the request.';
+        }
+      );
   }
+
+  extractCountsAndProbabilities() {
+    // Assuming 'results' is an array with only one item in this example
+    const resultItem = this.result.results[0];
+
+    if (resultItem && resultItem.result_dict) {
+      this.counts = resultItem.result_dict.counts;
+      this.probabilities = resultItem.result_dict.probabilities;
+    } else {
+      console.log('No valid result data found.');
+    }
+  }
+
 }

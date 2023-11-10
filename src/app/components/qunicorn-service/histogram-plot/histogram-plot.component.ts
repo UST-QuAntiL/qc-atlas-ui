@@ -10,9 +10,9 @@ import { Chart } from 'chart.js';
 })
 export class HistogramPlotComponent implements OnChanges {
 
-  @ViewChild('plot', {static: true}) plotDiv;
+  @ViewChild('plot', { static: true }) plotDiv;
 
-  @Input() counts: {[props: string]: number}|null = null;
+  @Input() counts: { [props: string]: number } | null = null;
 
   constructor() { }
 
@@ -26,12 +26,12 @@ export class HistogramPlotComponent implements OnChanges {
     console.log(labels, countsData);
 
     const data = {
-      labels:  labels,//Object.keys(this.counts),
+      labels: labels,//Object.keys(this.counts),
       datasets: [
         {
           label: 'Counts',
           data: countsData,// Object.values(this.counts),
-          backgroundColor: "#33aa33"
+          backgroundColor: "#0000ff"
         },
       ]
     };
@@ -42,13 +42,14 @@ export class HistogramPlotComponent implements OnChanges {
       options: {
         scales: {
           x: {
-              grid: {
-                offset: true
-              }
+            grid: {
+              offset: true
+            }
           },
           y: {
             beginAtZero: true,
-            min: 0
+            min: 0,
+            max: 2010,
           }
         }
       },
@@ -57,11 +58,16 @@ export class HistogramPlotComponent implements OnChanges {
     const div: HTMLDivElement = this.plotDiv.nativeElement;
     div.innerHTML = "";
     const canvas = document.createElement("canvas");
-    canvas.setAttribute("height", "100");
-    canvas.setAttribute("width", "100");
+    canvas.setAttribute("height", "50px");
+    canvas.setAttribute("width", "50px");
+    canvas.width = 500;
+    canvas.height = 500;
+    const context = canvas.getContext('2d');
+    context.scale(0.5, 0.5);
+    //chartcontext.scale(50, 50);
     div.appendChild(canvas);
 
-    new Chart(canvas, config);
+    new Chart(context, config);
   }
 
 }

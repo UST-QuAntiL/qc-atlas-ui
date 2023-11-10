@@ -16,7 +16,7 @@
           </form>
         </div>
 
-         <!-- <button mat-flat-button color="primary" (click)="submitDeployment()">Submit Definitions</button> -->
+        <!-- <button mat-flat-button color="primary" (click)="submitDeployment()">Submit Definitions</button> -->
         <div class="response-frame">
           <pre>{{ deploymentResponse }}</pre>
         </div>
@@ -36,7 +36,7 @@
             <button mat-flat-button color="primary" type="submit">Invoke Job</button>
           </form>
         </div>
-    
+
         <div class="response-frame">
           <pre>{{ jobResponse }}</pre>
         </div>
@@ -49,15 +49,27 @@
 
       <mat-tab label="Get Results">
         <button id="Results" color="primary" (click)="getResults()">Get Results</button>
-        <app-histogram-plot [counts]="{'1': 10, '0': 100}"></app-histogram-plot>
+        <!-- <app-histogram-plot [counts]="{'0': 2007, '11': 1993}"></app-histogram-plot> -->
         <div class="response-frame">
-          <pre>{{ result }}</pre>
+          <div *ngIf="result">
+            <h3>Counts:</h3>
+            <ul>
+              <li *ngFor="let count of counts | keyvalue">
+                {{ count.key }}: {{ count.value }}
+              </li>
+            </ul>
+
+            <h3>Probabilities:</h3>
+            <ul>
+              <li *ngFor="let probability of probabilities | keyvalue">
+                {{ probability.key }}: {{ probability.value }}
+              </li>
+            </ul>
+          </div>
         </div>
-        <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+
       </mat-tab>
     </mat-tab-group>
-
-    <!-- <app-ondemand></app-ondemand> -->
 
   </div>
 </mat-card>
