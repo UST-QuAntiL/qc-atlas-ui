@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UtilService } from '../../../util/util.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as Chart from 'chart.js';
-
-import { OnDemandComponent } from '../../on-demand-execution/ondemand.component';
 
 @Component({
   selector: 'qunicorn-service',
@@ -18,6 +15,7 @@ export class QunicornAppComponent implements OnInit {
 
   userInput: string = '';
   deploymentID: number = 3;
+  jobID: number = 3;
 
   constructor(
     private router: Router,
@@ -55,11 +53,17 @@ export class QunicornAppComponent implements OnInit {
       .set('accept', 'application/json')
       .set('Content-Type', 'application/json');
 
+    if (this.userInput = '') {
+      this.userInput = 'OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1];\nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n';
+    }
+
+    console.log(this.userInput);
+
     const requestBody = {
       programs: [
         {
-          // quantumCircuit: "OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1];\nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n (Note: if you have qrisp/qiskit as your assembler language add 'circuit =' to the beginning of your quantumCircuit string)",
-          quantumCircuit: this.userInput,
+          quantumCircuit: "OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1];\nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n",
+          //quantumCircuit: this.userInput,
           assemblerLanguage: "QASM2"
         }
       ],
@@ -96,7 +100,7 @@ export class QunicornAppComponent implements OnInit {
       // parameters: [0],
       token: "",
       type: "RUNNER",
-      deploymentId: 3,
+      deploymentId: this.deploymentID,
     };
 
     this.http.post('http://localhost:5005/jobs/', requestBody, { headers: headers })
@@ -107,8 +111,11 @@ export class QunicornAppComponent implements OnInit {
       });
   }
 
-  getResults() {
-    this.http.get('http://localhost:5005/jobs/3/', { headers: { accept: 'application/json' } })
+  getResults(jobID: number) {
+
+    const url = `http://localhost:5005/jobs/${jobID}/`;
+
+    this.http.get(url, { headers: { accept: 'application/json' } })
       .subscribe(
         (data: any) => {
           this.result = data;

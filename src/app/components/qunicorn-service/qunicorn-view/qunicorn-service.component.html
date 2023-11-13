@@ -48,7 +48,11 @@
       </mat-tab>
 
       <mat-tab label="Get Results">
-        <button id="Results" color="primary" (click)="getResults()">Get Results</button>
+        <!-- <button id="Results" color="primary" (click)="getResults()">Get Results</button> -->
+        <form (ngSubmit)="getResults(jobID)">
+          <input [(ngModel)]="jobID" name="jobID" placeholder=5 />
+          <button mat-flat-button color="primary" type="submit">Get Results</button>
+        </form>
         <!-- <app-histogram-plot [counts]="{'0': 2007, '11': 1993}"></app-histogram-plot> -->
         <div class="response-frame">
           <div *ngIf="result">
