@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PatternService } from 'api-atlas/services/pattern.service';
 import { PatternDto } from 'api-atlas/models/pattern-dto';
-import { forkJoin } from 'rxjs';
 import {
-  SelectParams,
   QueryParams,
   UrlData,
 } from '../../generics/data-list/data-list.component';
@@ -20,7 +18,7 @@ import { PagingInfo } from '../../../util/PagingInfo';
 export class PatternListComponent implements OnInit {
   patterns: PatternDto[] = [];
   tableColumns = ['Pattern', 'URL', 'Pattern Language'];
-  variableNames = ['name', '_links.self', 'patternLanguageName'];
+  variableNames = ['name', 'url', 'patternLanguageName'];
   externalLinkVariables = ['url'];
   pagingInfo: PagingInfo<PatternDto> = {};
   paginatorConfig: PaginatorConfig = {
@@ -39,7 +37,7 @@ export class PatternListComponent implements OnInit {
   getPatterns(params: QueryParams): void {
     this.patternService.getPatterns(params).subscribe(
       (data) => {
-        console.log('API response:', data);
+        // console.log('API response:', data);
         this.preparePatternData(data);
       },
       () => {
@@ -54,7 +52,11 @@ export class PatternListComponent implements OnInit {
   preparePatternData(data): void {
     // Read all incoming data
     if (data._embedded.patternModels) {
-      this.patterns = data._embedded.patternModels;
+      this.patterns = data._embedded.patternModels.map((pattern) => {
+        // Concatenate the URL
+        pattern.url = `http://localhost:1978/pattern-languages/${pattern.patternLanguageId}/${pattern.id}`;
+        return pattern;
+      });
     } else {
       this.patterns = [];
     }

@@ -36,7 +36,7 @@ export class PatternViewComponent implements OnInit {
           ) as PatternDto;
           this.links[0] = {
             heading: this.pattern.name,
-            subHeading: '',
+            subHeading: 'Quantum Computing Pattern',
           };
         },
         () => {
