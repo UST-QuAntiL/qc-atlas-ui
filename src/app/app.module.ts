@@ -29,6 +29,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -158,6 +159,7 @@ import { LibraryTableComponent } from './components/libraries/library-table/libr
     MatTableModule,
     MatCheckboxModule,
     MatTabsModule,
+    MatExpansionModule,
   ],
   bootstrap: [AppComponent],
   providers: [

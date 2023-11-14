@@ -7,92 +7,85 @@
       <img (click)="goToHome()" src="../assets/logo.png" class="logo-img">
       <span (click)="goToHome()">QC Atlas</span>
     </mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         [routerLink]="'./algorithms'" routerLinkActive="routerLinkActive">
+    <nav>
+      <a class="nav-link" [routerLink]="'./algorithms'" routerLinkActive="active">
         Algorithms
       </a>
-      <a mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         [routerLink]="'./qai-apps'" routerLinkActive="routerLinkActive">
+      <a class="nav-link" [routerLink]="'./qai-apps'" routerLinkActive="active">
         qAI Apps
       </a>
-      <a mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         [routerLink]="'./publications'" routerLinkActive="routerLinkActive">
+      <a class="nav-link" [routerLink]="'./publications'" routerLinkActive="active">
         Publications
       </a>
-      <a mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.show()"
-         [routerLink]="'./libraries'" routerLinkActive="routerLinkActive">
-        Libraries
-        <mat-icon
-            class="collapse-arrow-icon">{{ literatureComponentsCollapse.isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
-      </a>
-      <div mat-list-item mdbCollapse #literatureComponentsCollapse="bs-collapse">
-        <a class="sub-tab" mat-list-item [routerLink]="'./slr'"
-           routerLinkActive="routerLinkActive">
-          <span class="pl-3">Systematic Literature Review</span>
+      <mat-expansion-panel class="flat-panel" [expanded]="activeGroup === 'libraries'">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="nav-panel-header">
+            Libraries
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <a class="nav-link" [routerLink]="'./libraries'" routerLinkActive="active">
+          Libraries
         </a>
-      </div>
-      <a (click)="executionEnvironmentCollapseContent.show(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         mat-list-item
-         [routerLink]="'./execution-environments/search'"
-         routerLinkActive="routerLinkActive">
-        Execution Environments
-        <mat-icon
-            class="collapse-arrow-icon">{{ executionEnvironmentCollapseContent.isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
-      </a>
-      <div mat-list-item mdbCollapse #executionEnvironmentCollapseContent="bs-collapse">
-        <a class="sub-tab" mat-list-item [routerLink]="'./execution-environments/software-platforms'"
-           routerLinkActive="routerLinkActive">
-          <span class="pl-3">Software Platforms</span>
+        <a class="nav-link" [routerLink]="'./slr'" routerLinkActive="active">
+          Systematic Literature Review
         </a>
-        <a class="sub-tab" mat-list-item [routerLink]="'./execution-environments/cloud-services'"
-           routerLinkActive="routerLinkActive">
-          <span class="pl-3">Cloud Services</span>
+      </mat-expansion-panel>
+      <mat-expansion-panel class="flat-panel" [expanded]="activeGroup === 'execution'">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="nav-panel-header">
+            Execution Environments
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <a class="nav-link" [routerLink]="'./execution-environments/search'" routerLinkActive="active">
+          Search
         </a>
-        <a class="sub-tab" mat-list-item [routerLink]="'./execution-environments/compute-resources'"
-           routerLinkActive="routerLinkActive">
-          <span class="pl-3">Compute Resources</span>
+        <a class="nav-link" [routerLink]="'./execution-environments/software-platforms'"
+            routerLinkActive="active">
+          Software Platforms
         </a>
-      </div>
-      <a mat-list-item
-         (click)="minorComponentsCollapse.show(); executionEnvironmentCollapseContent.hide(); literatureComponentsCollapse.hide()">
-        Manage Components
-        <mat-icon
-            class="collapse-arrow-icon">{{ minorComponentsCollapse.isCollapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
-      </a>
-      <div mat-list-item mdbCollapse #minorComponentsCollapse="bs-collapse">
-        <a class="sub-tab" mat-list-item [routerLink]="'./problem-types'"
-           routerLinkActive="routerLinkActive">
-          <span class="pl-3">Problem Types</span>
+        <a class="nav-link" [routerLink]="'./execution-environments/cloud-services'"
+            routerLinkActive="active">
+          Cloud Services
         </a>
-        <a class="sub-tab" mat-list-item [routerLink]="'./application-areas'"
-           routerLinkActive="routerLinkActive">
-          <span class="pl-3">Application Areas</span>
+        <a class="nav-link"  [routerLink]="'./execution-environments/compute-resources'"
+            routerLinkActive="active">
+          Compute Resources
         </a>
-        <a class="sub-tab" mat-list-item [routerLink]="'./algorithm-relation-types'"
-           routerLinkActive="routerLinkActive">
-          <span class="pl-3">Algorithm Relation Types</span>
+      </mat-expansion-panel>
+      <mat-expansion-panel class="flat-panel" [expanded]="activeGroup === 'components'">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="nav-panel-header">
+            Manage Components
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <a class="nav-link" [routerLink]="'./problem-types'" routerLinkActive="active">
+          Problem Types
         </a>
-        <a *ngIf="configData.configuration.features.patternAtlas" class="sub-tab" mat-list-item [routerLink]="'./pattern-relation-types'"
-           routerLinkActive="routerLinkActive">
-          <span class="pl-3" *ngIf="configData.configuration.features.patternAtlas">Pattern Relation Types</span>
+        <a class="nav-link" [routerLink]="'./application-areas'" routerLinkActive="active">
+          Application Areas
         </a>
-        <a class="sub-tab" mat-list-item [routerLink]="'./compute-resource-property-types'"
-           routerLinkActive="routerLinkActive">
-          <span class="pl-3">Compute Resource Property Types</span>
+        <a class="nav-link" [routerLink]="'./algorithm-relation-types'"
+            routerLinkActive="active">
+          Algorithm Relation Types
         </a>
-      </div>
+        <a *ngIf="configData.configuration.features.patternAtlas"
+            class="nav-link" [routerLink]="'./pattern-relation-types'"
+            routerLinkActive="active">
+          Pattern Relation Types
+        </a>
+        <a class="nav-link" [routerLink]="'./compute-resource-property-types'"
+            routerLinkActive="active">
+          Compute Resource Property Types
+        </a>
+      </mat-expansion-panel>
+
+      <!-- TODO add external links in navigation -->
+
       <a *ngIf="configData.configuration.features.showSettings"
-         mat-list-item
-         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-         [routerLink]="'./feature-toggling'" routerLinkActive="routerLinkActive">
+          class="nav-link" [routerLink]="'./feature-toggling'" routerLinkActive="active">
         Settings
       </a>
-    </mat-nav-list>
+    </nav>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">

@@ -22,29 +22,51 @@
   top: 0;
   z-index: 1000;
 }
-.mat-nav-list a.routerLinkActive {
+
+nav {
+  margin-block-start: 0.5rem;
+}
+
+.nav-link {
+  min-height: 2rem;
+  color: initial;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.nav-link:focus, .nav-link:active, .nav-link.active {
   background: rgba(mat-color($qc-atlas-ui-primary), 0.20);
 }
-.mat-nav-list:hover a.routerLinkActive {
-  background: rgba(mat-color($qc-atlas-ui-primary), 0.20);
-}
-.mat-nav-list a.routerLinkActive:focus {
-  background: rgba(mat-color($qc-atlas-ui-primary), 0.20);
-}
-.mat-nav-list:hover a:hover {
+
+.nav-link:hover {
   background: rgba(mat-color($qc-atlas-ui-primary), 0.10);
 }
 
+.mat-expansion-panel.flat-panel {
+  box-shadow: none;
+  border-radius: 0px;
+}
+
+// TODO: check styles after angular upgrade!
+::ng-deep .mat-expansion-panel .mat-expansion-panel-header {
+  padding-inline-start: 16px;
+}
+
+::ng-deep .mat-expansion-panel .mat-expansion-panel-body {
+  padding-inline: 0px;
+}
+
+.nav-panel-header {
+  font-weight: 300;
+}
+
+mat-expansion-panel .nav-link {
+  padding-inline-start: 24px;
+}
+
+
 .mat-drawer-side {
   border: none;
-}
-
-.sub-tab {
-  font-size: 14px;
-}
-
-.collapse-arrow-icon {
-  color: mat-color($qc-atlas-ui-primary);
 }
 
 .menu-button {
