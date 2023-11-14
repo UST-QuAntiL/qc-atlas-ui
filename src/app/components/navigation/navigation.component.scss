@@ -24,7 +24,9 @@
 }
 
 nav {
-  margin-block-start: 0.5rem;
+  padding-block: 0.5rem;
+  overflow-y: auto;
+  max-height: calc(100% - 64px);
 }
 
 .nav-link {
