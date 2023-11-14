@@ -4,9 +4,10 @@ import {
   Breakpoints,
   BreakpointState,
 } from '@angular/cdk/layout';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ApiConfiguration } from 'api-atlas/api-configuration';
 import { Observable, from } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import {
   QcAtlasUiRepositoryConfigurationService,
   UiFeatures,
@@ -26,9 +27,12 @@ export class NavigationComponent implements OnInit {
   hideNav = false;
   bearerTokenSet = false;
 
+  activeGroup: 'libraries' | 'execution' | 'components' | null = null;
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router,
+    private activeRoute: ActivatedRoute,
     public configData: QcAtlasUiRepositoryConfigurationService,
     private config: ApiConfiguration,
     private utilService: UtilService,
@@ -36,6 +40,20 @@ export class NavigationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.activeRoute.firstChild) {
+      const path = this.activeRoute.firstChild.snapshot.url?.[0]?.path;
+      this.onUrlChanged(path);
+    }
+
+    this.router.events
+      .pipe(filter<NavigationEnd>((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        if (event.url.length < 2) {
+          this.onUrlChanged('');
+          return;
+        }
+        this.onUrlChanged(event.url.substring(1));
+      });
     this.breakpointObserver
       .observe([Breakpoints.Small, Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
@@ -85,5 +103,35 @@ export class NavigationComponent implements OnInit {
         .navigateByUrl(location.origin, { skipLocationChange: true })
         .then(() => this.router.navigate(['/algorithms']))
     );
+  }
+
+  private onUrlChanged(newPath: string): void {
+    if (newPath === '') {
+      this.activeGroup = null;
+      return;
+    }
+    console.log(newPath);
+    if (newPath === 'libraries' || newPath === 'slr') {
+      this.activeGroup = 'libraries';
+      return;
+    }
+
+    if (newPath.startsWith('execution-environments')) {
+      this.activeGroup = 'execution';
+      return;
+    }
+
+    if (
+      newPath.startsWith('problem-types') ||
+      newPath.startsWith('application-areas') ||
+      newPath.startsWith('algorithm-relation-types') ||
+      newPath.startsWith('pattern-relation-types') ||
+      newPath.startsWith('compute-resource-property-types')
+    ) {
+      this.activeGroup = 'components';
+      return;
+    }
+
+    this.activeGroup = null;
   }
 }
