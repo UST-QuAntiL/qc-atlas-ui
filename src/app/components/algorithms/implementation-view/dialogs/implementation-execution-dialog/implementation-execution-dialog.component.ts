@@ -23,7 +23,7 @@ export class ImplementationExecutionDialogComponent implements OnInit {
   provider?: EntityModelProviderDto;
   ready?: boolean;
   qpuArray: string[];
-  isIbmqSelected = true;
+  isSupportedSelected = true;
 
   constructor(
     public dialogRef: MatDialogRef<ImplementationExecutionDialogComponent>,
@@ -78,11 +78,12 @@ export class ImplementationExecutionDialogComponent implements OnInit {
   }
 
   onVendorChanged(value: string): void {
+    console.error('This code is ran');
     this.qpuArray = [];
-    this.isIbmqSelected = true;
-    if (value === 'IBMQ') {
+    this.isSupportedSelected = true;
+    if (value === 'IBMQ' || value === 'Google-Cirq'|| value === 'Amazon-AWS'|| value === 'Microsoft-Azure') {
       this.providerService.getProviders().subscribe((result) => {
-        this.getProviderDtoByName(result);
+        this.getProviderDtoByName(result, value);
         if (!this.provider) {
           console.error('Provider with given name not found!');
           this.ready = true;
@@ -100,17 +101,17 @@ export class ImplementationExecutionDialogComponent implements OnInit {
           });
       });
     } else {
-      this.isIbmqSelected = false;
+      this.isSupportedSelected = false;
     }
   }
 
-  getProviderDtoByName(result): void {
+  getProviderDtoByName(result, name): void {
     if (result === null) {
       console.error('Error while loading provider!');
       return;
     }
     for (const providerDto of result._embedded.providerDtoes) {
-      if (providerDto.name.toLowerCase() === 'ibmq') {
+      if (providerDto.name.toLowerCase() === name.toLowerCase()) {
         this.provider = providerDto;
         return;
       }
