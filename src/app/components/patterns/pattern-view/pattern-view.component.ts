@@ -3,6 +3,7 @@ import { PatternService } from 'api-atlas/services/pattern.service';
 import { PatternDto } from 'api-atlas/models/pattern-dto';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ConcreteSolutionDto } from 'generated/api-atlas/models/concrete-solution-dto';
 import { BreadcrumbLink } from '../../generics/navigation-breadcrumb/navigation-breadcrumb.component';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
 import { UtilService } from '../../../util/util.service';
@@ -15,6 +16,7 @@ import { UtilService } from '../../../util/util.service';
 export class PatternViewComponent implements OnInit {
   testTags: string[] = ['test tag', 'quantum', 'pattern'];
   pattern: PatternDto;
+  patternConcreteSolutions: ConcreteSolutionDto[]; // Add this line
   frontendPattern: PatternDto;
   links: BreadcrumbLink[] = [{ heading: '', subHeading: '' }];
   private routeSub: Subscription;

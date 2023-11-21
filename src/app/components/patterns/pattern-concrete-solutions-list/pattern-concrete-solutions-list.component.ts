@@ -1,28 +1,85 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PatternDto } from 'api-atlas/models/pattern-dto';
 import { Router } from '@angular/router';
-import { PatternService } from 'api-atlas/services/pattern.service';
-import { AlgorithmService } from 'api-atlas/services/algorithm.service';
-import { ImplementationDto } from 'api-atlas/models/implementation-dto';
-import { forkJoin, Observable } from 'rxjs';
-import { ConcreteSolutionService } from 'api-atlas/services/concrete-solution.service';
-import { PageImplementationDto } from 'api-atlas/models/page-implementation-dto';
-import {
-  LinkObject,
-  QueryParams,
-} from '../../generics/data-list/data-list.component';
-import { DialogData } from '../../generics/dialogs/link-item-list-dialog.component';
+import { forkJoin } from 'rxjs';
+import { ConcreteSolutionDto } from 'generated/api-atlas/models/concrete-solution-dto';
+import { ConcreteSolutionService } from 'generated/api-atlas/services/concrete-solution.service';
 import { UtilService } from '../../../util/util.service';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../generics/dialogs/confirm-dialog.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
 import { PagingInfo } from '../../../util/PagingInfo';
+import { QueryParams } from '../../generics/data-list/data-list.component';
 
 @Component({
   selector: 'app-pattern-concrete-solutions-list',
   templateUrl: './pattern-concrete-solutions-list.component.html',
   styleUrls: ['./pattern-concrete-solutions-list.component.scss'],
 })
-export class PatternConcreteSolutionsListComponent implements OnInit {
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
+export class PatternConcreteSolutionListComponent implements OnInit {
+  @Input() patternConcreteSolutions: ConcreteSolutionDto[];
+  tableColumns = [
+    'ID',
+    'Name',
+    'Qubit Count',
+    'Header',
+    'Measurement',
+    'Start Pattern',
+    'End Pattern',
+  ];
+  variableNames = [
+    'id',
+    'name',
+    'qubitCount',
+    'hasHeader',
+    'hasMeasurment',
+    'startPattern',
+    'endPattern',
+  ];
+  pagingInfo: PagingInfo<ConcreteSolutionDto> = {};
+  paginatorConfig: PaginatorConfig = {
+    amountChoices: [10, 25, 50],
+    selectedAmount: 10,
+  };
+  loading = true;
+
+  constructor(
+    private concreteSolutionService: ConcreteSolutionService,
+    private router: Router,
+    private utilService: UtilService
+  ) {}
+
+  ngOnInit(): void {}
+
+  getPatternConcreteSolutions(params: QueryParams): void {
+    this.concreteSolutionService.getPatternConcreteSolutions(params).subscribe(
+      (data) => {
+        this.preparePatternConcreteSolutionsData(data);
+      },
+      () => {
+        this.utilService.callSnackBar(
+          'Error! Concrete Solutions could not be retrieved.'
+        );
+      }
+    );
+  }
+
+  preparePatternConcreteSolutionsData(data): void {
+    // Read all incoming data
+    if (data.content) {
+      this.patternConcreteSolutions = data.content;
+    } else {
+      // If no content, set to empty array
+      this.patternConcreteSolutions = [];
+    }
+
+    this.pagingInfo.totalPages = data.totalPages;
+    this.pagingInfo.number = data.number;
+    this.pagingInfo.sort = data.sort;
+  }
+
+  onElementClicked(concreteSolution: ConcreteSolutionDto): void {
+    this.router.navigate(['concrete-solutions', concreteSolution.id]);
   }
 }

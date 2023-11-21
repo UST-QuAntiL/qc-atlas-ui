@@ -1,39 +1,90 @@
 /* tslint:disable */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpResponse } from '@angular/common/http';
 import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
-import { PagePatternDto } from '../models/page-pattern-dto';
-import { PatternDto } from '../models/pattern-dto';
+import { ConcreteSolutionDto } from '../models/concrete-solution-dto';
+import { PageConcreteSolutionDto } from '../models/page-concrete-solutions-dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConcreteSolutionService extends BaseService {
+  static readonly GetConcreteSolutionsPath = '/concrete-solutions';
+  static readonly GetConcreteSolutionsOfPatternPath = '/patterns/{patternId}/concrete-solutions';
+  static readonly GetFileOfConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions/{concreteSolutionId}/file';
+  static readonly GetFileContentOfConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions/{concreteSolutionId}/file/content';
+  static readonly PostConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions';
+  static readonly PostFileOfConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions/{concreteSolutionId}/file';
+  static readonly DeleteFileOfConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions/{concreteSolutionId}/file';
+
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
-  
   /**
-   * Path part for operation getPatterns
-   * TODO: ENDPOINT IS NOT YET IMPLEMENTED
-   */
-  static readonly GetPatternsPath = '/patternLanguages/af7780d5-1f97-4536-8da7-4194b093ab1d/patterns';
-
-  /**
-   * Retrieve all patterns.
+   * Define the basic properties of an concrete solution.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPatterns()` instead.
+   * To access only the response body, use `createPublication()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createConcreteSolution$Response(params: {
+    body: ConcreteSolutionDto;
+  }): Observable<StrictHttpResponse<ConcreteSolutionDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ConcreteSolutionService.PostConcreteSolutionPath,
+      'post'
+    );
+    if (params) {
+      rb.body(params.body, 'application/json');
+    }
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/hal+json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+          return r as StrictHttpResponse<ConcreteSolutionDto>;
+        })
+      );
+  }
+
+  /**
+   * Define the basic properties of an concrete solution.
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `createConcreteSOlution$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createConcreteSolution(params: {
+    body: ConcreteSolutionDto;
+  }): Observable<ConcreteSolutionDto> {
+    return this.createConcreteSolution$Response(params).pipe(
+      map((r: StrictHttpResponse<ConcreteSolutionDto>) => r.body as ConcreteSolutionDto)
+    );
+  }
+
+  /**
+   * Retrieve Concrete Solutions of Pattern.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getPatternConcreteSolutions()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatterns$Response(params?: {
+  getPatternConcreteSolutions$Response(params?: {
     /**
      * Filter criteria for this query
      */
@@ -53,10 +104,20 @@ export class ConcreteSolutionService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<StrictHttpResponse<PagePatternDto>> {
+  }): Observable<StrictHttpResponse<PageConcreteSolutionDto>> {
+    // Get the current URL
+    const currentUrl = window.location.href;
+
+    // Split the URL to extract the ID
+    // The URL format is assumed to be something like "http://localhost:4210/#/patterns/2229a430-fe92-4411-9d72-d10dd1d8da14"
+    const parts = currentUrl.split('/'); 
+    const patternId = parts[parts.length - 1]; // This gets the last part of the URL, which is the ID
+
+    // Now you can use `patternId` in your request
+
     const rb = new RequestBuilder(
       this.rootUrl,
-      ConcreteSolutionService.GetPatternsPath,
+      ConcreteSolutionService.GetConcreteSolutionsOfPatternPath.replace('{patternId}', patternId), // Replace placeholder with actual patternId
       'get'
     );
     if (params) {
@@ -75,20 +136,20 @@ export class ConcreteSolutionService extends BaseService {
       .pipe(
         filter((r: any) => r instanceof HttpResponse),
         map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<PagePatternDto>;
+          return r as StrictHttpResponse<PageConcreteSolutionDto>;
         })
       );
   }
 
   /**
-   * Retrieve all patterns.
+   * Retrieve Concrete Solutions of a Pattern.
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPatterns$Response()` instead.
+   * To access the full response (for headers, for example), `getPatternConcreteSolutions$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getPatterns(params?: {
+  getPatternConcreteSolutions(params?: {
     /**
      * Filter criteria for this query
      */
@@ -108,68 +169,12 @@ export class ConcreteSolutionService extends BaseService {
      * Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      */
     sort?: Array<string>;
-  }): Observable<PagePatternDto> {
-    return this.getPatterns$Response(params).pipe(
+  }): Observable<PageConcreteSolutionDto> {
+    return this.getPatternConcreteSolutions$Response(params).pipe(
       map(
-        (r: StrictHttpResponse<PagePatternDto>) =>
-          r.body as PagePatternDto
+        (r: StrictHttpResponse<PageConcreteSolutionDto>) =>
+          r.body as PageConcreteSolutionDto
       )
-    );
-  }
-
-
-  /**
-   * Path part for operation getPattern
-   */
-  static readonly GetPatternPath = '/patternLanguages/af7780d5-1f97-4536-8da7-4194b093ab1d/patterns/{patternId}';
-
-  /**
-   * Retrieve a specific pattern and its basic properties.
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getPattern()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPattern$Response(params: {
-    patternId: string;
-  }): Observable<StrictHttpResponse<PatternDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      ConcreteSolutionService.GetPatternPath,
-      'get'
-    );
-    if (params) {
-      rb.path('patternId', params.patternId, {});
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<PatternDto>;
-        })
-      );
-  }
-
-  /**
-   * Retrieve a specific pattern and its basic properties.
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `getPattern$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getPattern(params: {
-    patternId: string;
-  }): Observable<PatternDto> {
-    return this.getPattern$Response(params).pipe(
-      map((r: StrictHttpResponse<PatternDto>) => r.body as PatternDto)
     );
   }
 
