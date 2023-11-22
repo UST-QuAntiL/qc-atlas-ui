@@ -21,7 +21,8 @@ export class ConcreteSolutionService extends BaseService {
   static readonly PostConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions';
   static readonly PostFileOfConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions/{concreteSolutionId}/file';
   static readonly DeleteFileOfConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions/{concreteSolutionId}/file';
-
+  static readonly GetConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions/{concreteSolutionId}';
+  static readonly DeleteConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions/{concreteSolutionId}';
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
@@ -35,11 +36,21 @@ export class ConcreteSolutionService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createConcreteSolution$Response(params: {
+    patternId: string;
     body: ConcreteSolutionDto;
   }): Observable<StrictHttpResponse<ConcreteSolutionDto>> {
+    // Get the current URL
+    const currentUrl = window.location.href;
+
+    // Split the URL to extract the ID
+    // The URL format is assumed to be something like "http://localhost:4210/#/patterns/2229a430-fe92-4411-9d72-d10dd1d8da14"
+    const parts = currentUrl.split('/'); 
+    const patternId = parts[parts.length - 1]; // This gets the last part of the URL, which is the ID
+
+    // Now you can use `patternId` in your request
     const rb = new RequestBuilder(
       this.rootUrl,
-      ConcreteSolutionService.PostConcreteSolutionPath,
+      ConcreteSolutionService.PostConcreteSolutionPath.replace('{patternId}', patternId), // Replace placeholder with actual patternId
       'post'
     );
     if (params) {
@@ -69,6 +80,7 @@ export class ConcreteSolutionService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   createConcreteSolution(params: {
+    patternId: string;
     body: ConcreteSolutionDto;
   }): Observable<ConcreteSolutionDto> {
     return this.createConcreteSolution$Response(params).pipe(
@@ -177,5 +189,62 @@ export class ConcreteSolutionService extends BaseService {
       )
     );
   }
+
+    /**
+   * Delete an concrete solution. This also removes all references to other entities (e.g. file).
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteConcreteSolution()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+    deleteConcreteSolution$Response(params: {
+      concreteSolutionId: string;
+    }): Observable<StrictHttpResponse<void>> {
+      // Get the current URL
+      const currentUrl = window.location.href;
+
+      // Split the URL to extract the ID
+      // The URL format is assumed to be something like "http://localhost:4210/#/patterns/2229a430-fe92-4411-9d72-d10dd1d8da14"
+      const parts = currentUrl.split('/'); 
+      const patternId = parts[parts.length - 1]; // This gets the last part of the URL, which is the ID
+      const rb = new RequestBuilder(
+        this.rootUrl,
+        ConcreteSolutionService.DeleteConcreteSolutionPath.replace('{patternId}', patternId), // Replace placeholder with actual patternId
+        'delete'
+      );
+      if (params) {
+        rb.path('concreteSolutionId', params.concreteSolutionId, {});
+      }
+      return this.http
+        .request(
+          rb.build({
+            responseType: 'text',
+            accept: '*/*',
+          })
+        )
+        .pipe(
+          filter((r: any) => r instanceof HttpResponse),
+          map((r: HttpResponse<any>) => {
+            return (r as HttpResponse<any>).clone({
+              body: undefined,
+            }) as StrictHttpResponse<void>;
+          })
+        );
+    }
+  
+    /**
+     * Delete an concrete solution. This also removes all references to other entities (e.g. file).
+     *
+     * This method provides access to only to the response body.
+     * To access the full response (for headers, for example), `deleteConcreteSolution$Response()` instead.
+     *
+     * This method doesn't expect any request body.
+     */
+    deleteConcreteSolution(params: { concreteSolutionId: string }): Observable<void> {
+      return this.deleteConcreteSolution$Response(params).pipe(
+        map((r: StrictHttpResponse<void>) => r.body as void)
+      );
+    }
 
 }

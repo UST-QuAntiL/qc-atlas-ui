@@ -10,7 +10,9 @@
                [pagination]=pagingInfo
                [paginatorConfig]=paginatorConfig
                [emptyTableMessage]="'No Concrete Solutions found'"
+               (addElement)="onAddConcreteSolution()"
                (elementClicked)="onElementClicked($event)"
+               (submitDeleteElements)="onDeleteElements($event)"
                (datalistConfigChanged)="getPatternConcreteSolutions($event)"
                (pageChange)="getPatternConcreteSolutions($event)">
     </app-table>

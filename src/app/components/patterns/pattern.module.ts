@@ -19,15 +19,15 @@ import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/na
 import { PatternListComponent } from './pattern-list/pattern-list.component';
 import { PatternViewComponent } from './pattern-view/pattern-view.component';
 import { PatternPropertiesComponent } from './pattern-properties/pattern-properties.component';
-import { AddConcreteSolutionComponent } from './dialogs/add-concrete-solution-dialog.component';
 import { PatternConcreteSolutionListComponent } from './pattern-concrete-solutions-list/pattern-concrete-solutions-list.component';
+import { CreateConcreteSolutionDialogComponent } from './dialogs/create-concrete-solution-dialog.component';
 
 @NgModule({
   declarations: [
     PatternListComponent,
     PatternViewComponent,
     PatternPropertiesComponent,
-    AddConcreteSolutionComponent,
+    CreateConcreteSolutionDialogComponent,
     PatternConcreteSolutionListComponent,
   ],
   imports: [
@@ -57,8 +57,8 @@ import { PatternConcreteSolutionListComponent } from './pattern-concrete-solutio
   exports: [
     PatternListComponent,
     PatternViewComponent,
-    AddConcreteSolutionComponent,
     PatternConcreteSolutionListComponent,
+    CreateConcreteSolutionDialogComponent,
   ],
 })
 export class PatternModule {}
