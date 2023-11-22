@@ -10,7 +10,10 @@ import {
 } from '../../generics/dialogs/confirm-dialog.component';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
 import { PagingInfo } from '../../../util/PagingInfo';
-import { QueryParams, SelectParams } from '../../generics/data-list/data-list.component';
+import {
+  QueryParams,
+  SelectParams,
+} from '../../generics/data-list/data-list.component';
 import { CreateConcreteSolutionDialogComponent } from '../dialogs/create-concrete-solution-dialog.component';
 
 @Component({
@@ -102,7 +105,7 @@ export class PatternConcreteSolutionListComponent implements OnInit {
                 qubitCount: dialogResult.qubitCount,
                 inputParameterFormat: dialogResult.inputParameterFormat,
                 hasHeader: dialogResult.hasHeader,
-                hasMeasurement: dialogResult.hasMeasurement,
+                hasMeasurment: dialogResult.hasMeasurement,
                 startPattern: dialogResult.startPattern,
                 endPattern: dialogResult.endPattern,
                 concreteSolutionType: 'FILE',

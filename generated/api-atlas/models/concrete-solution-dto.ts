@@ -7,7 +7,7 @@ export interface ConcreteSolutionDto {
   qubitCount?: number;
   inputParameterFormat?: string;
   hasHeader?: boolean;
-  hasMeasurement?: boolean;
+  hasMeasurment?: boolean;
   startPattern?: boolean;
   endPattern?: boolean;
 }
