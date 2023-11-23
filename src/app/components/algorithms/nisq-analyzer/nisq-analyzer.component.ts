@@ -109,7 +109,7 @@ export class NisqAnalyzerComponent implements OnInit {
   >();
   executeAnalysisResultRequestDto: ExecuteAnalysisResultRequestDto = {
     refreshToken: '',
-    token: '',
+    tokens: new Map<string, Map<string, string>>(),
   };
 
   constructor(
@@ -379,7 +379,11 @@ export class NisqAnalyzerComponent implements OnInit {
         if (dialogResult.token) {
           token = dialogResult.token;
         }
-        this.executeAnalysisResultRequestDto.token = token;
+        const rawTokens: Map<string, string> = new Map();
+        rawTokens.set(analysisResult.provider, token);
+        const tokens: Map<string, Map<string, string>> = new Map();
+        tokens.set(analysisResult.provider, rawTokens);
+        this.executeAnalysisResultRequestDto.tokens = tokens;
         this.nisqAnalyzerService
           .execute(analysisResult.id, this.executeAnalysisResultRequestDto)
           .subscribe(

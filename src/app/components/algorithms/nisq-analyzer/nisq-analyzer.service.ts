@@ -57,11 +57,14 @@ export class NisqAnalyzerService {
 
   executeCompilationResult(
     resId: string,
-    token: string
+    token: string,
+    vendor: string
   ): Observable<ExecutionResultDto> {
+    const tokens = new Map<string, string>();
+    tokens.set(vendor, token);
     return this.compilerAnalysisResult.executeCompilationResult({
       resId,
-      token,
+      tokens,
     });
   }
 

@@ -6,6 +6,6 @@ export type CompilerSelectionDto = {
   circuitName?: string;
   circuitUrl?: string;
   qasmCode?: string;
-  token?: string;
+  tokens?: Map<string, string>;
   refreshToken?: string;
 };

@@ -28,6 +28,7 @@ import {
   EntityModelMcdaJob,
   EntityModelMcdaSensitivityAnalysisJob,
   EntityModelMcdaWeightLearningJob,
+  ExecuteAnalysisResultRequestDto,
   ExecutionResultDto,
   QpuSelectionDto,
   QpuSelectionResultDto,
@@ -214,18 +215,17 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           this.analyzerJob = undefined;
           this.jobReady = false;
           refreshToken = this.planqkService.getRefreshToken();
-          const providerTokens = {};
-          if (dialogResult.token) {
-            providerTokens[dialogResult.vendor] = dialogResult.token;
-          } else {
-            providerTokens[dialogResult.vendor] = ' ';
-          }
 
           const qpuSelectionDto: QpuSelectionDto = {
-            allowedProviders: [dialogResult.vendor],
+            allowedProviders: dialogResult.vendors,
             circuitLanguage: this.nisqImpl.language,
             circuitUrl: this.nisqImpl.fileLocation,
-            tokens: providerTokens,
+            tokens: this.setVendorTokens(
+              dialogResult.vendors,
+              dialogResult.ibmqToken,
+              dialogResult.awsToken,
+              dialogResult.awsSecretToken
+            ),
             refreshToken,
             compilers: dialogResult.selectedCompilers,
             circuitName: this.nisqImpl.name,
@@ -239,10 +239,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           };
           this.nisqAnalyzerRootService
             .selectQpuForCircuitFile1$Json({
-              circuitLanguage: this.nisqImpl.language,
-              circuitName: this.nisqImpl.name,
-              allowedProviders: [dialogResult.vendor],
-              tokens: providerTokens,
               body: qpuSelectionDto,
             })
             .subscribe((job) => {
@@ -307,21 +303,30 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   }
 
   execute(analysisResult: QpuSelectionResultDto): void {
-    let token = ' ';
     this.utilService
       .createDialog(ImplementationTokenDialogComponent, {
         title: 'Enter the token for the Vendor : ' + analysisResult.provider,
+        vendor: analysisResult.provider,
       })
       .afterClosed()
       .subscribe((dialogResult) => {
-        if (dialogResult.token) {
-          token = dialogResult.token;
-        }
         this.loadingResults[analysisResult.id] = true;
         this.results = undefined;
         this.executedAnalyseResult = analysisResult;
+        const executeBodyDto: ExecuteAnalysisResultRequestDto = {
+          tokens: this.setVendorTokens(
+            [analysisResult.provider],
+            dialogResult.ibmqToken,
+            dialogResult.awsToken,
+            dialogResult.awsSecretToken
+          ),
+        };
+
         this.qpuSelectionService
-          .executeQpuSelectionResult({ resId: analysisResult.id, token })
+          .executeQpuSelectionResult({
+            resId: analysisResult.id,
+            body: executeBodyDto,
+          })
           .subscribe(
             (results) => {
               if (
@@ -356,6 +361,28 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
             }
           );
       });
+  }
+
+  setVendorTokens(
+    vendors: string[],
+    ibmqToken: string,
+    awsToken: string,
+    awsSecretToken: string
+  ): Map<string, Map<string, string>> {
+    const providerTokens: Map<string, Map<string, string>> = new Map();
+    const rawTokens: Map<string, string> = new Map();
+    if (vendors.filter((vendor) => vendor === 'ibmq') != null) {
+      rawTokens.clear();
+      rawTokens.set('ibmq', ibmqToken);
+      providerTokens.set('ibmq', rawTokens);
+    }
+    if (vendors.filter((vendor) => vendor === 'ionq') != null) {
+      rawTokens.clear();
+      rawTokens.set('awsAccessKey', awsToken);
+      rawTokens.set('awsSecretKey', awsSecretToken);
+      providerTokens.set('ionq', rawTokens);
+    }
+    return providerTokens;
   }
 
   hasExecutionResult(analysisResult: QpuSelectionResultDto): void {

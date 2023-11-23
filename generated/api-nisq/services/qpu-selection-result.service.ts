@@ -8,6 +8,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { ExecuteAnalysisResultRequestDto } from '../models/execute-analysis-result-request-dto';
 import { ExecutionResultDto } from '../models/execution-result-dto';
 import { QpuSelectionJobDto } from '../models/qpu-selection-job-dto';
 import { QpuSelectionJobListDto } from '../models/qpu-selection-job-list-dto';
@@ -273,11 +274,11 @@ export class QpuSelectionResultService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `executeQpuSelectionResult()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   executeQpuSelectionResult$Response(params: {
     resId: string;
-    token: string;
+    body: ExecuteAnalysisResultRequestDto;
   }): Observable<StrictHttpResponse<ExecutionResultDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -286,7 +287,8 @@ export class QpuSelectionResultService extends BaseService {
     );
     if (params) {
       rb.path('resId', params.resId, {});
-      rb.query('token', params.token, {});
+
+      rb.body(params.body, 'application/json');
     }
     return this.http
       .request(
@@ -309,11 +311,11 @@ export class QpuSelectionResultService extends BaseService {
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `executeQpuSelectionResult$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   executeQpuSelectionResult(params: {
     resId: string;
-    token: string;
+    body: ExecuteAnalysisResultRequestDto;
   }): Observable<ExecutionResultDto> {
     return this.executeQpuSelectionResult$Response(params).pipe(
       map(

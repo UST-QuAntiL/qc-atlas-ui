@@ -25,16 +25,28 @@ export class ImplementationTokenDialogComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
-  get token(): AbstractControl | null {
-    return this.implementationExecutionForm.get('token');
+  get ibmqToken(): AbstractControl | null {
+    return this.implementationExecutionForm.get('ibmqToken');
+  }
+
+  get awsToken(): AbstractControl | null {
+    return this.implementationExecutionForm.get('awsToken');
+  }
+
+  get awsSecretToken(): AbstractControl | null {
+    return this.implementationExecutionForm.get('awsSecretToken');
   }
 
   ngOnInit(): void {
     this.implementationExecutionForm = new FormGroup({
-      token: new FormControl(this.data.token),
+      ibmqToken: new FormControl(this.data.ibmqToken),
+      awsToken: new FormControl(this.data.awsToken),
+      awsSecretToken: new FormControl(this.data.awsSecretToken),
     });
     this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.token = this.token.value;
+      this.data.ibmqToken = this.ibmqToken.value;
+      this.data.awsToken = this.awsToken.value;
+      this.data.awsSecretToken = this.awsSecretToken.value;
     });
   }
 
@@ -45,5 +57,8 @@ export class ImplementationTokenDialogComponent implements OnInit {
 
 export interface DialogData {
   title: string;
-  token: string;
+  vendor: string;
+  ibmqToken: string;
+  awsToken: string;
+  awsSecretToken: string;
 }

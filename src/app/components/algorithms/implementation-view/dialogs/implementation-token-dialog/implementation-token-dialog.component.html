@@ -1,9 +1,17 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
     <form [formGroup]="implementationExecutionForm">
-        <mat-form-field class="input-field">
-            <mat-label>Token</mat-label>
-            <input type="password" id="token" formControlName="token" matInput>
+        <mat-form-field class="input-field" *ngIf="data.vendor === 'ibmq'">
+            <mat-label>IBMQ Token</mat-label>
+            <input type="password" id="ibmqToken" formControlName="ibmqToken" matInput>
+        </mat-form-field>
+        <mat-form-field class="input-field" *ngIf="data.vendor === 'ionq'">
+            <mat-label>AWS Access Key</mat-label>
+            <input type="password" id="awsToken" formControlName="awsToken" matInput>
+        </mat-form-field>
+        <mat-form-field class="input-field" *ngIf="data.vendor === 'ionq'">
+            <mat-label>AWS Secret Key</mat-label>
+            <input type="password" id="awsSecretToken" formControlName="awsSecretToken" matInput>
         </mat-form-field>
     </form>
 </div>

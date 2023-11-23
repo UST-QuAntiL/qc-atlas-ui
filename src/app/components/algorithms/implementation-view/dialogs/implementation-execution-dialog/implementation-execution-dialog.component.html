@@ -6,6 +6,7 @@
             <mat-select formControlName="vendor" (selectionChange)="onVendorChanged($event.value)" required>
                 <mat-option [value]="'IBMQ'">IBMQ</mat-option>
                 <mat-option [value]="'Rigetti'">Rigetti</mat-option>
+                <mat-option [value]="'IonQ'">IonQ</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field class="input-field" *ngIf="isIbmqSelected">
