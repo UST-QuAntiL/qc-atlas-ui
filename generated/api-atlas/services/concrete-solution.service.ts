@@ -301,4 +301,33 @@ export class ConcreteSolutionService extends BaseService {
       return upload as Observable<HttpEvent<object>>;
     }
 
-}
+    deleteAttachedFile$Response(params: { concreteSolutionId: string }): Observable<StrictHttpResponse<void>> {
+      const rb = new RequestBuilder(
+        this.rootUrl,
+        ConcreteSolutionService.DeleteFileOfConcreteSolutionPath.replace('{patternId}', this.extractPatternId(window.location.href)).replace('{concreteSolutionId}', this.extractConcreteSolutionId(window.location.href)),
+        'delete'
+      );
+      return this.http
+        .request(
+          rb.build({
+            responseType: 'text',
+            accept: '*/*',
+          })
+        )
+        .pipe(
+          filter((r: any) => r instanceof HttpResponse),
+          map((r: HttpResponse<any>) => {
+            return (r as HttpResponse<any>).clone({
+              body: undefined,
+            }) as StrictHttpResponse<void>;
+          })
+        );
+
+    }
+
+    deleteAttachedFile(params: { concreteSolutionId: string }): Observable<void> {
+      return this.deleteAttachedFile$Response(params).pipe(
+        map((r: StrictHttpResponse<void>) => r.body as void)
+      );
+    }
+  }

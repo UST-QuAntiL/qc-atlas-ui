@@ -11,6 +11,7 @@
                [paginatorConfig]=paginatorConfig
                [emptyTableMessage]="'No File found'"
                (addElement)="onAddElement()"
+               (submitDeleteElements)="onDeleteElements($event)"
                (datalistConfigChanged)="getAttachedFile()"
                (pageChange)="getAttachedFile()">
     </app-table>

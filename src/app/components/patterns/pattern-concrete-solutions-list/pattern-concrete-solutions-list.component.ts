@@ -191,7 +191,9 @@ export class PatternConcreteSolutionListComponent implements OnInit {
                 })
                 .catch(() => {
                   snackbarMessages.push(
-                    'Could not delete algorithm "' + concreteSolution.id + '".'
+                    'Could not delete concrete solution "' +
+                      concreteSolution.id +
+                      '".'
                   );
                 })
             );
@@ -211,7 +213,7 @@ export class PatternConcreteSolutionListComponent implements OnInit {
               this.utilService.generateFinishingSnackbarMessage(
                 successfulDeletions,
                 event.elements.length,
-                'publications'
+                'concrete'
               )
             );
             this.utilService.callSnackBarSequence(snackbarMessages);

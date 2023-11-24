@@ -65,16 +65,14 @@ export class AddFileDialogComponent implements OnInit {
               100 * (event.loaded / event.total)
             );
           } else if (event.type === HttpEventType.Response) {
-            const qaiApp = event.body as ConcreteSolutionDto;
-
-            this.utilService.callSnackBar('qAI app was successfully created.');
-            this.router.navigate(['qai-apps', qaiApp.id]);
+            this.utilService.callSnackBar('File was successfully uploaded.');
+            window.location.reload();
             this.dialogRef.close();
           }
         },
         error: (error: HttpErrorResponse) => {
           this.utilService.callSnackBar(
-            'Could not create new qAI app: ' + error.message
+            'Could not upload the File: ' + error.message
           );
         },
         complete: () => {
@@ -94,7 +92,19 @@ export class AddFileDialogComponent implements OnInit {
   }
 
   isRequiredDataMissing(): boolean {
-    return this.name.errors?.required || this.selectedFile === undefined;
+    return this.selectedFile === undefined;
+  }
+
+  extractSegmentFromUrl(url: string, index: number): string {
+    const segments = url.split('/');
+
+    // Adjust index for negative values
+    if (index < 0) {
+      index = segments.length + index;
+    }
+
+    // Return the segment if index is within bounds
+    return index >= 0 && index < segments.length ? segments[index] : '';
   }
 
   onFileSelected(event): void {
