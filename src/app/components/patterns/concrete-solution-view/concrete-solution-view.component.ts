@@ -5,15 +5,16 @@ import { ConcreteSolutionService } from 'generated/api-atlas/services/concrete-s
 import { UtilService } from '../../../util/util.service';
 import { PaginatorConfig } from '../../../util/paginatorConfig';
 import { PagingInfo } from '../../../util/PagingInfo';
+import { AddFileDialogComponent } from '../dialogs/add-file-dialog.component';
 
 @Component({
   selector: 'app-concrete-solution-view',
   templateUrl: './concrete-solution-view.component.html',
 })
 export class ConcreteSolutionViewComponent implements OnInit {
-  file: FileDto;
-  tableColumns = ['Name'];
-  variableNames = ['name'];
+  file: FileDto[] = [];
+  tableColumns = ['Name', 'URL'];
+  variableNames = ['name', 'fileURL'];
   pagingInfo: PagingInfo<FileDto> = {};
   paginatorConfig: PaginatorConfig = {
     amountChoices: [10, 25, 50],
@@ -32,16 +33,18 @@ export class ConcreteSolutionViewComponent implements OnInit {
   getAttachedFile(): void {
     this.concreteSolutionService.getAttachedFile().subscribe(
       (data) => {
-        // console.log('API response:', data);
-        // console.log('File bevor:', this.file);
-        this.loading = false;
-        this.file = data;
-        // console.log('File after:', this.file);
+        this.file = [data];
       },
       () => {
         this.loading = false;
         this.utilService.callSnackBar('Error! File could not be retrieved.');
       }
     );
+  }
+
+  onAddElement(): void {
+    this.utilService.createDialog(AddFileDialogComponent, {
+      title: 'Add new File',
+    });
   }
 }

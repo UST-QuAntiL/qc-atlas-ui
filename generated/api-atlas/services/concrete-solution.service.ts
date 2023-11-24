@@ -284,4 +284,21 @@ export class ConcreteSolutionService extends BaseService {
       );
     }
 
+    attacheFile(file: File): Observable<HttpEvent<object>> {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('payload', JSON.stringify({ name }));
+  
+      const upload = this.http.post(
+        this.rootUrl + ConcreteSolutionService.PostFileOfConcreteSolutionPath.replace('{concreteSolutionId}', this.extractConcreteSolutionId(window.location.href)),
+        formData,
+        {
+          reportProgress: true,
+          observe: 'events',
+        }
+      );
+  
+      return upload as Observable<HttpEvent<object>>;
+    }
+
 }
