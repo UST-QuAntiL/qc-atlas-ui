@@ -28,6 +28,7 @@ import { LibraryViewComponent } from './components/libraries/library-view/librar
 import { SlrViewComponent } from './components/libraries/slr-view/slr-view.component';
 import { PatternListComponent } from './components/patterns/pattern-list/pattern-list.component';
 import { PatternViewComponent } from './components/patterns/pattern-view/pattern-view.component';
+import { ConcreteSolutionViewComponent } from './components/patterns/concrete-solution-view/concrete-solution-view.component';
 
 const routes: Routes = [
   { path: 'algorithms', component: AlgorithmListComponent },
@@ -40,6 +41,10 @@ const routes: Routes = [
     path: 'algorithms/:algoId/implementations/:implId',
     component: ImplementationViewComponent,
     canDeactivate: [ChangePageGuard],
+  },
+  {
+    path: 'patterns/:patternId/concrete-solutions/:concreteSolutionId',
+    component: ConcreteSolutionViewComponent,
   },
   {
     path: 'qai-apps',

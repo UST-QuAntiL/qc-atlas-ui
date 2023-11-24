@@ -9,11 +9,13 @@ import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { ConcreteSolutionDto } from '../models/concrete-solution-dto';
 import { PageConcreteSolutionDto } from '../models/page-concrete-solutions-dto';
+import { FileDto } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConcreteSolutionService extends BaseService {
+
   static readonly GetConcreteSolutionsPath = '/concrete-solutions';
   static readonly GetConcreteSolutionsOfPatternPath = '/patterns/{patternId}/concrete-solutions';
   static readonly GetFileOfConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions/{concreteSolutionId}/file';
@@ -25,6 +27,41 @@ export class ConcreteSolutionService extends BaseService {
   static readonly DeleteConcreteSolutionPath = '/patterns/{patternId}/concrete-solutions/{concreteSolutionId}';
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  extractPatternId(url: string): string | null {
+    const patternMatch = url.match(/\/patterns\/([^\/]+)/);
+    return patternMatch ? patternMatch[1] : null;
+  }
+
+  extractConcreteSolutionId(url: string): string | null {
+    const solutionMatch = url.match(/\/concrete-solutions\/([^\/]+)/);
+    return solutionMatch ? solutionMatch[1] : null;
+  }
+
+  getAttachedFile$Response(): Observable<StrictHttpResponse<FileDto>> {
+    const rb = new RequestBuilder(
+      this.rootUrl,
+      ConcreteSolutionService.GetFileOfConcreteSolutionPath.replace('{patternId}', this.extractPatternId(window.location.href)).replace('{concreteSolutionId}', this.extractConcreteSolutionId(window.location.href)),
+      'get'
+    );
+    return this.http
+      .request(
+        rb.build({
+          responseType: 'json',
+          accept: 'application/json',
+        })
+      )
+      .pipe(
+        filter((r: any) => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => r as StrictHttpResponse<FileDto>)
+      );
+  }
+
+  getAttachedFile(): Observable<FileDto> {
+    return this.getAttachedFile$Response().pipe(
+      map((r: StrictHttpResponse<FileDto>) => r.body)
+    );
   }
 
   /**

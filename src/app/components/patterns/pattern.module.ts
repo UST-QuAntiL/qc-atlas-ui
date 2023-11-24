@@ -21,6 +21,7 @@ import { PatternViewComponent } from './pattern-view/pattern-view.component';
 import { PatternPropertiesComponent } from './pattern-properties/pattern-properties.component';
 import { PatternConcreteSolutionListComponent } from './pattern-concrete-solutions-list/pattern-concrete-solutions-list.component';
 import { CreateConcreteSolutionDialogComponent } from './dialogs/create-concrete-solution-dialog.component';
+import { ConcreteSolutionViewComponent } from './concrete-solution-view/concrete-solution-view.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CreateConcreteSolutionDialogComponent } from './dialogs/create-concrete
     PatternPropertiesComponent,
     CreateConcreteSolutionDialogComponent,
     PatternConcreteSolutionListComponent,
+    ConcreteSolutionViewComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -59,6 +61,7 @@ import { CreateConcreteSolutionDialogComponent } from './dialogs/create-concrete
     PatternViewComponent,
     PatternConcreteSolutionListComponent,
     CreateConcreteSolutionDialogComponent,
+    ConcreteSolutionViewComponent,
   ],
 })
 export class PatternModule {}

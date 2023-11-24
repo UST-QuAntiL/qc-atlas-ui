@@ -83,8 +83,32 @@ export class PatternConcreteSolutionListComponent implements OnInit {
     this.pagingInfo.sort = data.sort;
   }
 
+  /**
+   * Extracts a segment from a given URL.
+   *
+   * @param url The URL from which to extract the segment.
+   * @param index The index of the segment to extract. If negative, it counts from the end.
+   * @returns The extracted segment, or an empty string if the index is out of bounds.
+   */
+  extractSegmentFromUrl(url: string, index: number): string {
+    const segments = url.split('/');
+
+    // Adjust index for negative values
+    if (index < 0) {
+      index = segments.length + index;
+    }
+
+    // Return the segment if index is within bounds
+    return index >= 0 && index < segments.length ? segments[index] : '';
+  }
+
   onElementClicked(concreteSolution: ConcreteSolutionDto): void {
-    this.router.navigate(['concrete-solutions', concreteSolution.id]);
+    this.router.navigate([
+      'patterns',
+      this.extractSegmentFromUrl(window.location.href, -1),
+      'concrete-solutions',
+      concreteSolution.id,
+    ]);
   }
 
   onAddConcreteSolution(): void {
@@ -115,7 +139,7 @@ export class PatternConcreteSolutionListComponent implements OnInit {
               (data) => {
                 this.router.navigate([
                   'patterns',
-                  window.location.href.split('/')[length - 1],
+                  this.extractSegmentFromUrl(window.location.href, -1),
                   'concrete-solutions',
                   data.id,
                 ]);
