@@ -740,6 +740,29 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
 
   showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {
     if (analysisResult.provider === 'ionq') {
+      this.qprovService.getProviders().subscribe((providers) => {
+        for (const providerDto of providers._embedded.providerDtoes) {
+          if (
+            providerDto.name.toLowerCase() ===
+            analysisResult.provider.toLowerCase()
+          ) {
+            this.provider = providerDto;
+            break;
+          }
+        }
+        // search for QPU with given name from the given provider
+        this.qprovService
+          .getQpUs({ providerId: this.provider.id })
+          .subscribe((qpuResult) => {
+            for (const qpuDto of qpuResult._embedded.qpuDtoes) {
+              if (
+                qpuDto.name.toLowerCase() === analysisResult.qpu.toLowerCase()
+              ) {
+                this.queueLengths[analysisResult.qpu] = qpuDto.queueSize;
+              }
+            }
+          });
+      });
       this.queueLengths[analysisResult.qpu] = 0;
     }
     this.nisqAnalyzerService
