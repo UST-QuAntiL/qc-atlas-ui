@@ -763,13 +763,15 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
             }
           });
       });
-      this.queueLengths[analysisResult.qpu] = 0;
+    } else if (analysisResult.provider === 'ibmq') {
+      this.nisqAnalyzerService
+        .getIBMQBackendState(analysisResult.qpu)
+        .subscribe((data) => {
+          this.queueLengths[analysisResult.qpu] = data.lengthQueue;
+        });
+    } else {
+      this.queueLengths[analysisResult.qpu] = null;
     }
-    this.nisqAnalyzerService
-      .getIBMQBackendState(analysisResult.qpu)
-      .subscribe((data) => {
-        this.queueLengths[analysisResult.qpu] = data.lengthQueue;
-      });
   }
 
   checkIfQpuDataIsOutdated(analysisResult: QpuSelectionResultDto): void {
