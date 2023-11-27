@@ -25,7 +25,6 @@ export class PatternConcreteSolutionListComponent implements OnInit {
   @Input() patternConcreteSolutions: ConcreteSolutionDto[];
   tableColumns = [
     'ID',
-    'Name',
     'Qubit Count',
     'Header',
     'Measurement',
@@ -34,7 +33,6 @@ export class PatternConcreteSolutionListComponent implements OnInit {
   ];
   variableNames = [
     'id',
-    'name',
     'qubitCount',
     'hasHeader',
     'hasMeasurment',
