@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="concreteSolutionForm">
+    <mat-form-field class="input-field">
+      <mat-label>Name</mat-label>
+      <input id="name" formControlName="name" matInput>
+    </mat-form-field>
+    <mat-form-field class="input-field">
+      <mat-label>Description</mat-label>
+      <textarea id="description" formControlName="description" matInput></textarea>
+    </mat-form-field>
+    <mat-form-field class="input-field">
+      <mat-label>Input Parameter Format</mat-label>
+      <textarea id="inputParameterFormat" formControlName="inputParameterFormat" matInput></textarea>
+    </mat-form-field>
+    <mat-form-field class="input-field">
+      <mat-label>Qubit Count</mat-label>
+      <input matInput type="number" formControlName="qubitCount">
+    </mat-form-field>
+    <mat-checkbox formControlName="hasHeader">Has Header</mat-checkbox>
+    <mat-checkbox formControlName="hasMeasurement">Has Measurement</mat-checkbox>
+    <mat-checkbox formControlName="startPattern">Start Pattern</mat-checkbox>
+    <mat-checkbox formControlName="endPattern">End Pattern</mat-checkbox>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [disabled]="isRequiredDataMissing()" [mat-dialog-close]="data">Ok
+  </button>
+</div>

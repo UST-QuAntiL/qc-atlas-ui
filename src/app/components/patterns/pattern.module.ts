@@ -14,21 +14,32 @@ import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GenericsModule } from '../generics/generics.module';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { PatternListComponent } from './pattern-list/pattern-list.component';
 import { PatternViewComponent } from './pattern-view/pattern-view.component';
 import { PatternPropertiesComponent } from './pattern-properties/pattern-properties.component';
+import { PatternConcreteSolutionListComponent } from './pattern-concrete-solutions-list/pattern-concrete-solutions-list.component';
+import { CreateConcreteSolutionDialogComponent } from './dialogs/create-concrete-solution-dialog.component';
+import { ConcreteSolutionViewComponent } from './concrete-solution-view/concrete-solution-view.component';
+import { AddFileDialogComponent } from './dialogs/add-file-dialog.component';
 
 @NgModule({
   declarations: [
     PatternListComponent,
     PatternViewComponent,
     PatternPropertiesComponent,
+    CreateConcreteSolutionDialogComponent,
+    PatternConcreteSolutionListComponent,
+    ConcreteSolutionViewComponent,
+    AddFileDialogComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
     CommonModule,
+    ReactiveFormsModule,
     MatDialogModule,
     GenericsModule,
     MatIconModule,
@@ -38,7 +49,6 @@ import { PatternPropertiesComponent } from './pattern-properties/pattern-propert
     MatButtonModule,
     MatSelectModule,
     MatInputModule,
-    MatFormFieldModule,
     MatOptionModule,
     MatSelectModule,
     MatCheckboxModule,
@@ -48,7 +58,16 @@ import { PatternPropertiesComponent } from './pattern-properties/pattern-propert
     NavigationBreadcrumbModule,
     MatTabsModule,
     MatAutocompleteModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
   ],
-  exports: [PatternListComponent, PatternViewComponent],
+  exports: [
+    PatternListComponent,
+    PatternViewComponent,
+    PatternConcreteSolutionListComponent,
+    CreateConcreteSolutionDialogComponent,
+    ConcreteSolutionViewComponent,
+    AddFileDialogComponent,
+  ],
 })
 export class PatternModule {}

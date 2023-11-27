@@ -1,15 +1,20 @@
 <mat-card class="m-2">
   <div class="mx-3 mb-2">
-    <app-table
-      [data]=displayedData
-      [variableNames]=variableNames
-      [dataColumns]=tableColumns
-      [allowAdd]=true
-      [allowDelete]=true
-      [allowSort]=true
-      [emptyTableMessage]="'No linked concrete-solutions found'"
-      [pagination]=pagingInfo
-      [paginatorConfig]=paginatorConfig>
+    <app-table [data]=patternConcreteSolutions
+               [variableNames]=variableNames
+               [dataColumns]=tableColumns
+               [allowAdd]=true
+               [allowDelete]="true"
+               [allowSearch]=true
+               [allowSort]=true
+               [pagination]=pagingInfo
+               [paginatorConfig]=paginatorConfig
+               [emptyTableMessage]="'No Concrete Solutions found'"
+               (addElement)="onAddConcreteSolution()"
+               (elementClicked)="onElementClicked($event)"
+               (submitDeleteElements)="onDeleteElements($event)"
+               (datalistConfigChanged)="getPatternConcreteSolutions($event)"
+               (pageChange)="getPatternConcreteSolutions($event)">
     </app-table>
   </div>
 </mat-card>

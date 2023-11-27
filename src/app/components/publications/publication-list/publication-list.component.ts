@@ -41,7 +41,6 @@ export class PublicationListComponent implements OnInit {
   getPublications(params: QueryParams): void {
     this.publicationService.getPublications(params).subscribe(
       (data) => {
-        console.log('getPublications API response:', data); // Fügen Sie diese Zeile hinzu
         this.preparePublicationData(data);
       },
       () => {
