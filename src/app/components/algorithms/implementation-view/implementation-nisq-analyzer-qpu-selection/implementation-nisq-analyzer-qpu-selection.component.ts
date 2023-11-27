@@ -222,8 +222,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
             dialogResult.awsSecretToken
           );
 
-          debugger;
-
           const qpuSelectionDto: QpuSelectionDto = {
             allowedProviders: dialogResult.vendors,
             circuitLanguage: this.nisqImpl.language,
@@ -375,7 +373,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
     const providerTokens = new Map<string, Map<string, string>>();
     const rawTokensIbmq = new Map<string, string>();
     const rawTokensIonq = new Map<string, string>();
-    debugger;
     if (vendors.includes('ibmq')) {
       rawTokensIbmq.set('ibmq', ibmqToken);
       providerTokens.set('ibmq', rawTokensIbmq);
@@ -386,7 +383,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
       providerTokens.set('ionq', rawTokensIonq);
     }
 
-    debugger;
     // converting such that it can be delivered via HTTP
     const convMap: { [props: string]: { [props: string]: string } } = {};
     providerTokens.forEach((val: Map<string, string>, key: string) => {
