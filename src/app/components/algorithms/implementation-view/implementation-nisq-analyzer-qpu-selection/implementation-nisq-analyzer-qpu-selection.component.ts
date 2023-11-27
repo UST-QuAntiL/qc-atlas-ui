@@ -311,56 +311,59 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
       })
       .afterClosed()
       .subscribe((dialogResult) => {
-        this.loadingResults[analysisResult.id] = true;
-        this.results = undefined;
-        this.executedAnalyseResult = analysisResult;
-        const executeBodyDto: ExecuteAnalysisResultRequestDto = {
-          tokens: this.setVendorTokens(
-            [analysisResult.provider],
-            dialogResult.ibmqToken,
-            dialogResult.awsToken,
-            dialogResult.awsSecretToken
-          ),
-        };
+        if (dialogResult) {
+          this.loadingResults[analysisResult.id] = true;
+          this.results = undefined;
+          this.executedAnalyseResult = analysisResult;
+          const executeBodyDto: ExecuteAnalysisResultRequestDto = {
+            tokens: this.setVendorTokens(
+              [analysisResult.provider],
+              dialogResult.ibmqToken,
+              dialogResult.awsToken,
+              dialogResult.awsSecretToken
+            ),
+          };
 
-        this.qpuSelectionService
-          .executeQpuSelectionResult({
-            resId: analysisResult.id,
-            body: executeBodyDto,
-          })
-          .subscribe(
-            (results) => {
-              if (
-                results.status === 'FAILED' ||
-                results.status === 'FINISHED'
-              ) {
-                this.results = results;
-              } else {
-                interval(1000)
-                  .pipe(
-                    exhaustMap(() =>
-                      this.http.get<ExecutionResultDto>(
-                        results._links['self'].href
+          this.qpuSelectionService
+            .executeQpuSelectionResult({
+              resId: analysisResult.id,
+              body: executeBodyDto,
+            })
+            .subscribe(
+              (results) => {
+                if (
+                  results.status === 'FAILED' ||
+                  results.status === 'FINISHED'
+                ) {
+                  this.results = results;
+                } else {
+                  interval(1000)
+                    .pipe(
+                      exhaustMap(() =>
+                        this.http.get<ExecutionResultDto>(
+                          results._links['self'].href
+                        )
+                      ),
+                      first(
+                        (value) =>
+                          value.status === 'FAILED' ||
+                          value.status === 'FINISHED'
                       )
-                    ),
-                    first(
-                      (value) =>
-                        value.status === 'FAILED' || value.status === 'FINISHED'
                     )
-                  )
-                  .subscribe((finalResult) => (this.results = finalResult));
+                    .subscribe((finalResult) => (this.results = finalResult));
+                }
+                this.utilService.callSnackBar(
+                  'Successfully started execution "' + results.id + '".'
+                );
+                this.hasExecutionResult(analysisResult);
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Could not start execution.'
+                );
               }
-              this.utilService.callSnackBar(
-                'Successfully started execution "' + results.id + '".'
-              );
-              this.hasExecutionResult(analysisResult);
-            },
-            () => {
-              this.utilService.callSnackBar(
-                'Error! Could not start execution.'
-              );
-            }
-          );
+            );
+        }
       });
   }
 
@@ -736,6 +739,9 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   }
 
   showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {
+    if (analysisResult.provider === 'ionq') {
+      this.queueLengths[analysisResult.qpu] = 0;
+    }
     this.nisqAnalyzerService
       .getIBMQBackendState(analysisResult.qpu)
       .subscribe((data) => {
