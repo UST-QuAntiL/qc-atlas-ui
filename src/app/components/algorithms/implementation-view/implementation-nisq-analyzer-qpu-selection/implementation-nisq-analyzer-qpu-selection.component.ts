@@ -215,17 +215,20 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           this.analyzerJob = undefined;
           this.jobReady = false;
           refreshToken = this.planqkService.getRefreshToken();
+          const tokensToDeliver = this.setVendorTokens(
+            dialogResult.vendors,
+            dialogResult.ibmqToken,
+            dialogResult.awsToken,
+            dialogResult.awsSecretToken
+          );
+
+          debugger;
 
           const qpuSelectionDto: QpuSelectionDto = {
             allowedProviders: dialogResult.vendors,
             circuitLanguage: this.nisqImpl.language,
             circuitUrl: this.nisqImpl.fileLocation,
-            tokens: this.setVendorTokens(
-              dialogResult.vendors,
-              dialogResult.ibmqToken,
-              dialogResult.awsToken,
-              dialogResult.awsSecretToken
-            ),
+            tokens: tokensToDeliver,
             refreshToken,
             compilers: dialogResult.selectedCompilers,
             circuitName: this.nisqImpl.name,
@@ -368,21 +371,32 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
     ibmqToken: string,
     awsToken: string,
     awsSecretToken: string
-  ): Map<string, Map<string, string>> {
-    const providerTokens: Map<string, Map<string, string>> = new Map();
-    const rawTokens: Map<string, string> = new Map();
-    if (vendors.filter((vendor) => vendor === 'ibmq') != null) {
-      rawTokens.clear();
-      rawTokens.set('ibmq', ibmqToken);
-      providerTokens.set('ibmq', rawTokens);
+  ): {} {
+    const providerTokens = new Map<string, Map<string, string>>();
+    const rawTokensIbmq = new Map<string, string>();
+    const rawTokensIonq = new Map<string, string>();
+    debugger;
+    if (vendors.includes('ibmq')) {
+      rawTokensIbmq.set('ibmq', ibmqToken);
+      providerTokens.set('ibmq', rawTokensIbmq);
     }
-    if (vendors.filter((vendor) => vendor === 'ionq') != null) {
-      rawTokens.clear();
-      rawTokens.set('awsAccessKey', awsToken);
-      rawTokens.set('awsSecretKey', awsSecretToken);
-      providerTokens.set('ionq', rawTokens);
+    if (vendors.includes('ionq')) {
+      rawTokensIonq.set('awsAccessKey', awsToken);
+      rawTokensIonq.set('awsSecretKey', awsSecretToken);
+      providerTokens.set('ionq', rawTokensIonq);
     }
-    return providerTokens;
+
+    debugger;
+    // converting such that it can be delivered via HTTP
+    const convMap: { [props: string]: { [props: string]: string } } = {};
+    providerTokens.forEach((val: Map<string, string>, key: string) => {
+      const innerConvMap: { [props: string]: string } = {};
+      val.forEach((subVal: string, subkey: string) => {
+        innerConvMap[subkey] = subVal;
+      });
+      convMap[key] = innerConvMap;
+    });
+    return convMap;
   }
 
   hasExecutionResult(analysisResult: QpuSelectionResultDto): void {

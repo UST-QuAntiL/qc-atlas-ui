@@ -32,7 +32,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   selectedCompilers: string[] = [];
 
   ibmqEnabled = true;
-  ionqEnabled = true;
+  ionqEnabled = false;
   shortWaitingTimeEnabled = false;
   stableExecutionResultsEnabled = false;
   predictionAlgorithmInDialog = 'extra_trees_regressor';
@@ -136,11 +136,11 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
       ),
     });
 
-    this.selectedVendors = ['ibmq', 'ionq'];
+    this.selectedVendors = ['ibmq'];
     for (const vendor of this.selectedVendors) {
       this.vendors.push(new FormControl(vendor));
     }
-    this.setCompilerOptions(this.vendors.value);
+    this.setCompilerOptions(this.selectedVendors);
     this.predictionAlgorithm.setValue('extra_trees_regressor');
     this.metaOptimizer.setValue('ada_boost_regressor');
     this.maxNumberOfCompiledCircuits.setValue(5);
@@ -167,7 +167,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   }
 
   updateCompilerSelection(compilerName: string, allowed: boolean): void {
-    if (allowed) {
+    if (allowed && !this.selectedCompilers.includes(compilerName)) {
       this.selectedCompilers.push(compilerName);
     } else {
       this.selectedCompilers = this.selectedCompilers.filter(
@@ -192,7 +192,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   }
 
   setCompilerOptions(vendors: string[]): void {
-    debugger;
     const setOfAllAvailableCompilers = new Set<string>();
     for (const vendor of vendors) {
       this.nisqAnalyzerService
@@ -201,14 +200,16 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
           for (const availableCompiler of availableCompilers) {
             setOfAllAvailableCompilers.add(availableCompiler);
           }
+          setOfAllAvailableCompilers.forEach((compiler) => {
+            if (!this.selectedCompilers.includes(compiler)) {
+              this.selectedCompilers.push(compiler);
+            }
+          });
+          this.compilers.clear();
+          for (const compiler of setOfAllAvailableCompilers) {
+            this.compilers.push(new FormControl(compiler));
+          }
         });
-      setOfAllAvailableCompilers.forEach((compiler) =>
-        this.selectedCompilers.push(compiler)
-      );
-      this.compilers.clear();
-      for (const compiler of this.selectedCompilers) {
-        this.compilers.push(new FormControl(compiler));
-      }
     }
   }
 
@@ -216,7 +217,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     this.ibmqEnabled = enabled;
     if (enabled) {
       this.selectedVendors.push('ibmq');
-      this.setCompilerOptions(['ibmq']);
     } else {
       this.selectedVendors = this.selectedVendors.filter(
         (item) => item !== 'ibmq'
@@ -228,7 +228,6 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     this.ionqEnabled = enabled;
     if (enabled) {
       this.selectedVendors.push('ionq');
-      this.setCompilerOptions(['ionq']);
     } else {
       this.selectedVendors = this.selectedVendors.filter(
         (item) => item !== 'ionq'

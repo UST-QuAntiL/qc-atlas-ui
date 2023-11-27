@@ -4,7 +4,7 @@ export type QpuSelectionDto = {
   circuitLanguage?: string;
   circuitUrl?: string;
   qasmCode?: string;
-  tokens?: Map<string, Map<string, string>>;
+  tokens?: {};
   refreshToken?: string;
   circuitName?: string;
   preciseResultsPreference?: boolean;
