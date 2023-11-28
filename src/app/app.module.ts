@@ -78,7 +78,6 @@ import { LibraryTableComponent } from './components/libraries/library-table/libr
 import { OnDemandComponent } from './components/on-demand-execution/ondemand.component';
 import { QunicornAppModule } from './components/qunicorn-service/qunicorn.apps.module';
 
-
 @NgModule({
   declarations: [
     // components
@@ -107,7 +106,7 @@ import { QunicornAppModule } from './components/qunicorn-service/qunicorn.apps.m
     AddSlrDialogComponent,
     SlrPropertiesComponent,
     LibraryTableComponent,
-    OnDemandComponent
+    OnDemandComponent,
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -167,7 +166,7 @@ import { QunicornAppModule } from './components/qunicorn-service/qunicorn.apps.m
   bootstrap: [AppComponent],
   providers: [
     UtilService,
-    //ChangePageGuard,
+    // ChangePageGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
@@ -181,4 +180,4 @@ import { QunicornAppModule } from './components/qunicorn-service/qunicorn.apps.m
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}

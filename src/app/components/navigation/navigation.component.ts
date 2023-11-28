@@ -34,7 +34,7 @@ export class NavigationComponent implements OnInit {
     private config: ApiConfiguration,
     private utilService: UtilService,
     private planqkPlatformLoginService: PlanqkPlatformLoginService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.breakpointObserver
@@ -48,7 +48,7 @@ export class NavigationComponent implements OnInit {
         if (loggedIn) {
           this.bearerTokenSet = true;
           this.config.rootUrl = 'https://platform.planqk.de/qc-catalog';
-          //this.reloadStartPage();
+          // this.reloadStartPage();
           this.utilService.callSnackBar(
             'Successfully logged into the PlanQK platform.'
           );
@@ -62,7 +62,7 @@ export class NavigationComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  onSettings(): void { }
+  onSettings(): void {}
 
   login(): void {
     if (!this.bearerTokenSet) {
