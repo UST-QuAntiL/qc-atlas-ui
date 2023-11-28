@@ -17,6 +17,9 @@ export class QunicornAppComponent implements OnInit {
   deploymentID = 3;
   jobID = 3;
 
+  selectedPlatform = ''; // Added property for the selected platform
+  selectedLanguage = 'QASM2';
+
   response: any;
   jobResponse: any;
   deploymentResponse: any;
