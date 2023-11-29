@@ -11,10 +11,9 @@
         <div class="container">
           <div class="input-frame">
             <form (ngSubmit)="submitDeployment()">
-              <p class="description">Define your circuit and the type of the circuit for the deployment:</p>
-              <!--<input style="width: 100%; height: auto;" [(ngModel)]="userInput" name="userInput"
-              placeholder='OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1];\nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];' />
-            -->
+              <p class="description">Define the name, your circuit and the type of the circuit for the deployment:</p>
+              <input style="width: 100%; height: auto;" [(ngModel)]="deploymentName" name="deploymentName"
+                placeholder="PlanQK-UseCase" />
               <textarea [(ngModel)]="userInput" name="userInput" placeholder="OPENQASM 2.0;
 include &quot;qelib1.inc&quot;;
 qreg q[2];
@@ -69,12 +68,15 @@ measure q[1] -&gt; meas[1];" rows="10"></textarea>
       <mat-tab label="Invoke Job">
         <div class="input-frame">
           <form (ngSubmit)="invokeJob()">
+            <p class="description"> Choose a JobName:</p>
+            <input [(ngModel)]="jobName" name="jobName" placeholder="PlanQK-Job" />
             <p class="description"> Input your Deployment ID from the response in Step 1:</p>
             <input [(ngModel)]="deploymentID" name="deploymentID" placeholder=3 />
             <p class="description">Choose the platform where the Job should be running:</p>
             <div class="radio-group">
               <label>
-                <input type="radio" [(ngModel)]="selectedPlatform" name="platform" value="IBM" />
+                <input type="radio" [(ngModel)]="selectedPlatform" name="platform" value="IBM"
+                  [checked]="selectedPlatform ==='IBM'" />
                 IBM
               </label>
               <label>

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UtilService } from '../../../util/util.service';
 
+
+
 @Component({
   selector: 'qunicorn-service',
   templateUrl: './qunicorn-service.component.html',
@@ -13,11 +15,13 @@ export class QunicornAppComponent implements OnInit {
   variableNames = ['name'];
   loading = true;
 
-  userInput = '';
+  userInput: string = '';
   deploymentID = 3;
-  jobID = 3;
+  deploymentName: string = 'PlanQK-UseCase';
+  jobID: any = 1;
+  jobName: string = 'PlanQK-Job';
 
-  selectedPlatform = ''; // Added property for the selected platform
+  selectedPlatform = 'IBM'; // Added property for the selected platform
   selectedLanguage = 'QASM2';
 
   response: any;
@@ -35,9 +39,9 @@ export class QunicornAppComponent implements OnInit {
     private router: Router,
     private utilService: UtilService,
     private http: HttpClient
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   getJobs() {
     this.http
@@ -59,25 +63,26 @@ export class QunicornAppComponent implements OnInit {
       .set('accept', 'application/json')
       .set('Content-Type', 'application/json');
 
-    if ((this.userInput = '')) {
+    if (this.userInput === '') {
       this.userInput =
         'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1]; \
         \nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n';
     }
 
-    console.log(this.userInput);
+    console.log('userInput:', this.userInput);
+    console.log('selectedLanguage:', this.selectedLanguage);
 
     const requestBody = {
       programs: [
         {
-          quantumCircuit:
-            'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1]; \
-            \nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n',
-          // quantumCircuit: this.userInput,
-          assemblerLanguage: 'QASM2',
+          // quantumCircuit:
+          //'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1]; \
+          //\nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n',
+          quantumCircuit: this.userInput,
+          assemblerLanguage: this.selectedLanguage,
         },
       ],
-      name: 'SeQuenC-UseCase',
+      name: this.deploymentName,
     };
 
     this.http
@@ -116,7 +121,7 @@ export class QunicornAppComponent implements OnInit {
       .set('Content-Type', 'application/json');
 
     const requestBody = {
-      name: 'JobName',
+      name: this.jobName,
       providerName: 'IBM',
       deviceName: 'aer_simulator',
       shots: 4000,
