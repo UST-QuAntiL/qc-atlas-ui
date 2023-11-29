@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UtilService } from '../../../util/util.service';
 
-
-
 @Component({
   selector: 'qunicorn-service',
   templateUrl: './qunicorn-service.component.html',
@@ -15,11 +13,11 @@ export class QunicornAppComponent implements OnInit {
   variableNames = ['name'];
   loading = true;
 
-  userInput: string = '';
+  userInput = '';
   deploymentID = 3;
-  deploymentName: string = 'PlanQK-UseCase';
+  deploymentName = 'PlanQK-UseCase';
   jobID: any = 1;
-  jobName: string = 'PlanQK-Job';
+  jobName = 'PlanQK-Job';
 
   selectedPlatform = 'IBM'; // Added property for the selected platform
   selectedLanguage = 'QASM2';
@@ -39,9 +37,9 @@ export class QunicornAppComponent implements OnInit {
     private router: Router,
     private utilService: UtilService,
     private http: HttpClient
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getJobs() {
     this.http
@@ -76,8 +74,8 @@ export class QunicornAppComponent implements OnInit {
       programs: [
         {
           // quantumCircuit:
-          //'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1]; \
-          //\nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n',
+          // 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1]; \
+          // \nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n',
           quantumCircuit: this.userInput,
           assemblerLanguage: this.selectedLanguage,
         },
