@@ -6,10 +6,14 @@
             <input type="password" id="ibmqToken" formControlName="ibmqToken" matInput>
         </mat-form-field>
         <mat-form-field class="input-field" *ngIf="data.vendor === 'ionq'">
+            <mat-label>IonQ Token</mat-label>
+            <input type="password" id="ionqToken" formControlName="ionqToken" matInput>
+        </mat-form-field>
+        <mat-form-field class="input-field" *ngIf="data.vendor === 'aws'">
             <mat-label>AWS Access Key</mat-label>
             <input type="password" id="awsToken" formControlName="awsToken" matInput>
         </mat-form-field>
-        <mat-form-field class="input-field" *ngIf="data.vendor === 'ionq'">
+        <mat-form-field class="input-field" *ngIf="data.vendor === 'aws'">
             <mat-label>AWS Secret Key</mat-label>
             <input type="password" id="awsSecretToken" formControlName="awsSecretToken" matInput>
         </mat-form-field>

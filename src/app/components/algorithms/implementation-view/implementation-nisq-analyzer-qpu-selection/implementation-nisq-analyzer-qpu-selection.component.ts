@@ -218,6 +218,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           const tokensToDeliver = this.setVendorTokens(
             dialogResult.vendors,
             dialogResult.ibmqToken,
+            dialogResult.ionqToken,
             dialogResult.awsToken,
             dialogResult.awsSecretToken
           );
@@ -319,6 +320,7 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
             tokens: this.setVendorTokens(
               [analysisResult.provider],
               dialogResult.ibmqToken,
+              dialogResult.ionqToken,
               dialogResult.awsToken,
               dialogResult.awsSecretToken
             ),
@@ -370,20 +372,27 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   setVendorTokens(
     vendors: string[],
     ibmqToken: string,
+    ionqToken: string,
     awsToken: string,
     awsSecretToken: string
   ): {} {
     const providerTokens = new Map<string, Map<string, string>>();
     const rawTokensIbmq = new Map<string, string>();
     const rawTokensIonq = new Map<string, string>();
+    const rawTokensAws = new Map<string, string>();
+
     if (vendors.includes('ibmq')) {
       rawTokensIbmq.set('ibmq', ibmqToken);
       providerTokens.set('ibmq', rawTokensIbmq);
     }
     if (vendors.includes('ionq')) {
-      rawTokensIonq.set('awsAccessKey', awsToken);
-      rawTokensIonq.set('awsSecretKey', awsSecretToken);
+      rawTokensIonq.set('ionq', ionqToken);
       providerTokens.set('ionq', rawTokensIonq);
+    }
+    if (vendors.includes('aws')) {
+      rawTokensAws.set('awsAccessKey', awsToken);
+      rawTokensAws.set('awsSecretKey', awsSecretToken);
+      providerTokens.set('aws', rawTokensAws);
     }
 
     // converting such that it can be delivered via HTTP

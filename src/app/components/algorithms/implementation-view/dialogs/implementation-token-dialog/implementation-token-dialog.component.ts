@@ -29,6 +29,10 @@ export class ImplementationTokenDialogComponent implements OnInit {
     return this.implementationExecutionForm.get('ibmqToken');
   }
 
+  get ionqToken(): AbstractControl | null {
+    return this.implementationExecutionForm.get('ionqToken');
+  }
+
   get awsToken(): AbstractControl | null {
     return this.implementationExecutionForm.get('awsToken');
   }
@@ -40,11 +44,13 @@ export class ImplementationTokenDialogComponent implements OnInit {
   ngOnInit(): void {
     this.implementationExecutionForm = new FormGroup({
       ibmqToken: new FormControl(this.data.ibmqToken),
+      ionqToken: new FormControl(this.data.ionqToken),
       awsToken: new FormControl(this.data.awsToken),
       awsSecretToken: new FormControl(this.data.awsSecretToken),
     });
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.ibmqToken = this.ibmqToken.value;
+      this.data.ionqToken = this.ionqToken.value;
       this.data.awsToken = this.awsToken.value;
       this.data.awsSecretToken = this.awsSecretToken.value;
     });
@@ -59,6 +65,7 @@ export interface DialogData {
   title: string;
   vendor: string;
   ibmqToken: string;
+  ionqToken: string;
   awsToken: string;
   awsSecretToken: string;
 }

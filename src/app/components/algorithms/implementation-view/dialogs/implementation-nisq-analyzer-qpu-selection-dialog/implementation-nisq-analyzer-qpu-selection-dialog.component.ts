@@ -6,7 +6,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -33,6 +32,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
 
   ibmqEnabled = true;
   ionqEnabled = false;
+  awsEnabled = false;
   shortWaitingTimeEnabled = false;
   stableExecutionResultsEnabled = false;
   predictionAlgorithmInDialog = 'extra_trees_regressor';
@@ -59,6 +59,10 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
 
   get ibmqToken(): AbstractControl | null {
     return this.qpuSelectionFrom.get('ibmqToken');
+  }
+
+  get ionqToken(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('ionqToken');
   }
 
   get awsToken(): AbstractControl | null {
@@ -101,6 +105,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     this.qpuSelectionFrom = new FormGroup({
       vendors: new FormArray([]),
       ibmqToken: new FormControl(this.data.ibmqToken),
+      ionqToken: new FormControl(this.data.ionqToken),
       awsToken: new FormControl(this.data.awsToken),
       awsSecretToken: new FormControl(this.data.awsSecretToken),
       compilers: new FormArray([]),
@@ -157,6 +162,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
       this.data.shortWaitingTime = this.shortWaitingTimeEnabled;
       this.data.stableExecutionResults = this.stableExecutionResultsEnabled;
       this.data.ibmqToken = this.ibmqToken.value;
+      this.data.ionqToken = this.ionqToken.value;
       this.data.awsToken = this.awsToken.value;
       this.data.awsSecretToken = this.awsSecretToken.value;
     });
@@ -235,6 +241,17 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     }
   }
 
+  setAwsEnabled(enabled: boolean): void {
+    this.awsEnabled = enabled;
+    if (enabled) {
+      this.selectedVendors.push('aws');
+    } else {
+      this.selectedVendors = this.selectedVendors.filter(
+        (item) => item !== 'aws'
+      );
+    }
+  }
+
   setWaitingTimeEnabled(enabled: boolean): void {
     this.shortWaitingTimeEnabled = enabled;
   }
@@ -287,6 +304,7 @@ interface DialogData {
   stableExecutionResults: boolean;
   shortWaitingTime: boolean;
   ibmqToken: string;
+  ionqToken: string;
   awsToken: string;
   awsSecretToken: string;
 }

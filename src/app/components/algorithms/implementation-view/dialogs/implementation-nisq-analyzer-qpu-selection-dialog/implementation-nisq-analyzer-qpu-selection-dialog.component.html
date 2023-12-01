@@ -4,19 +4,28 @@
         <span>Select vendor:</span><br>
         <mat-checkbox color="primary" [checked]="ibmqEnabled"
                       (change)="setIbmqEnabled($event.checked)">IBMQ
-        </mat-checkbox><br>
+        </mat-checkbox>
         <mat-form-field class="input-field" *ngIf="ibmqEnabled">
             <mat-label>IBMQ Token</mat-label>
             <input type="password" id="ibmqToken" formControlName="ibmqToken" matInput>
         </mat-form-field>
+        <br>
         <mat-checkbox color="primary" [checked]="ionqEnabled"
                       (change)="setIonqEnabled($event.checked)">IonQ
         </mat-checkbox>
         <mat-form-field class="input-field" *ngIf="ionqEnabled">
+            <mat-label>IonQ Token</mat-label>
+            <input type="password" id="ionqToken" formControlName="ionqToken" matInput>
+        </mat-form-field>
+        <br>
+        <mat-checkbox color="primary" [checked]="awsEnabled"
+                      (change)="setAwsEnabled($event.checked)">AWS Braket
+        </mat-checkbox>
+        <mat-form-field class="input-field" *ngIf="awsEnabled">
             <mat-label>AWS Access Key</mat-label>
             <input type="password" id="awsToken" formControlName="awsToken" matInput>
         </mat-form-field>
-        <mat-form-field class="input-field" *ngIf="ionqEnabled">
+        <mat-form-field class="input-field" *ngIf="awsEnabled">
             <mat-label>AWS Secret Key</mat-label>
             <input type="password" id="awsSecretToken" formControlName="awsSecretToken" matInput>
         </mat-form-field>
