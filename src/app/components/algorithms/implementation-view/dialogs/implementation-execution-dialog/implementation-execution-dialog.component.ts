@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { ProviderService } from 'api-qprov/services/provider.service';
 import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
+import { CollectionModelEntityModelProviderDto } from 'api-qprov/models/collection-model-entity-model-provider-dto';
 
 @Component({
   selector: 'app-implementation-execution-dialog',
@@ -79,10 +80,10 @@ export class ImplementationExecutionDialogComponent implements OnInit {
 
   onVendorChanged(value: string): void {
     this.qpuArray = [];
-    this.isIbmqSelected = true;
-    if (value === 'IBMQ') {
+    if (value === 'IBMQ' || value === 'IonQ') {
+      this.isIbmqSelected = true;
       this.providerService.getProviders().subscribe((result) => {
-        this.getProviderDtoByName(result);
+        this.getProviderDtoByName(result, value);
         if (!this.provider) {
           console.error('Provider with given name not found!');
           this.ready = true;
@@ -104,13 +105,16 @@ export class ImplementationExecutionDialogComponent implements OnInit {
     }
   }
 
-  getProviderDtoByName(result): void {
+  getProviderDtoByName(
+    result: CollectionModelEntityModelProviderDto,
+    provider: string
+  ): void {
     if (result === null) {
       console.error('Error while loading provider!');
       return;
     }
     for (const providerDto of result._embedded.providerDtoes) {
-      if (providerDto.name.toLowerCase() === 'ibmq') {
+      if (providerDto.name.toLowerCase() === provider.toLowerCase()) {
         this.provider = providerDto;
         return;
       }
@@ -122,6 +126,7 @@ export class ImplementationExecutionDialogComponent implements OnInit {
       console.error('Error while loading QPUs!');
       return;
     }
+    this.qpuArray = [];
     for (const qpuDto of result._embedded.qpuDtoes) {
       this.qpuArray.push(qpuDto.name);
     }
