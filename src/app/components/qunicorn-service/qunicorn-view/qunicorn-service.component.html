@@ -14,7 +14,7 @@
               <p class="description">Define the name, the circuit and the type of the circuit for the deployment:</p>
               <input style="width: 100%; height: auto;" [(ngModel)]="deploymentName" name="deploymentName"
                 placeholder="PlanQK-UseCase" />
-              <textarea [(ngModel)]="userInput" name="userInput" [placeholder]= "placeholderCircuit"></textarea>
+              <textarea #userInputTextArea [(ngModel)]="userInput" name="userInput" [placeholder]= "placeholderCircuit" [rows]="numRows"></textarea>
 <!--
 "OPENQASM 2.0;
 include &quot;qelib1.inc&quot;;
@@ -52,7 +52,7 @@ measure q[1] -&gt; meas[1];" rows="10"></textarea>
 
           <!-- <button mat-flat-button color="primary" (click)="submitDeployment()">Submit Definitions</button> -->
           <div class="response-frame">
-            <p class="description">Deployment Response {{deploymentID}} with the name: {{deploymentName}}:</p>
+            <p class="description">Deployment Response:</p>
             <pre>{{ deploymentResponse }}</pre>
           </div>
 

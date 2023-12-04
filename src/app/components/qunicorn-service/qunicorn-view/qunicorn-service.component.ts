@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UtilService } from '../../../util/util.service';
@@ -9,16 +9,23 @@ import { UtilService } from '../../../util/util.service';
   styleUrls: ['./qunicorn-view.component.scss'],
 })
 export class QunicornAppComponent implements OnInit {
+  @ViewChild('userInputTextArea', { static: false }) userInputTextArea:
+    | ElementRef
+    | undefined;
+
+  numRows = 10; // Initial number of rows
+
   tableColumns = ['Name'];
   variableNames = ['name'];
   loading = true;
 
   userInput = '';
-  deploymentID: number = 3;
+  deploymentID = 3;
   deploymentName = 'PlanQK-UseCase';
   jobID: any = 1;
   jobName = 'PlanQK-Job';
-  placeholderCircuit: string = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1]; \
+  placeholderCircuit =
+    'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1]; \
   \nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n';
 
   selectedPlatform = 'IBM'; // Added property for the selected platform
@@ -68,7 +75,7 @@ export class QunicornAppComponent implements OnInit {
       this.userInput =
         'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1]; \
         \nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n';
-      this.userInput = this.placeholderCircuit;  
+      this.userInput = this.placeholderCircuit;
     }
 
     console.log('userInput:', this.userInput);
@@ -94,7 +101,7 @@ export class QunicornAppComponent implements OnInit {
       .subscribe(
         (data: any) => {
           this.deploymentResponse = JSON.stringify(data, null, 2);
-                // Parse the JSON string into an object
+          // Parse the JSON string into an object
           const parsedData = JSON.parse(this.deploymentResponse);
 
           this.deploymentID = parsedData.id;
@@ -127,11 +134,11 @@ export class QunicornAppComponent implements OnInit {
       .set('accept', 'application/json')
       .set('Content-Type', 'application/json');
 
-      if (this.selectedPlatform === 'IBM'){
-        this.selectedDevice = 'aer_simulator';
-      } else if (this.selectedPlatform == 'AWS'){
-        this.selectedDevice = 'local_simulator';
-      }
+    if (this.selectedPlatform === 'IBM') {
+      this.selectedDevice = 'aer_simulator';
+    } else if (this.selectedPlatform === 'AWS') {
+      this.selectedDevice = 'local_simulator';
+    }
 
     const requestBody = {
       name: this.jobName,
@@ -150,7 +157,7 @@ export class QunicornAppComponent implements OnInit {
         (data: any) => {
           this.jobResponse = JSON.stringify(data, null, 2);
 
-                // Parse the JSON string into an object
+          // Parse the JSON string into an object
           const parsedData = JSON.parse(this.jobResponse);
 
           this.jobID = parsedData.id;
@@ -189,13 +196,16 @@ export class QunicornAppComponent implements OnInit {
 
   updatePlaceholder() {
     if (this.selectedLanguage === 'QASM2') {
-      this.placeholderCircuit = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1]; \
+      this.placeholderCircuit =
+        'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncreg meas[2];\nh q[0];\ncx q[0],q[1]; \
       \nbarrier q[0],q[1];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\n';
     } else if (this.selectedLanguage === 'QASM3') {
-      this.placeholderCircuit = 'OPENQASM 3.0;\nbit[2] bits;\nqubit[2] qubits;\nh qubits[0];\ncnot qubits[0], qubits[1];\nbits[0] = measure qubits[0];\nbits[1] = measure qubits[1];';
-    } else if (this.selectedLanguage === 'QISKIT'){
-      this.placeholderCircuit = 'circuit = QuantumCircuit(2, 2);\ncircuit.h(0);\ncircuit.cx(0, 1);\ncircuit.measure(0, 0);\ncircuit.measure(1, 1)';
-    } else if (this.selectedLanguage === 'BRAKET'){
+      this.placeholderCircuit =
+        'OPENQASM 3.0;\nbit[2] bits;\nqubit[2] qubits;\nh qubits[0];\ncnot qubits[0], qubits[1];\nbits[0] = measure qubits[0];\nbits[1] = measure qubits[1];';
+    } else if (this.selectedLanguage === 'QISKIT') {
+      this.placeholderCircuit =
+        'circuit = QuantumCircuit(2, 2);\ncircuit.h(0);\ncircuit.cx(0, 1);\ncircuit.measure(0, 0);\ncircuit.measure(1, 1)';
+    } else if (this.selectedLanguage === 'BRAKET') {
       this.placeholderCircuit = 'Circuit().h(0).cnot(0, 1)';
     }
   }
