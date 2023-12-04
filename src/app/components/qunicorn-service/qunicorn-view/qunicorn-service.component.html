@@ -14,7 +14,9 @@
               <p class="description">Define the name, the circuit and the type of the circuit for the deployment:</p>
               <input style="width: 100%; height: auto;" [(ngModel)]="deploymentName" name="deploymentName"
                 placeholder="PlanQK-UseCase" />
-              <textarea [(ngModel)]="userInput" name="userInput" placeholder="OPENQASM 2.0;
+              <textarea [(ngModel)]="userInput" name="userInput" [placeholder]= "placeholderCircuit"></textarea>
+<!--
+"OPENQASM 2.0;
 include &quot;qelib1.inc&quot;;
 qreg q[2];
 creg meas[2];
@@ -23,23 +25,23 @@ cx q[0],q[1];
 barrier q[0],q[1];
 measure q[0] -&gt; meas[0];
 measure q[1] -&gt; meas[1];" rows="10"></textarea>
-
+              -->
               <div class="radio-group">
                 <label>
                   <input type="radio" [(ngModel)]="selectedLanguage" name="language" value="QASM2"
-                    [checked]="selectedLanguage === 'QASM2'" />
+                    [checked]="selectedLanguage === 'QASM2'" (change)="updatePlaceholder()"/>
                   QASM2
                 </label>
                 <label>
-                  <input type="radio" [(ngModel)]="selectedLanguage" name="language" value="QASM3" />
+                  <input type="radio" [(ngModel)]="selectedLanguage" name="language" value="QASM3" (change)="updatePlaceholder()" />
                   QASM3
                 </label>
                 <label>
-                  <input type="radio" [(ngModel)]="selectedLanguage" name="language" value="QISKIT" />
+                  <input type="radio" [(ngModel)]="selectedLanguage" name="language" value="QISKIT" (change)="updatePlaceholder()" />
                   QISKIT
                 </label>
                 <label>
-                  <input type="radio" [(ngModel)]="selectedLanguage" name="language" value="BRAKET" />
+                  <input type="radio" [(ngModel)]="selectedLanguage" name="language" value="BRAKET" (change)="updatePlaceholder()"/>
                   BRAKET
                 </label>
               </div>
@@ -50,7 +52,7 @@ measure q[1] -&gt; meas[1];" rows="10"></textarea>
 
           <!-- <button mat-flat-button color="primary" (click)="submitDeployment()">Submit Definitions</button> -->
           <div class="response-frame">
-            <p class="description">Deployment Response:</p>
+            <p class="description">Deployment Response {{deploymentID}} with the name: {{deploymentName}}:</p>
             <pre>{{ deploymentResponse }}</pre>
           </div>
 
@@ -72,7 +74,7 @@ measure q[1] -&gt; meas[1];" rows="10"></textarea>
             <input [(ngModel)]="jobName" name="jobName" placeholder="PlanQK-Job" />
             <p class="description"> Input your Deployment ID from the response in Step 1:</p>
             <input [(ngModel)]="deploymentID" name="deploymentID" placeholder=3 />
-            <p class="description">Choose the platform where the Job should be running:</p>
+            <p class="description">Choose the platform where the Job should be running {{selectedPlatform}} and {{selectedDevice}}:</p>
             <div class="radio-group">
               <label>
                 <input type="radio" [(ngModel)]="selectedPlatform" name="platform" value="IBM"
