@@ -4,9 +4,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UtilService } from '../../../util/util.service';
 
 @Component({
-  selector: 'qunicorn-service',
-  templateUrl: './qunicorn-service.component.html',
-  styleUrls: ['./qunicorn-view.component.scss'],
+  selector: 'qunicorn-app',
+  templateUrl: './qunicorn-app.component.html',
+  styleUrls: ['./qunicorn-app.component.scss'],
 })
 export class QunicornAppComponent implements OnInit {
   @ViewChild('userInputTextArea', { static: false }) userInputTextArea:
@@ -47,9 +47,9 @@ export class QunicornAppComponent implements OnInit {
     private router: Router,
     private utilService: UtilService,
     private http: HttpClient
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   getJobs() {
     this.http
