@@ -47,9 +47,9 @@ export class QunicornAppComponent implements OnInit {
     private router: Router,
     private utilService: UtilService,
     private http: HttpClient
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   getJobs() {
     this.http

@@ -65,4 +65,4 @@ import { HistogramPlotComponent } from './histogram-plot/histogram-plot.componen
   ],
   exports: [QunicornAppComponent],
 })
-export class QunicornAppModule { }
+export class QunicornAppModule {}

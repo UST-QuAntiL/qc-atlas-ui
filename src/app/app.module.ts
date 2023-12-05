@@ -180,4 +180,4 @@ import { QunicornAppModule } from './components/qunicorn-app/qunicorn.apps.modul
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}
