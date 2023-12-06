@@ -1,0 +1,124 @@
+.response-frame {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: auto;
+    max-width: 50%;
+    justify-content: center;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.image {
+    max-width: 50%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    max-height: 200px;
+}
+
+.container {
+    margin-bottom: 20px;
+    /* Add margin between frames */
+}
+
+.input-frame {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    /* Centers the items vertically */
+    justify-content: center;
+    background-color: #f9f9f9;
+    max-width: 1000px;
+    margin: 0 auto;
+    /* Adjust the width as needed */
+}
+
+.response-frame {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    /* Centers the items vertically */
+    justify-content: center;
+    background-color: #f9f9f9;
+    max-width: 1000px;
+    margin: 0 auto;
+    /* Adjust the width as needed */
+}
+
+.platform-frame {
+    display: flex;
+    //flex-direction: column;
+    align-items: center;
+    border: 1px solid #ddd;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    max-width: 1000px;
+    margin: 0 auto;
+    /* Adjust the width as needed */
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.description {
+    margin-bottom: 10px;
+    font-size: 16px;
+    /* Adjust the font size as needed */
+    color: #333;
+    /* Adjust the color as needed */
+    font-weight: bold;
+    line-height: 1.4;
+    /* Adjust the line height as needed for better readability */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: auto;
+    max-width: 1000px;
+}
+
+button {
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    margin: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+    margin-top: 20px;
+    /* Adjust as needed */
+}

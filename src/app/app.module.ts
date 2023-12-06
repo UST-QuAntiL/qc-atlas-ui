@@ -76,7 +76,7 @@ import { AddSlrDialogComponent } from './components/libraries/dialogs/add-slr-di
 import { SlrPropertiesComponent } from './components/libraries/slr-properties/slr-properties.component';
 import { LibraryTableComponent } from './components/libraries/library-table/library-table.component';
 import { OnDemandComponent } from './components/on-demand-execution/ondemand.component';
-import { QunicornAppModule } from './components/qunicorn-service/qunicorn.apps.module';
+import { QunicornAppModule } from './components/qunicorn-app/qunicorn.apps.module';
 
 @NgModule({
   declarations: [

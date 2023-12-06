@@ -18,7 +18,7 @@
       </a>
       <a mat-list-item
         (click)="executionEnvironmentCollapseContent.hide(); minorComponentsCollapse.hide(); literatureComponentsCollapse.hide()"
-        [routerLink]="'./qunicorn-service'" routerLinkActive="routerLinkActive">
+        [routerLink]="'./qunicorn-app'" routerLinkActive="routerLinkActive">
         Execution Service
       </a>
       <a mat-list-item
@@ -56,13 +56,6 @@
         <a class="sub-tab" mat-list-item [routerLink]="'./execution-environments/compute-resources'"
           routerLinkActive="routerLinkActive">
           <span class="pl-3">Compute Resources</span>
-        </a>
-        <a class="sub-tab" mat-list-item [routerLink]="'./execution-environments/compute-resources'"
-          routerLinkActive="routerLinkActive">
-          <span class="pl-3">Compute Resources</span>
-        </a>
-        <a class="sub-tab" mat-list-item [href]="'http://localhost:5005/'" target="_blank">
-          <span class="pl-3">Qunicorn</span>
         </a>
       </div>
       <a mat-list-item

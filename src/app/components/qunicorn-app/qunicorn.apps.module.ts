@@ -27,7 +27,7 @@ import { ComputeResourcePropertyModule } from '../compute-resource-property/comp
 import { QcAtlasUiFeatureToggleModule } from '../../directives/feature-toggle.module';
 import { AlgorithmModule } from '../algorithms/algorithm.module';
 import { NisqAnalyzerModule } from '../algorithms/nisq-analyzer/nisq-analyzer.module';
-import { QunicornAppComponent } from './qunicorn-view/qunicorn-service.component';
+import { QunicornAppComponent } from './qunicorn-view/qunicorn-app.component';
 import { HistogramPlotComponent } from './histogram-plot/histogram-plot.component';
 
 @NgModule({
