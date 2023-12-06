@@ -79,8 +79,7 @@ measure q[1] -&gt; meas[1];" rows="10"></textarea>
             <input [(ngModel)]="jobName" name="jobName" placeholder="PlanQK-Job" />
             <p class="description"> Input your Deployment ID from the response in Step 1:</p>
             <input [(ngModel)]="deploymentID" name="deploymentID" placeholder=3 />
-            <p class="description">Choose the platform where the Job should be running {{selectedPlatform}} and
-              {{selectedDevice}}:</p>
+            <p class="description">Choose the platform where the Job should be running:</p>
             <div class="radio-group">
               <label>
                 <input type="radio" [(ngModel)]="selectedPlatform" name="platform" value="IBM"
