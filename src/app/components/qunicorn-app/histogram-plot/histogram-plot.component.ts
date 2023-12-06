@@ -1,61 +1,73 @@
-import { Component, OnChanges, ViewChild, Input } from '@angular/core';
+import { Component, OnChanges, OnInit, ViewChild, Input } from '@angular/core';
 import { Chart } from 'chart.js';
+
+
 
 @Component({
   selector: 'app-histogram-plot',
   templateUrl: './histogram-plot.component.html',
-  styleUrls: ['./histogram-plot.component.scss'],
+  styleUrls: ['./histogram-plot.component.scss']
 })
-export class HistogramPlotComponent implements OnChanges {
+export class HistogramPlotComponent implements OnInit {
+
   @ViewChild('plot', { static: true }) plotDiv;
 
   @Input() counts: { [props: string]: number } | null = null;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnChanges(): void {
+  ngOnInit(): void {
+
     const labels = Object.keys(this.counts);
 
     const countsData = [];
-    labels.forEach((label) => countsData.push(this.counts[label]));
+    labels.forEach(label => countsData.push(this.counts[label]));
 
     console.log(labels, countsData);
 
     const data = {
-      labels, // Object.keys(this.counts),
+      labels: labels,//Object.keys(this.counts),
       datasets: [
         {
           label: 'Counts',
-          data: countsData, // Object.values(this.counts),
-          backgroundColor: '#0000ff',
+          data: countsData,// Object.values(this.counts),
+          backgroundColor: "#0000ff"
         },
-      ],
+      ]
     };
 
     const config = {
-      type: 'line',
-      data: {},
-      options: {},
-      plugins: [],
-    };
+      type: 'bar',
+      data: data,
+      options: {
+        scales: {
+          x: {
+            grid: {
+              offset: true
+            }
+          },
+          y: {
+            beginAtZero: true,
+            min: 0,
+            max: 2010,
+          }
+        }
+      },
+    }
 
     const div: HTMLDivElement = this.plotDiv.nativeElement;
-    div.innerHTML = '';
-    const canvas = document.createElement('canvas');
-    canvas.setAttribute('height', '50px');
-    canvas.setAttribute('width', '50px');
-    canvas.width = 500;
-    canvas.height = 500;
+    div.innerHTML = "";
+    const canvas = document.createElement("canvas");
+    canvas.setAttribute("height", "5px");
+    canvas.setAttribute("width", "50px");
+    canvas.width = 5;
+    canvas.height = 5;
     const context = canvas.getContext('2d');
     context.scale(0.5, 0.5);
-    // chartcontext.scale(50, 50);
+    //chartcontext.scale(50, 50);
     div.appendChild(canvas);
 
-    // new Chart(canvas, config)
-
-    // new Chart(context, config);
-
-    const DATA_COUNT = 7;
-    const NUMBER_CFG = { count: DATA_COUNT, min: -100, max: 100 };
+    new Chart(context, config);
   }
+
 }
