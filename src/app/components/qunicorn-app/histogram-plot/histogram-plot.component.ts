@@ -54,7 +54,7 @@ export class HistogramPlotComponent implements OnChanges {
     const div: HTMLDivElement = this.plotDiv.nativeElement;
     div.innerHTML = "";
     const canvas = document.createElement("canvas");
-    canvas.setAttribute("height", "5px");
+    canvas.setAttribute("height", "50px");
     canvas.setAttribute("width", "50px");
     canvas.width = 500;
     canvas.height = 300;
