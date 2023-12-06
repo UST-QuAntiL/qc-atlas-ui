@@ -122,21 +122,25 @@ measure q[1] -&gt; meas[1];" rows="10"></textarea>
         </div>
         <div class="response-frame">
           <div *ngIf="result">
-            <h3>Counts:</h3>
-            <ul>
-              <li *ngFor="let count of counts | keyvalue">
-                {{ count.key }}: {{ count.value }}
-              </li>
-            </ul>
+            <div style="width:40%; float:left;">
+              <h3>Counts:</h3>
+              <ul>
+                <li *ngFor="let count of counts | keyvalue">
+                  {{ count.key }}: {{ count.value }}
+                </li>
+              </ul>
+            </div>
+            
+            <div style="width:40%; float:left;">
+              <h3>Probabilities:</h3>
+              <ul>
+                <li *ngFor="let probability of probabilities | keyvalue">
+                  {{ probability.key }}: {{ probability.value }}
+                </li>
+              </ul>
+            </div>
 
-            <h3>Probabilities:</h3>
-            <ul>
-              <li *ngFor="let probability of probabilities | keyvalue">
-                {{ probability.key }}: {{ probability.value }}
-              </li>
-            </ul>
-
-            <h3>Histogram:</h3>
+            <h3 style="clear: left;">Histogram:</h3>
             <app-histogram-plot [counts]=counts></app-histogram-plot>
           </div>
         </div>

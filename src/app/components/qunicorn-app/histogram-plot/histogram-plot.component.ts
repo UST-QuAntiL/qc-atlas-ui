@@ -31,7 +31,7 @@ export class HistogramPlotComponent implements OnChanges {
         {
           label: 'Counts',
           data: countsData,// Object.values(this.counts),
-          backgroundColor: "#0000ff"
+          backgroundColor: "#3f51b5"
         },
       ]
     };
@@ -57,7 +57,7 @@ export class HistogramPlotComponent implements OnChanges {
     canvas.setAttribute("height", "5px");
     canvas.setAttribute("width", "50px");
     canvas.width = 500;
-    canvas.height = 500;
+    canvas.height = 300;
     const context = canvas.getContext('2d');
     context.scale(0.5, 0.5);
     //chartcontext.scale(50, 50);
