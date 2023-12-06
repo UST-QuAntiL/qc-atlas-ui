@@ -28,9 +28,10 @@ import { QcAtlasUiFeatureToggleModule } from '../../directives/feature-toggle.mo
 import { AlgorithmModule } from '../algorithms/algorithm.module';
 import { NisqAnalyzerModule } from '../algorithms/nisq-analyzer/nisq-analyzer.module';
 import { QunicornAppComponent } from './qunicorn-view/qunicorn-service.component';
+import { HistogramPlotComponent } from './histogram-plot/histogram-plot.component';
 
 @NgModule({
-  declarations: [QunicornAppComponent],
+  declarations: [QunicornAppComponent, HistogramPlotComponent],
   imports: [
     MatTabsModule,
     MatChipsModule,
@@ -62,6 +63,6 @@ import { QunicornAppComponent } from './qunicorn-view/qunicorn-service.component
     NisqAnalyzerModule,
     MatProgressBarModule,
   ],
-  exports: [QunicornAppComponent],
+  exports: [QunicornAppComponent, HistogramPlotComponent],
 })
 export class QunicornAppModule {}

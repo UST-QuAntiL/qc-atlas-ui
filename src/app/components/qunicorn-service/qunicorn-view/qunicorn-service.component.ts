@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UtilService } from '../../../util/util.service';
+import { HistogramPlotComponent } from '../histogram-plot/histogram-plot.component'
 
 @Component({
   selector: 'qunicorn-service',

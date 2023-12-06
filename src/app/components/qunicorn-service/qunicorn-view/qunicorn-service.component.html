@@ -8,6 +8,7 @@
 
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
       <mat-tab label="Submit Deployment">
+        <!-- <app-histogram-plot [counts]="{'0': 2007, '11': 1993}"></app-histogram-plot> -->
         <div class="input-frame">
           <form (ngSubmit)="submitDeployment()">
             <input style="width: 100%; height: auto;" [(ngModel)]="userInput" name="userInput"
@@ -69,6 +70,9 @@
                 {{ probability.key }}: {{ probability.value }}
               </li>
             </ul>
+
+            <h3>Histogram:</h3>
+            <app-histogram-plot [counts]="{'0': 2007, '11': 1993}"></app-histogram-plot>
           </div>
         </div>
 
