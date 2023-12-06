@@ -8,7 +8,7 @@ import { Chart } from 'chart.js';
   templateUrl: './histogram-plot.component.html',
   styleUrls: ['./histogram-plot.component.scss']
 })
-export class HistogramPlotComponent implements OnInit {
+export class HistogramPlotComponent implements OnChanges {
 
   @ViewChild('plot', { static: true }) plotDiv;
 
@@ -16,7 +16,7 @@ export class HistogramPlotComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
 
     const labels = Object.keys(this.counts);
 
@@ -41,16 +41,12 @@ export class HistogramPlotComponent implements OnInit {
       data: data,
       options: {
         scales: {
-          x: {
-            grid: {
-              offset: true
+          yAxes: [{
+              ticks: {
+              beginAtZero: true,
+              min: 0,
             }
-          },
-          y: {
-            beginAtZero: true,
-            min: 0,
-            max: 2010,
-          }
+          }]
         }
       },
     }
@@ -60,8 +56,8 @@ export class HistogramPlotComponent implements OnInit {
     const canvas = document.createElement("canvas");
     canvas.setAttribute("height", "5px");
     canvas.setAttribute("width", "50px");
-    canvas.width = 5;
-    canvas.height = 5;
+    canvas.width = 500;
+    canvas.height = 500;
     const context = canvas.getContext('2d');
     context.scale(0.5, 0.5);
     //chartcontext.scale(50, 50);

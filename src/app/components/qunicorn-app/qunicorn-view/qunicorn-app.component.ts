@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UtilService } from '../../../util/util.service';
-import { HistogramPlotComponent } from '../histogram-plot/histogram-plot.component'
+import { HistogramPlotComponent } from '../histogram-plot/histogram-plot.component';
 
 @Component({
   selector: 'qunicorn-app',
