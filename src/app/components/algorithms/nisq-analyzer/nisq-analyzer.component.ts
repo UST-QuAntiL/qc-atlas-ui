@@ -31,6 +31,7 @@ import { MatSort } from '@angular/material/sort';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { ImplementationTokenDialogComponent } from '../implementation-view/dialogs/implementation-token-dialog/implementation-token-dialog.component';
+import { PlanqkPlatformLoginService } from '../../../services/planqk-platform-login.service';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
 
 @Component({
@@ -121,7 +122,8 @@ export class NisqAnalyzerComponent implements OnInit {
     private http: HttpClient,
     private implementationService: ImplementationService,
     private sdkService: SdksService,
-    private qprovService: ProviderService
+    private qprovService: ProviderService,
+    private planqkService: PlanqkPlatformLoginService
   ) {}
 
   ngOnInit(): void {
@@ -215,7 +217,7 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   onAddAnalysis(): void {
-    let token = ' ';
+    let refreshToken = '';
     this.utilService
       .createDialog(AddNewAnalysisDialogComponent, {
         title: 'Start Analysis',
@@ -224,22 +226,33 @@ export class NisqAnalyzerComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          if (dialogResult.token) {
-            token = dialogResult.token;
-          }
-          // Merge a list of parameter objects into a single parameter object.
-          const analyzeParams = Object.assign.apply(undefined, [
-            {
-              token,
-            },
-            ...dialogResult.params,
-          ]);
           this.analyzerJob = undefined;
           this.jobReady = false;
+          refreshToken = this.planqkService.getRefreshToken();
+          const tokensToDeliver = this.setVendorTokens(
+            dialogResult.vendors,
+            dialogResult.ibmqToken,
+            dialogResult.ionqToken,
+            dialogResult.awsToken,
+            dialogResult.awsSecretToken
+          );
           this.nisqAnalyzerService
             .analyze({
               algorithmId: this.algo.id,
-              parameters: analyzeParams,
+              parameters: dialogResult.parameters,
+              tokens: tokensToDeliver,
+              refreshToken,
+              allowedProviders: dialogResult.vendors,
+              compilers: dialogResult.selectedCompilers,
+              preciseResultsPreference: dialogResult.stableExecutionResults,
+              shortWaitingTimesPreference: dialogResult.shortWaitingTime,
+              queueImportanceRatio: dialogResult.queueImportanceRatio,
+              maxNumberOfCompiledCircuits:
+                dialogResult.maxNumberOfCompiledCircuits,
+              predictionAlgorithm: dialogResult.predictionAlgorithm,
+              metaOptimizer: dialogResult.metaOptimizer,
+              mcdaMethodName: dialogResult.mcdaMethodName,
+              mcdaWeightLearningMethod: dialogResult.mcdaWeightLearningMethod,
             })
             .subscribe((job) => {
               this.analyzerJob = job;
@@ -466,6 +479,44 @@ export class NisqAnalyzerComponent implements OnInit {
       .subscribe((data) => {
         this.queueLengths[analysisResult.qpu] = data.lengthQueue;
       });
+  }
+
+  setVendorTokens(
+    vendors: string[],
+    ibmqToken: string,
+    ionqToken: string,
+    awsToken: string,
+    awsSecretToken: string
+  ): {} {
+    const providerTokens = new Map<string, Map<string, string>>();
+    const rawTokensIbmq = new Map<string, string>();
+    const rawTokensIonq = new Map<string, string>();
+    const rawTokensAws = new Map<string, string>();
+
+    if (vendors.includes('ibmq')) {
+      rawTokensIbmq.set('ibmq', ibmqToken);
+      providerTokens.set('ibmq', rawTokensIbmq);
+    }
+    if (vendors.includes('ionq')) {
+      rawTokensIonq.set('ionq', ionqToken);
+      providerTokens.set('ionq', rawTokensIonq);
+    }
+    if (vendors.includes('aws')) {
+      rawTokensAws.set('awsAccessKey', awsToken);
+      rawTokensAws.set('awsSecretKey', awsSecretToken);
+      providerTokens.set('aws', rawTokensAws);
+    }
+
+    // converting such that it can be delivered via HTTP
+    const convMap: { [props: string]: { [props: string]: string } } = {};
+    providerTokens.forEach((val: Map<string, string>, key: string) => {
+      const innerConvMap: { [props: string]: string } = {};
+      val.forEach((subVal: string, subkey: string) => {
+        innerConvMap[subkey] = subVal;
+      });
+      convMap[key] = innerConvMap;
+    });
+    return convMap;
   }
 }
 

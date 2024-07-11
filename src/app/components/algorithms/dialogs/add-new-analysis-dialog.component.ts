@@ -42,6 +42,9 @@ export class AddNewAnalysisDialogComponent implements OnInit {
   maxNumberOfCompiledCircuitsDialog = 6;
   disableDefiningMaximumNumberOfCircuits = false;
 
+  mcdaMethodPredefinedPreferences = 'topsis';
+  weightLearningMethodPredefinedPreferences = 'cobyla';
+
   constructor(
     public dialogRef: MatDialogRef<AddNewAnalysisDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -104,6 +107,14 @@ export class AddNewAnalysisDialogComponent implements OnInit {
     return this.addNewAnalysisForm.get('queueImportanceRatio');
   }
 
+  get preferenceMcdaMethod(): AbstractControl | null {
+    return this.addNewAnalysisForm.get('preferenceMcdaMethod');
+  }
+
+  get weightLearningMethod(): AbstractControl | null {
+    return this.addNewAnalysisForm.get('weightLearningMethod');
+  }
+
   ngOnInit(): void {
     this.executionEnvironmentsService
       .getCloudServices()
@@ -156,6 +167,14 @@ export class AddNewAnalysisDialogComponent implements OnInit {
             Validators.required,
           ]
         ),
+        preferenceMcdaMethod: new FormControl(this.data.mcdaMethod, [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]),
+        weightLearningMethod: new FormControl(this.data.weightLearningMethod, [
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          Validators.required,
+        ]),
       });
 
       this.selectedVendors = ['ibmq'];
@@ -168,6 +187,9 @@ export class AddNewAnalysisDialogComponent implements OnInit {
       this.maxNumberOfCompiledCircuits.setValue(6);
       this.stableExecutionResults.setValue(true);
       this.shortWaitingTime.setValue(true);
+
+      this.preferenceMcdaMethod.setValue('topsis');
+      this.weightLearningMethod.setValue('cobyla');
 
       this.dialogRef.beforeClosed().subscribe(() => {
         this.data.params = this.params.value;
@@ -183,6 +205,8 @@ export class AddNewAnalysisDialogComponent implements OnInit {
         this.data.ionqToken = this.ionqToken.value;
         this.data.awsToken = this.awsToken.value;
         this.data.awsSecretToken = this.awsSecretToken.value;
+        this.data.mcdaMethod = this.mcdaMethodPredefinedPreferences;
+        this.data.weightLearningMethod = this.weightLearningMethodPredefinedPreferences;
       });
     });
   }
@@ -308,6 +332,16 @@ export class AddNewAnalysisDialogComponent implements OnInit {
     this.metaOptimizerInDialog = metaOptimizer;
   }
 
+  setMcdaMethodPredefinedPreferences(selectedMcdaMethod: string): void {
+    this.mcdaMethodPredefinedPreferences = selectedMcdaMethod;
+  }
+
+  setWeightLearningMethodPredefinedPreferences(
+    selectedWeightLearningMethod: string
+  ): void {
+    this.weightLearningMethodPredefinedPreferences = selectedWeightLearningMethod;
+  }
+
   setMaxNumberOfCompiledCircuits(event): void {
     this.maxNumberOfCompiledCircuitsDialog = event;
   }
@@ -340,4 +374,6 @@ export interface DialogData {
   ionqToken: string;
   awsToken: string;
   awsSecretToken: string;
+  mcdaMethod: string;
+  weightLearningMethod: string;
 }

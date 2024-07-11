@@ -54,7 +54,7 @@
                           (change)="setStableExecutionResultsEnabled($event.checked)">Precise Execution
                 Results
             </mat-checkbox>
-            <mat-expansion-panel *ngIf="stableExecutionResultsEnabled"
+            <mat-expansion-panel
                                  (opened)="advancedSettingsOpen = true"
                                  (closed)="advancedSettingsOpen = false"
                                  class="advancedSettings">
@@ -65,7 +65,7 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
-                <mat-form-field class="input-field">
+                <mat-form-field class="input-field" *ngIf="stableExecutionResultsEnabled">
                     <mat-label>Prediction Algorithm to estimate Execution Result Precision</mat-label>
                     <mat-select formControlName="predictionAlgorithm"
                                 (selectionChange)="setPredictionAlgorithm($event.value)">
@@ -80,13 +80,31 @@
                         <mat-option [value]="'theil_sen_regressor'">Theil Sen Regressor</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="input-field">
+                <mat-form-field class="input-field" *ngIf="stableExecutionResultsEnabled">
                     <mat-label>Meta Optimizer</mat-label>
                     <mat-select formControlName="metaOptimizer"
                                 (selectionChange)="setMetaOptimizer($event.value)">
                         <mat-option [value]="'ada_boost_regressor'">Ada Boost Regressor</mat-option>
                         <mat-option [value]="'bagging_regressor'">Bagging Regressor</mat-option>
                         <mat-option [value]="'none'">-</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="input-field">
+                    <mat-label>Prioritization Method</mat-label>
+                    <mat-select formControlName="preferenceMcdaMethod"
+                                (selectionChange)="setMcdaMethodPredefinedPreferences($event.value)">
+                        <mat-option [value]="'topsis'">TOPSIS</mat-option>
+                        <mat-option [value]="'promethee-II'">PROMETHEE II</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="input-field">
+                    <mat-label>Weight Learning Method</mat-label>
+                    <mat-select formControlName="weightLearningMethod"
+                                (selectionChange)="setWeightLearningMethodPredefinedPreferences($event.value)">
+                        <mat-option [value]="'cobyla'">COBYLA</mat-option>
+                        <mat-option [value]="'evolution-strategy'">Evolution Strategy</mat-option>
+                        <mat-option [value]="'genetic-algorithm'">Genetic Algorithm
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </mat-expansion-panel>
