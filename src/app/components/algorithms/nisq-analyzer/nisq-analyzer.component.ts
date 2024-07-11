@@ -254,8 +254,8 @@ export class NisqAnalyzerComponent implements OnInit {
                 dialogResult.maxNumberOfCompiledCircuits,
               predictionAlgorithm: dialogResult.predictionAlgorithm,
               metaOptimizer: dialogResult.metaOptimizer,
-              mcdaMethodName: dialogResult.mcdaMethodName,
-              mcdaWeightLearningMethod: dialogResult.mcdaWeightLearningMethod,
+              mcdaMethodName: dialogResult.mcdaMethod,
+              mcdaWeightLearningMethod: dialogResult.weightLearningMethod,
             })
             .subscribe((job) => {
               this.analyzerJob = job;
