@@ -12,8 +12,6 @@ import { AnalysisJobDto } from '../models/analysis-job-dto';
 import { AnalysisJobListDto } from '../models/analysis-job-list-dto';
 import { AnalysisResultDto } from '../models/analysis-result-dto';
 import { AnalysisResultListDto } from '../models/analysis-result-list-dto';
-import { ExecuteAnalysisResultRequestDto } from '../models/execute-analysis-result-request-dto';
-import { ExecutionResultDto } from '../models/execution-result-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -99,7 +97,7 @@ export class AnalysisResultService extends BaseService {
   static readonly GetAnalysisJobsPath = '/analysis-results/jobs';
 
   /**
-   * Retrieve all compiler analysis jobs
+   * Retrieve all analysis jobs
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getAnalysisJobs()` instead.
@@ -132,7 +130,7 @@ export class AnalysisResultService extends BaseService {
   }
 
   /**
-   * Retrieve all compiler analysis jobs
+   * Retrieve all analysis jobs
    *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `getAnalysisJobs$Response()` instead.
@@ -323,69 +321,6 @@ export class AnalysisResultService extends BaseService {
       map(
         (r: StrictHttpResponse<AnalysisResultDto>) =>
           r.body as AnalysisResultDto
-      )
-    );
-  }
-
-  /**
-   * Path part for operation executeAnalysisResult
-   */
-  static readonly ExecuteAnalysisResultPath =
-    '/analysis-results/{resId}/execute';
-
-  /**
-   * Execute an analysis configuration
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `executeAnalysisResult()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  executeAnalysisResult$Response(params: {
-    resId: string;
-    body?: ExecuteAnalysisResultRequestDto;
-  }): Observable<StrictHttpResponse<ExecutionResultDto>> {
-    const rb = new RequestBuilder(
-      this.rootUrl,
-      AnalysisResultService.ExecuteAnalysisResultPath,
-      'post'
-    );
-    if (params) {
-      rb.path('resId', params.resId, {});
-
-      rb.body(params.body, 'application/json');
-    }
-    return this.http
-      .request(
-        rb.build({
-          responseType: 'json',
-          accept: 'application/hal+json',
-        })
-      )
-      .pipe(
-        filter((r: any) => r instanceof HttpResponse),
-        map((r: HttpResponse<any>) => {
-          return r as StrictHttpResponse<ExecutionResultDto>;
-        })
-      );
-  }
-
-  /**
-   * Execute an analysis configuration
-   *
-   * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `executeAnalysisResult$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  executeAnalysisResult(params: {
-    resId: string;
-    body?: ExecuteAnalysisResultRequestDto;
-  }): Observable<ExecutionResultDto> {
-    return this.executeAnalysisResult$Response(params).pipe(
-      map(
-        (r: StrictHttpResponse<ExecutionResultDto>) =>
-          r.body as ExecutionResultDto
       )
     );
   }

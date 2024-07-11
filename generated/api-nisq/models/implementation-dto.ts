@@ -7,7 +7,6 @@ export type ImplementationDto = {
   implementedAlgorithm?: string;
   algorithmName?: string;
   language?: string;
-  selectionRule?: string;
   sdk?: string;
   fileLocation?: string;
   inputParameters?: ParameterListDto;

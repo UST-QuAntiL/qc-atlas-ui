@@ -20,6 +20,7 @@ import {
   ImplementationDto as NISQImplementationDto,
   AnalysisJobDto,
   ExecuteAnalysisResultRequestDto,
+  QpuSelectionResultDto,
 } from 'api-nisq/models';
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
@@ -80,31 +81,32 @@ export class NisqAnalyzerComponent implements OnInit {
     'execution',
   ];
   analyzerResults: AnalysisResultDto[] = [];
+  allQpuSelectionResults: QpuSelectionResultDto[] = [];
   jobColumns = ['inputParameters', 'time', 'ready'];
   analyzerJobs$: Observable<AnalysisJobDto[]>;
   sort$ = new BehaviorSubject<string[] | undefined>(undefined);
   analyzerJob: AnalysisJobDto;
   jobReady = false;
-  expandedElement: AnalysisResultDto | null;
+  expandedElement: QpuSelectionResultDto | null;
   pollingAnalysisJobData: Subscription;
   queueLengths = new Map<string, number>();
   executionResultsAvailable = new Map<string, boolean>();
   loadingResults = new Map<string, boolean>();
   groupedResultsMap = new Map<
     NISQImplementationDto,
-    MatTableDataSource<AnalysisResultDto>
+    MatTableDataSource<QpuSelectionResultDto>
   >();
-  qpuDataIsUpToDate = new Map<AnalysisResultDto, boolean>();
+  qpuDataIsUpToDate = new Map<QpuSelectionResultDto, boolean>();
   qpuCounter = 0;
   qpuCheckFinished = false;
 
   // 3) Execution
   resultBackendColumns = ['backendName', 'width', 'depth'];
-  executedAnalyseResult: AnalysisResultDto;
+  executedQpuSelectionResult: QpuSelectionResultDto;
   expandedElementExecResult: ExecutionResultDto | null;
   results?: ExecutionResultDto = undefined;
-  expandedElementMap: Map<AnalysisResultDto, ExecutionResultDto> = new Map<
-    AnalysisResultDto,
+  expandedElementMap: Map<QpuSelectionResultDto, ExecutionResultDto> = new Map<
+    QpuSelectionResultDto,
     ExecutionResultDto
   >();
   executeAnalysisResultRequestDto: ExecuteAnalysisResultRequestDto = {
@@ -113,11 +115,9 @@ export class NisqAnalyzerComponent implements OnInit {
   };
 
   constructor(
-    private executionEnvironmentsService: ExecutionEnvironmentsService,
     private analysisResultService: AnalysisResultService,
     private nisqAnalyzerService: NisqAnalyzerService,
     private utilService: UtilService,
-    private formBuilder: FormBuilder,
     private http: HttpClient,
     private implementationService: ImplementationService,
     private sdkService: SdksService,
@@ -322,7 +322,7 @@ export class NisqAnalyzerComponent implements OnInit {
     this.groupedResultsMap = resultMap;
   }
 
-  checkIfQpuDataIsOutdated(analysisResult: AnalysisResultDto): void {
+  checkIfQpuDataIsOutdated(analysisResult: QpuSelectionResultDto): void {
     let provider = null;
     this.qprovService.getProviders().subscribe((providers) => {
       for (const providerDto of providers._embedded.providerDtoes) {
@@ -365,7 +365,7 @@ export class NisqAnalyzerComponent implements OnInit {
     });
   }
 
-  execute(analysisResult: AnalysisResultDto): void {
+  execute(analysisResult: QpuSelectionResultDto): void {
     let token = ' ';
     this.utilService
       .createDialog(ImplementationTokenDialogComponent, {
@@ -375,7 +375,7 @@ export class NisqAnalyzerComponent implements OnInit {
       .subscribe((dialogResult) => {
         this.loadingResults[analysisResult.id] = true;
         this.results = undefined;
-        this.executedAnalyseResult = analysisResult;
+        this.executedQpuSelectionResult = analysisResult;
         if (dialogResult.token) {
           token = dialogResult.token;
         }
@@ -422,7 +422,7 @@ export class NisqAnalyzerComponent implements OnInit {
       });
   }
 
-  hasExecutionResult(analysisResult: AnalysisResultDto): void {
+  hasExecutionResult(analysisResult: QpuSelectionResultDto): void {
     this.analysisResultService
       .getAnalysisResult({ resId: analysisResult.id })
       .subscribe((result) => {
@@ -433,7 +433,7 @@ export class NisqAnalyzerComponent implements OnInit {
       });
   }
 
-  showExecutionResult(analysisResult: AnalysisResultDto): void {
+  showExecutionResult(analysisResult: QpuSelectionResultDto): void {
     if (this.expandedElementMap.has(analysisResult)) {
       this.expandedElementMap.delete(analysisResult);
       this.expandedElement = undefined;
@@ -460,7 +460,7 @@ export class NisqAnalyzerComponent implements OnInit {
     return result;
   }
 
-  showBackendQueueSize(analysisResult: AnalysisResultDto): void {
+  showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {
     this.nisqAnalyzerService
       .getIBMQBackendState(analysisResult.qpu)
       .subscribe((data) => {

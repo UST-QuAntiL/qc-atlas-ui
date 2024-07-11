@@ -33,13 +33,13 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   ibmqEnabled = true;
   ionqEnabled = false;
   awsEnabled = false;
-  shortWaitingTimeEnabled = false;
-  stableExecutionResultsEnabled = false;
+  shortWaitingTimeEnabled = true;
+  stableExecutionResultsEnabled = true;
   predictionAlgorithmInDialog = 'extra_trees_regressor';
-  metaOptimizerInDialog = 'ada_boost_regressor';
+  metaOptimizerInDialog = 'none';
   advancedSettingsOpen: boolean;
   queueImportanceRatioDialog = 0;
-  maxNumberOfCompiledCircuitsDialog = 5;
+  maxNumberOfCompiledCircuitsDialog = 6;
   disableDefiningMaximumNumberOfCircuits = false;
 
   constructor(
@@ -147,10 +147,10 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     }
     this.setCompilerOptions(this.selectedVendors);
     this.predictionAlgorithm.setValue('extra_trees_regressor');
-    this.metaOptimizer.setValue('ada_boost_regressor');
-    this.maxNumberOfCompiledCircuits.setValue(5);
-    this.stableExecutionResults.setValue(false);
-    this.shortWaitingTime.setValue(false);
+    this.metaOptimizer.setValue('none');
+    this.maxNumberOfCompiledCircuits.setValue(6);
+    this.stableExecutionResults.setValue(true);
+    this.shortWaitingTime.setValue(true);
 
     this.dialogRef.beforeClosed().subscribe(() => {
       this.data.vendors = this.selectedVendors;
