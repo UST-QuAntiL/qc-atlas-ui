@@ -236,10 +236,13 @@ export class NisqAnalyzerComponent implements OnInit {
             dialogResult.awsToken,
             dialogResult.awsSecretToken
           );
+          const analyzeParams = Object.assign.apply(undefined, [
+            ...dialogResult.params,
+          ]);
           this.nisqAnalyzerService
             .analyze({
               algorithmId: this.algo.id,
-              parameters: dialogResult.params,
+              parameters: analyzeParams,
               tokens: tokensToDeliver,
               refreshToken,
               allowedProviders: dialogResult.vendors,
