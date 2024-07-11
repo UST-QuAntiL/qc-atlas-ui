@@ -20,6 +20,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatSortModule } from '@angular/material/sort';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSliderModule } from '@angular/material/slider';
 import { NavigationBreadcrumbModule } from '../generics/navigation-breadcrumb/navigation-breadcrumb.module';
 import { GenericsModule } from '../generics/generics.module';
 import { ComputeResourcePropertyModule } from '../compute-resource-property/compute-resource-property.module';
@@ -89,6 +92,9 @@ import { CompareVersionDialogComponent } from './dialogs/compare-version-dialog.
     MatSortModule,
     QcAtlasUiFeatureToggleModule,
     MatBadgeModule,
+    MatCheckboxModule,
+    MatExpansionModule,
+    MatSliderModule,
   ],
   exports: [
     AlgorithmListComponent,

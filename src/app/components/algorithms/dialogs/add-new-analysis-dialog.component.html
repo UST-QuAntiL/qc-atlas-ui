@@ -2,6 +2,7 @@
     <h1 mat-dialog-title>{{data.title}}</h1>
     <div mat-dialog-content>
         <form [formGroup]="addNewAnalysisForm">
+            <span>Define parameters:</span><br>
             <div formArrayName="params">
                 <div *ngFor="let param of parameters; let i = index" [formGroupName]="i">
                     <mat-form-field class="input-field">
@@ -16,25 +17,134 @@
                 </div>
             </div>
 
-            <mat-form-field class="input-field">
-                <mat-label>Cloud Service</mat-label>
-                <mat-select
-                        formControlName="cloudService"
+            <span>Select vendor:</span><br>
+            <mat-checkbox color="primary" [checked]="ibmqEnabled"
+                          (change)="setIbmqEnabled($event.checked)">IBMQ
+            </mat-checkbox>
+            <mat-form-field class="input-field" *ngIf="ibmqEnabled">
+                <mat-label>IBMQ Token</mat-label>
+                <input type="password" id="ibmqToken" formControlName="ibmqToken" matInput>
+            </mat-form-field>
+            <br>
+            <mat-checkbox color="primary" [checked]="ionqEnabled"
+                          (change)="setIonqEnabled($event.checked)">IonQ
+            </mat-checkbox>
+            <mat-form-field class="input-field" *ngIf="ionqEnabled">
+                <mat-label>IonQ Token</mat-label>
+                <input type="password" id="ionqToken" formControlName="ionqToken" matInput>
+            </mat-form-field>
+            <br>
+            <mat-checkbox color="primary" [checked]="awsEnabled"
+                          (change)="setAwsEnabled($event.checked)">AWS Braket
+            </mat-checkbox>
+            <mat-form-field class="input-field" *ngIf="awsEnabled">
+                <mat-label>AWS Access Key</mat-label>
+                <input type="password" id="awsToken" formControlName="awsToken" matInput>
+            </mat-form-field>
+            <mat-form-field class="input-field" *ngIf="awsEnabled">
+                <mat-label>AWS Secret Key</mat-label>
+                <input type="password" id="awsSecretToken" formControlName="awsSecretToken" matInput>
+            </mat-form-field>
+            <br>
+            <span>Select preferences:</span><br>
+            <mat-checkbox color="primary" [checked]="shortWaitingTimeEnabled"
+                          (change)="setWaitingTimeEnabled($event.checked)">Short Waiting Time
+            </mat-checkbox>
+            <mat-checkbox color="primary" [checked]="stableExecutionResultsEnabled"
+                          (change)="setStableExecutionResultsEnabled($event.checked)">Precise Execution
+                Results
+            </mat-checkbox>
+            <mat-expansion-panel *ngIf="stableExecutionResultsEnabled"
+                                 (opened)="advancedSettingsOpen = true"
+                                 (closed)="advancedSettingsOpen = false"
+                                 class="advancedSettings">
+
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Advanced settings
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <mat-form-field class="input-field">
+                    <mat-label>Prediction Algorithm to estimate Execution Result Precision</mat-label>
+                    <mat-select formControlName="predictionAlgorithm"
+                                (selectionChange)="setPredictionAlgorithm($event.value)">
+                        <mat-option [value]="'extra_trees_regressor'">Extra Trees Regressor</mat-option>
+                        <mat-option [value]="'gradient_boosting_regressor'">Gradient Boostig Regressor</mat-option>
+                        <mat-option [value]="'random_forest_regressor'">Random Forest Regressor</mat-option>
+                        <mat-option [value]="'decision_tree_regressor'">Decision Tree Regressor</mat-option>
+                        <mat-option [value]="'hist_gradient_boosting_regressor'">Hist Gradient Boosting Regressor
+                        </mat-option>
+                        <mat-option [value]="'nu_svr'">Nu SVR</mat-option>
+                        <mat-option [value]="'k_neighbors_regressor'">K Neighbors Regressor</mat-option>
+                        <mat-option [value]="'theil_sen_regressor'">Theil Sen Regressor</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="input-field">
+                    <mat-label>Meta Optimizer</mat-label>
+                    <mat-select formControlName="metaOptimizer"
+                                (selectionChange)="setMetaOptimizer($event.value)">
+                        <mat-option [value]="'ada_boost_regressor'">Ada Boost Regressor</mat-option>
+                        <mat-option [value]="'bagging_regressor'">Bagging Regressor</mat-option>
+                        <mat-option [value]="'none'">-</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-expansion-panel>
+            <br *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled">
+            <span *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled">Select Importance Ratio:</span>
+            <br>
+            <div *ngIf="shortWaitingTimeEnabled && stableExecutionResultsEnabled" class="center">
+                <span class="aligned-with-slider">Short Waiting</span>
+                <mat-slider
+                        color="primary"
+                        formControlName="queueImportanceRatio"
+                        class="lift-slider"
+                        thumbLabel
+                        [displayWith]="formatLabel"
+                        tickInterval="10"
+                        step="10"
+                        min="0"
+                        max="100"
+                        aria-label="units"
+                        (change)="setQueueImportanceRatio($event)"
                 >
-                    <mat-option *ngFor="let cs of cloudServices" [value]="cs.name">
-                        {{ cs.name }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+                </mat-slider>
+                <span class="aligned-with-slider">Precise Results</span>
+            </div>
 
-            <mat-form-field class="input-field" [hidden]="true">
-                <mat-label>Number of shots (for later execution)</mat-label>
-                <input matInput pattern="[0-9]+" formControlName="shotCount"/>
-            </mat-form-field>
 
-            <mat-form-field class="input-field">
-                <mat-label>Your Token</mat-label>
-                <input matInput formControlName="token"/>
+            <div *ngIf="shortWaitingTimeEnabled || stableExecutionResultsEnabled">
+                <span>Select the number of compilation results:</span><br>
+                <div *ngIf="!disableDefiningMaximumNumberOfCircuits">
+                    <mat-form-field class="input-field">
+                        <input
+                                matInput
+                                type="number"
+                                min="1"
+                                [placeholder]="'Maximum number of compilation results'"
+                                formControlName="maxNumberOfCompiledCircuits"
+                                [ngModel]="maxNumberOfCompiledCircuitsDialog"
+                                (ngModelChange)="setMaxNumberOfCompiledCircuits($event)"
+                                [disabled]="disableDefiningMaximumNumberOfCircuits"
+                        />
+                    </mat-form-field>
+                </div>
+                <mat-checkbox color="primary" [checked]="disableDefiningMaximumNumberOfCircuits"
+                              (change)="setMaximumNumberofCompilationResultsSelected($event.checked)">Or compute <b>all</b> possible compilation results
+                </mat-checkbox>
+            </div>
+
+            <br>
+            <mat-label>Select SDKs to be used for compilation:</mat-label>
+            <mat-form-field appearance="none" class="input-field">
+                <input matInput [hidden]="true">
+                <mat-checkbox *ngFor="let compiler of compilers.controls; index as i" class="example-margin"
+                              formArrayName="compilers"
+                              [checked]="checkIfCompilerSelected(compiler.value)"
+                              (change)="updateCompilerSelection(compiler.value, $event.checked)"
+                              color="primary">
+                    {{compiler.value}}
+                </mat-checkbox>
             </mat-form-field>
         </form>
     </div>
