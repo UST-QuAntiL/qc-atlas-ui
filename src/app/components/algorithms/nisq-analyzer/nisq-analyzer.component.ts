@@ -239,7 +239,7 @@ export class NisqAnalyzerComponent implements OnInit {
           this.nisqAnalyzerService
             .analyze({
               algorithmId: this.algo.id,
-              parameters: dialogResult.parameters,
+              parameters: dialogResult.params,
               tokens: tokensToDeliver,
               refreshToken,
               allowedProviders: dialogResult.vendors,
