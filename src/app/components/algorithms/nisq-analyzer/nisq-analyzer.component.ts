@@ -21,6 +21,10 @@ import {
   AnalysisJobDto,
   ExecuteAnalysisResultRequestDto,
   QpuSelectionResultDto,
+  EntityModelMcdaSensitivityAnalysisJob,
+  EntityModelMcdaWeightLearningJob,
+  CriterionValue,
+  EntityModelMcdaJob,
 } from 'api-nisq/models';
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
@@ -28,10 +32,23 @@ import { SdksService } from 'api-nisq/services/sdks.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { ProviderService } from 'generated/api-qprov/services';
 import { MatSort } from '@angular/material/sort';
+import { QpuSelectionResultService } from 'api-nisq/services/qpu-selection-result.service';
+import { XmcdaCriteriaService } from 'api-nisq/services/xmcda-criteria.service';
 import { UtilService } from '../../../util/util.service';
 import { AddNewAnalysisDialogComponent } from '../dialogs/add-new-analysis-dialog.component';
 import { ImplementationTokenDialogComponent } from '../implementation-view/dialogs/implementation-token-dialog/implementation-token-dialog.component';
 import { PlanqkPlatformLoginService } from '../../../services/planqk-platform-login.service';
+// eslint-disable-next-line max-len
+import {
+  Criterion,
+  DialogData,
+  ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
+} from '../implementation-view/dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
+// eslint-disable-next-line max-len
+import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } from '../implementation-view/dialogs/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog.component';
+import { ChangePageGuard } from '../../../services/deactivation-guard';
+// eslint-disable-next-line max-len
+import { ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent } from '../implementation-view/dialogs/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
 
 @Component({
@@ -51,7 +68,8 @@ import { NisqAnalyzerService } from './nisq-analyzer.service';
 })
 export class NisqAnalyzerComponent implements OnInit {
   @Input() algo: AlgorithmDto;
-  @ViewChild('nisqAnalysisResultSort') public nisqAnalysisResultSort: MatSort;
+  @Input() guard: ChangePageGuard;
+  @ViewChild(MatSort) sort: MatSort;
 
   // 1) Selection
   params: ParameterDto[];
@@ -61,11 +79,14 @@ export class NisqAnalyzerComponent implements OnInit {
 
   // 2) Analyze phase
   analyzeColumns = [
+    'implementationName',
+    'rank',
+    'score',
     'qpu',
     'provider',
     'compiler',
-    'width',
-    'depth',
+    'analyzedWidth',
+    'analyzedDepth',
     'analyzedMultiQubitGateDepth',
     'analyzedTotalNumberOfOperations',
     'analyzedNumberOfSingleQubitGates',
@@ -79,6 +100,7 @@ export class NisqAnalyzerComponent implements OnInit {
     't1',
     't2',
     'lengthQueue',
+    'estimatedHistogramIntersectionValue',
     'execution',
   ];
   analyzerResults: AnalysisResultDto[] = [];
@@ -93,13 +115,32 @@ export class NisqAnalyzerComponent implements OnInit {
   queueLengths = new Map<string, number>();
   executionResultsAvailable = new Map<string, boolean>();
   loadingResults = new Map<string, boolean>();
-  groupedResultsMap = new Map<
-    NISQImplementationDto,
-    MatTableDataSource<QpuSelectionResultDto>
-  >();
   qpuDataIsUpToDate = new Map<QpuSelectionResultDto, boolean>();
   qpuCounter = 0;
   qpuCheckFinished = false;
+  loadingLearnWeights = false;
+  learnedWeightsReady = false;
+  loadingMCDAJob = false;
+  usedMcdaMethod: string;
+  usedLearningMethod: string;
+  dataSource = new MatTableDataSource(this.allQpuSelectionResults);
+  rankings: Ranking[] = [];
+  usedShortWaitingTime: boolean;
+  usedStableExecutionResults: boolean;
+  queueImportanceRatio: number;
+  sensitivityAnalysisJob: EntityModelMcdaSensitivityAnalysisJob;
+  sensitivityAnalysisJobReady = false;
+  pollingSensitivityAnalysisJobReadyData: Subscription;
+  sensitivityAnalysisJobSuccessful = false;
+  waitUntilSensitivityAnalysisIsFinished = false;
+  sensitivityAnalysisPlot: string;
+  bordaCountEnabled: boolean;
+  pollingWeightLearningJobData: Subscription;
+  weightLearningJob: EntityModelMcdaWeightLearningJob;
+  learningJobReady: boolean;
+  prioritizationJobReady = false;
+  prioritizationJob: EntityModelMcdaJob;
+  mcdaJobSuccessful = false;
 
   // 3) Execution
   resultBackendColumns = ['backendName', 'width', 'depth'];
@@ -123,7 +164,9 @@ export class NisqAnalyzerComponent implements OnInit {
     private implementationService: ImplementationService,
     private sdkService: SdksService,
     private qprovService: ProviderService,
-    private planqkService: PlanqkPlatformLoginService
+    private planqkService: PlanqkPlatformLoginService,
+    private qpuSelectionService: QpuSelectionResultService,
+    private mcdaService: XmcdaCriteriaService
   ) {}
 
   ngOnInit(): void {
@@ -152,11 +195,7 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    for (const entry of this.groupedResultsMap.entries()) {
-      const value = entry[1];
-      value.sort = this.nisqAnalysisResultSort;
-      this.groupedResultsMap.set(entry[0], value);
-    }
+    this.dataSource.sort = this.sort;
   }
 
   changeSort(active: string, direction: 'asc' | 'desc' | ''): void {
@@ -167,29 +206,26 @@ export class NisqAnalyzerComponent implements OnInit {
     }
   }
 
-  onMatSortChange(active: string, direction: 'asc' | 'desc' | ''): void {
-    for (const entry of this.groupedResultsMap.entries()) {
-      const value = entry[1];
-      this.nisqAnalysisResultSort.active = active;
-      this.nisqAnalysisResultSort.direction = direction;
-      value.sort = this.nisqAnalysisResultSort;
-      value.sortingDataAccessor = (item, property): string | number => {
-        switch (property) {
-          case 'lengthQueue':
-            return this.queueLengths[item.qpu];
-          default: {
-            if (property === 'width') {
-              property = 'analyzedWidth';
-            }
-            if (property === 'depth') {
-              property = 'analyzedDepth';
-            }
-            return item[property];
-          }
-        }
-      };
-      this.groupedResultsMap.set(entry[0], value);
-    }
+  onMatSortChange(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property): string | number => {
+      switch (property) {
+        case 'rank':
+          const rankObject = this.rankings.find(
+            (value) => value.id === item.id
+          );
+          return rankObject.rank;
+        case 'score':
+          const scoreObject = this.rankings.find(
+            (value) => value.id === item.id
+          );
+          return scoreObject.score;
+        case 'lengthQueue':
+          return this.queueLengths[item.qpu];
+        default:
+          return item[property];
+      }
+    };
   }
 
   formatParameters(analysisJob: AnalysisJobDto): string {
@@ -280,6 +316,24 @@ export class NisqAnalyzerComponent implements OnInit {
                     if (this.jobReady) {
                       this.ngOnInit();
                       this.analyzerResults = jobResult.analysisResultList;
+                      this.analyzerResults.forEach((analysisResult) => {
+                        this.qpuSelectionService
+                          .getQpuSelectionJob({
+                            resId: analysisResult.qpuSelectionJobId,
+                          })
+                          .subscribe((qpuSelectionJob) => {
+                            this.allQpuSelectionResults = this.allQpuSelectionResults.concat(
+                              qpuSelectionJob.qpuSelectionResultList
+                            );
+                            this.dataSource = new MatTableDataSource(
+                              this.allQpuSelectionResults
+                            );
+                            this.pollAnalysisJobData(
+                              jobResult.initialMcdaMethod,
+                              jobResult.initialMcdaJob
+                            );
+                          });
+                      });
                       this.pollingAnalysisJobData.unsubscribe();
                     }
                   },
@@ -299,43 +353,26 @@ export class NisqAnalyzerComponent implements OnInit {
       this.jobReady = jobResult.ready;
       this.analyzerJob = jobResult;
       this.analyzerResults = jobResult.analysisResultList;
-      this.groupResultsByImplementation(this.analyzerResults);
-      for (const analysisResult of this.analyzerResults) {
+      this.analyzerResults.forEach((analysisResult) => {
+        this.qpuSelectionService
+          .getQpuSelectionJob({ resId: analysisResult.qpuSelectionJobId })
+          .subscribe((qpuSelectionJob) => {
+            this.allQpuSelectionResults = this.allQpuSelectionResults.concat(
+              qpuSelectionJob.qpuSelectionResultList
+            );
+            this.dataSource = new MatTableDataSource(
+              this.allQpuSelectionResults
+            );
+          });
+      });
+      for (const analysisResult of this.allQpuSelectionResults) {
         this.showBackendQueueSize(analysisResult);
+        setInterval(() => this.showBackendQueueSize(analysisResult), 300000);
         this.hasExecutionResult(analysisResult);
         this.checkIfQpuDataIsOutdated(analysisResult);
       }
     });
     return true;
-  }
-
-  groupResultsByImplementation(analysisResults: AnalysisResultDto[]): void {
-    const results: GroupedResults[] = [];
-    const resultMap = new Map<
-      NISQImplementationDto,
-      MatTableDataSource<AnalysisResultDto>
-    >();
-    for (const analysisResult of analysisResults) {
-      const group = results.find(
-        (res) => res.implementation.id === analysisResult.implementation.id
-      );
-      if (group) {
-        group.results.push(analysisResult);
-      } else {
-        results.push({
-          implementation: analysisResult.implementation,
-          results: [analysisResult],
-        });
-      }
-    }
-    for (const res of results) {
-      if (!resultMap.has(res.implementation)) {
-        const temp = new MatTableDataSource(res.results);
-        // temp.sort = this.nisqAnalysisResultSort;
-        resultMap.set(res.implementation, temp);
-      }
-    }
-    this.groupedResultsMap = resultMap;
   }
 
   checkIfQpuDataIsOutdated(analysisResult: QpuSelectionResultDto): void {
@@ -379,6 +416,74 @@ export class NisqAnalyzerComponent implements OnInit {
           }
         });
     });
+  }
+
+  goToLink(url: string): void {
+    window.open(url, '_blank');
+  }
+
+  analyzeSensitivity(): void {
+    this.utilService
+      .createDialog(
+        ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent,
+        {
+          title: 'Analyze Sensitivity of Ranking',
+        }
+      )
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.mcdaService
+            .analyzeSensitivityOfCompiledCircuitsOfJob({
+              methodName: this.usedMcdaMethod,
+              jobId: this.analyzerJob.id,
+              stepSize: dialogResult.stepSize,
+              upperBound: dialogResult.upperBound,
+              lowerBound: dialogResult.lowerBound,
+              useBordaCount: this.bordaCountEnabled,
+              queueImportanceRatio: this.queueImportanceRatio,
+            })
+            .subscribe(
+              (job) => {
+                this.waitUntilSensitivityAnalysisIsFinished = true;
+                this.sensitivityAnalysisJobSuccessful = false;
+                this.sensitivityAnalysisJob = job;
+                this.sensitivityAnalysisJobReady = job.ready;
+                this.utilService.callSnackBar(
+                  'Successfully created sensitivity analysis job "' +
+                    job.id +
+                    '".'
+                );
+
+                this.pollingSensitivityAnalysisJobReadyData = interval(2000)
+                  .pipe(
+                    startWith(0),
+                    switchMap(() =>
+                      this.mcdaService.getSensitivityAnalysisJob({
+                        methodName: this.usedMcdaMethod,
+                        jobId: job.id,
+                      })
+                    )
+                  )
+                  .subscribe((jobResult) => {
+                    this.sensitivityAnalysisJob = jobResult;
+                    this.sensitivityAnalysisJobReady = jobResult.ready;
+                    if (jobResult.state === 'FINISHED') {
+                      this.sensitivityAnalysisJobSuccessful = true;
+                      this.waitUntilSensitivityAnalysisIsFinished = false;
+                      this.sensitivityAnalysisPlot = jobResult.plotFileLocation;
+                      this.pollingSensitivityAnalysisJobReadyData.unsubscribe();
+                    }
+                  });
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Could not start sensitivity analysis.'
+                );
+              }
+            );
+        }
+      });
   }
 
   execute(analysisResult: QpuSelectionResultDto): void {
@@ -521,6 +626,239 @@ export class NisqAnalyzerComponent implements OnInit {
     });
     return convMap;
   }
+
+  getRankOfResult(result: QpuSelectionResultDto): number | string {
+    const rankingResult = this.rankings.find((value) => value.id === result.id);
+    if (rankingResult) {
+      return rankingResult.rank;
+    } else {
+      return '-';
+    }
+  }
+
+  getScoreOfResult(result: QpuSelectionResultDto): number | string {
+    const rankingResult = this.rankings.find((value) => value.id === result.id);
+    if (
+      rankingResult &&
+      this.prioritizationJob.method !== 'electre-III' &&
+      !this.bordaCountEnabled
+    ) {
+      return rankingResult.score;
+    } else {
+      return '-';
+    }
+  }
+
+  prioritize(): void {
+    this.utilService
+      .createDialog(
+        ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
+        {
+          title: 'Prioritize Analysis Results',
+        }
+      )
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.learnedWeightsReady = false;
+          this.usedMcdaMethod = dialogResult.mcdaMethod;
+          this.usedLearningMethod = dialogResult.weightLearningMethod;
+          this.usedShortWaitingTime = dialogResult.shortWaitingTime;
+          this.usedStableExecutionResults = dialogResult.stableExecutionResults;
+          this.queueImportanceRatio = dialogResult.queueImportanceRatio;
+          if (dialogResult.stableExecutionResults) {
+            this.loadingLearnWeights = true;
+            this.mcdaService
+              .learnWeightsForCompiledCircuitsOfJob({
+                methodName: this.usedMcdaMethod,
+                weightLearningMethod: this.usedLearningMethod,
+              })
+              .subscribe((job) => {
+                this.weightLearningJob = job;
+                this.learningJobReady = job.ready;
+                this.utilService.callSnackBar(
+                  'Successfully started to learn weights.'
+                );
+                this.pollingWeightLearningJobData = interval(2000)
+                  .pipe(
+                    startWith(0),
+                    switchMap(() =>
+                      this.mcdaService.getWeightLearningJob({
+                        methodName: this.usedMcdaMethod,
+                        weightLearningMethod: this.usedLearningMethod,
+                        jobId: this.weightLearningJob.id,
+                      })
+                    )
+                  )
+                  .subscribe((jobResult) => {
+                    this.weightLearningJob = jobResult;
+                    this.learningJobReady = jobResult.ready;
+                    if (jobResult.state === 'FINISHED') {
+                      this.pollingWeightLearningJobData.unsubscribe();
+                      this.loadingLearnWeights = false;
+                      this.learnedWeightsReady = true;
+                      this.utilService.callSnackBar(
+                        'Learned weights are ready.'
+                      );
+                    } else if (jobResult.state === 'FAILED') {
+                      this.pollingWeightLearningJobData.unsubscribe();
+                      this.loadingLearnWeights = false;
+                      this.learnedWeightsReady = false;
+                      this.utilService.callSnackBar(
+                        'Error! Could not learn weights.'
+                      );
+                    }
+                  });
+              });
+          } else {
+            this.executePrioritization(dialogResult);
+          }
+        }
+      });
+  }
+
+  seeLearnedWeights(): void {
+    this.utilService
+      .createDialog(
+        ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent,
+        {
+          title: 'Learned Weights',
+          mcdaMethod: this.usedMcdaMethod,
+        }
+      )
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          this.learnedWeightsReady = false;
+          this.executePrioritization(dialogResult);
+        }
+      });
+  }
+
+  executePrioritization(dialogResult): void {
+    this.loadingMCDAJob = true;
+    this.prioritizationJobReady = false;
+    let totalSum = 0;
+    let criteria = dialogResult.criteriaAndValues;
+    this.bordaCountEnabled = !!(
+      this.usedStableExecutionResults && this.usedShortWaitingTime
+    );
+    if (this.usedStableExecutionResults) {
+      criteria = dialogResult.criteriaAndValues;
+    } else {
+      // calculate SMART with new assigned points
+      dialogResult.criteriaAndValues.forEach((obj) => {
+        totalSum += obj.points;
+      });
+      dialogResult.criteriaAndValues.forEach((obj) => {
+        if (obj.points !== 0) {
+          obj.weight = obj.points / totalSum;
+        } else {
+          obj.weight = 0;
+        }
+      });
+    }
+    let numberOfCriterion = 0;
+    criteria.forEach((obj) => {
+      const criterionValue: CriterionValue = {
+        description: { title: 'points', subTitle: obj.points.toString() },
+        criterionID: obj.id,
+        valueOrValues: [{ real: obj.weight }],
+        mcdaMethod: dialogResult.mcdaMethod,
+      };
+      this.mcdaService
+        .updateCriterionValue({
+          methodName: dialogResult.mcdaMethod,
+          criterionId: obj.id,
+          body: criterionValue,
+        })
+        .subscribe(
+          () => {
+            numberOfCriterion++;
+            if (numberOfCriterion === criteria.length) {
+              this.mcdaService
+                .prioritizeCompiledCircuitsOfJob({
+                  methodName: dialogResult.mcdaMethod,
+                  jobId: this.analyzerJob.id,
+                  useBordaCount: this.bordaCountEnabled,
+                  queueImportanceRatio: this.queueImportanceRatio,
+                })
+                .subscribe((job) => {
+                  this.rankings = [];
+                  this.prioritizationJob = job;
+                  this.prioritizationJobReady = job.ready;
+                  this.mcdaJobSuccessful = false;
+
+                  this.utilService.callSnackBar(
+                    'Successfully created prioritization job "' + job.id + '".'
+                  );
+                  this.pollAnalysisJobData(
+                    dialogResult.mcdaMethod,
+                    this.prioritizationJob.id
+                  );
+                });
+            }
+          },
+          () => {
+            this.loadingMCDAJob = false;
+            this.utilService.callSnackBar(
+              'Error! Could not set weight for criteria "' +
+                obj.name +
+                '". Please try again.'
+            );
+          }
+        );
+    });
+  }
+
+  pollAnalysisJobData(mcdaMethod: string, prioritizationJobId: string): void {
+    this.pollingAnalysisJobData = interval(2000)
+      .pipe(
+        startWith(0),
+        switchMap(() =>
+          this.mcdaService.getPrioritizationJob({
+            methodName: mcdaMethod,
+            jobId: prioritizationJobId,
+          })
+        )
+      )
+      .subscribe(
+        (jobResult) => {
+          this.prioritizationJob = jobResult;
+          this.prioritizationJobReady = jobResult.ready;
+          if (this.prioritizationJobReady) {
+            this.loadingMCDAJob = false;
+            jobResult.rankedResults.forEach((rankedResult) => {
+              this.rankings.push({
+                id: rankedResult.resultId,
+                rank: rankedResult.position,
+                score: rankedResult.score,
+              });
+            });
+            this.allQpuSelectionResults.sort((a, b) => {
+              const objA = this.rankings.find((value) => value.id === a.id);
+              const objB = this.rankings.find((value) => value.id === b.id);
+              if (objA.rank < objB.rank) {
+                return -1;
+              } else {
+                return 1;
+              }
+            });
+            this.dataSource = new MatTableDataSource(
+              this.allQpuSelectionResults
+            );
+            this.mcdaJobSuccessful = true;
+            this.pollingAnalysisJobData.unsubscribe();
+          }
+        },
+        () => {
+          this.loadingMCDAJob = false;
+          this.utilService.callSnackBar(
+            'Error! Could not create prioritization job.'
+          );
+        }
+      );
+  }
 }
 
 interface QiskitBackendState {
@@ -531,7 +869,8 @@ interface QiskitBackendState {
   backend_version: string;
 }
 
-export interface GroupedResults {
-  implementation: NISQImplementationDto;
-  results: AnalysisResultDto[];
+interface Ranking {
+  id: string;
+  rank: number;
+  score: number;
 }
