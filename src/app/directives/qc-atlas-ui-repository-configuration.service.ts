@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export enum UiFeatures {
@@ -73,6 +73,11 @@ export class QcAtlasUiRepositoryConfigurationService {
           this.configuration = initialValues;
           this.parseNode(response.node, this.configuration);
           return this.configuration;
+        }),
+        catchError((err) => {
+          this.configuration = initialValues;
+          console.warn('Could not load config from etcd store!', err);
+          return of(this.configuration);
         })
       );
   }
@@ -102,7 +107,7 @@ export class QcAtlasUiRepositoryConfigurationService {
    */
   private parseNode(node: EtcdNode, obj: QcAtlasUiConfiguration): void {
     const slashIndex = node.key.lastIndexOf('/');
-    const key = node.key.substr(slashIndex + 1);
+    const key = node.key.substring(slashIndex + 1);
     if (node.nodes) {
       node.nodes.forEach((child) => this.parseNode(child, obj[key]));
     } else {
