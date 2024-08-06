@@ -25,6 +25,7 @@ import {
   EntityModelMcdaWeightLearningJob,
   CriterionValue,
   EntityModelMcdaJob,
+  QpuSelectionJobDto,
 } from 'api-nisq/models';
 import { AnalysisResultService } from 'api-nisq/services/analysis-result.service';
 import { ImplementationService } from 'api-nisq/services/implementation.service';
@@ -353,6 +354,7 @@ export class NisqAnalyzerComponent implements OnInit {
       this.jobReady = jobResult.ready;
       this.analyzerJob = jobResult;
       this.analyzerResults = jobResult.analysisResultList;
+      this.allQpuSelectionResults = [];
       this.analyzerResults.forEach((analysisResult) => {
         this.qpuSelectionService
           .getQpuSelectionJob({ resId: analysisResult.qpuSelectionJobId })
@@ -363,19 +365,25 @@ export class NisqAnalyzerComponent implements OnInit {
             this.dataSource = new MatTableDataSource(
               this.allQpuSelectionResults
             );
+            for (const analysisQpuSelectionResult of qpuSelectionJob.qpuSelectionResultList) {
+              this.queueLengths[analysisQpuSelectionResult.qpu] =
+                analysisQpuSelectionResult.queueSize;
+              this.hasExecutionResult(analysisQpuSelectionResult);
+              this.checkIfQpuDataIsOutdated(
+                analysisQpuSelectionResult,
+                qpuSelectionJob
+              );
+            }
           });
       });
-      for (const analysisResult of this.allQpuSelectionResults) {
-        this.showBackendQueueSize(analysisResult);
-        setInterval(() => this.showBackendQueueSize(analysisResult), 300000);
-        this.hasExecutionResult(analysisResult);
-        this.checkIfQpuDataIsOutdated(analysisResult);
-      }
     });
     return true;
   }
 
-  checkIfQpuDataIsOutdated(analysisResult: QpuSelectionResultDto): void {
+  checkIfQpuDataIsOutdated(
+    analysisResult: QpuSelectionResultDto,
+    qpuSelectionJob: QpuSelectionJobDto
+  ): void {
     let provider = null;
     this.qprovService.getProviders().subscribe((providers) => {
       for (const providerDto of providers._embedded.providerDtoes) {
@@ -391,28 +399,25 @@ export class NisqAnalyzerComponent implements OnInit {
       this.qprovService
         .getQpUs({ providerId: provider.id })
         .subscribe((qpuResult) => {
-          for (const qpuDto of qpuResult._embedded.qpuDtoes) {
-            if (
-              qpuDto.name.toLowerCase() === analysisResult.qpu.toLowerCase()
-            ) {
-              if (
-                qpuDto.lastCalibrated === null ||
-                Date.parse(analysisResult.time) >=
-                  Date.parse(qpuDto.lastCalibrated)
-              ) {
-                this.qpuDataIsUpToDate.set(analysisResult, true);
-              } else {
-                this.qpuDataIsUpToDate.set(analysisResult, false);
-              }
-              break;
-            }
-          }
-          this.qpuCounter++;
-          if (this.qpuCounter === this.analyzerJob.analysisResultList.length) {
-            this.qpuCheckFinished = true;
-            this.qpuCounter = 0;
+          if (analysisResult.qpu.toLowerCase() === 'aer_simulator') {
+            this.qpuDataIsUpToDate.set(analysisResult, true);
           } else {
-            this.qpuCheckFinished = false;
+            for (const qpuDto of qpuResult._embedded.qpuDtoes) {
+              if (
+                qpuDto.name.toLowerCase() === analysisResult.qpu.toLowerCase()
+              ) {
+                if (
+                  qpuDto.lastCalibrated === null ||
+                  Date.parse(analysisResult.time) >=
+                    Date.parse(qpuDto.lastCalibrated)
+                ) {
+                  this.qpuDataIsUpToDate.set(analysisResult, true);
+                } else {
+                  this.qpuDataIsUpToDate.set(analysisResult, false);
+                }
+                break;
+              }
+            }
           }
         });
     });
@@ -582,11 +587,15 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {
-    this.nisqAnalyzerService
-      .getIBMQBackendState(analysisResult.qpu)
-      .subscribe((data) => {
-        this.queueLengths[analysisResult.qpu] = data.lengthQueue;
-      });
+    if (analysisResult.qpu !== 'aer_simluator') {
+      this.nisqAnalyzerService
+        .getIBMQBackendState(analysisResult.qpu)
+        .subscribe((data) => {
+          this.queueLengths[analysisResult.qpu] = data.lengthQueue;
+        });
+    } else {
+      this.queueLengths[analysisResult.qpu] = analysisResult.queueSize;
+    }
   }
 
   setVendorTokens(

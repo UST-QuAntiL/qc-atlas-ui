@@ -143,10 +143,6 @@
                       <span>{{ resParam.key }} = {{ resParam.value }}</span>
                   </div>
                   <p></p>
-                  <div *ngIf="!qpuCheckFinished" class="spinner-wrapper">
-                      <span><i>Check if QPU data is up-to-date</i></span>
-                      <mat-spinner class="mat-spinner-left" [diameter]="20"></mat-spinner>
-                  </div>
               </div>
               <div
                       *ngIf="jobReady && analyzerResults && analyzerResults.length === 0"
