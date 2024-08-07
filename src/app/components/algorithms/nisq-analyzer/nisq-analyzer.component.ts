@@ -502,57 +502,66 @@ export class NisqAnalyzerComponent implements OnInit {
       .afterClosed()
       .subscribe((dialogResult) => {
         if (dialogResult) {
-          this.loadingResults[analysisResult.id] = true;
-          this.results = undefined;
-          const executeBodyDto: ExecuteAnalysisResultRequestDto = {
-            tokens: this.setVendorTokens(
-              [analysisResult.provider],
-              dialogResult.ibmqToken,
-              dialogResult.ionqToken,
-              dialogResult.awsToken,
-              dialogResult.awsSecretToken
-            ),
-          };
+          this.analyzerJob.analysisResultList.forEach((anaResult) => {
+            if (
+              analysisResult.qpuSelectionJobId === anaResult.qpuSelectionJobId
+            ) {
+              this.loadingResults[analysisResult.id] = true;
+              this.results = undefined;
+              const executeBodyDto: ExecuteAnalysisResultRequestDto = {
+                correlationId: anaResult.correlationId,
+                tokens: this.setVendorTokens(
+                  [analysisResult.provider],
+                  dialogResult.ibmqToken,
+                  dialogResult.ionqToken,
+                  dialogResult.awsToken,
+                  dialogResult.awsSecretToken
+                ),
+              };
 
-          this.qpuSelectionService
-            .executeQpuSelectionResult({
-              resId: analysisResult.id,
-              body: executeBodyDto,
-            })
-            .subscribe(
-              (results) => {
-                if (
-                  results.status === 'FAILED' ||
-                  results.status === 'FINISHED'
-                ) {
-                  this.results = results;
-                } else {
-                  interval(1000)
-                    .pipe(
-                      exhaustMap(() =>
-                        this.http.get<ExecutionResultDto>(
-                          results._links['self'].href
+              this.qpuSelectionService
+                .executeQpuSelectionResult({
+                  resId: analysisResult.id,
+                  body: executeBodyDto,
+                })
+                .subscribe(
+                  (results) => {
+                    if (
+                      results.status === 'FAILED' ||
+                      results.status === 'FINISHED'
+                    ) {
+                      this.results = results;
+                    } else {
+                      interval(1000)
+                        .pipe(
+                          exhaustMap(() =>
+                            this.http.get<ExecutionResultDto>(
+                              results._links['self'].href
+                            )
+                          ),
+                          first(
+                            (value) =>
+                              value.status === 'FAILED' ||
+                              value.status === 'FINISHED'
+                          )
                         )
-                      ),
-                      first(
-                        (value) =>
-                          value.status === 'FAILED' ||
-                          value.status === 'FINISHED'
-                      )
-                    )
-                    .subscribe((finalResult) => (this.results = finalResult));
-                }
-                this.utilService.callSnackBar(
-                  'Successfully started execution "' + results.id + '".'
+                        .subscribe(
+                          (finalResult) => (this.results = finalResult)
+                        );
+                    }
+                    this.utilService.callSnackBar(
+                      'Successfully started execution "' + results.id + '".'
+                    );
+                    this.hasExecutionResult(analysisResult);
+                  },
+                  () => {
+                    this.utilService.callSnackBar(
+                      'Error! Could not start execution.'
+                    );
+                  }
                 );
-                this.hasExecutionResult(analysisResult);
-              },
-              () => {
-                this.utilService.callSnackBar(
-                  'Error! Could not start execution.'
-                );
-              }
-            );
+            }
+          });
         }
       });
   }
