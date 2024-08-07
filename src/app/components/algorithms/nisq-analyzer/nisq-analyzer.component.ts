@@ -329,10 +329,6 @@ export class NisqAnalyzerComponent implements OnInit {
                             this.dataSource = new MatTableDataSource(
                               this.allQpuSelectionResults
                             );
-                            this.pollAnalysisJobData(
-                              jobResult.initialMcdaMethod,
-                              jobResult.initialMcdaJob
-                            );
                           });
                       });
                       this.pollingAnalysisJobData.unsubscribe();
