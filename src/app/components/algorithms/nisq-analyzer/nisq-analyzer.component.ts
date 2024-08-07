@@ -50,6 +50,7 @@ import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } f
 import { ChangePageGuard } from '../../../services/deactivation-guard';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent } from '../implementation-view/dialogs/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog.component';
+import { ImplementationNisqAnalyzerQpuSelectionInitialWeightsDialogComponent } from '../implementation-view/dialogs/implementation-nisq-analyzer-qpu-selection-initial-weights-dialog/implementation-nisq-analyzer-qpu-selection-initial-weights-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
 
 @Component({
@@ -752,6 +753,16 @@ export class NisqAnalyzerComponent implements OnInit {
       });
   }
 
+  seeInitialWeights(): void {
+    this.utilService.createDialog(
+      ImplementationNisqAnalyzerQpuSelectionInitialWeightsDialogComponent,
+      {
+        title: 'Learned Weights',
+        mcdaMethod: this.usedMcdaMethod,
+      }
+    );
+  }
+
   executePrioritization(dialogResult): void {
     this.loadingMCDAJob = true;
     this.prioritizationJobReady = false;
@@ -864,6 +875,7 @@ export class NisqAnalyzerComponent implements OnInit {
             this.dataSource = new MatTableDataSource(
               this.allQpuSelectionResults
             );
+            this.usedMcdaMethod = mcdaMethod;
             this.mcdaJobSuccessful = true;
             this.pollingAnalysisJobData.unsubscribe();
           }

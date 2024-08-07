@@ -46,6 +46,7 @@ import { ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponen
 import { ImplementationTokenDialogComponent } from './dialogs/implementation-token-dialog/implementation-token-dialog.component';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog.component';
+import { ImplementationNisqAnalyzerQpuSelectionInitialWeightsDialogComponent } from './dialogs/implementation-nisq-analyzer-qpu-selection-initial-weights-dialog/implementation-nisq-analyzer-qpu-selection-initial-weights-dialog.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } f
     ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent,
     ImplementationTokenDialogComponent,
     ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent,
+    ImplementationNisqAnalyzerQpuSelectionInitialWeightsDialogComponent,
   ],
   imports: [
     CommonModule,

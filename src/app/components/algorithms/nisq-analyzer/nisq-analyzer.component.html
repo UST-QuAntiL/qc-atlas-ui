@@ -78,6 +78,14 @@
                   >
                       Back
                   </button>
+                  <button
+                          mat-raised-button
+                          type="button"
+                          color="primary"
+                          (click)="seeInitialWeights()"
+                  >
+                      <span>Used Weights</span>
+                  </button>
                   <button *ngIf="jobReady && analyzerResults.length !== 0 && !loadingLearnWeights && !learnedWeightsReady"
                           mat-raised-button
                           type="button"
