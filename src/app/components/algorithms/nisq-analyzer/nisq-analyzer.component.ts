@@ -44,12 +44,14 @@ import {
   Criterion,
   DialogData,
   ImplementationNisqAnalyzerQpuSelectionPrioritizationDialogComponent,
+  // eslint-disable-next-line max-len
 } from '../implementation-view/dialogs/implementation-nisq-analyzer-qpu-selection-prioritization-dialog/implementation-nisq-analyzer-qpu-selection-prioritization-dialog.component';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionLearnedWeightsDialogComponent } from '../implementation-view/dialogs/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog/implementation-nisq-analyzer-qpu-selection-learned-weights-dialog.component';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
 // eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionSensitivityAnalysisDialogComponent } from '../implementation-view/dialogs/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog/implementation-nisq-analyzer-qpu-selection-sensitivity-analysis-dialog.component';
+// eslint-disable-next-line max-len
 import { ImplementationNisqAnalyzerQpuSelectionInitialWeightsDialogComponent } from '../implementation-view/dialogs/implementation-nisq-analyzer-qpu-selection-initial-weights-dialog/implementation-nisq-analyzer-qpu-selection-initial-weights-dialog.component';
 import { NisqAnalyzerService } from './nisq-analyzer.service';
 
