@@ -497,59 +497,66 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   execute(analysisResult: QpuSelectionResultDto): void {
-    let token = ' ';
     this.utilService
       .createDialog(ImplementationTokenDialogComponent, {
         title: 'Enter the token for the Vendor : ' + analysisResult.provider,
+        vendor: analysisResult.provider,
       })
       .afterClosed()
       .subscribe((dialogResult) => {
-        this.loadingResults[analysisResult.id] = true;
-        this.results = undefined;
-        this.executedQpuSelectionResult = analysisResult;
-        if (dialogResult.token) {
-          token = dialogResult.token;
-        }
-        const rawTokens: Map<string, string> = new Map();
-        rawTokens.set(analysisResult.provider, token);
-        const tokens: Map<string, Map<string, string>> = new Map();
-        tokens.set(analysisResult.provider, rawTokens);
-        this.executeAnalysisResultRequestDto.tokens = tokens;
-        this.nisqAnalyzerService
-          .execute(analysisResult.id, this.executeAnalysisResultRequestDto)
-          .subscribe(
-            (results) => {
-              if (
-                results.status === 'FAILED' ||
-                results.status === 'FINISHED'
-              ) {
-                this.results = results;
-              } else {
-                interval(1000)
-                  .pipe(
-                    exhaustMap(() =>
-                      this.http.get<ExecutionResultDto>(
-                        results._links['self'].href
+        if (dialogResult) {
+          this.loadingResults[analysisResult.id] = true;
+          this.results = undefined;
+          const executeBodyDto: ExecuteAnalysisResultRequestDto = {
+            tokens: this.setVendorTokens(
+              [analysisResult.provider],
+              dialogResult.ibmqToken,
+              dialogResult.ionqToken,
+              dialogResult.awsToken,
+              dialogResult.awsSecretToken
+            ),
+          };
+
+          this.qpuSelectionService
+            .executeQpuSelectionResult({
+              resId: analysisResult.id,
+              body: executeBodyDto,
+            })
+            .subscribe(
+              (results) => {
+                if (
+                  results.status === 'FAILED' ||
+                  results.status === 'FINISHED'
+                ) {
+                  this.results = results;
+                } else {
+                  interval(1000)
+                    .pipe(
+                      exhaustMap(() =>
+                        this.http.get<ExecutionResultDto>(
+                          results._links['self'].href
+                        )
+                      ),
+                      first(
+                        (value) =>
+                          value.status === 'FAILED' ||
+                          value.status === 'FINISHED'
                       )
-                    ),
-                    first(
-                      (value) =>
-                        value.status === 'FAILED' || value.status === 'FINISHED'
                     )
-                  )
-                  .subscribe((finalResult) => (this.results = finalResult));
+                    .subscribe((finalResult) => (this.results = finalResult));
+                }
+                this.utilService.callSnackBar(
+                  'Successfully started execution "' + results.id + '".'
+                );
+                this.hasExecutionResult(analysisResult);
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Could not start execution.'
+                );
               }
-              this.utilService.callSnackBar(
-                'Successfully started execution "' + results.id + '".'
-              );
-              this.hasExecutionResult(analysisResult);
-            },
-            () => {
-              this.utilService.callSnackBar(
-                'Error! Could not start execution.'
-              );
-            }
-          );
+            );
+        }
       });
   }
 
