@@ -351,6 +351,7 @@ export class NisqAnalyzerComponent implements OnInit {
 
   showAnalysisResult(analysisJob: AnalysisJobDto): boolean {
     this.nisqAnalyzerService.getJob(analysisJob.id).subscribe((jobResult) => {
+      this.analyzerResults = [];
       this.jobReady = jobResult.ready;
       this.analyzerJob = jobResult;
       this.analyzerResults = jobResult.analysisResultList;
@@ -377,6 +378,10 @@ export class NisqAnalyzerComponent implements OnInit {
           });
       });
     });
+    this.pollAnalysisJobData(
+      analysisJob.initialMcdaMethod,
+      analysisJob.initialMcdaJob
+    );
     return true;
   }
 
@@ -549,8 +554,8 @@ export class NisqAnalyzerComponent implements OnInit {
   }
 
   hasExecutionResult(analysisResult: QpuSelectionResultDto): void {
-    this.analysisResultService
-      .getAnalysisResult({ resId: analysisResult.id })
+    this.qpuSelectionService
+      .getQpuSelectionResult({ resId: analysisResult.id })
       .subscribe((result) => {
         this.executionResultsAvailable[analysisResult.id] = !!Object.keys(
           result._links
@@ -566,8 +571,8 @@ export class NisqAnalyzerComponent implements OnInit {
       this.expandedElementExecResult = undefined;
       return;
     }
-    this.analysisResultService
-      .getAnalysisResult({ resId: analysisResult.id })
+    this.qpuSelectionService
+      .getQpuSelectionResult({ resId: analysisResult.id })
       .subscribe((result) => {
         const key = Object.keys(result._links).find((k) =>
           k.startsWith('execute-')
@@ -575,8 +580,8 @@ export class NisqAnalyzerComponent implements OnInit {
         const href = result._links[key].href;
         this.http.get<ExecutionResultDto>(href).subscribe((dto) => {
           this.expandedElement = analysisResult;
-          this.expandedElementExecResult = dto;
           this.expandedElementMap.set(analysisResult, dto);
+          this.expandedElementExecResult = dto;
         });
       });
   }
