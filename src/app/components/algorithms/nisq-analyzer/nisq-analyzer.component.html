@@ -405,7 +405,17 @@
                                               </code>
                                           </div>
                                           <div style="text-align: right">Result:
-                                              <code>{{ expandedElementMap.get(element).result || 'n/a' }}</code></div>
+                                              <code>{{ expandedElementMap.get(element).result || 'n/a' }}</code>
+                                          </div>
+                                          <button *ngIf="expandedElementMap.get(element).resultLocation"
+                                                  mat-button
+                                                  type="button"
+                                                  color="primary"
+                                                  class="sensAnalysisResultsButton"
+                                                  (click)="goToLink(expandedElementMap.get(element).resultLocation)"
+                                          >
+                                              <span>Post Processing Results <mat-icon class="link-icon">open_in_new</mat-icon></span>
+                                          </button>
                                       </div>
                                   </ng-container>
                               </div>
