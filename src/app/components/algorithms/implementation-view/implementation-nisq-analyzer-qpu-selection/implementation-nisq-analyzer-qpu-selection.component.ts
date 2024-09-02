@@ -28,6 +28,7 @@ import {
   EntityModelMcdaJob,
   EntityModelMcdaSensitivityAnalysisJob,
   EntityModelMcdaWeightLearningJob,
+  ExecuteAnalysisResultRequestDto,
   ExecutionResultDto,
   QpuSelectionDto,
   QpuSelectionResultDto,
@@ -214,18 +215,19 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           this.analyzerJob = undefined;
           this.jobReady = false;
           refreshToken = this.planqkService.getRefreshToken();
-          const providerTokens = {};
-          if (dialogResult.token) {
-            providerTokens[dialogResult.vendor] = dialogResult.token;
-          } else {
-            providerTokens[dialogResult.vendor] = ' ';
-          }
+          const tokensToDeliver = this.setVendorTokens(
+            dialogResult.vendors,
+            dialogResult.ibmqToken,
+            dialogResult.ionqToken,
+            dialogResult.awsToken,
+            dialogResult.awsSecretToken
+          );
 
           const qpuSelectionDto: QpuSelectionDto = {
-            allowedProviders: [dialogResult.vendor],
+            allowedProviders: dialogResult.vendors,
             circuitLanguage: this.nisqImpl.language,
             circuitUrl: this.nisqImpl.fileLocation,
-            tokens: providerTokens,
+            tokens: tokensToDeliver,
             refreshToken,
             compilers: dialogResult.selectedCompilers,
             circuitName: this.nisqImpl.name,
@@ -239,10 +241,6 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
           };
           this.nisqAnalyzerRootService
             .selectQpuForCircuitFile1$Json({
-              circuitLanguage: this.nisqImpl.language,
-              circuitName: this.nisqImpl.name,
-              allowedProviders: [dialogResult.vendor],
-              tokens: providerTokens,
               body: qpuSelectionDto,
             })
             .subscribe((job) => {
@@ -307,55 +305,106 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   }
 
   execute(analysisResult: QpuSelectionResultDto): void {
-    let token = ' ';
     this.utilService
       .createDialog(ImplementationTokenDialogComponent, {
         title: 'Enter the token for the Vendor : ' + analysisResult.provider,
+        vendor: analysisResult.provider,
       })
       .afterClosed()
       .subscribe((dialogResult) => {
-        if (dialogResult.token) {
-          token = dialogResult.token;
-        }
-        this.loadingResults[analysisResult.id] = true;
-        this.results = undefined;
-        this.executedAnalyseResult = analysisResult;
-        this.qpuSelectionService
-          .executeQpuSelectionResult({ resId: analysisResult.id, token })
-          .subscribe(
-            (results) => {
-              if (
-                results.status === 'FAILED' ||
-                results.status === 'FINISHED'
-              ) {
-                this.results = results;
-              } else {
-                interval(1000)
-                  .pipe(
-                    exhaustMap(() =>
-                      this.http.get<ExecutionResultDto>(
-                        results._links['self'].href
+        if (dialogResult) {
+          this.loadingResults[analysisResult.id] = true;
+          this.results = undefined;
+          this.executedAnalyseResult = analysisResult;
+          const executeBodyDto: ExecuteAnalysisResultRequestDto = {
+            tokens: this.setVendorTokens(
+              [analysisResult.provider],
+              dialogResult.ibmqToken,
+              dialogResult.ionqToken,
+              dialogResult.awsToken,
+              dialogResult.awsSecretToken
+            ),
+          };
+
+          this.qpuSelectionService
+            .executeQpuSelectionResult({
+              resId: analysisResult.id,
+              body: executeBodyDto,
+            })
+            .subscribe(
+              (results) => {
+                if (
+                  results.status === 'FAILED' ||
+                  results.status === 'FINISHED'
+                ) {
+                  this.results = results;
+                } else {
+                  interval(1000)
+                    .pipe(
+                      exhaustMap(() =>
+                        this.http.get<ExecutionResultDto>(
+                          results._links['self'].href
+                        )
+                      ),
+                      first(
+                        (value) =>
+                          value.status === 'FAILED' ||
+                          value.status === 'FINISHED'
                       )
-                    ),
-                    first(
-                      (value) =>
-                        value.status === 'FAILED' || value.status === 'FINISHED'
                     )
-                  )
-                  .subscribe((finalResult) => (this.results = finalResult));
+                    .subscribe((finalResult) => (this.results = finalResult));
+                }
+                this.utilService.callSnackBar(
+                  'Successfully started execution "' + results.id + '".'
+                );
+                this.hasExecutionResult(analysisResult);
+              },
+              () => {
+                this.utilService.callSnackBar(
+                  'Error! Could not start execution.'
+                );
               }
-              this.utilService.callSnackBar(
-                'Successfully started execution "' + results.id + '".'
-              );
-              this.hasExecutionResult(analysisResult);
-            },
-            () => {
-              this.utilService.callSnackBar(
-                'Error! Could not start execution.'
-              );
-            }
-          );
+            );
+        }
       });
+  }
+
+  setVendorTokens(
+    vendors: string[],
+    ibmqToken: string,
+    ionqToken: string,
+    awsToken: string,
+    awsSecretToken: string
+  ): {} {
+    const providerTokens = new Map<string, Map<string, string>>();
+    const rawTokensIbmq = new Map<string, string>();
+    const rawTokensIonq = new Map<string, string>();
+    const rawTokensAws = new Map<string, string>();
+
+    if (vendors.includes('ibmq')) {
+      rawTokensIbmq.set('ibmq', ibmqToken);
+      providerTokens.set('ibmq', rawTokensIbmq);
+    }
+    if (vendors.includes('ionq')) {
+      rawTokensIonq.set('ionq', ionqToken);
+      providerTokens.set('ionq', rawTokensIonq);
+    }
+    if (vendors.includes('aws')) {
+      rawTokensAws.set('awsAccessKey', awsToken);
+      rawTokensAws.set('awsSecretKey', awsSecretToken);
+      providerTokens.set('aws', rawTokensAws);
+    }
+
+    // converting such that it can be delivered via HTTP
+    const convMap: { [props: string]: { [props: string]: string } } = {};
+    providerTokens.forEach((val: Map<string, string>, key: string) => {
+      const innerConvMap: { [props: string]: string } = {};
+      val.forEach((subVal: string, subkey: string) => {
+        innerConvMap[subkey] = subVal;
+      });
+      convMap[key] = innerConvMap;
+    });
+    return convMap;
   }
 
   hasExecutionResult(analysisResult: QpuSelectionResultDto): void {
@@ -699,11 +748,39 @@ export class ImplementationNisqAnalyzerQpuSelectionComponent
   }
 
   showBackendQueueSize(analysisResult: QpuSelectionResultDto): void {
-    this.nisqAnalyzerService
-      .getIBMQBackendState(analysisResult.qpu)
-      .subscribe((data) => {
-        this.queueLengths[analysisResult.qpu] = data.lengthQueue;
+    if (analysisResult.provider === 'ionq') {
+      this.qprovService.getProviders().subscribe((providers) => {
+        for (const providerDto of providers._embedded.providerDtoes) {
+          if (
+            providerDto.name.toLowerCase() ===
+            analysisResult.provider.toLowerCase()
+          ) {
+            this.provider = providerDto;
+            break;
+          }
+        }
+        // search for QPU with given name from the given provider
+        this.qprovService
+          .getQpUs({ providerId: this.provider.id })
+          .subscribe((qpuResult) => {
+            for (const qpuDto of qpuResult._embedded.qpuDtoes) {
+              if (
+                qpuDto.name.toLowerCase() === analysisResult.qpu.toLowerCase()
+              ) {
+                this.queueLengths[analysisResult.qpu] = qpuDto.queueSize;
+              }
+            }
+          });
       });
+    } else if (analysisResult.provider === 'ibmq') {
+      this.nisqAnalyzerService
+        .getIBMQBackendState(analysisResult.qpu)
+        .subscribe((data) => {
+          this.queueLengths[analysisResult.qpu] = data.lengthQueue;
+        });
+    } else {
+      this.queueLengths[analysisResult.qpu] = null;
+    }
   }
 
   checkIfQpuDataIsOutdated(analysisResult: QpuSelectionResultDto): void {

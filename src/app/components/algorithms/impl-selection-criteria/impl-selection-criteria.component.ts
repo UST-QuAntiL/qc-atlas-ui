@@ -19,7 +19,6 @@ import {
 import { ApiConfiguration } from 'api-atlas/api-configuration';
 import { ExecutionEnvironmentsService } from 'generated/api-atlas/services/execution-environments.service';
 import { ChangePageGuard } from '../../../services/deactivation-guard';
-import { parsePrologRule, PrologRule } from '../../../util/MinimalPrologParser';
 import { Option } from '../../generics/property-input/select-input.component';
 import { UiFeatures } from '../../../directives/qc-atlas-ui-repository-configuration.service';
 import { PlanqkPlatformService } from '../../../services/planqk-platform.service';
@@ -39,10 +38,6 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
   readonly UiFeatures = UiFeatures;
   oldNisqImpl: NisqImplementationDto;
   nisqImpl: NisqImplementationDto;
-
-  paramPrologRules: {
-    selectionRule: PrologRule;
-  };
 
   selection = new SelectionModel<number>(true);
   sdks$: Observable<Option[]>;
@@ -90,9 +85,6 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
     if (!this.nisqImpl) {
       return;
     }
-    this.paramPrologRules = {
-      selectionRule: parsePrologRule(this.nisqImpl.selectionRule),
-    };
   }
 
   addOne(): void {
@@ -254,7 +246,6 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
                 body = {
                   name: this.impl.name,
                   implementedAlgorithm: this.algo.id,
-                  selectionRule: '',
                   sdk: this.impl.technology,
                   language: this.impl.version,
                   fileLocation:
@@ -326,7 +317,6 @@ export class ImplSelectionCriteriaComponent implements OnInit, OnChanges {
           body = {
             name: this.impl.name,
             implementedAlgorithm: this.algo.id,
-            selectionRule: '',
             // TODO
             sdk: 'Qiskit',
             language: 'OpenQASM',

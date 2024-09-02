@@ -37,7 +37,7 @@
             </button>
           </div>
         </div>
-        
+
       </div>
       <div class="col-lg-6 col-md-12">
         <app-select-input
@@ -112,7 +112,8 @@
                   [choices]="[
                     { value: 'Integer', label: 'Integer' },
                     { value: 'Float', label: 'Float' },
-                    { value: 'String', label: 'String' }
+                    { value: 'String', label: 'String' },
+                    { value: 'FloatArray', label: 'FloatArray' }
                   ]"
                   (onChange)="param.type = $event"
                 >
@@ -132,20 +133,6 @@
       </mat-card>
     </div>
   </div>
-  <div class="header-container" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
-    <h4>Prolog Rules</h4>
-  </div>
-  <mat-card class="m-4" *qcAtlasUiShowOnFeature="UiFeatures.NISQ_ANALYZER">
-    <div class="row">
-      <div class="col-12">
-        <app-prolog-input
-          name="Selection Rule (in PROLOG)"
-          [(ngModel)]="nisqImpl.selectionRule"
-          (onSaveChanges)="saveImplementation()"
-        ></app-prolog-input>
-      </div>
-    </div>
-  </mat-card>
 </div>
 
 <button

@@ -8,5 +8,7 @@ export type AnalysisJobDto = {
   time?: string;
   inputParameters?: Map<string, string>;
   ready?: boolean;
+  initialMcdaJob?: string;
+  initialMcdaMethod?: string;
   _links?: Links;
 };

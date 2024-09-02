@@ -4,6 +4,7 @@ import { AlgorithmService } from 'api-atlas/services/algorithm.service';
 import {
   AnalysisResultService,
   CompilerAnalysisResultService,
+  QpuSelectionResultService,
   RootService,
 } from 'api-nisq/services';
 import {
@@ -24,6 +25,7 @@ export class NisqAnalyzerService {
   constructor(
     private algorithmService: AlgorithmService,
     private analysisResultService: AnalysisResultService,
+    private qpuSelectionResultService: QpuSelectionResultService,
     private compilerAnalysisResult: CompilerAnalysisResultService,
     private rootService: RootService,
     private http: HttpClient
@@ -49,7 +51,7 @@ export class NisqAnalyzerService {
     resId: string,
     body: ExecuteAnalysisResultRequestDto
   ): Observable<ExecutionResultDto> {
-    return this.analysisResultService.executeAnalysisResult({
+    return this.qpuSelectionResultService.executeQpuSelectionResult({
       resId,
       body,
     });
@@ -57,11 +59,14 @@ export class NisqAnalyzerService {
 
   executeCompilationResult(
     resId: string,
-    token: string
+    token: string,
+    vendor: string
   ): Observable<ExecutionResultDto> {
+    const tokens = new Map<string, string>();
+    tokens.set(vendor, token);
     return this.compilerAnalysisResult.executeCompilationResult({
       resId,
-      token,
+      tokens,
     });
   }
 

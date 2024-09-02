@@ -1,5 +1,6 @@
 /* tslint:disable */
 export type ExecuteAnalysisResultRequestDto = {
   refreshToken?: string;
-  token?: string;
+  tokens?: {};
+  correlationId?: string;
 };

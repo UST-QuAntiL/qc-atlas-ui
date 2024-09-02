@@ -1,0 +1,22 @@
+<div *ngIf="weightLearningForm">
+    <h1 mat-dialog-title>Initially learned Weights</h1>
+    <div mat-dialog-content>
+        <form [formGroup]="weightLearningForm">
+            <p>The learned weights are presented</p>
+            <div formArrayName="criteriaAndValues">
+                <div *ngFor="let criterion of criteriaNamesAndValues; let i = index" [formGroupName]="i">
+                    <div *ngIf="criterion.name !== 'queue-size'">
+                        {{ criterion.name }}:
+                        <br>
+                        {{ criterion.weight }}
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button [mat-dialog-close]="data">Ok
+        </button>
+    </div>
+</div>

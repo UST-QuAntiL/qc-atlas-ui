@@ -68,7 +68,9 @@ export class CompilerAnalysisResultService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getCompilerAnalysisResults(params?: {}): Observable<CompilerAnalysisResultListDto> {
+  getCompilerAnalysisResults(params?: {}): Observable<
+    CompilerAnalysisResultListDto
+  > {
     return this.getCompilerAnalysisResults$Response(params).pipe(
       map(
         (r: StrictHttpResponse<CompilerAnalysisResultListDto>) =>
@@ -264,7 +266,7 @@ export class CompilerAnalysisResultService extends BaseService {
    */
   executeCompilationResult$Response(params: {
     resId: string;
-    token: string;
+    tokens: Map<string, string>;
   }): Observable<StrictHttpResponse<ExecutionResultDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -273,7 +275,7 @@ export class CompilerAnalysisResultService extends BaseService {
     );
     if (params) {
       rb.path('resId', params.resId, {});
-      rb.query('token', params.token, {});
+      rb.query('tokens', params.tokens, {});
     }
     return this.http
       .request(
@@ -300,7 +302,7 @@ export class CompilerAnalysisResultService extends BaseService {
    */
   executeCompilationResult(params: {
     resId: string;
-    token: string;
+    tokens: Map<string, string>;
   }): Observable<ExecutionResultDto> {
     return this.executeCompilationResult$Response(params).pipe(
       map(

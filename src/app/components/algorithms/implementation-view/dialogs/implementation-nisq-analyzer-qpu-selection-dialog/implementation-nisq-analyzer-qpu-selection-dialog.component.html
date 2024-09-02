@@ -1,16 +1,35 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
     <form [formGroup]="qpuSelectionFrom">
-        <mat-form-field class="input-field">
-            <mat-label>Vendor</mat-label>
-            <mat-select formControlName="vendor" (selectionChange)="onVendorChanged($event.value)" required>
-                <mat-option [value]="'IBMQ'">IBMQ</mat-option>
-            </mat-select>
+        <span>Select vendor:</span><br>
+        <mat-checkbox color="primary" [checked]="ibmqEnabled"
+                      (change)="setIbmqEnabled($event.checked)">IBMQ
+        </mat-checkbox>
+        <mat-form-field class="input-field" *ngIf="ibmqEnabled">
+            <mat-label>IBMQ Token</mat-label>
+            <input type="password" id="ibmqToken" formControlName="ibmqToken" matInput>
         </mat-form-field>
-        <mat-form-field class="input-field">
-            <mat-label>Token</mat-label>
-            <input type="password" id="token" formControlName="token" matInput>
+        <br>
+        <mat-checkbox color="primary" [checked]="ionqEnabled"
+                      (change)="setIonqEnabled($event.checked)">IonQ
+        </mat-checkbox>
+        <mat-form-field class="input-field" *ngIf="ionqEnabled">
+            <mat-label>IonQ Token</mat-label>
+            <input type="password" id="ionqToken" formControlName="ionqToken" matInput>
         </mat-form-field>
+        <br>
+        <mat-checkbox color="primary" [checked]="awsEnabled"
+                      (change)="setAwsEnabled($event.checked)">AWS Braket
+        </mat-checkbox>
+        <mat-form-field class="input-field" *ngIf="awsEnabled">
+            <mat-label>AWS Access Key</mat-label>
+            <input type="password" id="awsToken" formControlName="awsToken" matInput>
+        </mat-form-field>
+        <mat-form-field class="input-field" *ngIf="awsEnabled">
+            <mat-label>AWS Secret Key</mat-label>
+            <input type="password" id="awsSecretToken" formControlName="awsSecretToken" matInput>
+        </mat-form-field>
+        <br>
         <span>Select preferences:</span><br>
         <mat-checkbox color="primary" [checked]="shortWaitingTimeEnabled"
                       (change)="setWaitingTimeEnabled($event.checked)">Short Waiting Time
@@ -115,7 +134,7 @@
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button [disabled]="isRequiredDataMissing() || ! checkIfCompilersPresent()" [mat-dialog-close]="data">Ok
+    <button mat-button [disabled]="! checkIfCompilersAndProvidersPresent()" [mat-dialog-close]="data">Ok
     </button>
 </div>
 

@@ -7,5 +7,6 @@ export type ExecutionResultDto = {
   result?: string;
   shots?: number;
   histogramIntersectionValue?: number;
+  resultLocation?: string;
   _links?: Links;
 };

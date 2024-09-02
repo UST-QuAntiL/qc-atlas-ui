@@ -90,12 +90,7 @@ export class RootService extends BaseService {
    * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
   selectCompilerForFile1$FormData$Response(params: {
-    providerName: string;
-    qpuName: string;
-    circuitLanguage: string;
-    circuitName: string;
-    token: string;
-    body: { circuit?: Blob };
+    body: { compilerSelectionDto?: CompilerSelectionDto; circuit?: Blob };
   }): Observable<StrictHttpResponse<CompilationJobDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -103,12 +98,6 @@ export class RootService extends BaseService {
       'post'
     );
     if (params) {
-      rb.query('providerName', params.providerName, {});
-      rb.query('qpuName', params.qpuName, {});
-      rb.query('circuitLanguage', params.circuitLanguage, {});
-      rb.query('circuitName', params.circuitName, {});
-      rb.query('token', params.token, {});
-
       rb.body(params.body, 'multipart/form-data');
     }
     return this.http
@@ -135,12 +124,7 @@ export class RootService extends BaseService {
    * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
   selectCompilerForFile1$FormData(params: {
-    providerName: string;
-    qpuName: string;
-    circuitLanguage: string;
-    circuitName: string;
-    token: string;
-    body: { circuit?: Blob };
+    body: { compilerSelectionDto?: CompilerSelectionDto; circuit?: Blob };
   }): Observable<CompilationJobDto> {
     return this.selectCompilerForFile1$FormData$Response(params).pipe(
       map(
@@ -159,11 +143,6 @@ export class RootService extends BaseService {
    * This method sends `application/xml` and handles request body of type `application/xml`.
    */
   selectCompilerForFile1$Xml$Response(params: {
-    providerName: string;
-    qpuName: string;
-    circuitLanguage: string;
-    circuitName: string;
-    token: string;
     body: CompilerSelectionDto;
   }): Observable<StrictHttpResponse<CompilationJobDto>> {
     const rb = new RequestBuilder(
@@ -172,12 +151,6 @@ export class RootService extends BaseService {
       'post'
     );
     if (params) {
-      rb.query('providerName', params.providerName, {});
-      rb.query('qpuName', params.qpuName, {});
-      rb.query('circuitLanguage', params.circuitLanguage, {});
-      rb.query('circuitName', params.circuitName, {});
-      rb.query('token', params.token, {});
-
       rb.body(params.body, 'application/xml');
     }
     return this.http
@@ -204,11 +177,6 @@ export class RootService extends BaseService {
    * This method sends `application/xml` and handles request body of type `application/xml`.
    */
   selectCompilerForFile1$Xml(params: {
-    providerName: string;
-    qpuName: string;
-    circuitLanguage: string;
-    circuitName: string;
-    token: string;
     body: CompilerSelectionDto;
   }): Observable<CompilationJobDto> {
     return this.selectCompilerForFile1$Xml$Response(params).pipe(
@@ -228,11 +196,6 @@ export class RootService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   selectCompilerForFile1$Json$Response(params: {
-    providerName: string;
-    qpuName: string;
-    circuitLanguage: string;
-    circuitName: string;
-    token: string;
     body: CompilerSelectionDto;
   }): Observable<StrictHttpResponse<CompilationJobDto>> {
     const rb = new RequestBuilder(
@@ -241,12 +204,6 @@ export class RootService extends BaseService {
       'post'
     );
     if (params) {
-      rb.query('providerName', params.providerName, {});
-      rb.query('qpuName', params.qpuName, {});
-      rb.query('circuitLanguage', params.circuitLanguage, {});
-      rb.query('circuitName', params.circuitName, {});
-      rb.query('token', params.token, {});
-
       rb.body(params.body, 'application/json');
     }
     return this.http
@@ -273,11 +230,6 @@ export class RootService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   selectCompilerForFile1$Json(params: {
-    providerName: string;
-    qpuName: string;
-    circuitLanguage: string;
-    circuitName: string;
-    token: string;
     body: CompilerSelectionDto;
   }): Observable<CompilationJobDto> {
     return this.selectCompilerForFile1$Json$Response(params).pipe(
@@ -355,19 +307,7 @@ export class RootService extends BaseService {
    * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
   selectQpuForCircuitFile1$FormData$Response(params: {
-    allowedProviders: Array<string>;
-    circuitLanguage: string;
-    tokens: {};
-    circuitName?: string;
-    userId?: string;
-    preciseResultsPreference?: boolean;
-    shortWaitingTimesPreference?: boolean;
-    queueImportanceRatio?: number;
-    maxNumberOfCompiledCircuits?: number;
-    predictionAlgorithm?: string;
-    metaOptimizer?: string;
-    compilers?: Array<string>;
-    body: { circuit?: Blob };
+    body: { qpuSelectionDto?: QpuSelectionDto; circuit?: Blob };
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
     const rb = new RequestBuilder(
       this.rootUrl,
@@ -375,27 +315,6 @@ export class RootService extends BaseService {
       'post'
     );
     if (params) {
-      rb.query('allowedProviders', params.allowedProviders, {});
-      rb.query('circuitLanguage', params.circuitLanguage, {});
-      rb.query('tokens', params.tokens, {});
-      rb.query('circuitName', params.circuitName, {});
-      rb.query('userId', params.userId, {});
-      rb.query('preciseResultsPreference', params.preciseResultsPreference, {});
-      rb.query(
-        'shortWaitingTimesPreference',
-        params.shortWaitingTimesPreference,
-        {}
-      );
-      rb.query('queueImportanceRatio', params.queueImportanceRatio, {});
-      rb.query(
-        'maxNumberOfCompiledCircuits',
-        params.maxNumberOfCompiledCircuits,
-        {}
-      );
-      rb.query('predictionAlgorithm', params.predictionAlgorithm, {});
-      rb.query('metaOptimizer', params.metaOptimizer, {});
-      rb.query('compilers', params.compilers, {});
-
       rb.body(params.body, 'multipart/form-data');
     }
     return this.http
@@ -422,19 +341,7 @@ export class RootService extends BaseService {
    * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
   selectQpuForCircuitFile1$FormData(params: {
-    allowedProviders: Array<string>;
-    circuitLanguage: string;
-    tokens: {};
-    circuitName?: string;
-    userId?: string;
-    preciseResultsPreference?: boolean;
-    shortWaitingTimesPreference?: boolean;
-    queueImportanceRatio?: number;
-    maxNumberOfCompiledCircuits?: number;
-    predictionAlgorithm?: string;
-    metaOptimizer?: string;
-    compilers?: Array<string>;
-    body: { circuit?: Blob };
+    body: { qpuSelectionDto?: QpuSelectionDto; circuit?: Blob };
   }): Observable<QpuSelectionJobDto> {
     return this.selectQpuForCircuitFile1$FormData$Response(params).pipe(
       map(
@@ -453,18 +360,6 @@ export class RootService extends BaseService {
    * This method sends `application/xml` and handles request body of type `application/xml`.
    */
   selectQpuForCircuitFile1$Xml$Response(params: {
-    allowedProviders: Array<string>;
-    circuitLanguage: string;
-    tokens: {};
-    circuitName?: string;
-    userId?: string;
-    preciseResultsPreference?: boolean;
-    shortWaitingTimesPreference?: boolean;
-    queueImportanceRatio?: number;
-    maxNumberOfCompiledCircuits?: number;
-    predictionAlgorithm?: string;
-    metaOptimizer?: string;
-    compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
     const rb = new RequestBuilder(
@@ -473,27 +368,6 @@ export class RootService extends BaseService {
       'post'
     );
     if (params) {
-      rb.query('allowedProviders', params.allowedProviders, {});
-      rb.query('circuitLanguage', params.circuitLanguage, {});
-      rb.query('tokens', params.tokens, {});
-      rb.query('circuitName', params.circuitName, {});
-      rb.query('userId', params.userId, {});
-      rb.query('preciseResultsPreference', params.preciseResultsPreference, {});
-      rb.query(
-        'shortWaitingTimesPreference',
-        params.shortWaitingTimesPreference,
-        {}
-      );
-      rb.query('queueImportanceRatio', params.queueImportanceRatio, {});
-      rb.query(
-        'maxNumberOfCompiledCircuits',
-        params.maxNumberOfCompiledCircuits,
-        {}
-      );
-      rb.query('predictionAlgorithm', params.predictionAlgorithm, {});
-      rb.query('metaOptimizer', params.metaOptimizer, {});
-      rb.query('compilers', params.compilers, {});
-
       rb.body(params.body, 'application/xml');
     }
     return this.http
@@ -520,18 +394,6 @@ export class RootService extends BaseService {
    * This method sends `application/xml` and handles request body of type `application/xml`.
    */
   selectQpuForCircuitFile1$Xml(params: {
-    allowedProviders: Array<string>;
-    circuitLanguage: string;
-    tokens: {};
-    circuitName?: string;
-    userId?: string;
-    preciseResultsPreference?: boolean;
-    shortWaitingTimesPreference?: boolean;
-    queueImportanceRatio?: number;
-    maxNumberOfCompiledCircuits?: number;
-    predictionAlgorithm?: string;
-    metaOptimizer?: string;
-    compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<QpuSelectionJobDto> {
     return this.selectQpuForCircuitFile1$Xml$Response(params).pipe(
@@ -551,18 +413,6 @@ export class RootService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   selectQpuForCircuitFile1$Json$Response(params: {
-    allowedProviders: Array<string>;
-    circuitLanguage: string;
-    tokens: {};
-    circuitName?: string;
-    userId?: string;
-    preciseResultsPreference?: boolean;
-    shortWaitingTimesPreference?: boolean;
-    queueImportanceRatio?: number;
-    maxNumberOfCompiledCircuits?: number;
-    predictionAlgorithm?: string;
-    metaOptimizer?: string;
-    compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<StrictHttpResponse<QpuSelectionJobDto>> {
     const rb = new RequestBuilder(
@@ -571,27 +421,6 @@ export class RootService extends BaseService {
       'post'
     );
     if (params) {
-      rb.query('allowedProviders', params.allowedProviders, {});
-      rb.query('circuitLanguage', params.circuitLanguage, {});
-      rb.query('tokens', params.tokens, {});
-      rb.query('circuitName', params.circuitName, {});
-      rb.query('userId', params.userId, {});
-      rb.query('preciseResultsPreference', params.preciseResultsPreference, {});
-      rb.query(
-        'shortWaitingTimesPreference',
-        params.shortWaitingTimesPreference,
-        {}
-      );
-      rb.query('queueImportanceRatio', params.queueImportanceRatio, {});
-      rb.query(
-        'maxNumberOfCompiledCircuits',
-        params.maxNumberOfCompiledCircuits,
-        {}
-      );
-      rb.query('predictionAlgorithm', params.predictionAlgorithm, {});
-      rb.query('metaOptimizer', params.metaOptimizer, {});
-      rb.query('compilers', params.compilers, {});
-
       rb.body(params.body, 'application/json');
     }
     return this.http
@@ -618,18 +447,6 @@ export class RootService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   selectQpuForCircuitFile1$Json(params: {
-    allowedProviders: Array<string>;
-    circuitLanguage: string;
-    tokens: {};
-    circuitName?: string;
-    userId?: string;
-    preciseResultsPreference?: boolean;
-    shortWaitingTimesPreference?: boolean;
-    queueImportanceRatio?: number;
-    maxNumberOfCompiledCircuits?: number;
-    predictionAlgorithm?: string;
-    metaOptimizer?: string;
-    compilers?: Array<string>;
     body: QpuSelectionDto;
   }): Observable<QpuSelectionJobDto> {
     return this.selectQpuForCircuitFile1$Json$Response(params).pipe(

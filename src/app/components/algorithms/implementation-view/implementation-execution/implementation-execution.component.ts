@@ -160,7 +160,11 @@ export class ImplementationExecutionComponent implements OnInit {
         this.results = undefined;
         this.executedCompilationResult = analysisResult;
         this.nisqAnalyzerService
-          .executeCompilationResult(analysisResult.id, token)
+          .executeCompilationResult(
+            analysisResult.id,
+            analysisResult.provider,
+            token
+          )
           .subscribe(
             (results) => {
               this.utilService.callSnackBar(
@@ -288,15 +292,10 @@ export class ImplementationExecutionComponent implements OnInit {
             circuitName: this.nisqImpl.name,
             qpuName: dialogResult.qpu,
             circuitUrl: this.nisqImpl.fileLocation,
-            token,
+            tokens: new Map<string, string>([dialogResult.vendor, token]),
           };
           this.rootService
             .selectCompilerForFile1$Json({
-              providerName: dialogResult.vendor,
-              circuitLanguage: this.nisqImpl.language,
-              circuitName: this.nisqImpl.name,
-              qpuName: dialogResult.qpu,
-              token,
               body: compilerSelectionDto,
             })
             .subscribe(

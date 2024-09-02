@@ -6,7 +6,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { EntityModelProviderDto } from 'api-qprov/models/entity-model-provider-dto';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -27,18 +26,20 @@ import { NisqAnalyzerService } from '../../../nisq-analyzer/nisq-analyzer.servic
 export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
   implements OnInit {
   qpuSelectionFrom: FormGroup;
-  provider?: EntityModelProviderDto;
+  selectedVendors: string[] = [];
   ready?: boolean;
-  isIbmqSelected = true;
   selectedCompilers: string[] = [];
 
-  shortWaitingTimeEnabled = false;
-  stableExecutionResultsEnabled = false;
+  ibmqEnabled = true;
+  ionqEnabled = false;
+  awsEnabled = false;
+  shortWaitingTimeEnabled = true;
+  stableExecutionResultsEnabled = true;
   predictionAlgorithmInDialog = 'extra_trees_regressor';
-  metaOptimizerInDialog = 'ada_boost_regressor';
+  metaOptimizerInDialog = 'none';
   advancedSettingsOpen: boolean;
   queueImportanceRatioDialog = 0;
-  maxNumberOfCompiledCircuitsDialog = 5;
+  maxNumberOfCompiledCircuitsDialog = 6;
   disableDefiningMaximumNumberOfCircuits = false;
 
   constructor(
@@ -52,12 +53,24 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     private utilService: UtilService
   ) {}
 
-  get vendor(): AbstractControl | null {
-    return this.qpuSelectionFrom.get('vendor');
+  get vendors(): FormArray | null {
+    return this.qpuSelectionFrom.get('vendors') as FormArray;
   }
 
-  get token(): AbstractControl | null {
-    return this.qpuSelectionFrom.get('token');
+  get ibmqToken(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('ibmqToken');
+  }
+
+  get ionqToken(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('ionqToken');
+  }
+
+  get awsToken(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('awsToken');
+  }
+
+  get awsSecretToken(): AbstractControl | null {
+    return this.qpuSelectionFrom.get('awsSecretToken');
   }
 
   get compilers(): FormArray {
@@ -90,11 +103,11 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
 
   ngOnInit(): void {
     this.qpuSelectionFrom = new FormGroup({
-      vendor: new FormControl(this.data.vendor, [
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        Validators.required,
-      ]),
-      token: new FormControl(this.data.token),
+      vendors: new FormArray([]),
+      ibmqToken: new FormControl(this.data.ibmqToken),
+      ionqToken: new FormControl(this.data.ionqToken),
+      awsToken: new FormControl(this.data.awsToken),
+      awsSecretToken: new FormControl(this.data.awsSecretToken),
       compilers: new FormArray([]),
       maxNumberOfCompiledCircuits: new FormControl(
         this.data.maxNumberOfCompiledCircuits,
@@ -128,18 +141,19 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
       ),
     });
 
-    this.vendor.setValue('IBMQ');
-    this.onVendorChanged(this.vendor.value);
-    this.setCompilerOptions(this.vendor.value);
+    this.selectedVendors = ['ibmq'];
+    for (const vendor of this.selectedVendors) {
+      this.vendors.push(new FormControl(vendor));
+    }
+    this.setCompilerOptions(this.selectedVendors);
     this.predictionAlgorithm.setValue('extra_trees_regressor');
-    this.metaOptimizer.setValue('ada_boost_regressor');
-    this.maxNumberOfCompiledCircuits.setValue(5);
-    this.stableExecutionResults.setValue(false);
-    this.shortWaitingTime.setValue(false);
+    this.metaOptimizer.setValue('none');
+    this.maxNumberOfCompiledCircuits.setValue(6);
+    this.stableExecutionResults.setValue(true);
+    this.shortWaitingTime.setValue(true);
 
     this.dialogRef.beforeClosed().subscribe(() => {
-      this.data.vendor = this.vendor.value;
-      this.data.token = this.token.value;
+      this.data.vendors = this.selectedVendors;
       this.data.selectedCompilers = this.selectedCompilers;
       this.data.maxNumberOfCompiledCircuits = this.maxNumberOfCompiledCircuitsDialog;
       this.data.metaOptimizer = this.metaOptimizerInDialog;
@@ -147,6 +161,10 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
       this.data.queueImportanceRatio = this.queueImportanceRatioDialog;
       this.data.shortWaitingTime = this.shortWaitingTimeEnabled;
       this.data.stableExecutionResults = this.stableExecutionResultsEnabled;
+      this.data.ibmqToken = this.ibmqToken.value;
+      this.data.ionqToken = this.ionqToken.value;
+      this.data.awsToken = this.awsToken.value;
+      this.data.awsSecretToken = this.awsSecretToken.value;
     });
   }
 
@@ -154,43 +172,8 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     this.dialogRef.close();
   }
 
-  isRequiredDataMissing(): boolean {
-    return this.vendor.errors?.required;
-  }
-
-  onVendorChanged(value: string): void {
-    this.isIbmqSelected = true;
-    if (value === 'IBMQ') {
-      this.providerService.getProviders().subscribe((result) => {
-        this.getProviderDtoByName(result);
-        if (!this.provider) {
-          console.error('Provider with given name not found!');
-          this.ready = true;
-          return;
-        }
-        this.setCompilerOptions(value);
-      });
-    } else {
-      this.isIbmqSelected = false;
-      this.setCompilerOptions(value);
-    }
-  }
-
-  getProviderDtoByName(result): void {
-    if (result === null) {
-      console.error('Error while loading provider!');
-      return;
-    }
-    for (const providerDto of result._embedded.providerDtoes) {
-      if (providerDto.name.toLowerCase() === 'ibmq') {
-        this.provider = providerDto;
-        return;
-      }
-    }
-  }
-
   updateCompilerSelection(compilerName: string, allowed: boolean): void {
-    if (allowed) {
+    if (allowed && !this.selectedCompilers.includes(compilerName)) {
       this.selectedCompilers.push(compilerName);
     } else {
       this.selectedCompilers = this.selectedCompilers.filter(
@@ -206,24 +189,67 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
     return this.selectedCompilers.includes(compilerName);
   }
 
-  checkIfCompilersPresent(): boolean {
-    if (this.selectedCompilers.length > 0) {
+  checkIfCompilersAndProvidersPresent(): boolean {
+    if (this.selectedCompilers.length > 0 && this.selectedVendors.length > 0) {
       return true;
     } else {
       return false;
     }
   }
 
-  setCompilerOptions(vendor: string): void {
-    this.nisqAnalyzerService
-      .getCompilers(vendor)
-      .subscribe((availableCompilers) => {
-        this.selectedCompilers = availableCompilers;
-        this.compilers.clear();
-        for (const compiler of availableCompilers) {
-          this.compilers.push(new FormControl(compiler));
-        }
-      });
+  setCompilerOptions(vendors: string[]): void {
+    const setOfAllAvailableCompilers = new Set<string>();
+    for (const vendor of vendors) {
+      this.nisqAnalyzerService
+        .getCompilers(vendor)
+        .subscribe((availableCompilers) => {
+          for (const availableCompiler of availableCompilers) {
+            setOfAllAvailableCompilers.add(availableCompiler);
+          }
+          setOfAllAvailableCompilers.forEach((compiler) => {
+            if (!this.selectedCompilers.includes(compiler)) {
+              this.selectedCompilers.push(compiler);
+            }
+          });
+          this.compilers.clear();
+          for (const compiler of setOfAllAvailableCompilers) {
+            this.compilers.push(new FormControl(compiler));
+          }
+        });
+    }
+  }
+
+  setIbmqEnabled(enabled: boolean): void {
+    this.ibmqEnabled = enabled;
+    if (enabled) {
+      this.selectedVendors.push('ibmq');
+    } else {
+      this.selectedVendors = this.selectedVendors.filter(
+        (item) => item !== 'ibmq'
+      );
+    }
+  }
+
+  setIonqEnabled(enabled: boolean): void {
+    this.ionqEnabled = enabled;
+    if (enabled) {
+      this.selectedVendors.push('ionq');
+    } else {
+      this.selectedVendors = this.selectedVendors.filter(
+        (item) => item !== 'ionq'
+      );
+    }
+  }
+
+  setAwsEnabled(enabled: boolean): void {
+    this.awsEnabled = enabled;
+    if (enabled) {
+      this.selectedVendors.push('aws');
+    } else {
+      this.selectedVendors = this.selectedVendors.filter(
+        (item) => item !== 'aws'
+      );
+    }
   }
 
   setWaitingTimeEnabled(enabled: boolean): void {
@@ -269,8 +295,7 @@ export class ImplementationNisqAnalyzerQpuSelectionDialogComponent
 
 interface DialogData {
   title: string;
-  vendor: string;
-  token: string;
+  vendors: string[];
   selectedCompilers: string[];
   predictionAlgorithm: string;
   metaOptimizer: string;
@@ -278,4 +303,8 @@ interface DialogData {
   maxNumberOfCompiledCircuits: number;
   stableExecutionResults: boolean;
   shortWaitingTime: boolean;
+  ibmqToken: string;
+  ionqToken: string;
+  awsToken: string;
+  awsSecretToken: string;
 }
